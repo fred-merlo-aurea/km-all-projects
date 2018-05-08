@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[ApplicationLog] (
+    [LogID]            INT            IDENTITY (1, 1) NOT NULL,
+    [ApplicationID]    INT            NOT NULL,
+    [SeverityID]       INT            NOT NULL,
+    [SourceMethod]     NVARCHAR (250) NULL,
+    [Exception]        TEXT           NOT NULL,
+    [LogNote]          TEXT           NULL,
+    [IsBug]            BIT            NULL,
+    [IsUserSubmitted]  BIT            NULL,
+    [GDCharityID]      INT            NULL,
+    [ECNCustomerID]    INT            NULL,
+    [SubmittedBy]      NVARCHAR (250) NULL,
+    [SubmittedByEmail] NVARCHAR (100) NULL,
+    [IsFixed]          BIT            NULL,
+    [FixedDate]        DATE           NULL,
+    [FixedTime]        TIME (7)       NULL,
+    [FixedBy]          NVARCHAR (50)  NULL,
+    [FixedNote]        NVARCHAR (750) NULL,
+    [LogAddedDate]     DATE           NOT NULL,
+    [LogAddedTime]     TIME (7)       NOT NULL,
+    [LogUpdatedDate]   DATE           NULL,
+    [LogUpdatedTime]   TIME (7)       NULL,
+    [NotificationSent] BIT            NULL,
+    CONSTRAINT [PK_ApplicationLog] PRIMARY KEY CLUSTERED ([LogID] ASC) WITH (FILLFACTOR = 80)
+);
+

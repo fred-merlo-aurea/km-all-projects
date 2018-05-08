@@ -1,0 +1,131 @@
+﻿@using KMEnums
+@using KMModels
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;  
+}
+
+<script id="subscriber-notification-template" type="text/x-kendo-template">
+
+    @*# var type = formatId(getId(NotificationId, 'Type')); #*@
+    @*# var fromEmail = formatId(getId(NotificationId, 'FromEmail')); #*@
+    # var fromName = formatId(getId(NotificationId, 'FromName')); #
+    @*# var replyEmail = formatId(getId(NotificationId, 'ReplyEmail')); #*@
+    # var subjectLine = formatId(getId(NotificationId, 'SubjectLine')); #
+    # var message = formatId(getId(NotificationId, 'Message')); #
+    # var conditionType = formatId(getId(NotificationId, 'ConditionType')); #
+
+    <div id="#=NotificationId#" class="notifitem">
+        <input type="hidden" value="#=NotificationIndex#" name="SubscriberNotifications.Index">
+        <div class="rulesactionsbox float-right">
+            @Html.Kendo().Button().Name("#=NotificationId#_Delete").Content("Delete<i class='km-icon icon-kmcustom-delete'></i>").HtmlAttributes(new { @class = "btn btn-blue3", type = "button", onclick = "deleteNotification('#=NotificationId#')" }).ToClientTemplate()
+            @Html.Kendo().Button().Name("#=NotificationId#_Copy").Content("Copy<i class='km-icon icon-kmcustom-copy'></i>").HtmlAttributes(new { @class = "btn btn-blue3", type = "button", onclick = "copyNotification('#=NotificationId#')" }).ToClientTemplate()
+        </div>
+        <div class="notifinfo">
+            <div class="subscrbinfo">
+                <div class="subtitle">Subscriber Notification</div>
+                <div class="formbox">
+                    @*<div class="formitem">
+                        <label>Send</label>
+                        @(Html.Kendo()
+                              .DropDownList()
+                              .Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.Type))
+                              .HtmlAttributes(new { id = "#=type#" })
+                              .Items(items =>
+                              {
+                                    foreach (var type in Enum.GetValues(typeof(EmailType)))
+                                    {
+                                        items.Add().Text(type.ToString()).Value(type.ToString());
+                                    }
+                              })
+                              .ToClientTemplate()
+                        )
+                    </div>*@
+                    @*<div class="formitem formitemlabeltop">
+                        <label>From Email</label>
+                        @Html.Kendo().TextBox().Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.FromEmail)).HtmlAttributes(new { @class = "longinput", id = "#=fromEmail#" }).ToClientTemplate()
+                    </div>*@
+                    <div class="formitem formitemlabeltop">
+                        <label>From Name</label>
+                        @Html.Kendo().TextBox().Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.FromName)).HtmlAttributes(new { @class = "longinput", id = "#=fromName#" }).ToClientTemplate()
+                    </div>
+                    @*<div class="formitem formitemlabeltop">
+                        <label>Reply to Email</label>
+                        @Html.Kendo().TextBox().Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.ReplyEmail)).HtmlAttributes(new { @class = "longinput", id = "#=replyEmail#" }).ToClientTemplate()
+                    </div>*@
+                    <div class="formitem formitemlabeltop">
+                        <label>Subject Line</label>
+                        @Html.Kendo().TextBox().Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.SubjectLine)).HtmlAttributes(new { @class = "longinput", id = "#=subjectLine#" }).ToClientTemplate()
+                    </div>
+                </div>
+            </div>
+            <div class="formbox msgbox">
+                <div class="formitem formitemlabeltop">
+                    <label>Message</label>
+                    
+                    @(
+                        Html.Kendo()
+                            .Editor()
+                            .Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.Message))
+                            .Messages(m => m.InsertHtml("Insert Snippet"))
+                            .Tools(t => t.ViewHtml()
+                                         .Snippets(s => {
+                                             foreach (var control in controls) 
+                                             {
+                                                 s.Add(control.FieldLabel, GetControlSnippet(control));
+                                             }
+                                         })
+                                         .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                            )
+                            .ImageBrowser(imageBrowser => imageBrowser
+                    .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                            )
+                            .Encode(false)
+                            .HtmlAttributes(new { id = "#=message#" })
+                            .ToClientTemplate()
+)
+                </div>
+            </div>
+            <div class="conditionsbox">
+                @(Html.Kendo()
+                        .Button()
+                        .Name("#=NotificationId#_AddCondition")
+                        .Content("Add Condition<i class=\"km-icon icon-kmplus-circled-1\"></i>")
+                        .HtmlAttributes(new { onclick = "addCondition('#=NotificationId#')", type = "button", @class = "btn  btn-blue2 float-left add-new-condition" }).ToClientTemplate()
+                )
+                <div class="formitem formiteminline">
+                    <label>Condition Connector</label>
+                    @(
+                        Html.Kendo()
+                            .DropDownList()
+                            .Name(GetName<SubscriberNotificationModel>("#=NotificationId#", x => x.ConditionType))
+                            .HtmlAttributes(new { id = "#=conditionType#" })
+                            .Events(e => e.Select(@<text>function(e){ changeCondition('#=NotificationId#', this, e); }</text>))
+                            .Items(items =>
+                            {
+                                foreach (var type in Enum.GetValues(typeof(ConditionType)))
+                                {
+                                    items.Add().Text(type.ToString()).Value(type.ToString());
+                                }
+                            })
+                            .ToClientTemplate()
+                    )
+                </div>
+                <div class="conditionslist">
+                    <ul class="inline title">
+                        <li class="cond">Condition</li>
+                        <li class="fld">Field</li>
+                        <li class="comp">Comparator</li>
+                        <li class="value">Value</li>
+                        <li class="acts">Actions</li>
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

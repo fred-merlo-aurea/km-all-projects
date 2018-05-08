@@ -1,0 +1,104 @@
+﻿@model UAS.Web.Models.UAD.Filter.GeoFilter
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Geo Filter
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+               <table border="0" bordercolor="#cccccc" cellpadding="1" cellspacing="1" width="100%">
+                        <tbody>
+                               <tr style="background-color: #eeeeee; color: White; padding: 2px 0px 2px 0px; height: 20px;">
+                                    <td valign="middle" align="center" style="width:20%;min-width:140px;"><a class="standard">Geo Code</a></td>
+                                    <td valign="middle" align="center" style="width:20%;min-width:140px;"><a class="standard">State</a></td>
+                                    <td valign="middle" align="center" style="width:20%;min-width:140px;"><a class="standard">Country Regions</a></td>
+                                    <td valign="middle" align="center" style="width:20%;min-width:140px;"><a class="standard">Country</a></td>
+                                    <td valign="middle" align="center" style="width:20%;min-width:140px;display:none;" ><label class="field-header">GeoLocation</label></td>
+                                </tr>
+                               <tr style="padding-bottom:0px;">
+                                    <td valign="top" align="center" style="width:20%;min-width:140px;">
+                                        @*@Html.Kendo().ListBox().Name("GeoCode").BindTo(Model.RegionGroupsList).DataTextField("Text").DataValueField("Value").ConnectWith("lstGeoCode")*@
+                                        @Html.ListBox("lstGeoCode", Model.RegionGroupsList, new { @class = "stdfilters", style = "width:90%;", onchange = "OnGeoCodeSelectionChanged(this.id)" })
+                                    </td>
+                                    <td valign="top" align="center" style="width:20%;min-width:140px;">
+                                        @Html.ListBox("lstRegion", Model.RegionList, new { @class = "stdfilters", style = "width:90%;" })
+                                    </td>
+                                    <td valign="top" align="center" style="width:20%;min-width:140px;">
+                                        @Html.ListBox("lstArea", Model.AreaList, new { @class = "stdfilters", style = "width:90%;", onchange = "OnCountryRegionSelectionChanged(this.id)" })
+                                    </td>
+                                    <td valign="top" align="center" style="width:20%;min-width:140px;">
+                                        @Html.ListBox("lstCountry", Model.CountryList, new { @class = "stdfilters", style = "width:90%;" })
+                                    </td>
+                                    
+                                    <td valign="top" align="center" style="width:20%;min-width:140px; display:none;" id="GeoLoaction">
+                                        <table border="0" style="vertical-align:top;">
+                                            <tr>
+                                                <td style="font-size: x-small" width="45%" align="right">
+                                                    COUNTRY&nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    @(Html.Kendo().DropDownList()
+                                        .Name("drpCountry")
+                                        .DataTextField("Text")
+                                        .DataValueField("Value")
+                                        .HtmlAttributes(new { style = "width:70%;" })
+                                        .BindTo(new List<SelectListItem>(){
+                                            new SelectListItem() { Text= "United States", Value="UNITED STATES" }
+                                            , new SelectListItem() { Text= "Canada", Value="CANADA" }})
+
+                                                    )
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: x-small" width="45%" align="right">
+                                                    ZIP CODE&nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="k-textbox" id="ZipCode" style="width:70%;height:20px;">
+                                                    @*@(Html.Kendo().MaskedTextBox().Name("ZipCode").Mask("00000-0000").HtmlAttributes(new { style = "width:80px;height:20px;", id = "ZipCode" }))*@
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: x-small" align="right">
+                                                    RANGE (MIN)&nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="1" id="RangeMin" max="600" class="k-textbox" style="width:50%;height:20px;">
+                                                    @*@(Html.Kendo().TextBox().Name("Range").HtmlAttributes(new { , id = "RangeMin" }))*@
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: x-small" align="right">
+                                                    RANGE (MAX)&nbsp;&nbsp;
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="1" id="RangeMax" max="600" class="k-textbox" style="width:50%;height:20px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: xx-small" align="middle" colspan="2">
+                                                    Range (0 to 600 miles)
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                               <tr>
+                                    <td align="center" colspan="5" style="padding-bottom: 10px;">
+                                        <br>
+                                        <input type="button" name="btnSelectGeoFilter" onclick="SelectCloseGeoFieldFilter()" value="Select/Close" class="filterButton">
+                                        <input type="button" name="btnResetGeoFilter" onclick="ResetCloseGeoFieldFilter()" value="Reset" class="filterButton">
+                                    </td>
+                                </tr>
+                        </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,15 @@
+﻿@model int
+
+<div id="formpath" style='width: auto'>
+    @Html.Action("GetFormPath", new { id = Model })
+</div>
+
+<script>
+    var formPath = new FormPath();
+    function FormPath() {
+        this.load = function () {
+            $("#formpath").load('@Url.Action("GetFormPath")', { id: '@Model' });
+        }
+    }
+</script>
+

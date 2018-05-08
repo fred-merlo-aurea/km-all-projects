@@ -1,0 +1,78 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ConditionGroupModel
+
+@{
+    string groupID = "0";
+    
+    var conditionGroupId = ViewData.TemplateInfo.HtmlFieldPrefix;
+    {
+        string []temp = conditionGroupId.Replace("Rules", "").Replace("[", "").Replace("]", "").Replace("ConditionGroup", "").Split(new char[]{'.'});    
+        groupID = temp[1];
+    }        
+    
+    var controls = ViewContext.Controller.ViewBag.Controls;
+}        
+
+ <div class="conditionsbox" style="width: 925px"> 
+    <span class="groupID">Group Condition ID <span class="GroupNumber">@(int.Parse(groupID)+1)</span></span>
+    @(Html.Kendo().Button().Content( "Add Condition <i class=\"km-icon icon-kmplus-circled-1\"></i>" ).Name(FormatID(conditionGroupId)+"_AddCondition").HtmlAttributes(new { type = "button", @class = "AddCondition btn  btn-blue2  float-left" }))                           
+    <div class="formitem formiteminline" >
+        <label>Condition Connector</label>
+        @{
+            int dDindex = 0;
+            int typesIndex = 0;
+        }
+        @(Html.Kendo()
+            .DropDownListFor(x => x.LogicGroup)
+            .Events(e => e.Select(@<text>function(e){ changeCondition('@conditionGroupId', this, e); }</text>))
+            .Items(items =>
+            {
+                foreach (ConditionType type in Enum.GetValues(typeof(ConditionType)))
+                {
+                    items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == Model.LogicGroup );
+                    if (type == Model.LogicGroup)
+                    {
+                        dDindex = typesIndex;
+                    }
+                    typesIndex++;
+                }
+            }).HtmlAttributes(new {@class="middropd " + FormatID(conditionGroupId)+ "_LogicGroup" })
+            .SelectedIndex(dDindex)
+        )
+    </div>
+
+     <div class="conditionslist">
+                          <ul class="inline title">
+                            <li class="cond">Condition</li>
+                            <li class="fld">Field</li>
+                            <li class="comp">Comparator</li>
+                            <li class="value">Value</li>
+                            <li class="acts">Actions</li>
+                          </ul>
+                <div id="@String.Format(FormatID(conditionGroupId) + "_ListOfConditions")">
+
+                @foreach (var conditionItem in Model.Conditions.Select((Condition, Index) => new { Condition, Index }))
+                {
+                    var conditionId = string.Format("{0}.Conditions[{1}]", conditionGroupId, conditionItem.Index);
+                    conditionItem.Condition.Type = Model.LogicGroup;
+                    
+                    <div id="@(String.Format(FormatID(conditionGroupId) + "_Conditions_{0}__ConditionRowBox", conditionItem.Index))" class="@String.Format(FormatID(conditionGroupId) + "_ConditionRowBox")">
+
+                    <input type="hidden" value="@conditionItem.Index" name="@string.Format("{0}.Conditions.Index", conditionGroupId)"> 
+                    @Html.Partial("Partials/FormRules/_Condition", conditionItem.Condition,
+                        new ViewDataDictionary
+                        {
+                            TemplateInfo = new TemplateInfo
+                            {
+                                HtmlFieldPrefix = conditionId
+                            }
+                        })
+
+                    </div>
+            }   </div>
+                  @(Html.Kendo().Button().Content( "Add Group Condition <i class=\"km-icon icon-kmplus-circled-1\"></i>" ).Name( FormatID(conditionGroupId)+ "_AddGroup" ).HtmlAttributes(new { type = "button",  @class = "AddGroup  btn  btn-blue2 ",id = String.Format(FormatID(conditionGroupId)+ "_AddGroup_"+Guid.NewGuid().ToString().Replace("-",""))}))      
+         </div>
+
+    </div>

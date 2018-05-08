@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="DataCompare.Modules.FileAnalysis"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1800">
+    <telerik:RadBusyIndicator Name="RadBusy" IsIndeterminate="False">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1800"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="700" />
+            </Grid.RowDefinitions>
+
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Grid.Row="0" Text="Select a File:" Foreground="#4B87BC" FontSize="16" Margin="8" VerticalAlignment="Center"/>
+                <Border CornerRadius="10" BorderBrush="#FF747474" BorderThickness="1" Height="23" Margin="5" Width="250" >
+                    <TextBox x:Name="txtFileName" BorderThickness="0" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Height="20" Width="250" VerticalAlignment="Center"/>
+                </Border>
+                <telerik:RadButton x:Name="btnBrowse" Content="Browse" Height="22" Width="60" CornerRadius="5" Style="{DynamicResource RadButtonRound}" Click="btnBrowse_Click" 
+                               ToolTip="The file you select will be loaded into the grid below.  From there you are able to perform advanced filtering, sorting and grouping.  
+                                        Once complete can then export out result set to a new file."/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                <telerik:RadButton x:Name="btnExcel"  Margin="5" Height="48" Width="48" VerticalAlignment="Top" Click="btnExport_Click" CommandParameter="Excel" 
+                               HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Export your grid to Excel.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/ImageLibrary;Component/Images/Export/Excel.png" Height="48" Width="48" VerticalAlignment="Center" />
+                    </StackPanel>
+                </telerik:RadButton>
+                <telerik:RadButton x:Name="btnCSV"  Margin="5" Height="48" Width="48" VerticalAlignment="Top" Click="btnExport_Click" CommandParameter="CSV" 
+                               HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Export your grid to csv file.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/ImageLibrary;Component/Images/Export/csv-48.png" Height="48" Width="48" VerticalAlignment="Center" />
+                    </StackPanel>
+                </telerik:RadButton>
+                <telerik:RadButton x:Name="btnTxt"  Margin="5" Height="48" Width="48" VerticalAlignment="Top" Click="btnExport_Click" CommandParameter="TXT" 
+                               HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Export your grid to text file.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/ImageLibrary;Component/Images/Export/txt-48.png" Height="48" Width="48" VerticalAlignment="Center" />
+                    </StackPanel>
+                </telerik:RadButton>
+                <telerik:RadButton x:Name="btnPdf"  Margin="5" Height="48" Width="48" VerticalAlignment="Top" Click="btnExport_Click" CommandParameter="PDF" 
+                               HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Export your grid to pdf file.">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/ImageLibrary;Component/Images/Export/pdf-48.png" Height="48" Width="48" VerticalAlignment="Center" />
+                    </StackPanel>
+                </telerik:RadButton>
+                <Label Name="lbRecordCount" Margin="30,5,5,5" Content="Record Count: " VerticalAlignment="Center" FontSize="20" Foreground="#4B87BC" FontWeight="Bold"></Label>
+            </StackPanel>
+            <telerik:RadGridView Grid.Row="2" Name="gridFile" AutoGenerateColumns="True"
+                         CanUserDeleteRows="False" CanUserInsertRows="False" ColumnWidth="Auto"  
+                         CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserResizeRows="True"
+                         CanUserSortColumns="True" CanUserSortGroups="True" ShowGroupPanel="True" SelectionMode="Multiple" 
+                         IsFilteringAllowed="True" Margin="5,5,5,0" Filtered="gridFile_Filtered" 
+                         >                
+            </telerik:RadGridView>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

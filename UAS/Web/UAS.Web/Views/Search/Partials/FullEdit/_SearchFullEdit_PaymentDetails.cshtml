@@ -1,0 +1,64 @@
+﻿@model UAS.Web.Models.Circulations.PaidNew
+<style>
+    .DivRow {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        border-spacing: 10px;
+    }
+
+    .DivRowColumn {
+        display: table-cell;
+    }
+</style>
+<table>
+    <tbody>
+        <tr>
+            <td><label>Subscription Price:</label></td>
+            <td>@Html.EditorFor(m => Model.Amount, new { style = "width:250px" })</td>
+            <td><label>Amount Paid:</label></td>
+            <td>@Html.EditorFor(m => Model.AmountPaid, new { style = "width:250px" })</td>
+            <td><label>Pay Date:</label></td>
+            <td>@Html.Kendo().DatePickerFor(m => Model.PayDate).HtmlAttributes(new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td><label>Payment Method:</label></td>
+            <td>@Html.DropDownListFor(m => Model.PaymentTypeID, Model.paymentTypeSelectList, new { style = "width:250px" })</td>
+            <td><label>Copies:</label></td>
+            <td>@Html.EditorFor(m => Model.Copies, new { style = "width:250px" })</td>
+            <td><label>Start Issue:</label></td>
+            <td>@Html.Kendo().DatePickerFor(m => Model.StartIssueDate).HtmlAttributes(new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td class="commonmember"><label>Name:</label></td>
+            <td class="commonmember">@Html.EditorFor(m => Model.CCHolderName, new { style = "width:250px" })</td>
+            <td><label>Term:</label></td>
+            <td>@Html.EditorFor(m => Model.Term, new { style = "width:250px" })</td>
+            <td><label>Expire Date:</label></td>
+            <td>@Html.Kendo().DatePickerFor(m => Model.ExpireDate).HtmlAttributes(new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td class="checkmeber"><label>Check Number:</label></td>
+            <td class="checkmeber">@Html.EditorFor(m => Model.CheckNumber, new { style = "width:250px" })</td>
+            <td><label>Frequency:</label></td>
+            <td>@Html.EditorFor(m => Model.Frequency, new { style = "width:250px" })</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr class="creditcardmember">
+            <td><label>Credit Card Last 4:</label></td>
+            <td>@Html.EditorFor(m => Model.CreditCard, new { style = "width:250px" })</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr class="creditcardmember">
+            <td><label>Credit Card Type:</label></td>
+            <td>@Html.DropDownListFor(m => Model.CreditCardTypeID, Model.creditCardTypesSelectList)</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr class="creditcardmember">
+            <td><label>CC Year/Month:</label></td>
+            <td>@Html.DropDownList("CCExpirationMonth", Model.creditCardMonthSelectList, "", new { style = "width:100px" }) / @Html.DropDownList("CCExpirationYear", Model.creditCardYearSelectList, "", new { style = "width:100px" })</td>
+            <td colspan="4"></td>
+        </tr>
+    </tbody>
+</table>
+

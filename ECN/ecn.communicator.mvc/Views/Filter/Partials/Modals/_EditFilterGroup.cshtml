@@ -1,0 +1,51 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ECN_Framework_Entities.Communicator.FilterGroup
+
+@{
+    List<string> types = new List<string> { "OR", "AND" };
+
+    int index = types.FindIndex(x => x.StartsWith(Model.ConditionCompareType.ToUpper()));
+}
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Edit Filter Group</legend>
+
+        @Html.HiddenFor(x => x.FilterGroupID)
+        <div class="formbox">
+            <div class="subtitle">Filter Group Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBoxFor(x => x.Name, new Dictionary<string, object> { { "data-bind", "value:Name" } })
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Filter Condition Connector</div>
+            <div class="formitem formiteminline">
+                @Html.DropDownListFor(x => x.ConditionCompareType, types.Select(item => new SelectListItem
+           {
+               Value = item,
+               Text = item,
+               Selected = item == Model.ConditionCompareType.ToUpper()
+           }))
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Update").HtmlAttributes(new { @class = "btn k-button" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('EditFilterGroup')" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+
+</div>     
+   

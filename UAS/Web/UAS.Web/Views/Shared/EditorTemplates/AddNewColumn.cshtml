@@ -1,0 +1,294 @@
+﻿@model  UAS.Web.Models.FileMapperWizard.AddNewColumn
+
+<div>
+    <script>
+    $(document).ready(function() {
+        var hasTransform = @Html.Raw(Json.Encode(Model.HasTransformations));
+        var divName = "div_Transformations_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+        if (hasTransform) {
+            $("#" + divName).show();
+            loadAdditionalMappingTransformationGrid();
+        } else {
+            $("#" + divName).hide();
+        }
+    });
+
+    function MappedAdditionalColumnChange(e) {
+        var mappedColumnDDL = e.sender.element[0].id;
+        var dataItem = this.dataItem(e.item.index());
+        var columns = @Html.Raw(Json.Encode(Model.MappingColumns));
+        var isDisplay = false;
+        var displayActions = true;
+
+        if (dataItem.Value == "Ignore") {
+            displayActions = false;
+        } else {
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                if (dataItem.Value == column.DataTable + "." + column.ColumnName) {
+                    if (column.IsDemographic) {
+                        isDisplay = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        var fieldMappingID = @Html.Raw(Json.Encode(Model.FieldMapID));
+
+        var divName = "divDemoUpdate_" + fieldMappingID;
+        if (isDisplay) {
+            $("#" + divName).show();
+        } else {
+            $("#" + divName).hide();
+        }
+
+        var divActionName = "divColumnMenu_" + fieldMappingID;
+        if (displayActions) {
+            $("#" + divActionName).show();
+        } else {
+            $("#" + divActionName).hide();
+            //Remove Multi Maps and Transformations and hide divs
+
+            var setup = { FieldMappingID: fieldMappingID };
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/RemoveTransformationsAndMultiMappingsForFieldMappingID",
+                traditional: true,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                data: setup,
+                cache: !0,
+                datatype: "html",
+                success: function (returnData) {
+
+                },
+                error: function (data) {
+
+                }
+            });
+
+            var targetName = "div_Transformations_" + fieldMappingID;
+            $("#" + targetName).hide();
+        }
+    }
+    function MappedAdditionalColumnDatabound() {
+        var name = "addedColumn_" + @Html.Raw(Json.Encode(Model.FieldMapID)) + "".toString();
+        var t = document.getElementById(name);
+        var x = t.getElementsByTagName('input');
+        var columns = @Html.Raw(Json.Encode(Model.MappingColumns));
+        var isDisplay = false;
+        var displayActions = true;
+
+        for(var i = 0; i < x.length; i++) {
+            if (x[i].id.endsWith("__MappedColumn")) {
+                var mcDDLValue = x[i].value.toString();
+
+                if (mcDDLValue == "Ignore") {
+                    displayActions = false;
+                } else {
+                    for (var ii = 0; ii < columns.length; ii++) {
+                        var column = columns[ii];
+                        if (mcDDLValue == column.DataTable + "." + column.ColumnName) {
+                            if (column.IsDemographic) {
+                                isDisplay = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                var divName = "divDemoUpdate_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+                if (isDisplay) {
+                    $("#" + divName).show();
+                } else {
+                    $("#" + divName).hide();
+                }
+
+                var divActionName = "divColumnMenu_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+                if (displayActions) {
+                    $("#" + divActionName).show();
+                } else {
+                    $("#" + divActionName).hide();
+                }
+                break;
+            }
+        }
+    }
+
+    function preAdditionalMappingPerformTransformation(sfid, fmid, colname) {
+        SaveMappingBeforeLoadingTransformation(sfid, fmid, colname);
+    }
+
+    function loadAdditionalMappingTransformationGrid() {
+        var sourcefileid = @Html.Raw(Json.Encode(Model.SourceFileID));
+        var fieldmappingid = @Html.Raw(Json.Encode(Model.FieldMapID));
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function deleteAdditionalMapping(values) {
+        debugger;
+        var sourceFileId = values.SourceFileId;
+        var fieldMapId = values.FieldMapId;
+
+        var setup = { FieldMappingID: fieldMapId };
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/RemoveAdditionalMapping",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: setup,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                var element = "addedColumn_" + fieldMapId;
+                $("#" + element).empty();
+
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                    autoClose: false,
+                    IsOpen: false
+                });
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+
+    function confirmDeleteAdditionalMapping(sid, fmid) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to remove this mapping?",
+            autoClose: false,
+            action: deleteAdditionalMapping,
+            data: { SourceFileId: sid, FieldMapId: fmid },
+            IsOpen: false
+        });
+    }
+
+    function loadAdditionalMappingTransformationGridWithID(sid, fmid) {
+        var sourcefileid = sid;
+        var fieldmappingid = fmid;
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    </script>
+
+    <table id='addedColumn_@Model.FieldMapID' class="filedetails">
+        @Html.HiddenFor(m => m.FieldMapID)
+        @Html.HiddenFor(m => m.SourceFileID)
+        @Html.HiddenFor(m => m.SourceColumn)
+        @Html.HiddenFor(m => m.ColumnOrder)
+        @* REGULAR ROW *@
+        <tr>
+            <td style="padding: 2px;">
+                <div style="width:240px;"></div>
+                @*@Html.Kendo().TextBoxFor(m => m.SourceColumn).HtmlAttributes(new { @readonly = true, style = "width:240px;" })*@
+            </td>
+            <td style="padding: 2px;">
+                @if (Model.ProfileColumnList != null)
+                {
+                        @(Html.Kendo().DropDownListFor(m => m.MappedColumn)
+                                .Name("ddl_mappedColumn_" + Model.FieldMapID)
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e => e.Select("MappedAdditionalColumnChange").DataBound("MappedAdditionalColumnDatabound"))
+                        //.DataSource(source => source.Custom().Group(g => g.Add("Group", typeof(string))))
+                        .BindTo(Model.ProfileColumnList).HtmlAttributes(new { style = "width:240px; display:inline;" }))
+                }
+
+            </td>
+            <td style="padding: 2px;">
+                <div style="width: 95px;">
+                    <div id="divDemoUpdate_@Model.FieldMapID">
+                        @if (Model.DemoUpdateTypes != null)
+                        {
+                                @(Html.Kendo().DropDownListFor(m => m.DemoUpdateID)
+                                .Name("ddl_demoUpdate_" + Model.FieldMapID)
+                                .DataTextField("DisplayName")
+                                .DataValueField("CodeId")
+                            .BindTo(Model.DemoUpdateTypes).HtmlAttributes(new { style = "width:95px; display:inline;" }))
+                        }
+                    </div>
+                </div>
+            </td>
+            <td style="padding: 2px;">
+                <div id="divColumnMenu_@Model.FieldMapID">
+                    @(Html.Kendo()
+                        .Menu()
+                        .Name("menu_ColumnMap_" + Model.FieldMapID)
+                        .Direction(MenuDirection.Left)
+                        .Orientation(MenuOrientation.Vertical)
+                        .Animation(false)
+                        .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                        innerItems =>
+                                        {
+                                            innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                            innerItems.Add().Text("Apply a Transformation").HtmlAttributes(new { onclick = "preAdditionalMappingPerformTransformation(" + Model.SourceFileID + ", " + Model.FieldMapID + ", '" + Model.SourceColumn + "');" });
+                                            innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "confirmDeleteAdditionalMapping(" + Model.SourceFileID + ", " + Model.FieldMapID + ");" });
+                                        }
+                                    )
+                                )
+                    )
+                </div>
+            </td>
+        </tr>
+        @* TRANSFORMATIONS ROW *@
+        <tr>
+            <td colspan="4" style="padding: 2px;">
+                <div id="div_Transformations_@Model.FieldMapID">
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

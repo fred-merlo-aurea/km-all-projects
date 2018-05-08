@@ -1,0 +1,81 @@
+﻿@using KMEnums
+<script type="text/javascript">
+    function AddNoThresholdSuppresion() {
+        clearValidationErrorMessages();
+        var lastControlError = [];
+        if ($('#AddEmailsNoThreshold').val() == "") {
+            lastControlError.push({ name: "AddEmailsNoThreshold", message: "Please enter a value for Emails", label: "", isKendo: false });
+            setValidationClient(lastControlError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddNoThresholdSuppression", "Group")",
+                data: { emailAddressToAdd: $('#AddEmailsNoThreshold').val() },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $('#divEmailsNoThresholdReportCont').show();
+                        $("#divEmailsAddedNoThresholdReport").html('<h3>RESULTS:</h3>' + response[1]);
+                        //$("#channelNoThresholdGridDiv").html(response[2]);
+                        NoT_Search();
+                        $('#CancelThresholdSuppression').text('Close');
+                        $('#AddEmailsNoThreshold').text('');
+                    }
+                    else {
+                        CancelAddThresholdSuppression();
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+
+    function CancelAddThresholdSuppression()
+    {
+        var win = $("#AddThresholdSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+</script>
+<div class="wrapper modal modaladdnewform" style="padding-left:25px; margin-top: 10px; width: 550px; display: inline-block;">
+    <fieldset class="no-border">
+        <legend>Add Emails to No Threshold</legend>
+        <div class="formbox">
+            <div class="subtitle" style="width:500px;">
+                Add Emails to be ignored by Threshold Suppression for the Channel <br />
+                Use comma "," (or) Press Enter for separating email addresses.
+            </div>
+            <div class="formitem">
+                @Html.TextArea("AddEmailsNoThreshold", "", new { style = "width:500px; height:250px; font-size: 13px; font-family: Arial;" })
+            </div>
+        </div>
+        <div class="wrapper modal modaladdnewform" id="divEmailsNoThresholdReportCont" style="width: 500px;display:none;">
+            <div class="formbox">
+                <div class="formitem formiteminline" id="divEmailsAddedNoThresholdReport">
+                </div>
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "AddNoThresholdSuppresion()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("CancelThresholdSuppression").Content("Cancel").HtmlAttributes(new { onclick = "CancelAddThresholdSuppression()" })
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </fieldset>
+</div>
+

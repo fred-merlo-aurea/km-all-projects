@@ -1,0 +1,100 @@
+﻿@using KMEnums
+
+<style>
+    #divEmailsAddedGlobalReport table tr td:nth-child(2) {
+        padding: 0px;
+        text-align: center;
+    }
+</style>
+<script>
+    function ShowAddGlobalSuppression() {
+
+        var win = $("#AddGlobalSuppression");
+
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+
+
+    }
+    function DeleteGlobalSuppression(id) {
+        var win = $("#DeleteGlobalSuppression");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function SearchGlobalSuppresion() {
+
+        GS_Search();
+
+    }
+    function ExportGlobalSuppresion() {
+        
+            window.location = '@Url.Content("~/Group/ExportGlobalSuppresion")'
+                    + "?SearchGlobal=" + $('#SearchGlobalTxt').val();
+        
+    }
+</script>
+
+<table style="width:100%; margin-top:0px;">
+    <tr>
+        <td style="float:left; padding-right: 0px;">
+            @Html.Kendo().Button().Name("ExportEmails").Content("Download").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ExportGlobalSuppresion()" })
+        </td>
+        <td style="float:right; padding-right: 0px;">
+            @Html.Kendo().Button().Name("AddGS").Content("Add Emails<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ShowAddGlobalSuppression()" })
+        </td>
+    </tr>
+</table>
+<div style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Search Email
+                @Html.TextBox("SearchGlobalTxt")
+                @Html.Kendo().Button().Name("SearchGlobalBtn").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "SearchGlobalSuppresion()" })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="channelGlobalGridDiv">
+    @Html.Partial("Partials/_Suppresion_Global_Grid", "")
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DeleteGlobalSuppression")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="DeleteGlobalSuppressionDiv">
+                @Html.Partial("Partials/Modals/_DeleteGlobalSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("AddGlobalSuppression")
+        .Title("Add")
+        .Content(
+        @<text>
+            <div id="AddGlobalSuppressionDiv">
+                @Html.Partial("Partials/Modals/_AddGlobalSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

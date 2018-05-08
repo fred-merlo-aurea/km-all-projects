@@ -1,0 +1,164 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+@using KMEnums
+
+<script>
+    $(document).ready(function () {
+        $("#filterFrom").kendoDatePicker();
+
+        $("#filterFrom").bind("focus", function () {
+            $(this).data("kendoDatePicker").open();
+        });
+
+        $("#filterTo").kendoDatePicker();
+
+        $("#filterTo").bind("focus", function () {
+            $(this).data("kendoDatePicker").open();
+        });
+    });
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+    function deleteSubscriberModal(id) {
+        var win = $("#DeleteMasterSuppression");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+        clearValidationSummary();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function emailFilterSearch() {
+        clearValidationSummary();
+        MS_Search();
+    }
+    function getParams() {
+        return {
+            GroupID: '@Model.group.GroupID',
+            SubscribeTypeCodes: $('#subscribeTypeCodes').val(),
+            SearchCriterion: $('#searchCriterion').val(),
+            ProfileName: $('#profileName').val(),
+            FromDate: $("#filterFrom").val(),
+            ToDate: $("#filterTo").val(),
+            WithActivity: ($('#withActivity:checked').length > 0) ? true : false
+        };
+    }
+    function downloadEmails() {
+        clearValidationSummary();
+        var searchModel = {
+            groupID: '@Model.group.GroupID',
+            subscribeType: $('#subscribeTypeCodes').val(),
+            emailAddr: $('#profileName').val(),
+            searchType: $('#searchCriterion').val(),
+            downloadType: $('#downloadType').val(),
+            profFilter: 'ProfilePlusStandalone',
+            FromDate: $("#filterFrom").val(),
+            ToDate: $("#filterTo").val(),
+            WithActivity: ($('#withActivity:checked').length > 0) ? true : false
+        }
+        var form = $('#modelForm');
+        form.attr('method', 'POST');
+        form.attr('action', '@Url.Action("ExportData", "Subscriber")' + '?' + $.param(searchModel));
+        form.submit();
+    }
+</script>
+
+<div>
+    <div id="panelFilterExport" style="float: left;">
+        <table style="width:100%;">
+            <tr>
+                <td style="padding-right:5px;"> Export this view to </td>
+                <td style="padding-right:5px;">
+                    @Html.DropDownList("downloadType", new List<SelectListItem> {
+                        new SelectListItem { Text = "XML [.xml]", Value = ".xml" },
+                        new SelectListItem { Text = "EXCEL", Value = ".xls", Selected = true },
+                        new SelectListItem { Text = "CSV [.csv]", Value = ".csv" },
+                        new SelectListItem { Text = "TXT [.txt]", Value = ".txt" }
+                        })
+                <td> <button type="button" class="btn k-button" id="btnExport" onclick="downloadEmails()"> Download </button></td>                
+            </tr>
+        </table>
+        <form id="modelForm"></form>
+    </div>
+    @*<div id="panelSearch" style="width: 80%; float: right;display:inline;">
+    <table>
+        <tr>
+
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                From:
+            </td>
+            <td style="width:170px;">
+                @Html.Kendo().DatePicker().Name("filterFrom")
+            </td>
+            <td>
+                To:
+            </td>
+            <td style="width:170px;">
+                @Html.Kendo().DatePicker().Name("filterTo")
+            </td>
+            <td style="padding: 0px;"><input id="withActivity" type="checkbox" /></td>
+            <td> With Activity </td>
+        </tr>
+    </table>
+    </div>*@
+</div>
+<div id="panelSearch" style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Filter by
+                @Html.DropDownList("subscribeTypeCodes", Model.SubscribeTypeCodes.Select(item => new SelectListItem
+           {
+               Value = item.Item2,
+               Text = item.Item1
+           }))
+
+                &nbsp;&nbsp; [or]&nbsp;&nbsp;email address
+                @Html.DropDownList("searchCriterion", new List<SelectListItem> {
+                new SelectListItem { Text = "contains", Value = "like" },
+                new SelectListItem { Text = "equals", Value = "equals" },
+                new SelectListItem { Text = "starts with", Value = "starts" },
+                new SelectListItem { Text = "ends with", Value = "ends" }
+                })
+                @Html.TextBox("profileName")
+                From:
+                @Html.Kendo().DatePicker().Name("filterFrom").HtmlAttributes(new { style = "width:170px;max-width:170px;" })
+
+                To:
+                @Html.Kendo().DatePicker().Name("filterTo").HtmlAttributes(new { style = "width:170px;max-width:170px;" })
+                <input id="withActivity" type="checkbox" />With Activity <button type="button" class="btn k-button" onclick="emailFilterSearch()">Search</button>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<div id="divMasterGrid">
+    @Html.Partial("Partials/_Suppresion_Master_Grid", Model.group)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DeleteMasterSuppression")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteMasterSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

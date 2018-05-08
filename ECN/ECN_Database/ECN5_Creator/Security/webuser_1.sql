@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [webuser]
+    WITH PASSWORD = N' chn#E^hoLvfgwUzrj7uvIykmsFT7_&#$!~<oy_rsWdfbR7u', SID = 0x4E6E12A56AD0304D86375E861E5BF396, DEFAULT_DATABASE = [ecn5_accounts], DEFAULT_LANGUAGE = [us_english], CHECK_POLICY = OFF;
+

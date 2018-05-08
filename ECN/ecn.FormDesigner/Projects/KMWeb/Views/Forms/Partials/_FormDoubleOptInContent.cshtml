@@ -1,0 +1,78 @@
+﻿@using KMEnums
+@using KMModels
+@using KMModels.PostModels
+
+@model FormDoubleOptInPostModel
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewBag.Controls;
+}
+
+@Html.HiddenFor(x => x.Id)
+<script>
+    var currentCustID = '@ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString()';
+</script>
+<div class="form-wrapper formDoubleOptIn">
+    <div>
+        <h3 class="btitle">Double Opt-In Landing Page</h3>
+        <div>
+            
+            @(
+
+
+                        Html.Kendo()
+                            .EditorFor(x => x.Page)
+                            .Messages(m => m.InsertHtml("Insert Snippet"))
+                            .Tools(t => t
+                                    .ViewHtml()
+                                            .Snippets(s => {
+                                                foreach (var control in controls)
+                                                {
+                                                    s.Add(control.FieldLabel, GetControlSnippet(control));
+                                                }
+                                            })
+                                    .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                        ).ImageBrowser(imageBrowser => imageBrowser
+
+                        .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                    .Read("Read", "ImageBrowser")
+                    .Destroy("Destroy", "ImageBrowser")
+                    .Upload("Upload", "ImageBrowser")
+                    .Thumbnail("Thumbnail", "ImageBrowser")
+
+
+                )
+                    .Encode(false)
+            )
+        </div>
+    </div>
+    <div>
+        <h3 class="btitle">Double Opt-In Notification</h3>
+        <div class="notifbox">
+            <div class="notifitem">        
+                @Html.Partial("Partials/FormDoubleOptIn/_Notification", Model.Notification,
+                    new ViewDataDictionary
+                    {
+                        TemplateInfo = new TemplateInfo
+                        {
+                            HtmlFieldPrefix = "Notification"
+                        }
+                    })
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(!ViewContext.ViewData.ModelState.IsValid)
+{
+    var summary = Html.ValidationSummary().ToString();
+
+    var errors = Html.Raw(HttpUtility.JavaScriptStringEncode(summary));
+    
+    <script>
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@errors'
+        });
+    </script>
+}

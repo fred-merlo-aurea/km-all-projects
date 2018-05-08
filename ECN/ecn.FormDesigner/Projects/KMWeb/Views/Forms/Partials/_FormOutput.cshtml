@@ -1,0 +1,41 @@
+﻿@using KMModels.PostModels
+
+@model FormOutputPostModel
+@{
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+<div class="ptitle">
+    <span>Output</span>
+</div>
+@using (Ajax.BeginForm("SaveOutput", new AjaxOptions { 
+    HttpMethod = "POST",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "formOutputContent",
+    OnComplete = "onComplete",
+    //OnFailure = "onError"
+}))
+{
+    <div id="formOutputContent">
+        @Html.Partial("Partials/_FormOutputContent", Model)
+    </div>
+    
+    
+    <!------------lalalalla------------>
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("Previous").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "movePrevious(this)" })
+            </div>
+            <div class="cbtns">
+                @if (!viewOnly)
+                {
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "reloadTab()" })
+                    @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn btn-blue5" })      
+                }
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "moveNext(this)" })
+            </div>
+        </div>
+    </div>
+}

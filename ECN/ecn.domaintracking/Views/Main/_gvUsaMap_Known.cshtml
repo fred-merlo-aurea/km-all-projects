@@ -1,0 +1,71 @@
+﻿@Model
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['geochart']}]}"></script>
+<script language="javascript" type="text/javascript">
+    google.setOnLoadCallback(drawMarkersMap);
+    function drawMarkersMap() {
+        var aoa = [["City", "Page Requests"]];
+
+        @foreach (DataRow row in Model.Rows)
+        {
+            var cityState = row["City"] + " " + row["State"];
+            var hitCount = row["Known"].ToString();
+            int count = 0;
+            int.TryParse(hitCount, out count);
+            if (hitCount != "0" && count > 0)
+            {
+            <text>
+                aoa.push(["@cityState", @hitCount]);
+                </text>
+                }
+            }
+            var data = google.visualization.arrayToDataTable(aoa);
+            var options = {
+            region: "US",
+            resolution: "provinces",
+            enableRegionInteractivity: "true",
+            displayMode: "markers",
+            colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+            legend: "none"
+        };
+        var chart = new google.visualization.GeoChart(document.getElementById('USA_div_known'));
+        chart.draw(data, options);
+
+        var aoa_unknown = [["City", "Page Requests"]];
+        @foreach (DataRow row in Model.Rows)
+        {
+            var cityState = row["City"] + " " + row["State"];
+            var hitCount = row["Unknown"].ToString();
+            int count = 0;
+            int.TryParse(hitCount, out count);
+            if (hitCount != "0" && count > 0)
+            {
+            <text>
+                aoa_unknown.push(["@cityState", @hitCount]);
+                </text>
+                    }
+                }
+
+                var data_unknown = google.visualization.arrayToDataTable(aoa_unknown);
+                var options_unknown = {
+            region: "US",
+            resolution: "provinces",
+            enableRegionInteractivity: "true",
+            displayMode: "markers",
+            colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+            legend: "none"
+        };
+            var chart_unknown = new google.visualization.GeoChart(document.getElementById('USA_div_unknown'));
+            chart_unknown.draw(data_unknown, options_unknown);
+
+
+    }
+    </script>
+
+<div style="float:left;text-align:left;font-weight:bold;">
+    Known
+    <div id="USA_div_known" style="width: 500px; "></div>
+</div>
+<div style="float:left;text-align:left;font-weight:bold;">
+    Unknown
+    <div id="USA_div_unknown" style="margin-left: 10px; width: 500px;"></div>
+</div>

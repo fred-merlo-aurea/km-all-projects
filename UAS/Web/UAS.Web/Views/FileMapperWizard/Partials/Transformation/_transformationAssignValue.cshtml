@@ -1,0 +1,315 @@
+﻿@model UAS.Web.Models.FileMapperWizard.TransformationAssignModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $("#btnApplyAssign").css("display", "");
+
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            $("#transformationField_TransformationTemplate")[0].disabled = true;
+            document.getElementById("transformationField_TransformationName").disabled = true;
+            document.getElementById("transformationField_TransformationDesc").disabled = true;
+        }
+    });
+
+    function AddNewAssignRow() {
+        //just need to add an empty row to grid
+        var prodID = 0;
+        var prodName = "ALL PRODUCTS";
+        var value = "";
+
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var datasource = grid.dataSource;
+        var total = datasource.data().length;
+
+        var lastIndex = 0;
+        if (total > 0)
+            lastIndex = datasource.view()[total - 1]["TransIndex"];
+        var nextIndex = lastIndex + 1;
+
+        var newItem = datasource.insert(total, { TransformAssignID: 0, GroupedTransformAssignIDs: "0", TransIndex: nextIndex, selectedPubID: { Text: prodName, Value: prodID.toString() }, selectedValue: value }); //here mention all the column names, otherwise will get an error
+
+        var newRow = grid.items().filter("[data-uid='" + newItem.uid + "']");
+        grid.editRow(newRow);
+    }
+
+    function DeleteCondition(transformAssign, groupedIds, fieldIndex) {
+        debugger;
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable) {
+            var grid = $("#grid_Conditions").data("kendoGrid");
+            var totalItems = grid.dataSource._data.length;
+
+            for (var i = 0; i < grid.dataSource._data.length; i++) {
+
+                var rowTransformAssignID = grid.dataSource._data[i].TransformAssignID;
+                var rowIndex = grid.dataSource._data[i].TransIndex;
+                //Existing will have FieldMultiMapID
+                if (rowTransformAssignID != null && rowTransformAssignID > 0) {
+                    if (rowTransformAssignID == transformAssign) {
+                        var uid = grid.dataSource._data[i].uid;
+                        grid.removeRow('tr[data-uid="' + uid + '"]');
+                        break;
+                    }
+                    //New will not have FieldMultiMapID so use ACMIndex
+                } else if (rowIndex != null) {
+                    if (rowIndex == fieldIndex) {
+                        var uid = grid.dataSource._data[i].uid;
+                        grid.removeRow('tr[data-uid="' + uid + '"]');
+                        break;
+                    }
+                }
+            }
+
+            //Only call db delete if row has FieldMappingID
+            //And only delete if row was removed. grid.removeRow will ask to confirm. If cancel row will still exist so don't delete.
+            if (groupedIds.length > 0) {
+                var itemsNow = grid.dataSource._data.length;
+                if (totalItems != itemsNow) {
+                    var transformationId = document.getElementById("transformationField_TransformationId").value;
+                    var modelData = {
+                        TransformationId: transformationId,
+                        IDs: groupedIds
+                    }
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/DeleteTransformationAssign",
+                        type: "POST",
+                        data: modelData,
+                        dataType: 'html',//this is data type of what you are returning
+                        success: function (returnData) {
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        },
+                        error: function () {
+                            alert("An error has occured!!!");
+                        }
+                    })
+                }
+            }
+        } else {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Information',
+                text: "Transformation is read only. Delete canceled.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+    }
+
+    function ApplyTransformationInAssign() {
+        debugger;
+        $("#div_TransformAssignMessage").html("");
+        var transformationId = document.getElementById("transformationField_TransformationId").value;
+        var transformationTypeID = document.getElementById("transformationField_TransformationTypeId").value;
+        var transformationName = document.getElementById("transformationField_TransformationName").value;
+        var transformationDesc = document.getElementById("transformationField_TransformationDesc").value;
+        var isTemplate = $("#transformationField_TransformationTemplate")[0].checked;
+
+        var model1 = { TransformationID: transformationId, TransformationTypeID: transformationTypeID, TransformationName: transformationName, TransformationDesc: transformationDesc, IsTemplate: isTemplate }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/SaveTransformation",
+            data: model1,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (transformationSave) {
+                document.getElementById("transformationField_TransformationId").value = transformationSave.CurrentTransformationID;
+                if (transformationSave.IsComplete) {
+
+                    var grid = $("#grid_Conditions").data("kendoGrid");
+                    var json = "";
+                    for (var i = 0; i < grid.dataSource._data.length; i++) {
+                        debugger;
+                        var transformAssignID = grid.dataSource._data[i].TransformAssignID;
+                        var transIndex = grid.dataSource._data[i].TransIndex;
+                        var pubID = grid.dataSource._data[i].selectedPubID;
+                        var value = grid.dataSource._data[i].selectedValue;
+
+                        json = json.length > 0 ? json + ",{" : json + "[{";
+                        json = json + '"TransformAssignID":"' + transformAssignID.toString() + '"';
+                        json = json + ',"RowID":"' + transIndex.toString() + '"';
+                        if (pubID.length > 1) {
+                            var pubIDValues = pubID.map(function (elem) {
+                                return elem.Value;
+                            }).join(",");
+                            json = json + ',"PubID":"' + pubIDValues.toString() + '"';
+                        } else {
+                            if (pubID.Value != null) {
+                                json = json + ',"PubID":"' + pubID.Value.toString() + '"';
+                            } else {
+                                if (pubID[0] != null) {
+                                    json = json + ',"PubID":"' + pubID[0].Value.toString() + '"';
+                                } else {
+                                    json = json + ',"PubID":""';
+                                }
+                            }
+                        }
+                        json = json + ',"Value":"' + value.toString() + '" }';
+                    }
+
+                    var model2 = { TransformAssignID: transformAssignID, TransformationID: transformationSave.CurrentTransformationID, DataMappings: json }
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/SaveAssignTransformation",
+                        data: model2,
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        cache: !0,
+                        datatype: "html",
+                        success: function (detailSave) {
+                            if (detailSave.IsComplete) {
+                                showMessage({
+                                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                    autoClose: false,
+                                    IsOpen: false
+                                });
+
+                                var oldwin = $("#transformationWindow").data('kendoWindow');
+                                oldwin.close();
+
+                                loadTransformationGridWithID(detailSave.SourceFileID, detailSave.FieldMappingID);
+                            } else {
+                                var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + detailSave.Message + "</ul>";
+                                $("#div_TransformAssignMessage").html(errors);
+                            }
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });
+                } else {
+                    var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + transformationSave.Message + "</ul>";
+                    $("#div_TransformAssignMessage").html(errors);
+                }
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function onProductSelect(e) {
+        if (e.dataItem.Value == "0") {
+            //Unselect all but 0
+            var ms = $("#selectedPubID").data("kendoMultiSelect");
+            ms.value([]);
+        } else if (e.dataItem.Value == "-1") {
+            //Stop the selection as this is a spacing option between All and individual products
+            e.preventDefault();
+        } else {
+            //Unselect -2
+            //var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+            var productId = $('#selectedPubID').val()
+            if (productId != null && productId.indexOf('0') > -1) {
+                var ms = $("#selectedPubID").data("kendoMultiSelect");
+                ms.value([]);
+            }
+        }
+    };
+
+    function createProductDisplay(text) {
+        debugger;
+        var textelected = "";
+        if (text != null) {
+            textelected = text.map(function (elem) {
+                return elem.Text;
+            }).join(",");
+        }
+        return textelected;
+    }
+
+    function dataBound(e) {
+
+    }
+</script>
+<script id="tagTemplate" type="text/x-kendo-template">
+    # if (values.length == 1) { #
+    #: dataItems[0].Text #
+    # } else { #
+    #:values.length# item(s) selected
+    # } #
+</script>
+
+<div>
+    <div id="div_TransformAssignMessage">
+
+    </div>
+    <table class="filedetails" width="100%">
+        <tr class="filedetailsrow" style="margin-right: 0px;">
+            <td style="padding-right: 0px;">
+                <div style="text-align: right;">
+                    @(Html.Kendo().Button().Name("AddNewAssignCondition").Content("Add Row Condtion<i class='km-icon icon-kmplus-circled-1'></i>").Enable(Model.isEnabled)
+                    .HtmlAttributes(new { @id = "btnAddNewAssignCondition", @class = "btn k-button", type = "button", onclick = "AddNewAssignRow();" }))
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <div>
+        @(Html.Kendo()
+            .Grid(Model.transformAssignMaps)
+            .Name("grid_Conditions")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.TransformAssignID).Hidden(true);
+                columns.Bound(c => c.GroupedTransformAssignIDs).Hidden(true);
+                columns.Bound(c => c.TransIndex).Title("Row ID").Width(80);
+                columns.Bound(c => c.selectedPubID).ClientTemplate(
+                    "#if (selectedPubID.length > 1) { #" +
+                        "#= createProductDisplay(selectedPubID) #" +
+                    "# } else { #" +
+                        "#if (selectedPubID.length == 0) { #" +
+                            "" +
+                        "# } else if (selectedPubID.Text != null) { #" +
+                            "#=selectedPubID.Text#" +
+                        "# } else { #" +
+                            "#=selectedPubID[0].Text#" +
+                        "# } #" +
+                    "# } #").Title("Product").HtmlAttributes(new { @style = "overflow: hidden;" }).EditorTemplateName("TransformDataMapPub").Width(125);//required
+                columns.Bound(c => c.selectedValue).ClientTemplate("#=selectedValue#").Title("Value").Width(95);
+
+                columns.Template(@<text></text>).HtmlAttributes(new { @class = "templateCell" }).ClientTemplate(
+                                            @Html.Kendo().Button().Name("btnDeleteTransformAssignCondition")
+                                                         .Content("Delete <i class='km-icon icon-kmcustom-delete'></i>")
+                                                         .HtmlAttributes(new { @style = "padding: 0px; margin: 1px;", @class = "btn k-button", type = "button", onclick = "return DeleteCondition(#=TransformAssignID#,'#=GroupedTransformAssignIDs#',#=TransIndex#)" })
+                                                         .ToClientTemplate().ToHtmlString()
+                                                        ).Width(75);
+
+            })
+
+            .Scrollable(scroll => scroll.Virtual(true))
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .HtmlAttributes(new { style = "min-height:100px;max-height:550px;min-width:100px;" })
+            .Events(e => e.DataBound("dataBound"))
+            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Batch(true)
+                            .ServerOperation(false)
+                            .Model(m =>
+                            {
+                                m.Id(i => i.TransformAssignID);
+                                m.Field(i => i.TransformAssignID).Editable(false);
+                                m.Field(i => i.GroupedTransformAssignIDs).Editable(false);
+                                m.Field(i => i.TransIndex).Editable(false);
+
+                                if (Model.isEnabled)
+                                {
+                                    m.Field(i => i.selectedPubID).Editable(true);
+                                    m.Field(i => i.selectedValue).DefaultValue("").Editable(true);
+                                }
+                                else
+                                {
+                                    m.Field(i => i.selectedPubID).Editable(false);
+                                    m.Field(i => i.selectedValue).DefaultValue("").Editable(false);
+                                }
+                            })
+    ))
+    </div>
+</div>

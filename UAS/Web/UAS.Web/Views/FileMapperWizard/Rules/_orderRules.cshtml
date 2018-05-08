@@ -1,0 +1,499 @@
+﻿@model FrameworkUAS.Model.RuleSet
+
+@*UAS.Web.Models.FileMapperWizard.RulesViewModel*@
+
+<script language="JavaScript" type="text/JavaScript">
+    var ruleTabs,
+       ruleCurrentIndex = 0;
+    $(function(){
+        $("#AddRule").click(function(){
+            if (!$("#frmOrderRulesFMW").valid()){
+                 return false;
+            }
+            else{
+                $("#ruleSetErrorMsg").text("");
+                AddNewRule();
+            }
+        });
+    });
+    $(function(){
+        $("#LoadRuleSetTemplate").click(function(){
+            if (!$("#frmOrderRulesFMW").valid()){
+                return false;
+            }
+            else{
+                $("#ruleSetErrorMsg").text("");
+                Open_LoadRuleSetFromTemplate();
+            }
+        });
+    });
+    function checkRuleSetName() {
+        if($("#ruleSetName").val() != ''){
+            var modelData = {
+                RuleSetName: $("#ruleSetName").val()
+            }
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/CheckRuleSetName",
+                type: "POST",
+                data: modelData,
+                traditional: true,
+                cache: false,
+                success: function (returnData) {
+                    $("#ruleSetName").val(returnData)
+                    $("#ruleSetErrorMsg").text("");
+                    return false;
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+        else{
+            //error message
+            $("#ruleSetErrorMsg").text("Please provide Rule Set Name");
+        }
+    }
+    function Open_LoadRuleSetFromTemplate(){
+        var myWindow = $("#wndLoadRuleSetFromTemplate");
+        myWindow.data("kendoWindow").open();
+    }
+    function Close_LoadRuleSetFromTemplate(){
+        var myWindow = $("#wndLoadRuleSetFromTemplate");
+        myWindow.data("kendoWindow").close();
+        return false;
+    }
+    function AddNewRule() {
+        var sourceFileId = @Html.Raw(Json.Encode(Model.sourceFileId));
+        var ruleType = @Html.Raw(Json.Encode(Model.ruleTypeTab));
+        var isGlobal =  $("#isGlobalRuleSet")[0];
+           var isChecked = false;
+           if(isGlobal != null)
+               isChecked = isGlobal.checked;
+           var modelData = {
+               SourceFileId: sourceFileId,
+               RuleType:  ruleType,
+               RuleSetName:  $("#ruleSetName").val(),
+               IsGlobalRuleSet:  isChecked
+           }
+           $.ajax({
+               url: "/UAS.Web/FileMapperWizard/AddNewRule",
+               type: "GET",
+               data: modelData,
+               dataType: 'html',//this is data type of what you are returning
+               success: function (returnData) {
+                   var myWindow = $("#wndNewRule");
+                   myWindow.html(returnData);
+                   myWindow.data("kendoWindow").open();
+               },
+               error: function () {
+                   alert("An error has occured!!!");
+               }
+           });
+       }
+
+       @*var targetUrl = '@Url.Action("ReadData_CustomRuleGrid", "FileMapperWizard")';
+       function ReBindGrid(obj) {
+           debugger;
+           var grid = $("#customRuleGrid").data("kendoGrid");
+           var options = grid.getOptions();
+           var dataSource = new kendo.data.DataSource({
+               transport: {
+                   read: {
+                       url: targetUrl,
+                       dataType: "json",
+                       data: obj
+                   }
+               }
+           })
+           options.dataSource.data = dataSource.data;
+           debugger;
+           grid.setOptions(options);
+       }*@
+
+       function customRuleGridRuleSetId(){
+           return {
+               RuleSetId: $("#hdSelectedRuleSetId").val()
+           };
+       }
+       function DeleteRule(ruleId,ruleSetId){
+           debugger;
+           var modelData = {
+               RuleSetId: ruleSetId,
+               RuleId:  ruleId
+           }
+           $.ajax({
+               url: "/UAS.Web/FileMapperWizard/DeleteRule",
+               type: "Post",
+               data: modelData,
+               dataType: 'html',//this is data type of what you are returning
+               success: function (response) {
+                   if (response) {
+                       $("#validationErrorDiv").hide();
+                       $("#ResultsTable").html(response);
+                       $("#ResultsTable").show();
+                   }
+                   else //error
+                   {
+                       $("#" + "validationErrorDiv").text("an error occurred during delete");//response
+                       $("#" + "ResultsTable").hide();
+                       $("#" + "validationErrorDiv").show();
+                   }
+               },
+               error: function (response) {
+                   $("#" + "validationErrorDiv").text(response);
+                   $("#" + "ResultsTable").hide();
+                   $("#" + "validationErrorDiv").show();
+               }
+           });
+       }
+       function EditRule(ruleId,ruleSetId){
+           debugger;
+           var modelData = {
+               RuleSetId: ruleSetId,
+               RuleId:  ruleId
+           }
+           $.ajax({
+               url: "/UAS.Web/FileMapperWizard/EditRule",
+               type: "Post",
+               data: modelData,
+               dataType: 'json',//this is data type of what you are returning
+               success: function (returnData) {
+
+                   var myWindow = $("#wndNewRule");
+                   myWindow.html(returnData);
+                   myWindow.data("kendoWindow").open();
+
+                   //var grid = $("#customRuleGrid").data("kendoGrid")
+                   //var options = grid.getOptions();
+                   //options.dataSource.data = returnData;
+                   //grid.setOptions(options);//this will fire ReadData_CustomRuleGrid as defined on the grid customRuleGrid
+               },
+               error: function () {
+                   alert("An error has occured!!!");
+               }
+           });
+       }
+
+
+       function SelectLoadRuleSetFromTemplate(){
+           var ruleType = @Html.Raw(Json.Encode(Model.ruleTypeTab));
+           var sourceFileId = @Html.Raw(Json.Encode(Model.sourceFileId));
+           var isGlobal =  $("#IsGlobalRuleSet")[0];
+           var isChecked = false;
+           if(isGlobal != null)
+               isChecked = isGlobal.checked;
+           var rsId = $("#ruleSetId").val();
+           if(rsId == "")
+               rsId = 0;
+          
+           var modelData = {
+               SourceFileId: sourceFileId,
+               TemplateRuleSetId:  rsId,
+               RuleType:  ruleType,
+               RuleSetName:  $("#ruleSetName").val(),
+               IsGlobalRuleSet:  isChecked
+           }
+          
+           Close_LoadRuleSetFromTemplate();
+               $.ajax({
+                   url: "/UAS.Web/FileMapperWizard/NewRuleSetFromTemplate",
+                   type: "POST",
+                   data: modelData,
+                   dataType: 'html',//this is data type of what you are returning  was html
+                   success: function (response) {
+                       //needs to return _orderRules.cshtml view with updated Model because grid of rules is created via Razor loop
+                       if (response) {
+                           $("#LoadRuleSetTemplate").prop("disabled",true);
+
+                           $("#" + "validationErrorDiv").hide();
+                           $("#" + "ResultsTable").html(response);
+                           $("#" + "ResultsTable").show();
+                       }
+                       else //error
+                       {
+                           $("#" + "validationErrorDiv").text(response);
+                           $("#" + "ResultsTable").hide();
+                           $("#" + "validationErrorDiv").show();
+                       }
+                   },
+                   error: function (response) {
+                       $("#" + "validationErrorDiv").text(response);
+                       $("#" + "ResultsTable").hide();
+                       $("#" + "validationErrorDiv").show();
+                   }
+               });
+
+              
+           //}
+           //else {
+           //    $('#alertMsgMain').text("Please enter atleast one selection criteria.");
+           //    $('#validationErrorDiv').show();
+           //    $('#ResultsTable').hide();
+           //}
+
+
+           //$.ajax({
+           //    url: "/UAS.Web/FileMapperWizard/NewRuleSetFromTemplate",
+           //    type: "POST",
+           //    data: modelData,
+           //    dataType: 'html',//this is data type of what you are returning  was html
+           //    success: function (returnData) {
+           //        debugger;
+           //        Close_LoadRuleSetFromTemplate();
+
+           //        var grid = $("#customRuleGrid").data("kendoGrid")
+           //        var options = grid.getOptions();
+           //        options.dataSource.data = returnData;
+           //        //grid.refresh();
+           //        grid.setOptions(options);//this will fire ReadData_CustomRuleGrid as defined on the grid customRuleGrid
+
+           //        //do not call setOptions
+           //        //grid.setOptions(options);
+           //        //When setOptions is called, the Grid widget will be destroyed and recreated. If the widget is bound to remote data, a new read request will be made.
+           //        //calling setOptions() in a Grid event handler is not possible.
+           //        //calling setOptions() in a function, which is related to the Grid's databinding mechanism may cause an endless loop.
+
+           //        //i think that if we are doing things directly on the data source we don't need refresh ???
+           //        //grid.refresh();
+
+           //        //1 = setup
+           //        //2 = MapColumns
+           //        //3 = Rules
+           //        //4 = Review
+           //    },
+           //    error: function () {
+           //        alert("An error has occured!!!");
+           //    }
+           //});
+       }
+
+    //for _orderGrid
+    function customRuleGrid_onChange(e) {
+        var grid = $("#customRuleGrid").data("kendoGrid"),
+            skip = grid.dataSource.skip(),
+            oldIndex = e.oldIndex + skip,
+            newIndex = e.newIndex + skip,
+            data = grid.dataSource.data(),
+            dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+        grid.dataSource.remove(dataItem);
+        grid.dataSource.insert(newIndex, dataItem);
+
+        if (skip == null)
+            skip = 1;
+        var ruleSetId = dataItem["RuleSetId"];
+        var ruleId = dataItem["RuleId"];
+        var sortOrder = e.newIndex + skip;
+        var modelData = {
+            RuleSetId: ruleSetId,
+            RuleId: ruleId,
+            SortOrder: sortOrder
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/UpdateRuleExecutionOrder",
+            type: "Post",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (response) {
+                debugger;
+                if (response) {
+                    $("#" + "validationErrorDiv").hide();
+                    $("#" + "ResultsTable").html(response);
+                    $("#" + "ResultsTable").show();
+                }
+                else //error
+                {
+                    $("#" + "validationErrorDiv").text(response);
+                    $("#" + "ResultsTable").hide();
+                    $("#" + "validationErrorDiv").show();
+                }
+            },
+            error: function (response) {
+                $("#" + "validationErrorDiv").text(response);
+                $("#" + "ResultsTable").hide();
+                $("#" + "validationErrorDiv").show();
+            }
+        });
+    }
+    //for _orderHtml
+    function customRuleHtml_onChange(e) {
+        debugger;
+        var myDiv = e.item[0];
+        //var id = myDiv.attributes[0];
+        //var order = myDiv.attributes[1];//this is 3 or index 2
+        var myRuleId = myDiv.attributes[2];
+        var myRulesetId = myDiv.attributes[3];
+        //var oldIndex = e.oldIndex;//these are 0 based indexes
+        var newIndex = e.newIndex;//order will equal e.newIndex + 1
+
+        var ruleSetId = myRuleId.value;//dataItem["RuleSetId"];
+        var ruleId = myRulesetId.value;//dataItem["RuleId"];
+        var sortOrder = e.newIndex + 1;//e.newIndex + skip;
+        var modelData = {
+            RuleSetId: ruleSetId,
+            RuleId: ruleId,
+            SortOrder: sortOrder
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/UpdateRuleExecutionOrder",
+            type: "Post",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (response) {
+                debugger;
+                if (response) {
+                    $("#" + "validationErrorDiv").hide();
+                    $("#" + "ResultsTable").html(response);
+                    $("#" + "ResultsTable").show();
+                }
+                else //error
+                {
+                    $("#" + "validationErrorDiv").text(response);
+                    $("#" + "ResultsTable").hide();
+                    $("#" + "validationErrorDiv").show();
+                }
+            },
+            error: function (response) {
+                $("#" + "validationErrorDiv").text(response);
+                $("#" + "ResultsTable").hide();
+                $("#" + "validationErrorDiv").show();
+            }
+        });
+    }
+    function onClose_wndLoadRuleSetFromTemplate(e) {
+        
+    }
+    function onOpen_wndLoadRuleSetFromTemplate(e) {
+        //sessionStorage.MyVarName = true;
+        var wnd = e.sender;
+        $('#wndLoadRuleSetFromTemplate').parent().css("top", "0px");
+        $('#wndLoadRuleSetFromTemplate').parent().css("left", "0px");
+    }
+</script>
+
+<style>
+    #ruleContainer div {
+        cursor: move;
+    }
+    #ruleContainer div:hover {
+        background: rgba(0,0,0,.25);        
+    }
+
+    .placeholder {
+        outline-style: dashed;
+        outline-width: 1px;
+        outline-color: red;
+    }
+</style>
+
+
+@using (Html.BeginForm("Index", "FileMapperWizard", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "frmOrderRulesFMW", data_toggle = "validator" }))
+{
+    <div>
+        @Html.Hidden("hdSelectedRuleSetId", Model.ruleSetId)
+
+
+        <div id="columnMapping" style="margin:10px;">
+            <div style="width: 250px; margin-left:20px; text-align:left;">
+                <h3>Rules - @Html.Raw(Model.ruleTypeTab)</h3>
+            </div>
+        </div>
+
+        <br />
+        <div id="validationErrorDiv" style="display:none;">
+            <span>
+                <img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="20" width="20" style="margin:0px;padding:0px;" />
+                <span id="alertMsgMain" style="vertical-align:top;margin-top:5px;"></span>
+            </span>
+        </div>
+
+        <table>
+            <tr class="filedetailsrow">
+                <td>
+                    @Html.LabelFor(m => m.ruleSetName, new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.ruleSetName, new
+               {
+                   @onchange = "checkRuleSetName()",
+                   style = "width:300px",
+                   @class = "form-control",
+                   type = "text",
+                   required = "required",
+                   data_maxlength = "250",
+                   data_required_error = "Please provide Rule Set Name.",
+                   data_error = "Please provide Rule Set Name"
+               })
+                    <div id="ruleSetErrorMsg" class="help-block with-errors"></div>
+                    @(Html.Kendo().CheckBoxFor(m => m.isGlobalRuleSet).Checked(false).Label("Create as Template"))
+                </td>
+
+                <td>
+                    @Html.Kendo().Button().Name("LoadRuleSetTemplate").Content("Load From Template").HtmlAttributes(new { @class = "btn k-button btn-primary", type = "button" }) @*, onclick= "return  Open_LoadRuleSetFromTemplate()"*@
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.Kendo().Button().Name("AddRule").Content("Add").HtmlAttributes(new { @class = "btn k-button btn-primary", style = "margin-top:15px;", type = "button" }) @*, onclick = "return AddNewRule()"*@
+                </td>
+                @*<td>
+                        @Html.Kendo().Button().Name("EditRuleSet").Content("Edit").HtmlAttributes(new { @class = "btn k-button", style = "margin-top:15px;", type = "button", onclick = "return EditRuleSet()" })
+                    </td>*@
+            </tr>
+
+        </table>
+        <div id="ResultsTable">
+            @* this will hold the _orderHtml view  *@
+            @Html.Partial("Rules\\_orderHtml", this.Model)
+        </div>
+    </div>
+
+
+
+    @(Html.Kendo().Window()
+                .Name("wndLoadRuleSetFromTemplate")
+                .Width(400)
+                .Height(125)
+                .Draggable()
+                .Resizable()
+                .Title("Load From Template")
+                .Modal(true)
+                .Visible(false)
+                .Position(p => p.Top(0).Left(0))
+                .Events(ev => ev.Close("onClose_wndLoadRuleSetFromTemplate").Open("onOpen_wndLoadRuleSetFromTemplate"))
+                .Content(@<text>
+                <div>
+                    @(Html.Kendo().DropDownListFor(m => m.ruleSetId)
+                                      // .BindTo(Model.ExistingRuleSets.Where(x => x.IsGlobal == true)) 
+                                      //now we will get the Templates via this method and use currentClient.ClientID
+                                      .DataSource(d => d.Read(r => r.Action("GetRuleSetTemplates", "FileMapperWizard")))//if we needed to prepare data to pass to Controller method then would do this .Data("GetSelectedRuleFieldValue")))
+                                      .DataTextField("Text")
+                                      .DataValueField("Value").OptionLabel("- Select -")
+                                      .HtmlAttributes(new { style = "width:350px;" })
+                                      .Events(e => e.Change("SelectLoadRuleSetFromTemplate")))
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.Kendo().Button().Name("CancelLoadRuleSetFromTemplate").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "return Close_LoadRuleSetFromTemplate()" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </text>)
+    )
+
+
+    @(Html.Kendo().Window()
+                .Name("wndNewRule")
+                .Width(900)
+                .Height(650)
+                .Draggable()
+                .Resizable()
+                .Title("Add Rule")
+                .Modal(true)
+                .Visible(false)
+                .Position(p => p.Top(0).Left(0))
+                .Actions(actions => actions.Maximize().Close()))
+
+
+}

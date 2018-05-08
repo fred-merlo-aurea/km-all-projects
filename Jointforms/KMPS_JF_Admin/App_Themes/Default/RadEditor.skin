@@ -1,0 +1,221 @@
+﻿<%--
+Default skin template. The following skins are provided as examples only.
+
+1. Named control skin. The SkinId should be uniquely defined because
+	duplicate SkinId's per control type are not allowed in the same theme.
+
+<asp:GridView runat="server" SkinId="gridviewSkin" BackColor="White" >
+	<AlternatingRowStyle BackColor="Blue" />
+</asp:GridView>
+
+2. Default skin. The SkinId is not defined. Only one default 
+	control skin per control type is allowed in the same theme.
+
+<asp:Image runat="server" ImageUrl="~/images/image1.jpg" />
+--%>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
+<telerik:radeditor runat="server" Skin="Vista" >
+	<CssFiles>
+		<telerik:EditorCssFile Value="~/App_Themes/Default/RadCustomStyles.css" />
+	</CssFiles>
+ <Modules>
+        <telerik:EditorModule Name="RadEditorHtmlInspector" Enabled="true" Visible="false" />
+        <telerik:EditorModule Name="RadEditorNodeInspector" Enabled="true" Visible="false" />
+        <telerik:EditorModule Name="RadEditorDomInspector" Enabled="true" Visible="false"/>
+        <telerik:EditorModule Name="RadEditorStatistics" Enabled="true" Visible="false" />
+    </Modules>
+    <Tools>
+	    <telerik:EditorToolGroup Tag="MainToolbar">
+		    <telerik:EditorTool name="AjaxSpellCheck" />
+		    <telerik:EditorTool name="FindAndReplace" />
+            <telerik:EditorTool name="SelectAll" />
+            <telerik:EditorSeparator Visible="true" />
+		    <telerik:EditorTool name="Cut" />
+		    <telerik:EditorTool name="Copy" />
+		    <telerik:EditorTool name="Paste" shortcut="CTRL+!"/>
+            <telerik:EditorTool name="PasteStrip" />
+		    <telerik:EditorSeparator Visible="true" />
+		    <telerik:EditorTool name="Undo" />
+		    <telerik:EditorTool name="Redo" />
+		    <telerik:EditorSeparator Visible="true" />
+	    </telerik:EditorToolGroup>
+	    <telerik:EditorToolGroup Tag="Media">
+            <telerik:EditorTool name="InsertImage"/>
+            <telerik:EditorTool name="ImageMapDialog"/>
+            <telerik:EditorTool name="InsertTable"/>
+            <telerik:EditorTool name="LinkManager"/>
+            <telerik:EditorTool name="Unlink"/>
+        </telerik:EditorToolGroup>
+	    <telerik:EditorToolGroup Tag="Formatting">
+		    <telerik:EditorTool name="Bold" />
+		    <telerik:EditorTool name="Italic" />
+		    <telerik:EditorTool name="Underline" />
+            <telerik:EditorTool name="strikethrough" />
+            <telerik:EditorTool name="Superscript" />
+            <telerik:EditorTool name="Subscript" />    
+            <telerik:EditorSeparator Visible="true" />
+		    <telerik:EditorTool name="ForeColor" />
+		    <telerik:EditorTool name="BackColor"/>
+	    </telerik:EditorToolGroup>
+        <telerik:EditorToolGroup Tag="formatting2">
+		    <telerik:EditorTool name="InsertUnorderedList" />
+		    <telerik:EditorTool name="InsertOrderedList" />
+            <telerik:EditorSeparator Visible="true" />  
+		    <telerik:EditorTool name="Indent" />
+            <telerik:EditorTool name="Outdent" />
+		    <telerik:EditorSeparator Visible="true" />  
+		    <telerik:EditorTool name="JustifyLeft" />
+		    <telerik:EditorTool name="JustifyCenter"/>
+		    <telerik:EditorTool name="JustifyRight"/>
+		    <telerik:EditorTool name="JustifyFull"/>
+	    </telerik:EditorToolGroup>
+        <telerik:EditorToolGroup Tag="formatting3">
+            <telerik:EditorTool name="FormatBlock"/>
+		    <telerik:EditorTool name="FontName"/>
+		    <telerik:EditorTool name="RealFontSize"/>
+            <telerik:EditorSeparator Visible="true" />  
+            <telerik:EditorTool name="ModuleManager"/>
+            <telerik:EditorTool name="ToggleScreenMode"/>
+            <telerik:EditorTool name="Zoom"/>
+	    </telerik:EditorToolGroup>
+	</Tools>
+</telerik:radeditor>
+<telerik:radeditor runat="server" SkinId="MinimalSetOfTools">
+	<Tools>
+		<telerik:EditorToolGroup >
+		<telerik:EditorTool Name="Bold" />
+		<telerik:EditorTool Name="Italic" />
+		</telerik:EditorToolGroup>
+	</Tools>
+</telerik:radeditor>
+<%--BASIC SET OF TOOLS--%>
+<telerik:radeditor runat="server" SkinId="BasicSetOfTools">
+	<Tools>
+	<telerik:EditorToolGroup Tag="MainToolbar">
+		<telerik:EditorTool name="AjaxSpellCheck" />
+		<telerik:EditorTool name="FindAndReplace" />
+		<telerik:EditorSeparator Visible="true" />
+		<telerik:EditorTool name="Undo" />
+		<telerik:EditorTool name="Redo" />
+		<telerik:EditorSeparator Visible="true" />
+		<telerik:EditorTool name="Cut" />
+		<telerik:EditorTool name="Copy" />
+		<telerik:EditorTool name="Paste" shortcut="CTRL+!"/>
+	</telerik:EditorToolGroup>
+	<telerik:EditorToolGroup Tag="Formatting">
+		<telerik:EditorTool name="Bold" />
+		<telerik:EditorTool name="Italic" />
+		<telerik:EditorTool name="Underline" />
+		<telerik:EditorSeparator Visible="true" />
+		<telerik:EditorTool name="ForeColor" />
+		<telerik:EditorTool name="BackColor"/>
+		<telerik:EditorSeparator Visible="true" />
+		<telerik:EditorTool name="FontName"/>
+		<telerik:EditorTool name="RealFontSize"/>
+	</telerik:EditorToolGroup>
+	</Tools>
+</telerik:radeditor>
+<%--DEFAULT SET OF TOOLS--%>
+<telerik:radeditor runat="server" SkinId="DefaultSetOfTools">
+	<CssFiles>
+		<telerik:EditorCssFile Value="~/App_Themes/Default/RadCustomStyles.css" />
+	</CssFiles>
+
+	<Content>
+		<h2 class="titleText">RadEditor for ASP.NET AJAX</h2>
+		<p style="text-align: justify;"><span style="font-size: 19px; color: #4f6128;"><strong>RadEditor</strong></span><span style="color: #4f6128;"> </span>is not simply an HTML<a href="#HTMLDescription"><sup>1</sup></a> Editor. It is what Microsoft chose to use in <strong>MSDN</strong>, <strong>CodePlex</strong>, <strong>TechNet</strong>, <strong>MCMS</strong> and even as an alternative to the default editor in <a href="http://www.telerik.com/products/aspnet-ajax/sharepoint.aspx">SharePoint</a>. Whether you need a mere Textbox with Google-like spellchecker, or a Word-like content authoring environment, the result is the same: clean <strong>XHTML</strong> output, fast rendering, widest cross-browser support, and <a href="http://www.telerik.com/products/aspnet-ajax/editor.aspx">tons of features</a>: <br />
+		<br />
+		<img src="../../Img/editor.jpg" alt="product logo" style="margin-top: 25px; float: left; margin-right: 15px;" /></p>
+		<ul style="width: 350px; float: left;">
+			<li>
+			<em>Out-of-the-box XHTML-enabled Output...</em>
+			</li>
+			<li>
+			<em>Unmatched Loading Speed and Performance</em>
+			</li>
+			<li>
+			<em>Microsoft Word-like Spell-checking</em>
+			</li>
+			<li>
+			<em>Seven Ways for Pasting from Word</em>
+			</li>
+			<li>
+			<em>Multilevel Undo/Redo with Action Trails</em>
+			</li>
+			<li>
+			<em>Extended Functionality Through Integrated Controls</em>
+			</li>
+		</ul>
+		<table width="500" style="margin: 0pt auto;clear:both;">
+			<thead>
+				<tr>
+					<th style="background-color: #ebf1dd;">Browser/OS</th>
+					<th style="background-color: #ebf1dd;">Windows</th>
+					<th style="background-color: #ebf1dd;">Mac OS</th>
+					<th style="background-color: #ebf1dd;">Linux</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td align="center" style="text-align: left; vertical-align: middle;"><img src="../../Img/BrowserIcons/ie.gif" alt="ie" style="float: left;" />&nbsp; Internet Explorer</td>
+					<td valign="top" style="background-color: #f2f2f2;">6.0+</td>
+					<td valign="top" style="background-color: #e5e0ec;">- </td>
+					<td valign="top" style="background-color: #dbeef3;">- </td>
+				</tr>
+				<tr>
+					<td><img src="../../Img/BrowserIcons/ff.gif" alt="ff" style="float: left;" />&nbsp; Firefox</td>
+					<td style="background-color: #f2f2f2;">1.5+</td>
+					<td style="background-color: #e5e0ec;">1.5+</td>
+					<td style="background-color: #dbeef3;">1.5+</td>
+				</tr>
+				<tr>
+					<td><img src="../../Img/BrowserIcons/chrome.gif" alt="chrome" style="float: left;" />&nbsp; Google Chrome</td>
+					<td style="background-color: #f2f2f2;">0.2+</td>
+					<td style="background-color: #e5e0ec;">5.0+</td>
+					<td style="background-color: #dbeef3;">5.0+</td>
+				</tr>
+				<tr>
+					<td><img src="../../Img/BrowserIcons/opera.gif" alt="opera" style="float: left;" />&nbsp; Opera</td>
+					<td style="background-color: #f2f2f2;">9.0+</td>
+					<td style="background-color: #e5e0ec;">9.0+</td>
+					<td style="background-color: #dbeef3;">-</td>
+				</tr>
+				<tr>
+					<td><img src="../../Img/BrowserIcons/safari.gif" alt="safari" style="float: left;" />&nbsp; Safari</td>
+					<td style="background-color: #f2f2f2;">3.0+</td>
+					<td style="background-color: #e5e0ec;">3.0+</td>
+					<td style="background-color: #dbeef3;">-</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<p style="border-top: 1px solid #555;padding-top: 10px;">
+		<sup><sup><a id="HTMLDescription">1.</a></sup>The computer language used to create world-wide-web pages which are read by browsers.</sup>
+		</p>
+	</Content> 
+	<Links>
+		<telerik:EditorLink Name="Telerik" href="http://www.telerik.com">
+		<telerik:EditorLink Name="Products" href="http://www.telerik.com/products">
+		<telerik:EditorLink Name="RadEditor" href="http://www.telerik.com/radeditor">
+		<telerik:EditorLink Name="Accessible RadEditor" href="http://demos.telerik.com/aspnet-ajax/editor/examples/accessibleeditor/defaultcs.aspx" />
+		<telerik:EditorLink Name="Rad Editor for MOSS" href="http://www.telerik.com/products/aspnet-ajax/sharepoint.aspx" />
+		</telerik:EditorLink>
+		</telerik:EditorLink>
+		<telerik:EditorLink name="Purchase" href="http://www.telerik.com/purchase" />
+		<telerik:EditorLink name="Support" href="http://www.telerik.com/support" />
+		<telerik:EditorLink name="Community" href="http://www.telerik.com/community" />
+		<telerik:EditorLink name="Company" href="http://www.telerik.com/company" />
+		<telerik:EditorLink name="Account" href="https://www.telerik.com/login.aspx" />
+		</telerik:EditorLink>
+		<telerik:EditorLink name="Microsoft">
+		<telerik:EditorLink name="Main Site" href="http://www.microsoft.com" />
+		<telerik:EditorLink name="MSDN Online" href="http://msdn.microsoft.com" />
+		<telerik:EditorLink name="Windows Update" href="http://windowsupdate.microsoft.com" />
+		</telerik:EditorLink>
+		<telerik:EditorLink name="Search Engines">
+		<telerik:EditorLink name="Google" href="http://www.google.com" />
+		<telerik:EditorLink name="Yahoo" href="http://www.yahoo.com" />
+		<telerik:EditorLink name="Bing" href="http://www.bing.com" />
+		</telerik:EditorLink>
+	</Links> 
+</telerik:radeditor>

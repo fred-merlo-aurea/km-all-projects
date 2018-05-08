@@ -1,0 +1,109 @@
+﻿@model UAS.Web.Models.FileMapperWizard.InsertUpdateNewModel
+
+<script type="text/javascript">
+    function DeleteUpdateNew(ruleFieldId) {
+        var grid = $("#grid_UpdateNew").data("kendoGrid");
+        var row = $(event.srcElement).closest("tr");
+        debugger;//should be able to get row.index or something
+        var data = grid.dataSource.at(row.index);
+        grid.dataSource.remove(data);
+        // grid.refresh();
+    }
+</script>
+
+@using (Html.BeginForm("Index", "FileMapperWizard", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "frmPostDqmFMW", data_toggle = "validator" }))
+{
+        @(Html.Kendo()
+            .Grid(Model.updateList)
+            .Name("grid_UpdateNew")
+
+            .Columns(columns =>
+            {
+
+            columns.Bound(c => c.ruleFieldId).Hidden(true);//server bound columns can't be locked
+            columns.Bound(c => c.uiControl).Hidden(true);
+            columns.Bound(c => c.columnName).ClientTemplate("#=columnName#").Title("");
+
+            //start here in morning - testing which of these 3 column ways might work - i think the Client template with javascript has best chance
+            //does not work - same issue - extra text - columns.Bound(c => c.updateText).ClientTemplate("#=updateText#").EditorTemplateName("Rules_ConditionalValue");
+
+
+            //does not work - update text is dropdown markup text, edit is textbox
+            //columns.Bound(c => c.updateText).ClientTemplate("#if(uiControl == 'textbox'){#" +
+            //                                                "@(Html.Kendo().TextBox().Name('ruleFieldTextBox'))" +
+            //                                                "#}else if(uiControl == 'numeric'){#" +
+            //                                                "@(Html.Kendo().NumericTextBox().Name('ruleFieldNumeric').Min(0).Value(1))" +
+            //                                                "#} else if(uiControl == 'dropdownlist'){#" +
+            //                                                "@(Html.Kendo().DropDownList()" +
+            //                                                 "             .Name('compareValue')" +
+            //                                                 "             .OptionLabel('- Select Value -')" +
+            //                                                 "             .DataSource(d => d.Read(r => r.Action('GetRuleFieldValue', 'FileMapperWizard').Data('GetSelectedRuleFieldValue')))" +
+            //                                                 "             .DataTextField('Text')" +
+            //                                                 "             .DataValueField('Value')" +
+            //                                                 "             .HtmlAttributes(new { @style = 'width:200px;' })" +
+            //                                                 "             .Text('')" +
+            //                                                 "               .Events(e =>" +
+            //                                                 "               {" +
+            //                                                 "                   e.Change('onChangeConditionalValue');" +
+            //                                                 "               })" +
+            //                                                ")" +
+            //                                                "#}else if (uiControl == 'calendar') {#" +
+            //                                                "@(Html.Kendo().Calendar().Name('ruleFieldCalendar').Value(DateTime.Now))" +
+            //                                                "#}# ");
+
+
+            //does not work - edit is textbox
+            //columns.Bound(c => c.updateText).ClientTemplate("#=updateText#")
+            //.EditorTemplateName("#if(uiControl == 'textbox'){#" +
+            //                    "RuleField_TextBox" +
+            //                    "#}else if(uiControl == 'numeric'){#" +
+            //                    "RuleField_Numeric" +
+            //                    "#} else if(uiControl == 'dropdownlist'){#" +
+            //                    "RuleField_DropDownList" +
+            //                    "#}else if (uiControl == 'calendar') {#" +
+            //                    "RuleField_Calendar" +
+            //                    "#}# "); //Rules_ConditionalValue did not work - extra text    
+
+
+            columns.Bound(c => c.updateText).ClientTemplate("#=updateText#")
+            .EditorTemplateName("#if(uiControl == 'textbox'){#" +
+                                                    "RuleField_TextBox" +
+                                                    "#}else if(uiControl == 'numeric'){#" +
+                                                    "RuleField_Numeric" +
+                                                    "#} else if(uiControl == 'dropdownlist'){#" +
+                                                    "RuleField_DropDownList" +
+                                                    "#}else if (uiControl == 'calendar') {#" +
+                                                    "RuleField_Calendar" +
+                                                    "#}# "); //Rules_ConditionalValue did not work - extra text    
+                                                             //RuleField_TextBox when out of edit mode the value does not show
+
+            columns.Template(@<text></text>).HtmlAttributes(new { @class = "templateCell" }).Width(75).ClientTemplate(
+                                            @Html.Kendo().Button().Name("btnDeleteUpdateNew")
+                                                         .Content("Delete <i class='km-icon icon-kmcustom-delete'></i>")
+                                                         .HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "return DeleteUpdateNew(#=ruleFieldId#)" })
+                                                         .ToClientTemplate().ToHtmlString()
+                                                        );
+
+            })
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .HtmlAttributes(new { style = "min-height:100px;min-width:100px;" })
+    //.Events(e => e.Edit("grid_UpdateNew_Edit"))
+    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Batch(true)
+                    .ServerOperation(false)
+                    .Model(m =>
+                    {
+                        m.Id(i => i.ruleFieldId);
+                        m.Field(i => i.ruleFieldId).Editable(true);//if not set to true you can't change the values in javascript
+                        m.Field(i => i.uiControl).Editable(true);
+                        m.Field(i => i.columnName).Editable(true);
+                        m.Field(i => i.updateText).Editable(true);
+                        
+
+                    })
+                )
+     )
+
+
+}

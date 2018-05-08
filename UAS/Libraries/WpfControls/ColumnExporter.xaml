@@ -1,0 +1,109 @@
+﻿<Window x:Class="WpfControls.ColumnExporter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:local="clr-namespace:WpfControls"
+        Title="Export Columns" Height="600" Width="600">
+    <Window.Resources>
+        <Style x:Key="DraggableListBoxItem" TargetType="telerik:RadListBoxItem">
+            <Setter Property="telerik:DragDropManager.AllowCapturedDrag" Value="True" />
+        </Style>
+        <Style x:Key="vanillaButton" TargetType="{x:Type telerik:RadButton}">
+            <Setter Property="FontFamily" Value="Calibri"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadButton}">
+                        <Border x:Name="Border" CornerRadius="2" BorderThickness="0" 
+                                    Background="Transparent">
+                            <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="roundedContent">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="txtMe" Text="{Binding Name}" Margin="8,0,0,0"/>
+                <TextBlock Grid.Column="1" Text="|" HorizontalAlignment="Right" FontWeight="Bold"/>
+                <telerik:RadButton Name="btnRemoveCol" Grid.Column="2" Content="X" FontSize="12" FontWeight="Bold" Style="{StaticResource vanillaButton}" Background="White" Width="25" HorizontalAlignment="Right" 
+                                   Click="btnRemoveCol_Click"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Drag or double-click columns to combine into new column. Note: This will eliminate the original columns." Foreground="#559EDB" TextWrapping="Wrap" Margin="10"/>
+        <StackPanel Grid.Column="1" Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom">
+            <TextBlock Text="New Column Name: " Foreground="#559EDB" VerticalAlignment="Center" />
+            <TextBox Name="tBoxName" Width="150" VerticalAlignment="Center" />
+        </StackPanel>
+        <telerik:RadListBox x:Name="rlbCurrentColumns" Visibility="Visible" Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" BorderThickness="1" AllowDrop="True"
+         telerik:TouchManager.IsTouchHitTestVisible="True" ItemContainerStyle="{StaticResource DraggableListBoxItem}" MouseDoubleClick="rlbCurrentColumns_MouseDoubleClick">
+            <telerik:RadListBox.DragVisualProvider>
+                <telerik:ScreenshotDragVisualProvider />
+            </telerik:RadListBox.DragVisualProvider>
+            <telerik:RadListBox.DragDropBehavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:RadListBox.DragDropBehavior>
+            <telerik:ListBoxDragDrop.Behavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:ListBoxDragDrop.Behavior>
+        </telerik:RadListBox>
+        <telerik:RadListBox x:Name="rlbAddedColumn" Visibility="Visible" Grid.Column="1" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" BorderThickness="1" AllowDrop="True"
+         telerik:TouchManager.IsTouchHitTestVisible="True" ItemContainerStyle="{StaticResource DraggableListBoxItem}" PreviewDrop="rlbAddedColumn_PreviewDrop" MouseDoubleClick="rlbAddedColumn_MouseDoubleClick">
+            <telerik:RadListBox.DragVisualProvider>
+                <telerik:ScreenshotDragVisualProvider />
+            </telerik:RadListBox.DragVisualProvider>
+            <telerik:RadListBox.DragDropBehavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:RadListBox.DragDropBehavior>
+            <telerik:ListBoxDragDrop.Behavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:ListBoxDragDrop.Behavior>
+        </telerik:RadListBox>
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="10">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Delimiter: " Foreground="#559EDB" FontWeight="SemiBold" FontSize="14"  VerticalAlignment="Center"/>
+                <telerik:RadComboBox Name="rcbDelimiters" Width="150" Height="23" />
+            </StackPanel>
+            <telerik:RadButton Name="btnNewColumn" Content="Add New Column" Width="100" Height="23" HorizontalAlignment="Right" Margin="5" Click="btnNewColumn_Click"/>
+        </StackPanel>
+        <DockPanel Margin="10" Grid.Row="3" VerticalAlignment="Stretch">
+            <TextBlock Text="New Columns:" TextWrapping="Wrap" Foreground="#559EDB" FontWeight="SemiBold" FontSize="16" DockPanel.Dock="Top"/>
+            <telerik:RadListBox Name="rlbNewCols" BorderThickness="1" SelectionChanged="rlbNewCols_SelectionChanged" Margin="0,5,0,0" ItemTemplate="{DynamicResource roundedContent}">
+            </telerik:RadListBox>            
+        </DockPanel>
+        <DockPanel Margin="10" Grid.Row="3" Grid.Column="1" VerticalAlignment="Stretch">
+            <TextBlock Text="Select a new column to view the contained columns and delimiter below." TextWrapping="Wrap" Foreground="#559EDB" FontSize="14" DockPanel.Dock="Top"/>
+            <telerik:RadListBox Name="rlbPreviewColumns" Margin="0,5,0,0" BorderThickness="0" />
+            <DockPanel Name="dpDelimiters" VerticalAlignment="Bottom" Margin="0,5,0,0" Visibility="Hidden" HorizontalAlignment="Left" DockPanel.Dock="Left">
+                <TextBlock Text="Delimiter: " Foreground="#559EDB" FontSize="14" DockPanel.Dock="Left" FontWeight="SemiBold"/>
+                <TextBlock Name="txtDelimiter" Foreground="#559EDB" FontSize="14" DockPanel.Dock="Right" FontWeight="Light" />
+            </DockPanel>
+        </DockPanel>
+        <telerik:RadButton Name="btnExport" Grid.Row="4" Grid.Column="1" Content="Export" Width="65" Height="23" HorizontalAlignment="Right" Margin="5" Click="btnExport_Click"/>
+    </Grid>
+</Window>

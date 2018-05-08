@@ -1,0 +1,303 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="KMPS.MD.MasterPages.Site" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Master Database Reports</title>
+   <%-- <meta id="FirstCtrlID" runat="server" http-equiv="X-UA-Compatible" content="IE=9" />--%>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="http://www.ecn5.com/ecn.communicator/MasterPages/ECN_MainMenu.css" />
+    <link rel="stylesheet" href="http://www.ecn5.com/ecn.communicator/MasterPages/ECN_Controls.css" />
+
+    <link href="../Styles/jquery-ui.min.css" rel="stylesheet" />
+</head>
+<body runat="server" id="mBody" style="background-color: #cccccc;">
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="1000">
+            <Scripts>
+                <asp:ScriptReference Path="~/Scripts/AjaxHack.js" />
+                <asp:ScriptReference Path="~/Scripts/jquery/jquery-1.11.2.min.js" />
+
+                <asp:ScriptReference Path="~/Scripts/jquery-ui/jquery-ui.min.js" />
+
+                <asp:ScriptReference Path="~/Scripts/D3/numeric-1.2.6.min.js" />
+                <asp:ScriptReference Path="~/Scripts/D3/d3.v4.min.js?dt=04272017" />
+                <asp:ScriptReference Path="~/Scripts/D3/venn.js?dt=04272017" />
+                <asp:ScriptReference Path="~/Scripts/MD.js?dt=04272017" />
+                <asp:ScriptReference Path="~/Scripts/D3/mds.js?dt=04272017" />
+                <asp:ScriptReference Path="~/Scripts/UAD.js" />
+                <asp:ScriptReference Path="~/Scripts/BingMaps/matchMedia.js" />
+                <asp:ScriptReference Path="~/Scripts/BingMaps/MatchMedia.addListener.js" />
+            </Scripts>
+        </asp:ScriptManager>
+        <script type="text/javascript" language="javascript">
+            function ShowProcessing() {
+                $find('popProgressUpdate').show();
+            }
+
+            function HideProcessing() {
+                $find('popProgressUpdate').hide();
+            }
+        </script>
+        <center>
+            <table class="pageborder" cellpadding="0" cellspacing="0" id="Table1" width="500px">
+                <tr>
+                    <td class="hdr" valign="middle">
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td align="left" valign="middle">
+                                    <ul class="ECN-AppLinks">
+                                        <li>
+                                            <table cellpadding="0" cellspacing="0">
+                                                <tr valign="top">
+                                                    <td style="height: 80px;">
+                                                        <asp:Image ID="imgBrandLogo" runat="server" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <ul>
+                                                <li>
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <table cellspacing="1" cellpadding="1" width="100%">
+                                                                    <tr>
+                                                                        <td width="40px" style="padding-left: 10px">
+                                                                            <asp:Image ID="Image8" runat="server" src="../Images/home.png" Width="30" Height="30" />
+                                                                        </td>
+                                                                        <td align="left" width="240px">
+                                                                            <asp:HyperLink ID="hlHome" runat="server" class="ECN-Label">Home</asp:HyperLink>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <asp:Panel ID="pnlEmailMarketing" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image1" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-email.png" Width="35" Height="25" />
+                                                                            </td>
+                                                                            <td align="left" width="240px">
+                                                                                <asp:HyperLink ID="hlEmailMarketing" runat="server" class="ECN-Label">Email Marketing</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlUAD" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image2" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-audience.png" Width="31" Height="31" />
+                                                                            </td>
+                                                                            <td align="left" width="240px">
+                                                                                <asp:HyperLink ID="hlMAF" runat="server" class="ECN-Label">Unified Audience Database</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlSurveys" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image4" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-surveys.png" Width="30" Height="30" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlSurveys" runat="server" class="ECN-Label">Surveys</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+<%--                                                                    <asp:Panel ID="pnlPRT" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image5" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-wqt.png" Width="30" Height="30" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlPRT" runat="server" class="ECN-Label">Product Reporting</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>--%>
+<%--                                                                    <asp:Panel ID="pnlDigitalEditions" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image6" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-digitaleditions.png" Width="30" Height="30" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlDigitalEditions" runat="server" class="ECN-Label">Digital Editions</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>--%>
+                                                                    <asp:Panel ID="pnlDomainTracking" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image9" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-domaintracking.jpg" Width="30" Height="30" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlDomainTracking" runat="server" class="ECN-Label">Domain Tracking</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlJointForms" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image7" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-forms.png" Width="31" Height="31" Visible="false" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlJointForms" runat="server" class="ECN-Label" Visible="false">Form Builder</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlFormsDesigner" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image3" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-formsdesigner.png" Width="31" Height="31" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                            <asp:HyperLink ID="hlFormsDesigner" runat="server" class="ECN-Label">Form Designer</asp:HyperLink>
+                                                                        </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlMarketingAutomation" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image10" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-automation.png" Width="31" Height="31" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                            <asp:HyperLink ID="hlMarketingAutomation" runat="server" class="ECN-Label">Marketing Automation</asp:HyperLink>
+                                                                        </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlDataCompare" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image11" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-datacompare.png" Width="31" Height="31" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlDataCompare" runat="server" class="ECN-Label" >Data Compare</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                    <asp:Panel ID="pnlAMS" runat="server">
+                                                                        <tr>
+                                                                            <td width="40px" style="padding-left: 10px">
+                                                                                <asp:Image ID="Image5" runat="server" src="http://www.ecn5.com/ecn.communicator/images/ecn-icon-home-uas.png" Width="30" Height="30" />
+                                                                            </td>
+                                                                            <td align="left" width="100px">
+                                                                                <asp:HyperLink ID="hlAMS" runat="server" class="ECN-Label">AMS</asp:HyperLink>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </asp:Panel>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td align="right" valign="bottom">
+                                    <img src="../Images/poweredbykm.png" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="menu bar">
+                        <table width="100%" height="100%" cellspacing="0" cellpadding="0" id="Table3">
+                            <tr>
+                                <td nowrap>
+                                    <div style="position: relative; z-index: 9;">
+                                        <asp:Menu ID="NavigationMenu" runat="server" Orientation="Horizontal" StaticEnableDefaultPopOutImage="False" RenderingMode="Table">
+                                            <StaticMenuStyle CssClass="menu" />
+                                            <StaticMenuItemStyle CssClass="menu" />
+                                            <StaticSelectedStyle CssClass="menu-selected" />
+                                            <DynamicSelectedStyle CssClass="submenu-selected" />
+                                            <DynamicMenuItemStyle CssClass="submenu" HorizontalPadding="1px" VerticalPadding="1px" />
+                                            <DynamicMenuStyle CssClass="IE" />
+                                            <Items>
+                                                <asp:MenuItem Text="Home"></asp:MenuItem>
+                                                <asp:MenuItem Text="Dashboard" NavigateUrl="~/main/dashboard.aspx"></asp:MenuItem>
+                                                <asp:MenuItem Text="Audience Views">
+                                                    <asp:MenuItem Text="Consensus" NavigateUrl="~/AudienceViews/report.aspx?ViewType=ConsensusView" ToolTip="Single database that aggregates, de-dupes, and reconciles an individual’s information from multiple sources into one master profile"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Recency" NavigateUrl="~/AudienceViews/report.aspx?ViewType=RecencyView" ToolTip="Audience segmentation based on the most recent demographic data"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Product" NavigateUrl="~/AudienceViews/ProductView.aspx" ToolTip="Product level statistics based on a single product"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Cross Product" NavigateUrl="~/AudienceViews/CrossProductView.aspx" ToolTip="Compare product level statistics based on 2 or more individual products"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Record View" NavigateUrl="~/AudienceViews/CustomerService.aspx" ToolTip="Individual record information, subscriber and activity details within any selected product"></asp:MenuItem>
+                                                </asp:MenuItem>
+                                                <asp:MenuItem Text="Sales View" NavigateUrl="~/main/Questions.aspx"></asp:MenuItem>
+                                                <asp:MenuItem Text="Markets" NavigateUrl="~/main/Markets.aspx">
+                                                    <asp:MenuItem Text="Market Creation" NavigateUrl="~/main/Markets.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Market Comparison" NavigateUrl="~/main/MarketPenetration.aspx"></asp:MenuItem>
+                                                </asp:MenuItem>
+                                                <asp:MenuItem Text="Filters" NavigateUrl="~/main/FilterList.aspx">
+                                                    <asp:MenuItem Text="View Filters/Filter Segmentations" NavigateUrl="~/main/FilterList.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Scheduled Export" NavigateUrl="~/main/FilterSchedules.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Filter Comparison" NavigateUrl="~/main/filterPenetration.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Filter Category" NavigateUrl="~/main/filterCategory.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Question Category" NavigateUrl="~/main/QuestionCategory.aspx"></asp:MenuItem>
+                                                </asp:MenuItem>
+                                                <asp:MenuItem Text="Campaigns" NavigateUrl="~/main/Campaign.aspx">
+                                                    <asp:MenuItem Text="View Campaigns" NavigateUrl="~/main/Campaign.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Campaign Comparison" NavigateUrl="~/main/CampaignSegmentation.aspx"></asp:MenuItem>
+                                                </asp:MenuItem>
+                                                <asp:MenuItem Text="Tools" NavigateUrl="~/Tools/Geocode.aspx">
+                                                    <asp:MenuItem Text="GeoCoding" NavigateUrl="~/Tools/Geocode.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Summary Report" NavigateUrl="~/Tools/SummaryReport.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Record View Setup" NavigateUrl="~/Tools/RecordViewPDFSetup.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Brand Setup" NavigateUrl="~/Tools/BrandSetup.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="User Brand Setup" NavigateUrl="~/Tools/UserBrandSetup.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Download Template Setup" NavigateUrl="~/Tools/DownloadTemplateSetup.aspx"></asp:MenuItem>
+                                                    <asp:MenuItem Text="Merge Subscriber" NavigateUrl="~/Tools/MergeSubscriber.aspx" ></asp:MenuItem>
+                                                    <asp:MenuItem Text="CrossTab Report Setup" NavigateUrl="~/Tools/ReportSetup.aspx" ></asp:MenuItem>
+                                                    <asp:MenuItem Text="UserData Mask Setup" NavigateUrl="~/Tools/UserDataMaskSetup.aspx" ></asp:MenuItem>
+                                                </asp:MenuItem>
+                                            </Items>
+                                        </asp:Menu>
+                                    </div>
+                                </td>
+                                <td width="5%" align="right" valign="middle">
+                                    <asp:Label ID="lblUserName" CssClass="name" runat="server" />
+                                </td>
+                                <td width="6%" align="center" valign="middle" nowrap="nowrap">
+                                    <asp:HyperLink ID="HyperLinkAdmin" runat="server" NavigateUrl="~/Administration/Publications.aspx"
+                                        Visible="false" class='logoff'>Administration</asp:HyperLink>
+                                </td>
+                                <td width="6%" align="center" valign="middle">
+                                    <asp:LinkButton ID="lbEditProfile" runat="server" OnClick="lbEditProfile_Click" Text="Edit Profile" CausesValidation="false" class='logoff' />
+                                </td>
+                                <td width="6%" nowrap valign="middle" align="center">
+                                    <a href='http://www.kmlearningcenter.com' target="_blank" class='logoff'>Learning Center</a>
+                                </td>
+                                <td width="4%" align="center" valign="middle" nowrap="nowrap">
+                                    <asp:LinkButton ID="lnkbtnLogout" runat="server" CssClass="logoff" CausesValidation="false"
+                                        Text="Logout" OnClick="lnkbtnLogout_Click"></asp:LinkButton>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 800px">
+                    <td width="100%" valign="top">
+                        <asp:Panel ID="pnlHeader" runat="server" Style="background-color: orange; vertical-align: middle; padding-top: 5px; padding-bottom: 5px">
+                            &nbsp;&nbsp;<asp:Label ID="lblMenuSelected" font-family="Tahoma, Arial, sans-serif" ForeColor="#ffffff" Font-Bold="true" Font-Size="14px" runat="server" />
+                        </asp:Panel>
+                        <br />
+                        <asp:ContentPlaceHolder ID="Content" runat="server" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ftr"></td>
+                </tr>
+            </table>
+            <asp:Panel ID="pnlProgressUpdate" runat="server" CssClass="popupbody">
+                <div id="dvProgressUpdate" style="position: absolute; z-index: 10; color: black; font-size: x-small; background-color: #F4F3E1; border: solid 1px Orange; text-align: center; width: 100px; height: 100px; left: expression((this.offsetParent.clientWidth/2)-(this.clientWidth/2)+this.offsetParent.scrollLeft); top: expression((this.offsetParent.clientHeight/2)-(this.clientHeight/2)+this.offsetParent.scrollTop);">
+                    <br />
+                    <b>Processing...</b><br />
+                    <br />
+                    <asp:Image ID="imgProgress" runat="server" ImageUrl="~/Images/loading.gif" />
+                </div>
+            </asp:Panel>
+            <ajax:ModalPopupExtender ID="mpeProgressUpdate" BehaviorID="popProgressUpdate" runat="server"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlProgressUpdate" TargetControlID="pnlProgressUpdate">
+            </ajax:ModalPopupExtender>
+        </center>
+    </form>
+</body>
+</html>

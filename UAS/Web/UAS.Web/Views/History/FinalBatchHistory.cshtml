@@ -1,0 +1,44 @@
+﻿@model UAS.Web.Models.Circulations.History
+
+@{
+    ViewBag.Title = "History - Finalized Batches";
+}
+
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div class="container">
+    <ul class="nav nav-pills">
+        <li>@Html.ActionLink("Open Batches", "OpenBatchHistory", "Dashboard", null, new { @class = "navigationLink" })</li>
+        <li class="active"><a>Finalized Batches</a></li>
+    </ul>
+</div>
+<table style="width:75%;">
+    <tr>
+        <td> User Name: </td>
+        <td>
+            @Html.DropDownList("Username", Model.Users.Select(item => new SelectListItem
+       {
+           Value = item.Key.ToString(),
+           Text = item.Value.ToString(),
+           Selected = "select" == Model.User.Key.ToString()
+       }), "-- Select --")
+        </td>
+        <td>Start Date:</td>
+        <td>@Html.Kendo().DatePickerFor(x => x.StartDate).HtmlAttributes(new { @type = "" })</td>
+        <td> <button type="button" id="searchBtn"> Search </button></td>
+    </tr>
+    <tr>
+        <td> Batch #: </td>
+        <td>@Html.TextBoxFor(x => x.BatchNumber)</td>
+        <td> End Date: </td>
+        <td>@Html.Kendo().DatePickerFor(x => x.EndDate).HtmlAttributes(new { @type = "" })</td>
+        <td> <button type="button" id="resetBtn"> Reset</button></td>
+    </tr>
+</table>
+<br />
+<div id="divShowResults">
+    @Html.Partial("_BatchHistoryResults", Model.ResultsFinalized)
+</div>

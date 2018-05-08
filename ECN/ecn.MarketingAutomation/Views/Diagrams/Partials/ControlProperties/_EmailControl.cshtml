@@ -1,0 +1,692 @@
+﻿
+<div id="EmailControlProp">
+    <section class="propertyTitle">Email Control Properties</section>
+    <section class="propertyItem" id="emailcontrol_download" style="text-align:center;">
+        @Html.Kendo().Button().Name("btn_EmailControlDownload").Content("Download").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btn_EmailControlDownload_Click()" })
+        <input id="emailcontrol_ECNID" type="hidden" />
+        <input id="emailcontrol_ControlType" type="hidden" />
+    </section>
+    <section class="propertyItem">
+        <span>Control Name:</span>
+        <input type="text" id="eco01" />
+    </section>
+    <section class="propertyItem">
+        <span> Campaign Item Name:
+            <input type="text" id="emailcontrol_CampaignItemName" />
+        </span><br />
+    </section>
+    <input id="EmailCtrl_customerID" type="hidden" name="EmailCtrl_customerID" />
+    <section class="propertyItem">
+        <span>
+            Create from Template?
+            <input type="radio" name="rbl_eco_citemplate_selected" value="0"> Yes
+            <input type="radio" name="rbl_eco_citemplate_selected" value="1"> No<br>
+        </span>
+        <section id="ciTemplateEcoSelectExisting" style="display:none;">
+            <span>
+                @Html.Kendo().Button().Name("ciTemplateEco").Content("Select Template").HtmlAttributes(new { @class = "btn", type = "button", onclick = "campaign_btnSelectEcociTemplate_Click()" })
+            </span>
+            <br>
+            <strong style="margin-left:10px;">Campaign Item Template:</strong>
+            <span id="EmailCtrl_templateName"></span>
+        </section>
+        <input id="EmailCtrl_citemplateID" type="hidden" name="EmailCtrl_citemplateID" />
+    </section>
+    <section class="propertyItem">
+        <span>Message:</span><br>
+        @Html.Kendo().Button().Name("subscribeMessage").Content("Select Message to Send").HtmlAttributes(new { @class = "btn", type = "button", onclick = "EmailCtrlClick_btnSelectMessage()" })<br>
+        <strong style="margin-left:10px;">Message:</strong>
+        <span id="EmailCtrl_messageName"></span>
+        <input id="EmailCtrl_messageID" type="hidden" name="EmailCtrl_messageID" />
+    </section>
+    
+    <section class="propertyItem">
+        <span>Blast Fields:</span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="eco_blastfieldname1">Field 1:</label><input id="eco_blastfieldvalue1" style="margin-left:5px;margin-bottom:5px;" />
+            <span id="eco_blastfieldcustom1" style="display:none;"><input type="text" id="eco08" /></span><br>
+        </span>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="eco_blastfieldname2">Field 2:</label><input id="eco_blastfieldvalue2" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="eco_blastfieldcustom2" style="display:none;"><input type="text" id="eco09" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="eco_blastfieldname3">Field 3:</label><input id="eco_blastfieldvalue3" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="eco_blastfieldcustom3" style="display:none;"><input type="text" id="eco10" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="eco_blastfieldname4">Field 4:</label><input id="eco_blastfieldvalue4" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="eco_blastfieldcustom4" style="display:none;"><input type="text" id="eco11" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="eco_blastfieldname5">Field 5:</label><input id="eco_blastfieldvalue5" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="eco_blastfieldcustom5" style="display:none;"><input type="text" id="eco12" /></span><br>
+    </section>
+    <section class="propertyItem">
+        <span>Envelope:</span><br>
+        From Email <br><input type="text" id="eco04" /><br>
+        Reply To <br><input type="text" id="eco05" /><br>
+        From Name <br><input type="text" id="eco06" /><br>
+        Subject <br><input type="text" id="eco07" /><br>
+    </section>
+    <section class="propertyItem" id="emailControl_SendTime">
+        <span>Expected Send Time:</span>
+        <span id="emailControl_estSendTime"></span>
+    </section>
+    <section class="propertyItem" name="cancelControl" id="cancelControl">
+        <input type="radio" id="cancel" name="cancel" /><span><b>Cancel Automation Control</b></span>
+        <div id="cancelStats">
+            <span><b>Date Cancelled:</b></span>
+            <span id="cancelDate"></span>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        $("input:radio[name=cancel]").click(cancel_Click);
+        $("#eco_blastfieldvalue1").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#eco_blastfieldcustom1").show();
+                else
+                    {
+                    $("#eco_blastfieldcustom1").hide();
+                    $("#eco08").val(value);
+                }
+            }
+        });
+        $("#eco_blastfieldvalue2").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#eco_blastfieldcustom2").show();
+                else {
+                    $("#eco_blastfieldcustom2").hide();
+                    $("#eco09").val(value);
+                }
+            }
+        });
+        $("#eco_blastfieldvalue3").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#eco_blastfieldcustom3").show();
+                else {
+                    $("#eco_blastfieldcustom3").hide();
+                    $("#eco10").val(value);
+                }
+            }
+        });
+        $("#eco_blastfieldvalue4").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#eco_blastfieldcustom4").show();
+                else {
+                    $("#eco_blastfieldcustom4").hide();
+                    $("#eco11").val(value);
+                }
+            }
+        });
+        $("#eco_blastfieldvalue5").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#eco_blastfieldcustom5").show();
+                else {
+                    $("#eco_blastfieldcustom5").hide();
+                    $("#eco12").val(value);
+                }
+            }
+        });
+    });
+
+    function cancel_Click() {
+        var cancel = $(this);
+        if (cancel.is(":checked")) {
+            $("#cancelClickDate").text("");
+            $("#cancelClickStats").hide();
+        }
+    }
+    $("input[name$='rbl_eco_citemplate_selected']").click(function () {
+        if ($('input:radio[name=rbl_eco_citemplate_selected]')[0].checked)
+        {
+            $("#ciTemplateEcoSelectExisting").show();
+        }
+        else
+        {
+            $("#ciTemplateEcoSelectExisting").hide();
+        }
+        $("#EmailCtrl_citemplateID").val(-1);
+        $("#EmailCtrl_templateName").text('');
+        $("#EmailCtrl_messageID").val(0);
+        $("#EmailCtrl_messageName").text('');
+        $("#eco04").val('');
+        $("#eco05").val('');
+        $("#eco06").val('');
+        $("#eco07").val('');
+        $("#eco08").val('');
+        $("#eco09").val('');
+        $("#eco10").val('');
+        $("#eco11").val('');
+        $("#eco12").val('');
+        var customerid = $("#EmailCtrl_customerID").val();
+        ecofillblastfields(customerid);
+        var bfv1 = $("#eco_blastfieldvalue1").data("kendoDropDownList");
+        bfv1.select(0);
+        var bfv2 = $("#eco_blastfieldvalue2").data("kendoDropDownList");
+        bfv2.select(0);
+        var bfv3 = $("#eco_blastfieldvalue3").data("kendoDropDownList");
+        bfv3.select(0);
+        var bfv4 = $("#eco_blastfieldvalue4").data("kendoDropDownList");
+        bfv4.select(0);
+        var bfv5 = $("#eco_blastfieldvalue5").data("kendoDropDownList");
+        bfv5.select(0);
+    });
+    function propsEmailControl(shape, customerId, isHeatMap, est_sendTime, canEdit) {
+        $("#cancel").prop("checked", false);
+            switch (shape.category) {
+            case "Unsubscribe":
+                $('section.propertyTitle').html('Direct Email Unsubscribe');
+                break;
+            case "Subscribe":
+                $('section.propertyTitle').html('Direct Email Subscribe');
+                break;
+            case "Direct_Open":
+                $('section.propertyTitle').html('Direct Email Open');
+                break;
+            case "Direct_NoOpen":
+                $('section.propertyTitle').html('Direct Email No Open');
+                break;
+            case "NoClick":
+                $('section.propertyTitle').html('Group Email No Click');
+                break;
+            case "NoOpen":
+                $('section.propertyTitle').html('Group Email No Open');
+                break;
+            case "Open_NoClick":
+                $('section.propertyTitle').html('Group Email Open - No Click');
+                break;
+            case "Sent":
+                $('section.propertyTitle').html('Group Email Sent');
+                break;
+            case "NotSent":
+                $('section.propertyTitle').html('Group Email Not Sent');
+                break;
+            case "Suppressed":
+                $('section.propertyTitle').html('Group Email Suppressed');
+                break;
+            case "Click":
+                $('section.propertyTitle').html('Group Email Click');
+                break;
+            case "Open":
+                $('section.propertyTitle').html('Group Email Open');
+                break;
+            }
+          
+        if (customerId != null)
+            $("#EmailCtrl_customerID").val(customerId);
+        $("#eco01").val(shape.control_text);
+        $("#EmailCtrl_messageID").val(shape.messageId);
+        $("#EmailCtrl_messageName").text(shape.message);
+        $("#emailcontrol_CampaignItemName").val(shape.campaign_item_name);
+        $("#eco04").val(shape.from_email);
+        $("#eco05").val(shape.reply_to);
+        $("#eco06").val(shape.from_name);
+        $("#eco07").val(shape.subject);
+        ecofillblastfields(customerId);
+        var bfv1 = $("#eco_blastfieldvalue1").data("kendoDropDownList");
+        bfv1.select(0);
+        bfv1.trigger("change");
+        if (!shape.blastfield1 == "") {
+            bfv1.search(shape.blastfield1)
+            if (bfv1.text() != shape.blastfield1) {
+                $("#eco08").val(shape.blastfield1);
+                $("#eco_blastfieldcustom1").show();
+                bfv1.select(1);
+            }
+            else {
+                $("#eco08").val('');
+                $("#eco_blastfieldcustom1").hide();
+            }
+        }
+        else
+        {
+            $("#eco08").val('');
+            $("#eco_blastfieldcustom1").hide();
+            bfv1.select(0);
+        }
+        var bfv2 = $("#eco_blastfieldvalue2").data("kendoDropDownList");
+        bfv2.select(0);
+        bfv2.trigger("change");
+        if (!shape.blastfield2 == "") {
+            bfv2.search(shape.blastfield2)
+            if (bfv2.text() != shape.blastfield2) {
+                $("#eco09").val(shape.blastfield2);
+                $("#eco_blastfieldcustom2").show();
+                bfv2.select(1);
+            }
+            else {
+                $("#eco09").val('');
+                $("#eco_blastfieldcustom2").hide();
+            }
+        }
+        else
+        {
+            $("#eco09").val('');
+            $("#eco_blastfieldcustom2").hide();
+            bfv2.select(0);
+        }
+        var bfv3 = $("#eco_blastfieldvalue3").data("kendoDropDownList");
+        bfv3.select(0);
+        bfv3.trigger("change");
+        if (!shape.blastfield3 == "") {
+            bfv3.search(shape.blastfield3)
+            if (bfv3.text() != shape.blastfield3) {
+                $("#eco10").val(shape.blastfield3);
+                $("#eco_blastfieldcustom3").show();
+                bfv3.select(1);
+            }
+            else {
+                $("#eco10").val('');
+                $("#eco_blastfieldcustom3").hide();
+            }
+        }
+        else {
+            $("#eco10").val('');
+            $("#eco_blastfieldcustom3").hide();
+            bfv3.select(0);
+        }
+        var bfv4 = $("#eco_blastfieldvalue4").data("kendoDropDownList");
+        bfv4.select(0);
+        bfv4.trigger("change");
+        if (!shape.blastfield4 == "") {
+            bfv4.search(shape.blastfield4)
+            if (bfv4.text() != shape.blastfield4) {
+                $("#eco11").val(shape.blastfield4);
+                $("#eco_blastfieldcustom4").show();
+                bfv4.select(1);
+            }
+            else {
+                $("#eco11").val('');
+                $("#eco_blastfieldcustom4").hide();
+            }
+        }
+        else {
+            $("#eco11").val('');
+            $("#eco_blastfieldcustom4").hide();
+            bfv4.select(0);
+        }
+        var bfv5 = $("#eco_blastfieldvalue5").data("kendoDropDownList");
+        bfv5.select(0);
+        bfv5.trigger("change");
+        if (!shape.blastfield5 == "") {
+            bfv5.search(shape.blastfield5)
+            if (bfv5.text() != shape.blastfield5) {
+                $("#eco12").val(shape.blastfield5);
+                $("#eco_blastfieldcustom5").show();
+                bfv5.select(1);
+            }
+            else {
+                $("#eco12").val('');
+                $("#eco_blastfieldcustom5").hide();
+            }
+        }
+        else {
+            $("#eco12").val('');
+            $("#eco_blastfieldcustom5").hide();
+            bfv5.select(0);
+        }
+        if (shape.campaign_itemtemplateID > 0) {
+            $('input:radio[name=rbl_eco_citemplate_selected]')[0].checked = true;
+            $("#ciTemplateEcoSelectExisting").show();
+            $("#EmailCtrl_templateName").text(shape.citemplatename);
+            $("#EmailCtrl_citemplateID").val(shape.campaign_itemtemplateID);
+        }
+        else {
+            $('input:radio[name=rbl_eco_citemplate_selected]')[1].checked = true;
+            $("#ciTemplateEcoSelectExisting").hide();
+            $("#EmailCtrl_templateName").text = '';
+            $("#EmailCtrl_citemplateID").val(-1);
+        }
+        // 
+        
+        if (est_sendTime != null && est_sendTime != "Invalid Date") {
+            $("#emailControl_SendTime").show();
+            var AMPM = "AM";
+            var adjustedHours = est_sendTime.getHours();
+
+            if (adjustedHours > 12) {
+                AMPM = "PM";
+                adjustedHours = adjustedHours - 12;}
+            else if (adjustedHours == 12) { AMPM = "PM"; adjustedHours = adjustedHours }
+            else if (adjustedHours == 0) { adjustedHours = 12;}
+
+            $("#emailControl_estSendTime").text((est_sendTime.getMonth() + 1) + "/" + (est_sendTime.getDate()) + "/" + est_sendTime.getFullYear() + " " + adjustedHours + ":" + (est_sendTime.getMinutes()<10?'0':'') + est_sendTime.getMinutes() + " " + AMPM);
+        }
+        else
+        {
+            $("#emailControl_SendTime").hide();
+            $("#emailControl_estSendTime").text("");
+        }
+        if ((shape.category == "Subscribe" || shape.category == "Unsubscribe" || shape.category == "Direct_Open" || shape.category == "Direct_NoOpen") && shape.ECNID > 0)
+        {
+            $("#cancelControl").show();
+            if (shape.isCancelled)
+            {
+                $("#cancel").prop("checked", true).attr("disabled", true);
+                if (shape.cancelDate != '')
+                {
+                    var IsISOFormat = shape.cancelDate.search('T');
+                    if (IsISOFormat > 0)
+                        var cancelDate = new Date(parseIsoDatetime(shape.cancelDate));
+                    else
+                        var cancelDate = new Date(shape.cancelDate);
+                    var AMPM = "AM";
+                    var adjustedHours = cancelDate.getHours();
+
+                    if (adjustedHours > 12) {
+                        AMPM = "PM";
+                        adjustedHours = adjustedHours - 12;
+                    }
+                    else if (adjustedHours == 12) { AMPM = "PM"; adjustedHours = adjustedHours }
+                    else if (adjustedHours == 0) { adjustedHours = 12; }
+                    $("#cancelDate").text((cancelDate.getMonth() + 1) + "/" + (cancelDate.getDate()) + "/" + cancelDate.getFullYear() + " " + adjustedHours + ":" + (cancelDate.getMinutes() < 10 ? '0' : '') + cancelDate.getMinutes() + " " + AMPM);
+                    $("#cancelStats").show();
+                 }
+
+            }
+            else
+            {
+                $("#cancelDate").text("");
+                $("#cancel").prop("checked", false).attr("disabled", false);
+                $("#cancelStats").hide();
+            }
+
+        }
+        else
+        {
+            $("#cancelControl").hide();
+        }
+
+        if (shape.editable.remove == false) {
+           if (!shape.isCancelled)
+            {
+               $("#EmailControlProp :input").attr("disabled", false);
+               enableblastfields(true);
+                shape.cancelDate = '';
+           }
+           else
+           {
+               $("#EmailControlProp :input").attr("disabled", true);
+               enableblastfields(false);
+            }
+            $("#eco01").attr("disabled", false);
+        }
+        else {
+            $("#EmailControlProp :input").attr("disabled", false);
+            enableblastfields(true);
+        }
+
+        if (isHeatMap) {
+            $("#emailcontrol_ECNID").val(shape.ECNID);
+            $("#emailcontrol_ControlType").val(shape.category);
+            $("#EmailControlProp :input").attr("disabled", true);
+            $("#emailcontrol_download").show();
+            $("#btn_EmailControlDownload").attr("disabled", false);
+            enableblastfields(false);
+        }
+        else {
+            $("#emailcontrol_download").hide();
+            $("#btn_EmailControlDownload").attr("disabled", true);
+        }
+
+    }
+    function ecofillblastfields(customerid)
+    {
+         $.ajax({
+        type: 'GET',
+        url: '@Url.Action("GetBlastFieldInformation", "Web")?customerID=' + customerid,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (response) {
+            if (response.length > 0) {
+                if (response[0].BlastFieldName.length > 0 || response[1].BlastFieldName.length > 0 || response[2].BlastFieldName.length > 0 || response[4].BlastFieldName.length > 0) {
+                    if (response.length > 0) {
+                        $("#eco_blastfieldname1").text(response[0].BlastFieldName);
+                        var bfv1 = $("#eco_blastfieldvalue1").data("kendoDropDownList");
+                        if (bfv1.dataSource.data().length == 1) {
+                            response[0].BlastFieldValues.forEach(function (entry) {
+                                $("#eco_blastfieldvalue1").data("kendoDropDownList")
+                               .dataSource.add({ "text": entry, "value": entry });
+                            });
+                        }
+                    }
+                    if (response.length > 1) {
+                        $("#eco_blastfieldname2").text(response[1].BlastFieldName);
+                        var bfv2 = $("#eco_blastfieldvalue2").data("kendoDropDownList");
+                        if (bfv2.dataSource.data().length == 1) {
+                            response[1].BlastFieldValues.forEach(function (entry) {
+                                $("#eco_blastfieldvalue2").data("kendoDropDownList")
+                               .dataSource.add({ "text": entry, "value": entry });
+                            });
+                        }
+                    }
+                    if (response.length > 2) {
+                        $("#eco_blastfieldname3").text(response[2].BlastFieldName);
+                        var bfv3 = $("#eco_blastfieldvalue3").data("kendoDropDownList");
+                        if (bfv3.dataSource.data().length == 1) {
+                            response[2].BlastFieldValues.forEach(function (entry) {
+                                $("#eco_blastfieldvalue3").data("kendoDropDownList")
+                               .dataSource.add({ "text": entry, "value": entry });
+                            });
+                        }
+                    }
+                    if (response.length > 3) {
+                        $("#eco_blastfieldname4").text(response[3].BlastFieldName);
+                        var bfv4 = $("#eco_blastfieldvalue4").data("kendoDropDownList");
+                        if (bfv4.dataSource.data().length == 1) {
+                            response[3].BlastFieldValues.forEach(function (entry) {
+                                $("#eco_blastfieldvalue4").data("kendoDropDownList")
+                               .dataSource.add({ "text": entry, "value": entry });
+                            });
+                        }
+                    }
+                    if (response.length > 4) {
+                        $("#eco_blastfieldname5").text(response[4].BlastFieldName);
+                        var bfv5 = $("#eco_blastfieldvalue5").data("kendoDropDownList");
+                        if (bfv5.dataSource.data().length == 1) {
+                            response[4].BlastFieldValues.forEach(function (entry) {
+                                $("#eco_blastfieldvalue5").data("kendoDropDownList")
+                               .dataSource.add({ "text": entry, "value": entry });
+                            });
+                        }
+                    }
+               
+                
+               
+              
+              
+            }
+        }
+        },
+        error: function (e) {
+
+        }
+    });
+    }
+    //Button Events
+        function campaign_btnSelectEcociTemplate_Click() {
+            var customerID = $("#EmailCtrl_customerID").val();
+            campaignItemTemplateExplorer(EmailCtrl_ciTemplateSelected, customerID);
+        }
+    function btn_EmailControlDownload_Click() {
+        window.location = "/ecn.MarketingAutomation/Diagrams/DownloadEmails?ECNID=" + $("#emailcontrol_ECNID").val() + "&controlType=" + $("#emailcontrol_ControlType").val() + "&isWait=false" + "&maID=-1" ;
+
+        }
+    function EmailCtrlClick_btnSelectMessage() {
+        var customerID = $("#EmailCtrl_customerID").val();
+        messageExplorer(EmailCtrl_MessageSelected, customerID);
+    }
+
+    //Callback functions
+    function EmailCtrl_ciTemplateSelected(select)
+    {
+        var citemplate = select.citemplate;
+        $("#EmailCtrl_citemplateID").val(citemplate.CITemplateID);
+        $("#EmailCtrl_templateName").text(citemplate.TemplateName);
+        $("#EmailCtrl_messageID").val(citemplate.MessageID);
+        $("#EmailCtrl_messageName").text(citemplate.MessageName);
+        $("#eco04").val(citemplate.FromEmail);
+        $("#eco05").val(citemplate.ReplyTo);
+        $("#eco06").val(citemplate.FromName);
+        $("#eco07").val(citemplate.Subject);
+        if (citemplate.BlastField1 != null)
+        {
+            var bf1 = $("#eco_blastfieldvalue1").data("kendoDropDownList");
+            var bfData = bf1.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf1.dataSource.remove(bfData[i]); //remove all
+            }
+            bf1.value("Custom");
+            $("#eco_blastfieldcustom1").show();
+            $("#eco08").val(citemplate.BlastField1);
+        }
+        if (citemplate.BlastField2 != null) {
+            var bf2 = $("#eco_blastfieldvalue2").data("kendoDropDownList");
+            var bfData = bf2.dataSource.data();
+            for (i = 1; i = bfData.length-1; i++) {
+                bf2.dataSource.remove(bfData[i]); //remove all
+            }
+            bf2.value("Custom");
+            $("#eco_blastfieldcustom2").show();
+            $("#eco09").val(citemplate.BlastField2);
+        }
+        if (citemplate.BlastField3 != null) {
+            var bf3 = $("#eco_blastfieldvalue3").data("kendoDropDownList");
+            var bfData = bf3.dataSource.data();
+            for (i = 1; i = bfData.length-1; i++) {
+                bf3.dataSource.remove(bfData[i]); //remove all
+            }
+            bf3.value("Custom");
+            $("#eco_blastfieldcustom3").show();
+            $("#eco10").val(citemplate.BlastField3);
+        }
+        if (citemplate.BlastField4 != null) {
+            var bf4 = $("#eco_blastfieldvalue4").data("kendoDropDownList");
+            var bfData = bf4.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf4.dataSource.remove(bfData[i]); //remove all
+            }
+            bf4.value("Custom");
+            $("#eco_blastfieldcustom4").show();
+            $("#eco11").val(citemplate.BlastField4);
+        }
+        if (citemplate.BlastField5 != null) {
+            var bf5 = $("#eco_blastfieldvalue5").data("kendoDropDownList");
+            var bfData = bf5.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf5.dataSource.remove(bfData[i]); //remove all
+            }
+            bf5.value("Custom");
+            $("#eco_blastfieldcustom5").show();
+            $("#eco12").val(citemplate.BlastField5);
+        }
+    }
+    function EmailCtrl_MessageSelected(select) {
+        var message = select.message;
+        $("#EmailCtrl_messageID").val(message.MessageID);
+        $("#EmailCtrl_messageName").text(message.MessageName);
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetMessageEnvelope", "Web")?messageID=' + message.MessageID,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            success: function (response) {
+                if (response.FromEmail.length > 0 && response.ReplyTo.length > 0 && response.FromName.length > 0 && response.EmailSubject.length > 0) {
+                    $("#eco04").val(response.FromEmail);
+                    $("#eco05").val(response.ReplyTo);
+                    $("#eco06").val(response.FromName);
+                    $("#eco07").val(response.EmailSubject);
+                }
+            },
+            error: function (e) {
+
+            }
+        });
+    }
+    function disableEmailControls()
+    {
+        $("#EmailControlProp :input").attr("disabled", true);
+        $("#eco01").attr("disabled", true);
+        enableblastfields(false);
+    }
+    function enableblastfields(enable)
+    {
+        $("#eco_blastfieldvalue1").data("kendoDropDownList").enable(enable);
+        $("#eco_blastfieldvalue2").data("kendoDropDownList").enable(enable);
+        $("#eco_blastfieldvalue3").data("kendoDropDownList").enable(enable);
+        $("#eco_blastfieldvalue4").data("kendoDropDownList").enable(enable);
+        $("#eco_blastfieldvalue5").data("kendoDropDownList").enable(enable);
+    }
+    function disableforest_sendtime() {
+        $("#EmailControlProp :input").attr("disabled", true);
+        $("#eco01").attr("disabled", false);
+        enableblastfields(false);
+    }
+    function parseIsoDatetime(dtstr) {
+        var dt = dtstr.split(/[: T-]/).map(parseFloat);
+        return new Date(dt[0], dt[1] - 1, dt[2], dt[3] || 0, dt[4] || 0, dt[5] || 0, 0);
+    }
+</script>

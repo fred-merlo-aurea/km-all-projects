@@ -1,0 +1,170 @@
+﻿@model UAS.Web.Models.FileMapperWizard.TransformationSplitIntoRowModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $("#btnApplySplit").css("display", "");
+
+        var delimiter = @Html.Raw(Json.Encode(Model.Delimiter));
+        BindDropDownList({
+            ControlID: "transformationDetail_kddlDelimiter",
+            URL: targetTransformationDelimitersUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: delimiter
+        });
+
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            $("#transformationField_TransformationTemplate")[0].disabled = true;
+            document.getElementById("transformationField_TransformationName").disabled = true;
+            document.getElementById("transformationField_TransformationDesc").disabled = true;
+
+            $("#transformationDetail_kddlDelimiter").data("kendoDropDownList").enable(false)
+        }
+    });
+
+    function onProductSelect(e) {
+        debugger;
+        if (e.dataItem.Value == "0") {
+            //Unselect all but 0
+            var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+            ms.value([]);
+        } else if (e.dataItem.Value == "-1") {
+            //Stop the selection as this is a spacing option between All and individual products
+            e.preventDefault();
+        } else {
+            //Unselect -2
+            //var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+            var productId = $('#ddl_transformationProduct').val()
+            if (productId != null && productId.indexOf( '0' ) > -1) {
+                var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+                ms.value([]);
+            }
+        }
+    };
+
+    function ApplyTransformationInSplit() {        
+        $("#div_TransformSplitMessage").html("");
+        var transformationId = document.getElementById("transformationField_TransformationId").value;
+        var transformationTypeID = document.getElementById("transformationField_TransformationTypeId").value;
+        var transformationName = document.getElementById("transformationField_TransformationName").value;
+        var transformationDesc = document.getElementById("transformationField_TransformationDesc").value;
+        var isTemplate = $("#transformationField_TransformationTemplate")[0].checked;
+
+        var delimiter = $("#transformationDetail_kddlDelimiter").val();
+        var pubIDs = $('#ddl_transformationProduct').val();
+        var transformSplitID = document.getElementById("transformationField_TranformSplitID").value;
+
+        var model1 = { TransformationID: transformationId, TransformationTypeID: transformationTypeID, TransformationName: transformationName, TransformationDesc: transformationDesc, IsTemplate: isTemplate }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/SaveTransformation",
+            data: model1,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (transformationSave) {
+                document.getElementById("transformationField_TransformationId").value = transformationSave.CurrentTransformationID;
+                if (transformationSave.IsComplete) {
+                    var model2 = { TransformSplitID: transformSplitID, TransformationID: transformationSave.CurrentTransformationID, Delimiter: delimiter, PubIDs: pubIDs }
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/SaveSplitTransformation",
+                        data: model2,
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        cache: !0,
+                        datatype: "html",
+                        success: function (detailSave) {
+                            debugger;
+                            if (detailSave.IsComplete) {
+                                showMessage({
+                                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                    autoClose: false,
+                                    IsOpen: false
+                                });
+
+                                debugger;
+                                var oldwin = $("#transformationWindow").data('kendoWindow');
+                                oldwin.close();
+
+                                loadTransformationGridWithID(detailSave.SourceFileID, detailSave.FieldMappingID);
+                            } else {
+                                document.getElementById("transformationField_TranformSplitID").value = detailSave.TransformationSplitID;
+
+                                var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + detailSave.Message + "</ul>";
+                                $("#div_TransformSplitMessage").html(errors);
+                            }
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });
+                } else {
+                    var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + transformationSave.Message + "</ul>";
+                    $("#div_TransformSplitMessage").html(errors);
+                }
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+<script id="tagTemplate" type="text/x-kendo-template">
+    # if (values.length == 1) { #
+    #: dataItems[0].Text #
+    # } else { #
+    #:values.length# item(s) selected
+    # } #
+</script>
+
+<div>
+    @Html.HiddenFor(m => m.TransformSplitId, new { id = "transformationField_TranformSplitID" })
+    <div id="div_TransformSplitMessage">
+
+    </div>
+    <table>
+        <tr class="filedetailsrow">
+            <td colspan="1" style="text-align: right;">
+                @Html.Label("Delimiter")
+            </td>
+            <td colspan="3">
+                <input id="transformationDetail_kddlDelimiter" name="transformationDetail_Delimiter" style="width:75%;" />
+            </td>
+        </tr>
+        <tr class="filedetailsrow">
+            <td colspan="1" style="text-align: right;">
+                @Html.Label("Select Product")
+            </td>
+            <td colspan="3">
+                @*Html.DropDownList("transformationProduct", (MultiSelectList) Model.selectedProducts, new { id = "ddl_transformationProduct", multiple = "multiple", style = "width: 75%;" })*@
+                @(Html.Kendo().MultiSelect()
+                    .Name("transformationProduct")
+                    .AutoClose(false)
+                    .TagMode(TagMode.Single)
+                    .BindTo(Model.selectedProducts)
+                    .Placeholder("Select Product(s)")
+                    .HtmlAttributes(new { id = "ddl_transformationProduct", @style = "width: 200px;" })
+                    .Events(e =>
+                    {
+                        e.Select("onProductSelect");
+                    })
+                    .TagTemplateId("tagTemplate")
+                    .Enable(Model.isEnabled)
+                )            
+            </td>
+        </tr>        
+        <tr>
+            <td colspan="4" style="text-align: center;">
+                @*<div style="text-align: center;">
+                    <input type="button" id="btnApply" class="btn btn-blue2 k-button" value="Apply" onclick="ApplyTransformationInSplit();" />
+                </div>*@
+            </td>
+        </tr>
+    </table>
+</div>

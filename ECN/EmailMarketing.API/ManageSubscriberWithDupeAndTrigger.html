@@ -1,0 +1,775 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Email Marketing API</title>
+    <style>
+        body {
+            background-color: #EBEBEB;
+        }
+
+        .body-content {
+            margin: 0 auto;
+            width: 1000px;
+            background-color: white;
+        }
+
+        .main-content {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #9da2a7;
+            font-family: Arial;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        h1 { font-size: 1.5em; font-weight: bold; }
+        
+        h2 { font-size: 1.25em; font-weight: bold; }
+        section.content-wrapper.main-content > h2 { color: #045DA4; }
+        
+        h5 { font-weight: bold; text-decoration: none; }
+        
+        h10 {
+                font-size: 17px;
+                color:#045DA4;
+                font-weight:bold;
+                font-family: Arial;
+            }
+
+        h11 {
+            font-size: 14px;
+            color:#696969;
+            font-weight:bold;            
+            font-family: Arial;
+        }
+
+        h12 {
+            font-size: 13px;
+            color:#9da2a7;
+            font-weight:bold;
+            font-family: Arial;
+        }
+
+        h13 {
+            font-size: 14px;
+            color:#9da2a7;
+            font-weight:normal;
+            font-family: Arial;
+        }
+
+
+        mark > a, 
+        h5 > a { text-decoration: none; color: black; }
+        mark > a:hover, 
+        h5 > a:hover { text-decoration: underline; color: black; }
+
+        header {
+            height: 69px;
+        }
+
+        .header-left {
+            display: block;
+            padding-bottom: 10px;
+            padding-left: 20px;
+            padding-top: 10px;
+        }
+
+        .header-right {
+            display: block;
+            float: right;
+            padding-bottom: 10px;
+            padding-right: 20px;
+            padding-top: 12px;
+        }
+
+        menu {
+            padding: 10px 0px 0px 10px;
+            margin: 55px 0px 0px 0px;
+            height: 38px;
+            background: #045da4;
+            vertical-align:middle
+        }
+
+            menu > a {
+                color: white;
+                padding: 5px 5px 5px 5px;
+                font-size: 13px;
+                font-weight: bold;
+                text-transform: capitalize;
+                font-family: Arial;
+                text-decoration: none;
+            }
+
+                menu > a:hover, 
+                .selected {
+                    color: #8FC4F0 !important;
+                }
+
+        footer {
+            vertical-align: middle;
+            height: 55px;
+        }
+
+        .ECNText10 {
+            border-collapse: separate;
+            color: rgb(105, 105, 105);
+            font-family: Arial;
+            font-size: 10px;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        .FooterLink {
+            color: rgb(4, 93, 164);
+            font-family: Arial;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: -webkit-center;
+            text-decoration: none;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <section class="body-content">
+        <header>
+            <a href="http://www.ecn5.com/">
+                <img src="http://ecn5.com/ecn.images/Channels/12/kmlogo.jpg"
+                     alt="Knowledge Marketing" width="165" height="71" class="header-left" style="border-width:0px;">
+            </a>
+            
+        </header>
+        <menu>
+            <a href="/Home">Home</a>
+            <a href="/Help">Reference</a>
+            <a href="/Home/StatusCodes">Status Codes</a>
+        </menu>
+        <section class="main-content">
+            
+
+<link type="text/css" href="/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+<div id="body" class="help-page">
+    <section class="featured">
+        <div class="content-wrapper">
+            <p>
+                <a href="/Help">Help Page Home</a>
+            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        
+<h1>POST api/emailgroup/methods/ManageSubscriberWithDupeAndTrigger</h1>
+<div>
+    <p>Add one or more subscriber profiles (Email Address, Name, Custom Fields, etc.) to a single group.  If the Email Address already exists the profile data will be updated.  
+            Note: To update an Email Address please use the UpdateEmailAddress method.</p>
+
+    <p>
+        <div>
+            <h4 class="sample-header">JSON Example</h4>
+            <div class="sample-content">
+                    <span><b>Request:</b></span>
+<pre class="wrapped">
+
+             POST http://api.ecn5.com/api/emailgroup/methods/ManageSubscriberWithDupeAndTrigger HTTP/1.1
+             Accept: application/json
+             Content-type: application/json
+             APIAccessKey: &lt;YOUR-API-KEY-HERE&gt;
+             X-Customer-ID: 77777
+             Host: api.ecn5.com
+             Content-Length: 1352
+             
+                 {
+                     &quot;GroupID&quot;:123456,
+                     &quot;Format&quot;:&quot;HTML&quot;,
+                     &quot;SubscribeType&quot;:&quot;U&quot;,
+                     &quot;TriggerID&quot;:&quot;1&quot;,
+                     &quot;CompositeKey&quot;:&quot;user1&quot;,
+                     &quot;Profiles&quot;:[
+                     {
+                         &quot;EmailAddress&quot;:&quot;someone@nowhere.com&quot;,
+                         &quot;Title&quot;:&quot;Mr&quot;,
+                         &quot;FirstName&quot;:&quot;Som&quot;,
+                         &quot;LastName&quot;:&quot;eone&quot;,
+                         &quot;FullName&quot;:&quot;Som Eone&quot;,
+                         &quot;Company&quot;:&quot;A Fine Place&quot;,
+                         &quot;Occupation&quot;:&quot;Stuff and things&quot;,
+                         &quot;Address&quot;:&quot;123 My Street&quot;,
+                         &quot;Address2&quot;:&quot;Schweet Sweet Suite&quot;,
+                         &quot;City&quot;:&quot;A Little Place&quot;,
+                         &quot;State&quot;:&quot;Confused&quot;,
+                         &quot;Zip&quot;:&quot;90210&quot;,
+                         &quot;Country&quot;:&quot;UWF&quot;,
+                         &quot;Voice&quot;:&quot;612.555.1212&quot;,
+                         &quot;Mobile&quot;:&quot;651.555.1212&quot;,
+                         &quot;Fax&quot;:&quot;952.555.1212&quot;,
+                         &quot;Website&quot;:&quot;http://www.ecn5.com&quot;,
+                         &quot;Age&quot;:&quot;18&quot;,
+                         &quot;Income&quot;:&quot;19&quot;,
+                         &quot;Gender&quot;:&quot;20&quot;,
+                         &quot;User1&quot;:&quot;sample string 21&quot;,
+                         &quot;User2&quot;:&quot;sample string 22&quot;,
+                         &quot;User3&quot;:&quot;sample string 23&quot;,
+                         &quot;User4&quot;:&quot;sample string 24&quot;,
+                         &quot;User5&quot;:&quot;sample string 25&quot;,
+                         &quot;User6&quot;:&quot;sample string 26&quot;,
+                         &quot;UserEvent1&quot;:&quot;sample string 27&quot;,
+                         &quot;UserEvent1Date&quot;:&quot;2015-06-16&quot;,
+                         &quot;UserEvent2&quot;:&quot;sample string 28&quot;,
+                         &quot;UserEvent2Date&quot;:&quot;2015-06-17&quot;,
+                         &quot;Birthdate&quot;:&quot;1915-06-18&quot;,
+                         &quot;Notes&quot;:&quot;a note can be placed here&quot;,
+                         &quot;Password&quot;:&quot;a password could be stored here&quot;,
+                         &quot;SubscribeType&quot;: &quot;S&quot;,
+                         &quot;Format&quot;:&quot;HTML&quot;,
+                         &quot;CustomFields&quot;: [
+                         {
+                             &quot;Name&quot;: &quot;sample string 1&quot;,
+                             &quot;Value&quot;: &quot;sample string 2&quot;
+                         },
+                         {
+                             &quot;Name&quot;: &quot;sample string 1&quot;,
+                             &quot;Value&quot;: &quot;sample string 2&quot;
+                         }
+                         ]
+                      },
+                      {
+                         &quot;EmailAddress&quot;:&quot;testing@nowhere.com&quot;,
+                         &quot;Title&quot;:&quot;Mr&quot;,
+                         &quot;FirstName&quot;:&quot;Som&quot;,
+                         &quot;LastName&quot;:&quot;eone&quot;,
+                         &quot;FullName&quot;:&quot;Som Eone&quot;,
+                         &quot;Company&quot;:&quot;A Fine Place&quot;,
+                         &quot;Occupation&quot;:&quot;Stuff and things&quot;,
+                         &quot;Address&quot;:&quot;123 My Street&quot;,
+                         &quot;Address2&quot;:&quot;Schweet Sweet Suite&quot;,
+                         &quot;City&quot;:&quot;A Little Place&quot;,
+                         &quot;State&quot;:&quot;Confused&quot;,
+                         &quot;Zip&quot;:&quot;90210&quot;,
+                         &quot;Country&quot;:&quot;UWF&quot;,
+                         &quot;Voice&quot;:&quot;612.555.1212&quot;,
+                         &quot;Mobile&quot;:&quot;651.555.1212&quot;,
+                         &quot;Fax&quot;:&quot;952.555.1212&quot;,
+                         &quot;Website&quot;:&quot;http://www.ecn5.com&quot;,
+                         &quot;Age&quot;:&quot;18&quot;,
+                         &quot;Income&quot;:&quot;19&quot;,
+                         &quot;Gender&quot;:&quot;20&quot;,
+                         &quot;User1&quot;:&quot;sample string 21&quot;,
+                         &quot;User2&quot;:&quot;sample string 22&quot;,
+                         &quot;User3&quot;:&quot;sample string 23&quot;,
+                         &quot;User4&quot;:&quot;sample string 24&quot;,
+                         &quot;User5&quot;:&quot;sample string 25&quot;,
+                         &quot;User6&quot;:&quot;sample string 26&quot;,
+                         &quot;UserEvent1&quot;:&quot;sample string 27&quot;,
+                         &quot;UserEvent1Date&quot;:&quot;2015-06-16&quot;,
+                         &quot;UserEvent2&quot;:&quot;sample string 28&quot;,
+                         &quot;UserEvent2Date&quot;:&quot;2015-06-17&quot;,
+                         &quot;Birthdate&quot;:&quot;1915-06-18&quot;,
+                         &quot;Notes&quot;:&quot;a note can be placed here&quot;,
+                         &quot;Password&quot;:&quot;a password could be stored here&quot;,
+                         &quot;SubscribeType&quot;:&quot;S&quot;,
+                         &quot;Format&quot;:&quot;HTML&quot;,
+                         &quot;CustomFields&quot;: [
+                         {
+                             &quot;Name&quot;: &quot;sample string 1&quot;,
+                             &quot;Value&quot;: &quot;sample string 2&quot;
+                         },
+                         {
+                             &quot;Name&quot;: &quot;sample string 1&quot;,
+                             &quot;Value&quot;: &quot;sample string 2&quot;
+                         }
+                         ]
+                     }
+                     ]
+                 }
+            
+</pre>
+                                    <span><b>Response:</b></span>
+<pre class="wrapped">
+
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 19 Jun 2015 22:09:31 GMT
+             Content-Length: 117
+             
+             { 
+                &quot;New&quot;:2,
+                &quot;Updated&quot;:0,
+                &quot;Skipped&quot;:0,
+                &quot;Duplicate&quot;:0,
+                &quot;MasterSuppressed&quot;:0,
+                &quot;Total&quot;:2
+             }
+             
+</pre>
+            </div>
+        </div>
+    </p>
+
+    <h2>Request Information</h2>
+
+    <h3>URI Parameters</h3>
+        <p>None.</p>
+
+
+
+    <h3>Body Parameters</h3>
+
+    <p></p>
+
+<a href="/Help/ResourceModel?modelName=ManageProfile">ManageProfile</a>    <table class="help-page-table">
+        <thead>
+            <tr><th>Name</th><th>Description</th><th>Type</th><th>Additional information</th></tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td class="parameter-name">GroupID</td>
+                    <td class="parameter-documentation">
+                        <p>The GroupID</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Format</td>
+                    <td class="parameter-documentation">
+                        <p>The format type code</p>
+                    </td>
+                    <td class="parameter-type">
+                        <a href="/Help/ResourceModel?modelName=Formats">Formats</a>
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">SubscribeType</td>
+                    <td class="parameter-documentation">
+                        <p>The subscribe type code</p>
+                    </td>
+                    <td class="parameter-type">
+                        <a href="/Help/ResourceModel?modelName=SubscribeTypes">SubscribeTypes</a>
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+				<tr>
+                    <td class="parameter-name">TriggerID</td>
+                    <td class="parameter-documentation">
+                        <p>The ID of the trigger</p>
+                    </td>                    
+					<td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+								<tr>
+                    <td class="parameter-name">CompositeKey</td>
+                    <td class="parameter-documentation">
+                        <p>The composite key with which to determine a duplicate</p>
+                    </td>                    
+					<td class="parameter-type">
+                        string
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Profiles</td>
+                    <td class="parameter-documentation">
+                        <p>List of one or many profiles</p>
+                    </td>
+                    <td class="parameter-type">
+                                Collection of <a href="/Help/ResourceModel?modelName=Profile">Profile</a>
+
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+
+        <h3>Request Formats</h3>
+
+<div>
+        <h4 class="sample-header">application/json, text/json</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+{
+  &quot;GroupID&quot;: 1,
+  &quot;Format&quot;: &quot;HTML&quot;,
+  &quot;SubscribeType&quot;: &quot;S&quot;,
+  &quot;TriggerID&quot;: &quot;1&quot;,
+  &quot;CompositeKey&quot;: &quot;user1&quot;,
+  &quot;Profiles&quot;: [
+    {
+      &quot;EmailAddress&quot;: &quot;sample string 1&quot;,
+      &quot;Title&quot;: &quot;sample string 2&quot;,
+      &quot;FirstName&quot;: &quot;sample string 3&quot;,
+      &quot;LastName&quot;: &quot;sample string 4&quot;,
+      &quot;FullName&quot;: &quot;sample string 5&quot;,
+      &quot;Company&quot;: &quot;sample string 6&quot;,
+      &quot;Occupation&quot;: &quot;sample string 7&quot;,
+      &quot;Address&quot;: &quot;sample string 8&quot;,
+      &quot;Address2&quot;: &quot;sample string 9&quot;,
+      &quot;City&quot;: &quot;sample string 10&quot;,
+      &quot;State&quot;: &quot;sample string 11&quot;,
+      &quot;Zip&quot;: &quot;sample string 12&quot;,
+      &quot;Country&quot;: &quot;sample string 13&quot;,
+      &quot;Voice&quot;: &quot;sample string 14&quot;,
+      &quot;Mobile&quot;: &quot;sample string 15&quot;,
+      &quot;Fax&quot;: &quot;sample string 16&quot;,
+      &quot;Website&quot;: &quot;sample string 17&quot;,
+      &quot;Age&quot;: &quot;sample string 18&quot;,
+      &quot;Income&quot;: &quot;sample string 19&quot;,
+      &quot;Gender&quot;: &quot;sample string 20&quot;,
+      &quot;User1&quot;: &quot;sample string 21&quot;,
+      &quot;User2&quot;: &quot;sample string 22&quot;,
+      &quot;User3&quot;: &quot;sample string 23&quot;,
+      &quot;User4&quot;: &quot;sample string 24&quot;,
+      &quot;User5&quot;: &quot;sample string 25&quot;,
+      &quot;User6&quot;: &quot;sample string 26&quot;,
+      &quot;Birthdate&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;UserEvent1&quot;: &quot;sample string 27&quot;,
+      &quot;UserEvent1Date&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;UserEvent2&quot;: &quot;sample string 28&quot;,
+      &quot;UserEvent2Date&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;Notes&quot;: &quot;sample string 29&quot;,
+      &quot;Password&quot;: &quot;sample string 30&quot;,
+      &quot;SubscribeType&quot;: &quot;S&quot;,
+      &quot;Format&quot;: &quot;HTML&quot;,
+      &quot;CustomFields&quot;: [
+        {
+          &quot;Name&quot;: &quot;sample string 1&quot;,
+          &quot;Value&quot;: &quot;sample string 2&quot;
+        },
+        {
+          &quot;Name&quot;: &quot;sample string 1&quot;,
+          &quot;Value&quot;: &quot;sample string 2&quot;
+        }
+      ]
+    },
+    {
+      &quot;EmailAddress&quot;: &quot;sample string 1&quot;,
+      &quot;Title&quot;: &quot;sample string 2&quot;,
+      &quot;FirstName&quot;: &quot;sample string 3&quot;,
+      &quot;LastName&quot;: &quot;sample string 4&quot;,
+      &quot;FullName&quot;: &quot;sample string 5&quot;,
+      &quot;Company&quot;: &quot;sample string 6&quot;,
+      &quot;Occupation&quot;: &quot;sample string 7&quot;,
+      &quot;Address&quot;: &quot;sample string 8&quot;,
+      &quot;Address2&quot;: &quot;sample string 9&quot;,
+      &quot;City&quot;: &quot;sample string 10&quot;,
+      &quot;State&quot;: &quot;sample string 11&quot;,
+      &quot;Zip&quot;: &quot;sample string 12&quot;,
+      &quot;Country&quot;: &quot;sample string 13&quot;,
+      &quot;Voice&quot;: &quot;sample string 14&quot;,
+      &quot;Mobile&quot;: &quot;sample string 15&quot;,
+      &quot;Fax&quot;: &quot;sample string 16&quot;,
+      &quot;Website&quot;: &quot;sample string 17&quot;,
+      &quot;Age&quot;: &quot;sample string 18&quot;,
+      &quot;Income&quot;: &quot;sample string 19&quot;,
+      &quot;Gender&quot;: &quot;sample string 20&quot;,
+      &quot;User1&quot;: &quot;sample string 21&quot;,
+      &quot;User2&quot;: &quot;sample string 22&quot;,
+      &quot;User3&quot;: &quot;sample string 23&quot;,
+      &quot;User4&quot;: &quot;sample string 24&quot;,
+      &quot;User5&quot;: &quot;sample string 25&quot;,
+      &quot;User6&quot;: &quot;sample string 26&quot;,
+      &quot;Birthdate&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;UserEvent1&quot;: &quot;sample string 27&quot;,
+      &quot;UserEvent1Date&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;UserEvent2&quot;: &quot;sample string 28&quot;,
+      &quot;UserEvent2Date&quot;: &quot;2016-12-02T08:16:55.3017608-06:00&quot;,
+      &quot;Notes&quot;: &quot;sample string 29&quot;,
+      &quot;Password&quot;: &quot;sample string 30&quot;,
+      &quot;SubscribeType&quot;: &quot;S&quot;,
+      &quot;Format&quot;: &quot;HTML&quot;,
+      &quot;CustomFields&quot;: [
+        {
+          &quot;Name&quot;: &quot;sample string 1&quot;,
+          &quot;Value&quot;: &quot;sample string 2&quot;
+        },
+        {
+          &quot;Name&quot;: &quot;sample string 1&quot;,
+          &quot;Value&quot;: &quot;sample string 2&quot;
+        }
+      ]
+    }
+  ]
+}
+</pre>
+        </div>
+        <h4 class="sample-header">application/xml, text/xml</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+&lt;ManageProfile xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+  &lt;GroupID&gt;1&lt;/GroupID&gt;
+  &lt;Format&gt;HTML&lt;/Format&gt;
+  &lt;SubscribeType&gt;S&lt;/SubscribeType&gt;
+  &lt;TriggerID&gt;1&lt;/TriggerID&gt;
+  &lt;CompositeKey&gt;user1&lt;/CompositeKey&gt;
+  &lt;Profiles&gt;
+    &lt;Profile&gt;
+      &lt;EmailAddress&gt;sample string 1&lt;/EmailAddress&gt;
+      &lt;Title&gt;sample string 2&lt;/Title&gt;
+      &lt;FirstName&gt;sample string 3&lt;/FirstName&gt;
+      &lt;LastName&gt;sample string 4&lt;/LastName&gt;
+      &lt;FullName&gt;sample string 5&lt;/FullName&gt;
+      &lt;Company&gt;sample string 6&lt;/Company&gt;
+      &lt;Occupation&gt;sample string 7&lt;/Occupation&gt;
+      &lt;Address&gt;sample string 8&lt;/Address&gt;
+      &lt;Address2&gt;sample string 9&lt;/Address2&gt;
+      &lt;City&gt;sample string 10&lt;/City&gt;
+      &lt;State&gt;sample string 11&lt;/State&gt;
+      &lt;Zip&gt;sample string 12&lt;/Zip&gt;
+      &lt;Country&gt;sample string 13&lt;/Country&gt;
+      &lt;Voice&gt;sample string 14&lt;/Voice&gt;
+      &lt;Mobile&gt;sample string 15&lt;/Mobile&gt;
+      &lt;Fax&gt;sample string 16&lt;/Fax&gt;
+      &lt;Website&gt;sample string 17&lt;/Website&gt;
+      &lt;Age&gt;sample string 18&lt;/Age&gt;
+      &lt;Income&gt;sample string 19&lt;/Income&gt;
+      &lt;Gender&gt;sample string 20&lt;/Gender&gt;
+      &lt;User1&gt;sample string 21&lt;/User1&gt;
+      &lt;User2&gt;sample string 22&lt;/User2&gt;
+      &lt;User3&gt;sample string 23&lt;/User3&gt;
+      &lt;User4&gt;sample string 24&lt;/User4&gt;
+      &lt;User5&gt;sample string 25&lt;/User5&gt;
+      &lt;User6&gt;sample string 26&lt;/User6&gt;
+      &lt;Birthdate&gt;2016-12-02T08:16:55.3017608-06:00&lt;/Birthdate&gt;
+      &lt;UserEvent1&gt;sample string 27&lt;/UserEvent1&gt;
+      &lt;UserEvent1Date&gt;2016-12-02T08:16:55.3017608-06:00&lt;/UserEvent1Date&gt;
+      &lt;UserEvent2&gt;sample string 28&lt;/UserEvent2&gt;
+      &lt;UserEvent2Date&gt;2016-12-02T08:16:55.3017608-06:00&lt;/UserEvent2Date&gt;
+      &lt;Notes&gt;sample string 29&lt;/Notes&gt;
+      &lt;Password&gt;sample string 30&lt;/Password&gt;
+      &lt;SubscribeType&gt;S&lt;/SubscribeType&gt;
+      &lt;Format&gt;HTML&lt;/Format&gt;
+      &lt;CustomFields&gt;
+        &lt;ProfileCustomField&gt;
+          &lt;Name&gt;sample string 1&lt;/Name&gt;
+          &lt;Value&gt;sample string 2&lt;/Value&gt;
+        &lt;/ProfileCustomField&gt;
+        &lt;ProfileCustomField&gt;
+          &lt;Name&gt;sample string 1&lt;/Name&gt;
+          &lt;Value&gt;sample string 2&lt;/Value&gt;
+        &lt;/ProfileCustomField&gt;
+      &lt;/CustomFields&gt;
+    &lt;/Profile&gt;
+    &lt;Profile&gt;
+      &lt;EmailAddress&gt;sample string 1&lt;/EmailAddress&gt;
+      &lt;Title&gt;sample string 2&lt;/Title&gt;
+      &lt;FirstName&gt;sample string 3&lt;/FirstName&gt;
+      &lt;LastName&gt;sample string 4&lt;/LastName&gt;
+      &lt;FullName&gt;sample string 5&lt;/FullName&gt;
+      &lt;Company&gt;sample string 6&lt;/Company&gt;
+      &lt;Occupation&gt;sample string 7&lt;/Occupation&gt;
+      &lt;Address&gt;sample string 8&lt;/Address&gt;
+      &lt;Address2&gt;sample string 9&lt;/Address2&gt;
+      &lt;City&gt;sample string 10&lt;/City&gt;
+      &lt;State&gt;sample string 11&lt;/State&gt;
+      &lt;Zip&gt;sample string 12&lt;/Zip&gt;
+      &lt;Country&gt;sample string 13&lt;/Country&gt;
+      &lt;Voice&gt;sample string 14&lt;/Voice&gt;
+      &lt;Mobile&gt;sample string 15&lt;/Mobile&gt;
+      &lt;Fax&gt;sample string 16&lt;/Fax&gt;
+      &lt;Website&gt;sample string 17&lt;/Website&gt;
+      &lt;Age&gt;sample string 18&lt;/Age&gt;
+      &lt;Income&gt;sample string 19&lt;/Income&gt;
+      &lt;Gender&gt;sample string 20&lt;/Gender&gt;
+      &lt;User1&gt;sample string 21&lt;/User1&gt;
+      &lt;User2&gt;sample string 22&lt;/User2&gt;
+      &lt;User3&gt;sample string 23&lt;/User3&gt;
+      &lt;User4&gt;sample string 24&lt;/User4&gt;
+      &lt;User5&gt;sample string 25&lt;/User5&gt;
+      &lt;User6&gt;sample string 26&lt;/User6&gt;
+      &lt;Birthdate&gt;2016-12-02T08:16:55.3017608-06:00&lt;/Birthdate&gt;
+      &lt;UserEvent1&gt;sample string 27&lt;/UserEvent1&gt;
+      &lt;UserEvent1Date&gt;2016-12-02T08:16:55.3017608-06:00&lt;/UserEvent1Date&gt;
+      &lt;UserEvent2&gt;sample string 28&lt;/UserEvent2&gt;
+      &lt;UserEvent2Date&gt;2016-12-02T08:16:55.3017608-06:00&lt;/UserEvent2Date&gt;
+      &lt;Notes&gt;sample string 29&lt;/Notes&gt;
+      &lt;Password&gt;sample string 30&lt;/Password&gt;
+      &lt;SubscribeType&gt;S&lt;/SubscribeType&gt;
+      &lt;Format&gt;HTML&lt;/Format&gt;
+      &lt;CustomFields&gt;
+        &lt;ProfileCustomField&gt;
+          &lt;Name&gt;sample string 1&lt;/Name&gt;
+          &lt;Value&gt;sample string 2&lt;/Value&gt;
+        &lt;/ProfileCustomField&gt;
+        &lt;ProfileCustomField&gt;
+          &lt;Name&gt;sample string 1&lt;/Name&gt;
+          &lt;Value&gt;sample string 2&lt;/Value&gt;
+        &lt;/ProfileCustomField&gt;
+      &lt;/CustomFields&gt;
+    &lt;/Profile&gt;
+  &lt;/Profiles&gt;
+&lt;/ManageProfile&gt;
+</pre>
+        </div>
+</div>
+    <h2>Response Information</h2>
+
+    <h3>Resource Description</h3>
+
+    <p></p>
+
+<a href="/Help/ResourceModel?modelName=ImportResult">ImportResult</a>    <table class="help-page-table">
+        <thead>
+            <tr><th>Name</th><th>Description</th><th>Type</th><th>Additional information</th></tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td class="parameter-name">New</td>
+                    <td class="parameter-documentation">
+                        <p>New emails added to group</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Updated</td>
+                    <td class="parameter-documentation">
+                        <p>Emails updated</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Duplicate</td>
+                    <td class="parameter-documentation">
+                        <p>Duplicate emails in request</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">MasterSuppressed</td>
+                    <td class="parameter-documentation">
+                        <p>Emails that are master suppressed</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Total</td>
+                    <td class="parameter-documentation">
+                        <p>Total emails in request</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Skipped</td>
+                    <td class="parameter-documentation">
+                        <p>Emails skipped</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+
+        <h3>Response Formats</h3>
+
+<div>
+        <h4 class="sample-header">application/json, text/json</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+{
+  &quot;New&quot;: 1,
+  &quot;Updated&quot;: 2,
+  &quot;Duplicate&quot;: 3,
+  &quot;MasterSuppressed&quot;: 4,
+  &quot;Total&quot;: 5,
+  &quot;Skipped&quot;: 6
+}
+</pre>
+        </div>
+        <h4 class="sample-header">application/xml, text/xml</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+&lt;ImportResult xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+  &lt;New&gt;1&lt;/New&gt;
+  &lt;Updated&gt;2&lt;/Updated&gt;
+  &lt;Duplicate&gt;3&lt;/Duplicate&gt;
+  &lt;MasterSuppressed&gt;4&lt;/MasterSuppressed&gt;
+  &lt;Total&gt;5&lt;/Total&gt;
+  &lt;Skipped&gt;6&lt;/Skipped&gt;
+&lt;/ImportResult&gt;
+</pre>
+        </div>
+</div>
+</div>
+    </section>
+</div>
+
+        </section>
+        <footer style="text-align:center" align="center">
+            <hr width="980" align="center" />
+            <a href="http://www.knowledgemarketing.com/privacy-policy" target="_blank" class="FooterLink">Privacy Policy</a> |
+            <a href="http://www.knowledgemarketing.com/anti-spam-policy" target="_blank" class="FooterLink">Anti-Spam Policy</a> |
+            <a href="http://www.knowledgemarketing.com/index.php/about-km/contact-us/" target="_blank" class="FooterLink">Contact Us</a>
+            <span class="ECNText10">
+                <font align="center">
+                    <br>
+                    Copyright �
+                    <script type="text/javascript">
+                        copyright = new Date();
+                        update = copyright.getFullYear();
+                        document.write(update);
+                    </script>
+                    Knowledge Marketing, Inc., All Rights Reserved.
+                </font>
+            </span>
+        </footer>
+    </section>
+</body>
+</html>

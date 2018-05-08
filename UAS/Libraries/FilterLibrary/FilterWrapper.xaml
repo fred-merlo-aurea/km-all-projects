@@ -1,0 +1,318 @@
+﻿<UserControl x:Class="FilterControls.FilterWrapper"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="800"
+        xmlns:filters="clr-namespace:FilterControls"
+        xmlns:framework="clr-namespace:FilterControls.Framework"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <Style x:Key="LoadDefaultFiltersButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/72/Reset_72.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="AttachButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/Filters/minimize_window-64.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DetachButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/Filters/maximize_window-64.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ClearButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/Filters/erase-64.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LoadButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/Filters/file-64.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SaveButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid>
+                            <Image Width="20" Height="20" Source="/ImageLibrary;Component/Images/Filters/save-64.png" />
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <framework:MyMultiValueConverter x:Key="VisConverter" />
+    </UserControl.Resources>
+    <telerik:RadBusyIndicator Name="busy">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <filters:FilterSideBar x:Name="filters" Grid.RowSpan="4" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=MyViewModel}">
+                <filters:FilterSideBar.Style>
+                    <Style TargetType="{x:Type filters:FilterSideBar}">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource VisConverter}">
+                                        <Binding Path="DetachedFiltersCount"/>
+                                        <Binding Path="Filters.Count" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </filters:FilterSideBar.Style>
+            </filters:FilterSideBar>
+            <filters:FilterPanel x:Name="panel" Filter="{Binding ElementName=filters, Path=Filter, Mode=TwoWay}"
+                             Grid.RowSpan="4">
+                <filters:FilterPanel.Style>
+                    <Style TargetType="{x:Type filters:FilterPanel}">
+                        <Setter Property="Margin" Value="0,0,500,0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Filter}" Value="{x:Null}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                     To="0,0,500,0"
+                                                     Duration="0:00:00.5" />
+                                            <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0" Duration="0:0:00.5" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                     To="0,0,10,0"
+                                                     Duration="0:00:00.5" />
+                                            <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="1" Duration="0:0:0" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </filters:FilterPanel.Style>
+            </filters:FilterPanel>
+
+            <DockPanel x:Name="dpContent" Grid.Row="3" Margin="2,10,0,10">
+                <DockPanel.Style>
+                    <Style TargetType="{x:Type DockPanel}">
+                        <Setter Property="Grid.Column" Value="1" />
+                        <Setter Property="Grid.ColumnSpan" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=filters, Path=Visibility}" Value="Collapsed">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
+                <Viewbox>
+                    <TextBlock Text="REPORT" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin=".5,.5">
+                        <TextBlock.RenderTransform>
+                            <RotateTransform Angle="45" />
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Viewbox>
+            </DockPanel>
+            <filters:SelectedFilters x:Name="selected" Grid.Column="1" Margin="5" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=MyViewModel}" />
+            <Grid Name="grdFilterOptions" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" Background="#559EDB" Visibility="Visible"
+                    Width="{Binding ElementName=spControls, Path=ActualWidth}" MinHeight="{Binding ElementName=spControls, Path=ActualHeight}">
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Margin" Value="0,0,0,0" />
+                        <Setter Property="Opacity" Value="0" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ElementName=btnLoadFilters, Path=IsChecked}" Value="False" />
+                                    <Condition Binding="{Binding ElementName=btnSaveFilters, Path=IsChecked}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,30,0,0" Duration="0:00:00.5" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:01" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </MultiDataTrigger.ExitActions>
+                                <MultiDataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" Duration="0:00:00.5" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:01" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </MultiDataTrigger.EnterActions>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid Margin="5">
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=btnSaveFilters, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="txtFilterName" Margin="5" HorizontalAlignment="Stretch" />
+                    <Button Grid.Column="1" Margin="5" Content="Save" Click="Save_Filters" />
+                </Grid>
+                <Grid Margin="5">
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=btnLoadFilters, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Margin="5" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=MyViewModel.SavedFilters, UpdateSourceTrigger=PropertyChanged}" 
+                              DisplayMemberPath="FilterName" SelectedValuePath="FilterID" SelectedItem="{Binding Path=SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="1" Margin="5" Content="Load" Click="Load_Filters" />
+                </Grid>
+            </Grid>
+            <Rectangle Fill="#559EDB" Grid.Row="1" VerticalAlignment="Top" Height="30" Margin="2,0,0,0"
+                       DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=MyViewModel}">
+                <Rectangle.Style>
+                    <Style TargetType="{x:Type Rectangle}">
+                        <Setter Property="Grid.Column" Value="1" />
+                        <Setter Property="Grid.ColumnSpan" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=filters, Path=Visibility}" Value="Collapsed">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
+            </Rectangle>
+            <Grid Name="grdButtonControls" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0,0,5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <telerik:RadButton Name="btnLoadDefaultFilters" Grid.Column="0" Content="Load Default Filters" ToolTipService.ToolTip="Load Default Filters" HorizontalAlignment="Left" VerticalAlignment="Center" Height="24"  Margin="15,2,5,2" Click="LoadDefault_Filters" />
+                <StackPanel Name="spControls" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,0,5,0">
+                    <TextBlock Text="Circulation Explorer" FontSize="14" FontWeight="Light" Foreground="White" VerticalAlignment="Center" Margin="2,2,15,2" />
+                    <RadioButton x:Name="btnDetachAll" Grid.Column="1" Click="Detach_Filters" ToolTipService.ToolTip="Detach All Filters" Margin="2,2,5,2" FontSize="13" Height="24"
+                             GroupName="Buttons" Style="{DynamicResource DetachButton}" />
+                    <RadioButton x:Name="btnAttachAll" Grid.Column="1" Click="Attach_Filters" ToolTipService.ToolTip="Attach All Filters" Margin="2,2,5,2" FontSize="13" Height="24"
+                             GroupName="Buttons" Style="{DynamicResource AttachButton}" />
+                    <RadioButton x:Name="btnClearfilters" Grid.Column="1" Click="Clear_Filters" ToolTipService.ToolTip="Clear Filters" Margin="2,2,5,2" FontSize="13" Height="24"
+                             GroupName="Buttons" Style="{DynamicResource ClearButton}" />
+                    <RadioButton x:Name="btnLoadFilters" Grid.Column="1" Margin="2,2,5,2" FontSize="13" Height="24" ToolTipService.ToolTip="Load Filters"
+                             GroupName="Buttons" Style="{DynamicResource LoadButton}" />
+                    <RadioButton x:Name="btnSaveFilters" Grid.Column="1" Margin="2,2,5,2" FontSize="13" Height="24" ToolTipService.ToolTip="Save Filters"
+                             GroupName="Buttons" Style="{DynamicResource SaveButton}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

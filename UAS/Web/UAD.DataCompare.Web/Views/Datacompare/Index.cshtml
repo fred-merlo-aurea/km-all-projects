@@ -1,0 +1,52 @@
+﻿
+@model IEnumerable<UAD.DataCompare.Web.Models.SourceFile>
+@using UAD.DataCompare.Web.Infrastructure
+
+@{
+    ViewBag.Title = "Index";
+}
+<script>
+    function dataBound() {
+
+        ActionMenu_OnGridDataBoundEvent();
+    }
+    function addNewFile() {
+
+        window.location = "@Url.Action("ImportFileMapping", "Datacompare")";
+    }
+</script>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>Data Compare Files</span>
+        @Html.Kendo().Button().Name("Add").Content("Add New File<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { onclick = "addNewFile()", @class = "btn btn-blue2 float-right" })
+    </div>
+</div>
+<div style="max-width:100%;box-sizing: border-box;">
+    @(
+        Html.Kendo()
+           .Grid(Model)
+           .Name("Grid")
+           .Pageable()
+           .Events(e => e.DataBound("dataBound"))
+           .Sortable(sortable => sortable
+                        .AllowUnsort(true)
+                        .SortMode(GridSortMode.MultipleColumn))
+           .Columns(columns =>
+           {
+               columns.Bound(e => e.FileName).Title("File Name").HtmlAttributes(new { @style = "width :25%" });
+               columns.Bound(e => e.Extension).Title("Extension");
+               columns.Bound(e => e.Delimiter).Title("Delimiter");
+               columns.Bound(e => e.FileOwner).Title("Owner");
+               columns.Bound(e => e.DateCreated).Format("{0:MM/dd/yyyy hh:mm:ss}").Title("Date Created");
+               columns.Bound(e => e.DateUpdated).Format("{0:MM/dd/yyyy hh:mm:ss}").Title("Date Updated");
+               columns.Bound(e => e.SourceFileID).Title("").ClientTemplate(Html.ActionMenu_Content()).Filterable(false).HtmlAttributes(new { @style = "width :90px;" });
+
+           })
+           .DataSource(dataSource => dataSource
+               .Ajax()
+               .ServerOperation(false)
+               .Sort(sort => sort.Add("DateCreated").Descending())
+               .PageSize(10)
+               )
+    )
+</div>

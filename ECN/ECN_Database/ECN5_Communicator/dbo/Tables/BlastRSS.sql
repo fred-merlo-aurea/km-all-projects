@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[BlastRSS]
+(
+	[BlastRSSID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [BlastID] INT NOT NULL, 
+    [FeedID] INT NOT NULL, 
+    [FeedHTML] VARCHAR(MAX) NULL, 
+    [FeedTEXT] VARCHAR(MAX) NULL, 
+    [Name] VARCHAR(100) NULL
+)

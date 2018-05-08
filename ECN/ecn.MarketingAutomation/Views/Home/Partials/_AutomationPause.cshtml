@@ -1,0 +1,90 @@
+﻿@using ecn.MarketingAutomation.Models
+@using KMEnums
+@model DiagramPostModel
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="Delete" style="border :none; width: 400px;">
+        <legend>Pause/Resume</legend>
+        @Html.Hidden("Id", null, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+        <div class="formbox">
+            <div style="display:inline;float:left;padding-left: 2em;margin: 0">
+                <img alt="Information" src="/ecn.MarketingAutomation/Images/Warn_ico.png" border="0">
+             </div>
+            <div class="text" style="display:inline;float:left;padding-left: 2em;padding-top: 2em;margin: 0;"> Automation Name:
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+        <div class="formbox">
+            <span id="pauseError"></span>
+           
+        </div>
+        <div class="buttonsgroup" style="text-align:center; width: 400px; ">
+            @if (Model.State == ECN_Framework_Common.Objects.Communicator.Enums.MarketingAutomationStatus.Published)
+            {
+                @Html.Kendo().Button().Name("Pause").Content("Pause").HtmlAttributes(new { @class = "btn", onclick = "pauseAutomation(" + Model.Id + ")" })
+            }
+            else if (Model.State == ECN_Framework_Common.Objects.Communicator.Enums.MarketingAutomationStatus.Paused)
+            {
+                @Html.Kendo().Button().Name("Unpause").Content("Resume").HtmlAttributes(new { @class = "btn", onclick = "unPauseAutomation(" + Model.Id + ")" })
+            }
+            
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('PauseWindow')" })
+        </div>
+    </fieldset>
+</div>
+ 
+<script type="text/javascript">
+    function pauseAutomation(id)
+    {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Pause", "Home")?MAID=' + id,
+            //data: { MAID: id },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response[0] == '200')//success
+                {
+                    closeWindow('PauseWindow');
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+
+                    pauseDiagramCallBack(id);
+                }
+                else if (response[0] = '500')//error
+                {
+                    $('#pauseError').html(response[1]);
+                }
+
+            }
+        });
+
+    }
+
+    function unPauseAutomation(id)
+    {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("UnPause", "Home")?MAID=' + id,
+            //data: { MAID: id },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response[0] == '200')//success
+                {
+                    closeWindow('PauseWindow');
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    unPauseDiagramCallBack(id);
+                }
+                else if (response[0] = '500')//error
+                {
+                    $('#pauseError').html(response[1]);
+                }
+
+            }
+        });
+    }
+</script>

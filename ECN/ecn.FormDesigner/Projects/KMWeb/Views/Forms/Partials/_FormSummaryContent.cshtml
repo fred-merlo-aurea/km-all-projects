@@ -1,0 +1,174 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using KMManagers.APITypes
+@using KMWeb.Models.Forms.Modals
+
+@model FormPropertiesPostModel
+
+@{
+    var group = ViewContext.Controller.ViewBag.Group;
+    var formtype = ViewContext.Controller.ViewBag.FormType;
+}
+
+<div class="form-wrapper formedit-formProperties">     
+    <div class="formbox">
+        <div class="formitem" >
+            @Html.LabelFor(x => x.Name, "Form Name")
+            @Html.TextBoxFor(x => x.Name, new { disabled = "disabled" })
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle" for="Name">Group</div>
+        <div class="formitem">
+             @group.GroupName
+        </div>
+    </div>
+    <div class="subtitle">Activation</div>
+    <div class="formbox">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Active").Value(FormActive.Active).Checked(Model.Active == FormActive.Active).Enable(false)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Inactive").Value(FormActive.Inactive).Checked(Model.Active == FormActive.Inactive).Enable(false)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Use Activation Dates").Value(FormActive.UseActivationDates).Checked(Model.Active == FormActive.UseActivationDates).Enable(false)
+        </div>
+    </div>
+    <div class="subtitle">Activation Dates/Times</div>
+    <div class="formitem formiteminline" >
+        @Html.LabelFor(x => x.ActivationFrom, "From")
+        @Html.Kendo().DateTimePickerFor(x => x.ActivationFrom).Enable(false)
+    </div><div class="formitem formiteminline">
+        @Html.LabelFor(x => x.ActivationTo, "To")
+        @Html.Kendo().DateTimePickerFor(x => x.ActivationTo).Enable(false)
+    </div>
+@if (formtype != Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+{
+    <div class="formbox">
+        <div class="subtitle">Are you hosting the form in an iframe?</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Iframe).Label("Yes").Value(true).Checked(Model.Iframe).Enable(false)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Iframe).Label("No").Value(false).Checked(!Model.Iframe).Enable(false)
+        </div>
+    </div>
+    <div class="subtitle">Confirmation Page</div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("URL").Value(ResultType.URL).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.URL).Enable(false)
+            @Html.TextBoxFor(x => x.ConfirmationPageUrl, new { disabled = "disabled" })
+        </div>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("Message").Value(ResultType.Message).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.Message).Enable(false)
+            @(Html.Kendo()
+                .EditorFor(x => x.ConfirmationPageMessage)
+                .Name("msgcon")
+                .ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("Message and URL").Value(ResultType.MessageAndURL).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.MessageAndURL).Enable(false)
+            @Html.TextBoxFor(x => x.ConfirmationPageMAUUrl, new { disabled = "disabled" })
+            @(Html.Kendo()
+                .EditorFor(x => x.ConfirmationPageMAUMessage)
+                .Name("msgurl")
+                .ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>
+    </div>
+    if (Model.ConfirmationPageType.Value == ResultType.MessageAndURL)
+    {
+    <div class="formbox">
+        <div class="formitem formiteminline">
+            @Html.LabelFor(x => x.Delay, "Delay (in seconds) before redirect:")
+            @Html.TextBoxFor(x => x.Delay, new { disabled = "disabled" })
+        </div>
+    </div>
+    }
+    <div class="subtitle">Inactive Redirect</div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.InactiveRedirectType).Label("URL").Value(ResultType.URL).Checked(Model.InactiveRedirectType.HasValue && Model.InactiveRedirectType.Value == ResultType.URL).Enable(false)
+            @Html.TextBoxFor(x => x.InactiveRedirectUrl, new { disabled = "disabled" })
+        </div>
+    </div>
+    <div class="formbox  formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.InactiveRedirectType).Label("Message").Value(ResultType.Message).Checked(Model.InactiveRedirectType.HasValue && Model.InactiveRedirectType.Value == ResultType.Message).Enable(false)
+            @(Html.Kendo()
+                .EditorFor(x => x.InactiveRedirectMessage)
+                .Name("msginactive")
+                .ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>
+    </div>
+}
+    <div class="formbox">
+        <div class="subtitle">Opt In</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.OptInType).Label("Single Opt-In").Value(OptInType.Single).Checked(Model.OptInType == OptInType.Single).Enable(false)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.OptInType).Label("Double Opt-in").Value(OptInType.Double).Checked(Model.OptInType == OptInType.Double).Enable(false)
+        </div>
+    </div>
+@if (formtype != Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+{
+    <div class="formbox">
+        <div class="subtitle">Language Translation</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.LanguageTranslationType).Label("Show Language Translation").Value(true).Checked(Model.LanguageTranslationType).Enable(false)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.LanguageTranslationType).Label("Hide Language Translation").Value(false).Checked(!Model.LanguageTranslationType).Enable(false)
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle">Button Text</div>
+        <div class="formitem formiteminline">
+            @Html.LabelFor(x => x.SubmitButtonText, "Submit Button Text")
+            @Html.TextBoxFor(x => x.SubmitButtonText, new { disabled = "disabled" })
+        </div>
+    </div>
+}
+</div>
+
+<script>
+    $(function () {
+        @if (formtype != Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+            {
+            <Text>
+            $($('#msgurl').data().kendoEditor.body).attr('contenteditable', false);
+            $($('#msginactive').data().kendoEditor.body).attr('contenteditable', false);
+            $($('#msgcon').data().kendoEditor.body).attr('contenteditable', false);
+            </Text>
+            }
+        });
+</script>

@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>Client Kendo Grid</span>
+    </div>
+</div>
+<div id="SearchPanel" style="margin:20px auto;">
+    @Html.Partial("_searchPanel")
+</div>
+<div>
+    @Html.Partial("_filterCriteria")
+</div>
+<div id="resultDiv">
+    @Html.Partial("_clientKendoGrid")
+</div>
+<script>
+    var targetUrl = '@Url.Action("Read_Data", "KendoStandarGridClient")';
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#grid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        })
+        options.dataSource.data = dataSource.data;
+        grid.setOptions(options);
+    }
+
+
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    function filterGridParams() {
+
+        return {
+            Title: $("#UserTitle").val()
+
+        };
+
+    }
+    function titleFilter(element) {
+        var targetUrl = '@Url.Action("GetTitleFilter", "KendoStandarGridClient")';
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl
+                }
+            }
+
+        })
+       element.kendoDropDownList({
+              optionLabel: "--Select Value--",
+              dataTextField: "Text",
+              dataValueField: "Value",
+              dataSource: dataSource
+         });
+    }
+    function onDataBound(arg) {
+
+        $("#filterCriteria li").remove();
+        $("ul.k-pager-numbers.k-reset li:nth-child(3)").remove()
+        var grid = $("#grid").data("kendoGrid");
+        var options = grid.getOptions();
+        var filter = [];
+
+        //Display Selected filters
+        if (options.dataSource.filter) {
+            filter = options.dataSource.filter.filters
+
+            for (var i = 0; i < filter.length; i++) {
+                $("#filterCriteria").append("<li style='list-style:none'><strong>Filter" + i + " : " + filter[i].field + " " + filter[i].operator + "  " + filter[i].value + "</strong></li>");
+
+            }
+
+        }
+
+    }
+
+    $("input.k-textbox").on("change", function () {
+        alert('Hi');
+    })
+</script>

@@ -1,0 +1,25 @@
+﻿@using KMModels.PostModels
+
+@model ChangeGroupPostModel
+
+@Html.HiddenFor(x => x.FormId)
+@Html.HiddenFor(x => x.CustomerId)
+@Html.HiddenFor(x => x.GroupId)
+@Html.HiddenFor(x => x.ChangeFormGroup)
+
+<div class="formbox">
+    <ul class="formlist">
+        @foreach (var item in Model.Fields.Select((Control, Index) => new { Index, Control }))
+        {
+            <text>
+                @Html.Partial("Partials/Modals/_ControlField", item.Control, new ViewDataDictionary
+                {
+                    TemplateInfo = new TemplateInfo
+                    {
+                        HtmlFieldPrefix = string.Format("Fields[{0}]", item.Index)
+                    }
+                })
+            </text>
+        }
+    </ul>
+</div>

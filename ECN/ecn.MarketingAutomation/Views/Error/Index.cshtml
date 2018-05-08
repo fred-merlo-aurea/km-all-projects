@@ -1,0 +1,35 @@
+﻿@using ECN_Framework_Common.Objects
+@model Enums.ErrorMessage
+
+@{
+    ViewBag.Title = "Error Page";
+}
+
+@functions
+{
+    string GetErrorMessage(Enums.ErrorMessage errorType)
+    {
+        switch (errorType)
+        {
+            case Enums.ErrorMessage.InvalidLink: return "Sorry! The link you are requesting appears to be invalid.";
+            case Enums.ErrorMessage.PageNotFound:
+                return "Sorry! The page you have requested does not exist.";
+            case Enums.ErrorMessage.Timeout:
+            case Enums.ErrorMessage.HardError:
+            case Enums.ErrorMessage.Unknown:
+                return "Sorry! We're having trouble processing your request right now.";
+        }
+        return null;
+    }
+}
+
+<div class="erroboxnotmodal wrapper modal modalnotify modal-error">
+    <div class="picon"></div>
+    <div class="text">
+        <div class="validation-summary-errors" data-valmsg-summary="true">
+            <ul>
+                <li>@GetErrorMessage(Model)</li>
+            </ul>
+        </div>
+    </div>
+</div>

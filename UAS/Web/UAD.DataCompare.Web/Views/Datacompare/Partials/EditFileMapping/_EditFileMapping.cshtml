@@ -1,0 +1,152 @@
+﻿
+@model UAD.DataCompare.Web.Models.FileDetails
+
+<style>
+    .filedetails {
+        margin: 20px auto;
+    }
+</style>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div id="ErrorNotificationDiv">
+        @foreach (ModelState modelState in ViewData.ModelState.Values)
+        {<ul>
+            @foreach (ModelError error in modelState.Errors)
+            {
+             <li style="list-style:none;">
+                 <img src="~/Images/Notifications/Error_New.png" style="width:20px;height:20px;" /><span style="font-size:20px;vertical-align:top;">@error.ErrorMessage</span>
+             </li>
+            }
+        </ul>
+        }
+    </div>
+}
+<div id="dverrormessage" style="color:red;display:none;">
+    <ul>
+        <li style="list-style:none;">
+            <img src="~/Images/Notifications/Error_New.png" width="20" height="20"/><span id="lblerrormessage" style="font-size:20px;vertical-align:top;"></span>
+        </li>
+    </ul>
+</div>
+<div style="margin:10px 200px;border:solid 1px gray;">
+    <div style="width: 50%; margin: 0 auto;">
+        <h3>File Details</h3>
+    </div>
+    <table class="filedetails">
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.DataFile)<span style="color:red;"><strong>*</strong></span>
+            </td>
+            <td>
+                <input type="file" name="DataFile" accept=".xls,.xlsx,.csv,.tsv,.txt" onchange="document.getElementById('FileName').value = this.value.split('\\').pop().split('/').pop()" />
+            </td>
+
+        </tr>
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.FileName)<span style="color:red;"><strong>*</strong></span>
+            </td>
+            <td>
+                @Html.Kendo().TextBoxFor(m => m.FileName)
+            </td>
+
+        </tr>
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.DateCreated)
+            </td>
+            <td>
+                @(Html.Kendo().TextBoxFor(m => m.DateCreated).HtmlAttributes(new { @readonly =true}))
+            </td>
+
+        </tr>
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.Delimiter)
+            </td>
+            <td>
+                @(Html.Kendo().DropDownListFor(m => m.Delimiter).BindTo(Model.Delimiters).DataTextField("Text").DataValueField("Text"))
+            </td>
+
+        </tr>
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.HasQuotation)
+            </td>
+            <td>
+                @(Html.Kendo().DropDownListFor(m => m.HasQuotation).BindTo(Model.TrueFalse).DataTextField("Text").DataValueField("Text"))
+                @Html.Kendo().Button().Name("scan").Content("Rescan <i class='km-icon icon-kmspin1'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "submit", onclick = "return RescanFile()" })
+
+
+            </td>
+
+        </tr>
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.NotificationEmail)<span style="color:red;"><strong>*</strong></span>
+            </td>
+            <td>
+                @(Html.Kendo().TextBoxFor(m => m.NotificationEmail).HtmlAttributes(new { style="width:250px;", Placeholder="Enter Email addresses seperated with ;"}))
+                  
+            </td>
+        </tr>
+        @Html.HiddenFor(m => m.isKMStaff)
+        @if (Model.isKMStaff)
+            {
+            <tr class="filedetailsrow">
+                <td>
+                    @Html.LabelFor(m => m.IsImportBillable)
+                </td>
+                <td>
+                    @(Html.Kendo().DropDownListFor(m => m.IsImportBillable).BindTo(Model.TrueFalse).DataTextField("Text").DataValueField("Text").Events(e =>
+                {
+                    e.Change("ToggleNotes");
+                }))
+                </td>
+
+            </tr>
+            //if (Model.IsImportBillable == "No")
+            //{
+                <tr class="filedetailsrow" id="trnotes" style="display: @if (Model.IsImportBillable == "No") {<text>none</text> } else { <text>visible</text> } ">
+                    <td>
+                        @Html.LabelFor(m => m.Notes)<span style="color:red;"><strong>*</strong></span>
+                    </td>
+                    <td>
+                        @(Html.TextAreaFor(m => m.Notes))
+                    </td>
+
+                </tr>
+            //}
+
+        }
+
+
+
+
+    </table>
+</div>
+<div class="bottomnavbox">
+    <div class="bottomnav">
+        <div class="lbtns">
+        </div>
+        <div class="cbtns">
+        </div>
+        <div class="rbtns">
+            @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return MoveNext()" })
+        </div>
+    </div>
+</div>
+<script>
+    function ToggleNotes() {
+        var importbillable = $("#IsImportBillable").val();
+        if (importbillable.toLowerCase() == "no") {
+            $("#trnotes").show();
+           
+        }
+        else {
+            $("#trnotes").hide();
+            $("#Notes").val('');
+        }
+
+    }
+</script>

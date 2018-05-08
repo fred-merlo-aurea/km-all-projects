@@ -1,0 +1,171 @@
+﻿
+
+<table align="center" width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;">
+    <tr style="background-color: #5783BD;">
+        <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+          Visit Activity Filter
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    
+    <tr style="background-color: #EBEBEB" class="VisitSelection">
+        <td>
+            <label style="font-weight:bolder;">Website Visits </label>
+            <input id="VisitedCtr" />
+            @*@(Html.Kendo().DropDownList()
+                              .Name("VisitedCtr")
+                              .DataSource(d => d.Read(r => r.Action("GetVisitedActivityDropDown", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .Events(e =>
+                              {
+                                  e.Change("onVisitedCtrDrpChange");
+                              })
+            )*@
+        </td>
+    </tr>
+    <tr class="VisitPlusSelected">
+        <td>
+            <table>
+
+                <tr>
+                    <td>
+                        <label>Domain</label>
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                              .Name("VisitedCtr_Domain")
+                              .DataSource(d => d.Read(r => r.Action("GetDomains", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .OptionLabel(" ")
+                        )
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>URL</label>
+                        @Html.Kendo().TextBox().Name("VisitedCtr_Url").HtmlAttributes(new { placeholder = "exact match,partial match,keyword,single,comma delimited", style = "width:80%" })
+                    </td>
+
+                </tr>
+
+
+            </table>
+        </td>
+    </tr>
+    <tr class="NoVisitsSelected">
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <label>
+                            Visited Date
+                        </label>
+                        <input id="VisitedCtr_VisitedDate" />
+                        @*@(Html.Kendo().DropDownList()
+                          .Name("VisitedCtr_VisitedDate")
+                          .DataSource(d => d.Read(r => r.Action("GetDateFieldDropDown", "Filter")))
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Events(e =>
+                          {
+                              e.Change("onVisitedCtrVisitedDateDrpChange");
+                          })
+                        )*@
+                    </td>
+                    <td>
+                        <div id="VisitedCtr_VisitedDate_DateRangeDiv" class="displayNone">
+                            @Html.Kendo().TextBox().Name("VisitedCtr_VisitedDate_DateRangeFrom")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('VisitedCtr_VisitedDate_DateRangeFrom')" />
+                            <span>To</span>
+                            @Html.Kendo().TextBox().Name("VisitedCtr_VisitedDate_DateRangeTo")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('VisitedCtr_VisitedDate_DateRangeTo')" />
+                        </div>
+                        <div id="VisitedCtr_VisitedDate_LastXDaysDiv" class="displayNone">
+                            @(Html.Kendo().DropDownList()
+                              .Name("VisitedCtr_VisitedDate_LastXDays")
+                              .DataSource(d => d.Read(r => r.Action("GetNoOfDaysDropDown", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .HtmlAttributes(new { id = "VisitedCtr_VisitedDate_LastXDays" })
+                            )
+                        </div>
+                        <div id="VisitedCtr_VisitedDate_YearDiv" class="displayNone">
+                            <input type="number" id="VisitedCtr_VisitedDate_YearFrom" />
+                            @*@Html.Kendo().NumericTextBox().Name("VisitedCtr_VisitedDate_YearFrom")*@
+                            <span>To</span>
+                            <input type="number" id="VisitedCtr_VisitedDate_YearTo" />
+                            @*@Html.Kendo().NumericTextBox().Name("VisitedCtr_VisitedDate_YearTo")*@
+                        </div>
+
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding-bottom: 10px;">
+            <input type="button" name="btnSelectCirculationFilter" onclick="SelectCloseActivityFilter('Visit')" value="Select/Close" class="filterButton">
+            <input type="button" name="btnResetCirculationFilter" onclick="ResetCloseActivityFilter('Visit')" value="Reset" class="filterButton">
+        </td>
+    </tr>
+</table>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".NoVisitsSelected").hide();
+        $(".VisitPlusSelected").hide();
+        $("#VisitedCtr_VisitedDate_DateRangeDiv").removeClass("displayNone").addClass("displayInline");
+
+        $("#VisitedCtr").kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/Filter/GetVisitedActivityDropDown",
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "Text",
+            dataValueField: "Value",
+            change: function (e) {
+                onVisitedCtrDrpChange(this, e);
+
+            }
+        });
+
+        $("#VisitedCtr_VisitedDate").kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/Filter/GetDateFieldDropDown",
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "Text",
+            dataValueField: "Value",
+            change: function (e) {
+                onVisitedCtrVisitedDateDrpChange(this, e);
+
+            }
+        });
+    });
+
+    function onVisitedCtrDrpChange(ele,e) {
+        var dataItem = ele.dataItem(e.item);
+        showhideFilterPanel(dataItem.Value, 'Visit');
+    }
+    function onVisitedCtrVisitedDateDrpChange(ele,e) {
+        var dataItem = ele.dataItem(e.item);
+        changeVisibility('VisitedCtr_VisitedDate', dataItem.Value);
+    }
+    
+</script>

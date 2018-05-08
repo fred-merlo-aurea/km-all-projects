@@ -1,0 +1,27 @@
+﻿@model UAS.Web.Models.UAD.Filter.DynamicFilter
+
+
+    <table id="brandPanel">
+       <tr>
+            <td valign="middle" align="center">
+                 @(Html.Kendo().DropDownList()
+                    .Name("ddlBrand")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(Model.BrandFilterList)
+                    .Events(e=>e.Change("onBrandChange"))
+                )
+            </td>
+        </tr>
+
+        @if (Model.BrandFilterList.Count == 1)
+        {
+            <tr>
+                <td valign="middle" align="center">
+                    <img src="@Model.ImageUrl" />
+                </td>
+            </tr>
+        }
+
+    </table>
+

@@ -1,0 +1,805 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title></title>
+    <link href="http://www.kmpsgroup.com/subforms/kmpsMain.css" rel="stylesheet" type="text/css">
+
+    <script src="http://www.kmpsgroup.com/subforms/validators.js"></script>
+
+    <!-- START Conversion Tracking for KMPS -->
+
+    <script language="javascript" src="http://www.ecn5.com/ecn.accounts/assets/channelID_16/js/getConversionData.js"></script>   
+
+    <!-- END Conversion Tracking for KMPS -->
+
+    <script language="Javascript">
+
+        function ValidateAll() {
+            var allOk = false;
+
+            allOk = (
+            	    svValidator("First Name", document.frmsub.fn.value) && svValidator("Last Name", document.frmsub.ln.value) && svValidator("Title", document.frmsub.t.value) &&
+            		svValidator("Company Name", document.frmsub.compname.value) &&
+            		svValidator("Email", document.frmsub.e.value) &&
+            		svValidator("Phone Number", document.frmsub.ph.value) &&
+            		svValidator("Company Address", document.frmsub.adr.value) &&
+            		svValidator("City", document.frmsub.city.value) &&
+            		svValidator("Country", document.frmsub.ctry.value) &&
+            		svValidator("Job Function", document.frmsub.user_FUNCTION.value) &&
+            		svValidator("Primary Occupation", document.frmsub.user_BUSINESS.value)
+            		);
+
+            if (allOk) {
+                var emailRegxp = /^([\w]+)(.[\w]+)*@([\w]+)(.[\w]{2,3}){1,2}$/;
+                if (emailRegxp.test(document.forms[0].e.value) != true) {
+                    allOk = false;
+                    alert("Invalid Email Address.");
+                }
+            } 
+
+            if (allOk) {
+                if (document.frmsub.user_FUNCTION.value == '499' && document.frmsub.user_FUNCTIONTXT.value == "") {
+                    alert('Please Enter the Job Function that best matches your category');
+                    allOk = false;
+                } else if (document.frmsub.user_BUSINESS.value == '249' && document.frmsub.user_BUSINESSTXT.value == "") {
+                    alert('Please complete the field for category that best describes the Your Business');
+                    allOk = false;
+                }
+            }
+
+
+            if (allOk) {
+                if (document.frmsub.user_PassAlong[0].checked == true) {
+
+                    if (allOk) {
+                        if ((document.frmsub.user_PA1FNAME.value != "" || document.frmsub.user_PA1LNAME.value != "" || document.frmsub.user_PA1FUNCTION.value != "" || document.frmsub.user_PA1EMAIL.value != "") && (document.frmsub.user_PA1FNAME.value == "" || document.frmsub.user_PA1LNAME.value == "" || document.frmsub.user_PA1FUNCTION.value == "" || document.frmsub.user_PA1EMAIL.value == "")) {
+                            allOk = false;
+                            alert('Please Enter First Name, Last Name, Job Function and Email in question 8.');
+                        }
+                    }
+
+                    if (allOk) {
+                        if (document.frmsub.user_PA1FUNCTION.value == '499' && document.frmsub.user_PA1FUNCTIONTXT.value == "") {
+                            alert('Please complete the Contact person information');
+                            allOk = false;
+                        }
+                    }
+
+                    if (allOk) {
+                        document.frmsub.submit();
+                    }
+                }
+                else if (document.frmsub.user_PassAlong[1].checked == true) {
+                    document.frmsub.submit();
+                }
+                else {
+                    document.frmsub.submit();  
+                }
+            } 
+
+            return allOk;
+        }
+
+
+        function LoadContact() {
+            if (document.frmsub.user_PassAlong[0].checked == true) {
+                showHideFields(true);
+            }
+            else {
+                clearupFields();
+                showHideFields(false);
+            }
+        }
+
+        function clearupFields() {
+            document.frmsub.user_PA1FNAME.value = "";
+            document.frmsub.user_PA1LNAME.value = "";
+            document.frmsub.user_PA1EMAIL.value = "";
+            document.frmsub.user_PA1FUNCTIONTXT.value = "";
+        }
+
+        function showHideFields(param) {
+
+            if (param == true) {
+                document.getElementById('orgContact').style.visibility = 'visible';
+                document.getElementById('orgContact').style.width = '100%';
+                document.getElementById('orgContact').style.height = '150px';
+            }
+            else {
+                document.getElementById('orgContact').style.visibility = 'hidden';
+                document.getElementById('orgContact').style.width = '0%';
+                document.getElementById('orgContact').style.height = '0px';
+            }
+        }
+
+
+        function showHideProdServes() {
+            if (document.frmsub.user_DEMO10[5].checked) {
+                enableTB('user_DEMO10TXT', false);
+            }
+            else {
+                enableTB('user_DEMO10TXT', true);
+                document.frmsub.user_DEMO10TXT.value = "";
+            }
+        }
+        
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+    <style type="text/css">
+        .style1
+        {
+            width: 20%; 
+        }
+        .style2
+        {
+            width: 110px;
+        }
+    </style>
+</head>
+<body onload="LoadContact()">
+    <div id="container">
+        <div id="innerContainer">
+            <div id="container-content">
+                <div id="banner"  style="width:100%;text-align:center;">
+                    <img border="0" src="http://images.ecn5.com/Customers/2959/images/ET_Header_120321.jpg">
+                     <p><b>Free Subscription For Qualified Readers</b></p>
+                    </div> 
+                     <p  class="borderBottom padBottom">
+                  <p>The Extru-Technician is a quarterly newsletter, delivered via email, with information to improve extrusion processes and make your operation more competitive 
+                  and potentially more profitable.</p>
+                   
+                  <p>Extru-Tech has installed numerous extrusion systems worldwide for the production of human food, pet food, aquatic feed and animal feed products. 
+                  Extru-Tech produces one of the industry's most complete lines of extrusion processing systems and offers a full line of ancillary equipment and customized 
+                  equipment solutions for specialized processes.</p>
+
+                  <p>To receive a free subscription to The Extru-Technician, please fill out this form completely.</p>
+        
+                </p>
+                <form name="frmsub" id="frmsub" action="http://emailactivity.ecn5.com/engines/SO_subscribe.aspx">
+                <p>
+                    * Indicates a required field.</p>
+                <p class="borderBottom padBotom">
+                    <table border="0" cellspacing="3" cellpadding="1" width="100%"> 
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* First Name:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="fn" size="25" value="" maxlength="25">  
+                            </td> 
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Last Name:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="ln" size="25" value="" maxlength="25">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Job Title:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="t" size="25" value="" maxlength="25">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Company:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="compname" size="33" value="" maxlength="27">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Email:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="e" size="35" value="" maxlength="50">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Phone Number:</span>
+                            </td>
+                            <td align="left" width="90%">
+                                <input name="ph" size="15" value="" maxlength="15">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">Fax Number:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="fax" size="15" value="" maxlength="15">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">Company URL:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="website" size="33" value="" maxlength="50">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Company Address:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="adr" size="27" value="" maxlength="27">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">Department/Division:</span> 
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="user_Department/Division" size="25" value="" maxlength="25" /> 
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">PO Box:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="adr2" size="25" value="" maxlength="25">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* City:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="city" size="16" value="" maxlength="16">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">State:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <select name="state">
+                                    <option value="">Select for USA or Canada</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="DC">District of Columbia</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                    <option value="">&nbsp;</option>
+                                    <option value="AB">Alberta</option>
+                                    <option value="BC">British Columbia</option>
+                                    <option value="MB">Manitoba</option>
+                                    <option value="NB">New Brunswick</option>
+                                    <option value="NF">Newfoundland</option>
+                                    <option value="NS">Nova Scotia</option>
+                                    <option value="NT">Northwest Territories</option>
+                                    <option value="ON">Ontario</option>
+                                    <option value="PE">Prince Edward Island</option>
+                                    <option value="QC">Quebec</option>
+                                    <option value="SK">Saskatchewan</option>
+                                    <option value="YT">Yukon Territory</option>
+                                    <option value="">&nbsp;</option>
+                                    <option value="AS">American Samoa</option>
+                                    <option value="GU">Guam</option>
+                                    <option value="MH">Marshall Islands</option>
+                                    <option value="FM">Micronesia (Federated States of)</option>
+                                    <option value="PW">Palau</option>
+                                    <option value="PR">Puerto Rico</option>
+                                    <option value="OL">U.S. Minor Outlying Islands</option>
+                                    <option value="VI">U.S. Virgin Islands</option>
+                                    <option value="MP">Northern Mariana Islands</option>
+                                    <option value="AA">Armed Forces Americas AA</option>
+                                    <option value="AE">Armed Forces Middle East, Europe, Canada AE</option>
+                                    <option value="AP">Armed Forces Pacific AP</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">Zip Code:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <input name="zc" size="10" value="">
+                            </td>
+                        </tr>
+                        <tr valign="TOP">
+                            <td align="left" class="style1">
+                                <span class="label">* Country:</span>
+                            </td>
+                            <td align="left" width="80%">
+                                <select name="ctry">
+                                    <option value="">Select Country</option>
+                                    <option value="USA">UNITED STATES</option>
+                                    <option value="CANADA">CANADA</option>
+                                    <option value="AFGHANISTAN">AFGHANISTAN</option>
+                                    <option value="ALBANIA">ALBANIA</option>
+                                    <option value="ALGERIA">ALGERIA</option>
+                                    <option value="ANDORRA">ANDORRA</option>
+                                    <option value="ANGOLA">ANGOLA</option>
+                                    <option value="ANGUILLA">ANGUILLA</option>
+                                    <option value="ANTIGUA">ANTIGUA</option>
+                                    <option value="ARGENTINA">ARGENTINA</option>
+                                    <option value="ARMENIA">ARMENIA</option>
+                                    <option value="ARUBA">ARUBA</option>
+                                    <option value="AUSTRALIA">AUSTRALIA</option>
+                                    <option value="AUSTRIA">AUSTRIA</option>
+                                    <option value="AZERBAIJAN">AZERBAIJAN</option>
+                                    <option value="BAHAMAS">BAHAMAS</option>
+                                    <option value="BAHRAIN">BAHRAIN</option>
+                                    <option value="BANGLADESH">BANGLADESH</option>
+                                    <option value="BARBADOS">BARBADOS</option>
+                                    <option value="BARBUDA">BARBUDA</option>
+                                    <option value="BELARUS">BELARUS</option>
+                                    <option value="BELGIUM">BELGIUM</option>
+                                    <option value="BELIZE">BELIZE</option>
+                                    <option value="BENIN">BENIN</option>
+                                    <option value="BERMUDA">BERMUDA</option>
+                                    <option value="BHUTAN">BHUTAN</option>
+                                    <option value="BOLIVIA">BOLIVIA</option>
+                                    <option value="BORNIA">BORNIA</option>
+                                    <option value="BOSNIA">BOSNIA</option>
+                                    <option value="BOTSWANA">BOTSWANA</option>
+                                    <option value="BRAZIL">BRAZIL</option>
+                                    <option value="BRUNEI">BRUNEI</option>
+                                    <option value="BULGARIA">BULGARIA</option>
+                                    <option value="BURKINA FASO">BURKINA FASO</option>
+                                    <option value="BURUNDI">BURUNDI</option>
+                                    <option value="BRIT VIR ISLDS">BRIT VIR ISLDS</option>
+                                    <option value="CAMBODIA">CAMBODIA</option>
+                                    <option value="CAMEROON">CAMEROON</option>
+                                    <option value="CANAL ZONE">CANAL ZONE</option>
+                                    <option value="CAYMAN ISLANDS">CAYMAN ISLANDS</option>
+                                    <option value="CENTRL AFR RBPLC">CENTRL AFR RBPLC</option>
+                                    <option value="CHAD">CHAD</option>
+                                    <option value="CHILE">CHILE</option>
+                                    <option value="CHINA">CHINA</option>
+                                    <option value="COLOMBIA">COLOMBIA</option>
+                                    <option value="COOK ISLANDS">COOK ISLANDS</option>
+                                    <option value="COSTA RICA">COSTA RICA</option>
+                                    <option value="CROATIA">CROATIA</option>
+                                    <option value="CUBA">CUBA</option>
+                                    <option value="CYPRUS">CYPRUS</option>
+                                    <option value="CZECH REPUBLIC">CZECH REPUBLIC</option>
+                                    <option value="DAGESTAN">DAGESTAN</option>
+                                    <option value="DENMARK">DENMARK</option>
+                                    <option value="DOMINICA">DOMINICA</option>
+                                    <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+                                    <option value="ECUADOR">ECUADOR</option>
+                                    <option value="EGYPT">EGYPT</option>
+                                    <option value="EL SALVADOR">EL SALVADOR</option>
+                                    <option value="ENGLAND">ENGLAND</option>
+                                    <option value="ERITREA">ERITREA</option>
+                                    <option value="ESTONIA">ESTONIA</option>
+                                    <option value="ETHIOPIA">ETHIOPIA</option>
+                                    <option value="FAEROE ISLANDS">FAEROE ISLANDS</option>
+                                    <option value="FALKLAND ISLDS">FALKLAND ISLDS</option>
+                                    <option value="FRENCH GUIANA">FRENCH GUIANA</option>
+                                    <option value="FIJI">FIJI</option>
+                                    <option value="FINLAND">FINLAND</option>
+                                    <option value="FR POLYNESIA">FR POLYNESIA</option>
+                                    <option value="FRANCE">FRANCE</option>
+                                    <option value="GABON">GABON</option>
+                                    <option value="GAMBIA">GAMBIA</option>
+                                    <option value="GEORGIA">GEORGIA</option>
+                                    <option value="GERMANY">GERMANY</option>
+                                    <option value="GHANA">GHANA</option>
+                                    <option value="GIRBRALTAR">GIRBRALTAR</option>
+                                    <option value="GREECE">GREECE</option>
+                                    <option value="GREENLAND">GREENLAND</option>
+                                    <option value="GRENADA">GRENADA</option>
+                                    <option value="GUADELUPE">GUADELUPE</option>
+                                    <option value="GUATEMALA">GUATEMALA</option>
+                                    <option value="GUERNSEY">GUERNSEY</option>
+                                    <option value="GUINEA BIASSAU">GUINEA BIASSAU</option>
+                                    <option value="GUYANA">GUYANA</option>
+                                    <option value="HAITI">HAITI</option>
+                                    <option value="HONDURAS">HONDURAS</option>
+                                    <option value="HONG KONG">HONG KONG</option>
+                                    <option value="HUNGARY">HUNGARY</option>
+                                    <option value="ICELAND">ICELAND</option>
+                                    <option value="INDIA">INDIA</option>
+                                    <option value="INDONESIA">INDONESIA</option>
+                                    <option value="IRAN">IRAN</option>
+                                    <option value="IRAQ">IRAQ</option>
+                                    <option value="IRELAND">IRELAND</option>
+                                    <option value="IRELAND, NORTH">IRELAND, NORTH</option>
+                                    <option value="ISLE OF MAN">ISLE OF MAN</option>
+                                    <option value="ISRAEL">ISRAEL</option>
+                                    <option value="ITALY">ITALY</option>
+                                    <option value="IVORY COAST">IVORY COAST</option>
+                                    <option value="JAMAICA">JAMAICA</option>
+                                    <option value="JAPAN">JAPAN</option>
+                                    <option value="JERSEY">JERSEY</option>
+                                    <option value="JORDAN">JORDAN</option>
+                                    <option value="KAZAKHSTAN">KAZAKHSTAN</option>
+                                    <option value="KENYA">KENYA</option>
+                                    <option value="KIRIBATI">KIRIBATI</option>
+                                    <option value="KOREA, NORTH">KOREA, NORTH</option>
+                                    <option value="KOREA, SOUTH">KOREA, SOUTH</option>
+                                    <option value="KUWAIT">KUWAIT</option>
+                                    <option value="KYRGZSTAN">KYRGZSTAN</option>
+                                    <option value="LAOS">LAOS</option>
+                                    <option value="LATVIA">LATVIA</option>
+                                    <option value="LEBANON">LEBANON</option>
+                                    <option value="LEEWARD ISLANDS">LEEWARD ISLANDS</option>
+                                    <option value="LESOTHO">LESOTHO</option>
+                                    <option value="LIBERIA">LIBERIA</option>
+                                    <option value="LIBYA">LIBYA</option>
+                                    <option value="LIECHTENSTEIN">LIECHTENSTEIN</option>
+                                    <option value="LITHUANIA">LITHUANIA</option>
+                                    <option value="LUXEMBOURG">LUXEMBOURG</option>
+                                    <option value="MACEDONIA">MACEDONIA</option>
+                                    <option value="MADEIRA ISLAND">MADEIRA ISLAND</option>
+                                    <option value="MADAGASCAR">MADAGASCAR</option>
+                                    <option value="MALDIVES">MALDIVES</option>
+                                    <option value="MALI">MALI</option>
+                                    <option value="MALAYSIA">MALAYSIA</option>
+                                    <option value="MALTA">MALTA</option>
+                                    <option value="MALAWI">MALAWI</option>
+                                    <option value="MARTINIQUE">MARTINIQUE</option>
+                                    <option value="MAURITANIA">MAURITANIA</option>
+                                    <option value="MAURITIUS">MAURITIUS</option>
+                                    <option value="MEXICO">MEXICO</option>
+                                    <option value="MICRONESIA">MICRONESIA</option>
+                                    <option value="MOLDOVA">MOLDOVA</option>
+                                    <option value="MONACO">MONACO</option>
+                                    <option value="MONGOLIA">MONGOLIA</option>
+                                    <option value="MONTENEGRO">MONTENEGRO</option>
+                                    <option value="MONTSERRAT">MONTSERRAT</option>
+                                    <option value="MOROCCO">MOROCCO</option>
+                                    <option value="MOZAMBIQUE">MOZAMBIQUE</option>
+                                    <option value="MYANMAR">MYANMAR</option>
+                                    <option value="NAMIBIA">NAMIBIA</option>
+                                    <option value="NEPAL">NEPAL</option>
+                                    <option value="NETHERLANDS">NETHERLANDS</option>
+                                    <option value="NETH ANTILLES">NETH ANTILLES</option>
+                                    <option value="NEVIS">NEVIS</option>
+                                    <option value="NEW CALDONIA">NEW CALDONIA</option>
+                                    <option value="NEW ZEALAND">NEW ZEALAND</option>
+                                    <option value="NICARAGUA">NICARAGUA</option>
+                                    <option value="NIGERIA">NIGERIA</option>
+                                    <option value="NIGER">NIGER</option>
+                                    <option value="NORWAY">NORWAY</option>
+                                    <option value="OKINAWA">OKINAWA</option>
+                                    <option value="OMAN">OMAN</option>
+                                    <option value="PAKISTAN">PAKISTAN</option>
+                                    <option value="PANAMA">PANAMA</option>
+                                    <option value="PAPUA NEW GUINEA">PAPUA NEW GUINEA</option>
+                                    <option value="PARAGUAY">PARAGUAY</option>
+                                    <option value="PERU">PERU</option>
+                                    <option value="PHILIPPINES">PHILIPPINES</option>
+                                    <option value="POLAND">POLAND</option>
+                                    <option value="PORTUGAL">PORTUGAL</option>
+                                    <option value="QATAR">QATAR</option>
+                                    <option value="REUNION ISLAND">REUNION ISLAND</option>
+                                    <option value="ROMANIA">ROMANIA</option>
+                                    <option value="RUSSIA">RUSSIA</option>
+                                    <option value="RWANDA">RWANDA</option>
+                                    <option value="SAMOA">SAMOA</option>
+                                    <option value="SAUDI ARABIA">SAUDI ARABIA</option>
+                                    <option value="SCOTLAND">SCOTLAND</option>
+                                    <option value="SENEGAL">SENEGAL</option>
+                                    <option value="SERBIA">SERBIA</option>
+                                    <option value="SEYCHELLES">SEYCHELLES</option>
+                                    <option value="SIERRA LEONE">SIERRA LEONE</option>
+                                    <option value="SINGAPORE">SINGAPORE</option>
+                                    <option value="SLOVAKIA">SLOVAKIA</option>
+                                    <option value="SLOVENIA">SLOVENIA</option>
+                                    <option value="SOLOMON ISLANDS">SOLOMON ISLANDS</option>
+                                    <option value="SOMALIA">SOMALIA</option>
+                                    <option value="SOUTH AFRICA">SOUTH AFRICA</option>
+                                    <option value="SPAIN">SPAIN</option>
+                                    <option value="SRI LANKA">SRI LANKA</option>
+                                    <option value="ST KITTS">ST KITTS</option>
+                                    <option value="ST LUCIA">ST LUCIA</option>
+                                    <option value="ST VINCENT">ST VINCENT</option>
+                                    <option value="SUDAN">SUDAN</option>
+                                    <option value="SURINAME">SURINAME</option>
+                                    <option value="SWAZILAND">SWAZILAND</option>
+                                    <option value="SWEDEN">SWEDEN</option>
+                                    <option value="SWITZERLAND">SWITZERLAND</option>
+                                    <option value="SYRIA">SYRIA</option>
+                                    <option value="TAHITI">TAHITI</option>
+                                    <option value="TAIWAN">TAIWAN</option>
+                                    <option value="TAJIKISTAN">TAJIKISTAN</option>
+                                    <option value="TANZANIA">TANZANIA</option>
+                                    <option value="THAILAND">THAILAND</option>
+                                    <option value="TOGO">TOGO</option>
+                                    <option value="TONGO">TONGO</option>
+                                    <option value="TRINIDAD & TOBAGO">TRINIDAD & TOBAGO</option>
+                                    <option value="TRISTAN CUNHA">TRISTAN CUNHA</option>
+                                    <option value="TUNISIA">TUNISIA</option>
+                                    <option value="TURKMENISTAN">TURKMENISTAN</option>
+                                    <option value="TURKEY">TURKEY</option>
+                                    <option value="UNITED ARAB EMIRATE">UNITED ARAB EMIRATE</option>
+                                    <option value="UGANDA">UGANDA</option>
+                                    <option value="UKRAINE">UKRAINE</option>
+                                    <option value="URUGUAY">URUGUAY</option>
+                                    <option value="UZBEKISTAN">UZBEKISTAN</option>
+                                    <option value="VANUATU">VANUATU</option>
+                                    <option value="VENEZUELA">VENEZUELA</option>
+                                    <option value="VIETNAM">VIETNAM</option>
+                                    <option value="WALES">WALES</option>
+                                    <option value="WESTERN SAMOA">WESTERN SAMOA</option>
+                                    <option value="YEMEN">YEMEN</option>
+                                    <option value="ZAIRE">ZAIRE</option>
+                                    <option value="ZAMBIA">ZAMBIA</option>
+                                    <option value="ZIMBABWE">ZIMBABWE</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </p>
+                <ol>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">* Primary Job Function:</span><br />
+                            <span class="fieldSpace">
+                                <select id="user_FUNCTION" name="user_FUNCTION" onchange="ddlCtrlTB('user_FUNCTIONTXT','user_FUNCTION','499',false)">
+                                    <option value="" selected="selected">Select One</option>
+                                    <option value='401'>General Management</option>
+                                    <option value='413'>Production</option>
+                                    <option value='414'>Purchasing</option>
+                                    <option value='408'>Marketing/Sales</option>
+                                    <option value='417'>Research</option>
+                                    <option value='499'>Other&nbsp;(please specify)</option>
+                                </select>
+                                <br />
+                                <input id="user_FUNCTIONTXT" name="user_FUNCTIONTXT" disabled="disabled" type="text"
+                                    class="otherAnswer" size="55" maxlength="50" id="text3">
+                            </span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">* Primary Occupation:</span><br />
+                            <span class="fieldSpace">
+                                <select id="user_BUSINESS" name="user_BUSINESS" onchange="ddlCtrlTB('user_BUSINESSTXT','user_BUSINESS',249,false)">
+                                    <option value="" selected="selected">Select One</option>
+                                    <option value='176'>Pet Food Manufacturer</option>
+                                    <option value='177'>Pet Food Marketer</option>
+                                    <option value='175'>Pet Food Distributor/Broker</option>
+                                    <option value='188'>Retail Outlet/Manager of Private Label Pet Food</option>
+                                    <option value='148'>Importer/Exporter of Pet Food</option> 
+                                    <option value='135'>Government</option>
+                                    <option value='109'>Consultant to Pet Food Manufacturing/Marketing</option>
+                                    <option value='249'>Other&nbsp;(please specify)</option>
+                                </select> 
+                                <br />
+                                <input id="user_BUSINESSTXT" name="user_BUSINESSTXT" disabled="disabled" type="text"
+                                    class="otherAnswer" size="55" maxlength="50" id="text2">
+                            </span>  
+                        </p>
+                    </li>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">I recommend, specify, approve, and/or purchase the following: (check
+                                all that apply)</span><br />
+                            <br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="633" />&nbsp;Extrusion
+                            Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="634" />&nbsp;Horizontal
+                            Dryers & Coolers<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="635" />&nbsp;Vertical
+                            Coolers<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="636" />&nbsp;Feeding
+                            Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="637" />&nbsp;Conditioning
+                            Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="638" />&nbsp;Control
+                            Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="639" />&nbsp;PDU
+                            (Product Densification Unit)<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="640" />&nbsp;SAS
+                            (Sphere-izer Agglomeration System)<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="641" />&nbsp;Liquid/Powder
+                            Coating Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="642" />&nbsp;Pneumatic
+                            Conveying Systems<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="643" />&nbsp;Multi-Color
+                            Extrusion Die Assemblies<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="644" />&nbsp;Replacement
+                            Parts for Major Brands of Extruders<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="645" />&nbsp;Re-manufactured
+                            extruders and dryers<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="646" />&nbsp;Re-conditioning
+                            Services<br />
+                            <input type="checkbox" id="user_DEMO9" name="user_DEMO9" value="647" />&nbsp;None
+                            of the above<br />
+                        </p>
+                    </li>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">Type of Product Manufactured and/or Distributed: (check all that
+                                apply)</span><br />
+                            <br />
+                            <input name="user_DEMO13" type="checkbox" value="303" />&nbsp;Dry<br />
+                            <input name="user_DEMO13" type="checkbox" value="304" />&nbsp;Wet/Canned<br />
+                            <input name="user_DEMO13" type="checkbox" value="305" />&nbsp;Soft/Moist<br />
+                            <input name="user_DEMO13" type="checkbox" value="306" />&nbsp;Soft/Dry<br />
+                            <input name="user_DEMO13" type="checkbox" value="307" />&nbsp;Treats<br />
+                            <input name="user_DEMO13" type="checkbox" value="308" />&nbsp;Other<br />
+                        </p>
+                    </li>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">Species Product Serves: (check all that apply)</span><br />
+                            <br />
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="356" onclick="showHideProdServes()">&nbsp;Dogs<br />
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="357" onclick="showHideProdServes()">&nbsp;Cats<br />
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="358" onclick="showHideProdServes()">&nbsp;Birds<br />
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="359" onclick="showHideProdServes()">&nbsp;Fish<br />
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="360" onclick="showHideProdServes()">&nbsp;Small
+                            Mammals<br /> 
+                            <input id="user_DEMO10" type="checkbox" name="user_DEMO10" value="361" onclick="showHideProdServes()">&nbsp;Other&nbsp;(Please
+                            Specify)<br />
+                            <input id="user_DEMO10TXT" name="user_DEMO10TXT" type="text" disabled="disabled"
+                                    class="otherAnswer" size="55" maxlength="50"> 
+                            
+                        </p>
+                    </li>
+                    <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">Would you like more information about Extru-Tech products 
+                            and services?</span><br />
+                            <input name="user_DEMO30" type="radio" value="Y" />Yes&nbsp;
+                            <input name="user_DEMO30" type="radio" value="N" />No
+                        </p>
+                    </li>
+                     <li>
+                        <p class="borderBottom padBottom">
+                            <span class="label">Preferred Method of Contact:</span>
+                            <br />
+                            <select name="user_CONTACT" id="user_CONTACT" onchange="ddlCtrlTB('user_CONTACTTXT','user_CONTACT',41,false)"> 
+                                <option value="" selected="selected">Select One</option>
+                                <option value="33">Phone</option>
+                                <option value="32">Fax</option>
+                                <option value="35">Email</option>
+                                <option value="40">In-person</option>
+                                <option value="41">Other (Please Specify)</option>
+                            </select>
+                            <br />   
+                            <input type="text" disabled="disabled" name="user_CONTACTTXT" id="user_CONTACTTXT" size="55" maxlength="50" />   
+                        </p> 
+                    </li>  
+                     <li>
+                    <p>
+                    <span class="label">Is there anyone else at your organization would like to receive 
+                        this newsletter?</span>&nbsp;
+                        <br />
+                        <input type="radio" name="user_PassAlong" id="user_PassAlong" value="Y" onclick="showHideFields(true)" />&nbsp;Yes &nbsp;<input type="radio"
+                            name="user_PassAlong" id="user_PassAlong" value="N" onclick="showHideFields(false)" />&nbsp;No<br /> 
+                        </p>
+                        <br />
+                         <div id="orgContact" style="visibility:hidden; width:0px; height:0px;">  
+                        <p> 
+                        <table width="100%" cellspacing="2">
+                            <tr>
+                                <td class="style2">
+                                    <span class="label">First Name:</span>
+                                </td>
+                                <td>
+                                    <input type="text" name="user_PA1FNAME" id="user_PA1FNAME" /> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style2"> 
+                                    <span class="label">Last Name:</span>
+                                </td>
+                                <td>
+                                    <input type="text" name="user_PA1LNAME" id="user_PA1LNAME" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style2">
+                                    <span class="label">Email:</span>
+                                </td>
+                                <td>
+                                    <input type="text" name="user_PA1EMAIL" id="user_PA1EMAIL" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style2">
+                                    <span class="label">Job Function:</span>
+                                </td>
+                                <td>
+                                    <select id="user_PA1FUNCTION" name="user_PA1FUNCTION" onchange="ddlCtrlTB('user_PA1FUNCTIONTXT','user_PA1FUNCTION','499',false)">
+                                        <option value="" selected="selected">Select One</option>
+                                        <option value='401'>General Management</option>
+                                        <option value='413'>Production</option>
+                                        <option value='414'>Purchasing</option>
+                                        <option value='408'>Marketing/Sales</option>
+                                        <option value='417'>Research</option>
+                                        <option value='499'>Other (please specify)</option>
+                                    </select><br />
+                                    <br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <input type="text" disabled="disabled" id="user_PA1FUNCTIONTXT" name="user_PA1FUNCTIONTXT" />
+                                </td>
+                            </tr>
+                        </table>
+                        </p>
+                        </div>
+                    </li> 
+                </ol>
+                <p>
+                    <input type="hidden" value="S" name="s" id="Hidden1">
+                    <input type="hidden" value="html" name="f" id="Hidden2">
+                    <input type="hidden" value="33991" name="g" id="Hidden3"> 
+                    <input type="hidden" value="2806" name="c" id="Hidden4">
+                    <input type="hidden" value="1224" name="sfID" id="Hidden5">
+                    <input type="button" id="btnSubmit" name="btnSubmit" value="Submit" onclick="return ValidateAll()">
+                    <input type="reset" id="reset" name="reset" value=" Clear ">
+                    <input type="hidden" id="user_SUBSCRIBERID" size="15" name="user_SUBSCRIBERID">
+                    <input type="hidden" id="user_PUBLICATIONCODE" value="EXTR" size="15" name="user_PUBLICATIONCODE">
+                    <input type="hidden" id="user_TRANSACTIONTYPE" value="new" size="15" name="user_TRANSACTIONTYPE">
+                    <input type="hidden" name="ctrk_eid" id="ctrk_eid">
+                    <input type="hidden" name="ctrk_bid" id="ctrk_bid">
+                </p>
+                </form>
+            </div>
+            <!-- end container-content -->
+            <div id="footer">
+               
+            </div>
+            <!--end footer-->
+        </div>
+    </div>
+</body>
+</html>

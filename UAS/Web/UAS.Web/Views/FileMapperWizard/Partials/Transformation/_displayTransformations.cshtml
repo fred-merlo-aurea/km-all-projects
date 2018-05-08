@@ -1,0 +1,161 @@
+﻿@model  UAS.Web.Models.FileMapperWizard.TransformationsViewModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $(".k-grid .k-grid-header").hide();
+    });
+
+    function saveBeforeOpenEditTransformation(sourceFileID, transformationID, fieldMappingID) {
+        SaveMappingBeforeLoadingExistingTransformation(sourceFileID, fieldMappingID, transformationID);
+    }
+
+    function openEditTransformationFieldMap(transformationID, fieldMappingID) {
+        var win = $("#transformationWindow").data('kendoWindow');
+        $("#transformationWindow").html("");
+        win.content("Loading...");
+        win.center();
+        win.open();
+
+        var model1 = { FieldMappingID: fieldMappingID }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/EditTransformationDataTransformationSetup",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: model1,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                var model2 = { TransformationID: transformationID }
+
+                $.ajax({
+                    url: "/UAS.Web/FileMapperWizard/LoadTransformationSetup",
+                    traditional: true,
+                    contentType: "application/html; charset=utf-8",
+                    type: "GET",
+                    data: model2,
+                    cache: !0,
+                    datatype: "html",
+                    success: function (returnData) {
+                        win.content(returnData);
+                    },
+                    error: function (data) {
+                        alert("An error has occured!!!");
+                    }
+                });
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });        
+    }
+
+    function openDeleteTransformationFieldMap(transformationFieldMapId, sourceFileId, fieldMapId) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to remove this transformation?",
+            autoClose: false,
+            action: performDeleteTransformationFieldMap,
+            data: { TransformationFieldMapId: transformationFieldMapId, SourceFileId: sourceFileId, FieldMapId: fieldMapId },
+            IsOpen: false
+        });
+    }
+
+    function performDeleteTransformationFieldMap(values) {
+        var transformationFieldMapId = values.TransformationFieldMapId;
+        var sourceFileId = values.SourceFileId;
+        var fieldMapId = values.FieldMapId;        
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/RemoveTransformationFieldMapping",
+            data: values,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (retData) {
+                debugger;
+                if (retData) {
+                    reloadTransformationGrid(sourceFileId, fieldMapId);
+                } else {
+                    var targetName = "div_Transformations_" + fieldMapId;
+                    $("#" + targetName).hide();
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+
+    function reloadTransformationGrid(sourceFileID, fieldMapID) {
+        var sourcefileid = sourceFileID;
+        var fieldmappingid = fieldMapID;
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+</script>
+@{
+
+    Html.Kendo()
+        .Grid(Model.transformations)
+        .Name("grid_" + Model.FieldMappingId)
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.TransformationName).Title("Product").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+            columns.Bound(e => e).Title("Edit").Filterable(false).ClientTemplate(
+            "<span style='align:middle'><img src='" + Url.Content("~/Images/") + "icon-edits1.gif' onclick='javascript:saveBeforeOpenEditTransformation(#= SourceFileId #, #= TransformationId #, #= FieldMappingId #)' /></span>"
+            ).Width(40).Filterable(false).Sortable(false);
+            columns.Bound(e => e).Title("Delete").Filterable(false).ClientTemplate(
+            "<span style='align:middle'><img src='" + Url.Content("~/Images/") + "icon-delete.gif' onclick='javascript:openDeleteTransformationFieldMap(#= TransformationFieldMapId #, #= SourceFileId #, #= FieldMappingId #)' /></span>"
+            ).Width(40).Filterable(false).Sortable(false);            
+        })
+        .Sortable()
+        .HtmlAttributes(new { style = "min-width:100px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(Model.transformations.Count())
+            .ServerOperation(false)
+        )
+        .Events(ev => ev.DataBound("dataBound"))
+        .Render();
+}

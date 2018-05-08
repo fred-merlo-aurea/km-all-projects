@@ -1,0 +1,46 @@
+﻿<div id="LoadingBox"></div>
+<script>
+        var loadingBox;
+        function LoadingBox() {
+           this.show = function () {;
+               var content = $(".loaderbox");
+                var options = {  //Options can be customized according to requirement.
+                    title: false,
+                    modal: true,
+                    visible: false,
+                    animation: false,
+                    width: 200,
+                    height:200
+                };
+                var container = $("#LoadingBox");
+                var widget = kendo.widgetInstance(container);
+                if (widget) {
+                    widget.destroy();
+                }
+                container.kendoWindow(options);
+                var window = container.data("kendoWindow");
+                window.content("<div class='uil-default-css' style='transform:scale(0.46);'><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(0deg) translate(0,-60px);transform:rotate(0deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(30deg) translate(0,-60px);transform:rotate(30deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(60deg) translate(0,-60px);transform:rotate(60deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(90deg) translate(0,-60px);transform:rotate(90deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(120deg) translate(0,-60px);transform:rotate(120deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(150deg) translate(0,-60px);transform:rotate(150deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(180deg) translate(0,-60px);transform:rotate(180deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(210deg) translate(0,-60px);transform:rotate(210deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(240deg) translate(0,-60px);transform:rotate(240deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(270deg) translate(0,-60px);transform:rotate(270deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(300deg) translate(0,-60px);transform:rotate(300deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(330deg) translate(0,-60px);transform:rotate(330deg) translate(0,-60px);border-radius:10px;position:absolute;'></div></div><span style='margin-left:30%;text-align:center;font-family:Arial;font-size:12px;color:#8C8989;'>Please wait…</span>");
+                window.center().open();
+               
+            }
+            this.close = function () {
+                setTimeout(function () {
+                    var wnd = $("#LoadingBox").data('kendoWindow');
+                    if (wnd) {
+                        wnd.close();
+                    }
+                }, 100);//It can be adjusted as per your requirements.
+              }
+        }
+        function showLoadingWindow() {
+            loadingBox = new LoadingBox();
+            loadingBox.show();
+        }
+        function closeLoadingWindow() {
+            loadingBox.close();
+        }
+</script>
+
+
+
+

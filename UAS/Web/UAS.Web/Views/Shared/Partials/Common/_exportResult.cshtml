@@ -1,0 +1,28 @@
+﻿@using System.Data
+@model System.Data.DataTable
+<style>
+    #tblExportResult{
+        border:1px solid gray;
+       
+    }
+    #tblExportResult td{
+         border:1px solid gray;
+         height:15px;
+         padding:0;
+         margin:0;
+    }
+</style>
+<table id="tblExportResult" align="center" width="100%">
+         <tr>
+            <td><b>Description</b></td>
+            <td align="center"><b>Totals</b></td>
+        </tr>
+        @for (int i = 0; i < Model.Rows.Count; i++)
+        {
+            <tr>
+                <td><label>@Model.Rows[i][1].ToString().Replace("&nbsp;","")</label></td><td align="center"> <label>@Model.Rows[i][2]</label></td>
+            </tr>
+        }
+</table>
+
+        

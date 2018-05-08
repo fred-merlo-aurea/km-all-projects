@@ -1,0 +1,28 @@
+﻿@using ecn.MarketingAutomation.Models
+
+@model TemplateViewModel
+
+@Html.HiddenFor(x => x.Id, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+@Html.HiddenFor(x => x.Diagram, new Dictionary<string, object> { { "data-bind", "value:Diagram" } })
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="">
+        <legend></legend>
+        <div class="formbox">
+            <div class="subtitle">Template Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBoxFor(x => x.Name, new Dictionary<string, object> { { "data-bind", "value:Name" } })
+            </div>
+        </div>
+        @if (!Html.ViewData.ModelState.IsValid)
+        { <div  style="float:left;padding-left: 2em" >
+            <img alt="error" src="/ecn.MarketingAutomation/Images/Error_ico.png" style="float:left;padding-left: 2em" border="0">
+            @Html.ValidationSummary("", new { style = "display:inline;" })
+        </div>
+        }
+        <div class="buttonsgroup" style="margin: 0 auto; width: 300px; text-align: center;">
+             @if (Model.Id>0){@Html.Kendo().Button().Name("Save").Content(" Save ").HtmlAttributes(new { @class = "btn"})}
+            else{ @Html.Kendo().Button().Name("Save").Content("Save And Continue").HtmlAttributes(new { @class = "btn" })}
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('TemplateWindow')" })
+        </div>
+    </fieldset>
+</div>

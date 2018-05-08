@@ -1,0 +1,292 @@
+﻿@using ecn.MarketingAutomation.Models
+
+@{
+    ViewBag.Title = "Automation Templates";
+}
+
+<script>
+    function addTemplate() {
+        var title = 'Add New Template';
+        var window = $("#TemplateWindow");
+        var kendoWindow = window.data('kendoWindow');
+        window.find("form").attr('action', '@Url.Action("Create")');
+        kendoWindow.title(title);
+        $("#TemplateContent").load('@Url.Action("LoadTemplate")', null, function () {
+            window.find('legend').text(title);
+            kendoWindow.center().open();
+        });
+    }
+    //Edit Template Name 37213
+    function editTemplateName(id) {
+        var title = 'Edit Template Name';
+        var window = $("#TemplateWindow");
+        var kendoWindow = window.data('kendoWindow');
+        window.find("form").attr('action', '@Url.Action("Create")');
+        kendoWindow.title(title);
+        $("#TemplateContent").load('@Url.Action("LoadTemplate")', { Id: id }, function () {
+            window.find('legend').text(title);
+            kendoWindow.center().open();
+        });
+    }
+    function deleteTemplate(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function dataBound(arg) {
+        $("#filterCriteria li").remove();
+        $("ul.k-pager-numbers.k-reset li:nth-child(3)").remove()
+        var grid = $("#ActiveDiagrams").data("kendoGrid");
+        var options = grid.getOptions();
+        var filter = [];
+
+       
+        var grid = this;
+        setTimeout(function () {
+            $(".menuCell").each(function () {
+
+                var cell = $(this), item = grid.dataItem(cell.closest("tr"));
+                var endScript = cell.children("script").last().html();
+                eval(cell.children("script").last().html());
+                var menu = $("#Menu" + item.Id).data("kendoMenu");
+                var canEdit = '@ViewBag.CanEditTemplate';
+                var canDelete = '@ViewBag.CanDeleteTemplate';
+                if (canEdit === false || canEdit === "false" || canEdit === "False") {
+                    menu.remove(".k-item:has(>.k-link:contains(Edit))");
+                }
+                if (canDelete === false || canDelete === "false" || canDelete === "False") {
+                    menu.remove(".k-item:has(>.k-link:contains(Delete))");
+                }
+            });
+        }, 0);
+    }
+    function getText(field) {
+        var result;
+        var grid = $("#ActiveDiagrams").data("kendoGrid");
+        var column = getColumn(grid.columns, field.FieldName);
+        $.each(column.values, function (index, value) {
+            if (value.value == field.FieldValue) {
+                result = value.text;
+            }
+        });
+        return result;
+    }
+    function getDate(value) {
+        if (value == null) {
+            return String.empty;
+        }
+        var date = kendo.parseDate(value);
+        return kendo.toString(date, '@JavaScriptDateTimeFormat');
+    }
+    function getColumn(columns, name) {
+        var result;
+        $.each(columns, function (index, column) {
+            if (column.field == name) {
+                result = column;
+            }
+        });
+        return result;
+    }
+    kendo.data.binders.slide = kendo.data.Binder.extend({
+        refresh: function () {
+            var value = this.bindings["slide"].get();
+
+            if (value) {
+                $(this.element).slideDown();
+            } else {
+                $(this.element).slideUp();
+            }
+        }
+    });
+    var viewModel = kendo.observable({
+        slideChecked: false
+    });
+    kendo.bind(document.body, viewModel);
+    var targetUrl = '@Url.Action("GetTemplatesGrid", "Templates")';
+   
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#ActiveDiagrams").data("kendoGrid");
+        var options = grid.getOptions();
+        var gridItems = grid.options.datasource;
+        var $filterArray = new Array();
+
+        var filter = { field: "Name", operator: "contains", value: obj.Name };
+
+        $filterArray.push(filter);
+        if ($filterArray.length > 0)
+            grid.dataSource.filter($filterArray);
+       
+    }
+
+
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    function filterGridParams() {
+        return {
+            Name: $("#TemplateName").val()
+        };
+    }
+    function nameFilter(element) {
+
+        var targetUrl = '@Url.Action("GetNameFilter", "Templates")';
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl
+                }
+            }
+
+        });
+        //dataSource.read();
+        element.kendoDropDownList({
+            optionLabel: "--Select Value--",
+            dataTextField: "Text",
+            dataValueField: "Value",
+            dataSource: dataSource
+        });
+    }
+
+
+  
+</script>
+
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>AUTOMATION TEMPLATES</span>
+    </div>
+</div>
+<div class="gridttl" style="background-color:white; height: 0px; padding: 10px 0;">
+    @if (KMPlatform.BusinessLogic.User.IsSystemAdministrator(ViewBag.CurrentUser))
+    {
+        @Html.Kendo().Button().Name("NewTemplate").Content("Add New Template<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { onclick = "addTemplate()", @class = "btn btn-blue2 float-right" })
+    }
+</div>
+
+
+    @*<div id="SearchPanel" style="margin:20px auto;">
+        <label class="lbl">Template Name:</label>
+        @Html.Kendo().TextBox().Name("TemplateName").HtmlAttributes(new { style = "overflow: hidden; width:45%" })
+        <input type="button" class="k-button" value="Search" id="search" onclick="Search()" />    
+    </div>*@
+  
+
+    @( Html.Kendo().Grid<TemplateViewModel>()
+    .Name("ActiveDiagrams")
+    .Events(e => e.DataBound("dataBound"))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.TotalRecordCounts).Hidden(true);
+        columns.Bound(p => p.Name).Title("Template Name").HtmlAttributes(new { style = "overflow: hidden; max-width: 240px;min-width: 240px" })
+                    .Filterable(filter => { filter.Cell(cell => cell.Enabled(false).ShowOperators(false)); filter.UI("nameFilter"); });
+        // columns.Bound(p => p.Type).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Automation Type");
+        columns.Bound(p => p).ClientTemplate(GetActions("ActiveDiagrams").ToString()).HtmlAttributes(new { @class = "menuCell" }).Filterable(false).Sortable(false);
+        columns.Bound(p => p).Filterable(x => x.Cell(c => c.ShowOperators(false))).Sortable(false)
+                    .HtmlAttributes(new { style = "overflow: hidden; max-width: 240px;min-width: 240px" });
+    })
+    .Pageable(pages => pages.PageSizes(true).ButtonCount(1).Input(true).PageSizes(new int[] { 5, 10, 15, 20 }))
+    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+    .Filterable(filter =>
+    {
+        filter.Mode(GridFilterMode.Menu | GridFilterMode.Row); //Activates filtermode as row and  menu
+        filter.Extra(false); //Disable or Enable Extra Filters
+        filter.Operators(op =>
+        {
+        op.ForString(str => str.Clear().Contains("Contains")  
+                              .StartsWith("Starts with")
+                              .IsEqualTo("Is equal to")
+                              .EndsWith("Ends with")
+                            ); // Contains for String
+        op.ForNumber(num => num.IsEqualTo("Equal")); //Filter for Date operator -> Equal for Number
+        op.ForDate(dat => dat.Clear().IsGreaterThanOrEqualTo("Greater Than Or Equal")); //Filter for Date operator -> Greater Than Or Equal To
+    });
+
+    })
+     .DataSource(dataSource => dataSource // Configure the grid data source
+                 .Ajax() // Specify that ajax binding is used read => read.Data("filterGridParams")
+                 .Read(read => read.Data("filterGridParams").Action("GetTemplatesGrid", "Templates"))// Set the action method which will return the data in JSON format
+                 .PageSize(10) //Set up page size
+                 .ServerOperation(false) //Get Data from Server
+    ));
+
+
+
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=Id#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("View").Action("ViewTemplate", "Templates", new { id = "#=Id#" });
+                    innerItems.Add().Text("Edit").Action("Edit", "Templates", new { id = "#=Id#" });
+                    innerItems.Add().Text("Edit Template Name").HtmlAttributes(new {onclick = "editTemplateName('#=Id#')" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteTemplate('#=Id#')" });
+                }
+            )
+        ).ToClientTemplate())
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("TemplateWindow")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("Action", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "TemplateContent",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="TemplateContent"></div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Title("Delete")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("Delete", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "deleteDiv",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="deleteDiv">
+                    @Html.Partial("~/Views/Shared/Partials/_DeleteModal.cshtml")
+                </div>
+            }
+        </text>
+)
+        .Visible(false)
+        .Render();
+}

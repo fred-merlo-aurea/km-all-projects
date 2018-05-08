@@ -1,0 +1,197 @@
+﻿@model UAS.Web.Models.UAD.Filter.CirculationFilter
+ @{ 
+     var selectlist = new List<SelectListItem>();
+     var WaveMaling = new List<SelectListItem>();
+     WaveMaling.Add(new SelectListItem() { Text = "", Value = "" });
+     WaveMaling.Add(new SelectListItem() { Text = "Is Wave Mailed", Value = "1" });
+     WaveMaling.Add(new SelectListItem() { Text = "Is Not Wave Mailed", Value = "0" });
+     for (int i = 1; i <= 5; i++)
+     {
+         selectlist.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+     }
+ }
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Circulation Filter
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+               <table border="0" bordercolor="#cccccc" cellpadding="1" cellspacing="1" width="100%">
+                        <tbody>
+                            <tr style="background-color: #eeeeee; color: black; padding: 2px 0px 2px 0px; height: 20px;">
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Category Code Type</b>
+                                </td>
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Category Codes</b>
+                                </td>
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Transaction Type</b>
+                                </td>
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Transaction Code</b>
+                                </td>
+                               
+                            </tr>
+                            <tr>
+                                <td valign="top" align="center">
+                                    @Html.ListBox("lstCircCatCodeType", Model.CategoryCodeTypeSelectList, new { style = "height:150px;width:150px;vertical-align:top;" })
+                                </td>
+                                <td valign="top" align="center">
+                                    @Html.ListBox("lstCircCatCode", Model.CategoryCodeSelectList, new { style = "height:150px;width:430px;vertical-align:top;" })
+                                </td>
+                                <td valign="top" align="center">
+                                    @Html.ListBox("lstCircTransactionType", Model.TransactionCodeTypeSelectList, new { style = "height:150px;width:120px;vertical-align:top;" })
+                                </td>
+                                <td valign="top" align="center">
+                                   @Html.ListBox("lstCircTransaction", Model.TransactionCodeSelectList, new {  style = "height:150px;width:430px;vertical-align:top;" })
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="4" height="10px">
+
+                                </td>
+                            </tr>
+                            <tr style="background-color: #eeeeee; color: black; padding: 2px 0px 2px 0px; height: 20px;">
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Qual Source Type</b>
+                                </td>
+                                <td valign="middle" align="center" class="labelsmall">
+                                    <b>Qual Source Code</b>
+                                </td>
+                                <td valign="middle" colspan="2" align="center" class="labelsmall">
+                                    <table width="100%">
+                                        <tr>
+                                            <td align="center"><b>Media</b></td>
+                                            <td align="center"><b>Qualification Year</b></td>
+                                            <td align="center"><b>Qualification Date</b></td>
+                                            <td align="center"><b>Wave Mailing</b></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                
+                               
+                            </tr>
+                            <tr>
+                                <td valign="top" align="center">
+                                    @Html.ListBox("lstCircQSourceType", Model.QSourceTypeSelectList, new
+                               {
+                                   style = "height:150px;width:160px;vertical-align:top;"
+                               })
+                                </td>
+                                <td valign="top" align="center">
+                                    @Html.ListBox("lstCircQSource", Model.QSourceSelectList, new
+                               {
+                                   style = "height:150px;width:400px;vertical-align:top;"
+                               })
+                                </td>
+                                <td colspan="2" valign="top" align="center" >
+                                    <table width="100%">
+                                        <tr>
+                                            <td align="center">
+                                                @Html.ListBox("lstMedia", Model.MediaTypesSelectList, new
+                                               {
+                                                   style = "height:50px;width:70px;vertical-align:top;"
+                                               })
+                                            </td>
+                                            <td align="center">
+                                                @Html.ListBox("lstYear", selectlist, new { style = "height:50px;width:50px;vertical-align:top;" })
+                                            </td>
+                                            <td align="center">
+                                                From:@Html.Kendo().DatePicker().Name("QDateFrom").HtmlAttributes(new { style = "width:70px;vertical-align:top;" }) &nbsp; To:@Html.Kendo().DatePicker().Name("QDateTo").HtmlAttributes(new { style = "width:70px;vertical-align:top;" })
+                                            </td>
+                                            <td align="center">
+                                                @Html.Kendo().DropDownList().Name("drpIsWaveMailing").BindTo(WaveMaling).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style="width:80px;"})
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    
+                                </td>
+                             </tr>
+                            <tr>
+                                <td align="center" colspan="4" style="padding-bottom:10px;">
+                                    <br>
+                                    <input type="button"  name="btnSelectCirculationFilter" onclick="SelectCloseCircFilter()" value="Select/Close" class="filterButton" >
+                                    <input type="button" name="btnResetCirculationFilter" onclick="ResetCloseCircFilter()"   value="Reset" class="filterButton">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#lstCircCatCodeType").on("change", function () {
+            if ($(this).val()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/UAS.web/Filter/GetCategoryCodesByCategory',
+                    data: JSON.stringify({ 'catIdlst': $(this).val() }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        $("#lstCircCatCode option").prop("selected", false);
+                        $.each(response, function (i, e) {
+                            $("#lstCircCatCode option[value='" + e.Value + "'").prop("selected", true);
+                        });
+                    },
+                    error: function (response) {
+
+                        console.log(response)
+                    }
+                });
+            }
+        });
+        $("#lstCircTransactionType").on("change", function () {
+            if ($(this).val()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/UAS.web/Filter/GetXCodesByXType',
+                    data: JSON.stringify({ 'xTypeIdlst': $(this).val() }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        $("#lstCircTransaction option").prop("selected", false);
+                        $.each(response, function (i, e) {
+                            $("#lstCircTransaction option[value='" + e.Value + "'").prop("selected", true);
+                        });
+                    },
+                    error: function (response) {
+
+                        console.log(response)
+                    }
+                });
+            }
+        });
+
+        $("#lstCircQSourceType").on("change", function () {
+            if ($(this).val()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/UAS.web/Filter/GetQSourceCodesByQSourceType',
+                    data: JSON.stringify({ 'QTypeIdlst': $(this).val() }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        $("#lstCircQSource option").prop("selected", false);
+                        $.each(response, function (i, e) {
+                            $("#lstCircQSource option[value='" + e.Value + "'").prop("selected", true);
+                        });
+                    },
+                    error: function (response) {
+
+                        console.log(response)
+                    }
+                });
+            }
+        });
+        
+    });
+</script>

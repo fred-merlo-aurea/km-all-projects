@@ -1,0 +1,377 @@
+﻿
+    @*//   FrameworkUAS.Model.RuleSet*@
+
+<script language="JavaScript" type="text/JavaScript">
+    var ruleTabs;
+    //Rules tab
+    $(document).ready(function () {
+
+        $('#pnlCustomRules').hide();
+
+        $('input[type=radio][name=importRules]').on('change', function () {
+            switch ($(this).val()) {
+                case 'Default':
+                    //debugger;
+                    sessionStorage.isCustomRule = false;
+                    $('#pnlCustomRules').hide();
+                    //$("#btnAddNewRule").attr('style','display:none;')
+                    break;
+                case 'Custom':
+                    //debugger;
+                    //$("#btnAddNewRule").removeAttr('style');
+
+                    sessionStorage.isCustomRule = true;
+                    var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+                    var delTab = ruleTabs.tabGroup.children().eq(2);
+
+                    //if not a FullFile hide DELETE tab
+                    var isFF = @Html.Raw(Json.Encode(Model.isFullFile));
+                    if(isFF == false)
+                        delTab.hide();
+                    else
+                        delTab.show();
+
+                    $('#pnlCustomRules').show();
+                    ruleTabs.select(0);//when in edit mode try to select first tab with rules
+                    sessionStorage.acitveRuleTabIndex == 0;
+                    sessionStorage.activeRuleTab = "Insert";
+                    //debugger;
+                    break;
+            }
+        });
+
+        ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+
+        //debugger;
+        if(sessionStorage.isCustomRule == "true")
+        {
+            $("#rbCustom").prop("checked", true);
+            $("#rbDefault").prop("checked", false);
+
+            var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+            var delTab = ruleTabs.tabGroup.children().eq(2);
+
+            //if not a FullFile hide DELETE tab
+            var isFF = @Html.Raw(Json.Encode(Model.isFullFile));
+            if(isFF == false)
+                delTab.hide();
+            else
+                delTab.show();
+
+            $('#pnlCustomRules').show();
+
+            //debugger;
+            //sessionStorage.activeRuleTab = "Insert";
+            //sessionStorage.acitveRuleTabIndex = 0;
+            $("#newRuleType").val(sessionStorage.activeRuleTab);
+            ruleTabs.select(sessionStorage.acitveRuleTabIndex);
+
+            //debugger;
+            LoadSessionOrderRulesView();
+
+        }
+        else{
+            $("#rbCustom").prop("checked", false);
+            $("#rbDefault").prop("checked", true);
+            $('#pnlCustomRules').hide();
+        }
+    });
+
+    function LoadMapping()
+    {
+        var modelData = {
+            "SourceFileId": @Html.Raw(Json.Encode(Model.sourceFileId)),
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadMapping",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 2;
+                    var prevIndex = tabIndex - 1;
+                    if (prevIndex < 0) {
+                        prevIndex = 0;
+                    }
+                    var item = tabs.contentElement(prevIndex);
+                    $(item).html("");
+                    $(item).html(returnData);
+
+                    tabs.select(prevIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), false); // disable Rules
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), true); // enable Transformations / load that view
+                }
+                return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function GoToReview(){
+        //need ruleSetName and if is a template
+        var ruleSetName = $("#NewRuleSetName").val();
+        var isGlobal =  $("#IsGlobalRuleSet")[0];
+        var isChecked = false;
+        if(isGlobal != null)
+            isChecked = isGlobal.checked;
+
+        var modelData = {
+            "SelectedRuleSetId": sessionStorage.ruleSetId,
+            "SourceFileId": @Html.Raw(Json.Encode(Model.sourceFileId)),
+            "RuleSetName": ruleSetName,
+            "IsGlobalRuleSet": isChecked
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/GoToReview",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 3;//vbCurrentStep;
+                    var prevIndex = tabIndex - 1;
+                    if(prevIndex <= 0){
+                        prevIndex = 0;
+                    }
+                    var item = tabs.contentElement(tabIndex);
+                    $(item).html(returnData);
+
+
+                    tabs.select(tabIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 1
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+                }
+                window.location.href = "/UAS.Web/Home/Index";
+                //nothing to validate
+                return false;
+
+                //Often, in event handlers, such as onsubmit, returning false is a way to tell the event to not actually fire. So, say, in the onsubmit case,
+                //this would mean that the form is not submitted.
+
+                //return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+
+    function ruleTabOnSelect(e) {
+        if(e != null)
+        {
+            var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+            var selectedIndex = ruleTabs.element.find(e.item).index();//tabIndexOfElement(e.item),
+            sessionStorage.ruleCurrentIndex = selectedIndex;
+            ruleTabs.enable(getRuleTabAtIndex(sessionStorage.ruleCurrentIndex), true);
+            if (selectedIndex == 0)
+            {
+                sessionStorage.activeRuleTab = "Insert";
+                sessionStorage.acitveRuleTabIndex = 0;
+                $("#newRuleType").val("Insert");
+                GetNewRuleControl("Insert");
+            }
+            else if (selectedIndex == 1)
+            {
+                sessionStorage.activeRuleTab = "Update";
+                sessionStorage.acitveRuleTabIndex = 1;
+                $("#newRuleType").val("Update");
+                GetNewRuleControl("Update");
+            }
+            else if (selectedIndex == 2)
+            {
+                sessionStorage.activeRuleTab = "Delete";
+                sessionStorage.acitveRuleTabIndex = 2;
+                $("#newRuleType").val("Delete");
+                GetNewRuleControl("Delete");
+            }
+            else
+            {
+                sessionStorage.activeRuleTab = "ADMS";
+                sessionStorage.acitveRuleTabIndex = 3;
+                $("#newRuleType").val("ADMS");
+                GetNewRuleControl("ADMS");
+            }
+        }
+    }
+
+    function LoadSessionOrderRulesView() {
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadSessionOrderRulesView",
+            type: "GET",
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                //debugger;
+                var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+                if (ruleTabs != null) {
+                    var item = ruleTabs.contentElement(sessionStorage.ruleCurrentIndex);
+                    $(item).html(returnData);
+
+                    ruleTabs.select(sessionStorage.ruleCurrentIndex);
+                    ruleTabs.enable(ruleTabs.tabGroup.children().eq(sessionStorage.ruleCurrentIndex), true); // enable tab 1
+                    //tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+                }
+                //we don't want to submit the form when clicking different rule tabs
+                return false;
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function GetNewRuleControl(newRuleType) {
+        //need to use jQuery to find table for each sourceColumn
+        var modelData = {
+            "NewRuleType": newRuleType,
+            "SourceFileId": @Html.Raw(Json.Encode(Model.sourceFileId)),
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/GetOrderRulesView",
+            type: "GET",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+                if (ruleTabs != null) {
+                    var item = ruleTabs.contentElement(sessionStorage.ruleCurrentIndex);
+                    $(item).html(returnData);
+                    sessionStorage.ruleSetId = @Html.Raw(Json.Encode(Model.ruleSetId));
+                    ruleTabs.select(sessionStorage.ruleCurrentIndex);
+                    ruleTabs.enable(ruleTabs.tabGroup.children().eq(sessionStorage.ruleCurrentIndex), true); // enable tab 1
+                    //tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+                }
+                //we don't want to submit the form when clicking different rule tabs
+                return false;
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function getRuleTabAtIndex(index) {
+        var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+        return ruleTabs.tabGroup.children().eq(index);
+    }
+    function onActivate_RuleTab(e){
+        //debugger;
+        if(sessionStorage.isCustomRule == "true")
+        {
+            $("#rbCustom").prop("checked", true);
+            $("#rbDefault").prop("checked", false);
+
+            var ruleTabs = $("#tabstripRules").data("kendoTabStrip");
+            var delTab = ruleTabs.tabGroup.children().eq(2);
+
+            sessionStorage.ruleSetId = @Html.Raw(Json.Encode(Model.ruleSetId));
+            //if not a FullFile hide DELETE tab
+            var isFF = @Html.Raw(Json.Encode(Model.isFullFile));
+            if(isFF == false)
+                delTab.hide();
+            else
+                delTab.show();
+
+            //$('#pnlCustomRules').show();
+
+            //sessionStorage.activeRuleTab = "Insert";
+            //sessionStorage.acitveRuleTabIndex = 0;
+            $("#newRuleType").val(sessionStorage.activeRuleTab);
+            LoadSessionOrderRulesView();
+        }
+        else{
+            $("#rbCustom").prop("checked", false);
+            $("#rbDefault").prop("checked", true);
+            $('#pnlCustomRules').hide();
+        }
+    }
+</script>
+
+<div>
+    <div style="width: 50%; margin: 0 auto;">
+        <h3>Step 3 - Rules</h3>
+    </div>
+    @Html.Hidden("newRuleType")
+
+
+    <div>
+        @Html.Kendo().RadioButton().Name("rbDefault").HtmlAttributes(new { @name = "importRules" }).Label("Default").Value("Default").Checked(true)
+        @Html.Kendo().RadioButton().Name("rbCustom").HtmlAttributes(new { @name = "importRules" }).Label("Custom").Value("Custom").Checked(false)
+    </div>
+
+    
+
+    <div id="pnlCustomRules">
+        @(Html.Kendo().TabStrip()
+           .Name("tabstripRules")
+           .Items(tabstrip =>
+           {
+               tabstrip.Add().Text("Insert")
+                  .Enabled(true)
+                  .Content("insert")
+                  .HtmlAttributes(new { id = "tabstrip-Insert" });
+
+               tabstrip.Add().Text("Update")
+                  .Enabled(true)
+                  .Content("update")
+                  .HtmlAttributes(new { id = "tabstrip-Update" });
+
+               tabstrip.Add().Text("Delete")
+                  .Enabled(true)
+                  .Content("delete")
+                  .HtmlAttributes(new { id = "tabstrip-Delete" });
+
+               tabstrip.Add().Text("ADMS")
+                  .Enabled(false)
+                  .Visible(false)
+                  .Content("adms")
+                  .HtmlAttributes(new { id = "tabstrip-AdmsProcessing" });
+           })
+           .Events(ev =>
+           {
+               ev.Select("ruleTabOnSelect");
+               ev.Activate("onActivate_RuleTab");
+           })
+
+        )
+    </div>
+
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("rulesPrevious").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return LoadMapping()" })
+            </div>
+            <div class="cbtns">
+
+            </div>
+            <div class="rbtns">
+                @*@Html.Kendo().Button().Name("rulesNext").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return GoToReview()" })*@
+                @Html.Kendo().Button().Name("Finish").Content("Finish<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return GoToReview()" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

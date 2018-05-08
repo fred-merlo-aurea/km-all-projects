@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>FormDesigner</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{989be483-b8e2-4524-ba67-12b10b2f42ec}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>FormDesigner</RootNamespace>
+    <AssemblyName>FormDesigner</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558,71501,71508</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="dbo\Tables\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Stored Procedures\e_Form_ActiveByGroup.sql" />
+    <Build Include="dbo\Tables\ThirdPartyQueryValue.sql" />
+    <Build Include="dbo\Tables\SubmitHistory.sql" />
+    <Build Include="dbo\Tables\SubmitData.sql" />
+    <Build Include="dbo\Tables\Rule.sql" />
+    <Build Include="dbo\Tables\Notification.sql" />
+    <Build Include="dbo\Tables\FormStatisticLog.sql" />
+    <Build Include="dbo\Tables\FormStatistic.sql" />
+    <Build Include="dbo\Tables\FormResult.sql" />
+    <Build Include="dbo\Tables\FormControlPropertyGrid.sql" />
+    <Build Include="dbo\Tables\FormControlProperty.sql" />
+    <Build Include="dbo\Tables\Form.sql" />
+    <Build Include="dbo\Tables\DataTypePattern.sql" />
+    <Build Include="dbo\Tables\CssFile.sql" />
+    <Build Include="dbo\Tables\CssClass.sql" />
+    <Build Include="dbo\Tables\ControlType.sql" />
+    <Build Include="dbo\Tables\ControlPropertyGrid.sql" />
+    <Build Include="dbo\Tables\ControlProperty.sql" />
+    <Build Include="dbo\Tables\Control.sql" />
+    <Build Include="dbo\Tables\ConditionGroup.sql" />
+    <Build Include="dbo\Tables\Condition.sql" />
+    <Build Include="dbo\Stored Procedures\sp_DeleteFormsByUserID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_DeleteForm.sql" />
+    <Build Include="dbo\Stored Procedures\sp_DeleteConditionGroup.sql" />
+    <Build Include="dbo\Tables\NewsletterGroup.sql" />
+    <Build Include="dbo\Tables\ControlCategory.sql" />
+    <Build Include="dbo\Tables\NewsletterGroupUDF.sql" />
+    <Build Include="dbo\Stored Procedures\e_Form_ActiveByGDF.sql" />
+    <Build Include="dbo\Stored Procedures\e_Newsletter_ActiveByGDF.sql" />
+    <Build Include="dbo\Stored Procedures\e_Form_UpdateStaticstic.sql" />
+    <Build Include="dbo\Tables\RequestQueryValue.sql" />
+    <Build Include="dbo\Tables\OverwritedatapostValue.sql" />
+    <Build Include="dbo\Tables\SubscriberLogin.sql" />
+    <Build Include="dbo\Stored Procedures\e_Condition_Select_ConditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Condition_Select_ConditionGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Condition_Delete_ConditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Condition_Delete_ConditionGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Condition_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ConditionGroup_Select_ConditionGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ConditionGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ConditionGroup_Delete_ConditionGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_OverwritedataPostValue_Select_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_OverwritedataPostValue_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_OverwritedataPostValue_Delete_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RequestQueryValue_Select_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RequestQueryValue_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_RequestQueryValue_Delete_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Select_FormID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Select_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Delete_RuleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ConditionGroup_Select_MainGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Form_Select_Form_Seq_ID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Form_Select_FormID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployment_2017_Joker.sql" />
+    <None Include="PostDeployment_2016_Ironman.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="FormDesigner.refactorlog" />
+  </ItemGroup>
+</Project>

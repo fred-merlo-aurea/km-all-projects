@@ -1,0 +1,206 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerUsersViewModel
+@{
+    var records = Model.ProfileList.Count;
+    var activityList = Model.ActivityList;
+    var dtValue = Model.DomainTrackerValue;
+    TempData["Users"] = Model.Open;
+    var domainID = Model.DomainTracker.DomainTrackerID;
+    var folderList = Model.FolderList;
+    var folderGroupList = Model.folderECNGroupList;
+}
+
+<script type="text/javascript">
+    //$(function() {
+    //    alert("PartialDocReady");
+    //});
+    function LoadPage(id, num, page) {
+        //alert("ID: " + id + " Num: " + num + " Page: " + page);
+        //e.preventDefault();
+
+        var request = $.ajax({
+            url: '@Url.Content("~/Main/ActivityEmailsFilterByEmailClick")',
+            type: "POST",
+            traditional: true,
+            cache: false,
+            data: {
+                id: id,
+                num: num,
+                FilterEmail: $("#FilterByEmailTxt").val()
+            }
+        });
+        request.done(function (message) {
+            $("#divResultsTarget").html(message);
+        });
+    }
+</script>
+    <table id="userActivityList" style="border-collapse: collapse; border-spacing: 0px; width: 100%;">
+        @{
+        try
+        {
+            if (records > 0)
+            {
+                var dtl = "";
+                var sign = "";
+                var taba = "";
+                var tabb = "";
+                var ptaba = "";
+                var ptabb = "";
+                <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle;">
+                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; width: 90%;">Email Address</th>
+                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: center;"></th>
+                    </tr>
+                var len = Model.Open.Count;
+
+                for (var i = 0; i < len; i++)
+                {
+                    dtl = "detail" + i;
+                    taba = "taba" + i;
+                    tabb = "tabb" + i;
+                    ptaba = '#' + taba;
+                    ptabb = '#' + tabb;
+                    if (Model.Open[i])
+                    {
+                        sign = "-Details";
+                    }
+                    else
+                    {
+                        sign = "+Details";
+                    }
+                    <tr>
+                            @if ((i % 2) == 0)
+                        {
+                            <td style="background-color: white; border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding-left: 3px; text-align: left; vertical-align: middle; width: 30%;">@Model.ProfileList[i].EmailAddress</td>
+                            <td style="background-color: white; border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding: 0px; text-align: center; vertical-align: middle; width: 30%;">
+                                <a href="#" onclick="LoadPage(id = @Model.DomainTracker.DomainTrackerID, num = @i, page = @Model.Page)" style="color: black; text-decoration: underline;">@sign</a>
+                                @*<a href="@Url.Action("Users", new {id = Model.DomainTracker.DomainTrackerID, num = i, page = Model.Page})" style="color: black; text-decoration: underline;">@sign</a>*@
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="background-color: #DDDDDD; border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding-left: 3px; text-align: left; vertical-align: middle; width: 30%;">@Model.ProfileList[i].EmailAddress</td>
+                            <td style="background-color: #DDDDDD; border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding: 0px; text-align: center; vertical-align: middle; width: 30%;">
+                                <a href="#" onclick="LoadPage(id = @Model.DomainTracker.DomainTrackerID, num = @i, page = @Model.Page)" style="color: black; text-decoration: underline;">@sign</a>
+                                @*<a href="@Url.Action("Users", new {id = Model.DomainTracker.DomainTrackerID, num = i, page = Model.Page})" style="color: black; text-decoration: underline;">@sign</a>*@
+                            </td>
+                        }
+                        </tr>
+                    if (Model.Open[i])
+                    {
+                        <tr>
+                                <td colspan="2" style="border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; height: 60px; margin: 0px; padding: 0px; text-align: center; vertical-align: middle; width: 100%;">
+                                    <table style="border: 1px solid gray; height: 90%; text-align: center; vertical-align: middle; width: 100%;">
+                                        <tr>
+                                            <td>
+                                                <div class="usertabs">
+                                                    <ul class="usertablinks" style="list-style-type: none; margin-left: 10px; padding: 0; text-align: center;">
+                                                        <li class="button-link activetab" style="border: none; float: left; list-style: none; margin: 0px 5px;">
+                                                            <a href=@ptaba onclick=" javascript: var currentAttrValue = jQuery(this).attr('href'); jQuery('.usertab ' + currentAttrValue).show().siblings().hide(); jQuery(this).parent('li').addClass('activetab').siblings().removeClass('activetab'); /*e.preventDefault();*/ ">Standard Data Points</a>
+                                                        </li>
+                                                        <li class="button-link" style="border: none; float: left; list-style: none; margin: 0px 5px;">
+                                                            <a href=@ptabb onclick=" javascript: var currentAttrValue = jQuery(this).attr('href'); jQuery('.usertab ' + currentAttrValue).show().siblings().hide(); jQuery(this).parent('li').addClass('activetab').siblings().removeClass('activetab'); /*e.preventDefault();*/ ">Additional Data Points</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="usertabcontent">
+                                                        <div id=@taba class="usertabs">
+                                                            <table style="border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; width: 100%;">
+                                                                @if (activityList[i].Count > 0)
+                                                            {
+                                                                <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 55%;">
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 50%;">PageURL</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">IPAddress</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">OS</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">Browser</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">TimeStamp</th>
+                                                                    </tr>
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 100%;">
+                                                                        <td>
+                                                                            No data to show.
+                                                                        </td>
+                                                                    </tr>
+                                                            }
+
+                                                                @for (var b = 0; b < activityList[i].Count; b++)
+                                                            {
+                                                                <tr>
+                                                                        <td style="text-align: left; width: 55%;">
+                                                                            <small>@activityList[i][b].PageURL</small>
+                                                                        </td>
+                                                                        <td>
+                                                                            <small>@activityList[i][b].IPAddress</small>
+                                                                        </td>
+                                                                        <td>
+                                                                            <small>@activityList[i][b].OS</small>
+                                                                        </td>
+                                                                        <td>
+                                                                            <small>@activityList[i][b].Browser</small>
+                                                                        </td>
+                                                                        <td>
+                                                                            <small>@activityList[i][b].TimeStamp</small>
+                                                                        </td>
+                                                                    </tr>
+                                                            }
+                                                            </table>
+                                                        </div>
+                                                        <div id=@tabb class="usertab">
+                                                            <table style="border: 1px solid black; border-collapse: collapse; border-spacing: 0px; width: 100%;">
+                                                                @if (dtValue[i].Rows.Count > 0)
+                                                            {
+                                                                <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 55%;">
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 17%;">FieldName</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 8%;">Value</th>
+                                                                        <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 75%;">PageURL</th>
+                                                                    </tr>
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 100%;">
+                                                                        <td>
+                                                                            No data to show.
+                                                                        </td>
+                                                                    </tr>
+                                                            }
+
+                                                                @for (var c = 0; c < dtValue[i].Rows.Count; c++)
+                                                            {
+                                                                <tr>
+                                                                        <td style="font-size: 11px; text-align: left; width: 17%;">@dtValue[i].Rows[c]["FieldName"].ToString()</td>
+                                                                        <td style="font-size: 11px; text-align: left; width: 8%;">@dtValue[i].Rows[c]["Value"].ToString()</td>
+                                                                        <td style="font-size: 11px; text-align: left; width: 75%;">@dtValue[i].Rows[c]["PageURL"].ToString()</td>
+                                                                    </tr>
+                                                            }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                        <td style="text-align: center;">
+                            No data to show.
+                        </td>
+                    </tr>
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex is NullReferenceException)
+            {
+            }
+            else
+            {
+                throw;
+            }
+        }
+    }
+</table>

@@ -1,0 +1,185 @@
+﻿@using KMEnums
+@{
+    ViewBag.Title = "Email Loader";
+    List<ECN_Framework_Entities.Accounts.Code> codeList = ECN_Framework_BusinessLayer.Accounts.Code.GetAll();
+    List<ECN_Framework_Entities.Accounts.Code> codeListSubscribeType = (from src in codeList
+                                                                        where src.CodeType == "SubscribeType"
+                                                                        select src).ToList();
+    List<ECN_Framework_Entities.Accounts.Code> codeListFormatType = (from src in codeList
+                                                                     where src.CodeType == "FormatType"
+                                                                     select src).ToList();
+    int j = 0;
+    int count = codeListSubscribeType.Count;
+    for (int i = 0; i < count; i++)
+    {
+        if (!(codeListSubscribeType[j].CodeValue.Equals("S") || codeListSubscribeType[j].CodeValue.Equals("U")))
+        {
+            codeListSubscribeType.RemoveAt(j);
+        }
+        else
+        {
+            j++;
+        }
+    }
+    var customerId = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.CustomerID;
+}
+<style>
+    #Addresses {
+        width:400px; height:200px; font-size: 13px; font-family: Arial;
+    }
+    #divEmailsAdded table tr td:nth-child(2) {
+        padding: 0px;
+        text-align: center;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#customerId").val(@customerId);
+    });
+    function btnSelectGroup_Click() {
+        var customerID = $("#customerId").val();
+        groupExplorer(el_groupSelected, customerID, true);
+    }
+    function el_groupSelected(select) {
+        var group = select.group;
+        $("#groupName").html(group.GroupName);
+        $("#groupId").val(group.GroupID);
+        $("#customerId").val(group.CustomerID);
+    }
+
+    function addEmails() {
+        clearValidationErrorMessages();
+        var lastControlsError = [];
+        if ($('#Addresses').val() == "") {            
+            lastControlsError.push({ name: "Addresses", message: "Please enter a value for Addresses", label: "AddressesID", isKendo: false });
+        }
+        if ($('input[name=List]:checked').val() == "G" && $('#groupId').val() == "") {
+            lastControlsError.push({ name: "groupName", message: "Please select a Group", label: "groupNameID", isKendo: false });
+        }        
+        if (lastControlsError.length > 0) {
+            setValidationClient(lastControlsError);
+        }
+        else {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddEmails", "Group")",
+                data: {
+                    GL: $('input[name=List]:checked').val(),
+                    groupId: $('#groupId').val() == "" ? 0 : $('#groupId').val(),
+                    customerId: $('#customerId').val() == "" ? 0 : $('#customerId').val(),
+                    ST: $('#SubscribeType').val(),
+                    FT: $('#FormatType').val(),
+                    addresses: $('#Addresses').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#divEmailsAdded").show();
+                        $("#divEmailsAdded").html(response[1]);
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+        
+    }
+    function resetGroupsSelected() {
+        clearValidationErrorMessages();
+        $("#groupName").html(" -No Group Selected-");
+        $("#groupId").val("");
+
+        if($("input:radio[name='List']:checked").val() == 'G')
+        {
+            $("#OGE").data('kendoButton').enable(true);
+        }
+        else {
+            $("#OGE").data('kendoButton').enable(false);
+        }
+    }
+</script>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Add Emails</a></li>
+</ol>
+<div id="EL_Validation" style="margin:10px;padding-left:15px;">
+
+</div>
+<div class="wrapper modal modaladdnewform" style="padding-left:50px;padding-top:10px;">
+    <div class="formbox">
+        <div class="subtitle" id="groupNameID">Group / List</div>
+        <div class="formitem formiteminline">
+            <input id="customerId" name="customerId" type="hidden" value="" />
+            <input id="groupId" name="groupId" type="hidden" value="" />
+            <input checked="checked"
+                   id="Group"
+                   name="List"
+                   type="radio"
+                   value="G" onclick="resetGroupsSelected()" /><label id="groupName" style="font-family: arial;"> -No Group Selected-</label> 
+            <br />
+            <input id="AllGroups"
+                   name="List"
+                   type="radio"
+                   value="A"
+                   onclick="resetGroupsSelected()" /><label style="font-family: arial;">All Groups</label> 
+            <br />
+            <input id="Master"
+                   name="List"
+                   type="radio"
+                   value="M"
+                   onclick="resetGroupsSelected()" /><label style="font-family: arial;">Master Suppression Group</label> 
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().Button().Name("OGE").Content("Select Group").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btnSelectGroup_Click()" })
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Subscribe Type</div>
+        <div class="formitem formiteminline">
+            @Html.DropDownList("SubscribeType", codeListSubscribeType.Select(item => new SelectListItem
+            {
+                Value = item.CodeValue.ToString(),
+                Text = item.CodeName
+            }))
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle">Format Type</div>
+        <div class="formitem formiteminline">
+            @Html.DropDownList("FormatType", codeListFormatType.Select(item => new SelectListItem
+            {
+                Value = item.CodeValue.ToString(),
+                Text = item.CodeName
+            }))
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle" id="AddressesID">Addresses</div>
+        <div class="formitem formiteminline">
+            @Html.TextArea("Addresses")
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="formitem formiteminline" style="display:none;" id="divEmailsAdded">
+        </div>
+    </div>
+    <div class="formbox" style="margin-bottom:10px;">
+        <div class="subtitle">&nbsp;</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addEmails()" })
+        </div>
+    </div>
+</div>
+
+@Html.Partial("Partials/Modals/_GroupExplorer")

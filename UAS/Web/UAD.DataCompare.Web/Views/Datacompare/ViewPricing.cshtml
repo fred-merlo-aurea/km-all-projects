@@ -1,0 +1,139 @@
+﻿@model List<UAD.DataCompare.Web.Models.ViewPricingListModel>
+@{
+    ViewBag.Title = "ViewPricing";
+}
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>View Pricing</span>
+    </div>
+</div>
+<input type="hidden" id="fileNameFilterValue" value="@ViewBag.fileNameFilter" />
+<div style="width:100%;">
+
+    @Html.Partial("Partials/ViewPricing/_UserPricingView", Model as List<UAD.DataCompare.Web.Models.ViewPricingListModel>)
+   
+</div>
+
+<script type="text/x-kendo-template" id="statusUpdated">
+    <div class="wrapper modal modalsave">
+        <fieldset title="Save">
+            <legend>Success:</legend>
+            <p>
+               <h3>Status has been updated successfully.</h3>
+            </p>
+        </fieldset>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="templateNotesDetails">
+    <div class="wrapper modal modalsave">
+        <fieldset title="Save">
+            <legend>Notes:</legend>
+            <p>
+                #= data #
+            </p>
+        </fieldset>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="templateTotalDownloadsDetails">
+    <div id="TotalDownloadsContainer">
+        <ul>
+            <li><strong>Total Records in Target/Scope: </strong>#= data.TotalRecords #</li>
+            <li><strong>Total Records in File: </strong>#= data.FileRecords #</li>
+            <li><strong>File Comparison Cost: </strong>#= data.FileComaprsionCost #</li>
+            <li><strong>Total Download Cost: </strong>#= data.TotalDownLoadCost #</li>
+        </ul>
+    </div>
+</script>
+@(Html.Kendo().Window().Name("NotesDetails")
+    .Title("Notes:")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(600)
+)
+@(Html.Kendo().Window().Name("TotalDownloadsDetails")
+    .Title("Downloads Details:")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(350)
+)
+<script>
+
+    $(document).ready(function () {
+        var allEmpty = $(".emptyDiv").parents('td');
+        allEmpty.each(function (tdkey, tdval) {
+            console.log(this);
+                $(this).attr("style","display:none;");
+        });
+        $filter = new Array();
+
+        $filename = $("#fileNameFilterValue").val();
+
+        if ($filename) {
+            $filter.push({ field: "FileName", operator: "contains", value: $filename });
+        }
+        var grid = $("#Grid").data("kendoGrid");
+        
+        grid.dataSource.filter($filter);
+
+    });
+
+    function ShowViewDownLoadforFile(sourcefileId, targetFilter, scopeFilter,typeFilter) {
+
+        var src = "@Html.Raw(Url.Action("Viewcomparision", "Datacompare", new { SourceFileID = -10, targetFilter = -20 , typeFilter = -30, scopeFilter=-40 }))";
+        src = src.replace('-10', sourcefileId);
+        src = src.replace('-20', targetFilter);
+        src = src.replace('-30', typeFilter);
+        src = src.replace('-40', scopeFilter);
+        window.location = src;
+    }
+
+    function fileStatuses(args) {
+        args.element.kendoDropDownList({
+            autoBind:false,
+            dataSource: new kendo.data.DataSource({
+                data: [ "Paid","Unpaid","Pending", "Non Billed","Cancelled"]
+                      }),
+                index: 0,
+                valuePrimitive: true
+
+            });
+    }
+  function fileNameFilter(args) {
+        args.element.kendoDropDownList({
+            autoBind:false,
+            dataSource: {
+                transport: {
+                    read: "@Url.Action("GetDataCompareFileNames", "Datacompare")"
+                }
+            },
+                index: 0,
+                optionLabel: "--Select--",
+                valuePrimitive: true
+
+            });
+    }
+    function showNotesDetails(notes) {
+        var notesTemplate = kendo.template($("#templateNotesDetails").html());
+        var wnd = $("#NotesDetails").data("kendoWindow");
+        wnd.content(notesTemplate(notes));
+        wnd.center().open();
+
+    }
+
+    function showDownLoadDetails(total, infile, fileComaprsionCost,totalDownLoadCost) {
+        var notesTemplate = kendo.template($("#templateTotalDownloadsDetails").html());
+        var data = {
+            TotalRecords: total,
+            FileRecords: infile,
+            FileComaprsionCost: fileComaprsionCost,
+            TotalDownLoadCost: totalDownLoadCost
+        }
+        var wnd = $("#TotalDownloadsDetails").data("kendoWindow");
+        wnd.content(notesTemplate(data));
+        wnd.center().open();
+
+    }
+
+</script>

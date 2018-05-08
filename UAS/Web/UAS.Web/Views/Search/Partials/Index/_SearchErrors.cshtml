@@ -1,0 +1,14 @@
+﻿<ul>
+    @foreach (ModelState modelState in ViewData.ModelState.Values)
+            {
+                foreach (ModelError error in modelState.Errors)
+                {
+            <li style="color:red;list-style:none;">
+                <span>
+                    <img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="20" width="20" style="margin:0px;padding:0px;" />
+                    <span id="alertMsg" style="vertical-align:top;margin-top:5px;">@error.ErrorMessage</span>
+                </span>
+            </li>
+        }
+    }
+</ul>

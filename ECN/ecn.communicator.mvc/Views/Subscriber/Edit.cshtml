@@ -1,0 +1,229 @@
+﻿@model ecn.communicator.mvc.Models.EmailWrapper
+@using ecn.communicator.mvc.Infrastructure
+@using KMEnums
+@{
+    ViewBag.Title = "Subscriber Editor";
+}
+
+<style>
+    table input[type="text"] {
+        width: 360px;
+    }
+</style>
+
+<script type="text/javascript" src="/ecn.communicator/scripts/Twemoji/twemoji.js"></script>
+<script type="text/javascript" src="/ecn.communicator/scripts/Twemoji/twemoji-picker.js"></script>
+<link rel="stylesheet" href="/ecn.communicator/scripts/Twemoji/twemoji-picker.css" />
+<script>
+    @JavascriptHelperMethods.MakeGetModelFunction(typeof(ecn.communicator.mvc.Models.Email))
+    var lastControlError = [];
+    $(document).ready(function () {
+        $("#btnUpdateEmail").click(btnUpdateEmail_Click);
+    });
+
+    function btnUpdateEmail_Click()
+    {
+        clearValidationErrorMessages();
+        lastControlError = [];
+        var model = GetModel();
+        if (model.EmailAddress == undefined || model.EmailAddress == null || model.EmailAddress == "") {
+            lastControlError.push({ name: "EmailAddress", message: "You cannot create or update an email profile with an empty email address", label: "EmailAddressLabel", isKendo: false });
+        }
+        if (model.Birthdate != "" && !validateDate(model.Birthdate)) {
+            lastControlError.push({ name: "Birthdate", message: "Enter 'Birthdate' in MM/DD/YYYY format only. Please Correct!", label: "BirthdateLabel", isKendo: false });
+        }
+        if (model.UserEvent1Date != "" && !validateDate(model.UserEvent1Date)) {
+            lastControlError.push({ name: "UserEvent1Date", message: "Enter 'UserEvent1Date' in MM/DD/YYYY format only. Please Correct!", label: "UserEvent1DateLabel", isKendo: false });
+        }
+        if (model.UserEvent2Date != "" && !validateDate(model.UserEvent2Date)) {
+            lastControlError.push({ name: "UserEvent2Date", message: "Enter 'UserEvent2Date' in MM/DD/YYYY format only. Please Correct!", label: "UserEvent2DateLabel", isKendo: false });
+        }
+        if (lastControlError.length > 0) {
+            setValidationClient(lastControlError);
+            return false;
+        }
+        @*var form = $('#modelForm');
+        form.attr('method', 'POST');
+        form.attr('action', '@Url.Action("Update", "Subscriber")' + '?' + $.param(model));
+        form.submit();*@
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Update", "Subscriber")",
+            data: { externalEmail: model },
+            success: function (response) {
+                if (response[0] == '200') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    showLoadingWindow();
+                    window.location = document.location.protocol + "//" + document.domain + "/ecn.communicator.mvc/Subscriber/Index/" + @Model.email.CurrentGroupID;
+                
+                }
+                else if(response[0] == '300')
+                {
+                    ///ecn.communicator.mvc/Subscriber/MergeEmails?oldemailid=" + email1.EmailID.ToString() + "&newemailid=" + email2.EmailID.ToString()
+                    $("#hfOldEmailID").val(response[1]);
+                    $("#hfNewEmailID").val(response[2]);
+                    var win = $("#MergeWindow");
+                
+                    var kendoWindow = win.data('kendoWindow');
+                    kendoWindow.center().open();
+                }
+                else {
+                    var errorArray = [];
+                    for (var i = 1; i < response.length; i++) {
+                        errorArray.push(response[i]);
+                    }
+                    setValidationSummary(errorArray, []);
+                }
+            }
+        });
+    }
+
+    function btnMergeProfiles_Click()
+    {
+        showLoadingWindow();
+        window.location.href = window.location.protocol + "//" + window.location.host + "/ecn.communicator.mvc/Subscriber/MergeEmails?oldemailid=" + $("#hfOldEmailID").val() + "&newemailid=" + $("#hfNewEmailID").val() + "&groupID=" + '@Model.email.CurrentGroupID';
+    }
+
+    function btnCancelMergeProfiles_Click()
+    {
+        var win = $("#MergeWindow");
+
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+        $("#hfOldEmailID").val('');
+        $("#hfNewEmailID").val('');
+    }
+
+    function popManagerWindow(navURL) {
+        if (navURL != null) {
+            window.open(navURL, 'newwindow', 'toolbar=no,status=yes,menubar=no,scrollbars=1,location=no,resizable=yes');
+        }
+        return false;
+    }
+    function validateDate(testdate) {
+        var date_regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(18|19|20)\d{2}$/;
+        return date_regex.test(testdate);
+    }
+
+    function dataBound() {
+        var grid = this;
+        $("#subscriberLogs table td:nth-child(2)").each(function () {
+            var initialString = $(this).html();
+            initialString = initialString.replace(/'/g, "\\'");
+            initialString = initialString.replace(/\r?\n|\r/g, ' ');
+            initialString = twemoji.parse(eval("\'" + initialString + "\'"), { size: "16x16" });
+            $(this).html(initialString);
+        });
+    }
+</script>
+
+@Html.HiddenFor(e => e.email.EmailID, new { id = "EmailID" })
+@Html.HiddenFor(e => e.email.CurrentGroupID, new { id = "CurrentGroupID" })
+@Html.Hidden("hfOldEmailID")
+@Html.Hidden("hfNewEmailID")
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item"><a href="@(HttpContext.Current.Session["url"] as string)">Subscribers /</a></li>
+    <li class="breadcrumb-item active"><a href="">Edit</a></li>
+</ol>
+<div id="errorPanel">@Html.ECNErrors(Model.Errors)</div>
+<div id="notificationDiv"></div>
+<div style="margin:10px 30px;">
+    <table>
+        <tr>
+            <td><span id="EmailAddressLabel"> Email Address: </span></td>
+            <td> @Html.TextBoxFor(e => e.email.EmailAddress, new { id = "EmailAddress" }) </td>
+            <td> Password: </td>
+            <td> @Html.TextBoxFor(e => e.email.Password, new { id = "Password" }) </td>
+        </tr>
+        <tr>
+            <td>Format Type Code: </td>
+            <td>
+                @Html.DropDownListFor(x => x.email.FormatTypeCode, Model.FormatTypeCodes.Select(item => new SelectListItem
+               {
+                   Value = item.CodeValue,
+                   Text = item.CodeName,
+                   Selected = item.CodeValue == Model.email.FormatTypeCode.ToString()
+               }), new { id = "FormatTypeCode" })
+            </td>
+            <td> Bounce Score: </td>
+            <td> @Html.TextBoxFor(e => e.email.BounceScore, new { id = "BounceScore", @readonly = true }) </td>
+        </tr>
+        <tr>
+            <td> Subscribe Type Code: </td>
+            <td>
+                @Html.DropDownListFor(x => x.email.SubscribeTypeCode, Model.SubscribeTypeCodes.Select(item => new SelectListItem
+               {
+                   Value = item.Item2,
+                   Text = item.Item1,
+                   Selected = item.Item2 == Model.email.SubscribeTypeCode.ToString()
+               }), new { id = "SubscribeTypeCode" })
+            </td>
+            <td> Soft Bounce Score: </td>
+            <td> @Html.TextBoxFor(e => e.email.SoftBounceScore, new { id = "SoftBounceScore", @readonly = true }) </td>
+            <td><button type="button" class="btn k-button" onclick="return popManagerWindow('@Model.UDFURL');"> Profile Manager </button></td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    @(Html.Kendo().TabStrip()
+                  .Name("tabstrip")
+                  .Items(tabstrip =>
+                  {
+                      tabstrip.Add().Text("Details")
+                          .Selected(true)
+                          .Content(Html.Partial("Partials/_SubscriberEditor_Details", Model.email).ToString());
+
+                      tabstrip.Add().Text("Notes")
+                          .Content(Html.Partial("Partials/_SubscriberEditor_Notes", Model.email).ToString());
+
+                      tabstrip.Add().Text("Log")
+                        .Content(Html.Partial("Partials/_SubscriberEditor_Log", Model.email).ToString());
+
+                  })
+    )    
+</div>
+<hr />
+<div style="width:100%; text-align:center;">
+    <button id="btnUpdateEmail" class="btn k-button" type="submit"> Update </button>
+</div>
+<br />
+@*<form method="post" id="modelForm"></form>*@
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Actions(x => x.Clear())
+        .Animation(false)
+        .Name("MergeWindow")
+        .Title("Merge")
+        .Content(
+        @<text>
+            <div id="mergeDiv">
+                This email address already exists for this Customer Account. Would you like to merge these two profiles? 
+
+            </div>
+<div>
+    <table style="width:100%;">
+        <tr>
+            <td style="width:50%;text-align:center;">
+                @Html.Kendo().Button().Name("btnMergeProfiles").Content("Merge").Events(x => x.Click("btnMergeProfiles_Click"))
+            </td>
+            <td style="width:50%;text-align:center;">
+                @Html.Kendo().Button().Name("btnCancelMergeProfiles").Content("Cancel").Events(x => x.Click("btnCancelMergeProfiles_Click"))
+            </td>
+        </tr>
+    </table>
+    
+</div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

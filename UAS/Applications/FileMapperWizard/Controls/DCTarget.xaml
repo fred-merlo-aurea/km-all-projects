@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="FileMapperWizard.Controls.DCTarget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:telerikChromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="500">
+    <Grid Background="White" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="70" />
+            
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition />
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Select a compare Target: " Foreground="#4B87BC" FontSize="16" Margin="8" />
+        <telerik:RadComboBox x:Name="rcbTarget" Grid.Column="1" HorizontalAlignment="Stretch" Height="20" Margin="8" VerticalAlignment="Top" SelectionChanged="rcbTarget_SelectionChanged"/>
+        <telerik:RadButton x:Name="btnTargetInfo" Grid.Row="0" Grid.Column="2" AllowDrop="False" Margin="8" Height="22" VerticalAlignment="Top" 
+                           HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Your selection here will impact which Demographics are available.">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/ImageLibrary;Component/Images/Info/Info_16x16.png" Height="16" Width="16" VerticalAlignment="Center" />   
+            </StackPanel>
+        </telerik:RadButton>
+
+        <TextBlock Name="lbScope" Grid.Row="1" Grid.Column="0" Text="Select Target Scope: " Foreground="#4B87BC" FontSize="16" Margin="8" />
+        <telerik:RadComboBox x:Name="rcbScope"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Height="20" Margin="8" VerticalAlignment="Top"/>
+        <telerik:RadButton x:Name="btnScopeInfo" Grid.Row="1" Grid.Column="2" AllowDrop="False" Margin="8" Height="22" 
+                           VerticalAlignment="Top" HorizontalAlignment="Left" Background="Transparent" Style="{x:Null}" ToolTip="Your selection here will impact which Demographics are available.">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/ImageLibrary;Component/Images/Info/Info_16x16.png" Height="16" Width="16" VerticalAlignment="Center" />
+            </StackPanel>
+        </telerik:RadButton>
+        
+        <telerik:RadButton x:Name="btnNext" Grid.Row="4" Grid.Column="5" AllowDrop="False" Height="22" Width="70" VerticalAlignment="Center" 
+                                               HorizontalAlignment="Right" Style="{DynamicResource RadButtonRound}" Click="btnNext_Click" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Next" Margin="0,0,5,0" VerticalAlignment="Bottom"/>
+                <Image Source="/ImageLibrary;Component/Images/TileList/Next.png" Height="16" Width="16" VerticalAlignment="Center"/>
+            </StackPanel>
+        </telerik:RadButton>
+    </Grid>
+</UserControl>

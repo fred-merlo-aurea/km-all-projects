@@ -1,0 +1,417 @@
+﻿@model  UAS.Web.Models.FileMapperWizard.ColumnMap
+
+<script language="JavaScript" type="text/JavaScript">
+    function MappedColumnChange(e) {
+        var mappedColumnDDL = e.sender.element[0].id;
+        var dataItem = this.dataItem(e.item.index());
+        var columns = @Html.Raw(Json.Encode(Model.MappingColumns));
+        var isDisplay = false;
+        var displayActions = true;
+
+        if (dataItem.Value == "Ignore") {
+            displayActions = false;
+        } else {
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                if (dataItem.Value == column.DataTable + "." + column.ColumnName) {
+                    if (column.IsDemographic) {
+                        isDisplay = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        var fieldMappingID = @Html.Raw(Json.Encode(Model.FieldMapID));
+
+        var divName = "divDemoUpdate_" + fieldMappingID;
+        if (isDisplay) {
+            $("#" + divName).show();
+        } else {
+            $("#" + divName).hide();
+        }
+
+        var divActionName = "divColumnMenu_" + fieldMappingID;
+        if (displayActions) {
+            $("#" + divActionName).show();
+        } else {            
+            $("#" + divActionName).hide();
+            //Remove Multi Maps and Transformations and hide divs
+
+            var setup = { FieldMappingID: fieldMappingID };
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/RemoveTransformationsAndMultiMappingsForFieldMappingID",
+                traditional: true,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                data: setup,
+                cache: !0,
+                datatype: "html",
+                success: function (returnData) {
+
+                },
+                error: function (data) {
+
+                }
+            });
+
+            var gridMulti = $("#grid_MultiColumnMap_" + fieldMappingID).data("kendoGrid");
+            gridMulti.dataSource.data([]);
+            var targetName = "div_MultiMap_" + fieldMappingID;
+            $("#" + targetName).hide();
+
+            var gridMulti = $("#grid_" + fieldMappingID).data("kendoGrid");
+            if (gridMulti != null) {
+                gridMulti.dataSource.data([]);
+            }
+            var targetName = "div_Transformations_" + fieldMappingID;
+            $("#" + targetName).hide();
+        }
+    }
+    function MappedColumnDatabound() {
+        var name = "mc_" + @Html.Raw(Json.Encode(Model.FieldMapID)) + "".toString();
+        var t = document.getElementById(name);
+        var x = t.getElementsByTagName('input');
+        var columns = @Html.Raw(Json.Encode(Model.MappingColumns));
+        var isDisplay = false;
+        var displayActions = true;
+
+        for(var i = 0; i < x.length; i++) {
+            if (x[i].id.endsWith("__MappedColumn")) {
+                var mcDDLValue = x[i].value.toString();
+
+                if (mcDDLValue == "Ignore") {
+                    displayActions = false;
+                } else {
+                    for (var ii = 0; ii < columns.length; ii++) {
+                        var column = columns[ii];
+                        if (mcDDLValue == column.DataTable + "." + column.ColumnName) {
+                            if (column.IsDemographic) {
+                                isDisplay = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                var divName = "divDemoUpdate_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+                if (isDisplay) {
+                    $("#" + divName).show();
+                } else {
+                    $("#" + divName).hide();
+                }
+
+                var divActionName = "divColumnMenu_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+                if (displayActions) {
+                    $("#" + divActionName).show();
+                } else {
+                    $("#" + divActionName).hide();
+                }
+                break;
+            }
+        }
+    }
+
+    function performMultiMapping(fieldMappingId) {
+        //just need to add an empty row to grid
+        var grid = $("#grid_MultiColumnMap_" + fieldMappingId).data("kendoGrid");
+        var rowData = grid.dataSource.at(0);//this will get the first row
+        var datasource = grid.dataSource;
+        var total = datasource.data().length;
+
+        var newItem = datasource.insert(total, {FieldMultiMapID: 0, FieldMappingID: fieldMappingId, FieldMappingTypeID: 0, ColumnOrder: 0, MCMIndex: total, selectedMAFField: { Text: 'Ignore', Value: 'Ignore' }}); //here mention all the column names, otherwise will get an error
+
+        var newRow = grid.items().filter("[data-uid='" + newItem.uid + "']");
+        grid.editRow(newRow);
+
+        var targetName = "div_MultiMap_" + fieldMappingId;
+        $("#" + targetName).show();
+    }
+        
+    function prePerformTransformation(sfid, fmid, colname) {
+        SaveMappingBeforeLoadingTransformation(sfid, fmid, colname);
+    }
+
+    function performTransformation(sfid, fmid, colname) {     
+        var sourcefileid = sfid;
+        var fieldmappingid = fmid;
+        var fieldMappingName = colname;
+
+        var win = $("#transformationWindow").data('kendoWindow');
+        $("#transformationWindow").html("");
+        win.content("Loading...");
+        win.center();
+        win.open();
+
+        //Collect Data for Transformation use
+        var setup = { SourceFileId: sourcefileid, FieldMappingId: fieldmappingid, FieldMappingName: fieldMappingName };
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/DataTransformationSetup",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: setup,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                var model = { TransformationID: 0 };
+
+                $.ajax({
+                    url: "/UAS.Web/FileMapperWizard/LoadTransformationSetup",
+                    traditional: true,
+                    contentType: "application/html; charset=utf-8",
+                    type: "GET",
+                    data: model,
+                    cache: !0,
+                    datatype: "html",
+                    success: function (returnData) {
+                        win.content(returnData);
+                    },
+                    error: function (data) {
+                        alert("An error has occured!!!");
+                    }
+                });
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });        
+    }
+
+    function loadTransformationGrid() {
+        var sourcefileid = @Html.Raw(Json.Encode(Model.SourceFileID));
+        var fieldmappingid = @Html.Raw(Json.Encode(Model.FieldMapID));
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function loadTransformationGridWithID(sid, fmid) {
+        var sourcefileid = sid;
+        var fieldmappingid = fmid;
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var hasTransform = @Html.Raw(Json.Encode(Model.HasTransformations));
+        var divName = "div_Transformations_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+        if (hasTransform) {
+            $("#" + divName).show();
+            loadTransformationGrid();
+        } else {
+            $("#" + divName).hide();
+        }
+    });
+
+
+    function loadMultiMapGrid() {
+        var fieldmappingid = @Html.Raw(Json.Encode(Model.FieldMapID));
+
+        var modelData =
+        {
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_MultiMap_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadMultiMapGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                //$("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var hasMultiMap = @Html.Raw(Json.Encode(Model.HasMultiMap));
+        var divName = "div_MultiMap_" + @Html.Raw(Json.Encode(Model.FieldMapID));
+        if (hasMultiMap) {
+            $("#" + divName).show();
+            loadMultiMapGrid();
+        } else {
+            $("#" + divName).hide();
+            loadMultiMapGrid();
+        }
+    });
+</script>
+<style>
+    .k-list > .k-item.k-first {
+        padding-top: 2em;        
+    }
+    .k-list > .k-item.k-first > .k-group {
+        font-size: 10px;
+    }
+    .k-popup > .k-group-header, .k-popup > .k-virtual-wrap > .k-group-header {
+        font-size: 10px;
+    }
+</style>
+
+
+<table id='mc_@Model.FieldMapID' class="filedetails">
+    @Html.HiddenFor(m => m.FieldMapID)
+    @Html.HiddenFor(m => m.SourceFileID)
+    @* REGULAR ROW *@
+    <tr>
+        <td style="padding: 2px;">
+            @Html.Kendo().TextBoxFor(m => m.SourceColumn).HtmlAttributes(new { @readonly = true, style = "width:240px;" })
+        </td>
+        <td style="padding: 2px;">
+            @if (Model.ProfileColumnList != null)
+            {
+                @(Html.Kendo().DropDownListFor(m => m.MappedColumn)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(e => e.Select("MappedColumnChange").DataBound("MappedColumnDatabound"))    
+                            //.DataSource(source => source.Custom().Group(g => g.Add("Group", typeof(string))))
+                    .BindTo(Model.ProfileColumnList).HtmlAttributes(new { style = "width:240px; display:inline;" }))
+            }
+
+        </td>
+        <td style="padding: 2px;">
+            <div style="width: 95px;" >
+                <div id="divDemoUpdate_@Model.FieldMapID">
+                    @if (Model.DemoUpdateTypes != null)
+                    {
+                        @(Html.Kendo().DropDownListFor(m => m.DemoUpdateID)
+                            .DataTextField("DisplayName")
+                            .DataValueField("CodeId")
+                        .BindTo(Model.DemoUpdateTypes).HtmlAttributes(new { style = "width:95px; display:inline;" }))
+                    }
+                </div>
+            </div>
+        </td>
+        <td style="padding: 2px;">
+            <div id="divColumnMenu_@Model.FieldMapID">
+                @(Html.Kendo()
+                        .Menu()
+                        .Name("menu_ColumnMap_" + Model.FieldMapID)
+                        .Direction(MenuDirection.Left)
+                        .Orientation(MenuOrientation.Vertical)
+                        .Animation(false)
+                        .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                        innerItems =>
+                                        {
+                                            innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                            innerItems.Add().Text("Add Additional Column Mapping").HtmlAttributes(new { onclick = "performMultiMapping(" + Model.FieldMapID + ");" });
+                                            //innerItems.Add().Text("Apply a Transformation").HtmlAttributes(new { onclick = "performTransformation(" + Model.SourceFileID + ", " + Model.FieldMapID + ", '" + Model.SourceColumn + "');" });
+                                            innerItems.Add().Text("Apply a Transformation").HtmlAttributes(new { onclick = "prePerformTransformation(" + Model.SourceFileID + ", " + Model.FieldMapID + ", '" + Model.SourceColumn + "');" });
+                                        }
+                                    )
+                                )
+                )
+            </div>
+        </td>
+    </tr>
+    @* MULTI MAP ROW *@
+    <tr>
+        <td colspan="4" style="padding: 2px;">
+            <div id="div_MultiMap_@Model.FieldMapID">
+
+            </div>
+        </td>
+    </tr>
+    @* TRANSFORMATIONS ROW *@
+    <tr>
+        <td colspan="4" style="padding: 2px;">
+            <div id="div_Transformations_@Model.FieldMapID">
+
+            </div>
+        </td>
+    </tr>
+    @* PREVIEW DATA ROW *@
+    <tr class="previewdetails">
+        <td colspan="4" style="padding: 2px;">
+            @Html.Kendo().TextBoxFor(m => m.PreviewData).HtmlAttributes(new { @readonly = true, style = "width:100%;height:50px;background-color:#FCF5D8;" })
+        </td>
+    </tr>
+</table>
+
+
+
+@(Html.Kendo().Window()
+    .Name("transformationWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+    .Title("Transformation") //set the title of the window
+    .Content(@<text>
+        Loading Data. Please Wait.
+    </text>)
+    .Draggable() //Enable dragging of the window
+    .Resizable() //Enable resizing of the window
+    .Width(800) //Set width of the window
+    .Height(650)
+    .Modal(true)
+    .Visible(false)
+
+)
+
+@(Html.Kendo().Window()
+    .Name("transformationSearchWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+    .Title("Transformation") //set the title of the window
+    .Content(@<text>
+        Loading Data. Please Wait.
+    </text>)
+    .Draggable() //Enable dragging of the window
+    .Resizable() //Enable resizing of the window
+    .Width(800) //Set width of the window
+    .Height(650)
+    .Modal(true)
+    .Visible(false)
+
+)

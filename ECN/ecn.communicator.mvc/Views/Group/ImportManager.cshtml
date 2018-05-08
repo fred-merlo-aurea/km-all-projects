@@ -1,0 +1,568 @@
+﻿@using KMEnums
+@using System.Collections
+@model List<ecn.communicator.mvc.Models.DataFile>
+@{
+    ViewBag.Title = "Import Data";
+    List<ECN_Framework_Entities.Accounts.Code> codeList = ECN_Framework_BusinessLayer.Accounts.Code.GetAll();
+    List<ECN_Framework_Entities.Accounts.Code> codeListFormatType = (from src in codeList
+                                                                     where src.CodeType == "FormatType"
+                                                                     select src).ToList();
+
+    ArrayList aFiles = (ArrayList)Session["sFiles" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.UserID];
+
+    if (aFiles == null)
+    {
+        aFiles = new ArrayList();
+    }
+    List<string> FileList = new List<string>();
+    foreach (HttpPostedFileBase f in aFiles)
+    {
+        FileList.Add(f.FileName);
+    }
+
+    ECN_Framework_Entities.Communicator.Group msGroup = ECN_Framework_BusinessLayer.Communicator.Group.GetMasterSuppressionGroup(Convert.ToInt32(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.CustomerID), ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser);
+
+    var customerId = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.CustomerID;
+
+    List<ecn.communicator.mvc.Models.DataFile> ddlFiles = new List<ecn.communicator.mvc.Models.DataFile>();
+    ddlFiles.AddRange(Model);
+    ddlFiles.Insert(0, new ecn.communicator.mvc.Models.DataFile() { Date = DateTime.Now, FileName = "- Select File -", Size = 0 });
+}
+<script>
+    var lastControlsError = [];
+    String.prototype.endsWith = function (suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+    $(document).ready(function () {
+        $("#customerId").val(@customerId);
+        var errorMsg = getQueryStringByName('error');
+        if (errorMsg == "sheetname") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: "Please check the sheet name."
+            });
+        }
+        else if (errorMsg == "unknown") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: "Issue importing file, please check format and contents.  If you are still having problems, please contact customer service."
+            });
+        }
+
+        $("#FindFile").change(function (ev) {
+            var fileName = this.value;
+            var splitArray = fileName.split('\\');
+            $("#selectedFileName").html(splitArray[splitArray.length - 1]);
+        });
+        $('input[type=radio][name=List]').change(function () {
+            clearValidationErrorMessages();
+            var stbDDL = $("#SubscribeTypeCode").data('kendoDropDownList');
+
+            var data = [];
+            if (this.value == "M") {
+                data = [{ Text: "Manual Upload", Value: "M" }];
+                $("#OGE").data('kendoButton').enable(false);
+            }
+            else if (this.value == "G") {
+                data = [{ Text: "Subscribes", Value: "S" }, { Text: "Unsubscribes", Value: "U" }];
+                $("#OGE").data('kendoButton').enable(true);
+            }
+            var newSource = new kendo.data.DataSource({ data: data });
+            stbDDL.setDataSource(newSource);
+            stbDDL.select(0);
+        });
+
+    });
+    function btnSelectGroup_Click() {
+        clearValidationErrorMessages();
+        var customerID = $("#customerId").val();
+        groupExplorer(groupSelected, customerID, false);
+    }
+    function getQueryStringByName(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS, 'i');
+        var results = regex.exec(window.location.search);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+    function AddFile_Click() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        var findFile = $("#FindFile")[0];
+        if (findFile.value != "") {
+            var files = findFile.files[0]['name'];
+            var exists = false;
+            $('#FilesListBox option').each(function () {
+                if (this.value == files) {
+                    exists = true;
+                }
+            });
+            if (!exists) {
+                //if (findFile.files[0].size > 25000000) {
+                //    lastControlsError.push("selectedFileName");
+                //    setValidationError("Cannot Add File: <br><br>Only Files with less than 25 MB is supported in ECN", "UF_Validation", lastControlsError);
+
+                //    return;
+                //}
+                if (files.toLowerCase().endsWith(".csv") || files.toLowerCase().endsWith(".txt") || files.toLowerCase().endsWith(".xls") || files.toLowerCase().endsWith(".xlsx")) {
+                    //$('#FilesListBox').append('<option value="' + files + '">' + files + '</option>');
+                    var data = new FormData();
+                    data.append("FindFile", findFile.files[0]);
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("AddFiles", "Group")",
+                        data: data,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response[0] == '200') {
+                                showMessage({
+                                    type: '@MessageType.Success',
+                                    autoClose: true
+                                });
+                                $('#FindFile').val('');
+                                $('#selectedFileName').html('No file chosen');
+                                $("#FilesListBox").empty();
+                                $.each(response, function (index, files) {
+                                    if(index != 0)
+                                        $('#FilesListBox').append('<option value="' + files + '">' + files + '</option>');
+                                });
+                            }
+                            else {
+                                var errorArray = [];
+                                for (var i = 1; i < response.length; i++) {
+                                    errorArray.push(response[i]);
+                                }
+                                setValidationServer(errorArray, "#UF_Validation");
+                            }
+                        }
+                    });
+                }
+                else {
+                    lastControlsError.push({ name: "selectedFileName", message: "Cannot Add File: <br><br>Only files with following extensions are supported in ECN:<br><em>Data Files</em>: CSV, TXT, XLS, XLSX", label: "", isKendo: false });
+                    setValidationClient(lastControlsError);
+                }
+            }
+            else {
+                lastControlsError.push({ name: "selectedFileName", message: "Cannot Add File: <br><br>A File with the same name has already been added.", label: "", isKendo: false });
+                setValidationClient(lastControlsError);
+            }
+        }
+    }
+    function RemvFile_Click() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        if ($('#FilesListBox option:selected').val() === undefined) {
+            lastControlsError.push({ name: "FilesListBox", message: "Remove Function needs at least 1 file to be selected from the list box.", label: "", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveFiles", "Group")",
+                data: { fileIndex: $("#FilesListBox").prop('selectedIndex') },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#FilesListBox").empty();
+                        $.each(response, function (index, files) {
+                            if(index != 0)
+                                $('#FilesListBox').append('<option value="' + files + '">' + files + '</option>');
+                        });
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#UF_Validation");
+                    }
+                }
+            });        
+        }
+    }
+    function Upload_ServerClick() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        var files = [];
+        $('#FilesListBox option').each(function () {
+            files.push(this.value);
+        });
+        if (files.length == 0) {
+            lastControlsError.push({ name: "FilesListBox", message: "Upload Function needs at least 1 file added in the list box.", label: "", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UploadFilesToServer", "Group")",
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Info',
+                            text: response[1]
+                        });
+                        $("#FilesListBox").empty();
+                        $("#File").data('kendoDropDownList').dataSource.read();
+                        //$("#File").html(response[2]);
+                        $("#FileLibraryDiv").html(response[3]);
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#UF_Validation");
+                    }
+                }
+            });
+        }
+    }
+    function groupSelected(select) {
+        var group = select.group;
+        $("#groupName").html(group.GroupName);
+        $("#groupId").val(group.GroupID);
+        $("#customerId").val(group.CustomerID);
+       
+    }
+    function ImportFile_SelectedIndexChanged() {
+        clearValidationErrorMessages();
+        if ($("#File").data('kendoDropDownList').select() > 0) {
+            var value = $("#File").data('kendoDropDownList').value();
+            var dot = value.split(".");
+            var ext = dot[dot.length - 1];
+            switch (ext.toLowerCase()) {
+                case "txt":
+                    $("#delimiter").show();
+                    $("#sheetName").hide();
+                    break;
+                case "xls":
+                case "xlsx":
+                    $("#delimiter").hide();
+                    $("#sheetName").show();
+                    break;
+                case "csv":
+                default:
+                    $("#delimiter").hide();
+                    $("#sheetName").hide();
+                    break;
+            }
+        }
+    }
+    function StartImportProcess() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        var errorMessage = "";
+        if ($('input[name=List]:checked').val() == "G" && $('#groupId').val() == "") {
+            lastControlsError.push({ name: "groupName", message: "Please select a Group", label: "groupNameLabel", isKendo: false });
+        }
+        var index = $("#File").data('kendoDropDownList').select();
+        if (index == 0) {
+            lastControlsError.push({ name: "File", message: "Please select a File", label: "FileLabel", isKendo: true });
+        }
+        if (lastControlsError.length == 0) {
+            var value = $("#File").data('kendoDropDownList').value();
+            var dot = value.split(".");
+            var ext = dot[dot.length - 1];
+            var ft = ext.toLowerCase();
+            if (ft == "xls" || ft == "xlsx") {
+                ft = "X";
+            }
+            else if (ft == "csv") {
+                ft = "C";
+            }
+            else if (ft == "txt") {
+                ft = "O";
+            }
+            var gid = $('input[name=List]:checked').val() == "G" ? $('#groupId').val() : $('#msGroupId').val();
+            var redirectURL = '@Url.Content("~/Group/CheckImportDataFromFile")'
+                        + "?file=" + $('#File').data('kendoDropDownList').value()
+                        + "&ftc=" + $('#FormatType').data('kendoDropDownList').value()
+                        + "&stc=" + $('#SubscribeTypeCode').data('kendoDropDownList').value()
+                        + "&gid=" + gid
+                        + "&ft=" + ft
+                        + "&line=" + $('#NumToStart').val()
+                        + "&sheet=" + $('#SheetNameTypeCode').val()
+                        + "&dl=" + $('#DelimiterTypeCode').data('kendoDropDownList').value();
+            $.ajax({
+                type: "POST",
+                url: redirectURL,
+                success: function (response) {
+                    if (response[0] == '200') {
+                        window.location = '@Url.Content("~/Group/ImportDataFromFile")'
+                            + "?file=" + $('#File').data('kendoDropDownList').value()
+                            + "&ftc=" + $('#FormatType').data('kendoDropDownList').value()
+                            + "&stc=" + $('#SubscribeTypeCode').data('kendoDropDownList').value()
+                            + "&gid=" + gid
+                            + "&ft=" + ft
+                            + "&line=" + $('#NumToStart').val()
+                            + "&sheet=" + $('#SheetNameTypeCode').val()
+                            + "&dl=" + $('#DelimiterTypeCode').data('kendoDropDownList').value();
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#ID_Validation");
+                    }
+                }
+            });
+        }
+        else {
+            setValidationClient(lastControlsError);
+        }
+    }
+    function deleteFile(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+
+
+</script>
+<style>
+.tableHeader1 {
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: Gray;
+    padding: 2px,0px,2px,0px;
+    height: 20px;
+}
+label.myLabel input[type="file"] {
+    position: fixed;
+    top: -1000px;
+}
+
+/***** Example custom styling *****/
+.myLabel {
+    border: solid 1px #015da3;
+    border-radius: 8px;
+    padding: 0px 10px;
+    margin: 0px 5px;
+    background-color: #015da3;
+    display: inline-block;
+    color:#fff;
+    font-size:14px;
+    font-weight:500;
+    font-family:Arial;
+}
+.myLabel:hover {
+    background: #549edb;
+    border: solid 1px #549edb;
+}
+.myLabel:active {
+    background: #8ebc00;
+    border: solid 1px #8ebc00;
+}
+.myLabel :invalid + span {
+    color: #FFF;
+}
+.myLabel :valid + span {
+    color: #FFF;
+}
+</style>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Import Data</a></li>
+</ol>
+
+<table id="layoutWrapper" cellspacing="0" cellpadding="1" border='0'>
+    <tr>
+        <td colspan="2">
+            <div id="import_Validation" style="display:none;" class="validation-summary"></div>
+
+        </td>
+    </tr>
+        <tr>
+            <td valign="top" width="50%">
+                <table width="100%" cellpadding="1" cellspacing="0" style="border: #999999 1px solid; border-collapse: separate;" align="center">
+                    <tr>
+                        <td class="tableHeader1" colspan="2" valign="middle" align="left" height="25">
+                            &nbsp;&nbsp;Upload Files
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="UF_Validation"></div>
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin-left: 50px;">
+                                <tr>
+                                    <td align="left">
+                                        <label class="myLabel">
+                                            <input type="file" id="FindFile" style="width: 350px; height: 22px" size="26" name="FindFile">
+                                            <span>Choose File</span>
+                                        </label>
+                                        <span id="selectedFileName">No file chosen</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="bottom">
+                                        @Html.ListBox("FilesListBox", FileList.Select(item => new SelectListItem
+                                        {
+                                            Value = item,
+                                            Text = item
+                                        }), new { @style = "width: 500px; height:100px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="float: right">
+                                        @Html.Kendo().Button().Name("AddFile").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "AddFile_Click()" })
+                                        @Html.Kendo().Button().Name("RemvFile").Content("Remove").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "RemvFile_Click()" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="float: right">
+                                        @Html.Kendo().Button().Name("Upload").Content("Upload").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "Upload_ServerClick()" })
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" cellpadding="1" cellspacing="0" style="border: #999999 1px solid; border-collapse: separate;" align="center">
+                    <tr>
+                        <td class="tableHeader1" colspan="2" valign="middle" align="left" height="25">
+                            &nbsp;&nbsp;Import Data
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ID_Validation"></div>
+                            <div class="wrapper modal modaladdnewform" style="padding-left:50px;">
+                                <div class="formbox">
+                                    <div class="subtitle" id="groupNameLabel">Group</div>
+                                    <div class="formitem formiteminline">
+                                        <input id="customerId" name="customerId" type="hidden" value="" />
+                                        <input id="groupId" name="groupId" type="hidden" value="" />
+                                        <input id="msGroupId" name="msGroupId" type="hidden" value="@msGroup.GroupID" />
+                                        <input checked="checked"
+                                               id="Group"
+                                               name="List"
+                                               type="radio"
+                                               value="G"  /><label id="groupName"> -No Group Selected-</label>
+                                        <br />
+                                        <input id="Master"
+                                               name="List"
+                                               type="radio"
+                                               value="M"  /><label>Master Suppression Group</label>
+                                    </div>
+                                    <div class="formitem formiteminline">
+                                        @Html.Kendo().Button().Name("OGE").Content("Select Group").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btnSelectGroup_Click()" })
+                                    </div>
+                                </div>
+
+                                <div class="formbox">
+                                    <div class="subtitle">Subscribe Type</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.Kendo().DropDownList().Name("SubscribeTypeCode").BindTo(new List<SelectListItem> {
+                                            new SelectListItem { Text = "Subscribes", Value = "S" },
+                                            new SelectListItem { Text = "UnSubscribes", Value = "U" }
+                                        }).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:320px;" })
+                                    </div>
+                                </div>
+
+                                <div class="formbox">
+                                    <div class="subtitle">Format Type</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.Kendo().DropDownList().Name("FormatType").BindTo( codeListFormatType.Select(item => new SelectListItem
+                                        {
+                                            Value = item.CodeValue.ToString(),
+                                            Text = item.CodeName
+                                        })).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:320px;" })
+                                    </div>
+                                </div>
+
+                                <div class="formbox">
+                                    <div class="subtitle" id="FileLabel">File</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.Kendo().DropDownList().Name("File").Events(x => x.Change("ImportFile_SelectedIndexChanged")).DataTextField("Text").DataValueField("Value").DataSource(d => d.Read(read => { read.Action("GetFiles", "Group").Type(HttpVerbs.Post); }) ).HtmlAttributes(new { style = "width:320px;" })
+                                        <br />
+                                        (CSV, TXT, XLS or XLSX files)
+                                    </div>
+                                </div>
+
+                                <div class="formbox">
+                                    <div class="subtitle">Line number to start</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.TextBox("NumToStart", "0", new { @style = "width: 313px;" })
+                                    </div>
+                                </div>
+
+                                <div class="formbox" id="delimiter" style="display:none;">
+                                    <div class="subtitle">Delimiter</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.Kendo().DropDownList().Name("DelimiterTypeCode").BindTo(new List<SelectListItem> {
+                                            new SelectListItem { Text = "Commas", Value = "c" },
+                                            new SelectListItem { Text = "Tabs", Value = "TabDelimited" }
+                                        }).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:320px;" })
+                                    </div>
+                                </div>
+
+                                <div class="formbox" id="sheetName" style="display:none;">
+                                    <div class="subtitle">Sheet Name</div>
+                                    <div class="formitem formiteminline">
+                                        @Html.TextBox("SheetNameTypeCode", "Sheet1", new { @style = "width: 313px;" })
+                                    </div>
+                                </div>
+
+                                <div class="buttonsgroup" style="text-align:center">
+                                    @Html.Kendo().Button().Name("StartImportProcess").Content("Start Import Process").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "StartImportProcess()" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td valign="top">
+                <table width="100%" cellpadding="1" cellspacing="0" style="border: #999999 1px solid; border-collapse: separate;" align="center">
+                    <tr>
+                        <td class="tableHeader1" colspan="2" valign="middle" align="left" height="25">
+                            &nbsp;&nbsp;File Library
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="FileLibraryDiv" style="padding-left:10px;">
+                            @Html.Partial("Partials/_FileLibraryGrid", Model)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+</table>
+
+@Html.Partial("Partials/Modals/_GroupExplorer")
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Actions(x => x.Clear())
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteDataFile")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

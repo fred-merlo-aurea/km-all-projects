@@ -1,0 +1,13 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownList()
+              .Name("selectedConnector")
+              //.OptionLabel("- Select Connector -")
+              .DataSource(d => d.Read(r => r.Action("GetConnectors", "FileMapperWizard")))
+              .DataTextField("Text")
+              .DataValueField("Value")
+    .Events(e =>
+    {
+        //e.Select("onSelectConnector");
+    })
+    )

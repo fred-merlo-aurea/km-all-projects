@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="FileMapperWizard.Modules.FileLogViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900" Width="900" Height="620">
+    <telerik:RadBusyIndicator Name="busyIcon">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="450" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="File Name:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadComboBox Name="cbFiles" Grid.Row="0" Grid.Column="1" Margin="5" Height="23" Width="175" SelectionChanged="cbFiles_SelectionChanged" />
+            
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Process Code:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadComboBox Name="cbProcessCode" Grid.Row="1" Grid.Column="1" Margin="5" Height="23" Width="175" />
+           
+            <telerik:RadButton Name="btnDisplay" Content="Display" Grid.Row="2" Grid.Column="0" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnDisplay_Click"/>
+            <telerik:RadButton Name="btnReset" Content="Reset" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnReset_Click"/>
+            <ScrollViewer Name="spDataView" VerticalScrollBarVisibility="Auto"  Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3">
+                <StackPanel Orientation="Vertical">
+                    <telerik:RadGridView Name="grdFileLog" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" Width="870" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FileStatusTypeID}" Header="File Status Type" UniqueName="FileStatusTypeID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Message}" Header="Message" UniqueName="Message" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LogDate}" Header="LogDate" UniqueName="LogDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LogTime}" Header="LogTime" UniqueName="LogTime" Width="Auto" /> 
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerFileLog" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdFileLog}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>                    
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

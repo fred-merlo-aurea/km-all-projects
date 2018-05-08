@@ -1,0 +1,215 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ECN_Framework_Entities.Communicator.GroupDataFields
+@{ 
+    List<ECN_Framework_Entities.Communicator.DataFieldSets> dataFieldSetsList = ECN_Framework_BusinessLayer.Communicator.DataFieldSets.GetByGroupID(ViewBag.UDFGroupID);
+    if (dataFieldSetsList.Count > 0)
+    {
+        dataFieldSetsList.Insert(0, new ECN_Framework_Entities.Communicator.DataFieldSets { Name = "--- Select Transaction Name ---", DataFieldSetID = 0 });
+    }
+}
+<script>
+    var lastControlsError = [];
+    $(document).ready(function () {
+        debugger;
+        if(@dataFieldSetsList.Count > 0)
+        {
+            debugger;
+            //var typeDDL = $('#Add_ddlDefaultType').data('kendoDropDownList');
+            $("#add_tranDiv").show();
+            $('#Add_UseDefaultValue').hide();
+            $('#Add_ddlDefaultType').hide();
+            $('#Add_txtDefaultValue').hide();
+            $('#Add_ddlSystemValues').hide();
+        }
+        else{
+            $("#add_tranDiv").hide();
+        }
+        
+        
+        $("#Add_chkUseDefaultValue").change(function () {
+            var ddlType = $('#Add_ddlDefaultType').data('kendoDropDownList');
+            if ($('#Add_chkUseDefaultValue').is(":checked")) {
+                ddlType.wrapper.show();
+                ddlType.value("default");
+                $('#Add_txtDefaultValue').show();
+                $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.hide();
+            } else {
+                ddlType.wrapper.hide();
+                $('#Add_txtDefaultValue').hide();
+                $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.hide();
+            }
+        });
+        
+
+    });
+
+    function add_ddlTran_Change()
+    {
+        var defaultTypeDDL = $('#Add_ddlDefaultType').data('kendoDropDownList');
+        if ($('#Add_transaction').data('kendoDropDownList').value() > 0) {
+            $('#Add_UseDefaultValue').show();
+            if ($('#Add_chkUseDefaultValue').is(":checked")) {
+                defaultTypeDDL.wrapper.show();
+                defaultTypeDDL.value("default");
+                $('#Add_txtDefaultValue').show();
+                $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.hide();
+            } else {
+                defaultTypeDDL.wrapper.hide();
+                $('#Add_txtDefaultValue').hide();
+                $('#Add_ddlSystemValues').hide();
+                $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.hide();
+            }
+        } else {
+            $('#Add_UseDefaultValue').hide();
+        }
+    }
+
+    function add_ddlDefaultType_Change()
+    {
+        if ($('#Add_ddlDefaultType').data('kendoDropDownList').value() == "default") {
+            $('#Add_txtDefaultValue').show();
+            $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.hide();
+        } else {
+            $('#Add_txtDefaultValue').hide();
+            $('#Add_ddlSystemValues').data('kendoDropDownList').wrapper.show();
+        }
+    }
+    function addUDF() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        var model = {
+            ShortName: $('#ShortName').val().trim(),
+            LongName: $('#LongName').val(),
+            IsPublic: $('#Add_IsPublic').is(":checked") ? "Y" : "N",
+            DatafieldSetID: $('#Add_transaction').data('kendoDropDownList').value(),
+            GroupID: parseInt('@ViewBag.UDFGroupID')
+        };
+        var regName = /^[0-9a-zA-Z&_-\s]*$/;
+        if ($('#Add_transaction').data('kendoDropDownList').dataSource.data().length > 0) {
+            model.UseDefaultValue = $('#Add_chkUseDefaultValue').is(":checked");
+            model.DefaultType = $('#Add_ddlDefaultType').val();
+            model.DefaultValue = $('#Add_txtDefaultValue').val()
+            model.SystemValue = $('#Add_ddlSystemValues').val()
+        }
+        if (model.UseDefaultValue && model.DefaultType == "default" && $.trim(model.DefaultValue) === "") {   
+            lastControlsError.push({ name: "Add_txtDefaultValue", message: "Please enter a value for Default Value", label: "", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else if(!model.ShortName.match(regName))
+        {
+            lastControlsError.push({ name: "ShortName", message: "ShortName has invalid characters", label: "ShortNameLabel", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else if(model.ShortName.length == 0)
+        {
+            lastControlsError.push({ name: "ShortName", message: "ShortName cannot be empty", label: "ShortNameLabel", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddUDF", "DataField")",
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('AddUDF');
+                        $("#divUdfGrid").html(response[1]);
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#AddUDF_Validation");
+                    }
+                }
+            });
+        }
+    };
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Add UDF</legend>
+
+        <div id="AddUDF_Validation">
+
+        </div>
+        <div class="formbox">
+            <div class="subtitle" id="ShortNameLabel">Short Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBoxFor(x => x.ShortName) 
+            </div>
+            <div class="formitem formiteminline">
+                (unique name)
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Long Description</div>
+            <div class="formitem formiteminline">
+                @Html.TextAreaFor(x => x.LongName)
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Is Public?</div>
+            <div class="formitem formiteminline">
+                <input type="checkbox" id="Add_IsPublic" /> <label for="IsPublic">(Check this box to allow users to manage their email preferences for their subscriptions.)</label>
+            </div>
+        </div>
+
+        <div id="add_tranDiv">
+            <div class="formbox">
+                <div class="subtitle">Transaction</div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().DropDownList().Name("Add_transaction").BindTo(dataFieldSetsList.Select(item => new SelectListItem
+                   {
+                       Value = item.DataFieldSetID.ToString(),
+                       Text = item.Name
+                   })).DataTextField("Text").DataValueField("Value").Events(x => x.Change("add_ddlTran_Change")).HtmlAttributes(new { style = "width:250px;" })
+                </div>
+            </div>
+            <div class="formbox" id="Add_UseDefaultValue">
+                <div class="subtitle">Use Default Value?</div>
+                <div class="formitem formiteminline">
+                    <input type="checkbox" id="Add_chkUseDefaultValue" />
+                </div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().DropDownList().Name("Add_ddlDefaultType").BindTo(new List<SelectListItem> {
+                    new SelectListItem { Text = "Default Value", Value = "default" },
+                    new SelectListItem { Text = "System Value", Value = "system" }
+                    }).DataTextField("Text").DataValueField("Value").Events(x => x.Change("add_ddlDefaultType_Change"))
+                </div>
+                <div class="formitem formiteminline">
+                    @Html.TextBox("Add_txtDefaultValue")
+                </div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().DropDownList().Name("Add_ddlSystemValues").BindTo(new List<SelectListItem> {
+                    new SelectListItem { Text = "Current Date", Value = "CurrentDate" }
+                    }).DataTextField("Text").DataValueField("Value")
+                </div>
+            </div>
+        </div>
+
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:80px;text-align:center;padding-left:160px;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addUDF()" })
+                    </td>
+                    <td style="width:80px;text-align:center;padding-right:160px;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('AddUDF')" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>     
+   

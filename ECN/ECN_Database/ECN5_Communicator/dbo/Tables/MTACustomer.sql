@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[MTACustomer] (
+    [MTAID]      INT NOT NULL,
+    [CustomerID] INT NOT NULL,
+    [IsDefault]  BIT CONSTRAINT [DF_MTACustomer_IsDefault] DEFAULT ((0)) NOT NULL,
+    CONSTRAINT [PK_MTACustomer] PRIMARY KEY CLUSTERED ([MTAID] ASC, [CustomerID] ASC) WITH (FILLFACTOR = 80),
+    CONSTRAINT [FK_MTACustomer_MTA] FOREIGN KEY ([MTAID]) REFERENCES [dbo].[MTA] ([MTAID])
+);
+

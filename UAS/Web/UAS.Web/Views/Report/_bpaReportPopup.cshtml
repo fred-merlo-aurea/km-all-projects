@@ -1,0 +1,92 @@
+﻿<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+               <span>Customize BPA</span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+               <table border="0" id="PopuptableReport" width="90%">
+                        <tbody>
+                                <tr>
+                                    <td width="50%"><strong>Available Reports</strong></td>
+                                    <td width="50%"><strong>Included Reports</strong></td>
+                                </tr>
+                                <tr>
+                                     <td width="50%"><select id="BPAAvailableReports"></select></td>
+                                     <td width="50%"><select id="BPASelectedReports"></select></td>
+                                </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <h3><span id="currentRunningReportlbl"></span></h3>
+                                    <div class="progress">
+                                        <div id="dynamicReportProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            <span id="current-progress"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <br>
+                                        <input type="button"  value="Okay" onclick="GetReportPackage()" class="filterButton">
+                                        <input type="button" value="Close" onclick="CloseWindow('BPAPopup')" class="filterButton">
+                                    </td>
+                                </tr>
+                        </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<style>
+ .k-listbox {
+     width: 400px;
+     height: 500px;
+ }
+ #PopuptableReport{
+     margin:10px 5%;
+ }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#BPAAvailableReports").kendoListBox({
+            connectWith: "BPASelectedReports",
+            dropSources: ["BPASelectedReports"],
+            toolbar: {
+                position: "right",
+                tools: [ "transferTo", "transferFrom", ]
+            },
+            selectable: "multiple",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/report/GetReports?pubID=" + $("#SelectedProductID").val()+"&includeBPA="+false,
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "ReportName",
+            dataValueField: "ReportID"
+
+        });
+
+        $("#BPASelectedReports").kendoListBox({
+            connectWith: "BPAAvailableReports",
+            dropSources: ["BPAAvailableReports"],
+            selectable: "multiple",
+            dataTextField: "ReportName",
+            dataValueField: "ReportID"
+            
+
+        });
+
+
+    });
+
+   
+
+</script>

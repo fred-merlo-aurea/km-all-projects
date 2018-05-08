@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="Circulation.Modules.SubscriptionInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="1280">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+            <Grid Width="600" VerticalAlignment="Top" IsEnabled="{Binding Enabled}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Old Acct #:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}"/>
+                    <TextBox Name="tbAccountNumber" IsEnabled="False" Margin="2" VerticalAlignment="Center" Width="247" Style="{DynamicResource TextBoxC13}"
+                         Text="{Binding Path=AccountNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Member Group:" VerticalAlignment="Center" IsEnabled="true" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbMemberGroup" IsEnabled="true" Margin="2" VerticalAlignment="Center" Width="247"
+                         Style="{DynamicResource TextBoxC13}" Text="{Binding Path=MemberGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Org Subsrc:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbOrigSubSrc" IsEnabled="False" Margin="2" VerticalAlignment="Center" Width="247" IsReadOnly="True" Style="{DynamicResource TextBoxC13}"
+                         Text="{Binding Path=OriginalSubscriberSourceCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Subsrc:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbSubSrc" Margin="2" VerticalAlignment="Center" Width="247" HorizontalAlignment="Left" Style="{DynamicResource TextBoxC13}"
+                         Text="{Binding Path=SubscriberSourceCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Subsrc Type:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <telerik:RadComboBox Name="cbSubscriberSourceType" Margin="2" VerticalAlignment="Center" Width="247" Padding="4,3" Style="{DynamicResource ComboBoxC14}"
+                                     SelectedValue="{Binding Path=SubSrcID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Name="tblDeliver" HorizontalAlignment="Right" Margin="2" Text="Media Type:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                        <TextBlock Text="*" Foreground="Red" FontSize="14" Margin="0,2,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <telerik:RadComboBox Name="cbDeliver" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Center" Width="247"
+                                      Style="{DynamicResource ComboBoxC14}" SelectedValue="{Binding Path=Deliverability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                             TargetNullValue={x:Static sys:String.Empty}}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Verify:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbVerify" Margin="2" VerticalAlignment="Center" Width="247" Style="{DynamicResource TextBoxC13}" MaxLength="50"
+                         Text="{Binding Path=Verify, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2" Text="Created Date:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbCreatedDate" Focusable="False" Margin="2" VerticalAlignment="Center" Width="247" IsReadOnly="True" Style="{DynamicResource TextBoxC13}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right">
+                    <TextBlock Margin="2,10,2,9" Text="Last Updated:" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+                    <TextBox Name="tbUpdatedDate" Focusable="False" Margin="2" VerticalAlignment="Center" Width="247" IsReadOnly="True" Style="{DynamicResource TextBoxC13}"></TextBox>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

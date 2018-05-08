@@ -1,0 +1,1 @@
+<%@ Page language="c#" Inherits="ecn.communicator.engines.unsubscribeDirect" Codebehind="unsubscribeDirect.aspx.cs" %>

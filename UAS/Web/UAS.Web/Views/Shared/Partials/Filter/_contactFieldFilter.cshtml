@@ -1,0 +1,95 @@
+﻿@model UAS.Web.Models.UAD.Filter.StandardFilter
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Other Contact Fields Filter
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <table border="0" bordercolor="#cccccc" cellpadding="1" cellspacing="1" width="100%">
+                    <tbody>
+                        <tr style="background-color: #5783BD;padding: 0px 0px 0px 0px; height: 20px;">
+                            <td class="labelsmall" style="color: white;border:1px solid white;" colspan="5" align="center">
+                                <b>Contact Fields</b>
+                            </td>
+                        </tr>
+                        <tr style="background-color: #eeeeee; color: black; padding: 2px 0px 2px 0px; height: 20px;">
+                           
+                            <td align="center" style="border:1px solid white;">
+                                <b>Phone</b>
+                            </td>
+                            <td align="center" style="border:1px solid white;">
+                                <b>Fax</b>
+                            </td>
+                            <td align="center" style="border:1px solid white;">
+                                <b>Media</b>
+                            </td>
+
+                            <td align="center" style="border:1px solid white;display:none;">
+                                <b>GeoLocated</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td align="center" valign="top" style="border:1px solid white;">
+                              @(Html.Kendo().MultiSelect()
+                                              .Name("lstCtPhone")
+                                              .AutoClose(true)
+                                              .TagMode(TagMode.Multiple)
+                                            .BindTo(Model.YesNoSelectList)
+                                            .AutoWidth(false)
+                                            .ClearButton(false))
+                               
+                            </td>
+                            <td align="center" valign="top" style="border:1px solid white;">
+                              @(Html.Kendo().MultiSelect()
+                                              .Name("lstCtFax")
+                                              .AutoClose(true)
+                                              .TagMode(TagMode.Multiple)
+                                            .BindTo(Model.YesNoSelectList)
+                                            .AutoWidth(false)
+                                            .ClearButton(false)
+                                            )
+                               
+                            </td>
+                            <td align="center" valign="top" style="border:1px solid white;">
+                              
+                                @(Html.Kendo().MultiSelect()
+                                              .Name("lstCtMedia")
+                                              .AutoClose(true)
+                                              .TagMode(TagMode.Multiple)
+                                            .BindTo(Model.MediaStdSelectList)
+                                            .AutoWidth(false)
+                                            .ClearButton(false))
+                               
+                            </td>
+                            <td align="center" valign="top" style="border:1px solid white;display:none;">
+                                        @(Html.Kendo().MultiSelect()
+                                              .Name("lstCtGeoLocated")
+                                              .AutoClose(true)
+                                              .TagMode(TagMode.Multiple)
+                                              .BindTo(Model.YesNoSelectList)
+                                              .AutoWidth(false)
+                                              .ClearButton(false))
+                               
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td align="center" colspan="5" style="padding-bottom: 10px;">
+                                <br>
+                                <input type="button" name="btnSelectContactFieldFilter" onclick="SelectCloseContactFieldFilter()" value="Select/Close" class="filterButton">
+                                <input type="button" name="btnResetContactFieldFilter" onclick="ResetCloseContactFieldFilter()" value="Reset" class="filterButton">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

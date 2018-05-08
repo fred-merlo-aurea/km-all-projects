@@ -1,0 +1,14 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+@using CheckBox = KMModels.Controls.CheckBox
+
+<script>
+    array[@((int)ControlType.CheckBox)] = {
+        name: '@ControlType.CheckBox',
+        object: @Html.Raw(Json.Encode(new CheckBox(true))),
+        control: "<div ng-repeat='item in control.Items' ng-style='{width: (100/control.Columns) + \"%\" }' class='inline' >\
+                    <input type='checkbox' ng-value='item.Value' ng-checked='item.Default' name='{{control.Order}}@ControlType.CheckBox' />{{item.Text}}\
+                 </div>"
+    }
+</script>

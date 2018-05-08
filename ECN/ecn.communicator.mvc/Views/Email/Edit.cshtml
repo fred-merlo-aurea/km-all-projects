@@ -1,0 +1,101 @@
+﻿@model ecn.communicator.mvc.Models.EmailWrapper
+@using ecn.communicator.mvc.Infrastructure
+@{
+    ViewBag.Title = "Subscriber Editor";
+}
+<script>
+    @JavascriptHelperMethods.MakeGetModelFunction(typeof(ecn.communicator.mvc.Models.Email))
+
+    $(document).ready(function () {
+        $("#btnUpdateEmail").click(function () {
+            var model = GetModel();
+            var form = $('#modelForm');
+            form.attr('method', 'POST');
+            form.attr('action', '@Url.Action("Update", "Email")' + '?' + $.param(model));
+            form.submit();   
+        });
+    });
+</script>
+<style>
+    #btnUpdateEmail{
+        position: relative;
+        float: right;
+        right: 35%;
+    }
+    #btnProfileManager{
+        position: relative;
+        float: right;
+        right: 50%;
+    }
+</style>
+
+@Html.HiddenFor(e => e.email.EmailID, new { id = "EmailID" })
+@Html.HiddenFor(e => e.email.CurrentGroupID, new { id = "CurrentGroupID" })
+<br />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item"><a href="@(HttpContext.Current.Session["url"] as string)">Subscribers /</a></li>
+    <li class="breadcrumb-item active"><a href="">Edit</a></li>
+</ol>
+<hr />
+<div id="errorPanel">@Html.ECNErrors(Model.Errors)</div>
+<div id="notificationDiv"></div>
+<table>
+    <tr>
+        <td> Email Address: </td>
+        <td> @Html.TextBoxFor(e => e.email.EmailAddress, new { id = "EmailAddress" }) </td>
+        <td> Password: </td>
+        <td> @Html.TextBoxFor(e => e.email.Password, new { id = "Password" }) </td>
+    </tr>
+    <tr>
+        <td>Format Type Code: </td>
+        <td>
+            @Html.DropDownListFor(x => x.email.FormatTypeCode, Model.FormatTypeCodes.Select(item => new SelectListItem
+                {
+                    Value = item.CodeValue,
+                    Text = item.CodeName,
+                    Selected = item.CodeValue == Model.email.FormatTypeCode.ToString()
+                }), new { id = "FormatTypeCode" })
+        </td>
+        <td> Bounce Score: </td>
+        <td> @Html.TextBoxFor(e => e.email.BounceScore, new { id = "BounceScore", @readonly=true }) </td>
+    </tr>
+    <tr>
+        <td> Subscribe Type Code: </td>
+        <td>
+            @Html.DropDownListFor(x => x.email.SubscribeTypeCode, Model.SubscribeTypeCodes.Select(item => new SelectListItem
+                {
+                    Value = item.Item2,
+                    Text = item.Item1,
+                    Selected = item.Item2 == Model.email.SubscribeTypeCode.ToString()
+                }), new { id = "SubscribeTypeCode" })
+        </td>
+        <td> Soft Bounce Score: </td>
+        <td> @Html.TextBoxFor(e => e.email.SoftBounceScore, new { id = "SoftBounceScore", @readonly = true }) </td>
+    </tr>
+</table>
+<br />
+<br />
+@(Html.Kendo().TabStrip()
+                  .Name("tabstrip")
+                  .Items(tabstrip =>
+                  {
+                      tabstrip.Add().Text("Details")
+                          .Selected(true)
+                          .Content(Html.Partial("Partials/_SubscriberEditor_Details", Model.email).ToString());
+
+                      tabstrip.Add().Text("Notes")
+                          .Content(Html.Partial("Partials/_SubscriberEditor_Notes", Model.email).ToString());
+
+                      tabstrip.Add().Text("Log")
+                        .Content(Html.Partial("Partials/_SubscriberEditor_Log", Model.email).ToString());
+
+                  })
+)
+<hr />
+<button id="btnUpdateEmail" class="btn k-button" type="submit"> Update </button>
+<button id="btnProfileManager" type="button" class="btn k-button" onclick="window.open('@Model.UDFURL');"> Profile Manager </button>
+<br />
+<form method="post" id="modelForm"></form>
+

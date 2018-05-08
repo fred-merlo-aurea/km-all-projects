@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="ControlCenter.Controls.AdhocFilter"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:Chromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             xmlns:Navigation="clr-namespace:Telerik.Windows.Controls.Navigation;assembly=Telerik.Windows.Controls.Navigation" 
+             xmlns:CoreUtils="clr-namespace:Core_AMS.Utilities;assembly=Core_AMS.Utilities"
+	         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" 
+             d:DesignHeight="738" d:DesignWidth="1024">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer CanContentScroll="True" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <telerik:RadGridView Name="gridGroups" Grid.Row="0" ShowGroupPanel="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" SelectionUnit="FullRow" ItemsSource="{Binding SubscriptionsExtensionMapper}" RowIndicatorVisibility="Collapsed">
+                        <i:Interaction.Behaviors>
+                            <CoreUtils:RadGridEmptyDataTemplate>
+                                <CoreUtils:RadGridEmptyDataTemplate.EmptyDataTemplate>
+                                    <DataTemplate>
+                                        <Image Source="/ImageLibrary;component/Images/NoResults/NoResults512.png" Stretch="Fill" Width="512" Height="156" />
+                                    </DataTemplate>
+                                </CoreUtils:RadGridEmptyDataTemplate.EmptyDataTemplate>
+                            </CoreUtils:RadGridEmptyDataTemplate>
+                        </i:Interaction.Behaviors>
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CustomField}" Header="Name" UniqueName="CustomField" Width="400" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CustomFieldDataType}" Header="Data Type" UniqueName="CustomFieldDataType" Width="150" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Active}" Header="Active" UniqueName="Active" Width="100" />
+                            <telerik:GridViewDataColumn UniqueName="Edit" Header="Edit" IsReadOnly="True" Width="100">
+                                <telerik:GridViewDataColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Tag="{Binding SubscriptionsExtensionMapperID}" ToolTip="Edit" Width="25" Margin="2" Name="btnEdit" Click="btnEdit_Click" >
+                                                <Image Height="16" Source="/ImageLibrary;component/Images/16/edit_user-16white.png" Stretch="Fill" Width="16" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </telerik:GridViewDataColumn.CellTemplate>
+                            </telerik:GridViewDataColumn>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="radDataPager" Grid.Row="1" Source="{Binding Items, ElementName=gridGroups}"
+                                     PageSize="25"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                </Grid>
+            </ScrollViewer>
+            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Background="{StaticResource KMLightBlueGradient}" VerticalAlignment="Center">
+                    <Label Content="Add Adhoc" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left"></Label>
+                </StackPanel>
+
+                <Label Content="Adhoc Name:" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                <TextBox Name="tbxName" Grid.Row="1" Grid.Column="1" Margin="3"></TextBox>
+
+                <Label Content="Data Type:" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                <telerik:RadComboBox Name="cbDataType" Grid.Row="2" Grid.Column="1" Margin="3"></telerik:RadComboBox>
+
+                <Label Content="Active:" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                <CheckBox Name="cbxActive" Width="14" Grid.Row="3" Grid.Column="1" Margin="3" HorizontalAlignment="Left"></CheckBox>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="5,2,2,2">
+                    <telerik:RadButton Name="btnSave" Content="Save" Width="50" Click="btnSave_Click"></telerik:RadButton>
+                    <telerik:RadButton Name="btnCancel" Content="Cancel" Width="50" Click="btnCancel_Click"></telerik:RadButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

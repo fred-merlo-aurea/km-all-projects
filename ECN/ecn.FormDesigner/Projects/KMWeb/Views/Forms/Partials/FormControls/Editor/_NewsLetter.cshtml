@@ -1,0 +1,15 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+<script>
+    array[@((int)ControlType.NewsLetter)] = {
+        name: '@ControlType.NewsLetter',
+        object: @Html.Raw(Json.Encode(new NewsLetter(true))),
+        control: "<div ng-repeat='item in control.Groups' ng-style='{width: (100/control.Columns) + \"%\" }' class='inline' >\
+                    <input type='checkbox' ng-value='item.GroupID' ng-checked='item.Default' name='{{control.Order}}@ControlType.NewsLetter' />{{item.GroupName}}\
+                 </div>"
+        //control: "<div>\
+        //            <input type='checkbox' ng-checked='control.Subscribe'>Subscribe\
+        //          </div>"
+    }
+</script>

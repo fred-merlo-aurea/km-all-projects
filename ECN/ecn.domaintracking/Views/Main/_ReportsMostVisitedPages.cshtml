@@ -1,0 +1,213 @@
+﻿@model  DataTable
+
+@{
+    Layout = string.Empty;
+}
+
+<script type="text/javascript">
+    $(function() {
+
+        @*$(document).ready(function () {
+            var urlDDL = $("#UrlTopList").data('kendoDropDownList');
+            urlDDL.value(@ViewBag.TopRow);
+        });*@
+
+        
+    });
+    function ddlURLTop_Change(e) {
+        showLoadingWindow();
+        var dtID = parseInt($("#DomainTracker_DomainTrackerID").val());
+        var selectedValue = this.value();
+        $.ajax({
+            url: '@Url.Content("~/Main/GetMostVisitedPages")',
+            type: "POST",
+            traditional: true,
+            cache: false,
+            data: {
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+                Filter: $("#Filter").val(),
+                TopRow: this.value(),
+                TypeFilter: $("#ddlType").val(),
+                DomainTrackerID: dtID
+            },
+            success: function (response) {
+                closeLoadingWindow();
+                $("#divMostViewedPageTarget").html(response); //Target is self on Parent
+            },
+            error:function(response)
+            {
+
+            }
+        });
+        
+
+    }
+    
+    
+</script>
+
+<div style="text-align: left">
+    <label style="font-size: medium; font-weight: bold; text-align: left;">Most Visited Pages</label>&nbsp; -<span style="font-size: 10px;"> Show results</span>    
+    @if (Model.Rows.Count > 0)
+    {
+        @Html.Kendo().DropDownList().Name("UrlTopList").BindTo(new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Top 5", Value = "5", Selected = 5 == ViewBag.TopRow  },
+                    new SelectListItem {Text = "Top 10", Value = "10", Selected = 10 == ViewBag.TopRow  },
+                    new SelectListItem {Text = "Top 25", Value = "25", Selected = 25 == ViewBag.TopRow  },
+                    new SelectListItem {Text = "All", Value = "0", Selected = 0 == ViewBag.TopRow  }
+
+                    }).DataTextField("Text").DataValueField("Value").Events(x => x.Change("ddlURLTop_Change"))
+
+    }
+</div>
+
+<table style="text-align: left">
+    @if (!Model.Columns.Contains("Type"))
+    {
+        if (Model.Rows.Count > 0)
+        {
+            foreach (DataRow dt in Model.Rows)
+            {
+            <tr>
+                <td style="font-size: small; font-weight: 400; width: 56%;">
+                    <div style="width: 700px; overflow: auto; word-wrap: break-word">
+                        @dt["PageURL"]<br />
+                    </div>
+                </td>
+                <td style="font-size: small; font-weight: bold; width: 10%;">
+                    <a href="@Url.Action("Users", new { id = @Model.Rows[0]["DomainTrackerID"].ToString(), StartDate = @ViewBag.fromDate, EndDate = @ViewBag.ToDate, PageUrl = @dt["PageURL"], FilterEmail = ViewBag.TypeFilter })">@dt["Counts"]</a>
+                    <br />
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td style="text-align: center;">
+                    No data to show.
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        if (Model.Rows.Count > 0)
+        {
+
+            DataTable dtTotal = new DataTable();
+            DataRow[] drTotal = Model.Select("Type = 'Total'");
+            if (drTotal.Length > 0)
+            {
+                dtTotal = Model.Select("Type = 'Total'").CopyToDataTable();
+            }
+            DataTable dtKnown = new DataTable();
+            DataRow[] drKnown = Model.Select("Type = 'Known'");
+            if (drKnown.Length > 0)
+            {
+                dtKnown = Model.Select("Type = 'Known'").CopyToDataTable();
+            }
+            DataRow[] drUnknown = Model.Select("Type = 'Unknown'");
+            DataTable dtUnknown = new DataTable();
+            if (drUnknown.Length > 0)
+            {
+                dtUnknown = Model.Select("Type = 'Unknown'").CopyToDataTable();
+            }
+            <tr>
+                <td style="font-weight:bold;">
+                    Known
+                </td>
+            </tr>
+            if (dtKnown.Rows.Count > 0)
+            {
+                foreach (DataRow dt in dtKnown.Rows)
+                {
+
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; width: 56%;">
+                            <div style="width: 700px; overflow: auto; word-wrap: break-word">
+                                @dt["PageURL"]<br />
+                            </div>
+                        </td>
+                        <td style="font-size: small; font-weight: bold; width: 10%;">
+                            <a href="@Url.Action("Users", new { id = @Model.Rows[0]["DomainTrackerID"].ToString(), StartDate = @ViewBag.fromDate, EndDate = @ViewBag.ToDate, PageUrl = @dt["PageURL"], FilterEmail = "Known" })">@dt["Count"]</a>
+                            <br />
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td style="text-align: center;">
+                        No data to show.
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td style="font-weight:bold;">
+                    Unknown
+                </td>
+            </tr>
+            if (dtUnknown.Rows.Count > 0)
+            {
+                foreach (DataRow dt in dtUnknown.Rows)
+                {
+
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; width: 56%;">
+                            <div style="width: 700px; overflow: auto; word-wrap: break-word">
+                                @dt["PageURL"]<br />
+                            </div>
+                        </td>
+                        <td style="font-size: small; font-weight: bold; width: 10%;">
+                            <a href="@Url.Action("Users", new { id = @Model.Rows[0]["DomainTrackerID"].ToString(), StartDate = @ViewBag.fromDate, EndDate = @ViewBag.ToDate, PageUrl = @dt["PageURL"], FilterEmail = "Unknown" })">@dt["Count"]</a>
+                            <br />
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td style="text-align: center;">
+                        No data to show.
+                    </td>
+                </tr>
+            }
+        <tr>
+            <td style="font-weight:bold;">
+                All
+            </td>
+        </tr>
+            foreach (DataRow dt in dtTotal.Rows)
+            {
+
+            <tr>
+                <td style="font-size: small; font-weight: 400; width: 56%;">
+                    <div style="width: 700px; overflow: auto; word-wrap: break-word">
+                        @dt["PageURL"]<br />
+                    </div>
+                </td>
+                <td style="font-size: small; font-weight: bold; width: 10%;">
+                    <a href="@Url.Action("Users", new { id = @Model.Rows[0]["DomainTrackerID"].ToString(), StartDate = @ViewBag.fromDate, EndDate = @ViewBag.ToDate, PageUrl = @dt["PageURL"],  FilterEmail = "All" })">@dt["Count"]</a>
+                    <br/>
+                </td>
+            </tr>
+            }
+        
+        }
+        else
+        {
+        <tr>
+            <td style="text-align: center;">
+                No data to show.
+            </td>
+        </tr>
+        }
+    }
+</table>
+

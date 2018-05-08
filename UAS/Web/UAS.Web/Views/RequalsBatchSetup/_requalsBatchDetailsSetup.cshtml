@@ -1,0 +1,198 @@
+﻿@model UAS.Web.Models.Circulations.RequalBatchDetailsViewModel
+<form id="reqbatchdetailsfrm">
+    <table style="width:100%;">
+        <tr>
+            <td colspan="6">
+                <div id="dvErrorsInBatchDetailsSetup"></div>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" width="20%">
+                
+            </td>
+            <td align="left" width="10%">
+                <label for="SubSrc">Product: </label>
+            </td>
+            <td align="left" width="20%">
+                @Html.Kendo().DropDownListFor(x => x.ProductID).DataTextField("Text").AutoWidth(true).DataValueField("Value").BindTo(Model.ProductList).HtmlAttributes(new { required = "required" })
+            </td>
+            <td align="left" width="10%">
+                <span style="color:red">*</span>
+                <label for="QSourceID">Qualification Source: </label>
+               </td>
+            <td align="left" width="20%">
+                @Html.Kendo().DropDownListFor(x => x.QSourceID).DataTextField("Text").DataValueField("Value").BindTo(Model.QSourceList).AutoWidth(true).HtmlAttributes(new { required = "required" })
+            </td>
+            <td align="left" width="20%">
+            </td>
+
+        </tr>
+        <tr>
+            <td align="left" width="20%">
+            </td>
+            <td align="left" width="10%"><label for="SubSrc">SubSource: </label></td>
+            <td align="left" width="20%">
+                 @Html.Kendo().TextBoxFor(x => x.SubSrc)
+            </td>
+            <td align="left" width="10%">
+                <span style="color:red">*</span>
+                <label for="Par3CID">Par3C: </label>
+                 </td>
+            <td align="left" width="20%">
+                @Html.Kendo().DropDownListFor(x => x.Par3CID).DataTextField("Text").AutoWidth(true).DataValueField("Value").BindTo(Model.Par3CList).HtmlAttributes(new { required = "required" })
+        </td>
+            <td align="left" width="20%">
+            </td>
+        </tr>
+        <tr>
+              <td colspan="6" align="center" width="100%" >
+                <table align="center" width="60%">
+                    <tr>
+                        <td align="center" width="50%"><b>Available Demographics</b></td>
+                        <td align="center" width="50%"><b>Requal Form Order</b></td>
+                        
+                    </tr>
+                    <tr>
+                        <td align="center" width="50%">
+                            @(Html.Kendo().ListBox().Name("AvailableDemosFieldOptions")
+                            .ConnectWith("SelectedDemosFieldOptions")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Selectable(ListBoxSelectable.Multiple)
+                            .Draggable(true)
+                            .BindTo(Model.ResponseGroupList)
+                            .DropSources("SelectedDemosFieldOptions")
+                            .Toolbar(toolbar =>
+                            {
+                                toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                toolbar.Tools(tools => tools
+                                    .TransferTo()
+                                    .TransferFrom()
+
+                                );
+                            })
+                            .HtmlAttributes(new { style = "height:200px;width:350px;text-align:left;", id = "AvailableDemosFieldOptions" })) 
+                        </td>
+                        <td align="center" width="50%" id="tdSelectedOptions">
+                            @(Html.Kendo().ListBox().Name("SelectedDemosFieldOptions")
+                             .ConnectWith("AvailableDemosFieldOptions")
+                             .DataTextField("Text")
+                             .DataValueField("Value")
+                             .Draggable(true)
+                             .DropSources("AvailableDemosFieldOptions")
+                             .Selectable(ListBoxSelectable.Multiple)
+                             .HtmlAttributes(new { style = "height:200px;width:350px;text-align:left;", id = "SelectedDemosFieldOptions" }))
+                        </td>
+                        
+                    </tr>
+                </table>
+
+            </td>
+            <td align="left" width="20%"></td>
+        </tr>
+        <tr>
+            <td colspan="6" align="center">
+                <button type="button" class="btn-blue2" id="btnBDApply">Apply</button>
+                <button type="button" class="btn-blue2" id="btnBDReset">Reset</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+    $(document).ready(function () {
+        function ValidateBatchDetailsModel(model) {
+            var errors = [];
+            $("#dvErrorsInBatchDetailsSetup").html('');
+            if (model.SelectedResponseGroups.length == 0 || model.SelectedResponseGroups[0]=="") {
+                errors.push('Please add atleast one Demographic to Requal Form Order from Available Demographics.')
+            }
+            if (model.Par3CID<=0) {
+                errors.push('Please select valid Par3C.')
+            }
+            if (model.QSourceID <= 0) {
+                errors.push('Please select valid QSource.')
+            }
+            if (errors.length > 0) {
+                var lis = "";
+                $.each(errors, function (i, obj) {
+                    lis = lis + "<li style='color:red;'>" + obj+"</li>"
+                });
+                $("#dvErrorsInBatchDetailsSetup").append(lis);
+                return false;
+            }
+            else {
+                $("#dvErrorsInBatchDetailsSetup").html('');
+                return true;
+            }
+           
+
+        }
+        function ApplyRequal() {
+            var selectedformids = [];
+            var lstBx = $("#SelectedDemosFieldOptions").data("kendoListBox");
+            var items = $("#tdSelectedOptions li.k-item");
+            $.each(items, function (i, obj) {
+                var item = lstBx.dataSource.getByUid($(obj).data("uid"));
+                selectedformids.push(item.Value);
+            });
+            var model = {
+                ProductID: $("#ProductID").val(),
+                QSourceID: $("#QSourceID").val(),
+                Par3CID: $("#Par3CID").val(),
+                SubSrc: $("#SubSrc").val(),
+                SelectedResponseGroups: selectedformids
+            };
+            if (ValidateBatchDetailsModel(model)) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/UAS.web/RequalsBatchSetup/GetBatchEntryForm',
+                    data: JSON.stringify({ 'RqBatchVM': model }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        var reqTabs = $("#tabsRequalBatchSetup").data("kendoTabStrip");
+                        reqTabs.enable(reqTabs.tabGroup.children().eq(1), true);
+                        reqTabs.enable(reqTabs.tabGroup.children().eq(0), false)
+                        reqTabs.select(1);
+                        $("#dvBatchEntry").html(response);
+
+                    },
+                    error: function (response) {
+
+                        console.log(response)
+                    }
+                });
+
+            }
+        }
+        $("#btnBDApply").keypress(function (e) {
+            if (e.which == 13) {
+                ApplyRequal();
+            }
+        });
+        $('#btnBDApply').click(function () {
+            ApplyRequal();
+        });
+        $('#btnBDReset').click(function () {
+            window.location = "/uas.web/RequalsBatchSetup?PubID=" + $("#SelectedProductID").val();
+        });
+        $('#ProductID').on("change", function () {
+            $.ajax({
+                type: 'GET',
+                url: '/uas.web/RequalsBatchSetup/GetProductResponseGroupsAjax?PubID=' + $(this).val(),
+                contentType: "application/json; charset=utf-8",
+                cache: !0,
+                datatype: 'application/json',
+                success: function (response) {
+                    var listBox = $("#AvailableDemosFieldOptions").data("kendoListBox");
+                    var DS = new kendo.data.DataSource({
+                        data: response
+                    });
+                    listBox.setDataSource(DS);
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head id="Head1">
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+<link rel="SHORTCUT ICON" href="~/Content/img/favicon.ico" type="image/x-icon" />
+@Styles.Render("~/styles")@Scripts.Render("~/scripts/jquery")@Scripts.Render("~/scripts/jquery-ui")@Scripts.Render("~/scripts/main")</head>
+<body bgcolor="#EBEBEB">
+    @RenderSection("FoatingControls", required: false)
+    <div id="colorOne" class="do-not-display"></div>
+    <div id="colorTwo" class="do-not-display"></div>
+    <table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="2">
+                <div>
+                    <table cellpadding="0" cellspacing="0" align="center" id="Table4" width="100%" border="0">
+                        <tr>
+                            <td align="right" id="topLinks" height="25" style="padding-left: 10px; padding-right: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <!-- INSERT BRIANS STUFF -->
+                            <td align="center" bgcolor="#FFFFFF" style="font-family: Arial, Helvetica, sans-serif; font-size: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px;">
+                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="padding: 10 0 10 30;">
+                                                <ul class="ECN-AppLinks">
+                                                    <li>
+                                                        <table cellpadding="0" cellspacing="0">
+                                                            <tr valign="top">
+                                                                <td style="height: 80px;">
+                                                                    <img src="@ViewBag.BrandingImageSrc" />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <td align="right" style="padding: 0px 10px 0px 0px;">
+                                                <a href="http://www.kmlearningcenter.com" target="_blank" id="kmlearning">
+                                                    <img src="~/Content/img/learnsymbol.jpg" alt="The KM Learning Center Logo Image" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: right;">
+                                                <span class="ECNLabel10" style="vertical-align: bottom;">Account:</span>
+                                                <span class="ECNText10" style="vertical-align: bottom;" id="spanCurrentAccount">
+                                                    @ViewBag.CurrentAccount
+                                                </span><br />
+                                                <span class="ECNLabel10" style="vertical-align: bottom;">User:</span>
+                                                <span class="ECNText10" style="vertical-align: bottom;" id="spanCurrentUser">
+                                                    @ViewBag.CurrentUser
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="100%" class="mainmenu" style="padding-left: 20px; padding-right: 20px;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="700">
+                            <div style="position: relative; z-index: 9;">
+                                @Html.Action("Main","Menu")
+                            </div>
+                        </td>
+                        <td align="right" style="padding-left: 0px; padding-right: 20px;">
+                            @Html.Action("Impersonate","Menu")&nbsp;&nbsp;<a class="logoff_link" style="text-decoration: none" href="~/Login/Logout">
+                                <span class="EcnWhiteLink">LOG OFF</span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="subMenu do-not-display" colspan="3" style="color: #ffffff; padding-left: 25px;">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>
+                            <!-- asp:Menu ID="subMenu" runat="server" DataSourceID="SiteMapSecondLevel" CssClass="MenuSubClass"
+                                        Orientation="Horizontal" RenderingMode="List" OnMenuItemDataBound="Menu_SubMenuItemDataBound">
+                            </asp:Menu -->
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" bgcolor="#ffffff" colspan="2">
+                <table border="0" cellspacing="0" cellpadding="0" width="95%">
+                    <tr id="HideHeading" class="hidden">
+                        <td align="left" class="PageTitle">
+                            <br />
+                            <div ID="lblHeading"></div>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ContentPlaceHolder1">
+                                @RenderBody()
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" bgcolor="#ffffff">
+                <div ID="plFooter">
+                    <table width="1000" align="center">
+                        <tr>
+                            <td>
+                                <center>
+                                    <hr style="width: 980px" />
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <center>
+                                    <p>
+                                        <a href="http://www.knowledgemarketing.com/privacy-policy" target="_blank" class="footer-links">Privacy Policy</a> |
+                                        <a href="http://www.knowledgemarketing.com/anti-spam-policy" target="_blank" class="footer-links">Anti-Spam Policy</a> |
+                                        <a href="http://www.knowledgemarketing.com/index.php/about-km/contact-us/" class="footer-links">Contact Us</a>
+                                        <span class="ECNText10">
+                                            <font class="center-text">
+                                                <br />
+                                                Copyright &copy; 
+                                                @DateTime.Today.Year
+                                                Knowledge Marketing, Inc., All Rights Reserved.
+                                            </font>
+                                        </span>
+                                    </p>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+    @RenderSection("Scripts", required: false)
+<script src="~/Content/js/google-analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="IMAPTester.SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title></title>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form runat="server">
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    ECN WebServices Client
+                </h1>
+            </div>
+            <div class="loginDisplay">
+                <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
+                    <AnonymousTemplate>
+                        [ <a href="~/Account/Login.aspx" id="HeadLoginStatus" runat="server">Log In</a>
+                        ]
+                    </AnonymousTemplate>
+                    <LoggedInTemplate>
+                        Welcome <span class="bold">
+                            <asp:LoginName ID="HeadLoginName" runat="server" />
+                        </span>! [
+                        <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="Log Out"
+                            LogoutPageUrl="~/" />
+                        ]
+                    </LoggedInTemplate>
+                </asp:LoginView>
+            </div>
+        </div>
+
+            <asp:Menu ID="NavigationMenu" runat="server" DynamicMenuStyle-ForeColor="White" StaticMenuItemStyle-ForeColor="White"
+                EnableViewState="false" IncludeStyleBlock="false" ForeColor="White" Orientation="Horizontal" BackColor="#b6b5b2" Width="100%" >
+                 <LevelMenuItemStyles>
+    <asp:MenuItemStyle CssClass="level1"/>
+    <asp:MenuItemStyle CssClass="level2"/>
+    <asp:MenuItemStyle CssClass="level3" />
+    <asp:MenuItemStyle CssClass="level4" />
+  </LevelMenuItemStyles>
+  
+  <StaticHoverStyle CssClass="hoverstyle"/>
+
+                <Items>
+                    <asp:MenuItem NavigateUrl="~/ListServices/ListServices.aspx" Text="List Services" />
+                    <asp:MenuItem NavigateUrl="~/ContentServices/ContentServices.aspx" Text="Content Services" />
+                    <asp:MenuItem NavigateUrl="~/BlastServices/BlastServices.aspx" Text="Blast Services" />
+                    <asp:MenuItem NavigateUrl="~/ImageServices/ImageServices.aspx" Text="Image Services" />
+                    <asp:MenuItem NavigateUrl="~/PharmaliveServices/PharmaliveServices.aspx" Text="Pharmalive Services" />
+                    <asp:MenuItem NavigateUrl="~/AdvanstarServices/AdvanstarServices.aspx" Text="Advanstar Services" />
+                    <asp:MenuItem NavigateUrl="~/SaversAPI/SaversAPI.aspx" Text="Savers API" />
+                    <asp:MenuItem NavigateUrl="~/WATTAPI/WATTAPI.aspx" Text="WATT API" />
+                </Items>
+            </asp:Menu>
+
+        <br /><br />
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="footer">
+    </div>
+    </form>
+</body>
+</html>

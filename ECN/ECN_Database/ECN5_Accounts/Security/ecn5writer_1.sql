@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [ecn5writer]
+    WITH PASSWORD = N'5hx?d@|ib7v|vL dnoxcBqrkmsFT7_&#$!~<cikCaBIvwfb|', SID = 0xBBFCE3013FFC3D43911EEE0958DA5138, DEFAULT_LANGUAGE = [us_english], CHECK_POLICY = OFF;
+

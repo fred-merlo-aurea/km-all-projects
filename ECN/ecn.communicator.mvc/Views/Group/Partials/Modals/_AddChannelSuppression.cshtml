@@ -1,0 +1,84 @@
+﻿@using KMEnums
+<script type="text/javascript">
+    function AddChannelSuppression() {
+        clearValidationErrorMessages();
+        var lastControlError = [];
+        if ($('#AddEmailsChannel').val() == "") {
+            lastControlError.push({ name: "AddEmailsChannel", message: "Please enter a value for Emails", label: "", isKendo: false });
+            setValidationClient(lastControlError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddChannelSuppression", "Group")",
+                data: { emailAddressToAdd: $('#AddEmailsChannel').val() },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#divEmailsReportCont").show();
+                        $("#divEmailsAddedReport").html('<h3>RESULTS:</h3>' + response[1]);
+                        $("#channelSuppressionGridDiv").html(response[2]);
+                        $("#CancelChannelSuppression").text("Close");
+                        var win = $("#AddChannelSuppression");
+                        var kendoWindow = win.data('kendoWindow');
+                        kendoWindow.center();
+                    }
+                    else {
+                        CancelAddChannelSuppression();
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);                    
+                    }
+                }
+            });
+        }
+    }
+
+    function CancelAddChannelSuppression()
+    {
+        var win = $("#AddChannelSuppression");
+        var kendoWindow = win.data('kendoWindow');               
+        kendoWindow.close();        
+    }
+</script>
+
+
+<div class="wrapper modal modaladdnewform" style="padding-left:50px; margin-top: 10px; width: 550px; display: inline-block;">
+    <fieldset class="no-border">
+        <legend>Add Emails to Channel Master Suppression</legend>
+        <div class="formbox">
+            <div class="subtitle" style="width:500px;">
+                Add Emails to be Master suppressed for the Channel. <br />
+                Use comma "," (or) Press Enter for separating email addresses.
+            </div>
+            <div class="formitem">
+                @Html.TextArea("AddEmailsChannel", "", new { style = "width:500px; height:250px; font-size: 13px; font-family: Arial;" })
+            </div>
+        </div>
+        <div class="wrapper modal modaladdnewform" id="divEmailsReportCont" style="width: 550px; display: inline-block; display:none;">
+            <div class="formbox">
+                <div class="formitem formiteminline" id="divEmailsAddedReport" style="margin-left:100px; margin-top: 10px;">
+                </div>
+
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "AddChannelSuppression()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("CancelChannelSuppression").Content("Cancel").HtmlAttributes(new { onclick = "CancelAddChannelSuppression()" })
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </fieldset>
+</div>

@@ -1,0 +1,451 @@
+﻿@model UAS.Web.Models.FileMapperWizard.TransformationJoinColumnModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $("#btnApplyJoin").css("display", "");
+
+        var delimiter = @Html.Raw(Json.Encode(Model.Delimiter));
+        BindDropDownList({
+            ControlID: "transformationDetail_kddlDelimiter",
+            URL: targetTransformationDelimitersUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: delimiter
+        });
+
+        debugger;
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            $("#transformationField_TransformationTemplate")[0].disabled = true;
+            document.getElementById("transformationField_TransformationName").disabled = true;
+            document.getElementById("transformationField_TransformationDesc").disabled = true;
+
+            $("#transformationDetail_kddlDelimiter").data("kendoDropDownList").enable(false)
+        }
+    });
+
+    function onProductSelect(e) {        
+        if (e.dataItem.Value == "0") {
+            //Unselect all but 0
+            var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+            ms.value([]);
+        } else if (e.dataItem.Value == "-1") {
+            //Stop the selection as this is a spacing option between All and individual products
+            e.preventDefault();
+        } else {
+            //Unselect -2
+            //var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+            var productId = $('#ddl_transformationProduct').val()
+            if (productId != null && productId.indexOf( '0' ) > -1) {
+                var ms = $("#ddl_transformationProduct").data("kendoMultiSelect");
+                ms.value([]);
+            }
+        }
+    };
+
+    function availableListBoxChanged(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.preventDefault();
+        } else {
+            UpdateEndResult();
+        }
+    }
+
+    function availableListBoxDragEnd(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.draggableEvent.stopPropagation;
+        } else {
+            UpdateEndResult();
+        }
+    }
+
+    function joinedListBoxChanged(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.preventDefault();
+        } else {
+            UpdateEndResult();
+        }
+    }
+
+    function joinedListBoxReorder(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.preventDefault();
+        } else {
+            ReorderEndResult(e);
+        }
+    }
+
+    function joinedListBoxDragEnd(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.draggableEvent.stopPropagation;
+        } else {
+            UpdateEndResult();
+        }
+    }
+
+    function joinedListBoxDrop(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.preventDefault();
+        } else {
+            UpdateEndResult();
+        }
+    }
+
+    function availableListBoxDrop(e) {
+        var enable = @Json.Encode(Model.isEnabled);
+        if (enable == false) {
+            e.preventDefault();
+        }
+    }
+
+    function UpdateEndResult() {
+        var first = true;
+        var output = "";
+        var delimiter = $("#transformationDetail_kddlDelimiter").val();
+
+        if (delimiter == "comma") {
+            delimiter = ",";
+        } else if (delimiter == "tab") {
+            delimiter = "   ";
+        } else if (delimiter == "semicolon") {
+            delimiter = ";";
+        } else if (delimiter == "colon") {
+            delimiter = ":";
+        } else if (delimiter == "tild") {
+            delimiter = "~";
+        } else if (delimiter == "pipe") {
+            delimiter = "|";
+        }
+
+        var lst = $("#divJoinedListBox").find(".k-list-scroller").children().children();
+
+        if (lst != null) {
+            for (var i = 0; i < lst.length; i++) {
+                var t = lst[i].outerText;
+                if (first == true) {
+                    output = t;
+                    first = false;
+                } else {
+                    output = output + delimiter + t;
+                }
+            }
+            if (output.length > 0) {
+                $("#lblEndResult").html("End Result: " + output);
+            } else {
+                $("#lblEndResult").html("");
+            }
+        }
+    }
+
+    function ReorderEndResult(e) {
+        var first = true;
+        var output = "";
+        var delimiter = $("#transformationDetail_kddlDelimiter").val();
+
+        if (delimiter == "comma") {
+            delimiter = ",";
+        } else if (delimiter == "tab") {
+            delimiter = "   ";
+        } else if (delimiter == "semicolon") {
+            delimiter = ";";
+        } else if (delimiter == "colon") {
+            delimiter = ":";
+        } else if (delimiter == "tild") {
+            delimiter = "~";
+        } else if (delimiter == "pipe") {
+            delimiter = "|";
+        }
+
+        var lst = $("#divJoinedListBox").find(".k-list-scroller").children().children();
+
+        var itemName = e.items[0].innerHTML;
+        var currentIndex = 0;
+        var insertIndex = 0;
+        var insertBefore = true;
+        if (e.offset == 1)
+            insertBefore = false;
+
+        if (lst != null) {
+            for (var i = 0; i < lst.length; i++) {
+                var t = lst[i].outerText;
+                if (t == itemName) {
+                    currentIndex = i;
+                    insertIndex = i + e.offset;
+                }
+            }
+            for (var i = 0; i < lst.length; i++) {
+                var t = lst[i].outerText;
+                if (i != currentIndex) {
+                    if (first == true) {
+                        if (i == insertIndex) {
+                            if (insertBefore) {
+                                output = itemName + delimiter + t;
+                            } else {
+                                output = t + delimiter + itemName;
+                            }
+                            first = false;
+                        } else {
+                            output = t;
+                            first = false;
+                        }
+                    } else {
+                        if (i == insertIndex) {
+                            if (insertBefore) {
+                                output = output + delimiter + itemName + delimiter + t;
+                            } else {
+                                output = output + delimiter + t + delimiter + itemName;
+                            }
+                        } else {
+                            output = output + delimiter + t;
+                        }
+                    }
+                }
+            }
+            if (output.length > 0) {
+                $("#lblEndResult").html("End Result: " + output);
+            } else {
+                $("#lblEndResult").html("");
+            }
+        }
+    }
+
+    function ApplyTransformationInJoin() {
+        $("#div_TransformJoinMessage").html("");
+        var transformationId = document.getElementById("transformationField_TransformationId").value;
+        var transformationTypeID = document.getElementById("transformationField_TransformationTypeId").value;
+        var transformationName = document.getElementById("transformationField_TransformationName").value;
+        var transformationDesc = document.getElementById("transformationField_TransformationDesc").value;
+        var isTemplate = $("#transformationField_TransformationTemplate")[0].checked;
+
+        var columnsToJoin = "";
+        var first = true;
+        var delimiter = $("#transformationDetail_kddlDelimiter").val();
+
+        var lst = $("#divJoinedListBox").find(".k-list-scroller").children().children();
+
+        var delimiterCharacter = ",";
+        if (delimiter == "comma") {
+            delimiterCharacter = ",";
+        } else if (delimiter == "tab") {
+            delimiterCharacter = "   ";
+        } else if (delimiter == "semicolon") {
+            delimiterCharacter = ";";
+        } else if (delimiter == "colon") {
+            delimiterCharacter = ":";
+        } else if (delimiter == "tild") {
+            delimiterCharacter = "~";
+        } else if (delimiter == "pipe") {
+            delimiterCharacter = "|";
+        }
+
+        if (lst != null) {
+            for (var i = 0; i < lst.length; i++) {
+                var t = lst[i].outerText;
+                if (first == true) {
+                    columnsToJoin = t;
+                    first = false;
+                } else {
+                    columnsToJoin = columnsToJoin + delimiterCharacter + t;
+                }
+            }
+        }
+
+        var pubIDs = $('#ddl_transformationProduct').val();
+        var transformJoinID = document.getElementById("transformationField_TranformJoinID").value;
+
+        var model1 = { TransformationID: transformationId, TransformationTypeID: transformationTypeID, TransformationName: transformationName, TransformationDesc: transformationDesc, IsTemplate: isTemplate }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/SaveTransformation",
+            data: model1,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (transformationSave) {
+                document.getElementById("transformationField_TransformationId").value = transformationSave.CurrentTransformationID;
+                if (transformationSave.IsComplete) {
+                    var model2 = { TransformJoinID: transformJoinID, TransformationID: transformationSave.CurrentTransformationID, ColumnsToJoin: columnsToJoin, Delimiter: delimiter, PubIDs: pubIDs }
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/SaveJoinTransformation",
+                        data: model2,
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        cache: !0,
+                        datatype: "html",
+                        success: function (detailSave) {
+                            if (detailSave.IsComplete) {
+                                showMessage({
+                                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                    autoClose: false,
+                                    IsOpen: false
+                                });
+
+                                var oldwin = $("#transformationWindow").data('kendoWindow');
+                                oldwin.close();
+
+                                loadTransformationGridWithID(detailSave.SourceFileID, detailSave.FieldMappingID);
+                            } else {
+                                document.getElementById("transformationField_TranformJoinID").value = detailSave.TransformationJoinID;
+
+                                var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + detailSave.Message + "</ul>";
+                                $("#div_TransformJoinMessage").html(errors);
+                            }
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });
+                } else {
+                    var errors = "<h3>Errors</h3><ul style='list-style-type:disc; color:red;'>" + transformationSave.Message + "</ul>";
+                    $("#div_TransformJoinMessage").html(errors);
+                }
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+<script id="tagTemplate" type="text/x-kendo-template">
+    # if (values.length == 1) { #
+        #: dataItems[0].Text #
+    # } else { #
+        #:values.length# item(s) selected
+    # } #
+</script>
+<style>
+.disabled{
+    pointer-events:none;
+    opacity:0.7;
+}
+</style>
+
+<div>    
+    @Html.HiddenFor(m => m.TransformJoinId, new { id = "transformationField_TranformJoinID" })
+    <div id="div_TransformJoinMessage">
+
+    </div>
+    <div>
+        <table class="filedetails" style="width: 100%">
+            <tr class="filedetailsrow">
+                <td></td>
+                <td colspan="1" style="text-align: right;">
+                    @Html.Label("Delimiter")
+                </td>
+                <td colspan="2">
+                    <input id="transformationDetail_kddlDelimiter" name="transformationDetail_Delimiter" style="width:200px;" />
+                </td>
+            </tr>
+            <tr class="filedetailsrow">
+                <td></td>
+                <td colspan="1" style="text-align: right;">
+                    @Html.Label("Select Product")
+                </td>
+                <td colspan="2">
+                    @*@Html.DropDownList("transformationProduct", (MultiSelectList)Model.selectedProducts, new { id = "ddl_transformationProduct", multiple = "multiple", style = "width: 75%;" })*@
+                    @(Html.Kendo().MultiSelect()
+                        .Name("transformationProduct")
+                        .AutoClose(false)
+                        .TagMode(TagMode.Single)
+                        .BindTo(Model.selectedProducts)
+                        .Placeholder("Select Product(s)")
+                        .HtmlAttributes(new { id = "ddl_transformationProduct", @style = "width: 200px;" })
+                        .Events (e =>
+                        {
+                            e.Select("onProductSelect");
+                        })
+                        .TagTemplateId("tagTemplate")
+                        .Enable(Model.isEnabled)
+                    )
+                </td>
+            </tr>
+            <tr class="filedetailsrow">
+                <td style="min-width: 25%;"></td>
+                <td style="min-width: 25%;">
+                    <div id="divAvailableListBox">
+                        <label for="listBoxAvailable">Available Columns</label>
+                        <br />
+                        @*@Html.ListBoxFor(m => m.availableColumns, Model.availableColumns, new { style = "width: 200px; height: 200px;", id = "availableListBox" })*@
+                        @(Html.Kendo().ListBox()
+                        .Name("listBoxAvailable")
+                        .Toolbar(toolbar =>
+                        {
+                            if (Model.isEnabled)
+                            {
+                                toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                toolbar.Tools(tools => tools
+                                    .TransferTo()
+                                    .TransferFrom()
+                                );
+                            }
+                        })
+                        .DataValueField("Value")
+                        .DataTextField("Text")
+                        .Draggable(true)
+                        .DropSources("listBoxJoined")
+                        .ConnectWith("listBoxJoined")
+                        .HtmlAttributes(new { title = "ListBoxAvailable", style = "width: 250px; height: 200px;" })
+                        .BindTo(Model.availableColumns)
+                        .Selectable(ListBoxSelectable.Single)
+                        .Events(events => events.Change("availableListBoxChanged").DragEnd("availableListBoxDragEnd").Drop("availableListBoxDrop"))
+                        )
+                    </div>
+                </td>
+                <td style="min-width: 25%;"></td>
+                <td style="min-width: 25%;">
+                    <div id="divJoinedListBox">
+                        <label for="listBoxJoined">Joined Columns</label>
+                        <br />
+                        @(Html.Kendo().ListBox()
+                            .Name("listBoxJoined")
+                            .Toolbar(toolbar =>
+                            {
+                                if (Model.isEnabled)
+                                {
+                                    toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                    toolbar.Tools(tools => tools
+                                        .MoveUp()
+                                        .MoveDown()
+                                    );
+                                }
+                            })
+                            .Draggable(true)
+                            .DropSources("listBoxAvailable")
+                            .DataValueField("Value")
+                            .DataTextField("Text")
+                            .ConnectWith("listBoxAvailable")
+                            .HtmlAttributes(new { title = "ListBoxJoined", style = "width: 250px; height: 200px;" })
+                            .BindTo(Model.joinedColumns)
+                            .Selectable(ListBoxSelectable.Single)
+                            .Events(events => events.Change("joinedListBoxChanged").Reorder("joinedListBoxReorder").DragEnd("joinedListBoxDragEnd").Drop("joinedListBoxDrop"))
+                        )
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <div>
+                        <div style="margin: 2px;">
+                            @*<input type="button" id="btnEndResult" class="btn btn-blue2 k-button" value="End Result" onclick="EndResult();" style="width: 80px;" />*@
+                            <label id="lblEndResult"></label>
+                        </div>
+                        @*<div style="text-align: center;">
+                            <input type="button" id="btnApply" class="btn btn-blue2 k-button" value="Apply" onclick="ApplyTransformationInJoin();" />
+                        </div>*@
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

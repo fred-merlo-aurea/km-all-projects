@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.textpower.com/services/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.textpower.com/services/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.textpower.com/services/">
+      <s:element name="GetAllSubscribers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SubscriptionID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ReturnQuits" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllSubscribersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllSubscribersResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MessageValidationInfo" type="tns:MessageValidationInfo" />
+      <s:complexType name="MessageValidationInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PWD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Campaign" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Keyword" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="GetSubscriber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SubscriptionID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubscriberResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMOData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="LastReceiveID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMODataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMODataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMTData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="LastSendID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ReturnMessage" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMTDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMTDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSendLists">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSendListsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSendListsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetClientListMembers">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetClientListMembersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetClientListMembersResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSendListMembers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSendListMembersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSendListMembersResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendToSendList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DelaySend" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="SendTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendToSendListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendToSendListResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MergeSendList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ListDB">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateList" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MergeSendListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MergeSendListResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSendList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSendListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteSendListResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSendListMembers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ListDB">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="1" maxOccurs="1" name="DeleteAll" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSendListMembersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteSendListMembersResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageSendTags">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Command" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TagList" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageSendTagsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageSendTagsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSendTags">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSendTagsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSendTagsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetAllSubscribersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllSubscribers" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSubscribersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllSubscribersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSubscribersMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubscriber" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubscriberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetMODataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMOData" />
+  </wsdl:message>
+  <wsdl:message name="GetMODataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMODataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMODataMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetMTDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMTData" />
+  </wsdl:message>
+  <wsdl:message name="GetMTDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMTDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMTDataMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSendLists" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSendListsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListsMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetClientListMembersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetClientListMembers" />
+  </wsdl:message>
+  <wsdl:message name="GetClientListMembersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetClientListMembersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetClientListMembersMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListMembersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSendListMembers" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListMembersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSendListMembersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSendListMembersMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="SendToSendListSoapIn">
+    <wsdl:part name="parameters" element="tns:SendToSendList" />
+  </wsdl:message>
+  <wsdl:message name="SendToSendListSoapOut">
+    <wsdl:part name="parameters" element="tns:SendToSendListResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendToSendListMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="MergeSendListSoapIn">
+    <wsdl:part name="parameters" element="tns:MergeSendList" />
+  </wsdl:message>
+  <wsdl:message name="MergeSendListSoapOut">
+    <wsdl:part name="parameters" element="tns:MergeSendListResponse" />
+  </wsdl:message>
+  <wsdl:message name="MergeSendListMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteSendList" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteSendListResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListMembersSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteSendListMembers" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListMembersSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteSendListMembersResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSendListMembersMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="ManageSendTagsSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageSendTags" />
+  </wsdl:message>
+  <wsdl:message name="ManageSendTagsSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageSendTagsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageSendTagsMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSendTagsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSendTags" />
+  </wsdl:message>
+  <wsdl:message name="GetSendTagsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSendTagsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSendTagsMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:portType name="AdvancedMessageServicesV2Soap">
+    <wsdl:operation name="GetAllSubscribers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve All Subscription Data</wsdl:documentation>
+      <wsdl:input message="tns:GetAllSubscribersSoapIn" />
+      <wsdl:output message="tns:GetAllSubscribersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve Subscription Data for a single active subscriber</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberSoapIn" />
+      <wsdl:output message="tns:GetSubscriberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMOData">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get MO Data</wsdl:documentation>
+      <wsdl:input message="tns:GetMODataSoapIn" />
+      <wsdl:output message="tns:GetMODataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMTData">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get MT Data</wsdl:documentation>
+      <wsdl:input message="tns:GetMTDataSoapIn" />
+      <wsdl:output message="tns:GetMTDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSendLists">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Send Lists</wsdl:documentation>
+      <wsdl:input message="tns:GetSendListsSoapIn" />
+      <wsdl:output message="tns:GetSendListsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetClientListMembers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve members of a Client List</wsdl:documentation>
+      <wsdl:input message="tns:GetClientListMembersSoapIn" />
+      <wsdl:output message="tns:GetClientListMembersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSendListMembers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieve members of a Send List</wsdl:documentation>
+      <wsdl:input message="tns:GetSendListMembersSoapIn" />
+      <wsdl:output message="tns:GetSendListMembersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendToSendList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send SMS/Email/Voice to a Send List</wsdl:documentation>
+      <wsdl:input message="tns:SendToSendListSoapIn" />
+      <wsdl:output message="tns:SendToSendListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MergeSendList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add/Merge numbers to a Send List</wsdl:documentation>
+      <wsdl:input message="tns:MergeSendListSoapIn" />
+      <wsdl:output message="tns:MergeSendListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Send List</wsdl:documentation>
+      <wsdl:input message="tns:DeleteSendListSoapIn" />
+      <wsdl:output message="tns:DeleteSendListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendListMembers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete numbers from a Send List.</wsdl:documentation>
+      <wsdl:input message="tns:DeleteSendListMembersSoapIn" />
+      <wsdl:output message="tns:DeleteSendListMembersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageSendTags">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Manage Send Tags.</wsdl:documentation>
+      <wsdl:input message="tns:ManageSendTagsSoapIn" />
+      <wsdl:output message="tns:ManageSendTagsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSendTags">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Send Tags.</wsdl:documentation>
+      <wsdl:input message="tns:GetSendTagsSoapIn" />
+      <wsdl:output message="tns:GetSendTagsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AdvancedMessageServicesV2Soap" type="tns:AdvancedMessageServicesV2Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllSubscribers">
+      <soap:operation soapAction="http://www.textpower.com/services/GetAllSubscribers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetAllSubscribersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriber">
+      <soap:operation soapAction="http://www.textpower.com/services/GetSubscriber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetSubscriberMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMOData">
+      <soap:operation soapAction="http://www.textpower.com/services/GetMOData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetMODataMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMTData">
+      <soap:operation soapAction="http://www.textpower.com/services/GetMTData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetMTDataMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendLists">
+      <soap:operation soapAction="http://www.textpower.com/services/GetSendLists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetSendListsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetClientListMembers">
+      <soap:operation soapAction="http://www.textpower.com/services/GetClientListMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetClientListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendListMembers">
+      <soap:operation soapAction="http://www.textpower.com/services/GetSendListMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetSendListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendToSendList">
+      <soap:operation soapAction="http://www.textpower.com/services/SendToSendList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SendToSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeSendList">
+      <soap:operation soapAction="http://www.textpower.com/services/MergeSendList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:MergeSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendList">
+      <soap:operation soapAction="http://www.textpower.com/services/DeleteSendList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:DeleteSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendListMembers">
+      <soap:operation soapAction="http://www.textpower.com/services/DeleteSendListMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:DeleteSendListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageSendTags">
+      <soap:operation soapAction="http://www.textpower.com/services/ManageSendTags" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ManageSendTagsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendTags">
+      <soap:operation soapAction="http://www.textpower.com/services/GetSendTags" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetSendTagsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AdvancedMessageServicesV2Soap12" type="tns:AdvancedMessageServicesV2Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllSubscribers">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetAllSubscribers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetAllSubscribersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriber">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetSubscriber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetSubscriberMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMOData">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetMOData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetMODataMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMTData">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetMTData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetMTDataMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendLists">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetSendLists" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetSendListsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetClientListMembers">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetClientListMembers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetClientListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendListMembers">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetSendListMembers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetSendListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendToSendList">
+      <soap12:operation soapAction="http://www.textpower.com/services/SendToSendList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SendToSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeSendList">
+      <soap12:operation soapAction="http://www.textpower.com/services/MergeSendList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:MergeSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendList">
+      <soap12:operation soapAction="http://www.textpower.com/services/DeleteSendList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:DeleteSendListMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSendListMembers">
+      <soap12:operation soapAction="http://www.textpower.com/services/DeleteSendListMembers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:DeleteSendListMembersMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageSendTags">
+      <soap12:operation soapAction="http://www.textpower.com/services/ManageSendTags" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ManageSendTagsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSendTags">
+      <soap12:operation soapAction="http://www.textpower.com/services/GetSendTags" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetSendTagsMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AdvancedMessageServicesV2">
+    <wsdl:port name="AdvancedMessageServicesV2Soap" binding="tns:AdvancedMessageServicesV2Soap">
+      <soap:address location="http://www.textpower.com/TPIServices/AdvancedMessageServicesV2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AdvancedMessageServicesV2Soap12" binding="tns:AdvancedMessageServicesV2Soap12">
+      <soap12:address location="http://www.textpower.com/TPIServices/AdvancedMessageServicesV2.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

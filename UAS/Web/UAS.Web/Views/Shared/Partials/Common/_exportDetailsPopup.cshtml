@@ -1,0 +1,906 @@
+﻿@model UAS.Web.Models.Common.DownloadViewModel
+    <style>
+        .k-listbox {
+            width: 400px;
+            height: 500px;
+        }
+    </style>
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;" >
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Download/Export Details
+            </td>
+        </tr>
+        <tr>
+            <td><br /></td>
+        </tr>
+        <tr>
+            <td>
+                <div id="dvErrorNotification" style="margin-left:20px;color:red;" class="displayNone">
+                    <span id="errorText" style="color:red;"></span>
+                </div>
+            </td>
+        </tr>
+       @Html.HiddenFor(x=>x.TotalCount)
+        @Html.HiddenFor(x => x.DownloadFor)
+        <tr id="pnlUADExport">
+            <td>
+                <table width="90%" style="margin:0 5%;">
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                @if (Model.ExportToGroupVisible)
+                                {
+                                    <input type="radio" name="rbtnMaster" id="rbtnExportToGrp" onchange="toggleExportViews(this)" />
+                                    <label for="rbtnExportToGrp">Export To Group</label>
+                                }
+                                @if (Model.DownloadVisible)
+                                {
+                                    string displaynoneclass = Model.DisplayDownLoad?"": "displayNone";
+                                    <input type="radio" name="rbtnMaster" class="@displaynoneclass" id="rbtnDownload" checked onchange="toggleExportViews(this)" />
+                                    <label for="rbtnDownload" class="@displaynoneclass" >Download</label>
+
+                                }
+                                @if (Model.SaveToCampaignVisible)
+                                {
+                                    <input type="radio" name="rbtnMaster" id="rbtnSaveToCampaign" onchange="toggleExportViews(this)" />
+                                    <label for="rbtnSaveToCampaign">Save to Campaign</label>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <table width="100%" id="tbl1ExportToGroup" class="displayNone">
+                                    <tr>
+                                        <td align="left"><label>Job :</label></td>
+                                        <td align="left"><input type="text" class="k-textbox" id="txtJobName" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Customer :</label></td>
+                                        <td>
+                                            @(Html.Kendo().DropDownList()
+                                            .Name("drpCustomers")
+                                            .DataTextField("Text")
+                                            .DataValueField("Value")
+                                            .AutoWidth(true)
+                                            .OptionLabel(" ")
+                                            .BindTo(Model.Customers)
+                                            .HtmlAttributes(new { style = "width:300px;" })
+                                            )
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table width="100%" id="tbl2ExportToGroup" class="displayNone">
+                                    <tr>
+                                        <td align="left">
+                                           <input type="radio" name="rbtnEmailList" id="rbtnCreateNewEmailLst" onchange="toggleEmailLstViews(this)" />
+                                            <label for="rbtnCreateNewEmailLst">Create New Email List</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="trShowOnCreatNewLst displayNone">
+                                        <td align="left">
+                                            <label>Save In Folder</label>
+                                            <input id="drpCreateNewFolder" />
+                                        </td>
+                                    </tr>
+                                    <tr class="trShowOnCreatNewLst displayNone">
+                                        <td align="left">
+                                            <label>List Name</label>
+                                            <input type="text" class="k-textbox" id="txtExportListName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left">
+                                            <input type="radio" name="rbtnEmailList" id="rbtnUseExistingEmailLst" onchange="toggleEmailLstViews(this)" />
+                                            <label for="rbtnUseExistingEmailLst">Use Existing Email List</label>
+                                        </td>
+                                    </tr>
+                                    <tr class="trShowOnUseExistingLst displayNone">
+                                        <td align="left">
+                                            <label>Save In Folder</label>
+                                            <input id="drpUseExisitingFolder" />
+                                        </td>
+                                    </tr>
+                                    <tr class="trShowOnUseExistingLst displayNone">
+                                        <td align="left">
+                                            <label>List Name</label>
+                                            <input id="drpExportLists" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table width="100%" id="tbl1Download">
+                                    <tr>
+                                        <td>
+                                            @if (Model.QueryDetailsCheckboxVisible)
+                                            {
+                                                <input type="checkbox" id="chkIncludeQuery" />
+                                                <label for="chkIncludeQuery">Include Query Details Header</label>
+                                            }
+                                           
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table width="100%" id="tbl1SaveToCampaign" class="displayNone">
+                                    <tr>
+                                        <td>
+                                            <label>FilterName :</label>
+                                            <input type="text" class="k-textbox" id="txtFilterName" />
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="radio" name="rbtncampaign" id="rbtnCampaignCreateNew" value="Create New Campaign" onchange="toggleCampaignView(this)" />
+                                            <label for="rbtnCampaignCreateNew">Create New Campaign</label>
+                                        </td>
+                                    </tr>
+                                    <tr id="trCreateNewCmpn" class="displayNone">
+                                        <td>
+                                            <label for="txtCampaignName">Campaign Name</label>
+                                            <input type="text" class="k-textbox" id="txtCampaignName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="radio" name="rbtncampaign" id="rbtnCampaignExisting" onchange="toggleCampaignView(this)" />
+                                            <label for="rbtnCampaignExisting">Use Existing Campaign</label>
+                                        </td>
+                                    </tr>
+                                    <tr id="trExistingCmpn" class="displayNone">
+                                        <td>
+                                            <label for="drpCampaignName">Campaign Name</label>
+                                            <input id="drpCampaignName" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="trDownLoadTemplates">
+                            <td>
+                                <label>Download Templates :</label>
+                                @(Html.Kendo().DropDownList()
+                                .Name("drpDownloadTemplates")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .AutoWidth(true)
+                                .OptionLabel(" ")
+                                .BindTo(Model.DownLoadTemplates)
+                                .HtmlAttributes(new { style = "width:300px;" })
+                                )
+
+                                @*<input id="drpDownloadTemplates" style="width:300px;" />*@
+                            </td>
+                        </tr>
+                        <tr id="trAvailableFields">
+                            <td>
+                                <table border="0" width="90%">
+                                    <tbody>
+                                        <tr>
+                                            <td width="50%" align="center"><strong>Available Fields</strong></td>
+                                            <td width="50%" align="center"><strong>Selected Fields</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%" align="center">
+                                                <input type="radio" name="rbtnFields" id="rbtnProfile" checked onchange="toggleListBox(this)" />
+                                                <label for="rbtnProfile">Profile</label>
+                                                <input type="radio" name="rbtnFields" id="rbtnDemo" onchange="toggleListBox(this)" />
+                                                <label for="rbtnDemo">Demo</label>
+                                                <input type="radio" name="rbtnFields" id="rbtnAdHoc" onchange="toggleListBox(this)" />
+                                                <label for="rbtnAdHoc">AdHoc</label>
+                                            </td>
+                                            <td width="50%" align="center">
+                                                <input type="button" id="btnEditCase" value="Edit Case" onclick="editCase()" class="k-button">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%" id="trprofilefield">
+
+                                                @(Html.Kendo().ListBox().Name("AvailableProfileFieldOptions")
+                                                .BindTo(Model.AvailableProfileFields)
+                                                .ConnectWith("SelectedFieldOptions")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Selectable(ListBoxSelectable.Multiple)
+                                                .Toolbar(toolbar =>
+                                                {
+                                                    toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                                    toolbar.Tools(tools => tools
+                                                        .TransferTo()
+                                                        .TransferFrom()
+
+                                                    );
+                                                })
+                                                .Events(x => x.Add("processAfterRemoved"))
+                                                .HtmlAttributes(new { style = "height:200px;" }))
+
+                                            </td>
+                                            <td width="50%" id="trdemofield">
+                                                @(Html.Kendo().ListBox().Name("AvailableDemoFieldOptions")
+                                                .BindTo(Model.AvailableDemoFields)
+                                                .ConnectWith("SelectedFieldOptions")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Selectable(ListBoxSelectable.Multiple)
+                                                .Toolbar(toolbar =>
+                                                {
+                                                    toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                                    toolbar.Tools(tools => tools
+                                                        .TransferTo()
+                                                        .TransferFrom()
+
+                                                    );
+                                                })
+                                                .Events(x => x.Add("processAfterRemoved"))
+                                                .HtmlAttributes(new { style = "height:200px;" }))
+
+                                            </td>
+                                            <td width="50%" id="tradhocfield">
+                                                @(Html.Kendo().ListBox().Name("AvailableAdhocFieldOptions")
+                                                .BindTo(Model.AvailableAdhocFields)
+                                                .ConnectWith("SelectedFieldOptions")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value")
+                                                .Selectable(ListBoxSelectable.Multiple)
+                                                .Toolbar(toolbar =>
+                                                {
+                                                    toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                                    toolbar.Tools(tools => tools
+                                                        .TransferTo()
+                                                        .TransferFrom()
+
+                                                    );
+                                                })
+                                                .Events(x => x.Add("processAfterRemoved"))
+                                                .HtmlAttributes(new { style = "height:200px;" }))
+
+                                            </td>
+                                            <td width="50%">
+                                                <div id="dvSelectedFieldOptions">
+                                                    <select id="SelectedFieldOptions" style="height:200px;" />
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table width="100%">
+                                    <tr>
+                                        <td width="50%"><label>Total Records To Export Or Download :</label></td>
+                                        <td width="50%">
+                                            @Html.Kendo().TextBoxFor(x => x.DownloadCount)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        @if (Model.PromoCodeVisible)
+                        {
+                            <tr id="trPromoCode">
+                                <td>
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="50%"><label>PromoCode :</label></td>
+                                            <td width="50%"><input type="text" class="k-textbox" id="txtPromoCode" /></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                       <tr>
+                            <td>
+                                <div id="exportResult" class="displayNone"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="padding-bottom:10px;">
+                                <br>
+                                <div id="dvBtnGrpExport" style="display:none;">
+                                    <input type="button" id="btnExport" onclick="downLoadDetails()" value="Export" class="k-button">
+                                    <input type="button" id="btnCloseExportToGroup" onclick="CloseWindow('DownloadDetailsPopup')" value="Close" class="k-button">
+                                </div>
+                                <div id="dvBtnGrpDownload">
+                                    <input type="button" id="btnDownload" onclick="downLoadDetails()" value="Download" class="k-button">
+                                    <input type="button" id="btnCloseDownload" onclick="CloseWindow('DownloadDetailsPopup')" value="Close" class="k-button">
+                                </div>
+                                <div id="dvBtnGrpCampaign" style="display:none;">
+                                    <input type="button" id="btnSaveToCampaign" onclick="downLoadDetails()" value="Save" class="k-button">
+                                    <input type="button" id="btnCloseSaveToCampaign" onclick="CloseWindow('DownloadDetailsPopup')" value="Close" class="k-button">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+@{
+    Html.Kendo()
+        .Window()
+        .Width(500)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("EditCase")
+        .Content(@<text>@Html.Partial("Partials/Common/_editCase")</text>)
+        .Visible(false)
+        .Render();
+}
+<script>
+
+
+    $(document).ready(function () {
+
+
+        function onCustomerChange(e) {
+
+            var dropdownlist = $("#drpCustomers").data("kendoDropDownList");
+            if (dropdownlist.value()) {
+                $("#tbl2ExportToGroup").show();
+            }
+        }
+
+        function onTemplateChangedChange() {
+            var dropdownlist = $("#drpDownloadTemplates").data("kendoDropDownList");
+            if (dropdownlist.value()) {
+                ChangeDataSourceForListBoxes();
+            }
+        }
+        $("#drpCustomers").val($("#SelectedClientID").val());
+        $("#tradhocfield").hide();
+        $("#trdemofield").hide();
+
+        $("#drpCustomers").on("change", function () {
+            onCustomerChange();
+        });
+
+        $("#drpDownloadTemplates").on("change", function () {
+            onTemplateChangedChange();
+        });
+
+        $("#SelectedFieldOptions").kendoListBox({
+            draggable: {
+                placeholder: function (element) {
+                    return element.clone().css({
+                        "opacity": 0.3,
+                        "border": "1px dashed #000000"
+                    });
+                }
+            },
+            selectable: "multiple",
+            dataTextField: "Text",
+            dataValueField: "Value",
+            toolbar: {
+                position: "right",
+                tools: ["moveUp", "moveDown"]
+            },
+            add: processBeforeAdd
+
+        });
+
+        $("#drpUseExisitingFolder").change(function () {
+            CreateExistingExportListDrp();
+
+        });
+
+
+    });
+
+    function editCase() {
+        $("#editCaseElements").html('');
+        var listBox = $("#SelectedFieldOptions").data("kendoListBox");
+        var order = 1;
+        var dataRequired = [];
+        var items = $("#dvSelectedFieldOptions li.k-item");
+        $.each(items, function (i, obj) {
+
+            var item = listBox.dataSource.getByUid($(obj).data("uid"));
+            if (item.Value.toString().includes("varchar")) {
+                dataRequired.push({ Text: item.Text, Value: item.Value, UID: item.uid });
+            }
+
+        });
+       if (dataRequired.length > 0) {
+
+            var tableElement = "<table align='center'>";
+                 var trItems ="";
+                 for(var i=0;i<dataRequired.length;i++){
+                     var id =dataRequired[i].Text.replace(' ','');
+                     var lable =dataRequired[i].Text;
+                     var select = "";
+                     var casevalue = dataRequired[i].Value.split('|')[2];
+                     switch (casevalue) {
+                         case 'Default':
+                             lable = lable.replace('(Default)', '');
+                             select = "<select data-uids=" + dataRequired[i].UID + "  data-selval=" + dataRequired[i].Value + " data-seltext=" + dataRequired[i].Text + "  onchange='ChangeFileFormat(event)'><option  selected value='Default'>As Imported</option><option value='ProperCase'>Proper</option><option value='UpperCase'>Upper</option><option value='LowerCase'>Lower</option></select>";
+                             break;
+                         case 'ProperCase':
+                             lable = lable.replace('(ProperCase)', '');
+                             select = "<select data-uids=" + dataRequired[i].UID + "   data-selval=" + dataRequired[i].Value + " data-seltext=" + dataRequired[i].Text + "   onchange='ChangeFileFormat(event)'><option value='Default'>As Imported</option><option  selected value='ProperCase'>Proper</option><option value='UpperCase'>Upper</option><option value='LowerCase'>Lower</option></select>";
+                             break;
+                         case 'UpperCase':
+                             lable = lable.replace('(UpperCase)', '');
+                             select = "<select data-uids=" + dataRequired[i].UID + "   data-selval=" + dataRequired[i].Value + " data-seltext=" + dataRequired[i].Text + "  onchange='ChangeFileFormat(event)'><option  value='Default'>As Imported</option><option value='ProperCase'>Proper</option><option  selected value='UpperCase'>Upper</option><option value='LowerCase'>Lower</option></select>";
+                             break;
+                         case 'LowerCase':
+                             lable = lable.replace('(LowerCase)', '');
+                             select = "<select data-uids=" + dataRequired[i].UID + "   data-selval=" + dataRequired[i].Value + " data-seltext=" + dataRequired[i].Text + "  onchange='ChangeFileFormat(event)'><option  value='Default'>As Imported</option><option value='ProperCase'>Proper</option><option value='UpperCase'>Upper</option><option selected value='LowerCase'>Lower</option></select>";
+                             break;
+
+                     }
+                     trItems = trItems + "<tr><td><lable id='" + dataRequired[i].Text.replace(' ', '') + "'>" + lable + "</lable></td><td></td><td>"+select+"</td></tr>";
+
+                 }
+            tableElement = tableElement + trItems + "</table>"
+            $("#editCaseElements").html(tableElement);
+            var window = $("#EditCase");
+            var kendoWindow = window.data('kendoWindow');
+            kendoWindow.content();
+            kendoWindow.center().open();
+        }
+
+    }
+
+    function toggleExportViews(e) {
+        var dropdownlist = $("#drpCustomers").data("kendoDropDownList");
+        $("#exportResult").hide();
+        $("#trCreateNewCmpn").hide();
+        $("#trExistingCmpn").hide();
+        $("#tbl2ExportToGroup").hide();
+        $("#trPromoCode").show();
+        if (e.id == "rbtnExportToGrp") {
+            ChangeDataSourceForListBoxes();
+            $("#tbl1ExportToGroup").show();
+            if (dropdownlist.value() > 0) {
+                $("#tbl2ExportToGroup").show();
+            }
+            $("#dvBtnGrpExport").show();
+
+            $("#tbl1Download").hide();
+            $("#tbl1SaveToCampaign").hide();
+
+            $("#dvBtnGrpDownload").hide();
+            $("#dvBtnGrpCampaign").hide();
+            $("#trDownLoadTemplates").show();
+            $("#trAvailableFields").show();
+
+        }
+        else if (e.id == "rbtnSaveToCampaign") {
+            $("#tbl1ExportToGroup").hide();
+            $("#dvBtnGrpExport").hide();
+
+            $("#tbl1Download").hide();
+            $("#dvBtnGrpDownload").hide();
+            $("#trPromoCode").hide();
+            $("#tbl1SaveToCampaign").show();
+            $("#dvBtnGrpCampaign").show();
+            $("#trDownLoadTemplates").show();
+            $("#trDownLoadTemplates").hide();
+            $("#trAvailableFields").hide();
+
+        }
+        else {
+            ChangeDataSourceForListBoxes();
+            $("#tbl1ExportToGroup").hide();
+            $("#dvBtnGrpExport").hide();
+
+            $("#tbl1Download").show();
+            $("#dvBtnGrpDownload").show();
+
+            $("#tbl1SaveToCampaign").hide();
+            $("#dvBtnGrpCampaign").hide();
+            $("#trDownLoadTemplates").show();
+            $("#trAvailableFields").show();
+
+        }
+    }
+
+    function toggleCampaignView(e) {
+        if (e.id == "rbtnCampaignCreateNew") {
+            $("#trCreateNewCmpn").show();
+            $("#trExistingCmpn").hide();
+        } else {
+            $("#trCreateNewCmpn").hide();
+            $("#trExistingCmpn").show();
+            CreateCampaignDropDown();
+        }
+    }
+
+    function toggleListBox(e) {
+
+        if (e.id == "rbtnDemo") {
+            $("#trdemofield").show();
+            $("#tradhocfield").hide();
+            $("#trprofilefield").hide();
+        }
+        else if (e.id == "rbtnAdHoc") {
+            $("#trdemofield").hide();
+            $("#tradhocfield").show();
+            $("#trprofilefield").hide();
+        }
+        else {
+            $("#trdemofield").hide();
+            $("#tradhocfield").hide();
+            $("#trprofilefield").show();
+        }
+    }
+
+    function toggleEmailLstViews(e) {
+        var dropdownlist = $("#drpCustomers").data("kendoDropDownList");
+        var clientid = dropdownlist.value();
+        if (e.id == "rbtnCreateNewEmailLst") {
+
+            $(".trShowOnCreatNewLst").show();
+            $(".trShowOnUseExistingLst").hide();
+            CreateFolderDropDown("drpCreateNewFolder", clientid);
+
+        } else if (e.id == "rbtnUseExistingEmailLst") {
+
+            $(".trShowOnCreatNewLst").hide();
+            $(".trShowOnUseExistingLst").show();
+            CreateFolderDropDown("drpUseExisitingFolder", clientid);
+            CreateExistingExportListDrp();
+        }else{
+            $(".trShowOnUseExistingLst").hide();
+            $(".trShowOnCreatNewLst").hide();
+        }
+    }
+
+    function CreateFolderDropDown(id, clientID) {
+        var widget = $("#" + id).data("kendoDropDownList");
+        if (widget) {
+            widget.destroy();
+        }
+        $("#" + id).kendoDropDownList({
+            dataTextField: "FolderName",
+            dataValueField: "FolderID",
+            optionLabel: " ",
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: "json",
+                        url: "/uas.web/filter/GetFolderList?ClientID=" + clientID
+                    }
+                }
+            }
+
+        });
+    }
+
+    function CreateCampaignDropDown() {
+        var BrandID = 0;
+        var drpBrand = $("#ddlBrand").data("kendoDropDownList");
+        if (drpBrand) {
+            BrandID = drpBrand.value();
+        }
+        var widget = $("#drpCampaignName").data("kendoDropDownList");
+        if (widget) {
+            widget.destroy();
+        }
+        $("#drpCampaignName").kendoDropDownList({
+            dataTextField: "CampaignName",
+            dataValueField: "CampaignID",
+            optionLabel: " ",
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: "json",
+                        url: "/uas.web/filter/GetExistingCampaigns"
+                    }
+                }
+            }
+
+        });
+    }
+
+    function CreateExistingExportListDrp() {
+        var folderid = 0;
+        var drpFolder = $("#drpUseExisitingFolder").data("kendoDropDownList");
+        if (drpFolder.value()) {
+            folderid = drpFolder.value();
+        }
+        var widget = $("#drpExportLists").data("kendoDropDownList");
+        if (widget) {
+            widget.destroy();
+        }
+        $("#drpExportLists").kendoDropDownList({
+            dataTextField: "GroupName",
+            dataValueField: "GroupID",
+            optionLabel: " ",
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: "json",
+                        url: "/uas.web/filter/GetExistingExportList?FolderID=" + folderid
+                    }
+                }
+            }
+
+        });
+    }
+
+    function getDownloadPopupModel() {
+        var dp = {
+            PubID:  $("#SelectedProductID").val(),
+            MasterOptionSelected: "Download",
+            SelectedItems: [],
+            DownloadCount: $("#DownloadCount").val(),
+            TotalCount: $("#TotalCount").val(),
+            HeaderText: $("#HeaderText").val(),
+            SelectedFilterNos: $("#SelectedFilterNos").val(),
+            SuppressedFilterNos: $("#SuppressedFilterNos").val(),
+            SelectedFilterOperation: $("#SelectedFilterOperation").val(),
+            SuppressedFilterOperation: $("#SuppressedFilterOperation").val(),
+            PromoCode: $("#txtPromoCode").val()?$("#txtPromoCode").val():" ",
+            DownloadTemplateID: $("#drpDownloadTemplates").val(),
+            IsQueryDetailsIncluded: false,
+            GroupID: 0,
+            IsNewGroupChecked: false,
+            IsExistingGroupChecked: false,
+            FolderID: 0,
+            JobCode: "",
+            GroupName: "",
+            IsNewCampaign: false,
+            IsExistingCampaign: false,
+            CampaignName: "",
+            FilterName: "",
+            CampaignID: 0,
+            IssueID: $("#kddlIssues").val(),
+            DownloadFor: $("#DownloadFor").val()
+        }
+        //Get Checked View
+        var mastercheckedID = $('input[type=radio][name=rbtnMaster]:checked').attr('id');
+        switch (mastercheckedID) {
+            case "rbtnExportToGrp":
+                dp.MasterOptionSelected = "Export";
+                var drpCustomers = $("#drpCustomers").data("kendoDropDownList");
+                var exportgrpcheckid = $('input[type=radio][name=rbtnEmailList]:checked').attr('id');
+                if (drpCustomers.value()) {
+                    dp.CustomerClientID = drpCustomers.value();
+                }
+                else {
+                    dp.CustomerClientID = dp.ClientID;
+                }
+                dp.JobCode = $("#txtJobName").val();
+                if (exportgrpcheckid == "rbtnCreateNewEmailLst") {
+                    var drpNewFolder = $("#drpCreateNewFolder").data("kendoDropDownList");
+                    dp.IsNewGroupChecked = true;
+                    dp.IsExistingGroupChecked = false;
+                    dp.FolderID = drpNewFolder.value() ? drpNewFolder.value() : 0;
+                    dp.GroupName = $("#txtExportListName").val();
+                }
+                else if (exportgrpcheckid == "rbtnUseExistingEmailLst") {
+                    var drpUseExisitingFolder = $("#drpUseExisitingFolder").data("kendoDropDownList");
+                    var drpExportLists = $("#drpExportLists").data("kendoDropDownList");
+                    dp.FolderID = drpUseExisitingFolder.value() ? drpUseExisitingFolder.value() : 0;
+                    dp.GroupID = drpExportLists.value();
+                    dp.IsExistingGroupChecked = true;
+                    dp.IsNewGroupChecked = false;
+                }
+                break;
+            case "rbtnSaveToCampaign":
+                debugger;
+                dp.MasterOptionSelected = "SaveToCampaign";
+                var campigncheckid = $('input[type=radio][name=rbtncampaign]:checked').attr('id');
+                if (campigncheckid == "rbtnCampaignCreateNew") {
+                    dp.IsNewCampaign = true;
+                    dp.IsExistingCampaign= false;
+                    dp.CampaignName = $("#txtCampaignName").val();
+                }
+                else if (campigncheckid == "rbtnCampaignExisting") {
+                    var drpCampaign = $("#drpCampaignName").data("kendoDropDownList");
+                    dp.IsExistingCampaign= true;
+                    dp.IsNewCampaign = false;
+                    dp.CampaignName = drpCampaign.text();
+                    dp.CampaignID = drpCampaign.value();
+                }
+                dp.FilterName = $("#txtFilterName").val();
+                break;
+            case "rbtnDownload":
+                dp.MasterOptionSelected = "Download";
+                break;
+
+        }
+        //Get Selected ListItems
+        var listBox = $("#SelectedFieldOptions").data("kendoListBox");
+        var items = $("#dvSelectedFieldOptions li.k-item");
+        $.each(items, function (i, obj) {
+            var item = listBox.dataSource.getByUid($(obj).data("uid"));
+            dp.SelectedItems.push({ Text: item.Text, Value: item.Value });
+
+        });
+        dp.IsQueryDetailsIncluded = $('#chkIncludeQuery').is(':checked') ? true : false;
+        return dp;
+    }
+
+    function ValidateModel(model) {
+        var errors = [];
+        if (parseInt(model.DownloadCount) > parseInt(model.TotalCount)) {
+            errors.push({ field: "DownloadCount", error: "Download count(" + model.DownloadCount + ") cannot be greater than Total Count(" + model.TotalCount + ")." });
+        }
+        switch (model.MasterOptionSelected) {
+            case 'Download':
+                if (!model.SelectedItems.length > 0) {
+                    errors.push({ field: "SelectedFieldOptions", error: "Please select atleast one field to download." });
+                }
+                if (!parseInt(model.DownloadCount) > 0) {
+                    errors.push({ field: "DownloadCount", error: "Please input valid download count." });
+                }
+                break;
+            case 'Export':
+                if (!parseInt(model.CustomerClientID) > 0) {
+                    if (!model.GroupName) {
+                        errors.push({ field: "drpCustomers", error: "Please select customer." });
+                    }
+                }
+                if (!model.SelectedItems.length > 0) {
+                    errors.push({ field: "SelectedFieldOptions", error: "Please select atleast one field to download." });
+                }
+                if (model.IsNewGroupChecked) {
+
+                    if (!model.GroupName) {
+                        errors.push({ field: "txtExportListName", error: "Please input valid List Name." });
+                    }
+                 }
+                else if (model.IsExistingGroupChecked) {
+                    model.GroupID = model.GroupID ? model.GroupID : 0;
+                     if (parseInt(model.GroupID) == 0) {
+                         errors.push({ field: "drpExportLists", error: "Please Select valid List Name." });
+                     }
+                 }
+                 else {
+                        errors.push({ field: "rbtnCreateNewEmailLst", error: "Please select new list or existing list." });
+                 }
+                 break;
+            case 'SaveToCampaign':
+                if(!model.FilterName){
+                    errors.push({ field: "txtFilterName", error: "Please input valid Filter Name." });
+                }
+                if (model.IsNewCampaign) {
+                    if (!model.CampaignName) {
+                        errors.push({ field: "txtCampaignName", error: "Please input valid Campaign Name." });
+                    }
+                } else if (model.IsExistingCampaign) {
+                    if (!model.CampaignName) {
+                        errors.push({ field: "drpCampaignName", error: "Please input valid Campaign Name." });
+                    }
+                }
+                else{
+                    errors.push({ field: "rbtnCampaignCreateNew", error: "Please select New Campaign or Use Existing Campaign." });
+                }
+                break;
+        }
+        if (errors.length > 0) {
+            var ulList = "<ul>";
+            var liList = "";
+            for (var i = 0; i < errors.length ; i++) {
+                liList = liList + "<li>" + errors[i].error + "</li>";
+            }
+            ulList = ulList + liList + "</ul>"
+            $("#dvErrorNotification").html(ulList);
+            $("#dvErrorNotification").show();
+            return false;
+        } else {
+            $("#dvErrorNotification").hide();
+            return true;
+        }
+
+
+    }
+
+    function downLoadDetails() {
+        $("#errorText").hide();
+        $("#exportResult").hide();
+        $("#dvErrorNotification").hide();
+        var dp = getDownloadPopupModel();
+        if (ValidateModel(dp))
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/UAS.web/Filter/ExportData',
+                data: JSON.stringify({ 'dp': dp }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response.error) {
+                        $("#errorText").html(response.errormessage);
+                        $("#errorText").show();
+                        $("#dvErrorNotification").show();
+                        $("#exportResult").hide();
+                    }
+                    else {
+
+                        $("#errorText").hide();
+                        $("#exportResult").hide();
+                        $("#dvErrorNotification").hide();
+                        if (dp.MasterOptionSelected == "Export") {
+                            $("#exportResult").html(response);
+                            $("#exportResult").show();
+                        } else if (dp.MasterOptionSelected == "Download") {
+                            CloseWindow('DownloadDetailsPopup');
+                            if (dp.DownloadFor == "AddRemove") {
+                                var win = window.open('/UAS.web/addkill/DownLoadFile?fileloc=' + response, '_blank');
+                                if (win) {
+                                    //Browser has allowed it to be opened
+                                    win.focus();
+                                } else {
+                                    //Browser has blocked it
+                                    showMessage({
+                                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                                        text: "Please allow popups for this website.",
+                                        autoClose: false,
+                                        IsOpen: false
+                                    });
+                                }
+                            } else {
+                                window.location = '/UAS.web/Filter/DownLoadFile?fileloc=' + response;
+                            }
+                        } else if (dp.MasterOptionSelected == "SaveToCampaign") {
+                            if (response.success) {
+                                $("#exportResult").html(response.successmessge);
+                                $("#exportResult").show();
+                            }
+                        }
+                    }
+
+
+                },
+                error: function (response) {
+
+                    console.log(response)
+
+
+                }
+            });
+        }
+    }
+
+    function ChangeDataSourceForListBoxes() {
+        var listBoxProfile = $("#AvailableProfileFieldOptions").data("kendoListBox");
+        var listBoxDemo = $("#AvailableDemoFieldOptions").data("kendoListBox");
+        var listBoxAdhoc = $("#AvailableAdhocFieldOptions").data("kendoListBox");
+        var listBoxSelected = $("#SelectedFieldOptions").data("kendoListBox");
+
+        var dp = getDownloadPopupModel();
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/UAS.web/Filter/GetExportColumns',
+                data: JSON.stringify({ 'dp': dp }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var profile_DS = new kendo.data.DataSource({
+                        data: data.AvailableProfileFields
+                    });
+
+                    var demo_DS = new kendo.data.DataSource({
+                        data: data.AvailableDemoFields
+                    });
+                    var adhoc_DS = new kendo.data.DataSource({
+                        data: data.AvailableAdhocFields
+                    });
+                    var selected_DS = new kendo.data.DataSource({
+                        data: data.SelectedItems
+                    });
+                    listBoxProfile.setDataSource(profile_DS);
+                    listBoxDemo.setDataSource(demo_DS);
+                    listBoxAdhoc.setDataSource(adhoc_DS);
+                    listBoxSelected.setDataSource(selected_DS);
+                },
+                error: function (data) {
+
+                    console.log(data);
+
+                }
+            });
+
+
+        }
+    }
+</script>

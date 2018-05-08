@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title></title>
+    <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1" />
+    <meta name="ProgId" content="VisualStudio.HTML" />
+    <meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
+    <style type="text/css"> 
+		<!-- 
+		@import url("/ecn.accounts/assets/channelID_1/images/ecnstyle.css"); 
+		@import url("/ecn.accounts/assets/channelID_1/stylesheet.css"); 
+		-->
+		</style>
+
+    <script language="JavaScript">
+			function getSelectedStDate(selected){
+				St_date_Val.value = selected;
+			}
+			function ok()	{
+				var START_DT	= St_date_Val.value;			
+				var st_validated = "false";				
+				
+				if(START_DT.length == 0){
+					START_DT = 'Today';
+				}
+								
+				if(St_date_Val.value == 'other'){
+					START_DT = StartDt_MM.value+'/'+StartDt_DD.value+'/'+StartDt_YYYY.value;
+					if(START_DT.length < 10){
+						st_validated = "false";
+						alert('Choose a From date');
+					}else{
+						st_validated = "true";
+					}
+				}else if(St_date_Val.value == 'TodayPlusMinus'){
+					var pl_mn	= StartDt_Today_plusminus.value;
+					var days		= StartDt_Today_plusminus_Days.value;
+					if(pl_mn.length <= 0){
+						st_validated = "false";
+						alert('Choose a [+ / -] from selection');					
+					}else if(days.length <= 0){
+						st_validated = "false";
+						alert('Enter number of Days');						
+					}else{
+						START_DT = 'Today ['+pl_mn+days+']';
+						st_validated = "true";
+					}
+				}else{
+					st_validated = "true";
+				}
+				
+				//window.opener.document.FiltersForm.DtTime_Value1.value = START_DT;
+				//window.close();
+				if(st_validated == 'true'){
+					//var YN = confirm('Please Confirm the Date you have chosen'+'\n'+'\n'+'To Date: '+END_DT);
+					//if(YN){
+				        window.opener.document.forms[0].ctl00_ContentPlaceHolder1_DtTime_Value1.value = START_DT;		            
+						window.close();
+					//}
+				}				
+			}
+    </script>
+
+</head>
+<body bottommargin="5" leftmargin="5" topmargin="5" rightmargin="5">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" height="1" id="Table1">
+        <tr>
+            <td width="100%" align="center" height="19" class="formfield errormsg">
+                <b>From Date</b></td>
+        </tr>
+        <tr>
+            <td width="100%" height="1">
+                <table border="0" width="100%" class="formfield">
+                    <tr>
+                        <td>
+                            <input type="hidden" name="St_date_Val">
+                            <input type="radio" value="Today" name="StartDt" size="20" checked="checked" onclick="getSelectedStDate('Today')">Today<br>
+                            <!--<input type="radio" value="Yesterday" name="StartDt" size="20" onclick=getSelectedStDate('Yesterday')>Yesterday<br>
+								<input type="radio" value="3-Days Ago" name="StartDt" size="20" onclick=getSelectedStDate('3-Days-ago')>3 days ago<br>
+								<input type="radio" value="1-Week Ago" name="StartDt" size="20" onclick=getSelectedStDate('1-Week-ago')>1 Week ago<br>-->
+                            <input type="radio" value="TodayPlusMinus" name="StartDt" size="20" onclick="getSelectedStDate('TodayPlusMinus')">Today&nbsp;
+                            <select name="StartDt_Today_plusminus" class="formfield">
+                                <option selected></option>
+                                <option value="+">plus</option>
+                                <option value="-">minus</option>
+                            </select>
+                            &nbsp;Days:<input type="text" name="StartDt_Today_plusminus_Days" size="3" maxlength="3"
+                                class="formfield">
+                            <input type="radio" value="Other" name="StartDt" size="20" onclick="getSelectedStDate('other')">Other&nbsp;[choose
+                            From date below]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="StartDt_MM" class="formfield">
+                                <option selected>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                            </select>
+                            /
+                            <select name="StartDt_DD" class="formfield">
+                                <option selected>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                            </select>
+                            /
+                            <select name="StartDt_YYYY" class="formfield">
+                                <option selected></option>
+                                <option value="2000">2000</option>
+                                <option value="2001">2001</option>
+                                <option value="2002">2002</option>
+                                <option value="2003">2003</option>
+                                <option value="2004">2004</option>
+                                <option value="2005">2005</option>
+                                <option value="2006">2006</option>
+                                <option value="2007">2007</option>
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>                                
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <!--<TR>
+				<TD height="35" align="left" class="bodyText" valign=top>
+					<font color="FF0000"><b>NOTE:</b><br>* Choose "FROM" and "TO" dates only if you are comparing 2 dates.<br>* If you have only one date to Compare. Choose only "From Date"</font></TD>
+			</TR>-->
+        <tr>
+            <td width="100%" height="40" align="center">
+                <input name="OK" type="button" onclick="ok()" value="Set START Date" class="formfield"></td>
+        </tr>
+    </table>
+</body>
+</html>

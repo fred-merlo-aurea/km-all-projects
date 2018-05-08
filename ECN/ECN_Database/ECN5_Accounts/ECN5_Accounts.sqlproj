@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ECN5_Accounts</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{a89389e3-d05a-465b-9118-a8af6c73a58e}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ECN5_Accounts</RootNamespace>
+    <AssemblyName>ECN5_Accounts</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Basechannel.sql" />
+    <Build Include="dbo\Tables\BillItems.sql" />
+    <Build Include="dbo\Tables\Bills.sql" />
+    <Build Include="dbo\Tables\CallRecords.sql" />
+    <Build Include="dbo\Tables\CustomerInquiries.sql" />
+    <Build Include="dbo\Tables\CustomerProduct.sql" />
+    <Build Include="dbo\Tables\CustomerTemplate.sql" />
+    <Build Include="dbo\Tables\BillingContact.sql" />
+    <Build Include="dbo\Tables\dtproperties.sql" />
+    <Build Include="dbo\Tables\EngineLog.sql" />
+    <Build Include="dbo\Tables\ProductDetail.sql" />
+    <Build Include="dbo\Tables\Channel.sql" />
+    <Build Include="dbo\Tables\CustomerDepartments.sql" />
+    <Build Include="dbo\Tables\Product.sql" />
+    <Build Include="dbo\Tables\UserDepartments.sql" />
+    <Build Include="dbo\Tables\Code.sql" />
+    <Build Include="dbo\Tables\Role.sql" />
+    <Build Include="dbo\Tables\Staff.sql" />
+    <Build Include="dbo\Tables\UserActions.sql" />
+    <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Tables\Customer.sql" />
+    <Build Include="dbo\Tables\LandingPage.sql" />
+    <Build Include="dbo\Tables\LandingPageAssign.sql" />
+    <Build Include="dbo\Tables\LandingPageOption.sql" />
+    <Build Include="dbo\Tables\CustomerConfig.sql" />
+    <Build Include="dbo\Tables\LandingPageAssignContent.sql" />
+    <Build Include="dbo\Tables\CustomerContact.sql" />
+    <Build Include="dbo\Tables\CustomerLicense.sql" />
+    <Build Include="dbo\Tables\CustomerNote.sql" />
+    <Build Include="dbo\Tables\Quote.sql" />
+    <Build Include="dbo\Tables\temp_userwithAmbersand.sql" />
+    <Build Include="dbo\Tables\CustomerPlans.sql" />
+    <Build Include="dbo\Tables\QuoteItem.sql" />
+    <Build Include="dbo\Tables\QuoteOption.sql" />
+    <Build Include="dbo\Tables\RoleAction.sql" />
+    <Build Include="dbo\Tables\channel_digitalriver_backup.sql" />
+    <Build Include="dbo\Tables\DKIMKeys.sql" />
+    <Build Include="dbo\Tables\CustomerIP.sql" />
+    <Build Include="dbo\Tables\Wizard_BaseFee.sql" />
+    <Build Include="dbo\Tables\Wizard_EmailRates.sql" />
+    <Build Include="dbo\Tables\CustomerDiskUsage.sql" />
+    <Build Include="dbo\Tables\Action.sql" />
+    <Build Include="Security\db_executor.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\ecn5.sql" />
+    <Build Include="Security\ecn5_1.sql" />
+    <Build Include="Security\ecn5writer.sql" />
+    <Build Include="Security\ecn5writer_1.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="Security\webuser_1.sql" />
+    <Build Include="Security\jwelter.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\bill_1.hipps.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\justin_1.welter.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\latha_1.sunil.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\GetFirstName.sql" />
+    <Build Include="dbo\Functions\GetLastName.sql" />
+    <Build Include="dbo\Functions\fn_Split.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_AccessKey.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Login.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Exists_ByUserName.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Users_DepartmentID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Users_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Users_ChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_UserDepartment_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_UserActions_userID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_UserActions_ActionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_UserActions.sql" />
+    <Build Include="dbo\Stored Procedures\AP_Maintenance_RebuildIndexes.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_BillingNotes.sql" />
+    <Build Include="dbo\Stored Procedures\e_ProductFeature_ProductName_FeatureName_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_RebuildIndex.sql" />
+    <Build Include="dbo\Stored Procedures\sp_NoUsageReport.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Channel_ProductTypeCode_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Channel_ProductTypeCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_BaseChannels_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_BaseChannels.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Actions_ActionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Actions.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPage_Exists_ByLPID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Roles_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPage_Select_ALL.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Customers_ChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPage_Select_LPID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Products.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_NewCustomerreport.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_KMLogoClickReport.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_Default.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_InternetRetailer_KMLogoClickReport.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_GetOneToUse.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ChannelLook_details.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_LPAID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ChannelLook.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_LPID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_BillingReport.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_Select_LPACID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_DigitalEditionBilling.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_Select_LPAID.sql" />
+    <Build Include="dbo\Stored Procedures\v_CustomerDiskUsage_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageOption_Exists_ByLPOID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_CustomerUsagebyType.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageOption_Select_LPID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_accountintensity.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageOption_Select_LPOID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_NewUserreport.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Select_SubDomain.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_Diskmonitor.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_RemoveBaseChannelOverrideForCustomer.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Department_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_CustomerDepartment_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_BaseChannelID_LPID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Select_Customer_ChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssign_Select_customerID_LPID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RoleAction_Select_RoleID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_Delete_LPAID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RoleAction_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Role_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Role_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Role_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_QuoteOption_Select_BaseChannelID_LicenseType.sql" />
+    <Build Include="dbo\Stored Procedures\e_QuoteItem_Select_QuoteID.sql" />
+    <Build Include="dbo\Stored Procedures\e_QuoteItem_Exists_ByQuoteID.sql" />
+    <Build Include="dbo\Stored Procedures\e_QuoteItem_Delete_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Quote_Select_QuoteID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Quote_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Quote_Exists_ByQuoteID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Quote_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_EmailWizardRate.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ECNToday.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ecnLogin.sql" />
+    <Build Include="dbo\Stored Procedures\e_ProductDetail_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Product_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Select_TypeCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Select_CTID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerTemplate_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerProduct_UpdateActive_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerProduct_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerProduct_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerProduct_Exists_ByProductDetailID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerNote_Select_NoteID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerNote_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerNote_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerLicense_Select_CustomerID_LicenseTypeCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerLicense_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerLicense_Select_CLID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerLicense_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerLicense_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerContact_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerContact_Select_ContactID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerContact_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerContact_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerConfig_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerConfig_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerConfig_Exists_ByCustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CustomerConfig_Delete_ByCustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_ByType.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Select_ProductTypeCode_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Select_ProductTypeCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Select_ChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Select_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Channel_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingContact_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingContact_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Users_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserDepartment_Update_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserDepartment_Update.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserDepartment_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserDepartment_Delete_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Update_Active.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Update.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAction_Delete_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Update.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_UserName.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Tables\SFSettings.sql" />
+    <Build Include="dbo\Tables\BillingReportItem.sql" />
+    <Build Include="dbo\Tables\BillingReport.sql" />
+    <Build Include="dbo\Stored Procedures\v_LandingPageAssign_GetPreviewParameters.sql" />
+    <Build Include="dbo\Stored Procedures\v_LandingPageAssign_GetParameters_BaseChannel.sql" />
+    <Build Include="dbo\Stored Procedures\o_ReportFilter_Select_MagazineID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberSourceCode_Select_SubscriberSourceCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SFSettings_Select_GetOneToUse.sql" />
+    <Build Include="dbo\Stored Procedures\e_SFSettings_Select_CMSBaseChannels.sql" />
+    <Build Include="dbo\Stored Procedures\e_SFSettings_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SFSettings_RemoveBaseChannelOverrideForCustomer.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReportItem_GetEmailUsage.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReport_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_HasProductFeature.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagement_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagement_Exists_SMID_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagement_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagement_Select_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagement_Select_SMID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementGroup_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementGroup_Delete_SMID_SMGID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementGroup_Exists_SMGID_SMID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementGroup_Select_SMID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementUDF_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementUDF_Exists_SMID_SMGID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementUDF_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementUDF_Select_SMGID.sql" />
+    <Build Include="dbo\Tables\SubscriptionManagement.sql" />
+    <Build Include="dbo\Tables\SubscriptionManagementGroup.sql" />
+    <Build Include="dbo\Tables\SubscriptionManagementUDF.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Exists.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReport_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_Select_LPOID_LPAID.sql" />
+    <Build Include="dbo\Tables\SubscriptionManagementReason.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementReason_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionManagementReason_Select_SMID.sql" />
+    <Build Include="dbo\Stored Procedures\e_LandingPageAssignContent_GetSelectedReasons.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReport_Select_BillingReportID.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReportItem_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReportItem_Select_BillingReportID.sql" />
+    <Build Include="dbo\Stored Procedures\e_BillingReportItem_Select_BillingReportItemID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Select_NotificationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Select_CurrentDate_CurrentTime.sql" />
+    <Build Include="dbo\Tables\Notification.sql" />
+    <Build Include="dbo\Stored Procedures\e_Notification_Exists_ByTime.sql" />
+    <Build Include="dbo\Stored Procedures\v_EmailDirectReport.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Content_IsCreater_1.sql" />
+    <Build Include="dbo\Stored Procedures\e_BaseChannel_Exists_ByName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Exists_ByName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Customer_Select_PlatformClientID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.BaseChannelTable.sql" />
+    <None Include="PostDeployment_2014_Q4.sql" />
+    <None Include="PostDeployment_2015_Q2.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ECN5_Accounts.refactorlog" />
+  </ItemGroup>
+</Project>

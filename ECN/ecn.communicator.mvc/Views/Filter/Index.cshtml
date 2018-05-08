@@ -1,0 +1,222 @@
+﻿@model ecn.communicator.mvc.Models.Filters
+@using ecn.communicator.mvc.Infrastructure
+@using KMEnums
+@{
+    ViewBag.Title = "Group Filters";
+}
+<script>
+    var currentGroupID = @Model.GroupID;
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+    $(document).ready(function () {
+        $("#ArchiveFilter").change(function () {
+            showLoadingWindow();
+            $.cookie("archivefilter", $("#ArchiveFilter").val(), { domain: window.location.hostname });
+            window.location = "@Url.Action("Index", new { GroupID = Model.GroupID })";
+        });
+    });
+    function createFilter() {
+        var win = $("#CreateFilter");
+        var kendoWindow = win.data('kendoWindow');
+
+        kendoWindow.title('Create new Filter');
+        $("#FilterName").val('');
+        $("#GroupCompareType").data('kendoDropDownList').value('OR');
+        kendoWindow.center().open();
+    }
+    function copyFilter() {
+
+        var win = $("#CopyFilter");
+        
+        var kendoWindow = win.data('kendoWindow');
+
+        kendoWindow.title('Copy Filter');
+        $("#copyFilterDiv").load('@Url.Action("LoadCopyFilterGroups")', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function deleteFilter(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id, GroupID: @Model.GroupID });
+
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function archiveFilter(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ArchiveFilter", "Filter")",
+            data: { id: id },
+            success: function (response) {
+                if (response != '') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    window.location.href = "/ecn.communicator.mvc/Filter/Index/" + response;
+                }
+            }
+        });
+    }
+    function getArchiveButtonText(Archived) {
+        if (Archived) return 'Unarchive';
+        else return 'Archive';
+    }
+</script>
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Filters</a></li>
+</ul>
+<div id="FilterIndex_Validation" style="display:none;" class="validation-summary"></div>
+<input type="hidden" value="@(HttpContext.Current.Session["url"] = Request.Url.ToString())" />
+<table style="width:100%; margin-top:0px;">
+    <tr>
+        <td style="width:600px"> List of Filters for Group: @Model.GroupName </td>
+        
+        @if (Model.canWrite)
+        {
+            <td style="float:right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="createFilter()">Create new Filter<i class='km-icon icon-kmplus-circled-1'></i></button></td>
+            <td style="float:right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="copyFilter()">Copy Filter</button></td>
+        }
+        else
+        {
+            <td></td>
+            <td></td>
+        }
+    </tr>
+</table>
+<div id="panelSearch" style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                <form action="@Url.Action("Filters")" method="post">
+                    @Html.DropDownListFor(e => e.ArchiveFilter, Model.ArchiveFilterTypes.Select(item => new SelectListItem
+               {
+                   Value = item,
+                   Text = item,
+               }))
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="divFilterGrid">
+    @(Html.Kendo()
+        .Grid(Model.FilterList)
+        .Name("grid")
+        .Events(x => x.DataBound("dataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.FilterName).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Filter Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle;" });
+            columns.Bound(e => e.CreatedDate).Format("{0:G}").Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Date Created").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; " });
+            columns.Bound(e => e.Archived).Title("Archived").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("#if(Archived){#<span>Yes</span>#}else{#<span>No</span>#}#");
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" }); ;
+        })
+        .Pageable(pageable => pageable
+            .PageSizes(new[] { 5, 10, 15, 20 })
+            .Input(true)
+            .ButtonCount(1)
+            )
+        .Sortable()
+        .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.FilterID);
+            })
+            .PageSize(10)
+            .ServerOperation(false)
+        )
+    )
+</div>
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=FilterID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("Edit").Action("Edit", "Filter", new { id = "#=FilterID#" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteFilter('#=FilterID#')" });
+                    innerItems.Add().Text("#=getArchiveButtonText(Archived)#").HtmlAttributes(new { onclick = "archiveFilter('#=FilterID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("CreateFilter")
+        .Actions(x => x.Clear())
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("CreateFilter", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "createFilterDiv",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="createFilterDiv">
+                    @Html.Partial("Partials/Modals/_CreateFilter", new ECN_Framework_Entities.Communicator.Filter())
+                </div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("CopyFilter")
+        .Actions(x => x.Clear())
+        .Content(
+        @<text>
+            <div id="copyFilterDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            
+                <div id="deleteDiv">
+                    @Html.Partial("Partials/Modals/_DeleteFilter")
+                </div>
+            
+        </text>
+)
+        .Visible(false)
+        .Render();
+}

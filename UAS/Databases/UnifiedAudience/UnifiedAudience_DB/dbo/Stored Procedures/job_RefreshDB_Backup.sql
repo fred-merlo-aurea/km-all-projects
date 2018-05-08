@@ -1,0 +1,13 @@
+﻿CREATE PROCEDURE [job_RefreshDB_Backup]
+@DbName varchar(200),
+@File varchar(500)
+AS
+BEGIN
+
+	SET NOCOUNT ON
+
+	BACKUP DATABASE @DbName 
+	TO DISK = @File
+	WITH STATS = 1, COMPRESSION
+
+END

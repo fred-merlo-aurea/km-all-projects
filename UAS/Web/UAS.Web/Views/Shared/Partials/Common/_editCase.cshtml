@@ -1,0 +1,128 @@
+﻿<div align='center' style='text-align: center; height: 100%; padding: 0px 10px 0px 10px;'>
+  <table width='100%' align='center' border='0' cellpadding='5' cellspacing='5' style='border: solid 1px #5783BD; height: auto'>
+        <tbody>
+            <tr style='background-color: #5783BD;'>
+                <td style='padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold'>
+                    Case Edit
+                </td>
+            </tr>
+            <tr>
+                <td align='center' height="10px;">
+                  
+                </td>
+            </tr>
+            <tr>
+                <td align='center'>
+                    <Strong>File Format</Strong>
+                    <select id="fileFormatCase" onchange="SetFileFormat()">
+                        <option selected='selected' value='Default'>As Imported</option>
+                        <option value='ProperCase'>Proper</option>
+                        <option value='UpperCase'>Upper</option>
+                        <option value='LowerCase'>Lower</option>
+                        <option value='Custom'>Custom</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   <div id='editCaseElements'>
+                      
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" height="40" align="center">
+                    <input type="button" value="Save" class="k-button" onclick="SaveCase()">
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Cancel" class="k-button" onclick="CancelCaseEdit()">
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+       
+    });
+    function ChangeFileFormat(e) {
+        var selected = $("#editCaseElements select>option:selected");
+        var optionValues = [];
+        $.each(selected, function (i, obj) {
+            optionValues.push(obj.value);
+            var seltext =$(obj).parent().data("seltext");
+            var selval = $(obj).parent().data("selval");
+            var replacedtext = seltext.toString().substring(0, seltext.lastIndexOf("("))
+            var replacedval = selval.toString().substring(0, selval.lastIndexOf("|"))
+            $(obj).parent().data("seltext", replacedtext + "(" + obj.value + ")");
+            $(obj).parent().data("selval", replacedval + "|" + obj.value);
+        })
+        var unique = $.unique(optionValues);
+        if (unique.length == 1) {
+            $('#fileFormatCase').val(unique[0]);
+        } else {
+            $('#fileFormatCase').val('Custom');
+        }
+    }
+    function SetFileFormat() {
+        var fileformat = $('#fileFormatCase').val();
+        if (fileformat != 'Custom') {
+            $("#editCaseElements select").val($('#fileFormatCase').val());
+            ChangeFileFormat();
+        }
+       
+    }
+    function SaveCase() {
+        var selected = $("#editCaseElements select>option:selected");
+        var data = [];
+        var listBox = $("#SelectedFieldOptions").data("kendoListBox");
+        //var items = listBox.dataItems();
+        //$.each(listBox.dataItems(), function (itemindex, itemobj) {
+        //    if (itemobj.Value.toString().includes("varchar")) {
+        //        $.each(selected, function (i, obj) {
+        //            if ($(obj).parent().data("uids").toString() == itemobj.uid.toString()) {
+        //                data.push({ Text: $(obj).parent().data("seltext"),Value : $(obj).parent().data("selval") })
+        //            }
+        //        });
+        //    }
+        //    else{
+        //        data.push({ Text: itemobj.Text,Value : itemobj.Value });
+        //    }
+        //});
+        var items = $("#dvSelectedFieldOptions li.k-item");
+        $.each(items, function (itemindex, itemobj) {
+            var item = listBox.dataSource.getByUid($(itemobj).data("uid"))
+            if (item.Value.toString().includes("varchar")) {
+                $.each(selected, function (i, obj) {
+                    if ($(obj).parent().data("uids").toString() == item.uid.toString()) {
+                        data.push({ Text: $(obj).parent().data("seltext"),Value : $(obj).parent().data("selval") })
+                    }
+                });
+            }
+            else{
+                data.push({ Text: item.Text, Value: item.Value });
+            }
+        });
+        //$.each(selected, function (i, obj) {
+        //    var item = listBox.dataSource.getByUid($(obj).parent().data("uids"));
+        //    console.log(item);
+        //    listBox.dataSource.getByUid($(obj).parent().data("uids")).Text = $(obj).parent().data("seltext");
+        //    listBox.dataSource.getByUid($(obj).parent().data("uids")).Value = $(obj).parent().data("selval");
+        //});
+       
+        var dataSource = new kendo.data.DataSource({
+            data: data
+        });
+        listBox.setDataSource(dataSource);
+        var window = $('#EditCase');
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+       
+    }
+    function CancelCaseEdit() {
+        
+        var window = $('#EditCase');
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+ </script>

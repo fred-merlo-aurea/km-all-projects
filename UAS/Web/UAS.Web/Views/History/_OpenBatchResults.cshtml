@@ -1,0 +1,218 @@
+﻿@model UAS.Web.Models.Circulations.BatchHistoryWithName
+
+
+<script language="JavaScript" type="text/JavaScript">
+    function finalize(id, num) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to finalize batch?",
+            autoClose: false,
+            action: finalizeYes,
+            data: { batchID: id, batchNumber: num },
+            IsOpen: false
+        });
+    }
+
+    function finalizeYes(values) {        
+        var prod = "";
+        var model = {
+            BatchID: values.batchID,
+            BatchNumber: values.batchNumber,
+            PubCode: prod
+        }            
+
+        var window = $("#myWindow").data('kendoWindow');
+
+        $.ajax({
+            url: "/UAS.Web/History/FinalizeBatch",
+            type: "GET",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (result) {
+
+                //Reset Open Batches grid to reflect batch finalized.
+                $.ajax({
+                    url: "/UAS.Web/History/OpenBatchHistory",
+                    type: "POST",
+                    traditional: true,
+                    cache: false,
+                    success: function (data) {
+                        debugger;
+                        $("#openBatches").html(data);
+                        LoadSearchResults();
+                    },
+                    error: function () {
+                        alert("An error has occured!!!");
+                    }
+                });
+
+                window.content(result);
+                window.center().open();
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });                      
+    }
+    function getActionColumn(batchHistory) {
+
+        return GetActions("grid_" + Model.BatchHistoryName + "_Report_" + batchHistory.BatchID.ToString(), batchHistory.BatchID, batchHistory.BatchNumber, batchHistory.Product.Value)
+    }
+    function initMenus(e) {
+        $(".templateCell").each(function () {
+            eval($(this).children("script").last().html());
+        });
+    }
+    function gridActions(data) {
+        return GetActions("grid_" + Model.BatchHistoryName + "_" + data.BatchID.ToString(), data.BatchID, data.BatchNumber, data.Product.Value);
+    }
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+</script>
+
+<style>
+#confirmBox
+{
+    display: none;
+    background-color: #eee;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    position: fixed;
+    width: 400px;
+    height: 200px;
+    left: 40%;
+    top: 30%;    
+    padding: 6px 8px 8px;
+    box-sizing: border-box;
+    text-align: center;
+}
+#confirmBox .message
+{
+    text-align: left;
+    margin-bottom: 30px;
+}
+#confirmBox .title
+{
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+
+.k-widget .templateCell
+{
+    overflow: visible;
+}
+
+</style>
+
+<div id='openBatches'>
+    @LoadtoKendoGrid(Model.BatchHistoryIEnum)
+
+    @helper LoadtoKendoGrid(IEnumerable<UAS.Web.Models.Circulations.BatchHistory> source)
+    {
+
+Html.Kendo()
+    .Grid(Model.BatchHistoryIEnum)
+    .Name("grid_" + Model.BatchHistoryName)
+    .Columns(columns =>
+    {
+
+        columns.Bound(p => p).ClientTemplate(GetActions().ToString()).Width(100).Filterable(false).Sortable(false);
+        //columns.Bound(p => p).ClientTemplate(GetActions("grid").ToString()).Width(100).Filterable(false).Sortable(false);
+        //columns.Template(e => GetActions("grid_" + Model.BatchHistoryName + "_" + e.BatchID.ToString(), e.BatchID, e.BatchNumber, e.Product.Value).ToString()).Width(100).HtmlAttributes(new { @style = "overflow: visible; vertical-align:left;" });
+        columns.Bound(e => e.Product.Value).Title("Product").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+        columns.Bound(e => e.BatchNumber).Title("Batch #").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+        columns.Bound(e => e.User.Value).Title("Username").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+        columns.Bound(e => e.DateCreated).Title("Date Created").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+        columns.Bound(e => e.BatchCount).Title("Count").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+    })
+    .Pageable()
+    .Sortable()
+    .HtmlAttributes(new { style = "height:550px;min-width:100px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+     )
+     .Events(ev => ev.DataBound("dataBound"))
+    .Render();
+
+}
+</div>
+
+    @(Html.Kendo().Window()
+        .Name("myWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+        .Title("Login") //set the title of the window
+        .Content(@<text>
+            This is my window.
+        </text>)
+        .Draggable() //Enable dragging of the window
+        .Resizable() //Enable resizing of the window
+        .Width(600) //Set width of the window
+        .Modal(true)
+        .Visible(false)
+    )
+
+    @(Html.Kendo().Window()
+        .Name("printWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+        .Title("Login") //set the title of the window
+        .Content(@<text>
+            Loading Data. Please Wait.
+        </text>)
+        .Draggable() //Enable dragging of the window
+        .Resizable() //Enable resizing of the window
+        .Width(600) //Set width of the window
+        .Height(600)
+        .Modal(true)
+        .Visible(false)
+    )
+
+    @(Html.Kendo().Window()
+        .Name("printWindowDetail") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+        .Title("Login") //set the title of the window
+        .Content(@<text>
+            Loading Data. Please Wait.
+        </text>)
+        .Draggable() //Enable dragging of the window
+        .Resizable() //Enable resizing of the window
+        .Width(600) //Set width of the window
+        .Height(600)
+        .Modal(true)
+        .Visible(false)
+    )
+
+
+    <div id="client-detail-modal">
+        @helper  GetActions()//string name, int batchID, string batchNumber, string product
+{
+//"grid_" + Model.BatchHistoryName + "_" + e.BatchID.ToString(), e.BatchID, e.BatchNumber, e.Product.Value).ToString()
+    @(Html.Kendo()
+            .Menu()
+            .Name("grid_" + Model.BatchHistoryName + "_#=BatchID#")
+            .Direction(MenuDirection.Right)
+            .Orientation(MenuOrientation.Vertical)
+            .Animation(false)
+            .Items(
+                items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                    innerItems =>
+                    {
+                        innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                        innerItems.Add().Text("Finalize Batch").HtmlAttributes(new { onclick = "finalize(" + "#=BatchID#" + ", " + "#=BatchNumber#" + ")" });
+                    }
+                )
+            ).ToClientTemplate()
+    )
+}
+    </div>

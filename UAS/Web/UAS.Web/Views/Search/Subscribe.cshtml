@@ -1,0 +1,294 @@
+﻿@model UAS.Web.Models.Circulations.SubscriberViewModel
+@{
+    ViewBag.Title = "Manage Subscription";
+}
+
+<script>
+    var pubsubid=0;
+    var psid =@Html.Raw(Json.Encode(ViewBag.PubSubscriptionID));
+    var pid =@Html.Raw(Json.Encode(ViewBag.PubID));
+    var searchSequence =@Html.Raw(Json.Encode(ViewBag.searchSequence));
+    var mainUrl = '@Url.Action("Index", "Search")';
+    var baseUrl = '@Url.Action("GetSubscriber", "Search")';
+    var saveSubUrl ='@Url.Action("SaveSubscriberNew", "Search")';
+    var searchMatchUrl ='@Url.Action("SearchMatch", "Search")';
+    var getlastupdateddatetime ='@Url.Action("SubscriberLastDateUpdated", "Search")';
+    $(document).ready(function () {
+        //window.addEventListener('beforeunload', recordeCloseTime);
+        //Prevent user from submitting form using Enter
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+    //function recordeCloseTime()
+    //{
+
+    //    if(psid>0){
+
+    //        var targetUrl = unlockSubUrl + "?psid=" + psid //getClientID()+"?psid="+psid;
+    //        $.ajax({
+    //            type: "HEAD",
+    //            url: targetUrl,
+    //        });
+    //    }
+
+    //}
+    function CloseSubscriber(data){
+        window.location = mainUrl+"?psid="+data.psid;
+    }
+    function showAlert()
+    {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Any unsaved data will be lost by leaving this page. Do you wish to continue?",
+            autoClose: false,
+            IsOpen: false,
+            action: CloseSubscriber,
+            data: { 'psid': psid }
+        });
+        return false;
+    }
+</script>
+
+<style>
+    /*This is to get rid of box sizing in Bootstrap- which breaks footer nav*/
+    body , #tabstrip-1 {
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+     
+    fieldset.sub-add-edit {
+        height: auto;
+        width: auto;
+        min-height:300px;
+        border: 1px solid gray !important;
+        padding-bottom: 5px;
+        margin: 0px 0px 5px 0px;
+        border-radius: 20px 20px;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.sub-add-edit {
+        width: auto;
+        padding: 0px 0px 0px 0px;
+        border-bottom: none;
+        margin: 0px 0px 0px 5%;
+    }
+
+    #mainCtrlDiv {
+        width: 100%;
+    }
+
+    .disabledinputs {
+        pointer-events: none;
+        /*opacity: 0.4;*/
+    }
+
+    .highlight {
+        border: 2px solid red;
+        width: 250px;
+    }
+
+    .k-button.btn-orange1 {
+        background-color: orange;
+        border: 0;
+    }
+
+    .alert-message {
+        color: red;
+        font-weight: bold;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .k-window-action {
+        visibility: hidden;
+    }
+    /*.k-tabstrip{
+        margin-top:22%;
+    }
+    .k-tabstrip .k-tabstrip-items{
+        margin-top:0%;
+    }*/
+    .subcriber-details {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+<div class="gridttl" id="topDiv">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+
+<div id="mainCtrlDiv" ng-controller="SubscriberCtrl">
+    <form name="subscriberform" novalidate ng-submit="SaveSubscriber()">
+        <table width="100%">
+            <tr>
+                <td>
+                    <div id="alertDiv" style="display:none;color:red;margin:0px;">
+                        <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="30" width="30" style="margin:0px;padding:0px;" /></span>
+                        <span id="alertMsg" style="vertical-align:top;"></span>
+                    </div>
+                    <div id="warningDiv" style="display:none;color:red;margin:0px;">
+                        <span><img src='@Url.Content("~/Images/Notifications/Warning_New.png")' height="30" width="30" style="margin:0px;padding:0px;" /></span>
+                        <span id="warningMsg" style="vertical-align:top;"></span>
+                    </div>
+                    <div id="validationErrorDiv">
+                        <ul>
+                            <li ng-repeat="field in requiredfields.requiredList" style="color:red;list-style:none;">
+                                <span><img src="~/Images/Notifications/Error_New.png" style="width:20px;height:20px;" /><strong>{{field.tabname}}</strong>&nbsp;&nbsp;-&nbsp;&nbsp;{{field.fieldMissing}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        @Html.Partial("Partials/Subscribe/_SubscriptionHeader")
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="width:100%" cellspacing="1" cellpadding="1">
+                        <tr>
+                            <td style="width:50%; vertical-align:top;">
+                                        <fieldset class="sub-add-edit">
+                                            <legend class="sub-add-edit">Profile</legend>
+                                            @Html.Partial("Partials/Subscribe/_SubscriptionProfile")
+                                        </fieldset>
+                            </td>
+                            <td style="width:25%; vertical-align:top;">
+                                    <fieldset class="sub-add-edit">
+                                        <legend class="sub-add-edit">Status</legend>
+                                        @Html.Partial("Partials/Subscribe/_SubscriptionStatus")
+                                    </fieldset>
+                            </td>
+                            <td style="width:25%; vertical-align:top;">
+                                    <fieldset class="sub-add-edit">
+                                        <legend class="sub-add-edit">Marketing</legend>
+                                        @Html.Partial("Partials/Subscribe/_SubscriptionMarketingDetail")
+                                    </fieldset>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @(Html.Kendo().TabStrip()
+                      .Name("tabstrip")
+                      .Items(tabstrip =>
+                      {
+                          tabstrip.Add().Text("Qualification")
+                           .Selected(true)
+                                .Content(Html.Partial("Partials/Subscribe/_SubscriptionQualificationDetail").ToString()).HtmlAttributes(new { @class = "tab" });
+
+                          tabstrip.Add().Text("Ad Hoc")
+                                .Content(Html.Partial("Partials/Subscribe/_SubscriptionAdHocDetail").ToString()).HtmlAttributes(new { @class = "tab" });
+
+                          tabstrip.Add().Text("Paid")
+                                .Content(Html.Partial("Partials/Subscribe/_SubscriptionPaymentDetails").ToString()).HtmlAttributes(new { @class = "tab" });
+
+                          tabstrip.Add().Text("Bill To")
+                                .Content(Html.Partial("Partials/Subscribe/_SubscriptionBillTo").ToString()).HtmlAttributes(new { @class = "tab" });
+
+                      })
+                    )
+                </td>
+            </tr>
+        </table>
+        <div id="tabdetails" style="width:100%;margin:0;padding:0;">
+            
+        </div>
+        <div class="bottomnavbox">
+            <div class="bottomnav">
+                <div class="lbtns">
+                </div>
+                <div class="cbtns">
+                </div>
+                <div class="rbtns">
+                    <input type="button" class="btn btn-blue5" id="rstButton1" value="Reset" />
+                    <input type="submit" class="btn btn-blue5" id="saveBtn1" name="Save" value="Save" />
+                    <input type="button" class="btn btn-blue5" id="cancelButton1" value="Cancel" onclick="return showAlert()" />
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal fade" role="dialog" style="height:500px;">
+            <div class="modal-dialog" style="width:60%;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <label>Potential match(es) found. Please select edit icon for editing or save to create new Subscriber.</label>
+                    </div>
+                    <div class="modal-body" style="height:200px; overflow-x:scroll;">
+                        <div kendo-grid k-options="gridOptions" k-ng-delay="gridOptions" k-on-change="handleChange(dataItem)" id="resultGrid">
+                            <table>
+                                <tr k-row-template data-uid="#: uid #">
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-group-sm" ng-click="copyMatchedRecordProfile(dataItem)">
+                                            <span class="k-icon k-i-copy"></span>
+                                        </button>
+                                    </td>
+                                    <td>{{dataItem.MatchType}}</td>
+                                    <td>{{dataItem.Name}}</td>
+                                    <td>{{dataItem.TITLE}}</td>
+                                    <td>{{dataItem.COMPANY}}</td>
+                                    <td>{{dataItem.ADDRESS}}</td>
+                                    <td>{{dataItem.PHONE}}</td>
+                                    <td>{{dataItem.EMAIL}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<button type="button" class="k-button" id="btnSaveMatched">Save</button>*@
+                        <button type="button" class="k-button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="LoadingWindow"></div>
+            @*@(Html.Kendo().Window().Name("LoadingWindow")
+            .Title(false)
+            .Visible(true)
+            .Modal(true)
+            .Draggable(false)
+            .Animation(false)
+            .Width(200)
+            .Height(200)
+            .Content("<div class='uil-default-css' style='transform:scale(0.46);'><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(0deg) translate(0,-60px);transform:rotate(0deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(30deg) translate(0,-60px);transform:rotate(30deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(60deg) translate(0,-60px);transform:rotate(60deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(90deg) translate(0,-60px);transform:rotate(90deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(120deg) translate(0,-60px);transform:rotate(120deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(150deg) translate(0,-60px);transform:rotate(150deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(180deg) translate(0,-60px);transform:rotate(180deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(210deg) translate(0,-60px);transform:rotate(210deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(240deg) translate(0,-60px);transform:rotate(240deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(270deg) translate(0,-60px);transform:rotate(270deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(300deg) translate(0,-60px);transform:rotate(300deg) translate(0,-60px);border-radius:10px;position:absolute;'></div><div style='top:80px;left:93px;width:14px;height:40px;background:#559edb;-webkit-transform:rotate(330deg) translate(0,-60px);transform:rotate(330deg) translate(0,-60px);border-radius:10px;position:absolute;'></div></div><span style='margin-left:30%;text-align:center;font-family:Arial;font-size:12px;color:#8C8989;'>Please wait…</span>")
+            .Scrollable(false)
+            .HtmlAttributes(new { ng_show="pending"})
+            )*@
+        
+        
+
+
+        <script type="text/x-kendo-template" id="notificationDialog">
+            #if(data.error=="Success_Complete"){#
+            <img src='@Url.Content("~/Images/Notifications/Success_New.png")' height="30" width="30" />
+            <h5>#=data.msg#</h5>
+            @Html.ActionLink("Ok", "Index", "Search", new { psid = @ViewBag.PubSubscriptionID }, new { @class = "k-button btn-blue2" })
+            # } #
+        </script>
+    </form>
+
+</div>
+
+

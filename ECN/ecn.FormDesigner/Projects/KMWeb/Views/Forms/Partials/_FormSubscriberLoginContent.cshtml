@@ -1,0 +1,254 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using KMManagers.APITypes
+@using KMWeb.Models.Forms.Modals
+@using KMWeb.Models.Forms
+@using KMModels
+
+@model FormSubscriberLoginPostModel
+
+@{
+    var group = (ECN_Framework_Entities.Communicator.Group)ViewBag.Group;
+ }
+
+<script>
+    $(function () {
+        $("input[name='OtherIdentificationSelection']").click(function () {
+            if ($('input:checkbox[name=OtherIdentificationSelection]')[0].checked) {
+                $("#Other").show();
+            }
+            else {
+                $("#Other").hide();
+            }
+        });
+        if ($('input:checkbox[name=OtherIdentificationSelection]').length) {
+            if ($('input:checkbox[name=OtherIdentificationSelection]')[0].checked) {
+                $("#Other").show();
+            }
+            else {
+                $("#Other").hide();
+            }
+        }
+
+        $("input[name='PasswordRequired']").click(function () {
+            if ($('input:checkbox[name=PasswordRequired]')[0].checked && $('input:checkbox[name=AutoLoginAllowed]')[0].checked) {
+                $("#Password").show();
+            }
+            else {
+                $("#Password").hide();
+            }
+        });
+        if ($('input:checkbox[name=PasswordRequired]').length) {
+            if ($('input:checkbox[name=PasswordRequired]')[0].checked && $('input:checkbox[name=AutoLoginAllowed]')[0].checked) {
+                $("#Password").show();
+            }
+            else {
+                $("#Password").hide();
+            }
+        }
+
+        $("input[name='AutoLoginAllowed']").click(function () {
+            if ($('input:checkbox[name=PasswordRequired]')[0].checked && $('input:checkbox[name=AutoLoginAllowed]')[0].checked) {
+                $("#Password").show();
+            }
+            else {
+                $("#Password").hide();
+            }
+        });
+        if ($('input:checkbox[name=AutoLoginAllowed]').length) {
+            if ($('input:checkbox[name=PasswordRequired]')[0].checked && $('input:checkbox[name=AutoLoginAllowed]')[0].checked) {
+                $("#Password").show();
+            }
+            else {
+                $("#Password").hide();
+            }
+        }
+    });
+
+    function openAddFieldWindow_SL() {
+        var list = $("#OtherIdentification").data("kendoDropDownList"); //this.fieldList;
+        var options = {
+            CustomerId: @ViewBag.Group.CustomerID,
+            GroupId: @ViewBag.Group.GroupID,
+            fieldAdded: function (field) {
+                debugger;
+                field.LongName = field.GroupDataFieldsID;
+                list.dataSource.add(field);
+                list.value(field.LongName);
+                //control.FieldId = field.GroupDataFieldsID;
+                //$scope.$apply();
+            }
+        }
+        openAddField(options);
+    };
+</script>
+
+@Html.HiddenFor(x => x.FormID)
+<div class="form-wrapper formedit-formProperties" style="width: 75%; overflow: hidden;">        
+    <div class="formbox">
+        <div class="subtitle">Subscriber Login</div>
+        <div class="formitem formiteminline">
+            @Html.LabelFor(x => x.LoginRequired, "Subscriber Login Required?")            
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.LoginRequired).Label("Yes").Value(true).Checked(Model.LoginRequired)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.LoginRequired).Label("No").Value(false).Checked(!Model.LoginRequired)
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Subscriber Identification</div>
+        <div class="formitem">
+            <em>Select the data fields used to uniquely identify the person filling out the form (i.e. Email Address, Subscriber ID). If more than one is selected, the Subscriber can use either field to identify themselves when logging into the form.</em>
+        </div>
+        <div class="formitem" style="margin-top:10px;">
+            <table>
+                <tr>
+                    <td style="width:312px;">@Html.Kendo().CheckBox().Name("EmailAddress").Checked(true).Enable(false).Label("Email Address")</td>
+                    <td>
+                        @Html.LabelFor(x => x.EmailAddressQuerystringName, "Querystring Name") 
+                        @Html.Kendo().TextBoxFor(x => x.EmailAddressQuerystringName)
+                    </td>
+                </tr>
+            </table>            
+        </div>
+        <div class="formitem">
+            <table>
+                <tr>
+                    <td>@Html.Kendo().CheckBoxFor(x => x.OtherIdentificationSelection).Checked(Model.OtherIdentificationSelection).Label("Other")</td>
+                    <td id="Other">
+                        @Html.Kendo().DropDownListFor(x => x.OtherIdentification).BindTo(ViewContext.Controller.ViewBag.Fields).DataTextField("ShortName").DataValueField("LongName")
+                        <button type="button" onclick="openAddFieldWindow_SL()" class="btn btn-blue2 k-button" style="margin-right:10px;">Add<i class="km-icon icon-kmplus-circled-1"></i></button>
+                        @Html.LabelFor(x => x.OtherQuerystringName, "Querystring Name")
+                        @Html.Kendo().TextBoxFor(x => x.OtherQuerystringName)
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Subscriber Authentication</div>
+        <div class="formitem">
+            <em>Select whether a password is required for authentication.</em> <br />
+            <table>
+                <tr>
+                    <td style="width:312px;">@Html.Kendo().CheckBoxFor(x => x.PasswordRequired).Checked(Model.PasswordRequired).Label("Password Required")</td>
+                    <td id="Password">
+                        @Html.LabelFor(x => x.PasswordQuerystringName, "Querystring Name")
+                        @Html.Kendo().TextBoxFor(x => x.PasswordQuerystringName)
+                    </td>
+                </tr>
+            </table> 
+            <br />
+
+            <em>Select if you want the subscriber to be auto logged in when passing credentials in querystring.</em> <br />
+            @Html.Kendo().CheckBoxFor(x => x.AutoLoginAllowed).Checked(Model.AutoLoginAllowed).Label("Auto-Login Allowed") <br />
+            <br />
+
+            <span>Login Modal Literal HTML</span>
+            @(Html.Kendo()
+                .EditorFor(x => x.LoginModalHTML)
+                .Tools(t => t
+                        .ViewHtml()
+                        .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                ).ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                    .Read("Read", "ImageBrowser")
+                    .Destroy("Destroy", "ImageBrowser")
+                    .Upload("Upload", "ImageBrowser")
+                    .Thumbnail("Thumbnail", "ImageBrowser")
+                )
+                .Encode(false)
+            )
+            
+            <table>
+                <tr>
+                    <td>@Html.LabelFor(x => x.LoginButtonText, "Login Button Text")</td>
+                    <td>@Html.Kendo().TextBoxFor(x => x.LoginButtonText)</td>
+                    <td>@Html.LabelFor(x => x.NewSubscriberButtonText, "New Subscriber Button Text")</td>
+                    <td>@Html.Kendo().TextBoxFor(x => x.NewSubscriberButtonText)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(x => x.SignUpButtonText, "Sign Up Button Text")</td>
+                    <td>@Html.Kendo().TextBoxFor(x => x.SignUpButtonText)</td>
+                    <td>@Html.LabelFor(x => x.ExistingSubscriberButtonText, "Existing Subscriber Button Text")</td>
+                    <td>@Html.Kendo().TextBoxFor(x => x.ExistingSubscriberButtonText)</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(x => x.ForgotPasswordButtonText, "Forgot Password Button Text")</td>
+                    <td>@Html.Kendo().TextBoxFor(x => x.ForgotPasswordButtonText)</td>
+                </tr>
+            </table>       
+            
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Forgot Password</div>
+        <div class="formitem">
+            <span>Forgot Password Message</span>
+            @(Html.Kendo()
+                .EditorFor(x => x.ForgotPasswordMessageHTML)
+                .Tools(t => t
+                        .ViewHtml()
+                        .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                ).ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                    .Read("Read", "ImageBrowser")
+                    .Destroy("Destroy", "ImageBrowser")
+                    .Upload("Upload", "ImageBrowser")
+                    .Thumbnail("Thumbnail", "ImageBrowser")
+                )
+                .Encode(false)
+            )
+            <br />
+            <span>Forgot Password Email Notification</span>
+            <br />
+            <table>
+                <tr>
+                    <td style="padding:0px;">
+                        <table>
+                            <tr><td>@Html.LabelFor(x => x.ForgotPasswordFromName, "From Name")</td></tr>
+                            <tr><td>@Html.Kendo().TextBoxFor(x => x.ForgotPasswordFromName)</td></tr>
+                            <tr><td>@Html.LabelFor(x => x.ForgotPasswordSubject, "Subject Line")</td></tr>
+                            <tr><td>@Html.Kendo().TextBoxFor(x => x.ForgotPasswordSubject)</td></tr>
+                        </table>
+                    </td>
+                    <td style="padding:0px;">
+                        @(Html.Kendo()
+                            .EditorFor(x => x.ForgotPasswordNotificationHTML)
+                            .Tools(t => t
+                                    .ViewHtml()
+                                    .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                            ).ImageBrowser(imageBrowser => imageBrowser
+                            .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                            )
+                            .Encode(false)
+                        )
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if(!ViewContext.ViewData.ModelState.IsValid)
+{
+    var summary = Html.ValidationSummary().ToString();
+
+    var errors = Html.Raw(HttpUtility.JavaScriptStringEncode(summary));
+    
+    <script>
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@errors'
+        });
+    </script>
+}

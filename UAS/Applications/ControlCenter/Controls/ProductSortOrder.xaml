@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="ControlCenter.Controls.ProductSortOrder"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:Chromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             xmlns:Navigation="clr-namespace:Telerik.Windows.Controls.Navigation;assembly=Telerik.Windows.Controls.Navigation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="738" d:DesignWidth="1024">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="256*"/>
+                <RowDefinition Height="243*"/>
+                <RowDefinition Height="239*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="250"/>                    
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Content="Product Type:" Grid.Row="0" VerticalAlignment="Center"></Label>
+                <telerik:RadComboBox Name="cbType" Grid.Row="0" Grid.Column="1" Margin="3" Width="375" HorizontalAlignment="Left" SelectionChanged="cbType_SelectionChanged"></telerik:RadComboBox>
+                
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Background="{StaticResource KMLightBlueGradient}" VerticalAlignment="Center">
+                    <Label Content="Publication Sort Order" Foreground="White" FontWeight="Bold"></Label>
+                </StackPanel>
+
+                <Label Content="Product:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                <ListBox Name="lbxProduct" Grid.Row="2" Grid.RowSpan="5" Grid.Column="1" Margin="3" SelectionMode="Multiple"></ListBox>
+
+                <telerik:RadButton Name="btnUp" Content="Move Up" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Width="75" Margin="3" Click="btnUp_Click"></telerik:RadButton>
+                <telerik:RadButton Name="btnDown" Content="Move Down" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Width="75" Margin="3" Click="btnDown_Click"></telerik:RadButton>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" Margin="5,2,2,2">
+                    <telerik:RadButton Name="btnSave" Content="Save" Width="50" Click="btnSave_Click"></telerik:RadButton>
+                    <telerik:RadButton Name="btnCancel" Content="Cancel" Width="50" Click="btnCancel_Click"></telerik:RadButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

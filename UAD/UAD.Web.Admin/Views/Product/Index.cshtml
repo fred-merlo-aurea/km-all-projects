@@ -1,0 +1,79 @@
+﻿@model UAD.Web.Admin.Models.ProductWrapper
+@using UAD.Web.Admin.Infrastructure
+@{
+    ViewBag.Title = "Product";
+}
+
+<script>
+    function deleteProduct(Id) {
+        if (Id > 0) {
+            window.location = "@Url.Action("Delete", "Product")" + "?Id=" + String(Id);
+        }
+        else {
+            $('#deleteModal').modal('hide');
+        }
+    }
+</script>
+
+<div>@Html.ValidationSummary()</div>
+<table style="width:100%">
+    <tr><td class="h4">Products</td></tr>
+    <tr>
+        <td align="right">
+            <div style="text-align:right">
+                <input type="button" value="Add" onclick="location.href='@Url.Action("Add", "Product")'" class="btn k-button"/>
+            </div>
+        </td>
+    </tr>
+</table>
+
+@(
+ Html.Kendo()
+        .Grid(Model.pubs)
+    .Name("grid")
+    .Events(e => e.DataBound("ActionMenu_OnGridDataBoundEvent"))
+    .Columns(columns =>
+    {
+        columns.Bound(e => e.PubName).Title("Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" });
+        columns.Bound(e => e.PubCode).Title("Code").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" });
+        columns.Bound(e => e.SortOrder).Title("Sort Order").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align:center" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+        //columns.Bound(e => e..PubTypeDisplayName).Title("Type").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" });
+        columns.Bound(e => e.score).Title("Score").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align:center" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+        columns.Bound(e => e.EnableSearching).ClientTemplate(
+            "# if (EnableSearching == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+        ).Title("Enable Searching").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align:center" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+        columns.Bound(e => e).Title("").ClientTemplate(Html.ActionMenu_Product()).Filterable(false).HtmlAttributes(new { @style = "width :90px;" });
+    })
+    .Pageable()
+    .Sortable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(12)
+        .ServerOperation(false)
+    .Model(model => model.Id(e => e.PubID))
+     )
+)
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn k-button" onclick="deleteProduct(Id);"> Yes </button>
+                <button type="button" class="btn k-button" data-dismiss="modal"> No </button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{844ACE84-D3B8-4221-ACC5-E6EA0D4203B4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.wizard</RootNamespace>
+    <AssemblyName>ecn.wizard</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ActiveUp.WebControls, Version=5.0.3119.50, Culture=neutral, PublicKeyToken=6e8eac0d38e90b9b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AgileComponents\bin\Debug\ActiveUp.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="CKEditor.NET">
+      <HintPath>..\DLLs\CKEditor.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="pfpro_dotNET, Version=4.0.0.5, Culture=neutral, PublicKeyToken=14aa1e8d77f2a97c">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\fs1\IT Docs\KM_Dev_SharedDLLs\pfpro_dotNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Component\IWizard.cs" />
+    <Compile Include="Component\MasterControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Component\MasterPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Component\SaveWizard.cs" />
+    <Compile Include="Component\Session.cs" />
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Importer.aspx.cs">
+      <DependentUpon>Importer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Importer.aspx.designer.cs">
+      <DependentUpon>Importer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InvokeWSHandlers\InvokeWS.aspx.cs">
+      <DependentUpon>InvokeWS.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InvokeWSHandlers\InvokeWS.aspx.designer.cs">
+      <DependentUpon>InvokeWS.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ListCreate.aspx.cs">
+      <DependentUpon>ListCreate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListCreate.aspx.designer.cs">
+      <DependentUpon>ListCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ListEditor.aspx.cs">
+      <DependentUpon>ListEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListEditor.aspx.designer.cs">
+      <DependentUpon>ListEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ListManage.aspx.cs">
+      <DependentUpon>ListManage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListManage.aspx.designer.cs">
+      <DependentUpon>ListManage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginHandlers\DirectLogin.aspx.cs">
+      <DependentUpon>DirectLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginHandlers\DirectLogin.aspx.designer.cs">
+      <DependentUpon>DirectLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginHandlers\WebServiceLogin.aspx.cs">
+      <DependentUpon>WebServiceLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginHandlers\WebServiceLogin.aspx.designer.cs">
+      <DependentUpon>WebServiceLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\Registration.aspx.cs">
+      <DependentUpon>Registration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPages\Registration.aspx.designer.cs">
+      <DependentUpon>Registration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_20_login.aspx.cs">
+      <DependentUpon>wizchannel_20_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_20_login.aspx.designer.cs">
+      <DependentUpon>wizchannel_20_login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_26_login.aspx.cs">
+      <DependentUpon>wizchannel_26_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_26_login.aspx.designer.cs">
+      <DependentUpon>wizchannel_26_login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_2_login.aspx.cs">
+      <DependentUpon>wizchannel_2_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_2_login.aspx.designer.cs">
+      <DependentUpon>wizchannel_2_login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_31_login.aspx.cs">
+      <DependentUpon>wizchannel_31_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_31_login.aspx.designer.cs">
+      <DependentUpon>wizchannel_31_login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPages\wizchannel_33_login.aspx.cs">
+      <DependentUpon>wizchannel_33_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PricingChart.aspx.cs">
+      <DependentUpon>PricingChart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PricingChart.aspx.designer.cs">
+      <DependentUpon>PricingChart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PreviewEmail.aspx.cs">
+      <DependentUpon>PreviewEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\PreviewEmail.aspx.designer.cs">
+      <DependentUpon>PreviewEmail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingBounces.aspx.cs">
+      <DependentUpon>ReportingBounces.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingBounces.aspx.designer.cs">
+      <DependentUpon>ReportingBounces.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingClicks.aspx.cs">
+      <DependentUpon>ReportingClicks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingClicks.aspx.designer.cs">
+      <DependentUpon>ReportingClicks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingForwards.aspx.cs">
+      <DependentUpon>ReportingForwards.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingForwards.aspx.designer.cs">
+      <DependentUpon>ReportingForwards.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingMain.aspx.cs">
+      <DependentUpon>ReportingMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingMain.aspx.designer.cs">
+      <DependentUpon>ReportingMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingMsgDetail.aspx.cs">
+      <DependentUpon>ReportingMsgDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingMsgDetail.aspx.designer.cs">
+      <DependentUpon>ReportingMsgDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingOpens.aspx.cs">
+      <DependentUpon>ReportingOpens.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingOpens.aspx.designer.cs">
+      <DependentUpon>ReportingOpens.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportingUnSubscribes.aspx.cs">
+      <DependentUpon>ReportingUnSubscribes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportingUnSubscribes.aspx.designer.cs">
+      <DependentUpon>ReportingUnSubscribes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Footer.ascx.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\Footer.ascx.designer.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Header.ascx.cs">
+      <DependentUpon>Header.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\Header.ascx.designer.cs">
+      <DependentUpon>Header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StatusBar.ascx.cs">
+      <DependentUpon>StatusBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\StatusBar.ascx.designer.cs">
+      <DependentUpon>StatusBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\wzAccountCreation\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\wzProcessLogin\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\wzPushLeadsList\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard.aspx.cs">
+      <DependentUpon>Wizard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Wizard.aspx.designer.cs">
+      <DependentUpon>Wizard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wizard\ChooseTemplate.ascx.cs">
+      <DependentUpon>ChooseTemplate.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wizard\ChooseTemplate.ascx.designer.cs">
+      <DependentUpon>ChooseTemplate.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="wizard\Confirmation.ascx.cs">
+      <DependentUpon>Confirmation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wizard\Confirmation.ascx.designer.cs">
+      <DependentUpon>Confirmation.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="wizard\CreateMessage.ascx.cs">
+      <DependentUpon>CreateMessage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wizard\CreateMessage.ascx.designer.cs">
+      <DependentUpon>CreateMessage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="wizard\CreditCardSend.ascx.cs">
+      <DependentUpon>CreditCardSend.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wizard\CreditCardSend.ascx.designer.cs">
+      <DependentUpon>CreditCardSend.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="wizard\Preview.ascx.cs">
+      <DependentUpon>Preview.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wizard\Preview.ascx.designer.cs">
+      <DependentUpon>Preview.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Importer.aspx" />
+    <Content Include="ListCreate.aspx" />
+    <Content Include="ListEditor.aspx" />
+    <Content Include="ListManage.aspx" />
+    <Content Include="Logout.aspx" />
+    <Content Include="PricingChart.aspx" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="style.css" />
+    <Content Include="Wizard.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="htmltemplates\215.jpg" />
+    <Content Include="htmltemplates\216.jpg" />
+    <Content Include="htmltemplates\217.jpg" />
+    <Content Include="htmltemplates\bright-idea-thumb.GIF" />
+    <Content Include="htmltemplates\customtemplate.gif" />
+    <Content Include="htmltemplates\fish-thumb.GIF" />
+    <Content Include="images\bgShadow3.gif" />
+    <Content Include="images\bgShadow3.jpg" />
+    <Content Include="images\bg_status.gif" />
+    <Content Include="images\bounces.gif" />
+    <Content Include="images\btn_back_to_main_menu.gif" />
+    <Content Include="images\btn_back_to_previous_page.gif" />
+    <Content Include="images\btn_back_to_report_menu.gif" />
+    <Content Include="images\btn_browse.gif" />
+    <Content Include="images\btn_close.gif" />
+    <Content Include="images\btn_continue.gif" />
+    <Content Include="images\btn_create_login_id.gif" />
+    <Content Include="images\btn_delete.gif" />
+    <Content Include="images\btn_delete_list.gif" />
+    <Content Include="images\btn_download.gif" />
+    <Content Include="images\btn_edit_message.gif" />
+    <Content Include="images\btn_export_list.gif" />
+    <Content Include="images\btn_import_data.gif" />
+    <Content Include="images\btn_logout.gif" />
+    <Content Include="images\btn_previous.gif" />
+    <Content Include="images\btn_rename_list.gif" />
+    <Content Include="images\btn_save.gif" />
+    <Content Include="images\btn_send_email.gif" />
+    <Content Include="images\btn_submit.gif" />
+    <Content Include="images\btn_unsubscribe.gif" />
+    <Content Include="images\btn_view_edit_email_list.gif" />
+    <Content Include="images\btn_view_pricing.gif" />
+    <Content Include="images\clicks.gif" />
+    <Content Include="images\content_bg.gif" />
+    <Content Include="images\copyright_km.gif" />
+    <Content Include="images\divider_line.gif" />
+    <Content Include="images\footer.gif" />
+    <Content Include="images\forwards.gif" />
+    <Content Include="images\header.gif" />
+    <Content Include="images\header_1.gif" />
+    <Content Include="images\header_2.gif" />
+    <Content Include="images\icon-delete1.gif" />
+    <Content Include="images\icon-unsubscribe.gif" />
+    <Content Include="images\icon_1_off.gif" />
+    <Content Include="images\icon_1_on.gif" />
+    <Content Include="images\icon_2_off.gif" />
+    <Content Include="images\icon_2_on.gif" />
+    <Content Include="images\icon_3_off.gif" />
+    <Content Include="images\icon_3_on.gif" />
+    <Content Include="images\icon_4_off.gif" />
+    <Content Include="images\icon_4_on.gif" />
+    <Content Include="images\img_arrow1.gif" />
+    <Content Include="images\img_arrow2.gif" />
+    <Content Include="images\img_arrow3.gif" />
+    <Content Include="images\img_arrow4.gif" />
+    <Content Include="images\img_arrow5.gif" />
+    <Content Include="images\img_arrow6.gif" />
+    <Content Include="images\img_company.gif" />
+    <Content Include="images\img_create_new_list.gif" />
+    <Content Include="images\img_create_new_login.gif" />
+    <Content Include="images\img_credit_card.gif" />
+    <Content Include="images\img_cust_reg.gif" />
+    <Content Include="images\img_dotted_line.gif" />
+    <Content Include="images\img_editor_header.gif" />
+    <Content Include="images\img_email_address.gif" />
+    <Content Include="images\img_file_icon.gif" />
+    <Content Include="images\img_first_name.gif" />
+    <Content Include="images\img_last_name.gif" />
+    <Content Include="images\img_list.gif" />
+    <Content Include="images\img_login.gif" />
+    <Content Include="images\img_manage_list.gif" />
+    <Content Include="images\img_map_data.gif" />
+    <Content Include="images\img_number1.gif" />
+    <Content Include="images\img_number2.gif" />
+    <Content Include="images\img_or.gif" />
+    <Content Include="images\img_phone_number.gif" />
+    <Content Include="images\img_selection.gif" />
+    <Content Include="images\img_step1.gif" />
+    <Content Include="images\img_step2.gif" />
+    <Content Include="images\img_step3.gif" />
+    <Content Include="images\img_step4.gif" />
+    <Content Include="images\img_step5.1.gif" />
+    <Content Include="images\img_step5.gif" />
+    <Content Include="images\KM-Footer.jpg" />
+    <Content Include="images\KM_Footer.jpg" />
+    <Content Include="images\KM_footer1.jpg" />
+    <Content Include="images\KM_header.jpg" />
+    <Content Include="images\KM_header1.jpg" />
+    <Content Include="images\left_footer_reporting.gif" />
+    <Content Include="images\left_horizontal_divider.gif" />
+    <Content Include="images\logo_km.gif" />
+    <Content Include="images\main.gif" />
+    <Content Include="images\message_detail.gif" />
+    <Content Include="images\NB_Footer.jpg" />
+    <Content Include="images\NB_Header.jpg" />
+    <Content Include="images\opens.gif" />
+    <Content Include="images\right_arrow_yellow.gif" />
+    <Content Include="images\unsubscribes.gif" />
+    <Content Include="images\uw_footer.jpg" />
+    <Content Include="images\uw_header.jpg" />
+    <Content Include="InvokeWSHandlers\InvokeWS.aspx" />
+    <Content Include="LoginHandlers\DirectLogin.aspx" />
+    <Content Include="LoginHandlers\WebServiceLogin.aspx" />
+    <Content Include="LoginPages\Registration.aspx" />
+    <Content Include="LoginPages\wizchannel_20_login.aspx" />
+    <Content Include="LoginPages\wizchannel_26_login.aspx" />
+    <Content Include="LoginPages\wizchannel_2_login.aspx" />
+    <Content Include="LoginPages\wizchannel_31_login.aspx" />
+    <Content Include="LoginPages\wizchannel_33_login.aspx" />
+    <Content Include="Reports\PreviewEmail.aspx" />
+    <Content Include="Reports\ReportingBounces.aspx" />
+    <Content Include="Reports\ReportingClicks.aspx" />
+    <Content Include="Reports\ReportingForwards.aspx" />
+    <Content Include="Reports\ReportingMain.aspx" />
+    <Content Include="Reports\ReportingMsgDetail.aspx" />
+    <Content Include="Reports\ReportingOpens.aspx" />
+    <Content Include="Reports\ReportingUnSubscribes.aspx" />
+    <Content Include="UserControls\Footer.ascx" />
+    <Content Include="UserControls\Header.ascx" />
+    <Content Include="UserControls\StatusBar.ascx" />
+    <Content Include="packages.config" />
+    <Fakes Include="Fakes\SanitizerProviders.fakes" />
+    <None Include="Web References\wzAccountCreation\AccountCreation.disco" />
+    <None Include="Web References\wzProcessLogin\ProcessLogin.disco" />
+    <None Include="Web References\wzPushLeadsList\PushLeadsList.disco" />
+    <Content Include="Web.config" />
+    <Content Include="wizard\ChooseTemplate.ascx" />
+    <Content Include="wizard\Confirmation.ascx" />
+    <Content Include="wizard\CreateMessage.ascx" />
+    <Content Include="wizard\CreditCardSend.ascx" />
+    <Content Include="wizard\Preview.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="htmltemplates\Thumbs.db" />
+    <None Include="images\Thumbs.db" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\wzAccountCreation\AccountCreation.wsdl" />
+    <None Include="Web References\wzAccountCreation\Contact.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\wzAccountCreation\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\wzProcessLogin\ProcessLogin.wsdl" />
+    <None Include="Web References\wzProcessLogin\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\wzPushLeadsList\PushLeadsList.wsdl" />
+    <None Include="Web References\wzPushLeadsList\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3B505AE1-FD1C-429A-A534-81AE42F7CCC5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://wizard.ecn5.com/webservice/KM/AccountCreation.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\wzAccountCreation\</RelPath>
+      <UpdateFromURL>http://wizard.ecn5.com/webservice/KM/AccountCreation.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ecn_wizard_wzAccountCreation_AccountCreation</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\wzProcessLogin\</RelPath>
+      <UpdateFromURL>http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ecn_wizard_wzProcessLogin_ProcessLogin</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://wizard.ecn5.com/webservice/KM/PushLeadsList.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\wzPushLeadsList\</RelPath>
+      <UpdateFromURL>http://wizard.ecn5.com/webservice/KM/PushLeadsList.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ecn_wizard_wzPushLeadsList_PushLeadsList</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3036</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ecn.wizard</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+</Project>

@@ -1,0 +1,146 @@
+﻿
+<style>
+    
+
+    .panel-body-scrollable {
+        position: relative;
+        bottom: 30px;
+        clear: both;
+        border-bottom: 1px solid transparent;
+    }
+
+    .well .list-group {
+        margin-bottom: 0px;
+    }
+
+    .rowmargin {
+        margin: 10px auto;
+        padding: 10px 0;
+    }
+
+    .Qual-table {
+        width: 100%;
+        margin-left: 10px;
+    }
+
+    .Qual-columns-lable {
+        width: 10%;
+        padding: 5px auto;
+    }
+
+    .Qual-columns-input {
+        width: 30%;
+        padding: 5px auto;
+    }
+</style>
+<table class="Qual-table">
+    <tbody>
+        <tr>
+            <td class="Qual-columns-lable">
+                <label>Qualification Source:<span id="QSourceRequiredStar" style="color:red;">*</span></label>
+
+            </td>
+            <td class="Qual-columns-input">
+                <input id="QSource" name="QSource" ng-model="subscrberViewModel.PubSubscription.PubQSourceID" style="width:250px;"  ng-required="CheckRequired()" />
+                <div ng-show="loadcomplete" id="errorDivQSource" @*ng-messages="subscriberform.QSource.$error"*@ style="color:red">
+                    <div @*ng-message="required"*@ id="errorLblQSource">Please select Qualification Source.</div>
+                </div>
+            </td>
+            <td class="Qual-columns-lable">
+                <label>Qualification Date:</label>
+
+            </td>
+            <td class="Qual-columns-input">
+                <input kendo-date-picker ng-model="subscrberViewModel.PubSubscription.QualificationDate" id="QualDate" />
+                <button class="k-button btn-orange1" type="button" ng-click="ApplyDemoDates()" id="btnApplyQualDate">Apply</button>
+            </td>
+
+        </tr>
+        <tr>
+            <td class="Qual-columns-lable">
+                <label>Par3C:<span style="color:red;" id="Par3CRequiredStar">*</span></label>
+            </td>
+            <td class="Qual-columns-input">
+                <input id="Par3C" name="Par3C" ng-model="subscrberViewModel.PubSubscription.Par3CID" style="width:250px;"  ng-required="CheckRequired()" />
+                <div ng-show="loadcomplete" id="errorDivPar3CID" @*ng-messages="subscriberform.Par3C.$error"*@ style="color:red">
+                    <div @*ng-message="required"*@ id="errorLblPar3CID">Please select Par3C.</div>
+                </div>
+            </td>
+            <td class="Qual-columns-lable">
+                <label>Copies:</label>
+            </td>
+            <td class="Qual-columns-input">
+                <input kendo-numerictextbox ng-model="subscrberViewModel.PubSubscription.Copies" value="1" k-min="1"
+                       ng-disabled="!subscrberViewModel.IsCopiesEnabled">
+            </td>
+        </tr>
+    </tbody>
+</table>
+<h4> Permissions </h4>
+<table width="100%;">
+    <tr>
+        <td> Mail </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.MailPermission" id="MailPermission" style="width:60px;" />
+        </td>
+        <td> Fax </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.FaxPermission" id="FaxPermission" style="width:60px;" />
+        </td>
+        <td> Phone </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.PhonePermission" id="PhonePermission" style="width:60px;" />
+        </td>
+        <td> Other Products </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.OtherProductsPermission" id="OtherProductsPermission" style="width:60px;" />
+        </td>
+        <td> Email Renew </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.EmailRenewPermission" id="EmailRenewPermission" style="width:60px;" />
+        </td>
+        <td> Third Party </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.ThirdPartyPermission" id="ThirdPartyPermission" style="width:60px;" />
+        </td>
+        <td> Text </td>
+        <td>
+            <input ng-model="subscrberViewModel.PubSubscription.TextPermission" id="TextPermission" style="width:60px;" />
+        </td>
+    </tr>
+</table>
+
+<div class="panel-group" style="margin-top:10px;" id="questions" >
+    <div class="panel panel-default" ng-repeat="Question in subscrberViewModel.QuestionList track by $index" style="margin:0px">
+        <div class="panel-heading">
+            <p style="color:cornflowerblue">
+                <strong>
+                    <span class="alert-message" ng-show="Question.IsRequired && subscrberViewModel.AreQuestionsRequired">*</span>{{ Question.DisplayName}}
+                    <input kendo-date-picker id="demodatepicker_{{Question.GroupID}}" ng-model="Question.DateCreated" ng-disabled="!Question.IsSelected" ng-change="DemoDatesChanged(Question)" />
+                    <input type="checkbox" ng-disabled="!subscrberViewModel.Enabled" id="demochecked_{{Question.GroupID}}"   ng-click="DemoDatesChecked($event,Question)" />
+
+                </strong>
+                <span>If checked the Qualification Date will be applied for Demographic Date.</span>
+                <span class="text-danger pull-right" id="demomessage_{{Question.GroupID}}"></span>
+            </p>
+        </div>
+        <div class="panel-body" style="margin-top:5px;max-height:250px;overflow-y:scroll;overflow-x:hidden;" response-main-directive>
+            <input ng-model="query.ResponseDesc" ng-disabled="!subscrberViewModel.Enabled" style="margin-bottom:5px;" class="k-textbox" placeholder="Starts With.." autofocus>
+            <button ng-show="Question.ShowMore" class="k-button btn-orange1" type="button" ng-click="LoadMore(Question)">Load More..</button>
+            <div>
+                <ul id="check-list-box" class="list-unstyled">
+                    <li ng-class="Question.ResponseCounter>10 ? 'col-sm-5 col-md-5 col-lg-5' : 'col-sm-12 col-md-12 col-lg-12'" ng-repeat="Answer in Question.Answers|filter:query:startsWith| limitTo:Question.ResponseDisplay"  response-repeat-directive>
+                        <input type="checkbox" name="responsegroup{{Answer.ResponseGroupID}}" id="responsegroup{{Answer.CodeSheetID}}" ng-click="ResponseChanged($event,Question,Answer)"  ng-checked="Answer.IsSelected" ng-disabled="!subscrberViewModel.Enabled"/>
+                        {{Answer.ResponseDesc}} <span ng-show="Answer.IsOther && Question.ShowOther" style="margin-left:20px;"><label id="lblOther{{Question.GroupID}}">Other:</label><input class="k-textbox" ng-change="MadeResponseChanged()" ng-model="Question.OtherValue" id="Other{{Question.GroupID}}" /></span>
+                    </li>
+
+                </ul>
+               
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,44 @@
+﻿@model List<ecn.communicator.mvc.Models.EmailUDFDataValue>
+
+@(Html.Kendo()
+        .Grid(Model)
+        .Name("grid")
+        .Events(x => x.DataBound("dataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.UDFName).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("UDF Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+            columns.Bound(e => e.Data).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Data").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" });
+        })
+        .Pageable()
+        .Sortable()
+        .HtmlAttributes(new { style = "min-height:200px;min-width:100px;border:none;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.GroupDataFieldsID);
+            })
+            .PageSize(10)
+            .ServerOperation(false)
+        )
+)
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=GroupDataFieldsID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").Action("Index", "Group").HtmlAttributes(new { @style = "display:none;" });
+                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "editUDFDataModal('#=GroupDataFieldsID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}

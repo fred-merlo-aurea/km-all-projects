@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" Debug="true" CodeBehind="ListManager.asmx.cs" Class="ecn.webservice.ListManager" %>  

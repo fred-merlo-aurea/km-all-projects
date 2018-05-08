@@ -1,0 +1,145 @@
+﻿@using KMEnums
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("ChangeGroupWindow")
+        .Width(550)
+        .Content(
+            @<text>
+                <div class="wrapper modal modalgroupcustomfield">
+                    <fieldset title="Group Custom Fields">
+                        <legend>Group Custom Fields</legend>
+                            <span>
+                                Items in <span style="color:#cc0000">red</span> do not exist in the new group.
+                                Either select a new custom field or the existing one will be created for you.
+                                If you want to add a different custom field, select "Add New".
+                            </span>
+                            @using (Ajax.BeginForm("ChangeGroup", null, new AjaxOptions
+                            {
+                                HttpMethod = "POST",
+                                OnComplete = "ChangeGroupComplete"
+                                
+                            }, new { id = "changeGroupForm" }))
+                            {
+                                <div id="ChangeGroupContent"></div>
+                                <div class="buttonsgroup">
+                                    @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn gridbtn" })
+                                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn gridbtn", type = "button", onclick = "changeGroupManager.close()" })
+                                </div>
+                            }                                
+                    </fieldset>
+                </div>
+            </text>)
+        .Visible(false)
+        .Render();
+}
+
+<script>
+    function ChangeGroupComplete(response) {
+        if (response.status == '@((int)HttpStatusCode.OK)') {
+            changeGroupManager.performAction();
+        } else {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Unable to change group'
+            });
+        }
+    }
+    function ChangeGroupManager(options) {
+        var scope = this;
+        this.data = options.data;
+        this.action = options.action;
+        this.open = function () {
+            $("#ChangeGroupContent").load('@Url.Action("ChangeGroupContent")', this.data,
+                function (responseText, status, request) {
+                    var controls = request.getResponseHeader('controls');
+                    if (controls) {
+                        $("#ChangeGroupWindow").data('kendoWindow').center().open();
+                    } else {
+                        $("#changeGroupForm").submit();
+                    }
+            });
+        };
+        this.close = function () {
+            $("#ChangeGroupWindow").data('kendoWindow').close();
+        };
+        this.performAction = function () {
+            this.close();
+            if (this.action) {
+                this.action();
+            }
+        }
+    }
+    var changeGroupManager;
+    function openChangeGroupManager(options) {
+        changeGroupManager = new ChangeGroupManager(options);
+        changeGroupManager.open();
+    }
+</script>
+
+<script>
+    function openAddFieldWindow(element) {
+        var options = {
+            CustomerId: changeGroupManager.data.CustomerId,
+            GroupId: changeGroupManager.data.GroupId,
+            fieldAdded: function (field) {
+                var id = field.GroupDataFieldsID;
+                var name = field.ShortName;
+                var listSelector = "[name$=FieldId]";
+                var lists = $("#ChangeGroupContent").find(listSelector);
+                var container = $(element).closest("li");
+                var selectedList = container.find(listSelector).data("kendoDropDownList");
+                $.each(lists, function (index, list) {
+                    var currentList = $(list).data("kendoDropDownList");
+                    var currentListIndex = currentList.selectedIndex;
+                    var dataItems = currentList.dataSource.data();
+                    var dataItem = getDataItem(dataItems, name);
+                    if (dataItem) {
+                        dataItem.set("Id", id);
+                    } else {
+                        currentList.dataSource.add({
+                            Id: id,
+                            Name: name
+                        });
+                    }
+                    if (currentList == selectedList) {
+                        currentList.value(id);
+                    } else {
+                        currentList.select(currentListIndex);
+                    }
+                    currentList.trigger("change");
+                });
+            }
+        };
+        openAddField(options);
+    }
+    function getDataItem(items, name) {
+        var dataItem = null;
+        $.each(items, function (index, item) {
+            if (item.Name == name) {
+                dataItem = item;
+            }
+        });
+        return dataItem;
+    }
+    function fieldChanged(e) {
+        var name = e.sender.text();
+        var element = e.sender.element;
+        var container = element.closest("li");
+        container.find("[name$=FieldName]").val(name);
+        var value = e.sender.value();
+        var button = container.find("button");
+        if (value) {
+            e.sender.wrapper.removeClass('k-state-highlight-red');
+            button.hide();
+        } else {
+            e.sender.wrapper.addClass('k-state-highlight-red');
+            button.show();
+        }
+    }
+</script>
+
+

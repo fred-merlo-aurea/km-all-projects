@@ -1,0 +1,116 @@
+﻿<div align="center" style="text-align: center; height: 100%; padding: 0px 10px 0px 10px;">
+   
+    <table width="100%" align="center" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD; height: auto">
+        <tbody>
+            <tr style="background-color: #5783BD;">
+                <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold">
+                    Choose Date
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table border="0" width="100%" cellpadding="5" cellspacing="5">
+                        <tbody>
+                            <tr>
+                                <td  valign="middle" align="left" width="100%">
+                                    <input type="radio" name="ActivityFilterDatePicker" id="rbToday" class="k-radio" onchange="checkChanged(event)">
+                                    <label class="k-radio-label" for="rbToday">Today</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="middle" align="left">
+                                    <input type="radio" name="ActivityFilterDatePicker" id="rbPlusMinusToday" class="k-radio" onchange="checkChanged(event)">
+                                    <label class="k-radio-label" for="rbPlusMinusToday">&nbsp;&nbsp;Plus/Minus Today</label>
+                                    <span id="divTodayPlusMinus" style="display: none;">
+                                        <select name="ddlPlusMinus" id="ddlPlusMinus" tabindex="-1">
+                                            <option selected="selected" value="Plus">Plus</option>
+                                            <option value="Minus">Minus</option>
+                                        </select>
+                                        &nbsp;&nbsp;<input name="txtDays" type="number" id="txtDays" style="width:100px;" tabindex="-1">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="middle" align="left">
+                                    <input type="radio" name="ActivityFilterDatePicker" id="rbOther" class="k-radio" onchange="checkChanged(event)">
+                                    <label class="k-radio-label" for="rbOther">&nbsp;Other</label>
+                                    <span id="divOther" style="display: none;">
+                                        
+                                        @(Html.Kendo().DatePicker()
+                                      .Name("datepicker")
+                                      .HtmlAttributes(new { style = "width: 100px;", title = "datepicker" })
+                                        )
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100%" height="40" align="center">
+                                    <input type="button" value="Choose Date" class="k-button" onclick="ChooseDate()">
+                                    &nbsp;&nbsp;&nbsp;
+                                    <input type="button" value="Cancel"  class="k-button" onclick="CancelDateSelection()">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+       
+    });
+
+    function checkChanged(e) {
+        console.log(e.target.id);
+        if ($('#' + e.target.id).is(':checked')) {
+            if (e.target.id == 'rbPlusMinusToday') {
+                $("#divTodayPlusMinus").show();
+                $("#divOther").hide();
+            }
+            else if (e.target.id == 'rbOther') {
+                $("#divTodayPlusMinus").hide();
+                $("#divOther").show();
+            }
+        }
+
+    }
+    function CancelDateSelection() {
+        
+        var window = $("#customDatePicker");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+    function ChooseDate() {
+        var expression = "";
+        var setvalue = $("#parentControl").val();
+        if ($('#rbPlusMinusToday').is(':checked')) {
+            console.log($('#ddlPlusMinus').val());
+            expression= "EXP:Today["
+            if ($('#ddlPlusMinus').val() == "Plus" && $('#txtDays').val()) {
+                expression = expression + "+" + $('#txtDays').val().trim()+"]";
+            }
+            else if ($('#ddlPlusMinus').val() == "Minus" && $('#txtDays').val()) {
+                expression = expression + "-" + $('#txtDays').val().trim()+"]";
+            }
+            else {
+                expression = "";
+            }
+        } else if ($('#rbOther').is(':checked')) {
+            expression = $('#datepicker').val();
+
+        }
+        else {
+            expression = "EXP:Today";
+        }
+        $("#" + setvalue).val(expression);
+        $('#txtDays').val("");
+        $('#datepicker').val("");
+        $('#ddlPlusMinus').val("plus")
+        var window = $("#customDatePicker");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+</script>

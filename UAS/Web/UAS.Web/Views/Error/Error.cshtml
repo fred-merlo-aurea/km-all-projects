@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ECN_Framework_Common.Objects.ECNError>
+<ul>
+    @if (Model.Count() > 0)
+    {
+        string err = string.Empty;
+        foreach (ECN_Framework_Common.Objects.ECNError ecnError in Model)
+        {
+            <li style="color:red;list-style:none;">
+                <span>
+                    <img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="50" width="50" style="margin:0px;padding:0px;" />
+                    <span style="vertical-align:top;margin-top:5px;"> @ecnError.ErrorMessage </span>
+                </span>
+            </li>
+        }
+    }
+</ul>

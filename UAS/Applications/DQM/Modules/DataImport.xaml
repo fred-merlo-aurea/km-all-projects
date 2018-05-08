@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="DQM.Modules.DataImport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="500">
+    <telerik:RadBusyIndicator Name="radBusy">
+        <Grid Name="gridMain">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="310" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions> 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <telerik:Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Content="Data Import" FontSize="21" />
+            <StackPanel Name="spSystem" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <StackPanel>
+                    <telerik:Label Content="Select System:" FontSize="14" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <telerik:RadRibbonRadioButton Name="rbCirc" Margin="10,0,0,0" Checked="RadRadioButtonSystem_Checked" Content="Circulation"/>
+                    <telerik:RadRibbonRadioButton Name="rbUAD" Margin="10,0,0,0" Checked="RadRadioButtonSystem_Checked" Content="UAD" Visibility="Hidden"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Name="spDB" Orientation="Horizontal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <telerik:Label Name="lbDB" HorizontalAlignment="Left" Content="Select Database:" FontSize="14" />
+                <telerik:RadRibbonComboBox Name="cbDB" Width="200" SelectionChanged="cbDB_SelectionChanged">
+
+                </telerik:RadRibbonComboBox>
+            </StackPanel>
+            <StackPanel Name="spTable" Orientation="Horizontal" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <telerik:Label Name="lbTable" HorizontalAlignment="Left" Content="Select Table:" FontSize="14" />
+                <telerik:RadRibbonComboBox Name="cbTable" Width="200" SelectionChanged="cbTable_SelectionChanged">
+
+                </telerik:RadRibbonComboBox>
+            </StackPanel>
+            <StackPanel Name="spPublisher" Orientation="Horizontal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <telerik:Label Name="lbPublisher" HorizontalAlignment="Left" Content="Publisher:" FontSize="14" />
+                <telerik:RadRibbonComboBox Name="cbPublisher" Width="200" SelectionChanged="cbPublisher_SelectionChanged">
+
+                </telerik:RadRibbonComboBox>
+            </StackPanel>
+            <StackPanel Name="spPublication" Orientation="Horizontal" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <telerik:Label Name="lbPub" HorizontalAlignment="Left" Content="Publication:" FontSize="14" />
+                <telerik:RadRibbonComboBox Name="cbPublication" Width="200" SelectionChanged="cbPublication_SelectionChanged">
+
+                </telerik:RadRibbonComboBox>
+            </StackPanel>
+            <StackPanel Name="spBrowse" Orientation="Horizontal" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">            
+                <telerik:Label Name="lbBrowse" HorizontalAlignment="Left" Content="File:" FontSize="14" />
+                <TextBox Name="tbFile" Width="200" Margin="1,0,1,0" HorizontalAlignment="Left" ></TextBox>            
+            </StackPanel>
+            <telerik:RadButton Name="btnFile" Grid.Row="5" Grid.Column="2" Content="Browse" Margin="10,0,0,0" Width="75" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="btnFile_Click" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <StackPanel Name="spOutput" Orientation="Horizontal" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <telerik:Label Name="lbOutput" HorizontalAlignment="Left" Content="" FontSize="14" />
+            </StackPanel>
+            <telerik:RadButton Name="btnImport" Content="Import" Margin="10,0,0,0" Width="75" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" VerticalAlignment="Center" Click="btnImport_Click" />
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

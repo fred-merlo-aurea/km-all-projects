@@ -1,0 +1,160 @@
+﻿@model ecn.communicator.mvc.Models.DataFields
+@using ecn.communicator.mvc.Infrastructure
+@using KMEnums
+@{
+    ViewBag.Title = "User Defined Fields";
+}
+<script>
+    function addUDFModal() {
+        var win = $("#AddUDF");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add new User Defined Fields');
+        kendoWindow.center().open();
+        
+        $("#AddUDFDiv").load('@Url.Action("LoadAddUDF")' + '?NewGroupID=' + '@Model.GroupID', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function addTransactionModal() {
+        var win = $("#AddTransaction");
+        kendo.bind(win, {TranGroupID:@Model.GroupID});
+        var kendoWindow = win.data('kendoWindow');
+        $("#TransactionName").val('');
+        kendoWindow.title('Add new Transaction');
+        kendoWindow.center().open();
+    }
+    function copyUDFModal() {
+        var win = $("#CopyUDFs");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Copy UDFs');
+        $("#copyUDFsDiv").load('@Url.Action("LoadCopyUDFs")' + '?currentGroupID=' + '@Model.GroupID', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function editUDFModal(id) {
+        var win = $("#EditUDF");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Edit Data Fields');
+        $("#EditUDFsDiv").load('@Url.Action("LoadEditUDFs")', { GroupDataFieldsID: id }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function deleteUDFModal(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id, GroupID : @Model.GroupID });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+</script>
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">User Defined Fields</a></li>
+    @if (Model.canWrite)
+    {
+        <li class="breadcrumb-button"><button type="button" class="btn k-button" onclick="addTransactionModal()">Add Transaction<i class='km-icon icon-kmplus-circled-1'></i></button></li>
+        <li class="breadcrumb-button"><button type="button" class="btn k-button" onclick="addUDFModal()">Add new UDF<i class='km-icon icon-kmplus-circled-1'></i></button></li>
+    }
+</ul>
+<input type="hidden" value="@(HttpContext.Current.Session["url"] = Request.Url.ToString())" />
+
+<table style="width:100%;margin-top:0px">
+    <tr>
+        <td style="width: 600px;"> User Defined Fields for Group: @Model.GroupName </td>
+        @if (Model.canWrite)
+        {            
+            <td style="float: right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="copyUDFModal()">Copy UDF</button></td>
+        }
+        else
+        {
+            <td></td>
+        }
+    </tr>
+</table>
+<div id="divUdfGrid">
+    @Html.Partial("Partials/_UDFsGrid", Model.GroupDataFieldsList)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("AddUDF")
+        .Actions(x  => x.Clear())
+        .Content(
+        @<text>
+            <div id="AddUDFDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("AddTransaction")
+        .Actions(x => x.Clear())
+        .Content(
+        @<text>
+            <div id="AddTransactionDiv">
+                @Html.Partial("Partials/Modals/_AddTransaction", new ECN_Framework_Entities.Communicator.GroupDataFields())
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("CopyUDFs")
+        .Content(
+        @<text>
+            <div id="copyUDFsDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("EditUDF")
+        .Actions(x => x.Clear())
+        .Content(
+        @<text>
+            <div id="EditUDFsDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteUDF")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

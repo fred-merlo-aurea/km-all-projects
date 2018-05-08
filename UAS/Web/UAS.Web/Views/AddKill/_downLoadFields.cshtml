@@ -1,0 +1,153 @@
+﻿@model UAS.Web.Models.Circulations.ExportFieldsViewModel
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Download/Export Records
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td align="center" style="padding:10px;">
+                <table width="100%" align="center" id="tblAddKillExportFields">
+                    <tr>
+                        <td align="center"><b>Profile Fields</b></td>
+                        <td align="center"><b>Demo fields</b></td>
+                        <td align="center"><b>Adhoc Fields</b></td>
+                        <td align="center"><b>Paid Fields</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @(Html.Kendo().ListBox().Name("ProfileFieldOptions")
+                              .BindTo(Model.ProfileFields)
+                              .DataTextField("DisplayName")
+                              .DataValueField("DownloadName")
+                              .Selectable(ListBoxSelectable.Multiple)
+                              .HtmlAttributes(new { style = "height:200px;width:210px;" }))
+                        </td>
+                        <td>
+                            @(Html.Kendo().ListBox().Name("DemoFieldOptions")
+                               .BindTo(Model.DemoFields)
+                               .DataTextField("DisplayName")
+                               .DataValueField("DownloadName")
+                               .Selectable(ListBoxSelectable.Multiple)
+                               .HtmlAttributes(new { style = "height:200px;width:210px;" }))
+                        </td>
+                        <td>
+                            @(Html.Kendo().ListBox().Name("AdhocFieldOptions")
+                               .BindTo(Model.AdHocFields)
+                               .DataTextField("DisplayName")
+                               .DataValueField("DownloadName")
+                               .Selectable(ListBoxSelectable.Multiple)
+                               .HtmlAttributes(new { style = "height:200px;width:210px;" }))
+                        </td>
+                        <td>
+                            @(Html.Kendo().ListBox().Name("PaidFieldOptions")
+                               .BindTo(Model.PaidFields)
+                               .DataTextField("DisplayName")
+                               .DataValueField("DownloadName")
+                               .Selectable(ListBoxSelectable.Multiple)
+                               .HtmlAttributes(new { style = "height:200px;width:210px;" }))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="4">
+                            <br>
+                            <input type="button" id="btnDownloadExported" value="Download" class="filterButton">
+                            <input type="button" id="btnCancelDownload" value="Cancel" class="filterButton">
+
+                        </td>
+
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#btnDownloadExported").on("click", function () {
+            var data = [];
+            var splitsProfileFieldlistbox = $("#ProfileFieldOptions").data("kendoListBox");
+            var splitsDemoFieldlistbox = $("#DemoFieldOptions").data("kendoListBox");
+            var splitsAdhocFieldlistbox = $("#AdhocFieldOptions").data("kendoListBox");
+            var splitsPaidFieldlistbox = $("#PaidFieldOptions").data("kendoListBox");
+            var items = $("#tblAddKillExportFields  li[role='option'].k-item.k-state-selected");
+            $.each(items, function (i,obj) {
+                var item;
+                if (!item){
+                    item = splitsProfileFieldlistbox.dataSource.getByUid($(obj).data("uid"));
+                }
+                if (!item) {
+                    item = splitsDemoFieldlistbox.dataSource.getByUid($(obj).data("uid"));
+                }
+                if (!item) {
+                    item = splitsAdhocFieldlistbox.dataSource.getByUid($(obj).data("uid"));
+                }
+                if (!item) {
+                    item = splitsPaidFieldlistbox.dataSource.getByUid($(obj).data("uid"));
+                }
+                data.push({ DisplayName: item.DisplayName, DownloadName: item.DownloadName, Type: item.Type });
+            });
+            //ColumnTransformationConfirmation(data);
+            var window = $("#AddKillDownLoadExportRecords");
+            var kendoWindow = window.data('kendoWindow');
+            kendoWindow.close();
+            DownloadAddKillFile(data);
+        });
+        $("#btnCancelDownload").on("click", function () {
+            //CloseWindow('AddKillDownLoadExportRecords');
+            var window = $("#AddKillDownLoadExportRecords");
+            var kendoWindow = window.data('kendoWindow');
+            kendoWindow.close();
+        });
+    });
+
+    function DownloadAddKillFile(downloadData) {
+        debugger;
+        if (downloadData != null && downloadData.length > 0) {
+            var detail = JSON.stringify({ 'Detail': downloadData });
+            var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+            $.ajax({
+                url: '/UAS.Web/AddKill/DownloadAddKillFile',
+                type: "POST",
+                data: { 'Detail': detail, 'AddKillList': addKillList },
+                traditional: true,
+                cache: false,
+                success: function (response) {
+                    if (!response.error) {
+                        debugger;
+                        var win = window.open('/UAS.web/addkill/DownLoadFile?fileloc=' + response.filedownloadpath, '_blank');
+                        if (win) {
+                            //Browser has allowed it to be opened
+                            win.focus();
+                        } else {
+                            //Browser has blocked it
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                                text: "Please allow popups for this website.",
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        }                        
+                        //window.location = '/UAS.web/addkill/DownLoadFile?fileloc=' + response.filedownloadpath;
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }                
+            });
+            debugger;
+        } else {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                text: "No Columns were selected.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+        debugger;
+    }
+</script>

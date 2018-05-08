@@ -1,0 +1,184 @@
+﻿<script>
+    function CampaignExplorer(options) {
+        this.select = options.select;
+        this.customerID = options.CustomerID;
+        this.open = function () {
+            var window = $("#CampaignExplorer").data("kendoWindow");
+            window.center().open();
+            showLoadingWindow();
+        };
+        this.close = function () {
+            var window = $("#CampaignExplorer").data("kendoWindow");
+            window.close();
+        };
+        //bindCampaigns(this.customerID);
+        $("#CampaignExplorer").on("CampaignSelected", function (e) {
+            explorer.select(e);
+        });
+    }
+
+    function bindCampaigns(customerID)
+    {
+        var searchStringCampaign = $("#SearchCampaignsInput").val();
+        var Campaigns = {
+            schema: {
+                model: {
+                    id: "CampaignID",
+                    CampaignName: "CampaignName"
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCampaigns", "Web")',
+                    data: {
+                        customerID: explorer.customerID,
+                        search: searchStringCampaign
+                    }
+                }
+            }
+        };
+        kendo.destroy("#Campaigns");
+        $("#Campaigns").kendoGrid({
+            columns: [
+                { field: "CampaignName", width:410 },
+                { template: "<i class='km-icon icon-kmplus-circled-1'></i>", width:20 }
+            ],
+            selectable: "row",
+            change: addCampaign,
+            dataSource: Campaigns,
+            pageable: {
+                pageSizes: [10, 15, 20],
+                buttonCount: 5,
+                messages: {
+                    first:"",
+                    previous:"",
+                    next:"",
+                    last:""
+                }
+            },
+            dataBound: function (e) {
+                if (e.sender.dataSource.total() != 0) {
+                    $("#Campaigns").show();
+                    $("#NoCampaigns").hide();
+                }
+                else {
+                    $("#Campaigns").hide();
+                    $("#NoCampaigns").show();
+                }
+            },
+            autoBind: false,
+            sortable: true,
+            scrollable: false
+        });
+    
+    
+    }
+
+    var _customerID;
+    var explorer;
+    function onCampaignExplorerOpen() {
+        $("#SearchCampaignsInput").val('');
+        bindCampaigns(explorer.customerID);
+        var grid = $("#Campaigns").data("kendoGrid");
+        var searchString = $("#SearchCampaignsInput").val();
+        grid.dataSource.read({
+            customerID: explorer.CustomerID,
+            search: searchString
+        });
+
+
+    }
+    function onCampaignExplorerClose() {
+        $(".k-overlay").remove();
+    }
+
+    function campaignExplorer(select, customerID) {
+        explorer = new CampaignExplorer({
+            select: select,
+            CustomerID: customerID
+        });
+        
+        explorer.open();
+    }
+
+    function addCampaign(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var selectedCampaign = this.dataItem(item);
+        //e.sender.clearSelection();
+        var event = $.Event("CampaignSelected");
+        event.sender = explorer;
+        event.selectedCampaign = selectedCampaign;
+        $("#CampaignExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+
+        //$("#cam02").text(customer.CustomerName);
+        //$("#customerSelected").removeAttr("style");
+        //$("#PopupWindow").data('kendoWindow').close();
+    }
+</script>
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("Campaigns")
+                       .Name("CampaignExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onCampaignExplorerOpen")
+                                    .Close("onCampaignExplorerClose"))
+                       .Visible(false)
+                       .Width(600);
+
+    explorer.Render();
+}
+
+@helper Content()
+{
+<div class="wrapper modal" style="min-width:200px">
+    <fieldset title="Customer Explorer">
+        <legend>Campaigns</legend>
+        <div>
+            <span>Campaign Name to Search:</span>
+            <input type="text" id="SearchCampaignsInput" />
+            @Html.Kendo().Button().Name("Search").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "searchCampaigns()" })
+            @Html.Kendo().Button().Name("ClearSearch").Content("Clear Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "clearSearchCampaigns()" })
+        </div>
+        <div id="Campaigns" style="width:520px;overflow:hidden;">
+
+        </div>
+        <div id="NoCampaigns">
+            No Campaigns
+        </div>
+    </fieldset>
+</div>
+
+<script>
+
+    function searchCampaigns() {
+        //bindCampaigns(explorer.customerID);
+        var grid = $("#Campaigns").data("kendoGrid");
+        grid.dataSource.read({
+            customerID: explorer.CustomerID,
+            search: $("#SearchCampaignsInput").val()
+        });
+       
+    };
+    function clearSearchCampaigns() {
+        $("#SearchCampaignsInput").val('');
+        var grid = $("#Campaigns").data("kendoGrid");
+        var searchString = $("#SearchCampaignsInput").val();
+        grid.dataSource.read({
+            customerID: explorer.CustomerID,
+            search: searchString
+        });
+
+    };
+</script>
+}

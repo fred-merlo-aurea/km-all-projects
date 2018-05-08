@@ -1,0 +1,62 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+
+@model RequestQueryDataValueModel
+@{
+
+    var htmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var Index = htmlFieldPrefix.IndexOf(ResultType.KMPaidPage.ToString());
+    var Enable = true;
+    var current_id = "";
+    var controlid = "";
+    if (Index >0 )
+    {
+        current_id= htmlFieldPrefix.Replace(".KMPaidPage", "").Replace(".", "").Replace("[", "_").Replace("_", "[");
+        Enable = false;
+        controlid = htmlFieldPrefix.Replace(".KMPaidPage", "");
+    }
+    else
+    {
+        current_id = htmlFieldPrefix.Replace(".URL", "").Replace(".", "").Replace("[", "_").Replace("_", "[");
+        controlid = htmlFieldPrefix.Replace(".URL", "");
+    }
+ }
+
+
+  <ul class="inline">
+    <li class="name">
+        @if (Enable)
+        {
+            @Html.Kendo().TextBoxFor(x => x.Name).Name(string.Format("{0}", controlid + ".Name"))
+        }
+        else
+        {
+            @Html.Kendo().TextBoxFor(x => x.Name).Name(string.Format("{0}", controlid + ".Name")).HtmlAttributes(new { @readonly = "readonly"})
+        }
+    </li>
+    <li class="value">
+        @if (Enable) {
+            @Html.Kendo().DropDownListFor(x => x.Value).Name(string.Format("{0}", controlid + ".Value")).BindTo(ViewContext.Controller.ViewBag.URLControls).DataTextField("FieldLabel").DataValueField("Id")
+        }
+        else
+        {
+            //int id = Model.Value;
+            //string label = "";
+            //foreach (var item in ViewContext.Controller.ViewBag.URLControls)
+            //{
+            //    if (item.Id == id)
+            //    {
+            //        label = item.FieldLabel;
+            //    }
+
+            //}
+            @Html.Kendo().DropDownListFor(x => x.Value).Name(string.Format("{0}", controlid + ".Value")).BindTo(ViewContext.Controller.ViewBag.URLControls).DataTextField("FieldLabel").DataValueField("Id").HtmlAttributes(new { @readonly = !Enable ? "readonly" : "" })
+            @*@Html.Kendo().TextBox().Value(label).Name(string.Format("{0}", controlid + ".Value")).HtmlAttributes(new { @readonly = !Enable ? "readonly" : "" })*@
+            }
+</li>
+     <li class="acts">
+        @(Html.Kendo().Button().Content("Delete<i class='km-icon icon-kmcustom-delete'></i>").Name(string.Format("{0}", current_id + "DeleteBtn")).HtmlAttributes(new { @class = "DeleteBtnClass btn btn-blue3", type = "button", id = @FormatID(current_id) + "DeleteBtn" }))
+    </li>
+</ul>
+

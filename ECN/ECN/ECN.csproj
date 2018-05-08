@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECN</RootNamespace>
+    <AssemblyName>ECN</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>ECNKey.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <PublishUrl>http://localhost/ECN/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>false</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Local\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Prod\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="aspNetEmail, Version=2.0.0.514, Culture=neutral, PublicKeyToken=bc571e8da1c1f543">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\aspNetEmail.dll</HintPath>
+    </Reference>
+    <Reference Include="aspNetMX, Version=2.0.2.0, Culture=neutral, PublicKeyToken=bc571e8da1c1f543">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\aspNetMX.DLL</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFNet">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\PDFNet.dll</HintPath>
+    </Reference>
+    <Reference Include="port25.pmta.api.submitter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\port25.pmta.api.submitter.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\CallRecord.cs" />
+    <Compile Include="Accounts\Lead.cs" />
+    <Compile Include="Accounts\LeadConfig.cs" />
+    <Compile Include="Accounts\NotifyBillingDept.cs" />
+    <Compile Include="Accounts\Product.cs" />
+    <Compile Include="Collector\Answers.cs" />
+    <Compile Include="Collector\ChannelBlock.cs" />
+    <Compile Include="Collector\Gridstatement.cs" />
+    <Compile Include="Collector\IWizard.cs" />
+    <Compile Include="Collector\Option.cs" />
+    <Compile Include="Collector\Question.cs" />
+    <Compile Include="Collector\Survey.cs" />
+    <Compile Include="Collector\SurveyPage.cs" />
+    <Compile Include="Collector\SurveyStyle.cs" />
+    <Compile Include="Common\AccountData.cs" />
+    <Compile Include="Common\BaseChannel.cs" />
+    <Compile Include="Common\billing\Bill.cs" />
+    <Compile Include="Common\billing\BillingEngine.cs" />
+    <Compile Include="Common\billing\BillItem.cs" />
+    <Compile Include="Common\billing\CreditCard.cs" />
+    <Compile Include="Common\billing\IBillingHistoryManager.cs" />
+    <Compile Include="Common\billing\ICreditCardProcessor.cs" />
+    <Compile Include="Common\billing\Quote.cs" />
+    <Compile Include="Common\billing\QuoteItem.cs" />
+    <Compile Include="Common\billing\QuoteItemBase.cs" />
+    <Compile Include="Common\billing\QuoteOption.cs" />
+    <Compile Include="Common\billing\QuoteQueryBuilder.cs" />
+    <Compile Include="Common\billing\RatesKeeper.cs" />
+    <Compile Include="Common\BlastConfig.cs" />
+    <Compile Include="Common\BlastContent.cs" />
+    <Compile Include="Common\BlastQueue.cs" />
+    <Compile Include="Common\ChannelBlockBase.cs" />
+    <Compile Include="Common\ChannelCheck.cs" />
+    <Compile Include="Common\Contact.cs" />
+    <Compile Include="Common\CRReport.cs" />
+    <Compile Include="Common\CustomerBase.cs" />
+    <Compile Include="Common\Customer.cs" />
+    <Compile Include="Common\CustomerConfig.cs" />
+    <Compile Include="Common\CustomerInquirie.cs" />
+    <Compile Include="Common\DataFunctions.cs" />
+    <Compile Include="Common\DataLists.cs" />
+    <Compile Include="Common\DateTimeInterpreter.cs" />
+    <Compile Include="Common\ECNError.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\ECNErrors.cs" />
+    <Compile Include="Common\ecnSession.cs" />
+    <Compile Include="Common\ECNTasks.cs" />
+    <Compile Include="Common\EmailAccessor.cs" />
+    <Compile Include="Common\EmailListQueryGenerator.cs" />
+    <Compile Include="Common\EngineLogEntry.cs" />
+    <Compile Include="Common\EventsCalendar.cs" />
+    <Compile Include="Common\FtpClient.cs" />
+    <Compile Include="Common\Helpers\DatabaseFunctionsAdapter.cs" />
+    <Compile Include="Common\Helpers\ViewStateHelper.cs" />
+    <Compile Include="Common\HttpRequestProcessor.cs" />
+    <Compile Include="Common\Interfaces\IDatabaseFunctions.cs" />
+    <Compile Include="Common\LicenseCheck.cs" />
+    <Compile Include="Common\license\EmailUsageLicense.cs" />
+    <Compile Include="Common\license\LicenseBase.cs" />
+    <Compile Include="Common\license\LicenseEngine.cs" />
+    <Compile Include="Common\license\Product.cs" />
+    <Compile Include="Common\license\ProductFeature.cs" />
+    <Compile Include="Common\license\ProductFeatureLicense.cs" />
+    <Compile Include="Common\license\ProductLicense.cs" />
+    <Compile Include="Common\license\Service.cs" />
+    <Compile Include="Common\license\ServiceLicense.cs" />
+    <Compile Include="Common\license\UsageLicense.cs" />
+    <Compile Include="Common\MasterPageEx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\NoSuchElementException.cs" />
+    <Compile Include="Common\SecuityException.cs" />
+    <Compile Include="Common\SecurityAccess.cs" />
+    <Compile Include="Common\SmartSegmentFilter.cs" />
+    <Compile Include="Common\SQLHelper.cs" />
+    <Compile Include="Common\SqlStatementHolder.cs" />
+    <Compile Include="Common\Staff.cs" />
+    <Compile Include="Common\StringFunctions.cs" />
+    <Compile Include="Common\Synchronizer.cs" />
+    <Compile Include="Common\TemplateFunctions.cs" />
+    <Compile Include="Common\URLFunctions.cs" />
+    <Compile Include="Common\User.cs" />
+    <Compile Include="Common\UserControlEx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\Utilities\SecureQueryString.cs" />
+    <Compile Include="Common\Utilities\ExpiredQueryStringException.cs" />
+    <Compile Include="Common\Utilities\InvalidQueryStringException.cs" />
+    <Compile Include="Common\Validator.cs" />
+    <Compile Include="Common\WebControlFunctions.cs" />
+    <Compile Include="Communicator\BlastLinks.cs" />
+    <Compile Include="Communicator\BlastPlans.cs" />
+    <Compile Include="Communicator\Blasts.cs" />
+    <Compile Include="Communicator\BlastSingle.cs" />
+    <Compile Include="Communicator\Bounces\BounceHolder.cs" />
+    <Compile Include="Communicator\ContentTransnippet.cs" />
+    <Compile Include="Communicator\EmailBuilder\MessageBuilderHelper.cs" />
+    <Compile Include="Communicator\EmailBuilder\MessageStringBuilders.cs" />
+    <Compile Include="Communicator\EmailBuilder\PersonalizedContentBuilder.cs" />
+    <Compile Include="Communicator\EmailWriter\CodesnippetBreakupArrayHolder.cs" />
+    <Compile Include="Communicator\EmailBuilder\MessageBuilder.cs" />
+    <Compile Include="Communicator\ImportData\EmailTableColumnManagerCommunicator.cs" />
+    <Compile Include="Communicator\Port25\SendThread.cs" />
+    <Compile Include="Communicator\EmailWriter\SMTPDelivery.cs" />
+    <Compile Include="Communicator\EmailWriter\SmtpException.cs" />
+    <Compile Include="Communicator\EmailWriter\SocialMediaHolder.cs" />
+    <Compile Include="Communicator\EmailQueue.cs" />
+    <Compile Include="Communicator\Customers\CustomerMTAs.cs" />
+    <Compile Include="Communicator\Customers\SecondWindZipCodeLocator.cs" />
+    <Compile Include="Communicator\Customers\Store.cs" />
+    <Compile Include="Communicator\DatabaseAccessor.cs" />
+    <Compile Include="Communicator\EmailActivityLog.cs" />
+    <Compile Include="Communicator\EmailBlacklist.cs" />
+    <Compile Include="Communicator\EmailBlast.cs" />
+    <Compile Include="Communicator\EmailFunctions.cs" />
+    <Compile Include="Communicator\EmailMessageProvider.cs" />
+    <Compile Include="Communicator\Emails.cs" />
+    <Compile Include="Communicator\EmailWriter\EmailWriterRefactory.cs" />
+    <Compile Include="Communicator\EmailWriter\IEmailWriter.cs" />
+    <Compile Include="Communicator\EmailWriter\IISEmailWriter.cs" />
+    <Compile Include="Communicator\EmailWriter\IronPortEMailWriter.cs" />
+    <Compile Include="Communicator\EmailWriter\SmtpWriter.cs" />
+    <Compile Include="Communicator\EventOrganizer.cs" />
+    <Compile Include="Communicator\Event\EventTimer.cs" />
+    <Compile Include="Communicator\Event\LayoutPlanSummary.cs" />
+    <Compile Include="Communicator\Filters.cs" />
+    <Compile Include="Communicator\GroupDataField.cs" />
+    <Compile Include="Communicator\Groups.cs" />
+    <Compile Include="Communicator\HtmlEmailMessageProvider.cs" />
+    <Compile Include="Communicator\IBlastLike.cs" />
+    <Compile Include="Communicator\ImportData\FileImporter.cs" />
+    <Compile Include="Communicator\ImportData\ImportErrorReport.cs" />
+    <Compile Include="Communicator\ImportData\ImportSqlBuilder.cs" />
+    <Compile Include="Communicator\ImportFunctions.cs" />
+    <Compile Include="Communicator\IZipCodeLocator.cs" />
+    <Compile Include="Communicator\LayoutPlans.cs" />
+    <Compile Include="Communicator\Layouts.cs" />
+    <Compile Include="Communicator\MimeLib.cs" />
+    <Compile Include="Communicator\PageWatch\PageWatch.cs" />
+    <Compile Include="Communicator\PlainTextEmailMessageProvider.cs" />
+    <Compile Include="Communicator\PopUp.cs" />
+    <Compile Include="Communicator\Port25\Recipient.cs" />
+    <Compile Include="Communicator\Port25\RecipientProvider.cs" />
+    <Compile Include="Communicator\Port25\ThreadCoordinator.cs" />
+    <Compile Include="Communicator\PrePop.cs" />
+    <Compile Include="Communicator\QuotedPrintable.cs" />
+    <Compile Include="Communicator\Samples.cs" />
+    <Compile Include="Communicator\SmartFormActivityLog.cs" />
+    <Compile Include="Communicator\SMSBlast.cs" />
+    <Compile Include="Communicator\SmsFunctions.cs" />
+    <Compile Include="Communicator\EmailWriter\SmtpInjector.cs" />
+    <Compile Include="Communicator\EmailWriter\TransnippetHolder.cs" />
+    <Compile Include="Common\StatusItem.cs" />
+    <Compile Include="Communicator\TriggerPlans.cs" />
+    <Compile Include="Communicator\UserDefinedField.cs" />
+    <Compile Include="Communicator\ValidationFunctions.cs" />
+    <Compile Include="Communicator\Wizard.cs" />
+    <Compile Include="Creator\ChannelBlock.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Publisher\Edition.cs" />
+    <Compile Include="Publisher\Helpers\PDFNetExtensions.cs" />
+    <Compile Include="Publisher\Link.cs" />
+    <Compile Include="Publisher\Links.cs" />
+    <Compile Include="Publisher\Page.cs" />
+    <Compile Include="Publisher\Pages.cs" />
+    <Compile Include="Publisher\Publications.cs" />
+    <Compile Include="Service References\TextPowerAdvanced\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TextPowerWebManagement\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="webservice\AuthenticationHandler.cs" />
+    <Compile Include="webservice\IResponseManager.cs" />
+    <Compile Include="webservice\RaiseSOAPException.cs" />
+    <Compile Include="webservice\ResponseManager.cs" />
+    <Compile Include="webservice\SendResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Communicator\PageWatch\SQL\PageWatchHistory_CreateTable.sql" />
+    <None Include="Communicator\PageWatch\SQL\PageWatchTag_CreateTable.sql" />
+    <None Include="Communicator\PageWatch\SQL\PageWatch_CreateTable.sql" />
+    <None Include="Communicator\PageWatch\SQL\spGetPageWatches_CreateProc.sql" />
+    <None Include="ECNKey.snk" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
+    <None Include="Service References\TextPowerAdvanced\AdvancedMessageServicesV2.wsdl" />
+    <None Include="Service References\TextPowerWebManagement\WebManagementServicesV2.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.EmailPreview\ecn.EmailPreview.csproj">
+      <Project>{4bf970d0-3b03-4949-a105-e23593af6c34}</Project>
+      <Name>ecn.EmailPreview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.FormDesigner\Projects\KMSite\KMSite.csproj">
+      <Project>{347570d6-a43f-4e0a-ac0d-e1d48d2308c6}</Project>
+      <Name>KMSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TextPowerAdvanced\" />
+    <WCFMetadataStorage Include="Service References\TextPowerWebManagement\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerAdvanced\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerAdvanced\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerAdvanced\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerWebManagement\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerWebManagement\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TextPowerWebManagement\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>REM c:\"Program Files"\"Microsoft Visual Studio 8"\SDK\v2.0\bin\gacutil /U ECN
+REM c:\"Program Files"\"Microsoft Visual Studio 8"\SDK\v2.0\bin\gacutil /I ECN.dll</PostBuildEvent>
+  </PropertyGroup>
+</Project>

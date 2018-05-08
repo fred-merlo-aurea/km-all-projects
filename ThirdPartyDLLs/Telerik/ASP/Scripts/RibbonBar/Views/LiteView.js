@@ -1,0 +1,17 @@
+(function(a,b,c){if(!b.RadRibbonBar.Views){b.RadRibbonBar.Views={};
+}b.RadRibbonBar.Views.Lite=function(d){this._owner=d;
+};
+b.RadRibbonBar.Views.Lite.prototype={initialize:function(){var d=this._owner;
+d._cssClasses={_rrbButtonGroup:"rrbCommandGroup",_rrbButtonGroupHover:"rrbHovered",_rrbSmallButton:"rrbSmallButton",_rrbMediumButton:"rrbMediumButton",_rrbLargeButton:"rrbLargeButton",_rrbButtonStrip:"rrbButtonGroup",_rrbSplitButton:"rrbSplitButton",_rrbButtonArrow:"rrbArrow",_rrbButtonStripPart:"rrbButton",_rrbButtonText:"rrbText",_rrbButtonOut:"rrbButton",_rrbButtonIn:"rrbButton",_rrbContextualTab:"rrbContextualItem",_rrbQuickAccessToolbar:"rrbQat",_rrbMenuGroup:"rrbMenu",_rrbApplicationMenuGroup:"rrbGroup",_rrbMenuGroupOut:"rrbMenu",_rrbSelectedApplicationTab:"rrbSelected",_rrbHoveredApplicationTab:"rrbHovered",_rrbHovered:"rrbHovered",_rrbExpanded:"rrbExpanded",_rrbTabText:"rrbLink",_rrbTab:"rrbItem",_rrbSelectedTab:"rrbSelected",_rrbTabLabel:"rrbItem",_rrbHoveredTab:"rrbHovered",_rrbButtonArea:"rrbCommandArea",_rrbButtonAreaIn:"rrbCommands",_rrbGroupTitle:"rrbTitle",_rrbGroupIcon:"rrbIcon",_rrbTextContent:"rrbText",_rrbHiddenGroup:"rrbHidden",_rrbButtonImage:"rrbImage",_rrbQatItem:"rrbItem",_rrbMenuItemCheckboxChecked:"rrbChecked",_rrbIcon:"radIcon radIconExpand",_rrbContextualTabActive:"rrbActive",_rrbGalleryItemImage:"rrbImage",_rrbGalleryItemText:"rrbText",_rrbGalleryItemHovered:"rrbHovered",_rrbMIInner:"rrbInner",_rrbMIToggle:"rrbToggle",_rrbMIImage:"rrbImage",_rrbMIText:"rrbText",_rrbMIDesc:"rrbDescription",_rrbActionButton:"rrbButton",_rrbGroupToggleIcon:"radIcon radIconDown",_rrbGalleryScrollWrap:"rrbGalleryScrollWrap",_rrbGalleryItemSelected:"rrbSelected",_rrbMenuGroupIn:"rrbItem",_rrbMenuGroupInli:".rrbUL>li.rrbItem",_rrbToolTipDescription:"p.rrbToolTipDescription",_rrbApplicationTab:"rrbApplicationItem",_rrbMenuItem:"rrbItem",_rrbGalleryItem:"rrbItem",_rrbGalleryAction:"rrbGalleryAction",_rrbGalleryActionSelected:"rrbGalleryActionSelected",_rrbGalleryActionHovered:"rrbHovered",_rrbButtonClicked:"rrbClicked",_rrbListItemHovered:"rrbHovered",_rrbArrowHovered:"rrbArrowHovered",_AElement:"",_spanButtonOut:",span.rrbButton"};
+},_initializeButtonEvents:function(){var e=this._owner;
+var d=e._$element;
+var f=e._cssClasses;
+d.delegate("."+f._rrbSplitButton+" ."+f._rrbButtonArrow,{mouseenter:function(i){var g=a(i.currentTarget);
+var h=g.parent("."+f._rrbSplitButton);
+h.toggleClass(f._rrbArrowHovered,true);
+},mouseleave:function(i){var g=a(i.currentTarget);
+var h=g.parent("."+f._rrbSplitButton);
+h.toggleClass(f._rrbArrowHovered,false);
+}});
+}};
+})($telerik.$,Telerik.Web.UI);

@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3EA27084-99A8-42AF-B0A5-71A462ADFFC4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.publisher</RootNamespace>
+    <AssemblyName>ecn.publisher</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.51116.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AntiXSSLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AntiXSSLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlSanitizationLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFNet, Version=4.0.7.0, Culture=neutral, PublicKeyToken=36167be3f67ac39c">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\PDFNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SanitizerProviders, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\SanitizerProviders.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="main\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\AddLinks.aspx.cs">
+      <DependentUpon>AddLinks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\AddLinks.aspx.designer.cs">
+      <DependentUpon>AddLinks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\EditionLinks.aspx.cs">
+      <DependentUpon>EditionLinks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\EditionLinks.aspx.designer.cs">
+      <DependentUpon>EditionLinks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\LinkAlias.aspx.cs">
+      <DependentUpon>LinkAlias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\LinkAlias.aspx.designer.cs">
+      <DependentUpon>LinkAlias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\Preview.aspx.cs">
+      <DependentUpon>Preview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\Preview.aspx.designer.cs">
+      <DependentUpon>Preview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\Report.aspx.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Edition\Report.aspx.designer.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\SelectTemplate.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>SelectTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\SelectTemplate.aspx.designer.cs">
+      <DependentUpon>SelectTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\SetupEdition.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>SetupEdition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Edition\SetupEdition.aspx.designer.cs">
+      <DependentUpon>SetupEdition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Publication\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Publication\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Publication\RuleDetails.aspx.cs">
+      <DependentUpon>RuleDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Publication\RuleDetails.aspx.designer.cs">
+      <DependentUpon>RuleDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Publication\Rules.aspx.cs">
+      <DependentUpon>Rules.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Publication\Rules.aspx.designer.cs">
+      <DependentUpon>Rules.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Publication\SetupPublication.aspx.cs">
+      <DependentUpon>SetupPublication.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Publication\SetupPublication.aspx.designer.cs">
+      <DependentUpon>SetupPublication.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\securityAccessError.aspx.cs">
+      <DependentUpon>securityAccessError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\securityAccessError.aspx.designer.cs">
+      <DependentUpon>securityAccessError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Publisher.Master.cs">
+      <DependentUpon>Publisher.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Publisher.Master.designer.cs">
+      <DependentUpon>Publisher.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\1\ECN.css" />
+    <Content Include="App_Themes\25\ECN.css" />
+    <Content Include="App_Themes\25\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\25\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\25\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\31\GD.css" />
+    <Content Include="App_Themes\51\ECN.css" />
+    <Content Include="App_Themes\51\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\51\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\shade_bottom_07.jpg" />
+    <Content Include="App_Themes\stylesheet.css" />
+    <Content Include="default.aspx" />
+    <Content Include="error.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="images\branch.png" />
+    <Content Include="images\btnfit.gif" />
+    <Content Include="images\buttons2_05.gif" />
+    <Content Include="images\buttons2_08.gif" />
+    <Content Include="images\buttons2_10.gif" />
+    <Content Include="images\buttons3_10.gif" />
+    <Content Include="images\buttons_05.gif" />
+    <Content Include="images\buttons_08.gif" />
+    <Content Include="images\buttons_10.gif" />
+    <Content Include="images\clicks_b.gif" />
+    <Content Include="images\clicks_h.gif" />
+    <Content Include="images\clicks_s.gif" />
+    <Content Include="images\closed.png" />
+    <Content Include="images\divBottom_14.gif" />
+    <Content Include="images\divTop_06.gif" />
+    <Content Include="images\dj-cover.png" />
+    <Content Include="images\ecn_logo.jpg" />
+    <Content Include="images\expanded.png" />
+    <Content Include="images\f2f-art_01.gif" />
+    <Content Include="images\f2f-art_02.gif" />
+    <Content Include="images\f2f-art_03.gif" />
+    <Content Include="images\f2f-art_04.gif" />
+    <Content Include="images\f2f-art_06.gif" />
+    <Content Include="images\f2f-art_07.gif" />
+    <Content Include="images\f2f-art_08.gif" />
+    <Content Include="images\f2f-art_09.gif" />
+    <Content Include="images\f2f-icon.gif" />
+    <Content Include="images\folder.png" />
+    <Content Include="images\folder_opened.png" />
+    <Content Include="images\forwards_b.gif" />
+    <Content Include="images\forwards_h.gif" />
+    <Content Include="images\forwards_s.gif" />
+    <Content Include="images\gry_hd_bg_img.gif" />
+    <Content Include="images\gry_hd_left.gif" />
+    <Content Include="images\gry_hd_right.gif" />
+    <Content Include="images\icFirst.gif" />
+    <Content Include="images\icFirst_o.gif" />
+    <Content Include="images\icLast.gif" />
+    <Content Include="images\icLast_o.gif" />
+    <Content Include="images\icNext.gif" />
+    <Content Include="images\icNext_o.gif" />
+    <Content Include="images\icPrevious.gif" />
+    <Content Include="images\icPrevious_o.gif" />
+    <Content Include="images\last_closed.png" />
+    <Content Include="images\last_expanded.png" />
+    <Content Include="images\last_leaf.png" />
+    <Content Include="images\leaf.png" />
+    <Content Include="images\login.gif" />
+    <Content Include="images\login2.gif" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\nav1pg.gif" />
+    <Content Include="images\nav2pg.gif" />
+    <Content Include="images\Navigation.gif" />
+    <Content Include="images\Navigation_sm.gif" />
+    <Content Include="images\Navigation_sm5_GO.gif" />
+    <Content Include="images\navTN.gif" />
+    <Content Include="images\newtabs_01.gif" />
+    <Content Include="images\newtabs_03.gif" />
+    <Content Include="images\newtabs_05.gif" />
+    <Content Include="images\newtabs_07.gif" />
+    <Content Include="images\new_1_03.jpg" />
+    <Content Include="images\new_1_05.jpg" />
+    <Content Include="images\new_1_07.jpg" />
+    <Content Include="images\new_1_09.jpg" />
+    <Content Include="images\new_1_10.jpg" />
+    <Content Include="images\new_1_12.jpg" />
+    <Content Include="images\pagehelp.gif" />
+    <Content Include="images\print.jpg" />
+    <Content Include="images\prints_b.gif" />
+    <Content Include="images\prints_h.gif" />
+    <Content Include="images\prints_s.gif" />
+    <Content Include="images\prog-bar.gif" />
+    <Content Include="images\publisher_header.jpg" />
+    <Content Include="images\search_b.gif" />
+    <Content Include="images\search_h.gif" />
+    <Content Include="images\search_s.gif" />
+    <Content Include="images\SI_Logo.jpg" />
+    <Content Include="images\spacer.gif" />
+    <Content Include="images\stylesheet.css" />
+    <Content Include="images\subscribes_b.gif" />
+    <Content Include="images\subscribes_h.gif" />
+    <Content Include="images\subscribes_s.gif" />
+    <Content Include="images\tabs_09.jpg" />
+    <Content Include="images\tabs_10.jpg" />
+    <Content Include="images\tabs_11.jpg" />
+    <Content Include="images\transparentpixel.gif" />
+    <Content Include="images\visits_b.gif" />
+    <Content Include="images\visits_h.gif" />
+    <Content Include="images\visits_s.gif" />
+    <Content Include="images\winLeft.gif" />
+    <Content Include="images\winmiddle.gif" />
+    <Content Include="images\winright.gif" />
+    <Content Include="images\zoom0.gif" />
+    <Content Include="images\zoom1.gif" />
+    <Content Include="images\zoom2.gif" />
+    <Content Include="images\zoom3.gif" />
+    <Content Include="images\zoom4.gif" />
+    <Content Include="images\zoom5.gif" />
+    <Content Include="images\zoom6.gif" />
+    <Content Include="images\zoom_03.gif" />
+    <Content Include="images\zoom_05.gif" />
+    <Content Include="images\zoom_07.gif" />
+    <Content Include="images\zoom_in.gif" />
+    <Content Include="images\zoom_out.gif" />
+    <Content Include="main\default.aspx" />
+    <Content Include="main\Edition\default.aspx" />
+    <Content Include="main\Edition\EditionLinks.aspx" />
+    <Content Include="main\Edition\LinkAlias.aspx" />
+    <Content Include="main\Edition\Preview.aspx" />
+    <Content Include="main\Edition\Report.aspx" />
+    <Content Include="main\Publication\default.aspx" />
+    <Content Include="main\Publication\RuleDetails.aspx" />
+    <Content Include="main\Publication\Rules.aspx" />
+    <Content Include="main\securityAccessError.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\1\ECN.skin" />
+    <Content Include="App_Themes\25\ECN.skin" />
+    <Content Include="App_Themes\31\GD.skin" />
+    <Content Include="App_Themes\51\ECN.skin" />
+    <None Include="images\Thumbs.db" />
+    <Content Include="MasterPages\Publisher.Master" />
+    <None Include="Properties\PublishProfiles\ECN_Publisher.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
+    <None Include="Resources\pdfnet.res" />
+    <Content Include="images\uploadbutton.gif" />
+    <Content Include="main\Edition\AddLinks.aspx" />
+    <Content Include="main\Edition\SelectTemplate.aspx" />
+    <Content Include="main\Edition\SetupEdition.aspx" />
+    <Content Include="main\Publication\SetupPublication.aspx" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Script\effects.js" />
+    <Content Include="Script\previewtt.js" />
+    <Content Include="Script\prototype.js" />
+    <Content Include="Script\prototype_reduced.js" />
+    <Content Include="Script\rectmarquee.js" />
+    <Content Include="Script\scriptaculous.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.sitemap" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AgileComponents\ActiveUp.WebControls.csproj">
+      <Project>{847ff6d7-b5c4-4884-933f-425fc3c3525f}</Project>
+      <Name>ActiveUp.WebControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.controls\ecn.controls.csproj">
+      <Project>{FB0CACB3-28B6-45FC-A266-E5068537F136}</Project>
+      <Name>ecn.controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.FormDesigner\Projects\KMSite\KMSite.csproj">
+      <Project>{347570d6-a43f-4e0a-ac0d-e1d48d2308c6}</Project>
+      <Name>KMSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8bbeb645-dd44-4e47-a204-95341f4d87c2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Themes\31\images\" />
+    <Folder Include="classes\" />
+    <Folder Include="includes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>18477</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ecn.publisher</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!--<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>-->
+</Project>

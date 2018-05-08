@@ -1,0 +1,60 @@
+﻿@using KMModels.PostModels
+@using KMEnums
+
+@model FormPropertiesPostModel
+@{
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+<script>
+    function onSuccess() {
+        location.href = '@Url.Action("Index")';
+    }
+</script>
+
+<div class="ptitle" style='width: 100%'>
+    <span>Form Properties</span>
+</div>
+
+@using (Ajax.BeginForm("PublishForm", new AjaxOptions
+{ 
+    HttpMethod = "POST",
+    OnSuccess = "onSuccess",
+    //OnFailure = "onError"
+}))
+{
+    <div id="formSummaryContent">
+        @Html.HiddenFor(x => x.Id)
+
+        @Html.Partial("Partials/_FormSummaryContent", Model, new ViewDataDictionary
+                        {
+                            TemplateInfo = new TemplateInfo
+                            {
+                                HtmlFieldPrefix = "Summary"
+                            }
+                        })
+    </div>
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("Previous").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "movePreviousTab()" })
+            </div>
+            <div class="cbtns">
+                @if (ViewBag.FormType != Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+                {
+                    var formUrl = string.Format("{0}?tokenuid={1}", Config("GetFormHandlerUrl"), Model.Token);
+                    if (Model.HasParent)
+                    {
+                        formUrl += "&child=true";
+                    }
+
+                    <a href="@formUrl" class="btn btn-blue5" target="_blank">Preview</a>
+                }
+                @if (!viewOnly)
+                {
+                    @Html.Kendo().Button().Name("Publish").Content("Publish").HtmlAttributes(new { @class = "btn btn-blue5" })
+                }
+            </div>
+            <div class="rbtns"></div>
+        </div>
+    </div>
+}

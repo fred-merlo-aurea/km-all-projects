@@ -1,0 +1,83 @@
+﻿<Window x:Class="UAD_Explorer.Windows.GraphPopOut"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="GraphPopOut" Height="400" Width="600" MouseLeave="Window_MouseLeave" WindowStyle="None" AllowsTransparency="True" 
+        Deactivated="Window_Deactivated" BorderBrush="Black" BorderThickness="0">
+    <Window.Resources>
+        <telerik:ChartPalette x:Key="customPalette">
+            <telerik:ChartPalette.SeriesEntries>
+                <telerik:PaletteEntryCollection SeriesFamily="Bar">
+                    <telerik:PaletteEntry Fill="#FFF47E1F" Stroke="White"/>
+                    <telerik:PaletteEntry Fill="#FF045DA4" Stroke="White"/>
+                </telerik:PaletteEntryCollection>
+            </telerik:ChartPalette.SeriesEntries>
+        </telerik:ChartPalette>
+    </Window.Resources>
+    <Grid>
+        <Grid.Resources>
+            <StackPanel x:Key="chartToolTip" Orientation="Vertical">
+                <TextBlock Text="{Binding ClientName}" FontWeight="Bold" FontSize="11"/>
+                <TextBlock Text="{Binding Path=Data[0].RecordCount}" FontWeight="Bold" FontSize="11"/>
+            </StackPanel>
+        </Grid.Resources>
+        <telerik:RadPieChart x:Name="pieChart" Palette="Windows8" MinHeight="350" MinWidth="500" Visibility="Collapsed">
+            <telerik:RadPieChart.Behaviors>
+                <telerik:ChartSelectionBehavior DataPointSelectionMode="Single" SelectionChanged="ChartSelectionBehavior_SelectionChanged"/>
+            </telerik:RadPieChart.Behaviors>
+            <telerik:RadPieChart.SmartLabelsStrategy>
+                <telerik:PieChartSmartLabelsStrategy DisplayMode="Spider"/>
+            </telerik:RadPieChart.SmartLabelsStrategy>
+            <telerik:RadPieChart.Series>
+                <telerik:PieSeries>
+                    <telerik:PieSeries.LabelConnectorsSettings>
+                        <telerik:ChartSeriesLabelConnectorsSettings FadeOpacity="1" >
+                        </telerik:ChartSeriesLabelConnectorsSettings>
+                    </telerik:PieSeries.LabelConnectorsSettings>
+                    <telerik:PieSeries.DataPoints>
+                    </telerik:PieSeries.DataPoints>
+                </telerik:PieSeries>
+            </telerik:RadPieChart.Series>
+        </telerik:RadPieChart>
+        <StackPanel Orientation="Horizontal" x:Name="spCounts" Visibility="Collapsed" Margin="5,12,0,0">
+            <StackPanel Orientation="Vertical" Margin="0,0,5,0">
+                <TextBlock Text="File Count " FontSize="12"/>
+                <Rectangle Height="4" Width="Auto" Fill="#FFF47E1F" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Transformation Count" FontSize="12"/>
+                <Rectangle Height="4" Width="Auto" Fill="#FF045DA4" />
+            </StackPanel>
+        </StackPanel>
+        <telerik:RadCartesianChart x:Name="currentRecordsChart" Grid.Column="0" Grid.Row="1" MaxWidth="900" Palette="{StaticResource customPalette}" 
+                                   Margin="5,12,0,0" HoverMode="None" Visibility="Collapsed" MaxHeight="400">
+            <telerik:RadCartesianChart.Resources>
+                <telerik:DataPointLegendSettings x:Key="legendSettings" TitleBinding="ClientName" />
+            </telerik:RadCartesianChart.Resources>
+            <telerik:RadCartesianChart.Behaviors>
+                <telerik:ChartSelectionBehavior DataPointSelectionMode="Single" />
+            </telerik:RadCartesianChart.Behaviors>
+            <telerik:RadCartesianChart.HorizontalAxis>
+                <telerik:CategoricalAxis LineStroke="#FFF47E1F" ShowLabels="True" LabelFitMode="Rotate"/>
+            </telerik:RadCartesianChart.HorizontalAxis>
+            <telerik:RadCartesianChart.VerticalAxis>
+                <telerik:LinearAxis LineStroke="#FFF47E1F"/>
+            </telerik:RadCartesianChart.VerticalAxis>
+            <telerik:RadCartesianChart.SeriesProvider>
+                <telerik:ChartSeriesProvider Source="{Binding Data}">
+                    <telerik:ChartSeriesProvider.SeriesDescriptors>
+                        <telerik:CategoricalSeriesDescriptor ItemsSourcePath="Data" ValuePath="RecordCount" CategoryPath="ClientName">
+                            <telerik:CategoricalSeriesDescriptor.Style>
+                                <Style TargetType="telerik:BarSeries">
+                                    <Setter Property="CombineMode" Value="Cluster" />
+                                    <Setter Property="LegendSettings" Value="{StaticResource legendSettings}" />
+                                    <Setter Property="ToolTip" Value="{StaticResource chartToolTip}" />
+                                </Style>
+                            </telerik:CategoricalSeriesDescriptor.Style>
+                        </telerik:CategoricalSeriesDescriptor>
+                    </telerik:ChartSeriesProvider.SeriesDescriptors>
+                </telerik:ChartSeriesProvider>
+            </telerik:RadCartesianChart.SeriesProvider>
+        </telerik:RadCartesianChart>
+    </Grid>
+</Window>

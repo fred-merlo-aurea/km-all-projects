@@ -1,0 +1,14 @@
+﻿CREATE PROCEDURE [dbo].[e_Product_Exists_ByPubTypeID]
+@PubTypeID int
+AS
+BEGIN
+	
+	SET NOCOUNT ON
+	
+	IF EXISTS (
+		SELECT TOP 1 PubID
+		FROM Pubs WITH (NOLOCK)
+		WHERE PubTypeID = @PubTypeID
+	) SELECT 1 ELSE SELECT 0
+
+END

@@ -1,0 +1,146 @@
+﻿@using KMEnums
+
+<style>
+    .droptrue li, .droptrue li {
+        border-bottom:1px dotted Gray
+    }
+    .droptrue li.selected, .droptrue li.selected  {
+        background-color:#115fa9;
+        color: white;
+    }
+    .droptrue {
+        width: 12em;
+        height: 20em;
+        line-height: 2em;
+        border: 1px solid #ccc;
+        padding: 0;
+        margin: 0;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    td.k-state-focused {
+        color: #115fa9;
+    }
+</style>
+<script type="text/ng-template" id="@(ControlType.NewsLetter)Properties">
+    <ng-form name="form">
+        <div class="proptitle">NewsLetter Properties</div>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Field Name:</label>
+                <input type="text" ng-model="control.Label" />
+            </div>
+            <div class="formitem">
+                <label>Field Label (HTML Editor):</label>
+                <textarea kendo-editor="LabelHTML" class="editorForRefresh" ng-model="control.LabelHTML" k-options="$parent.$parent.editorOptionsNoImage" k-encoded="false" k-on-select="onEditorSelect(kendoEvent)"></textarea>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Options</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <input type="checkbox" ng-model="control.IsPrepopulateFromDb" />
+                    <label>Prepopulate from database</label>
+                </div>
+            </div>
+            <div class="subtitle">Number of Columns</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <input type="text" ng-model="control.Columns" kendo-numerictextbox k-options="{ decimals: 0, format: '#', min: 1, value: 1 }" />
+                </div>
+            </div>
+            <div class="subtitle">Categories</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <div ng-attr-id="{{ 'catgrid-' + control.Grid }}" kendo-grid="ItemsGrid" k-options='{
+                    dataSource: { 
+                        data: control.Categories, 
+                        change: changeCategories
+                    },
+                    editable: { 
+                        mode: "incell", 
+                        create: true, 
+                        destroy: true 
+                    },
+                    edit: edit,
+                    navigatable: true,
+                    toolbar: [{ name: "create", text: "Add" }],
+                    columns: [
+                        { field: "CategoryName", title: "Category"}, { command: [{ name:"destroy", text: "" }], title: "" }
+                    ]
+                }'></div> 
+                </div>
+            </div>
+            <div class="subtitle">Newsletters</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <div ng-attr-id="{{ 'selectedGroupsGrid-' + control.Grid }}" kendo-grid="ItemsGrid" k-options='{
+                    dataSource: {
+                        data: control.Groups,
+                         schema: {
+                                    model: {
+                                        id: "GroupID",
+                                        fields: {
+                                            GroupName: { type: "string" },
+                                            Category: { defaultValue: { CategoryID: 0, CategoryName: "No Category" } },
+                                            Default: { type: "boolean" }
+                                        }
+                                    }
+                                },
+                                sort: { field: "Order", dir: "asc" }
+                    },
+                    editable: false,
+                    toolbar: [{ template: "<button type=\"button\" ng-click=\"openManage()\">Manage NewsLetter</button>" }],
+                        columns: [
+                        { field: "GroupName", title: "Group Name"},
+                        { field: "Category", title: "Category", template: "#=Category.CategoryName#" },
+                        { template: "<input type=\"checkbox\" ng-model=\"dataItem.Default\" class=\"checkbox\" disabled=\"disabled\" />", title: "Default", width: "60px" }
+                        ]
+                }'></div>                
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Modal Popup -->
+        <div ng-show="control.mode">
+            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#f3f3f3; opacity: 0.5; z-index:1000;"></div>
+            <div style="font-family: Arial; border: 0px solid #dedede; border-radius:4px; box-shadow: 0px 0px 10px #a8a8a8; position:fixed; top: 50%; left: 50%; margin-left: -430px; margin-top:-450px; width: 860px; background: #f9f9f9; z-index:10000;">
+                <div style="overflow-y:auto;max-height:800px;">
+                    <p style="color: #fff; background-color: #115fa9; margin: 0; padding: 10px; text-transform: uppercase;">Manage Newsletters</p>
+                    <input ng-attr-id="{{ 'groupSelected-' + control.Grid }}" type="hidden" />
+                    <!-- ManageGroups -->
+                    <fieldset style="padding: 20px 30px;">
+                        <button class="btn k-button" type="button" ng-click="groupExplorer(groupSelected)" style="margin: 0px 0px 10px 690px;">+ Add</button>
+                        <div ng-attr-id="{{ 'grid-' + control.Grid }}"></div>
+                    </fieldset>
+                    <!-- FieldLabelHTML -->
+                    <fieldset style="padding: 20px 30px;">
+                        <legend>Field Label for Newsletter Group: <b ng-attr-id="{{ 'FieldLabelGroupName-' + control.Grid }}"></b></legend>
+                        <textarea ng-attr-id="{{ 'GroupLabelHtml-' + control.Grid }}" kendo-editor k-on-change="groupLabelHtmlChange()" k-options="$parent.$parent.editorOptions" k-encoded="false"></textarea>
+                    </fieldset>
+                    <!-- SelectUDFs -->
+                    <fieldset style="padding: 20px 30px;">
+                        <legend>Select UDFs for Newsletter Group: <b ng-attr-id="{{ 'SelectUDFsGroupName-' + control.Grid }}"></b></legend>
+                        <div style="width:730px;display:inline-flex"><p style="margin-left: 40px;width:300px;float:left;">Form UDFs</p><p style="width:200px;float:left;"></p><p style="width:300px;float:left;">Selected UDFs</p></div>
+                        <ul ng-attr-id="{{ 'lstBox1-' + control.Grid }}" class="droptrue" style="margin-left: 30px;list-style-type: none; border:1px solid Black; width:300px; height:300px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+
+                        <div style="display:inline-block; width:120px;">
+                            <p>Drag and Drop your UDFs.</p>
+                            <p>
+                                <kbd>Click</kbd> to select individual items.<br />
+                                <kbd>Ctrl + Click</kbd> or <kbd>Shift + Click</kbd> to select multiple items.
+                            </p>
+                        </div>
+
+                        <ul ng-attr-id="{{ 'lstBox2-' + control.Grid }}" class="droptrue" style="list-style-type: none; border:1px solid Black; width:300px; height:300px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+                    </fieldset>
+                    <div style="display:block; margin-bottom:25px; text-align: center;">
+                        <button type="button" ng-click="closeMode()">Cancel</button>
+                        <button type="button" ng-click="applyMode()" style="margin-left:30px;">Save</button>
+                    </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </ng-form>
+</script>

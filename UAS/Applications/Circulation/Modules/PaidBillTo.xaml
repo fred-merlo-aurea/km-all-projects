@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="Circulation.Modules.PaidBillTo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="1280">
+    <Grid IsEnabled="{Binding Enabled}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="218"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Content="Bill To:" Style="{DynamicResource LabelC24}" Width="76"></Label>
+        <DockPanel Grid.Row="0" Grid.Column="5" HorizontalAlignment="Right">
+            <Label Content="Same As Profile" VerticalAlignment="Center" Style="{DynamicResource LabelC24}" FontSize="16" />
+            <CheckBox Grid.Row="0" Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Path=CopyProfile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                </CheckBox.LayoutTransform>
+            </CheckBox>
+        </DockPanel>
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Margin="2" Text="First Name:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbFname" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" Margin="5,0,5,0"
+                     MaxLength="50" Text="{Binding Path=FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Margin="2" Text="Last Name:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbLname" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                     MaxLength="50" Text="{Binding Path=LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" />
+        <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" Margin="2" Text="Title:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox x:Name="tbTitle" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                     MaxLength="255" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="4" HorizontalAlignment="Right" Margin="2" Text="Company:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox x:Name="tbCompany" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" Margin="5,0,5,0"
+                     MaxLength="100" Text="{Binding Path=Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="5" HorizontalAlignment="Right" Margin="2,4,2,6" Text="Address Type:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <telerik:RadComboBox Name="cbAddressType" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0,5,0" Style="{DynamicResource ComboBoxC14}" VerticalAlignment="Center"
+                             IsReadOnly="True" SelectedValue="{Binding Path=AddressTypeCodeId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="6" HorizontalAlignment="Right" Margin="2" Text="Address 1:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbAddress" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                     MaxLength="100" Text="{Binding Path=Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="Address 2:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbAddress2" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" MaxLength="100" 
+                     Text="{Binding Path=Address2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="Address 3:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbAddress3" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" MaxLength="100"
+                     Text="{Binding Path=Address3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="City:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox x:Name="tbCity" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                     MaxLength="50" Text="{Binding Path=City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="Country:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <telerik:RadComboBox Name="cbCountry" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Bottom" IsReadOnly="True"
+                                 Style="{DynamicResource ComboBoxC14}" SelectedValue="{Binding Path=CountryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="State:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <telerik:RadComboBox Name="cbState" Grid.Row="5" Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" IsReadOnly="True" 
+                                 Style="{DynamicResource ComboBoxC14}" SelectedValue="{Binding Path=RegionID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Margin="2" Text="Zip:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbZipPlus4" Grid.Row="6" Grid.Column="3" PreviewTextInput="tbZipPlus4_TextInput" LostFocus="tbZipPlus4_LostFocus" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center"
+                     Style="{DynamicResource TextBoxC13}" MaxLength="10" Text="{Binding Path=FullZip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretIndex="{x:Static System:Int32.MaxValue}" />
+        <TextBlock Grid.Row="1" Grid.Column="4" Margin="2" Text="Phone:" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Right" Style="{DynamicResource TextBlockC13}" />
+        <Grid Grid.Row="1" Grid.Column="5" Margin="5,0,5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Name="tbPhoneCode" HorizontalAlignment="Stretch" Margin="0,0,5,0" VerticalAlignment="Center" IsEnabled="False" IsReadOnly="True" Style="{DynamicResource TextBoxC13}" />
+            <TextBox Name="tbPhone" Grid.Column="1" PreviewTextInput="tbPhone_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" 
+                    MaxLength="25" Text="{Binding Path=Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <telerik:RadWatermarkTextBox Name="txtPhoneExt"  Grid.Column="2" WatermarkContent="Ext." PreviewTextInput="txtPhoneExt_PreviewTextInput" Style="{DynamicResource TextBoxC13}"
+                                         HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Foreground="#FFC7CACC" MaxLength="25"
+                                         Text="{Binding Path=PhoneExt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></telerik:RadWatermarkTextBox>
+        </Grid>
+        <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Right" Margin="2" Text="Mobile:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbMobile" Grid.Row="2" Grid.Column="5" PreviewTextInput="tbPhone_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" 
+                 MaxLength="25" Text="{Binding Path=Mobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="3" Grid.Column="4" HorizontalAlignment="Right" Margin="2" Text="Fax:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbFax" Grid.Row="3" Grid.Column="5" PreviewTextInput="tbPhone_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" 
+                 MaxLength="25" Text="{Binding Path=Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="4" Grid.Column="4" HorizontalAlignment="Right" Margin="2" Text="Email:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbEmail" Grid.Row="4" Grid.Column="5" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                     MaxLength="255" Text="{Binding Path=Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Column="4" Grid.Row="5" HorizontalAlignment="Right" Margin="2" Text="Website:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbWeb" Grid.Column="5" Grid.Row="5" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" MaxLength="255"
+                     Text="{Binding Path=Website, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Column="4" Grid.Row="6" HorizontalAlignment="Right" Margin="2" Text="County:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+        <TextBox Name="tbCounty" Grid.Column="5" Grid.Row="6" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" MaxLength="255"
+                     Text="{Binding Path=County, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>

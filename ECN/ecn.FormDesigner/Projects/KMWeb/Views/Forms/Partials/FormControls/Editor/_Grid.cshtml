@@ -1,0 +1,26 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+<script>
+    array[@((int)ControlType.Grid)] = {
+        name: '@ControlType.Grid',
+        object: @Html.Raw(Json.Encode(new Grid(true))),
+        control: "<table>\
+                    <tbody>\
+                        <tr>\
+                            <th></th>\
+                            <th ng-repeat='column in control.Columns'>{{column}}</th>\
+                        </tr>\
+                        <tr ng-repeat='row in control.Rows'>\
+                            <td>{{row}}</td>\
+                            <td ng-repeat='column in control.Columns'>\
+                                <span ng-switch on='control.Controls'>\
+                                    <input type='radio' ng-switch-when='@((int)GridControl.RadioButtons)' />\
+                                    <input type='checkbox' ng-switch-when='@((int)GridControl.Checkboxes)' />\
+                                </span>\
+                            </td>\
+                        </tr>\
+                    </tbody>\
+                </table>"
+    }
+</script>

@@ -1,0 +1,234 @@
+﻿@model List<UAD.DataCompare.Web.Models.ViewComparisionViewModel>
+@{
+    ViewBag.Title = "View Downloads";
+}
+<style>
+    a {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+    .k-window-title
+    {
+        display:inline;
+    }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<input type="hidden" id="fileNameFilterValue" value="@ViewBag.fileNameFilter" />
+<div style="width:100%;">
+    @(
+        Html.Kendo()
+           .Grid(Model)
+           .Name("Grid")
+           .Pageable()
+           .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+           .Sortable(sortable => sortable
+                        .AllowUnsort(true)
+                        .SortMode(GridSortMode.MultipleColumn))
+           .Columns(columns =>
+           {
+               columns.Bound(e => e.FileName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title("File Name");
+               columns.Bound(e => e.User).Filterable(false).Title("User");
+               columns.Bound(e => e.Target).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title("Target");
+               columns.Bound(e => e.Scope).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title("Scope");
+               columns.Bound(e => e.Type).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title("Type");
+               columns.Bound(e => e.DownLoadDate).Format("{0:MM/dd/yyyy hh:mm:ss}").Filterable(false).Title("Download Date");
+               columns.Bound(e => e.Query).Filterable(false).Title("Query Ran").ClientTemplate("<a onclick =\"showQueryDetails('#=DcDownloadId#', '#=Query#')\">#=Query#</a>");
+               columns.Bound(e => e.TotalRecords).Title("Total Records").Filterable(false).ClientTemplate(Html.ActionLink("#=TotalRecords#", "Download", new { file = "id" }).ToHtmlString().Replace("id", "#=DownloadedFileName#")).HtmlAttributes(new { style = "text-align:right" }).HeaderHtmlAttributes(new { @style = "text-align:right;" });
+               columns.Bound(e => e.Price).Filterable(false).Title("Price").HtmlAttributes(new { style = "text-align:right" }).HeaderHtmlAttributes(new { @style = "text-align:right;" });
+           })
+       .DataSource(dataSource => dataSource
+           .Ajax()
+           .ServerOperation(false)
+           .Sort(sort => sort.Add("DownLoadDate").Descending())
+           .PageSize(10)
+
+))
+</div>
+
+@(Html.Kendo().Window().Name("Details")
+    .Title("Details")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Resizable(x=>x.Enabled(true))
+    .Width(600)
+    .Height(300)
+)
+<script type="text/x-kendo-template" id="querytemplate">
+    <div class="wrapper modal modalsave">
+        <fieldset title="Save">
+            <legend>Query Ran:</legend>
+            <p>
+                <h3>#=data#</h3>
+            </p>
+        </fieldset>
+    </div>
+</script>
+<script type="text/x-kendo-template" id="template">
+    <table id="details-container" style="margin:0 auto;">
+        <thead>
+            <tr>
+                <th> Category </th>
+                <th> Count </th>
+                <th> Price </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Profile Attributes
+                </td>
+                <td>
+                    #= data.totalProfileAttrCount#
+                </td>
+                <td>
+                    #= data.totalProfileAttrCost#
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Demographic Attributes
+                </td>
+                <td>
+                    #= data.totalDemoAttrCount #
+                </td>
+                <td>
+                    #= data.totalDemoAttrCost #
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">
+                    Total
+                </td>
+                <td style="font-weight:bold;">
+                    #= data.totalCount #
+                </td>
+                <td style="font-weight:bold;">
+                    #= data.totalPrice #
+                </td>
+            </tr>
+        </tbody>
+        
+    </table>
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $filter = new Array();
+        var targetFilter=  @Html.Raw(Json.Encode(ViewBag.targetFilter));
+        var typeFilter=  @Html.Raw(Json.Encode(ViewBag.typeFilter));
+        var scopeFilter=  @Html.Raw(Json.Encode(ViewBag.scopeFilter));
+        var fileFilter=  @Html.Raw(Json.Encode(ViewBag.fileNameFilter));
+
+        $filter.push({ field: "FileName", operator: "contains", value: fileFilter });
+        $filter.push({ field: "Target", operator: "contains", value: targetFilter });
+        $filter.push({ field: "Scope", operator: "contains", value: scopeFilter });
+        $filter.push({ field: "Type", operator: "contains", value: typeFilter });
+
+        var grid = $("#Grid").data("kendoGrid");
+        grid.dataSource.filter($filter);
+
+    });
+
+    function showQueryDetails(DcDownloadID, Query) {
+        var wnd = $("#Details").data("kendoWindow");
+        wnd.title(Query);
+        wnd.content("");
+        wnd.refresh({
+            url: '@Url.Action("LoadFilterDetails", "Datacompare")',
+            data: { DcDownloadID: DcDownloadID }
+
+        });
+        kendo.ui.progress(wnd.element, true);
+        wnd.center().open();
+    }
+
+    function showDetails(e) {
+        e.preventDefault();
+        var detailsTemplate = kendo.template($("#template").html());
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+        var DownloadCostDetails = dataItem.DownloadCostDetails;
+
+        var vmmodels = []
+        var totalPrice = 0;
+        var totalCount = 0;
+        var totalProfileAttrCost = 0;
+        var totalProfileAttrCount = 0;
+        var totalDemoAttrCost = 0;
+        var totalDemoAttrCount = 0;
+        var vmmodel = {};
+
+        for (var i = 0; i < DownloadCostDetails.length; i++) {
+
+            if (DownloadCostDetails[i].CodeTypeId == 37 || DownloadCostDetails[i].CodeTypeId == 38)
+            {
+                totalProfileAttrCost = totalProfileAttrCost + DownloadCostDetails[i].ItemTotalCostClient;
+                totalProfileAttrCount = totalProfileAttrCount + DownloadCostDetails[i].ItemCount;
+            }
+            if (DownloadCostDetails[i].CodeTypeId == 39 || DownloadCostDetails[i].CodeTypeId == 40)
+            {
+                totalDemoAttrCost = totalDemoAttrCost + DownloadCostDetails[i].ItemTotalCostClient
+                totalDemoAttrCount = totalDemoAttrCount + DownloadCostDetails[i].ItemCount;
+            }
+
+            totalPrice = totalPrice + DownloadCostDetails[i].ItemTotalCostClient;
+            totalCount = totalCount + DownloadCostDetails[i].ItemCount;
+            //vmmodels.push({
+            //    totalcost: DownloadCostDetails[i].ItemTotalCostClient,
+            //    codetypes: DownloadCostDetails[i].CodeTypeId,
+            //    costeperitemclient: DownloadCostDetails[i].CostPerItemClient,
+            //    costperitemdetailclient: DownloadCostDetails[i].CostPerItemDetailClient,
+            //    costperitemthirdparty: DownloadCostDetails[i].CostPerItemThirdParty,
+            //    costperitemdetailthirdparty: DownloadCostDetails[i].CostPerItemDetailThirdParty,
+            //    itemcount: DownloadCostDetails[i].ItemCount,
+            //    itemtotalcostthirdparty: DownloadCostDetails[i].ItemTotalCostThirdParty
+            //})
+
+        }
+
+        vmmodel.totalProfileAttrCost = totalProfileAttrCost.toFixed(2);
+        vmmodel.totalProfileAttrCount = totalProfileAttrCount;
+        vmmodel.totalDemoAttrCost = totalDemoAttrCost.toFixed(2);
+        vmmodel.totalDemoAttrCount = totalDemoAttrCount;
+        vmmodel.totalCount = totalCount;
+        vmmodel.totalPrice = totalPrice.toFixed(2);
+        wnd.content(detailsTemplate(vmmodel));
+        //wnd.content(detailsTemplate(vmmodels));
+        wnd.center().open();
+    }
+
+
+</script>
+<style type="text/css">
+    #details-container {
+        padding: 10px;
+    }
+
+        #details-container h2 {
+            margin: 0;
+        }
+
+        #details-container em {
+            color: #8c8c8c;
+        }
+
+        #details-container dt {
+            margin: 0;
+            display: block;
+        }
+</style>
+
+
+

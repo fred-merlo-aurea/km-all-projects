@@ -1,0 +1,26 @@
+﻿<Window x:Class="WpfControls.WindowsAndDialogs.RecordUpdateChangeSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:local="clr-namespace:WpfControls.WindowsAndDialogs"        
+        Title="Applied Changes" Height="400" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="5">
+            <TextBlock Name="txtStandard"  Grid.Row="0" Text="Select property to change: " Margin="5" FontSize="16"/>
+            <telerik:RadComboBox Name="cbProperty" Width="200" HorizontalAlignment="Left" Margin="5,0,0,0" SelectionChanged="cbProperty_SelectionChanged" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="2" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+            <StackPanel Name="spChanges" Orientation="Vertical">
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+        <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="#C7CACC" />
+        <telerik:RadButton Name="btnApply" Grid.Row="2" Content="Apply" HorizontalAlignment="Right" Margin="5" Width="65" Click="btnApply_Click" />
+    </Grid>
+</Window>

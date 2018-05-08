@@ -1,0 +1,503 @@
+﻿@using UAD.Web.Admin.Infrastructure
+@model UAD.Web.Admin.Models.CodeSheets
+@{
+    ViewBag.Title = "CodeSheet";
+}
+
+<script>
+    var firstGridLoad = true;
+
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                Search();
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        function dataBound() {
+            this.expandRow(this.tbody.find("tr.k-master-row").first());
+        }
+
+        function resyncParentGrid(e) {
+            var parentData = $('#grdCodeSheet').data("kendoGrid");
+            parentData.dataSource.read();
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetProducts", "CommonMethods")',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#ddlProduct").empty();
+                $.each(data, function (index, item) {
+                    $('#ddlProduct').append($('<option></option>').val(item.Value).html(item.Text));
+                });
+
+                if (@Model.PubID == 0)
+                    $('#ddlProduct').val("");
+                else
+                    $('#ddlProduct').val(@Model.PubID).change();
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        $("#ddlProduct").on("change", function (e) {
+
+            if($("#ddlProduct").val() != "" || $("#ddlProduct").val() >0)
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetResponseGroups", "CommonMethods")',
+                    data: {pubID : $("#ddlProduct").val() },
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#ddlResponseGroup").empty();
+                        $.each(data, function (index, item) {
+                            $('#ddlResponseGroup').append($('<option></option>').val(item.Value).html(item.Text));
+                        });
+                        if (@Model.ResponseGroupID == 0)
+                            $('#ddlResponseGroup').val("");
+                        else
+                            $('#ddlResponseGroup').val(@Model.ResponseGroupID);
+                        var data = filterGridParams();
+                        ReBindGrid(data);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("An error has occured!!!");
+                    }
+                });
+            }
+        });
+
+        $("#ddlResponseGroup").on("change", function (e) {
+
+            if($("#ddlResponseGroup").val() != "" || $("#ddlResponseGroup").val() >0)
+            {
+                $("#alertDiv").hide();
+                SetPagerWidget("firstpage");
+                firstGridLoad = true;
+                var data = filterGridParams();
+                ReBindGrid(data);
+            }
+            else{
+                $("#grdCodeSheet").data("kendoGrid").dataSource.data([ ]);
+                SetPagerWidget("0");
+            }
+        });
+
+        $('#btnNewCodeSheet').click(function () {
+            window.location = '@Html.Raw(Url.Action("AddEdit", "CodeSheet", new { pubID = "temp",responseGroupID = "rgtemp" }))'.replace("rgtemp", $("#ddlResponseGroup").val()).replace("temp", $("#ddlProduct").val());
+        });
+
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+        //Enents -Page number input changed.
+        $("#pagerInputPageNumber").on("change", function (e) {
+            RebindOnPageOrSizeChange()
+        });
+
+        //Events - Page Size input changed
+        $("#ddPageSize").on("change", function (e) {
+            RebindOnPageOrSizeChange()
+        });
+    });
+
+    function onDataBound(arg) {
+        this.expandRow(this.tbody.find("tr.k-master-row"));
+
+        if (firstGridLoad) {
+            firstGridLoad = false;
+            SetPagerWidget("firstpage");
+        }
+
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data)
+    }
+
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        if(($("#ddlProduct").val() != "" || $("#ddlProduct").val() >0) && ($("#ddlResponseGroup").val() != "" || $("#ddlResponseGroup").val() >0))
+        {
+            $("#alertDiv").hide();
+            SetPagerWidget("firstpage");
+            firstGridLoad = true;
+            var data = filterGridParams();
+            ReBindGrid(data);
+        }
+        else {
+            if($("#ddlProduct").val() == "" && ($("#ddlResponseGroup").val() == "" || $("#ddlResponseGroup").val() == null))
+            {
+                $("#alertMsg").html("Please select Product and Response Group.");
+                $("#alertDiv").show();
+            }
+            else if($("#ddlProduct").val() == "" )
+            {
+                $("#alertMsg").html("Please select Product.");
+                $("#alertDiv").show();
+            }
+            else if($("#ddlResponseGroup").val() == "" || $("#ddlResponseGroup").val() == null)
+            {
+                $("#alertMsg").html("Please select Response Group.");
+                $("#alertDiv").show();
+            }
+        }
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        if($("#ddlResponseGroup").val() != "" || $("#ddlResponseGroup").val() >0)
+        {
+            var grid = $("#grdCodeSheet").data("kendoGrid");
+            var options = grid.getOptions();
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: '@Url.Action("GetCodeSheetData", "CodeSheet")',
+                        dataType: "json",
+                        data: obj
+                    }
+                }
+            })
+            options.dataSource.data = dataSource.data;
+            options.dataSource.pageSize = obj.PageSize;
+            grid.setOptions(options);
+            grid.dataSource.read();
+        }
+    }
+
+    function filterGridParams() {
+        if($("#ddlResponseGroup").val() == "") {
+            var responseGroupID = 0 }
+        else {
+            var responseGroupID = $("#ddlResponseGroup").val()};
+        return {
+            ResponseGroupID: responseGroupID,
+            Name: $("#Name").val(),
+            SearchCriteria: $("#ddlSearchCriteria").val(),
+            PageNumber: $("#pagerInputPageNumber").val(),
+            PageSize: $("#ddPageSize").val()
+        };
+    }
+
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+        if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+            SetPagerWidget($("#pagerInputPageNumber").val());
+            var data = filterGridParams();
+            ReBindGrid(data);
+        }
+        else {
+            showMessage({
+                type: 'Error',
+                text: 'Please enter valid page number.',
+                autoClose: false
+            });
+        }
+    }
+
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#grdCodeSheet").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalRecordCounts);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#pagerInputPageNumber").val());
+
+        if (totalrecordCount % pagesize == 0){
+            var lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        else{
+            var lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+
+        if(currentpage == 0 ){
+            var start = 0;
+        }
+        else{
+            var start = ((currentpage - 1) * pagesize + 1);
+        }
+
+        if (start > totalrecordCount)
+        {
+            currentpage = 1;
+            start = 1;
+        }
+
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+    }
+
+    function checkChange(e) {
+        RebindOnPageOrSizeChange()
+    }
+
+    function Reset() {
+        $("#alertDiv").hide();
+        $('#ddlProduct').val("");
+        $('#ddlResponseGroup').html("");
+        $("#Name").val('');
+        $("#ddlSearchCriteria").val('starts');
+        $("#grdCodeSheet").data("kendoGrid").dataSource.data([ ]);
+        SetPagerWidget("0");
+    }
+
+    function showDeleteAlert(id) {
+        var data = {
+            id: id,
+            pubID: $("#ddlProduct").val(),
+            responseGroupID: $("#ddlResponseGroup").val(),
+        }
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to delete?",
+            autoClose: false,
+            IsOpen: false,
+            action: deleteCodeSheet,
+            data: data,
+        });
+        return false;
+    }
+
+    function deleteCodeSheet(values) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Delete", "CodeSheet")',
+            data: { id: values.id, pubID : values.pubID},
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var result = JSON.parse(response);
+                if (result.Success) {
+                    $("#alertDiv").hide();
+                    var data = {
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        text: result.Text,
+                        autoClose: false,
+                        action: RedirectPage,
+                        IsOpen: false
+                    }
+                    showMessage(data);
+                }
+                else
+                {
+                    $("#alertMsg").html(result.Text);
+                    $("#alertDiv").show();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        var RedirectPage = function () {
+            window.location = '@Html.Raw(Url.Action("Index", "CodeSheet", new { pubID = "temp",responseGroupID = "rgtemp" }))'.replace("rgtemp", $("#ddlResponseGroup").val()).replace("temp", $("#ddlProduct").val());
+        }
+    }
+</script>
+<script type="text/kendo" id="MasterTemplate">
+    @(
+        Html.Kendo()
+        .Grid<UAD.Web.Admin.Models.CodeSheetMaster>()
+            .Name("grdMasterData_#=CodeSheetID#")
+            .Events(e => e.DataBound("onDataBound"))
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.MasterValue).Title("Master Value").HtmlAttributes(new { @style = "vertical-align:middle;" });
+                columns.Bound(e => e.MasterDesc).Title("Master Description").HtmlAttributes(new { @style = "vertical-align:middle" });
+                columns.Bound(e => e.DisplayName).Title("Master Group").HtmlAttributes(new { @style = "vertical-align:middle" });
+            })
+            .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn).AllowUnsort(false))
+            .Pageable(page => page.Enabled(false))
+            .Filterable(filter => filter.Enabled(false))
+            .HtmlAttributes(new { style = "width:50%;" })
+            .DataSource(source => source.Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.MasterValue);
+            })
+            .Read(read => read.Action("GetCodeSheetMasterData", "CodeSheet", new { CodeSheetID = "#=CodeSheetID#" }))// Set the action method which will return the data in JSON format
+            .ServerOperation(false)
+            ).ToClientTemplate()
+      )
+</script>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error"></span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="SearchPanel" style="margin:20px auto;">
+        <span style="margin:20px">
+            <span style="color:red">*</span><label class="control-label">Product:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            @Html.DropDownListFor(e => e.PubID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlProduct", style = "width:450px" })
+        </span>
+        <span style="margin:20px">
+            <br />
+            <span style="color:red">*</span><label class="control-label">Response Group:</label>
+            @Html.DropDownListFor(e => e.ReportGroupID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlResponseGroup", style = "width:450px" })
+        </span>
+        <span style="margin:20px">
+            <br />
+            <label class="control-label">Value or Description:</label>
+            @Html.DropDownList("ddlSearchCriteria", new List<SelectListItem>
+            {
+            new SelectListItem { Text = "starts with", Value = "starts" },
+            new SelectListItem { Text = "contains", Value = "like" },
+            new SelectListItem { Text = "equals", Value = "equals" },
+            new SelectListItem { Text = "ends with", Value = "ends" }
+            })
+            @Html.Kendo().TextBox().Name("Name").HtmlAttributes(new { style = "overflow: hidden; width:25%" })
+            <input type="button" class="btn-blue2" value="Search" id="search" onclick="Search()" />
+            <input type="button" class="btn-blue2" value="Reset" id="reset" onclick="Reset()" />
+        </span>
+        <span style="text-align:right">
+            @Html.Kendo().Button().Name("Addbb").Content("Add Code Sheet<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { type = "button", id = "btnNewCodeSheet", @class = "btn-blue2 float-right" })
+        </span>
+    </div>
+    <div id="grid">
+        @(
+        Html.Kendo()
+        .Grid<UAD.Web.Admin.Models.CodeSheets>
+            ()
+            .Name("grdCodeSheet")
+            .Events(e => e.DataBound("onDataBound"))
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.TotalRecordCounts).Hidden(true);
+                columns.Bound(e => e.ResponseValue).Title("Value").HtmlAttributes(new { @style = "vertical-align:middle;" });
+                columns.Bound(e => e.ResponseDesc).Title("Description").HtmlAttributes(new { @style = "vertical-align:middle" });
+                columns.Bound(e => e.ReportGroupName).Title("Report Group").HtmlAttributes(new { @style = "vertical-align:middle" });
+                columns.Bound(e => e.IsActive).ClientTemplate(
+                "# if (IsActive == true) { #" +
+                "yes" +
+                "# } else { #" +
+                "No" +
+                "# } #"
+                ).Title("Active").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+                columns.Bound(e => e.IsOther).ClientTemplate(
+                "# if (IsOther == true) { #" +
+                "yes" +
+                "# } else { #" +
+                "No" +
+                "# } #"
+                ).Title("Other").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+                columns.Bound(p => p).ClientTemplate(GetActions("grdCodeSheet").ToString()).Width(100).Filterable(false).Sortable(false);
+            })
+            .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn).AllowUnsort(false))
+            .Pageable(page => page.Enabled(false))
+            .Filterable(filter => filter.Enabled(false))
+            .AutoBind(false)
+            .DataSource(dataSource => dataSource // Configure the grid data source
+            .Ajax() // Specify that ajax binding is used
+            .Model(m =>
+            {
+                m.Id(y => y.CodeSheetID);
+            })
+            .Read(read => read.Data("filterGridParams").Action("GetCodeSheetData", "CodeSheet"))// Set the action method which will return the data in JSON format
+            .ServerOperation(true) //Get Data from Server
+            ).ClientDetailTemplateId("MasterTemplate"))
+
+        <div id="serverGrid">
+            @Html.Partial("Partials/_ServerGridPager")
+        </div>
+    </div>
+</div>
+<br /><br />
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=CodeSheetID#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" });
+                    innerItems.Add().Text("Edit")
+                        .Action("AddEdit", "CodeSheet", new { id = "#=CodeSheetID#" })
+                        .HtmlAttributes(new { onclick = "showLoadingMessage()" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "showDeleteAlert(id)", id = "#=CodeSheetID#" });
+                }
+            )
+        ).ToClientTemplate())
+}
+
+

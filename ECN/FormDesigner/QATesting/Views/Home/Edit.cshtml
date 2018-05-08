@@ -1,0 +1,74 @@
+﻿@model ecn.qatools.Models.IndexViewModel
+@{
+    string url = Model.Params.Any(x => x.Key.Equals("URI", StringComparison.InvariantCultureIgnoreCase))
+        ? Model.Params.FirstOrDefault(x => x.Key.Equals("URI")).Value
+        : "";
+    string css = Model.Params.Any(x => x.Key.Equals("CSS", StringComparison.InvariantCultureIgnoreCase))
+        ? Model.Params.FirstOrDefault(x => x.Key.Equals("CSS")).Value
+        : "";
+    string cssLink = Url.Action("Css", "Home", null, Request.Url.Scheme);
+}
+<form>
+    <table>
+        <tr>
+            <th align="left">URL</th>
+            <td style="border-bottom: 2px inset black" colspan="2"><input id="URI" name="URI" type="text" value="@url"></td>
+        </tr>
+        <tr>
+            <td>Param</td>
+            <td colspan="2"><input id="NEWKEY" name="NEWKEY" type="text"></td>
+        </tr>
+        <tr>
+            <td>Value&nbsp;</td>
+            <td colspan="2"><input id="NEWVALUE" name="NEWVALUE" type="text"></td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+            <th align="right"><a href="javascript:addKey()">Create</a></th>
+        </tr>
+        @if (Model.Params != null && Model.Params.Count() > 0)
+        {
+            <tr>
+                <th colspan="3" align="right">Edit</th>
+            </tr>
+            foreach (var foo in Model.Params)
+            {
+                if (false == foo.Key.Equals("URI", StringComparison.InvariantCultureIgnoreCase)
+                    && false == foo.Key.Equals("CSS", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    <tr>
+                        <td><code>@foo.Key</code></td>
+                        <td><input class="valueEdit" id="@foo.Key" name="@foo.Key" type="text" value="@foo.Value"></td>
+                        <td><a href="javascript:removeKey('@foo.Key')">Remove</a></td>
+                    </tr>
+                }
+            }
+        }
+        <tr>
+            <th colspan="3" align="left">CSS (URL: <code> <a href="@cssLink">@cssLink</a></code>)</th>
+        </tr>
+        <tr>
+            <td colspan="3"><textarea name="CSS" id="CSS" class="cssEdit" rows="10" >@css</textarea></td>
+        </tr>
+        <tr>
+            <th colspan="3" style="border-top: 2px inset black" align="right"><a id="submitLink" name="submitLink" href="#">Submit to Form Designer</a></th>
+        </tr>
+        <tr>
+            <th colspan="3" align="right"><code><span style="color:red;" id="formsLinkLabel" name="formsLinkLabel">???</span></code></th>
+        </tr>
+        <tr>
+            <th colspan="3" style="border-top: 2px inset black" align="right">Saved</a></th>
+        </tr>
+        @foreach(var m in Model.Saved)
+        {
+            string folder = m.IndexOf('\\') != -1 ? m.Substring(m.LastIndexOf('\\') + 1) : m;
+            if(folder.IndexOf('.') != -1)
+            {
+                folder = folder.Remove(folder.IndexOf('.'));
+            }
+            <tr>
+                <td colspan="3" align="left"><a id="@folder" name="@folder" xdata="@m" class="viewSavedLink">@folder</a></td>
+            </tr>
+        }
+    </table>
+</form>

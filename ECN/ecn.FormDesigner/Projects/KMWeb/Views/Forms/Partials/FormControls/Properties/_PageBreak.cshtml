@@ -1,0 +1,30 @@
+﻿@using KMEnums
+
+<script type="text/ng-template" id="@(ControlType.PageBreak)Properties">
+    <div class="proptitle">PageBreak Properties</div>
+    <div class="formbox">
+        <div class="formitem formitemlabeltop">
+            <label>Page Name (optional)</label>
+            <input type="text" ng-model="control.PageName" />
+        </div>
+    </div>
+    <div ng-show="control.hasPrevious || control.hasNext">
+        <div class="params btncontols pagebreakbtns">
+            <div class="subtitle">Button Text</div>
+            <div class="formbox" ng-if='control.hasPrevious = HasPrevious()'>
+                <div class="formitem">
+                    <label>Previous</label>
+                    <input type="text" ng-model="control.Previous" />
+                </div>
+            </div>
+            <div class="formbox" ng-if='control.hasNext = HasNext()'>
+                <div class="formitem">
+                    <label>Next</label>
+                    <input type="text" ng-model="control.Next" />
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+

@@ -1,0 +1,41 @@
+﻿@using UAD.Web.Admin.Infrastructure
+@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+</script>
+<div>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="30" width="30" style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" style="vertical-align:top;"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <div style="text-align:right">
+                    @Html.Kendo().Button().Name("Addbb").Content("Add<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { type = "button", id = "btnNewCustomField", @class = "btn-blue2 float-right" })
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    @*@(Html.Kendo().ListBox()
+            .Name("optional")
+            .Toolbar(toolbar =>
+            {
+                toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                toolbar.Tools(tools => tools
+                    .MoveUp()
+                    .MoveDown()
+                );
+            })
+            .HtmlAttributes(new { title = "Products" })
+            .ConnectWith("selected")
+            .BindTo(ViewBag.Attendees)
+    )*@
+</div>

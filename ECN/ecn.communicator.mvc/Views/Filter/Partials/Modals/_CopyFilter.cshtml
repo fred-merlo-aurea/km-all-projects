@@ -1,0 +1,114 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+
+    @{ 
+        int cuID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+    }
+
+<script>
+    var lastControlError = [];
+    function changeGroupSelection() {
+        var groupID = $("#selectedGroupID").val();
+        if (groupID > 0) {
+            $.ajax({
+                url: "@Url.Action("LoadCopyFilterList", "Filter")",
+                type: "GET",
+                data: { groupID: groupID },
+                success: function (result) {
+                    $("#divFilterCheckBox").html(result);
+                }
+            });
+        }
+    };
+
+    function groupSelected(select) {
+        var group = select.group;
+        $("#selectedGroupName").html(group.GroupName);
+        $("#selectedGroupID").val(group.GroupID);
+        changeGroupSelection();
+    }
+
+    function btnSelectGroup_Click()
+    {
+        
+        groupExplorer(groupSelected, @cuID);
+    }
+
+    function btncopyFilter_Click() {
+        debugger;
+        clearValidationError("copyFilter_Validation", lastControlError);
+        lastControlError = [];
+        var selected = [];
+        var groupID = parseInt($("#selectedGroupID").val());
+        if(isNaN(groupID) || groupID.length == 0)
+        {
+            lastControlError.push("selectedGroupName");
+            setValidationError("Please select a group", "copyFilter_Validation", lastControlError);
+            return;
+        }
+        $('#divFilterCheckBox input:checked').each(function () {
+            selected.push($(this).val());
+        });
+
+        var existingGroupID = currentGroupID;
+        if (selected.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CopyFilter", "Filter")",
+                data: { selected: selected, selectedGroupID: existingGroupID },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        window.location.href = "/ecn.communicator.mvc/Filter/Index/" + response[1];
+                    }
+                    else {
+                        setValidationError(response[1], "copyFilter_Validation", []);
+                    }
+                }
+            });
+        }
+        else
+        {
+            lastControlError.push("divFilterCheckBox");
+            setValidationError("Please select a filter to copy", "copyFilter_Validation", lastControlError);
+            
+        }
+    };
+</script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Copy Filter</legend>
+        <div id="copyFilter_Validation"></div>
+        <div class="formbox">
+            <div class="subtitle">Source Group</div>
+            <div class="formitem formiteminline">
+                <span id="selectedGroupName">-Select Group-</span>
+                
+                @Html.Hidden("selectedGroupID")
+                @Html.Kendo().Button().Name("btnSelectGroup").Events(x => x.Click("btnSelectGroup_Click")).Content("Select Group")
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Filter Name</div>
+            <div class="formitem formiteminline" id="divFilterCheckBox">
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Copy").Content("Copy").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "btncopyFilter_Click()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('CopyFilter')" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>     
+   
+@Html.Partial("~/Views/Group/Partials/Modals/_GroupExplorer.cshtml")

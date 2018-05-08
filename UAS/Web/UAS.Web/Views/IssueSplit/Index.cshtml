@@ -1,0 +1,1049 @@
+﻿@{
+    ViewBag.Title = "Issue Splits";
+}
+<style>
+    .highlightInput {
+        border: 1px solid red !important;;
+    }
+   #IssueSplitGridTable tr:nth-child(even) {background: #F7F8F9}
+   #IssueSplitGridTable tr:nth-child(odd) {background: #FFF}
+   #IssueSplitGridTable td{
+       padding:2.5px 0px 2.5px 0px;
+       border:0.5px solid #fff;
+   }
+   #IssueSplitGridTable th {
+    color: #f57f20;
+    font-size: 16px;
+    letter-spacing: 0.3pt;
+    font-weight: 500;
+    border: 0.5px solid #fff;
+    background-color: #E3E3E3;
+   }
+   #IssueSplitGridTable input[type="text"] {
+        width:120px;
+        min-width:60px;
+        max-width:300px;
+    }
+    #divRecordsInfo{
+        margin: 0px 10px;
+    }
+   #divRecordsInfo td{
+       padding:0;
+       
+   }
+    .panel {
+         margin-bottom: 0px;
+    }
+    .panel-body{
+        padding:5px 10px;
+    }
+    .panel-footer{
+         padding:8px 10px;
+    }
+    button[disabled],input[disabled]{
+            color: #ccc;
+            border-color: #e5e5e5;
+            background-color: #fff;
+            background-image: none;
+    }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div id="mainview" style="height:700px;min-height:600px;">
+    <div id="lpane">
+        @*Partial View For Filter*@
+    </div>
+    <div id="rpane">
+        <div>
+            <table width="100%">
+                <tr>
+                    <td style="padding:0;margin:0;">
+                        <button id="toggleLeftPane" class="pull-left" style="border:0;color:orange;background-color:#dadada;"><span id="pinLeft" class="k-icon k-i-pin" style="font-size:25px;"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="width:100%">
+                            <div style="width:50%;float:left;">
+                                <span class="pull-right"><label>Last Modified Date : <span id="lastModifiedDate">@ViewBag.LastModifiedDate</span> </label></span>
+                            </div>
+                            <div style="width:50%;float:left;">
+                                <span class="pull-right" style="margin-right:20px;">
+                                    <label>Issues :</label>
+                                    @(Html.Kendo().DropDownList()
+                                      .Name("kddlIssues")
+                                      .BindTo(Model.IssueList)
+                                      .DataTextField("IssueName")
+                                      .DataValueField("IssueId")
+                                    )
+                                    @if (Model.WaveList.Count > 0)
+                                    {
+                                        <label>Wave :</label>
+                                            @(Html.Kendo().DropDownList()
+                                          .Name("kddlWaveMailing")
+                                          .BindTo(Model.WaveList)
+                                          .DataTextField("WaveMailingName")
+                                          .DataValueField("WaveMailingID")
+                                          .OptionLabel(" ")
+                                            )
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </table>
+        </div>
+        <div class="panel panel-default" style="height:474px;">
+            <div class="panel-heading" style="height:20px;background-color:#115fa9;margin:0px;">
+                <span style="color:white;font-weight:bold;">Issue Split Info</span>
+            </div>
+            <div class="panel-body" style="height:400px;margin:0px;overflow:scroll;">
+              @(Html.Kendo().TabStrip()
+                      .Name("tabsIssueSplit")
+                      .Items(tabstrip =>
+                      {
+                          tabstrip.Add().Text("Issue Split")
+                           .Selected(true)
+                                .Content("<div id='IssueSplitGrid'>"+Html.Partial("_issueSplitGrid", Model.SplitsList).ToString()+"</div>").HtmlAttributes(new { @class = "tab" });
+
+                          tabstrip.Add().Text("Report")
+                                .Content("Report").HtmlAttributes(new { @class = "tab" });
+                      })
+                )
+                       
+            </div>
+            <div class="panel-footer" style="text-align:right;height:20px;margin:0px;">
+                
+                    <button class="filterButton" style="width:200px;" id="btnSaveSplit" onclick="ConfirmBeforeSaving()">Generate and Save Splits</button>&nbsp;<button class="filterButton" style="width:120px;" id="btnResetAllFilters" onclick="    ResetAllFilters()">Reset All Filters</button>
+               
+            </div>
+           
+        </div>
+        <div id="divRecordsInfo">
+            <table width="100%">
+                <tr>
+                    <td></td>
+                    <td><b>Records</b></td>
+                    <td><b>Copies</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="spRemaining">Remaining:<label id="lblRemainingCount"></label></span></td>
+                    <td align="right">
+                        <label for="chkIsWaveMail">Is This Wave Mailing</label>
+                        <input type="checkbox" id="chkIsWaveMail"  />
+                        <button class="filterButton" disabled id="btnExportSplit">Export</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Current Free Active</b></td>
+                    <td><label id="lblFreeActiveRecords">@Model.RecordCounts.FreeRecords</label></td>
+                    <td><label id="lblFreeActiveCopies">@Model.RecordCounts.FreeCopies</label></td>
+                    <td align="right"><button class="filterButton" style="width:120px;" disabled id="btnFinalizeIssue">Finalize Issue</button></td>
+
+                </tr>
+                <tr>
+                    <td><b>Current Paid Active</b></td>
+                    <td><label id="lblPaidActiveRecords">@Model.RecordCounts.PaidRecords</label></td>
+                    <td><label id="lblPaidActiveCopies">@Model.RecordCounts.PaidCopies</label></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td><b>Current Comp Active</b></td>
+                    <td><label id="lblCompActiveRecords">0</label></td>
+                    <td><label id="lblCompActiveCopies">0</label></td>
+                    <td></td>
+
+                </tr>
+            </table>
+        </div>
+       
+    </div>
+</div>
+@{Html.Kendo()
+       .Window()
+       .Modal(true)
+       .Title(false)
+       .Animation(false)
+       .Name("IssuSplitPopUpWindow")
+       .Content(@<text><div>@Html.Partial("_issueSplitDetailsPopup")</div></text>)
+       .Visible(false)
+       .Render();
+}
+@{Html.Kendo()
+       .Window()
+       .Width(500)
+       .Modal(true)
+       .Title(false)
+       .Animation(false)
+       .Name("IssuSplitDesiredCountPopUpWindow")
+       .Content(@<text><div>@Html.Partial("_splitOrganizer")</div></text>)
+       .Visible(false)
+       .Render();
+}
+@{Html.Kendo()
+       .Window()
+       .Width(1000)
+       .Modal(true)
+       .Title(false)
+       .Animation(false)
+       .Name("IssuSplitDownLoadExportRecords")
+       .Content(@<text><div id="dvIssuSplitDownLoadExportRecords"></div></text>)
+       .Visible(false)
+       .Render();
+}
+@{Html.Kendo()
+       .Window()
+       .Width(800)
+       .Modal(true)
+       .Title(false)
+       .Animation(false)
+       .Name("IssuSplitCreateNewColumns")
+       .Content(@<text><div id="dvIssuSplitCreateNewColumns">@Html.Partial("_downLoadFieldsTransformation")</div></text>)
+       .Visible(false)
+       .Render();
+}
+@{Html.Kendo()
+       .Window()
+       .Modal(true)
+       .Title(false)
+       .Animation(false)
+       .Name("IssueFinalizePopUpWindow")
+       .Content(@<text><div id="dvIssueFinalizePopUpWindow"></div></text>)
+       .Visible(false)
+       .Render();
+}
+<script type="text/javascript">
+    //#region Document Ready
+    var tabStrip = $("#tabsIssueSplit").kendoTabStrip().data("kendoTabStrip");
+
+    $(document).ready(function () {
+
+
+        $(window).unload(function () {
+            sessionStorage.removeItem("filter");
+        });
+        $("#mainview").kendoSplitter({
+            orientation: "horizontal",
+            panes: [{ collapsible: true, size: "20%", collapsedSize: "0%" },
+                { collapsible: true, size: "80%", collapsedSize: "0%" }
+            ]
+        });
+        $("#toggleLeftPane").click(function (e) {
+            var splitterElement = $("#mainview");
+            var leftPane = $("#lpane");
+            var splitter = splitterElement.data("kendoSplitter");
+            console.log(leftPane.width())
+            if (leftPane.width() > 0) {
+                $("#pinLeft").removeClass('k-i-pin').addClass('k-i-unpin');
+            }
+            else {
+                $("#pinLeft").removeClass('k-i-unpin').addClass('k-i-pin');
+            }
+            splitter[leftPane.width() > 0 ? "collapse" : "expand"](leftPane);
+        });
+        $("input").on("focus", function () {
+            $(this).select();
+        })
+        $.ajax({
+            url: '/uas.web/filter/GetFilterViewModel?brandId=0&IsCirc=true&vwType=ProductView&pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#lpane").html(response);
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+        $("#chkIsWaveMail").on("change", function () {
+            if ($(this).prop('checked') == true) {
+                $("#btnFinalizeIssue").text('Finalize Wave');
+            } else {
+                $("#btnFinalizeIssue").text('Finalize Issue');
+            }
+        });
+
+        $("#btnExportSplit").on("click", function () {
+            if (ExportChecked() > 1) {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                    text: "You have selected multiple splits for export. Any column changes you make will<br/> affect all export files. Do you want to continue?",
+                    autoClose: false,
+                    IsOpen: true,
+                    IsCancelOpen: false,
+                    action: ColumnSelectionConfirmation
+                    //data: { 'logout': logout, 'changedurl': url }
+                });
+            }
+            else {
+                ColumnSelectionConfirmation();
+            }
+
+        });
+
+        $("#btnFinalizeIssue").on("click", function () {
+            var finalizeOption = $(this).text();
+            var exportsplits = $(".export");
+            var SplitIds = [];
+            $.each(exportsplits, function (i, obj) {
+                var splitid = obj.id.split("_")[1];
+                if ($("#spExported_" + splitid).data('exported') == 'true') {
+                    SplitIds.push($("#hdnSplitID_" + splitid).val());
+                }
+            });
+            //If Split is exported then only allow finalize issue or wave
+            if (SplitIds.length > 0) {
+                if (finalizeOption == "Finalize Issue") {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                        text: "Are you sure you want to finalize this issue? This will automatically opens the next issue.",
+                        autoClose: false,
+                        IsOpen: false,
+                        action: FinalizeIssue
+                    });
+
+                } else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                        text: "Only the records contained in splits marked as 'Exported' will be saved in this Wave Mailing. Are you sure you want to continue?",
+                        autoClose: false,
+                        IsOpen: false,
+                        action: FinalizePopup,
+                        data:true
+                    });
+                }
+            } else {
+
+            }
+            
+        });
+    });
+
+
+    //#endregion Document Ready
+    function ColumnSelectionConfirmation() {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Would you like to select the columns to export? If you select cancel, the default columns will be used.",
+            autoClose: false,
+            IsOpen: false,
+            IsCancelOpen: true,
+            action: OpenColumnSelectionPopup,
+            cancelaction: ExportWithDefaultColumnSelection
+            //data: { 'logout': logout, 'changedurl': url }
+        });
+    }
+
+    function OpenColumnSelectionPopup() {
+
+        var window = $("#IssuSplitDownLoadExportRecords");
+        var kendoWindow = window.data('kendoWindow');
+        $("#dvIssuSplitDownLoadExportRecords").html('');
+        $.ajax({
+            url: '/uas.web/issuesplit/ExportColumnLists?includeSplitsColumns=true&pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#dvIssuSplitDownLoadExportRecords").html(response);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+    }
+
+    function ExportWithDefaultColumnSelection(data) {
+         data = [
+            { DisplayName: "Pubcode", DownloadName: "p.[Pubcode]", Type: "Default" },
+            { DisplayName: "SequenceID", DownloadName: "ps.[SequenceID]", Type: "Default" },
+            { DisplayName: "PubTransactionID", DownloadName: "ps.[PubTransactionID]", Type: "Default" },
+            { DisplayName: "TempACSCode", DownloadName: " '' as [TempACSCode] ", Type: "Default" },
+            { DisplayName: "tempkeyline", DownloadName: " '' as [tempkeyline]", Type: "Default" },
+            { DisplayName: "tempmailerid", DownloadName: " '' as [tempmailerid]", Type: "Default" },
+            { DisplayName: "IMBSeq", DownloadName: "ps.[IMBSeq]", Type: "Default" },
+            { DisplayName: "Copies", DownloadName: "ps.[Copies]", Type: "Default" },
+            { DisplayName: "FirstName", DownloadName: "ps.[FirstName]", Type: "Default" },
+            { DisplayName: "LastName", DownloadName: "ps.[LastName]", Type: "Default" },
+            { DisplayName: "Title", DownloadName: "ps.[Title]", Type: "Default" },
+            { DisplayName: "Company", DownloadName: "ps.[Company]", Type: "Default" },
+            { DisplayName: "Address1", DownloadName: "ps.[Address1]", Type: "Default" },
+            { DisplayName: "Address2", DownloadName: "ps.[Address2]", Type: "Default" },
+            { DisplayName: "Address3", DownloadName: "ps.[Address3]", Type: "Default" },
+            { DisplayName: "Address1", DownloadName: "ps.[Address1]", Type: "Default" },
+            { DisplayName: "RegionCode", DownloadName: "ps.[RegionCode]", Type: "Default" },
+            { DisplayName: "ZipCode", DownloadName: "ps.[ZipCode]", Type: "Default" },
+            { DisplayName: "Plus4", DownloadName: "ps.[Plus4]", Type: "Default" },
+            { DisplayName: "Country", DownloadName: "ps.[Country]", Type: "Default" },
+            { DisplayName: "reqflag", DownloadName: "ps.[reqflag]", Type: "Default" },
+            { DisplayName: "ExpireIssueDate", DownloadName: "sp.[ExpireIssueDate]", Type: "Default" },
+            { DisplayName: "Qualificationdate", DownloadName: "ps.[Qualificationdate]", Type: "Default" },
+            { DisplayName: "Exp_Qdate", DownloadName: "ps.[Exp_Qdate]", Type: "Default" },
+            { DisplayName: "tempkeycode", DownloadName: " '' as [tempkeycode]", Type: "Default" },
+            { DisplayName: "QSource", DownloadName: "ps.[QSource]", Type: "Default" },
+            { DisplayName: "tempsplit", DownloadName: " '' as [tempsplit]", Type: "Default" },
+            { DisplayName: "tempsplitdesc", DownloadName: " '' as [tempsplitdesc] ", Type: "Default" },
+            { DisplayName: "Phone", DownloadName: "ps.[Phone]", Type: "Default" },
+            { DisplayName: "Fax", DownloadName: "ps.[Fax]", Type: "Default" },
+            { DisplayName: "Email", DownloadName: "ps.[Email]", Type: "Default" }
+        ];
+        ColumnTransformationConfirmation(data);
+    }
+    function ColumnTransformationConfirmation(data) {
+        CloseWindow('IssuSplitDownLoadExportRecords');
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Would you like to combine columns to create new fields for export file?",
+            autoClose: false,
+            IsOpen: false,
+            action: OpenColumnTransformationPopup,
+            cancelaction: ExportWithDefaultTransformation,
+            data: data
+        });
+    }
+    function OpenColumnTransformationPopup(data) {
+        $("#dvNewColumn").html('');
+        var splitsFieldlistbox = $("#AvailableDefaultFieldOptions").data("kendoListBox");
+        CloseWindow('IssuSplitDownLoadExportRecords');
+        if (data.length > 0) {
+            var dataSource = new kendo.data.DataSource({
+                data: data
+            });
+            splitsFieldlistbox.setDataSource(dataSource);
+            var window = $("#IssuSplitCreateNewColumns");
+            var kendoWindow = window.data('kendoWindow');
+            kendoWindow.center().open();
+        }
+    }
+    function ExportWithDefaultTransformation(data) {
+        console.log(data);
+        var model = {
+            IsDefault: false,
+            DownloadFields: data,
+            NewColumnsFields: []
+        };
+        ExportSplits(model);
+
+    }
+    function ExportSplits(model) {
+        if (ExportChecked() > 0) {
+            var exportsplits = $(".export");
+            var exportIds = "";
+            model.IssueSplitIDs = [];
+            $.each(exportsplits, function (i, obj) {
+                if ($("#" + obj.id).prop('checked') == true) {
+                    splitid = obj.id.split("_")[1];
+                    model.IssueSplitIDs.push($("#hdnSplitID_" + splitid).val());
+
+                }
+            });
+            model.ProductID=$("#SelectedProductID").val();
+            model.IssueID =$("#kddlIssues").val();
+            $.ajax({
+                type: 'POST',
+                url: '/uas.web/issuesplit/ExportSplits',
+                data: JSON.stringify({ 'exportmodel': model }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    console.log(response);
+                    if (!response.error) {
+                        $.each(exportsplits, function (i, obj) {
+                            if ($("#" + obj.id).prop('checked') == true) {
+                                splitid = obj.id.split("_")[1];
+                                $("#chkNotExported_" + splitid).hide();
+                                $("#chkNotExported_" + splitid).prop('checked', false);
+                                $("#spExported_" + splitid).show();
+                                $("#spExported_" + splitid).data("exported", "true");
+                                $("#spExported_" + splitid).css({ color: "green" });
+
+                            }
+                        });
+                        $("#hdn_maximb").val(response.maximb);
+                        $("#btnFinalizeIssue").prop('disabled', false);
+                        ExportChecked();
+                        window.location = '/UAS.web/issuesplit/DownLoadFile?fileloc=' + response.filedownloadpath;
+                    }
+
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+
+        }
+        else {
+            alert("Please check split tha needs to be exorted.");
+        }
+
+
+    }
+    function ExportChecked() {
+        var exportsplits = $(".export");
+        var flagExportChecked = false;
+        var count = 0;
+        $.each(exportsplits, function (i, obj) {
+            if ($("#" + obj.id).prop('checked') == true) {
+                flagExportChecked = true;
+                count++;
+            }
+        });
+        if (flagExportChecked) {
+            $("#btnExportSplit").prop('disabled', false);
+        } else {
+            $("#btnExportSplit").prop('disabled', true);
+        }
+        return count;
+    }
+    function ChangeExportStatus(elementID) {
+
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Unchecking an export will reset the IMBSequence Counter to the value it was before exporting. Currently exported files will no longer be valid and need to be exported again. Are you sure you want to continue?",
+            autoClose: false,
+            IsOpen: false,
+            action: UncheckExport,
+            data: { 'exportedchkid': elementID }
+
+        });
+
+
+    }
+    function UncheckExport(data) {
+        $.ajax({
+            url: '/uas.web/issuesplit/ResetImbSequenceCounter?pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                if (!response.error) {
+                    var splitid = data.exportedchkid.split("_")[1];
+                    $("#chkNotExported_" + splitid).show();
+                    $("#chkNotExported_" + splitid).prop('checked', false);
+                    $("#spExported_" + splitid).hide();
+                    $("#spExported_" + splitid).css({ color: "green" });
+                    $("#spExported_" + splitid).data("exported", "false");
+                    ExportChecked();
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+    }
+
+    function GetIssueSplitFinalizeModel(wave) {
+        var Splits = [];
+        var model ={};
+        var exportsplits = $(".export");
+        $.each(exportsplits, function (i, obj) {
+            var splitid = obj.id.split("_")[1];
+            if ($("#spExported_" + splitid).data('exported') == 'true') {
+                // model.SplitIds.push($("#hdnSplitID_" + splitid).val());
+                Splits.push({
+                    IssueSplitId: $("#hdnSplitID_" + splitid).val(),
+                    KeyCode: $("#txtKeyCode_" + splitid).val(),
+                    IssueSplitDescription: $("#txtIssueSplitDescription_" + splitid).val(),
+                    IssueSplitName: $("#txtIssueSplitName_" + splitid).val()
+                });
+            }
+        });
+        if (wave) {
+            model = {
+                FinalizeOperation: "Finalize Wave",
+                CurrentIssueID: $("#kddlIssues").val(),
+                CurrentProductID: $("#SelectedProductID").val(),
+                MaxIMB: $("#hdn_maximb").val(),
+                WaveMailingName: $("#txtWaveMailingName").val(),
+                Splits: Splits
+            }
+        } else {
+             model = {
+                FinalizeOperation: "Finalize Issue",
+                CurrentIssueID: $("#kddlIssues").val(),
+                CurrentProductID: $("#SelectedProductID").val(),
+                MaxIMB: $("#hdn_maximb").val(),
+                NextIssueName: $("#txtNewIssueName").val(),
+                NextIssueCode: $("#txtNewIssueCode").val(),
+                Splits: Splits
+            }
+        }
+        return model;
+    }
+    function FinalizeIssue() {
+       
+        var model=GetIssueSplitFinalizeModel(false);
+        $.ajax({
+            type: 'POST',
+            url: '/uas.web/issuesplit/Finalize',
+            data: JSON.stringify({ 'model': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (!response.error) {
+                    toastr.success(response.succcessmessage, 'Success');
+                    FinalizePopup(false);
+                } else {
+                    toastr.error(response.errormessage, 'Error');
+                }
+
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+    function SaveNewIssue() {
+        var model = GetIssueSplitFinalizeModel(false);
+        var errors = [];
+        if (!model.NextIssueName) {
+            $("#txtNewIssueName").addClass('highlightInput');
+            errors.push({errorMessage:"Please Enter Valid Issue Name."})
+        } else {
+            $("#txtNewIssueName").removeClass('highlightInput');
+        }
+        if (!model.NextIssueCode) {
+            $("#txtNewIssueCode").addClass('highlightInput');
+            errors.push({ errorMessage: "Please Enter Valid Issue Code." })
+        } else {
+            $("#txtNewIssueCode").removeClass('highlightInput');
+        }
+        var lis = "<ul>";
+        if (errors.length > 0) {
+            $.each(errors, function(i,obj){
+                lis = lis + "<li>" + obj.errorMessage + "</li>";
+            });
+            lis = lis+"</ul>"
+            $("#dvNextIssueSaveErors").append(lis);
+           
+
+        } else {
+            $("#dvNextIssueSaveErors").html('');
+            CancelFinalizeWave();
+            $.ajax({
+                type: 'POST',
+                url: '/uas.web/issuesplit/CreateNewIssue',
+                data: JSON.stringify({ 'model': model }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (!response.error) {
+                        toastr.success(response.succcessmessage, 'Success');
+                    } else {
+                        toastr.error(response.errormessage, 'Error');
+                    }
+
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+        
+    }
+    function FinalizePopup(wave) {
+        var window = $("#IssueFinalizePopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        $("#dvIssueFinalizePopUpWindow").html('');
+        var url = "";
+        if (wave) {
+            url='/uas.web/issuesplit/GetFinalizeWavePopup';
+        }
+        else {
+            url = '/uas.web/issuesplit/GetNewIssuePopup';
+        }
+        $.ajax({
+            url: url,
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#dvIssueFinalizePopUpWindow").html(response);
+                kendoWindow.open().center();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+    function FinalizeWave() {
+        var model= GetIssueSplitFinalizeModel(true);
+        CancelFinalizeWave();
+        $.ajax({
+            type: 'POST',
+            url: '/uas.web/issuesplit/Finalize',
+            data: JSON.stringify({ 'model': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (!response.error) {
+                    toastr.success(response.succcessmessage, 'Success');
+                } else {
+                    toastr.error(response.errormessage, 'Error');
+                }
+
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+       
+    }
+    function CancelFinalizeWave() {
+        $("#dvIssueFinalizePopUpWindow").html('');
+        CloseWindow("IssueFinalizePopUpWindow");
+
+    }
+    
+
+    
+
+
+    function ApplyFilter() {
+        var kendoWindow = $("#IssuSplitPopUpWindow").data('kendoWindow');
+        var filtername = $("#menuApplyFilters").data("FilterName");
+        if (filtername) {
+            $("#txtIssueSplitName").val(filtername);
+            $("#txtIssueSplitDescription").val(filtername + ' filter updated');
+        }
+        kendoWindow.center().open();
+    }
+
+    function CancelAddIssueSplit() {
+        $("#txtIssueSplitName").val('');
+        $("#txtIssueSplitDescription").val('');
+        var kendoWindow = $("#IssuSplitPopUpWindow").data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    function ValidateIssueSplitModel() {
+        var InvalidInputs = [];
+        if ($("#kddlIssues").val()) {
+            $("#kddlIssues").removeClass('highlightInput')
+        } else {
+            $("#kddlIssues").addClass('highlightInput')
+            InvalidInputs.push('kddlIssues');
+        }
+        if ($("#SelectedProductID").val()) {
+            $("#SelectedProductID").removeClass('highlightInput')
+        } else {
+            $("#SelectedProductID").addClass('highlightInput')
+            InvalidInputs.push('SelectedProductID');
+        }
+        if ($("#txtIssueSplitDescription").val()) {
+            $("#txtIssueSplitDescription").removeClass('highlightInput')
+        } else {
+            $("#txtIssueSplitDescription").addClass('highlightInput')
+            InvalidInputs.push('txtIssueSplitDescription');
+        }
+        if ($("#txtIssueSplitName").val()) {
+            $("#txtIssueSplitName").removeClass('highlightInput')
+        } else {
+            $("#txtIssueSplitName").addClass('highlightInput')
+            InvalidInputs.push('txtIssueSplitName');
+        }
+        if (InvalidInputs.length > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function AddIssueSplit() {
+        if (ValidateIssueSplitModel()) {
+
+            var model = {
+                PubID: $("#SelectedProductID").val(),
+                IssueID: $("#kddlIssues").val(),
+                WaveID: $("#kddlWaveMailing").val(),
+                SplitName: $("#txtIssueSplitName").val(),
+                SplitDescription: $("#txtIssueSplitDescription").val()
+            }
+            CancelAddIssueSplit();
+            GetSplits(filter.FilterName, model);
+
+        }
+    }
+    function GetSplits(FilterName, model) {
+        var filterlist = $.parseJSON(sessionStorage.getItem("filter"));
+        if (filterlist.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: '/UAS.web/issuesplit/GetSplits',
+                data: JSON.stringify({ 'filterscol': $.parseJSON(sessionStorage.getItem("filter")), 'model': model }),
+                //data: JSON.stringify({ 'filter': filter, 'model': model }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.error) {
+                        var finalFilters = [];
+                        var filterlist = $.parseJSON(sessionStorage.getItem("filter"));
+                        for (var i = 0; i < filterlist.length; i++) {
+                            if (filterlist[i].FilterName == FilterName) {
+                                continue;
+                            } else {
+                                finalFilters.push(filterlist[i]);
+                            }
+                        }
+                        filterlist = finalFilters;
+                        sessionStorage.setItem("filter", JSON.stringify(filterlist));
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: data.errormessage,
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    } else {
+                        $("#IssueSplitGrid").html(data);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        } else {
+            sessionStorage.removeItem("filter");
+            window.location = "/uas.web/issuesplit?ProductID=" + $("#SelectedProductID").val();
+        }
+
+    }
+    function ResetAllFilters() {
+        sessionStorage.removeItem("filter");
+        window.location = "/uas.web/issuesplit?ProductID=" + $("#SelectedProductID").val();
+    }
+
+    function EditFilter(Menuid) {
+        resetFilter(false);
+        var id = "spFilterCriteria_" + (Menuid).replace("edit_", "");
+        var data = $("#" + id).data("filterdetails");
+        $("#menuApplyFilters .k-link").text('Updated');
+        $("#menuApplyFilters").data("FilterName", data.FilterName);
+        LoadFilterDetails(data);
+
+    }
+
+    function DeleteFilter(Menuid) {
+        var splitid = Menuid.split("_")[1];
+        var FilterName = $("#txtIssueSplitName_" + splitid).val();
+        var finalFilters = [];
+        var filterlist = $.parseJSON(sessionStorage.getItem("filter"));
+        for (var i = 0; i < filterlist.length; i++) {
+            if (filterlist[i].FilterName == FilterName) {
+                continue;
+            } else {
+                finalFilters.push(filterlist[i]);
+            }
+        }
+        filterlist = finalFilters;
+        sessionStorage.setItem("filter", JSON.stringify(filterlist));
+        var model = {
+            PubID: $("#SelectedProductID").val(),
+            IssueID: $("#kddlIssues").val(),
+            WaveID: $("#kddlWaveMailing").val(),
+            SplitName: $("#txtIssueSplitName").val(),
+            SplitDescription: $("#txtIssueSplitDescription").val()
+        }
+        GetSplits(FilterName, model);
+    }
+
+    function SetFilterDetails() {
+
+    }
+    function SaveSplits() {
+        var model = {
+            PubID: $("#SelectedProductID").val(),
+            IssueID: $("#kddlIssues").val(),
+            IssueID: $("#kddlIssues").val(),
+            WaveID: $("#kddlWaveMailing").val(),
+            SplitName: $("#txtIssueSplitName").val(),
+            SplitDescription: $("#txtIssueSplitDescription").val()
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/issuesplit/SaveSplits',
+            data: JSON.stringify({ 'filterscollection': $.parseJSON(sessionStorage.getItem("filter")), 'model': model }),
+            //data: JSON.stringify({ 'filter': filter, 'model': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#IssueSplitGrid").html(data);
+                ExportChecked();
+            },
+            error: function (response) {
+                $("#IssueSplitGrid").html(response);
+                console.log(response);
+            }
+        });
+    }
+
+    function ConfirmBeforeSaving() {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "If you save the current splits all saved splits data will be erased. Do you want to continue? ",
+            autoClose: false,
+            IsOpen: false,
+            action: GenerateSplits
+            //cancelaction: ExportWithDefaultTransformation
+            //data: { 'logout': logout, 'changedurl': url }
+        });
+    }
+    function GenerateSplits() {
+        var model = {
+            PubID: $("#SelectedProductID").val(),
+            IssueID: $("#kddlIssues").val(),
+            IssueID: $("#kddlIssues").val(),
+            WaveID: $("#kddlWaveMailing").val(),
+            SplitName: $("#txtIssueSplitName").val(),
+            SplitDescription: $("#txtIssueSplitDescription").val()
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/issuesplit/GenerteSplitList',
+            data: JSON.stringify({ 'filterscollection': $.parseJSON(sessionStorage.getItem("filter")), 'model': model }),
+            //data: JSON.stringify({ 'filter': filter, 'model': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#IssueSplitGrid").html(data);
+                ExportChecked();
+            },
+            error: function (response) {
+                $("#IssueSplitGrid").html(response);
+                console.log(response);
+
+
+            }
+        });
+    }
+
+    function OpenDesiredCountPopUp(ele) {
+        var currentid = ele.id.split('_')[1];
+        $("#hdnMovedToSplitId").val(currentid);
+        var allsplits = $(".desiredcount");
+        var desiredrecord = parseInt($("#txtDesiredRecords_" + currentid).val());
+        var totalrecords = parseInt($("#spRecordCount_" + currentid).text());
+        var movableRecords = totalrecords - desiredrecord;
+        //if (movableRecords == 0)
+        //    movableRecords = totalrecords;
+        $("#splitsMovableRecords").text(movableRecords);
+        var splitdata = [];
+        $.each(allsplits, function (i, obj) {
+            var splitID = obj.id.split('_')[1];
+            if (currentid != splitID) {
+                splitdata.push({ Id: splitID, Name: $("#txtIssueSplitName_" + splitID).val(), SplitId: $("#hdnSplitID_" + splitID).val() })
+            }
+        });
+        var window = $("#IssuSplitDesiredCountPopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        if ($("#lstBoxSplits").data("kendoListBox")) {
+            $("#tblSplits .k-widget.k-listbox").remove();
+            $("#tblSplits> tbody>tr:nth-child(1)").find('td:nth-child(1)').html('<select id="lstBoxSplits">');
+        }
+        $("#lstBoxSplits").kendoListBox({
+            toolbar: false,
+            selectable: "single",
+            dataSource: { data: splitdata },
+            dataTextField: "Name",
+            dataValueField: "Id"
+        });
+        kendoWindow.center().open();
+
+    }
+
+    function MoveRemainingRecordFromSplit() {
+        var fromsplit = $("#hdnMovedToSplitId").val();
+        var fromsplitName = $("#txtIssueSplitName_" + fromsplit).val();
+        var fromsplitid = $("#hdnSplitID_" + fromsplit).val();
+        var RecordTotalCount = parseInt($("#spRecordCount_" + fromsplit).text());
+        var RecordMovedCount = parseInt($("#splitsMovableRecords").text());
+        var splitslistbox = $("#lstBoxSplits").data("kendoListBox");
+        var selectedlstItem = splitslistbox.dataItem(".k-item.k-state-selected");
+        if (selectedlstItem.Id.includes("split") && RecordMovedCount > 0) {
+
+            var model = {
+                FromIssuePlitId: fromsplitid,
+                ToIssueSplitId: selectedlstItem.SplitId,
+                MovedRecordCount: RecordMovedCount,
+                TotalRecordCount: RecordTotalCount
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/UAS.web/issuesplit/MoveRecordCounts',
+                data: JSON.stringify({ 'movedata': model }),
+                //data: JSON.stringify({ 'filter': filter, 'model': model }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var divelement = '<div class="childsplits" id="MovedSplits_' + fromsplitid + '_' + selectedlstItem.SplitId + '_' + RecordMovedCount + '"> Moved record ' + RecordMovedCount + ' from <b>' + fromsplitName + '</b> <a>x</a><div>';
+                    var currentcount = parseInt($("#txtDesiredRecords_" + selectedlstItem.Id).val());
+                    currentcount = currentcount + RecordMovedCount;
+                    $("#txtDesiredRecords_" + selectedlstItem.Id).val(currentcount);
+                    $("#tdChildSplit_" + selectedlstItem.Id).append(divelement);
+                    $("#trChildSplit_" + selectedlstItem.Id).show();
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+        CloseWindow('IssuSplitDesiredCountPopUpWindow')
+    }
+
+    function GetNth(TotalRecords, RequestedRecords) {
+        if (RequestedRecords == 0)
+            RequestedRecords = TotalRecords;
+        var inccounter = (TotalRecords * 1.000) / (RequestedRecords * 1.000);
+        var listResult = [];
+        var y = inccounter * 1.000;
+        for (; parseFloat(y.toFixed(2)) <= parseInt(TotalRecords) ; y = (y + inccounter)) {
+            listResult.push(parseInt(y - 1));
+            if (listResult.length == RequestedRecords) {
+                break;
+            }
+        }
+        return listResult;
+
+        //moverecordfromid, moverecordtoid,
+        //var fromfilter = $("#spFilterCriteria_" + moverecordfromid).data('filterdetails');
+        //var FromfilterCurrentSubscriberList = fromfilter.SubscriberIDs;
+        //var tofilter = $("#spFilterCriteria_" + moverecordtoid).data('filterdetails');
+        //var TofilterCurrentSubscriberList = tofilter.SubscriberIDs;
+        //TofilterCurrentSubscriberList = _.union(TofilterCurrentSubscriberList, listResult);
+        //fromfilter.SubscriberIDs = FromfilterCurrentSubscriberList;
+        //tofilter.SubscriberIDs = TofilterCurrentSubscriberList;
+        //console.log(TofilterCurrentSubscriberList);
+        //console.log(FromfilterCurrentSubscriberList);
+        //$("#spFilterCriteria_" + moverecordfromid).data('filterdetails', fromfilter);
+        //$("#spFilterCriteria_" + moverecordtoid).data('filterdetails', tofilter);
+
+    }
+
+    function ResetDesiredCountSelection() {
+        CloseWindow('IssuSplitDesiredCountPopUpWindow');
+    }
+
+
+    function OpneSavedFiltersPanel() {
+
+        var saveModel = {
+            viewType: "ProductView",
+            IsCirc: true,
+            PubID: $("#SelectedProductID").val(),
+            FilterIDs: "",
+            SourcePage: 'IssueSplit'
+        }
+        GetSavedFiltersPanel(saveModel); //in _filter.chtml
+    }
+
+    function LoadSavedFilterForReport(FilterId, SetFilterDetails) {
+        LoadFilterData(FilterId, SetFilterDetails);//in _filter.chtml
+    }
+
+
+
+
+
+</script>

@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="ControlCenter.Modules.BrandMgmt"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1080">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="MyTemplate">
+                <Grid x:Name="MyGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Brand Name:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding BrandName, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Logo:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding Logo, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Is Brand Group:</Label>
+                        <telerik:DataFormCheckBoxField  DataMemberBinding="{Binding IsBrandGroup, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Is Deleted:</Label>
+                        <telerik:DataFormCheckBoxField  DataMemberBinding="{Binding IsDeleted, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal">
+                        <telerik:RadButton Name="rbCancel" HorizontalAlignment="Left" Margin="19,5,0,5" Content="Cancel" Width="80" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="rbCancel_Click" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ListBox Name="lstEnabled" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  SelectionChanged="lstEnabled_SelectionChanged" >
+            <ListBoxItem IsSelected="True">All</ListBoxItem>
+            <ListBoxItem>Deleted</ListBoxItem>
+            <ListBoxItem>Not Deleted</ListBoxItem>
+        </ListBox>
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <telerik:RadButton Name="rbNewBrand" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="New Brand" Click="rbNewBrand_Click"/>
+        </StackPanel>
+        <telerik:RadGridView Name="grdBrand" Grid.Row="3" Grid.ColumnSpan="4" Width="1000" Height="500" Margin="5,10,0,0" VerticalAlignment="Center"
+                                 telerik:StyleManager.Theme="Expression_Dark" EditTriggers="CellClick" IsReadOnly="True"
+                                 RowDetailsVisibilityMode="VisibleWhenSelected" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 AutoGenerateColumns="False" ItemsSource="{Binding Brand}" EnableColumnVirtualization="False" 
+ 
+                             SelectionChanged="grdBrand_SelectionChanged">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding BrandID}" Header="ID" IsVisible="False" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding BrandName}" Header="Name" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Logo}" Header="Logo" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding IsBrandGroup}" Header="Is Brand Group" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding IsDeleted}" Header="Is Deleted" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CreatedDate}" Header="Created" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CreatedByName}" Header="Created By" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding UpdatedDate}" Header="Updated" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding UpdatedByName}" Header="Updated By" />
+            </telerik:RadGridView.Columns>
+            <telerik:RadGridView.SortDescriptors>
+                <telerik:SortDescriptor Member="BrandName" SortDirection="Ascending" />
+            </telerik:RadGridView.SortDescriptors>
+            <telerik:RadGridView.RowDetailsTemplate>
+                <DataTemplate>
+                    <telerik:RadDataForm Name="rdForm" CurrentItem="{Binding}" Header="Edit Brand:" HorizontalAlignment="Left" AutoGenerateFields="False"
+                           ReadOnlyTemplate="{StaticResource MyTemplate}" EditTemplate="{StaticResource MyTemplate}" EditEnded="rdForm_EditEnded" />
+                </DataTemplate>
+            </telerik:RadGridView.RowDetailsTemplate>
+        </telerik:RadGridView>
+
+        <Canvas Name="rwNew" Visibility="Collapsed" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="370" Height="225" Background="White">
+            <Border   BorderBrush="#045DA4" BorderThickness="5,5,5,5" CornerRadius="8,8,8,8" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Name:</telerik:Label>
+                        <TextBox Name="tbBrandName" Width="250"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Logo:</telerik:Label>
+                        <TextBox Name="tbLogo" Width="250" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Left">
+                        <telerik:Label>Is Brand Group:</telerik:Label>
+                        <CheckBox Name="cbIsBrandGroup" VerticalAlignment="Center"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Left">
+                        <telerik:Label>Is Deleted:</telerik:Label>
+                        <CheckBox Name="cbIsDeleted" VerticalAlignment="Center"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:RadButton Name="btnNewSave" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Save" Click="btnNewSave_Click"/>
+                        <telerik:RadButton Name="btnNewCancel" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Cancel" Click="btnNewCancel_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Canvas>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,43 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerUsersViewModel
+@{
+    List<ECN_Framework_Entities.DomainTracker.DomainTrackerUserProfile> userList = Model.ProfileList;
+    List<List<ECN_Framework_Entities.DomainTracker.DomainTrackerActivity>> activityList = Model.ActivityList;
+}
+
+<script language="JavaScript" type="text/JavaScript">
+$(document).ready(function() {
+        $("#userActivity").tablesorter();
+});
+</script>
+
+<div id="divUserResultsTarget" class="">
+    <table id="userActivity" style="width:100%;border-collapse:collapse;border-spacing:0px;border:1px" class="tablesorter">
+        <thead>
+            <tr style="border-collapse:collapse;font-weight: bolder;font-size: 11px;height: 20px;vertical-align: middle;font-family: Arial, Helvetica, Tahoma, sans-serif;background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; text-decoration: underline;">
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">Email</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">IPAddress</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">OS</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">Browser</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">TimeStamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProfileList.Count > 0)
+            {
+                for (int i = 0; i < Model.ProfileList.Count; i++)
+                {
+                    for (int b = 0; b < Model.ActivityList[i].Count; b++)
+                    {
+                        <tr style="text-align:center;border:1px solid gray;border-collapse:collapse;">
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ProfileList[i].EmailAddress</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].IPAddress</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].OS</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].Browser</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].TimeStamp</small></td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

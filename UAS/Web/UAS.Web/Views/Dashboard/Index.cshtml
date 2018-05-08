@@ -1,0 +1,245 @@
+﻿@model UAS.Web.Models.Dashboard.DashboardModel
+@using UAS.Web.Models.Circulations
+@{
+    ViewBag.Title = "File Status";
+}
+
+@{
+    ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+}
+
+@{
+    FrameworkUAS.Entity.EngineLog admsEngine = new FrameworkUAS.Entity.EngineLog();
+    admsEngine = Model.EngineLogs.FirstOrDefault(x => x.Engine.Equals("ADMS", StringComparison.CurrentCultureIgnoreCase));
+    string admsTime = "";
+    if (admsEngine != null)
+    {
+        DateTime time = DateTime.Today.Add(admsEngine.LastRefreshTime);
+        admsTime = time.ToString("h:mm tt");
+    }
+    FrameworkUAS.Entity.EngineLog sqmEngine = new FrameworkUAS.Entity.EngineLog();
+    sqmEngine = Model.EngineLogs.FirstOrDefault(x => x.Engine.Equals("SQM", StringComparison.CurrentCultureIgnoreCase));
+    string sqmTime = "";
+    if (sqmEngine != null)
+    {
+        DateTime time = DateTime.Today.Add(sqmEngine.LastRefreshTime);
+        sqmTime = time.ToString("h:mm tt");
+    }
+
+    List<FileStatus> circList = Model.CircList;
+    List<FileStatus> uadList = Model.UadList;
+    List<FileStatus> apiList = Model.ApiList;
+    List<KMPlatform.Object.Product> products = Model.Products;
+}
+
+<script>
+    $(document).ready(function () {
+        var currentLocation = window.location;
+        var circIndex = String(currentLocation).lastIndexOf("grid_CIRCULATION");
+        var uadIndex = String(currentLocation).lastIndexOf("grid_UAD");
+
+        if (circIndex == -1 && uadIndex == -1) {
+            var tabStrip = $("#Tabs").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(0);   // Select by index
+        }
+        else if (uadIndex > circIndex) {
+            var tabStrip = $("#Tabs").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(1);   // Select by index
+        }
+        else {
+            var tabStrip = $("#Tabs").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(0);   // Select by index
+        }
+
+
+    });
+</script>
+
+<style>
+    .noPadding {
+        padding: 0px;
+    }
+
+    .fullwidth {
+        width: 100%;
+    }
+
+    .halfwidth {
+        width: 50%;
+    }
+
+    fieldset.dashboard-fieldset {
+        height: auto;
+        width: auto;
+        border: 1px solid gray !important;
+        padding:5px;
+        margin: 0px 0px 2.5px 0px;
+        border-radius: 20px 20px;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.dashboard-legend {
+        width: auto;
+        padding: 0px 0px 0px 0px;
+        border-bottom: none;
+        margin: 0px 0px 0px 5%;
+    }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+        <span class = "float-right">
+            <a href="/uas.web/dashboard?refresh=@DateTime.Now"><img src="~/Images/icon-sync.png" /></a>
+        </span>
+    </div>
+</div>
+
+<table class="fullwidth">
+    <tr>
+        <td class="halfwidth">
+            <fieldset class="dashboard-fieldset">
+                <legend class="dashboard-legend">Engine</legend>
+                <table class="fullwidth">
+
+                    <tr>
+                        <td class="noPadding">
+                            <div class="gridttl">
+                                <table class="fullwidth">
+                                    <tr>
+                                        <td class="halfwidth noPadding" align="left">
+                                            @if (admsEngine != null && admsEngine.IsRunning)
+                                            {
+                                                <div class="gridttlmedium">
+                                                    <div class="gridttlbox" style="font-size:medium;"><label>Last Refresh :</label>@admsEngine.LastRefreshDate.ToString("M/d/yyyy") @admsTime</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="gridttlmedium">
+                                                    <div class="gridttlbox" style="font-size:medium;"><label>Last Refresh :</label>: N/A</div>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="halfwidth noPadding" align="right">
+                                            <div class="gridttlbox">
+                                                @if (admsEngine != null && admsEngine.IsRunning)
+                                                {
+                                                    <span style="color:green">ON</span>
+                                                }
+                                                else
+                                                {
+                                                    <span style="color:red">OFF</span>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+
+                    </tr>
+                   
+                    <tr>
+                        <td valign="top" class="noPadding">
+                            @(Html.Kendo()
+                                .TabStrip()
+                                .Name("Tabs")
+                                .Animation(false)
+                                .Items(items =>
+                                {
+                                    items.Add().Selected(Model.isCirc).Visible(Model.isCirc).Text("CIRCULATION").Content(@<text>@Html.Action("GetFileStatus", new { filteredList = circList, listName = "CIRCULATION" })</text>);
+                                    items.Add().Selected(!Model.isCirc).Visible(Model.isUAD).Text("UAD").Content(@<text>@Html.Action("GetFileStatus", new { filteredList = uadList, listName = "UAD" })</text>);
+
+                                })
+                            )
+                        </td>
+
+                    </tr>
+                </table>
+            </fieldset>
+
+        </td>
+        <td class="halfwidth">
+            <fieldset class="dashboard-fieldset">
+                <legend class="dashboard-legend">Service Queue Monitor</legend>
+                <table style="width:100%;border-color:red;">
+                    <tr>
+                        <td class="noPadding">
+                            <div class="gridttl">
+                                <table class="fullwidth">
+                                    <tr>
+                                        <td class="halfwidth noPadding" align="left">
+                                            @if (sqmEngine != null && sqmEngine.IsRunning)
+                                            {
+                                                <div class="gridttlmedium"><div class="gridttlbox" style="font-size:medium;"><label>Last Refresh :</label>@sqmEngine.LastRefreshDate.ToString("M/d/yyyy") @sqmTime</div></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="gridttlmedium"><div class="gridttlbox" style="font-size:medium;"><label>Last Refresh :</label>N/A</div></div>
+                                            }
+                                        </td>
+                                        <td class="halfwidth noPadding" align="right">
+                                            <div class="gridttlbox">
+                                                @if (sqmEngine != null && sqmEngine.IsRunning)
+                                                {
+                                                    <span style="color:green">ON</span>
+                                                }
+                                                else
+                                                {
+                                                    <span style="color:red">OFF</span>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                                
+                        </td>
+                    </tr>
+                   <tr>
+                        <td valign="top" class="noPadding">
+                            <div class="gridttlmedium" style="height:36px">&nbsp;</div>
+                            @Html.Action("GetFileStatus", new { filteredList = apiList, listName = "API" })
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </td>
+    </tr>
+</table>
+
+
+<div class="gridttlmedium" style="float: left;">
+    <div class="viewTitle">Circulation Products</div><br />
+    @foreach (KMPlatform.Object.Product p in products.Where(x => x.IsCirc == true).OrderBy(x => x.ProductCode))
+    {
+        <div style="float: left; width: 175px; margin-left: 15px; margin-bottom: 10px; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;">
+            <h4 style="margin: 0px 0px 0px 0px;">@p.ProductCode</h4>
+            @if (p.AllowDataEntry == true)
+                {
+                <div>
+                    <div style="float: left;"><img src="~/Images/black-unlock-64.png" width="16" height="16" alt="Data Entry Unlocked" border="0" /></div><div style="float: left;">&nbsp; Data Entry Unlocked</div>
+                </div>
+            }
+            else if (p.ClientImportAllowed == true || p.KMImportAllowed == true)
+            {
+                <div>
+                    <div style="float: left;"><img src="~/Images/black-unlock-64.png" width="16" height="16" alt="Imports Unlocked" border="0" /></div><div style="float: left;">&nbsp; Imports Unlocked</div>
+                </div>
+            }
+            else if (p.AddRemoveAllowed == true)
+            {
+                <div>
+                    <div style="float: left;"><img src="~/Images/black-unlock-64.png" width="16" height="16" alt="Add Remove Unlocked" border="0" /></div><div style="float: left;">&nbsp; Add Remove Unlocked</div>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <div style="float: left;"><img src="~/Images/black-unlock-64.png" width="16" height="16" alt="Issue Splits Unlocked" border="0" /></div><div style="float: left;">&nbsp; Issue Splits Unlocked</div>
+                </div>
+            }
+        </div>
+    }
+</div>

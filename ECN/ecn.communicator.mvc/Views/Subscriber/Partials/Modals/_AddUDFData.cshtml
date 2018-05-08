@@ -1,0 +1,90 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ecn.communicator.mvc.Models.EditUDFData
+@{ 
+    Model.GroupDataFields.Insert(0, new ECN_Framework_Entities.Communicator.GroupDataFields { GroupDataFieldsID = 0, ShortName = "-Select-" });
+}
+<script>
+    function addUDFData() {
+        debugger;
+        if ($('#data_Add').val() == "") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please enter a value for UDF Data'
+            });
+        }
+        else if ($('#udf').val() == "0") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please select a UDF'
+            });
+        }
+        else {
+            var addUDF = {
+                groupDataFieldsID: $('#udf').val(),
+                value: $('#data_Add').val(),
+                emailID:  @Model.EmailID,
+                groupID: @Model.GroupID
+                };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddEditUDFData", "Subscriber")",
+                data: addUDF,
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('AddUDFData');
+                        $("#divUDFsDataGrid").html(response[1]);
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        }
+    };
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="AddUDF" class="no-border">
+        <legend>Add UDF Data</legend>
+        <div class="formbox">
+            <div class="subtitle">UDF Name</div>
+            <div class="formitem formiteminline">
+                @Html.DropDownList("udf", Model.GroupDataFields.Select(item => new SelectListItem
+                {
+                    Value = item.GroupDataFieldsID.ToString(),
+                    Text = item.ShortName
+                }))
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Data</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("data_Add") 
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%; text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addUDFData()" })
+                    </td>
+                <td style="width:50%; text-align:center;">
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('AddUDFData')" })
+                    </td>
+                </tr>
+            </table>
+            
+            
+        </div>
+    </fieldset>
+</div>     
+   

@@ -1,0 +1,32 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model FormControlsPostModel
+@{
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+<div class="ptitle">
+    <div class="columntitle formcontrols" style='width: 15%'>form controls</div>
+    <div class="columntitle formedit" style='width: 62%'>form editor</div>
+    <div class="columntitle formcontrolprops" style='width: 20%'>form control properties</div>
+</div>
+<div id="formControlsContent" >
+    @Html.Partial("Partials/_FormControlsContent", Model)
+</div>
+<div class="bottomnavbox">
+    <div class="bottomnav">
+    <div class="lbtns">
+        @Html.Kendo().Button().Name("Previous").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "movePrevious(this)" })
+    </div>
+    <div class="cbtns">
+        @if (!viewOnly)
+        {
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "reloadTab()" })
+            @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "saveControls()" })
+        }
+    </div>
+    <div class="rbtns">
+        @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "moveNext(this)" })
+    </div>
+    </div>
+</div>

@@ -1,0 +1,211 @@
+﻿@model IEnumerable<UAS.Web.Models.FileMapperWizard.CurrentMappingModel>
+
+<div>
+    <script type="text/javascript">
+        function openEditFile(id) {
+            var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+            var type = "UAD";
+            if (rbCirc)
+                type = "CIRC";
+
+            window.location.href = "/UAS.Web/FileMapperWizard/IndexEdit?ID=" + id;
+        }
+
+        function openCopyFile(id) {
+            var fileName = window.prompt("Please provide a new filename for this mapping.", "");
+
+            if (fileName == null || fileName == "") {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Information',
+                    text: 'User has entered blank or cancelled copy action.',
+                    autoClose: false,
+                    IsOpen: false
+                });
+            } else {
+                var values = { sourceFileID: id, newFileName: fileName }
+                $.ajax({
+                    url: "/UAS.Web/FileMapperWizard/CopyNewFileMapping",
+                    type: "GET",
+                    data: values,
+                    traditional: true,
+                    cache: false,
+                    success: function (result) {
+                        var status = result.status;
+                        var message = result.message;
+                        if (status == "true") {
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                            LoadSearchResults();
+                        }
+                        else {
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                                text: message,
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        }
+                    },
+                    error: function () {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: "An error has occurred while copying a new file mapping.",
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    }
+                });
+            }
+        }
+
+        function deleteFile(values) {
+            var id = values.ID;
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/DeleteFile",
+                type: "GET",
+                data: { sourceFileID: id },
+                traditional: true,
+                cache: false,
+                success: function (result) {
+                    if (result) {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                        LoadSearchResults();
+                    }
+                    else {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: "Unable to delete file " + values.FileName,
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    }
+                },
+                error: function () {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: "An error has occurred while deleting the file.",
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            });
+        }
+
+        function openDeleteWindow(id, file) {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                text: "Are you sure you want to delete file " + file + "?",
+                autoClose: false,
+                action: deleteFile,
+                data: { ID: id, FileName: file },
+                IsOpen: true
+            });
+        }
+
+        function dataBound() {
+            var grid = this;
+            this.element.find("[role='gridcell']").each(function () {
+                eval($(this).children("script").html());
+            });
+
+            grid.tbody.find('>tr').each(function () {
+                var dataItem = grid.dataItem(this);
+                if (!dataItem.Child) {
+                    $(this).find(".k-hierarchy-cell a").hide();
+                }
+            });
+        }
+    </script>
+    <script id="delete-confirmation" type="text/x-kendo-template">
+        <p style="font-size: 12px; padding: 10px">
+            Do you want to delete #=FileName#? #=SourceFileID#
+        </p>
+        <div style="text-align: right">
+            <button class="password-ok k-button">OK</button>
+        </div>
+    </script>    
+     @(
+        Html.Kendo()
+        .Grid(Model)
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.PubCode).Title("Pub Code").Filterable(false);
+            columns.Bound(e => e.FileName).Title("File Name").ClientTemplate("<div style='word-break: break-all; word-wrap: break-word;'>#= FileName #</div>").HtmlAttributes(new { @style = "width:25%; vertical-align:middle" }).Filterable(false);
+            columns.Bound(e => e.FileType).Title("File Type").Filterable(false);
+            columns.Bound(e => e.DateCreated).Format("{0:MM/dd/yyyy hh:mm:ss tt}").Title("Date Created").Filterable(false);
+            columns.Bound(e => e.CreatedByUserName).Title("Created By").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(false);
+            columns.Bound(e => e.DateUpdated).Format("{0:MM/dd/yyyy hh:mm:ss tt}").Title("Date Updated").Filterable(false);
+            columns.Bound(e => e.UpdatedByUserName).Title("Updated By").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(false);
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Width(110).Filterable(false).Sortable(false);
+        })
+        .Pageable()
+        .Sortable()
+        .Filterable(f => f.Extra(false)
+                          .Mode(GridFilterMode.Row | GridFilterMode.Menu)//Menu
+                          .Operators(operators => operators
+                              .ForString(str => str.Clear()
+                                .StartsWith("Starts with")
+                                .IsEqualTo("Is equal to")
+                                .IsNotEqualTo("Is not equal to")
+                            )))
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .ServerOperation(false)
+        .Sort(sort => sort.Add(x => x.FileName).Ascending())
+        )
+        .Events(ev => ev.DataBound("dataBound"))        
+
+    )
+</div>
+
+
+
+@(Html.Kendo().Window()
+        .Name("deleteWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+        .Title("Login") //set the title of the window
+        .Content(@<text>
+            
+        </text>)
+        .Draggable() //Enable dragging of the window
+        .Resizable() //Enable resizing of the window
+        .Width(600) //Set width of the window
+        .Height(600)
+        .Modal(true)
+        .Visible(false)
+)
+
+
+<div id="client-detail-modal">
+    @helper  GetActions()
+    {
+        @(Html.Kendo()
+            .Menu()
+            .Name("menu_Results_#=SourceFileID#")
+            .Direction(MenuDirection.Right)
+            .Orientation(MenuOrientation.Vertical)
+            .Animation(false)
+            .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                            innerItems =>
+                            {
+                                innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "openEditFile(#=SourceFileID#);" });
+                                innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "openDeleteWindow(#=SourceFileID#, '#=FileName#');" });
+                                innerItems.Add().Text("Copy").HtmlAttributes(new { onclick = "openCopyFile(#=SourceFileID#);" });
+                            }
+                        )
+                    )
+                    .ToClientTemplate()
+        )
+    }
+</div>
+        

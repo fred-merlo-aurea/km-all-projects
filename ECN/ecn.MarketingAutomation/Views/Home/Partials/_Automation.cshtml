@@ -1,0 +1,258 @@
+﻿@using ecn.MarketingAutomation.Models
+@using KMEnums
+
+
+@model DiagramPostModel
+
+@{
+    var group = (ECN_Framework_Entities.Communicator.Group)ViewBag.Group;
+    var currentUser = (KMPlatform.Entity.User)ViewBag.CurrentUser;
+}
+
+@Html.HiddenFor(x => x.Id, new Dictionary<string, object> { {"data-bind", "value:Id" } })
+@Html.HiddenFor(x => x.Diagram, new Dictionary<string, object> { { "data-bind", "value:Diagram" } })
+@Html.HiddenFor(x => x.IsCreate, new Dictionary<string, object> { { "data-bind", "value:IsCreate" } })
+@Html.HiddenFor(x => x.IsCopy, new Dictionary<string, object> {{"data-bind", "value:IsCopy"}})
+<script type="text/javascript">
+    var haveInitial = false;
+    var initialDate = '';
+    function onPickerOpen(e) {
+
+        debugger;
+
+        var dPicker = e.sender.element[0].id;
+
+        var wrongToday = $(".k-today");
+        wrongToday.each(function (i) {
+            $(this).removeClass('k-today');
+        });
+        var todaysDate = initialDate;
+        if (!haveInitial || initialDate.length == 0) {
+            
+
+            var split = todaysDate.split('/');
+            todaysDate = split[2] + '/' + (parseInt(split[0]) - 1) + '/' + split[1];
+            initialDate = todaysDate;
+            haveInitial = true;
+        }
+        else {
+            todaysDate = initialDate;
+        }
+        var actualToday = $("a[data-value='" + todaysDate + "']");
+
+        actualToday.each(function(i){
+            $(this).parent('td').addClass('k-today');
+
+        });
+
+        if(dPicker == 'StartTo')
+        {
+            var StartTo = $("#StartTo").data('kendoDatePicker');
+            var startToValue = StartTo.value();
+            if (startToValue == '' || startToValue == null)
+            {
+                var wrongFocused = $(".k-state-focused");
+                wrongFocused.each(function (i) {
+                    $(this).removeClass('k-state-focused');
+                });
+            }
+        }
+
+    }
+    function onStartChange() {
+        
+        var endDate = $("#StartTo").data('kendoDatePicker');
+        endDate.min(this.value());
+
+        
+        if(endDate.value() == '' || endDate.value() == null)
+        {
+
+        }
+        else if (endDate.value() < this.value()) {
+            endDate.value(this.value());
+        }
+    }
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="">
+        <legend></legend>
+        <div class="formbox">
+            <div class="subtitle" style="width:210px;" >Automation Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBoxFor(x => x.Name, new Dictionary<string, object> { {"data-bind", "value:Name" } } )
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle" style="width:210px;">Start Dates/Times</div>
+            <div class="formitem formiteminline">
+                @Html.LabelFor(x => x.StartFrom, "From")
+                @Html.Kendo().DatePickerFor(x => x.StartFrom).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "value:StartFrom" } }).Events(x => x.Change("onStartChange").Open("onPickerOpen")).HtmlAttributes( new { @class = "calendar-orange"}).Footer(false)
+            </div>
+            <div class="formitem formiteminline">
+                @Html.LabelFor(x => x.StartTo, "To")
+                @Html.Kendo().DatePickerFor(x => x.StartTo).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "value:StartTo" } }).HtmlAttributes(new { @class = "calendar-orange" }).Events(x => x.Open("onPickerOpen")).Footer(false)
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle" style="width:210px;">Goal</div>
+            <div class="formitem formiteminline">
+            @if (Model.State == ECN_Framework_Common.Objects.Communicator.Enums.MarketingAutomationStatus.Saved)
+            {
+                @Html.TextAreaFor(x => x.Goal, new Dictionary<string, object> { { "data-bind", "value:Goal" }, { "style", "height:130px; width:390px; font-size:12px; font-family:arial;" } })
+            }
+            else
+            {
+                @Html.TextAreaFor(x => x.Goal, new Dictionary<string, object> { { "data-bind", "value:Goal" }, { "disabled", "disabled" }, { "style", "height:130px; width:390px; font-size:12px; font-family:arial;" } })
+            }
+            </div>
+        </div>
+        @if (Model.IsCreate)
+        {
+            <div class="formbox">
+                @*Task 37041: rename 'From Template' to 'Create Automation From Template'*@
+                <div class="subtitle" style="width:210px;">Create Automation From Template? </div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().RadioButtonFor(x => x.FromTemplate).Label("No").Value(DiagramFromTemplate.No).Checked(Model.FromTemplate == DiagramFromTemplate.No).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Active" } })
+                </div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().RadioButtonFor(x => x.FromTemplate).Label("Yes").Value(DiagramFromTemplate.Yes).Checked(Model.FromTemplate == DiagramFromTemplate.Yes).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Active" } })
+                </div>
+            </div>
+            <div class="formbox" id="selectTemplate">
+                <div class="subtitle">Select a Template</div>
+                <div class="formitem formiteminline">
+                    @(
+                    Html.Kendo()
+                        .DropDownListFor(x => x.TemplateId)
+                        .HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:TemplateId" } })
+                         .OptionLabel("Select Template")
+                        .Items(items =>
+                        {
+                            TemplateViewModel tvm = new TemplateViewModel();
+                            List<TemplateViewModel> listTvm = tvm.getFileDiagrams();
+                            foreach (TemplateViewModel template in listTvm)
+                            {
+                                items.Add().Text(template.Name).Value(template.Id.ToString());
+                            }
+                        })
+                    )
+                </div>
+                <div class="formitem formiteminline">
+                    @Html.Kendo().Button().Name("View").Content("Preview").HtmlAttributes(new { @class = "btn", type = "button", onclick = "viewTemplate()", disabled = "disabled" })
+                </div>
+            </div>
+        }
+           <div class="formbox">
+            @if (!Html.ViewData.ModelState.IsValid)
+            { <div class="formitem formiteminline" style="display:inline;float:left;padding-left: 2em">
+                <img alt="error" src="/ecn.MarketingAutomation/Images/Error_ico.png" style="float:left;padding-left: 2em" border="0">
+            </div>
+            <div class="formitem formiteminline" style="display:inline;float:left;padding-left: 2em">
+                @Html.ValidationSummary("", new { style = "display:inline;" })
+            </div>
+            }
+            </div>
+            <div class="formbox">
+                <div class="formitem formiteminline" style="width: 100%; text-align: center; margin-top: 20px;">
+                    @if ((Model.IsCreate) || (Model.IsCopy))
+                    {
+                        @Html.Kendo().Button().Name("Save").Content("Save And Continue").HtmlAttributes(new { @class = "btn" })}
+                    else if (Model.State == ECN_Framework_Common.Objects.Communicator.Enums.MarketingAutomationStatus.Saved || Model.State == ECN_Framework_Common.Objects.Communicator.Enums.MarketingAutomationStatus.Archived)
+                    { @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn" })}
+                    else
+                    { @Html.Kendo().Button().Name("Save").Content("Publish").HtmlAttributes(new { @class = "btn" })}
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('FormWindow')" })
+                </div>
+            </div>
+</fieldset>
+</div>       
+   
+<script>
+    $(function () {
+        $("input[name='FromTemplate']").change(initControls);
+        $("input[name='TemplateId']").change(IsValidTemplate);
+        initControls();
+    });
+    function initControls() {
+        var val = $("input[name='FromTemplate']:checked").val();
+        if (val == '@DiagramFromTemplate.Yes') {
+            $("#selectTemplate").show();
+
+
+        }
+        else {
+            $("#selectTemplate").hide();
+        }
+        var startDate = $("#StartFrom").data('kendoDatePicker');
+        var endDate = $("#StartTo").data('kendoDatePicker');
+        if (('@Model.IsCreate' === 'False') && ('@Model.IsCopy' === 'False'))
+        {
+            if ('@Model.State' === 'Saved')
+            {
+                startDate.enable(true);
+                endDate.enable(true);
+            }
+            else if ('@Model.State' === 'Archived') {
+                startDate.enable(false);
+                endDate.enable(false);
+            }
+            else
+            {
+                startDate.enable(false);
+                endDate.enable(true);
+            }
+        }
+        else
+        {
+            startDate.enable(true);
+            endDate.enable(true);
+        }
+        
+        if('@Model.IsCreate' === 'True')
+        {
+            var current = new Date();
+            var systemtz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (systemtz != 'America/Chicago') {
+                var sysDatetime = new Date();
+                var m = moment.utc(sysDatetime, "DD-MM-YYYY h:mm:ss A"); // parse input as UTC
+                var tz = 'America/Chicago';
+                var csttime = m.clone().tz(tz).format("MM/DD/YYYY h:mm:ss A");
+                current = new Date(csttime);
+            }
+            var dd = current.getDate();
+            var mm = current.getMonth() + 1;
+            var yyyy = current.getFullYear();
+
+            startDate.value(mm + '/' + dd + '/' + yyyy);
+            initialDate = yyyy + "/" + (mm - 1) + "/" + dd;
+            haveInitial = true;
+            startDate.min(startDate.value());
+            endDate.min(startDate.value());
+            //endDate.value(startDate.value());
+            
+        }
+    }
+
+    
+    function IsValidTemplate()
+    {
+        var tempId = $("#TemplateId").val();
+        var viewbtn = $("#View").data("kendoButton");
+        if(tempId > 0)
+        {
+            viewbtn.enable(true);
+        }
+        else {
+            viewbtn.enable(false);
+        }
+    }
+    function viewTemplate() {
+        var tempId = $("#TemplateId").val();
+        var templateWindow = $("#ViewTemplateWindow").data("kendoWindow").center().open();
+        templateWindow.refresh({
+            url: "Home/GetTemplateView",
+            data: { id: tempId }
+        });
+    }
+</script> 

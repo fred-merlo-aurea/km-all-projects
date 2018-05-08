@@ -1,0 +1,629 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1BCCCBF6-03B4-49B8-A52C-BCBF38456CD4}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ControlCenter</RootNamespace>
+    <AssemblyName>ControlCenter</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Navigation, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\AdhocFilter.xaml.cs">
+      <DependentUpon>AdhocFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AdhocSetup.xaml.cs">
+      <DependentUpon>AdhocSetup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\CustomerService.xaml.cs">
+      <DependentUpon>CustomerService.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\Group.xaml.cs">
+      <DependentUpon>Group.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\GroupOrder.xaml.cs">
+      <DependentUpon>GroupOrder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\Magazines.xaml.cs">
+      <DependentUpon>Magazines.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\Publisher.xaml.cs">
+      <DependentUpon>Publisher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ReportGroupOrder.xaml.cs">
+      <DependentUpon>ReportGroupOrder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ReportGroups.xaml.cs">
+      <DependentUpon>ReportGroups.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports.xaml.cs">
+      <DependentUpon>Reports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CircCodesheet\Response.xaml.cs">
+      <DependentUpon>Response.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MasterCodeSheetSort.xaml.cs">
+      <DependentUpon>MasterCodeSheetSort.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MasterGroup.xaml.cs">
+      <DependentUpon>MasterGroup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MasterCodeSheet.xaml.cs">
+      <DependentUpon>MasterCodeSheet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MasterGroupSort.xaml.cs">
+      <DependentUpon>MasterGroupSort.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProductSortOrder.xaml.cs">
+      <DependentUpon>ProductSortOrder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProductCreation.xaml.cs">
+      <DependentUpon>ProductCreation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ResponseGroups.xaml.cs">
+      <DependentUpon>ResponseGroups.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CodeSheet.xaml.cs">
+      <DependentUpon>CodeSheet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProductSetupCopy.xaml.cs">
+      <DependentUpon>ProductSetupCopy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProductType.xaml.cs">
+      <DependentUpon>ProductType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ResponseGroupCopy.xaml.cs">
+      <DependentUpon>ResponseGroupCopy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\ConfigurationManagerSettingsProvider.cs" />
+    <Compile Include="Interfaces\IAppSettingsProvider.cs" />
+    <Compile Include="Modules\ApplicationControls\ApplicationSecurityDetails.xaml.cs">
+      <DependentUpon>ApplicationSecurityDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ApplicationManagement.xaml.cs">
+      <DependentUpon>ApplicationManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\BrandMgmt.xaml.cs">
+      <DependentUpon>BrandMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CampaignMgmt.xaml.cs">
+      <DependentUpon>CampaignMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CircCodeSheetViewer.xaml.cs">
+      <DependentUpon>CircCodeSheetViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CircRulesMgmt.xaml.cs">
+      <DependentUpon>CircRulesMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientControls\Configuration.xaml.cs">
+      <DependentUpon>Configuration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientControls\CustomProcedures.xaml.cs">
+      <DependentUpon>CustomProcedures.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientControls\DragDropPopUp.cs" />
+    <Compile Include="Modules\ClientControls\FTPSites.xaml.cs">
+      <DependentUpon>FTPSites.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientControls\SpecialFiles.xaml.cs">
+      <DependentUpon>SpecialFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientControls\CreateNewClient.xaml.cs">
+      <DependentUpon>CreateNewClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientGroupMgmt.xaml.cs">
+      <DependentUpon>ClientGroupMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CodeSheetViewer.xaml.cs">
+      <DependentUpon>CodeSheetViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\FilterMgmt.xaml.cs">
+      <DependentUpon>FilterMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MarketMgmt.xaml.cs">
+      <DependentUpon>MarketMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MenuFeatureMgmt.xaml.cs">
+      <DependentUpon>MenuFeatureMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MenuManagement.xaml.cs">
+      <DependentUpon>MenuManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PublicationManagement.xaml.cs">
+      <DependentUpon>PublicationManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ClientManagement.xaml.cs">
+      <DependentUpon>ClientManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\SecurityGroupManagement.xaml.cs">
+      <DependentUpon>SecurityGroupManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ServiceFeatureManagement.xaml.cs">
+      <DependentUpon>ServiceFeatureManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\ServiceManagement.xaml.cs">
+      <DependentUpon>ServiceManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\UADDataRemovalMgmt.xaml.cs">
+      <DependentUpon>UADDataRemovalMgmt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\UserManagement.xaml.cs">
+      <DependentUpon>UserManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Web References\com.ecn5.webservices.AccountManager\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\com.ecn5.webservices.ListManager\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AnimatedPrompt.xaml.cs">
+      <DependentUpon>AnimatedPrompt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CodeSheetEditResponses.xaml.cs">
+      <DependentUpon>CodeSheetEditResponses.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateNewApplication.xaml.cs">
+      <DependentUpon>CreateNewApplication.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateNewClient.xaml.cs">
+      <DependentUpon>CreateNewClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateNewPublication.xaml.cs">
+      <DependentUpon>CreateNewPublication.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Helper.xaml.cs">
+      <DependentUpon>Helper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\QuestionBranching.xaml.cs">
+      <DependentUpon>QuestionBranching.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Web References\com.ecn5.webservices.AccountManager\AccountManager.wsdl" />
+    <None Include="Web References\com.ecn5.webservices.AccountManager\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\com.ecn5.webservices.ListManager\ListManager.wsdl" />
+    <None Include="Web References\com.ecn5.webservices.ListManager\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\AdhocFilter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AdhocSetup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircCodesheet\CustomerService.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircCodesheet\Group.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircCodesheet\GroupOrder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircCodesheet\Magazines.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircCodesheet\Publisher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReportGroupOrder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReportGroups.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Reports.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CircCodesheet\Response.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MasterCodeSheetSort.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MasterGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MasterCodeSheet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MasterGroupSort.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProductSortOrder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProductCreation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResponseGroups.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CodeSheet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProductSetupCopy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProductType.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResponseGroupCopy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ApplicationControls\ApplicationSecurityDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ApplicationManagement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\BrandMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\CampaignMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\CircCodeSheetViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\CircRulesMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientControls\Configuration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientControls\CustomProcedures.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientControls\FTPSites.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientControls\SpecialFiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientControls\CreateNewClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ClientGroupMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\CodeSheetViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\FilterMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Home.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\MarketMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\MenuFeatureMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\MenuManagement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modules\ServiceFeatureManagement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\ServiceManagement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\UADDataRemovalMgmt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AnimatedPrompt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CodeSheetEditResponses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateNewApplication.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateNewClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateNewPublication.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Helper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\QuestionBranching.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\PublicationManagement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\ClientManagement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\SecurityGroupManagement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Modules\UserManagement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ECN\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Utilities\Core_AMS.Utilities.csproj">
+      <Project>{aac306a3-a54b-4e6d-b5e7-0170acdffe26}</Project>
+      <Name>Core_AMS.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkServices\FrameworkServices.csproj">
+      <Project>{609c1392-849d-4095-ab9b-fe4fdda7e57a}</Project>
+      <Name>FrameworkServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD\FrameworkUAD.csproj">
+      <Project>{cba5b2c6-3ce4-4782-bae0-570528690b4b}</Project>
+      <Name>FrameworkUAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD_Lookup\FrameworkUAD_Lookup\FrameworkUAD_Lookup.csproj">
+      <Project>{8ad0b7b7-73a4-437a-b533-1f9d5a90f2be}</Project>
+      <Name>FrameworkUAD_Lookup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAS\FrameworkUAS.csproj">
+      <Project>{824833b3-d839-4878-ab71-b4dfdf802085}</Project>
+      <Name>FrameworkUAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ImageLibrary\ImageLibrary.csproj">
+      <Project>{1a764a0c-7de0-41c3-9dda-a4aa1145eb60}</Project>
+      <Name>ImageLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAD_WS\UAD_WS.csproj">
+      <Project>{dc9b6839-c4a2-4e72-9ea9-72a888e43938}</Project>
+      <Name>UAD_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAS_WS\UAS_WS.csproj">
+      <Project>{63e0167c-0f7f-4486-8175-8eec61e50e64}</Project>
+      <Name>UAS_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAD_Lookup_WS\UAD_Lookup_WS.csproj">
+      <Project>{eca86827-0960-47cf-abf7-a4b6cad4cd74}</Project>
+      <Name>UAD_Lookup_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\WpfControls\WpfControls.csproj">
+      <Project>{7b99e614-92e1-40f3-a6f2-b1b12f449567}</Project>
+      <Name>WpfControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://webservices.ecn5.com/AccountManager.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\com.ecn5.webservices.AccountManager\</RelPath>
+      <UpdateFromURL>http://webservices.ecn5.com/AccountManager.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ControlCenter_com_ecn5_webservices1_AccountManager</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://webservices.ecn5.com/ListManager.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\com.ecn5.webservices.ListManager\</RelPath>
+      <UpdateFromURL>http://webservices.ecn5.com/ListManager.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ControlCenter_com_ecn5_webservices_ListManager</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\com.ecn5.webservices.ListManager\ListManager.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\com.ecn5.webservices.AccountManager\AccountManager.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

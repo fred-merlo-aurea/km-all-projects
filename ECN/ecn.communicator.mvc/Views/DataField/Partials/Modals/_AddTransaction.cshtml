@@ -1,0 +1,74 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+<script>
+    var lastControlsError = [];
+    function addTransaction() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        var model = $('#TransactionName').val();
+        if ($.trim(model) === "") {
+            lastControlsError.push({ name: "TransactionName", message: "Please enter a value for Transaction Name", label: "TransactionNameLabel", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTransaction", "DataField")",
+                data: { TransactionName: model, groupID: parseInt($("#TranGroupID").val()) },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $('#TransactionName').val('');
+                        closeAddTransaction();
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#AddTran_Validation");                        
+                    }
+                }
+            });
+        }
+    };
+    function closeAddTransaction() {
+        clearValidationErrorMessages();
+        closeWindow('AddTransaction');
+    }
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Add Transaction</legend>
+
+        <div id="AddTran_Validation">
+
+        </div>
+        <div class="formbox">
+            <div class="subtitle" id="TransactionNameLabel">Transaction Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("TransactionName")
+                @Html.Hidden("TranGroupID", null, new Dictionary<string, object> { { "data-bind", "value:TranGroupID" } })
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:80px;text-align:center;padding-left:160px;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addTransaction()" })
+                    </td>
+                    <td style="width:80px;text-align:center;padding-right:160px;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeAddTransaction()" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>     
+   

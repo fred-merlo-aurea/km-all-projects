@@ -1,0 +1,96 @@
+﻿@using KMEnums
+@using KMModels
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+
+    var selected = controls.FirstOrDefault();
+}
+
+@functions
+{
+    public MvcHtmlString GetValueControl(string name, ControlModel control)
+    {
+        var dataType = control != null ? control.DataType : DataType.Text;
+        
+        if(dataType == DataType.Selection)
+        {
+            var items = control != null ? control.SelectableItems : null;
+
+            return Html.Kendo().DropDownList().Name(name).BindTo(items).DataTextField("Label").DataValueField("Id").HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        if(dataType == DataType.Text)
+        {
+            return Html.Kendo().TextBox().Name(name).HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        if(dataType == DataType.Date)
+        {
+            return Html.Kendo().DateTimePicker().Name(name).HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        if(dataType == DataType.Number)
+        {
+            return Html.Kendo().NumericTextBox().Name(name).Decimals(0).Format("#").HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        if(dataType == DataType.Decimal)
+        {
+            return Html.Kendo().NumericTextBox().Name(name).HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        if (dataType == DataType.Newsletter)
+        {
+            return Html.Kendo().DropDownList().Name(name)
+                .Items(items =>
+                {
+                    items.Add().Value("Subscribe").Text("Subscribe");
+                })
+                .HtmlAttributes(new { id = "#=FormattedConditionId#__Value" }).ToClientTemplate();
+        }
+        return null;
+    }
+}
+
+<script id="rules_condition-template" type="text/x-kendo-template">
+    <div id="#=FormattedConditionId#__ConditionRowBox" name="#=ConditionId#.Condition" class="#=ConditionClass#_ConditionRowBox">        
+
+        <input type="hidden" value="#=currIndx#" name= "#=IndexForCondition#" />
+
+        <ul class="inline">
+            <li class="cond conditionTypeItem">#=ConditionType#</li>
+            <li class="fld">
+                @(Html.Kendo().DropDownList().Name(GetName<ConditionModel>("#=ConditionId#", x => x.ControlId))
+                .HtmlAttributes(new { id = "#=FormattedConditionId#__ControlId" })
+                .BindTo(controls)
+                .DataTextField("FieldLabel")
+                .DataValueField("Id")
+                .Events(e => e.Change(@<text>function(){ changeControl('#=FormattedConditionId#__ControlId', this); }</text>))
+                .ToClientTemplate())
+            </li>
+            <li class="comp">
+                @(Html.Kendo()
+                      .DropDownList()
+                      .Name(GetName<ConditionModel>("#=ConditionId#", x => x.ComparisonType)).HtmlAttributes(new { id = "#=FormattedConditionId#__ComparisonType" })
+                      .Items(items =>
+                      {
+                          foreach (ComparisonType type in GetComparisonTypeValues(selected != null ? selected.DataType : DataType.Text))
+                          {
+                              items.Add().Text(type.ToString()).Value(type.ToString());
+                          }
+                      })
+                      .ToClientTemplate()
+                )
+            </li>
+            <li class="value">
+               @* @Html.Kendo().TextBox().Name(GetName<ConditionModel>("#=ConditionId#", x => x.Value)).HtmlAttributes(new { id = "#=FormattedConditionId#_Value" }).ToClientTemplate()*@
+                @GetValueControl(GetName<ConditionModel>("#=ConditionId#", x => x.Value), selected)
+            </li>
+            <li class="acts">            
+                @(
+                    Html.Kendo()
+                        .Button()
+                        .Name("#=ConditionId#_DeleteCondition")
+                        .Content("Delete  <i class='km-icon icon-kmcustom-delete'></i>").HtmlAttributes(new { id = "#=FormattedConditionId#__DeleteCondition", type = "button", @class = "btn btn-blue3 DeleteCondition"})
+                        
+                        .ToClientTemplate())
+            </li>
+        </ul>
+    </div>
+</script>

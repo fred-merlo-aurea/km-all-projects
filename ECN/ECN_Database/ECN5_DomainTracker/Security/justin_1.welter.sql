@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [justin.welter]
+    WITH PASSWORD = N'R;pjz,lh_ruV^.WHv{Ygkp|rmsFT7_&#$!~<nO>sywpxipEm', SID = 0xB08D3987060A1B429EC7522FDD800122, DEFAULT_DATABASE = [ECN5_ACCOUNTS], DEFAULT_LANGUAGE = [us_english];
+

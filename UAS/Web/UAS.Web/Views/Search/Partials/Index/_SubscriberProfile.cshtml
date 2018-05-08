@@ -1,0 +1,283 @@
+﻿
+@model UAS.Web.Models.Circulations.SubscriberProfile
+
+<style>
+    .k-window-action {
+        visibility: hidden;
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+
+        var inputChanged =false;
+        var AllowdataEntry =@Html.Raw(Json.Encode(ViewBag.AllowdataEntry));
+        var InActiveOrUnsubscribed =@Html.Raw(Json.Encode(ViewBag.InActiveOrUnsubscribed));
+
+        BindDropDownList({
+            ControlID: "profile_kddlCountry",
+            URL :targetCountryUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel : "",
+            DataType: "json"
+        })
+        var dropdownlist = $("#profile_kddlCountry").data("kendoDropDownList");
+        dropdownlist.enable(false);
+
+        BindDropDownList({
+            ControlID: "profile_kddlRegion",
+            URL :targetRegionUrl+"?countryID="+$("#profile_kddlCountry").val(),
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel : "",
+            sort:true,
+            DataType: "json"
+        })
+        BindDropDownList({
+            ControlID: "profile_kddlAddressTypes",
+            URL :targetAddressTypeUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel : "",
+            DataType: "json"
+        });
+       
+        var toggleInputState = function(flag){
+
+            $('#quickEditModal input').attr('readonly', 'readonly');
+            $('#profile_btnSave').prop('disabled', !flag);
+            var countryDropdownList = $("#profile_kddlCountry").data("kendoDropDownList");
+            var addressTypeDropdownList = $("#profile_kddlAddressTypes").data("kendoDropDownList");
+            var regionTypeDropdownList = $("#profile_kddlRegion").data("kendoDropDownList");
+            countryDropdownList.enable(flag);
+            addressTypeDropdownList.enable(flag);
+            regionTypeDropdownList.enable(flag);
+
+
+        }
+
+        if(!AllowdataEntry){
+
+            toggleInputState(false);
+            $("#alertMsg").text("Data entry is currently locked for this product.");
+            $("#alertDiv").show();
+        }
+        else if (InActiveOrUnsubscribed) {
+            toggleInputState(false);
+            $("#alertMsg").text("This subscription is Inactive or Unsubscribed.Please open their record to reactivate.");
+            $("#alertDiv").show();
+        }
+
+        var ReloadSearch =function(){
+
+            Search();
+        }
+
+        var QuickEditSave=function() {
+
+            var countryDropdownList = $("#profile_kddlCountry").data("kendoDropDownList");
+            var addressTypeDropdownList = $("#profile_kddlAddressTypes").data("kendoDropDownList");
+            var regionTypeDropdownList = $("#profile_kddlRegion").data("kendoDropDownList");
+            var quickeditmodel = {
+                FirstName: $('#profile_txtFirstName').val(),
+                LastName: $('#profile_txtLastName').val(),
+                Title: $('#profile_txtTitle').val(),
+                Company: $('#profile_txtCompany').val(),
+                AddressTypeID: addressTypeDropdownList.value(),
+                Address1: $('#profile_txtAddress1').val(),
+                Address2: $('#profile_txtAddress2').val(),
+                Address3: $('#profile_txtAddress3').val(),
+                City: $('#profile_txtCity').val(),
+                Country: countryDropdownList.text(),
+                CountryID: countryDropdownList.value(),
+                RegionCode: regionTypeDropdownList.value(),
+                FullZip: $('#profile_txtFullZip').val(),
+                County: $('#profile_txtCounty').val(),
+                Phone: $('#profile_txtPhone').val(),
+                PhoneExt: $('#profile_txtPhoneExt').val(),
+                PhoneCode:$('#profile_txtPhoneCode').val(),
+                Mobile: $('#profile_txtMobile').val(),
+                Fax: $('#profile_txtFax').val(),
+                Email: $('#profile_txtEmail').val(),
+                Website: $('#profile_txtWebsite').val(),
+                SequenceID: $('#profile_txtSequenceID').val(),
+                PubID: $('#PubID').val(),
+                PubSubscriptionID: $('#PubSubscriptionID').val()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SaveProfile", "Search")',
+                data: JSON.stringify({ model: quickeditmodel }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var result =JSON.parse(response);
+                    if (result.Success)//success
+                    {
+                        $("#alertDiv").hide();
+                        var data ={
+                            type: 'Success',
+                            text:   result.Text,
+                            autoClose: false,
+                            action: ReloadSearch,
+                            IsOpen:false
+                        }
+                        showMessage(data);
+                        $("#profile_btnSave").closest("[data-role=window]").data("kendoWindow").close();
+
+                    }
+                    else //error
+                    {
+                        $("#alertMsg").text(result.Text);
+                        $("#alertDiv").show();
+
+                    }
+
+                }
+            });
+
+        };
+        $("input").on("focus", function () {
+            $(this).select();
+        });
+
+        $("#profile_btnSave").click(function (e) {
+
+            QuickEditSave()
+
+
+        });
+
+        $("#profile_btnCancel").click(function () {
+
+
+            $(this).closest("[data-role=window]").data("kendoWindow").close();
+
+        });
+
+
+
+    });
+
+</script>
+<div style="height:30px;background-color:#6babe5;text-align:center;margin:0px;">
+    <h3 style="color:white;vertical-align:middle;"><strong>Subscriber Profile</strong> </h3>
+</div>
+<div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="30" width="30" style="margin:0px;padding:0px;" /></span>
+    <span id="alertMsg" style="vertical-align:top;"></span>
+</div>
+@if (Model.IsInActiveWaiveMailing)
+{
+    <div id="warningDiv" style="color:red;margin:5px 0 0 0;">
+        <span><img src='@Url.Content("~/Images/Notifications/Warning_New.png")' height="30" width="30" style="margin:0px;padding:0px;" /></span>
+        <span id="warningMsg" style="vertical-align:top;">This subscriber is currently in an active Wave Mailing. Certain field changes will not take effect until the current issue is finalized.</span>
+    </div>
+}
+
+
+<div id="quickEditModal">
+
+    @Html.HiddenFor(m => m.PubSubscriptionID)
+    @Html.HiddenFor(m => m.PubID)
+    @Html.HiddenFor(m => m.SubscriptionID)
+    @Html.HiddenFor(m => m.PaidFreeTransactionCode)
+   
+    <table>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.FirstName)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.FirstName).HtmlAttributes(new { style = "width:250px;", id = "profile_txtFirstName", tabindex="21" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Address3)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Address3).HtmlAttributes(new { style = "width:250px;", id = "profile_txtAddress3", tabindex="28" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Mobile)</td>
+            <td class="columnwidth">@(Html.Kendo().MaskedTextBoxFor(m => m.Mobile).Mask("000-000-0000").HtmlAttributes(new { style = "width:250px;", id = "profile_txtMobile", tabindex="36" }))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.LastName)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.LastName).HtmlAttributes(new { style = "width:250px;", id = "profile_txtLastName", tabindex="22" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.City)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.City).HtmlAttributes(new { style = "width:250px;", id = "profile_txtCity", tabindex="29" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Fax)</td>
+            <td class="columnwidth">@(Html.Kendo().MaskedTextBoxFor(m => m.Fax).Mask("000-000-0000").HtmlAttributes(new { style = "width:250px;", id = "profile_txtFax", tabindex="37" }))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.Title)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Title).HtmlAttributes(new { style = "width:250px;", id = "profile_txtTitle", tabindex="23" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.CountryID)</td>
+            <td class="columnwidth">
+                <input id="profile_kddlCountry" value="@Model.CountryID" style="width:250px;" , tabindex="30" />
+
+            </td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Email)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { style = "width:250px;", id = "profile_txtEmail", tabindex = "38" }))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.Company)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Company).HtmlAttributes(new { style = "width:250px;", id = "profile_txtCompany", tabindex="24" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.RegionID)</td>
+            <td class="columnwidth">
+                <input id="profile_kddlRegion" value="@Model.RegionCode" style="width:250px;" tabindex="31" />
+            </td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Website)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Website).HtmlAttributes(new { style = "width:250px;", id = "profile_txtWebsite", tabindex = "39" }))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.AddressTypeID)</td>
+            <td class="columnwidth">
+                <input id="profile_kddlAddressTypes" value="@Model.AddressTypeID" style="width:250px;" tabindex="25" />
+            </td>
+            <td class="columnwidth">@Html.LabelFor(m => m.FullZip)</td>
+            <td class="columnwidth">
+
+                @if (Model.CountryID == 1)
+                {
+                    @(Html.Kendo().MaskedTextBoxFor(m => m.FullZip).Mask("00000-0000").HtmlAttributes(new { style = "width:250px;", id = "profile_txtFullZip", tabindex = "32" }))
+
+                }
+                else if (Model.CountryID == 2)
+                {
+                    @(Html.Kendo().MaskedTextBoxFor(m => m.FullZip).Mask("L0L 0L0").HtmlAttributes(new { style = "width:250px;", id = "profile_txtFullZip", tabindex = "32" }))
+
+                }
+                else
+                {
+                    @(Html.Kendo().MaskedTextBoxFor(m => m.FullZip).Mask("AAAAAAAAAA").HtmlAttributes(new { style = "width:250px;", id = "profile_txtFullZip", tabindex = "32" }))
+
+                }
+            </td>
+            <td class="columnwidth">@Html.LabelFor(m => m.SequenceID)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.SequenceID).HtmlAttributes(new { style = "width:250px;background-color:#D3D3D3;", id = "profile_txtSequenceID" }).Enable(false))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.Address1)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Address1).HtmlAttributes(new { style = "width:250px;", id = "profile_txtAddress1", tabindex = "26" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.County)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.County).HtmlAttributes(new { style = "width:250px;", id = "profile_txtCounty", tabindex = "33" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.SubscriptionID)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.SubscriptionID).HtmlAttributes(new { style = "width:250px;background-color:#D3D3D3;", id = "profile_SubscriptionID" }).Enable(false))</td>
+        </tr>
+        <tr>
+            <td class="columnwidth">@Html.LabelFor(m => m.Address2)</td>
+            <td class="columnwidth">@(Html.Kendo().TextBoxFor(m => m.Address2).HtmlAttributes(new { style = "width:250px;", id = "profile_txtAddress2", tabindex = "27" }))</td>
+            <td class="columnwidth">@Html.LabelFor(m => m.Phone)</td>
+            <td class="columnwidth">
+                @(Html.Kendo().TextBoxFor(m => m.PhoneCode).HtmlAttributes(new { style = "width:70px;;background-color:#D3D3D3;", id = "profile_txtPhoneCode" }).Enable(false))
+                @(Html.Kendo().MaskedTextBoxFor(m => m.Phone).Mask("000-000-0000").HtmlAttributes(new { style = "width:100px;", id = "profile_txtPhone", tabindex = "34" }))
+                @(Html.Kendo().TextBoxFor(m => m.PhoneExt).HtmlAttributes(new { style = "width:70px;", id = "profile_txtPhoneExt", tabindex = "35" }))
+            </td>
+
+        </tr>
+        <tr>
+            <td align="right" colspan="6">
+                <input type="button" value="Save" id="profile_btnSave" name="cmd" class="btn-blue2" />
+                <input type="button" value="Cancel" id="profile_btnCancel" class="btn-blue2" />
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+
+

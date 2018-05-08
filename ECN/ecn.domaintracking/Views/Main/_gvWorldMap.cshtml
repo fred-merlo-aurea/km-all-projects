@@ -1,0 +1,33 @@
+﻿@Model
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['geochart']}]}"></script>
+<script language="javascript" type="text/javascript">
+    google.setOnLoadCallback(drawMarkersMap);
+    function drawMarkersMap() {
+
+       
+       
+            var aoa = [["Country", "Page Requests"]];
+            @foreach (DataRow row in Model.Rows)
+            {
+                var country = row["Country"];
+                var hitCount = row["Count"];
+                <text>
+            aoa.push(["@country", @hitCount]);
+            </text>
+            }
+            var data = google.visualization.arrayToDataTable(aoa);
+            var options = {
+                displayMode: "regions",
+                colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+                legend: "none"
+            };
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+            chart.draw(data, options);
+       
+    }
+
+
+</script>
+<div id="regions_div" style="margin-left: 140px; width: 500px;"></div>
+
+<br />

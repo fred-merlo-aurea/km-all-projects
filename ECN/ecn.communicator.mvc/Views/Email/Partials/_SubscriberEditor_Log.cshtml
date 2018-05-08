@@ -1,0 +1,25 @@
+﻿@model IEnumerable<ECN_Framework_Entities.Activity.View.BlastActivity>
+@using ecn.communicator.mvc.Infrastructure
+
+@(
+Html.Kendo()
+       .Grid(Model)
+   .Name("grid")
+   .Columns(columns =>
+   {
+       var imageStyle = "display: block; margin: auto;";
+       columns.Bound(e => e.ActionDate).Title("Time").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).Width(100);
+       columns.Bound(e => e.EmailSubject).Title("Blast").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).Width(85);
+       columns.Bound(e => e.BlastID).Title("BlastID").Width(50).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+       columns.Bound(e => e.ActionTypeCode).Title("Type").Width(50).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+       columns.Bound(e => e.ActionValue).Title("Value").Width(50).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+    })
+   .Pageable()
+   .Scrollable()
+   .HtmlAttributes(new { style = "height:550px;min-width:100px;" })
+   .DataSource(dataSource => dataSource
+       .Ajax()
+       .PageSize(30)
+       .ServerOperation(false)
+    )
+)

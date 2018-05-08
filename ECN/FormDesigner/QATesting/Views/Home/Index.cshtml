@@ -1,0 +1,81 @@
+﻿@model ecn.qatools.Models.IndexViewModel
+
+@{
+    string url = Model.Params.Any(x => x.Key.Equals("URI", StringComparison.InvariantCultureIgnoreCase))
+        ? Model.Params.FirstOrDefault(x => x.Key.Equals("URI")).Value
+        : "";
+    string css = Model.Params.Any(x => x.Key.Equals("CSS", StringComparison.InvariantCultureIgnoreCase))
+        ? Model.Params.FirstOrDefault(x => x.Key.Equals("CSS")).Value
+        : "";
+    string cssLink = Url.Action("Css", "Home", null, Request.Url.Scheme);
+}
+
+<div id="framesContainer" name="framesContainer" style="display:block; float:left; width:100%; height:100%;">
+    <div id="editFrame" name="editFrame" style="display: block; float: left; background: #CCCCCC; width:350px; min-height:400px;">
+        @Html.Partial("Edit", Model)
+    </div>
+    <div id="formFrame" name="formFrame" style="display: block; float: left; width: 650px; min-height:400px; background: #e0e0e0">
+        <code style="display:block; min-height: 400px; vertical-align: middle; text-align: center; padding-top: 100px;">&lt;URL will load here&gt;</code>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript">
+        var formsLink = "";
+        var apiBaseUri = '@Url.Action("", "api", null, Request.Url.Scheme)';
+        var viewBaseUri = '@Url.Action("Show", "Home", null, Request.Url.Scheme)';
+    $(document).ready(function () {
+        $('#URI').change(function () {
+            setKey('URI');
+        });
+        $('#CSS').change(function () {
+            setKey('CSS');
+        });
+        $('.valueEdit').change(function () {
+            var $this = $(this);
+            setKeyInternal($this.attr('id'), $this.val());
+        });
+        formsLink = makeFormsLink();
+        $('#submitLink').click(function () {
+            $.ajax({ url: formsLink }).success(function (d) {
+                $('#formFrame').html(d);
+            }).error(function (x, y) {
+                $('#formFrame').html('<div class="error">' + x.toString() + '</div>');
+            });
+        });
+        $('#formsLinkLabel').text(formsLink);
+        $('.viewSavedLink').click(function () {
+            $.ajax({ url: viewBaseUri + '/' + $( this ).attr('id') }).success(function (d) {
+                $('#formFrame').html(d);
+            })
+        });
+    });
+    function addKey() {
+        setKeyInternal($('#NEWKEY').val(), $('#NEWVALUE').val());
+    }
+    function setKey(key) {
+        setKeyInternal(key, $('#' + key).val());
+    }
+    function setKeyInternal(key, value) {
+        var url = apiBaseUri + '/' + key;
+        $.ajax({ method: "POST", url: url, data: '"' + value + '"', contentType: "application/json", processData: false })
+            .done(function () { document.location.reload(true); });
+    }
+    function removeKey(key) {
+        $.ajax({ method: "DELETE", url: apiBaseUri + '/' + key })
+            .done(function () { document.location.reload(true); });
+    }
+    function makeFormsLink() {
+        var url = '@url';
+        var props = [];
+        $('.valueEdit').each(function (i, x) {
+            $x = $(x);
+            //url += $x.attr('id') + '=' + $x.val() + '&';
+            props.push($x.attr('id') + '=' + $x.val());
+        });
+        url += '?' + props.join('&');
+        return url;
+    }
+</script>
+}

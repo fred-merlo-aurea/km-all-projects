@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[RuleSet_Rule_Map]
+(
+	RuleSetId int NOT NULL,
+	RuleId int NOT NULL,
+	RecordTypeId int NOT NULL,
+	RuleValueId int NULL,
+	FreeTextValue varchar(max) NULL,
+	IsActive bit NOT NULL,
+	ConditionGroup int default(1) NOT NULL,
+	ConditionChainId int default(0) NOT NULL,
+	ConditionOrder int default(0) NOT NULL,
+	ConditionBreakResult bit default('true') NOT NULL,
+	RuleOrder int default(0) NOT NULL,
+	RuleChainId int NOT NULL,
+	RuleGroup int NOT NULL,
+	RuleGroupChainId int NULL,
+	RuleGroupOrder int NOT NULL,
+	RuleGroupBreakResult int NOT NULL,
+	DateCreated datetime default(getdate()) not null,
+	DateUpdated datetime NULL,
+	CreatedByUserId int NOT NULL,
+	UpdatedByUserId int NULL,
+	CONSTRAINT [FK_RuleSet_Rule_Map_Rule] FOREIGN KEY ([RuleId]) REFERENCES [dbo].[Rule] ([RuleId]),
+    CONSTRAINT [FK_RuleSet_Rule_Map_RuleSet] FOREIGN KEY ([RuleSetId]) REFERENCES [dbo].[RuleSet] ([RuleSetId])
+)

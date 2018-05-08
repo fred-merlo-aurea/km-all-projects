@@ -1,0 +1,754 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerReportsViewModel
+@using Kendo.Mvc.UI;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var domainID = Model.DomainTracker.DomainTrackerID;
+    var dtBrowser = Model.BrowserStats;
+    var dtPlatform = Model.PlatformStats;
+
+    var stateCountTbl = Model.StateCountTbl;
+    var CountyCountTbl = Model.CountyCountTbl;
+    bool showType = Model.ShowUnknown;
+    string typeFilter = Model.TypeFilter;
+}
+<!-- saved from url=(0016)http://localhost -->
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>*@
+<script src="~/Scripts/jQueryMask/jQueryMask.js"></script>
+<script src="~/Scripts/Validate_Km_FieldDate/Validate_Km_FieldDate.js"></script>
+<style>
+    .errorClass {
+        border: 2px solid red;
+    }
+</style>
+
+<script language="JavaScript" type="text/JavaScript">
+    var did = @Model.DomainTracker.DomainTrackerID;
+</script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function() {
+
+
+        function submitForm() {
+            var url = '@Url.Action("ReportsSearch", new { id = @Model.DomainTracker.DomainTrackerID, numDays = 0 })';
+            url += "&fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&Filter=" + encodeURIComponent($("#Filter").val()) + "&TopRow=" + $("#UrlTopList").val() + "&TypeFilter=" + $("#ddlType").val();
+            if('@showType' == "true")
+            {
+                url += "&TypeFilter=" + $("#ddlType").val();
+            }
+            window.location.href = url;
+        }
+
+        var failMsg = "";
+        function validateSubmit() {
+            var pass = true;
+            if ($("#fromDate").val() !== "" && $("#toDate").val() !== "") {
+
+                var resultFronDate = validateKmDate($("#fromDate"));
+                if (resultFronDate) {
+                    pass = false;
+                    failMsg = resultFronDate;
+                }
+                var resultToDate = validateKmDate($("#toDate"));
+                if (resultToDate) {
+                    pass = false;
+                    failMsg = resultToDate;
+                }
+
+                if (pass) {
+                    var fromDate = new Date($("#fromDate").val());
+                    var toDate = new Date($("#toDate").val());
+                    if (fromDate > toDate) {
+                        pass = false;
+                        $("#fromDate").addClass("errorClass");
+                        $("#toDate").addClass("errorClass");
+                        failMsg = "From date can not be after To date";
+                    } else {
+                        $("#fromDate").removeClass("errorClass");
+                        $("#toDate").removeClass("errorClass");
+                    }
+                }
+
+            }
+            return pass;
+        }
+
+        $("#showReport").click(function() {
+            if (validateSubmit()) {
+                showLoadingWindow();
+                submitForm();
+            } else {
+                alert(failMsg);
+            }
+        });
+    });
+
+    function fromDateChange()
+    {
+        var toDate = $("#toDate").data('kendoDatePicker');
+        toDate.min(kendo.toString(this.value()));
+    }
+
+    function toDateChange()
+    {
+        var toDate = $("#fromDate").data('kendoDatePicker');
+        toDate.max(kendo.toString(this.value()));
+    }
+    var ddlType_FirstLoad = true;
+
+    function ddlType_DataSource()
+    {       
+        var dataArray = [ { Text : "All", Value :"All" },
+                    {Text : "Known", Value : "Known"},
+                {Text : "Unknown", Value : "Unknown"}]
+
+        var dataSource = new kendo.data.DataSource({data: dataArray});
+                    
+        return dataSource;                       
+    }
+
+    function ddlType_DataBound()
+    {
+        if(ddlType_FirstLoad == true)
+        {
+            this.value("Known");
+            ddlType_FirstLoad = false;
+        }
+        else{
+            this.value('@Model.TypeFilter.ToString()');
+        }
+    }
+    
+
+    function mapRegionChange() {
+        if ($("#mapRegion").val() === "USAonly") {
+            if('@Model.ShowUnknown.ToString().ToLower()' == 'false' || '@Model.TypeFilter.ToLower()' == 'known' || '@Model.TypeFilter.ToLower()' == 'unknown')
+            {
+                $('#divWorldMapTarget').show();
+                $('#divWorldWideTarget').hide();
+                $('#LocationStatsUS').show();
+                $('#LocationStatsWorld').hide();
+            }
+            else{
+                $('#divWorldMapTarget_Known').show();
+                $('#divWorldWideTarget_Known').hide();
+                $('#LocationStatsUS').show();
+                $('#LocationStatsWorld').hide();
+            }
+        }
+        else{
+            if('@Model.ShowUnknown.ToString().ToLower()' == 'false' || '@Model.TypeFilter.ToLower()' == 'known' || '@Model.TypeFilter.ToLower()' == 'unknown')
+            {
+                $('#divWorldMapTarget').hide();
+                $('#divWorldWideTarget').show();
+                $('#LocationStatsUS').hide();
+                $('#LocationStatsWorld').show();
+            }
+            else{
+                $('#divWorldMapTarget_Known').hide();
+                $('#divWorldWideTarget_Known').show();
+                $('#LocationStatsUS').hide();
+                $('#LocationStatsWorld').show();
+            }
+        }
+    }
+</script>
+@Html.HiddenFor(m => Model.IsUsaOnly, new { @class = "hIsUsaOnly" })
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Domain Tracking /", "Index", "Main", null, new { onclick = "showLoadingWindow()" })</li>
+    <li class="breadcrumb-item">Reports</li>
+</ol>
+<br />
+<div style="float: left; font-size: medium; font-weight: bold; text-align: left;">Domain Tracking Report (@Model.DomainTracker.Domain)</div>
+
+<div style="float: right; text-align: right;">
+    @Html.ActionLink("Back to Domains", "Index", "Main", null, new { @class = "btn k-button" })
+</div>
+<br><br />
+@Html.HiddenFor(x => x.DomainTracker.DomainTrackerID)
+<div style="float: left; font-size: 14px; font-weight: bold; text-align: left;">
+    <p>
+        From @Html.Kendo().DatePicker().Name("fromDate").Events(m => m.Change("fromDateChange")).Value(ViewBag.fromDate)
+
+        To @Html.Kendo().DatePicker().Name("toDate").Events(m => m.Change("toDateChange")).Value(ViewBag.toDate)
+        URL @Html.Kendo().TextBox().Name("Filter").Value(ViewBag.Filter)
+        @if (Model.ShowUnknown)
+        {
+            <text>User Type</text>
+
+        @Html.Kendo().DropDownList().Name("ddlType").BindTo(new List<SelectListItem>
+                    {
+                    new SelectListItem {Text = "Known", Value = "Known" , Selected = Model.TypeFilter.ToLower().Equals("known") },
+                    new SelectListItem {Text = "Unknown", Value = "Unknown", Selected = Model.TypeFilter.ToLower().Equals("unknown") },
+                    new SelectListItem { Text = "All", Value = "All", Selected = Model.TypeFilter.ToLower().Equals("all") }        
+                    
+                    }).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = Model.ShowUnknown ? "display:inline;font-weight:normal;" : "display:none;font-weight:normal;" })
+        }
+
+
+        <input type="button" id="showReport" class="btn k-button" value="Search">
+    </p>
+</div>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 66%;">
+            @if (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown"))
+            {
+                string totalViews = "0";
+                if (Model.TypeFilter.ToLower().Equals("known"))
+                {
+                    totalViews = Model.KnownPageViews;
+                }
+                else if (Model.TypeFilter.ToLower().Equals("unknown"))
+                {
+                    totalViews = Model.UnknownPageViews;
+                }
+                else
+                {
+                    totalViews = Model.TotalPageViews;
+                }
+                <div style="float: left; font-size: medium; font-weight: bold; text-align: left;">Total Page Views: @totalViews</div>
+            }
+            else
+            {
+                <div style="float: left; font-size: medium; font-weight: bold; text-align: right;">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                Total Page View Count
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;width:25%;">Known:</td>
+                            <td style="text-align:left;">
+                                @Model.KnownPageViews
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">
+                                Unknown:
+                            </td>
+                            <td style="text-align:left;">
+                                @Model.UnknownPageViews
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right;">
+                                All:
+                            </td>
+                            <td style="text-align:left;">
+
+                                @Model.TotalPageViews
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+            }
+
+        </td>
+        <td style="width: 34%;">
+            <!-- Empty -->
+        </td>
+    </tr>
+    <tr>
+        <td style="height: 400px; text-align: center; width: 66%; width: 700px;">
+            @{ var random = new Random().Next(); }
+            <br />
+            <div style="display:inline;">
+                <span style="font-size:medium;font-weight:bold;">Total Page Views Chart</span>
+                <br />
+                <img src="/ecn.domaintracking/Main/PageViews?id=@domainID&random=@random&startDate=@ViewBag.ChartFromDate&endDate=@ViewBag.ChartEndDate&Filter=@ViewBag.Filter&TypeFilter=@Model.TypeFilter" style="display:inline;max-height: 450px; max-width: 700px;" alt="No Chart" />
+            </div>
+            <div id="divMostViewedPageTarget">
+                @Html.Partial("_ReportsMostVisitedPages", Model.DomainTrackerActivity)
+            </div>
+        </td>
+
+        <td style="vertical-align: top;">
+            <table style="float: right; font-size: medium; font-weight: bold; text-align: center;">
+
+                @{
+                    if (dtBrowser != null && dtBrowser.Rows.Count > 0 && (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown")))
+                    {
+                        <tr>
+                            <td colspan="3">
+                                <div style="font-size: medium; font-weight: bold; text-align: center;">Browser Stats</div>
+                            </td>
+                        </tr>
+                        for (var i = 0; i < dtBrowser.Rows.Count; i++)
+                        {
+                            <tr>
+                                <td style="width: 50px;">
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("chrome"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgChrome.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("firefox"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgFirefox.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("ie"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgIE.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("mozilla"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgFirefox.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("safari"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgSafari.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("ucbrowser"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgUC.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("unknown"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgOther.png" alt="" />
+                                    }
+                                </td>
+                                <td style="font-size: small; font-weight: 400; text-align: left; width: 150px;">
+                                    @dtBrowser.Rows[i]["Browser"].ToString()
+                                </td>
+                                <td style="font-weight: bold; text-align: left;">
+                                    @dtBrowser.Rows[i]["Counts"].ToString()
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else if (dtBrowser != null && dtBrowser.Rows.Count > 0 && (Model.ShowUnknown && Model.TypeFilter.ToLower().Equals("all")))
+                    {
+                        <tr>
+                            <td></td>
+                            <td colspan="3">
+                                Browser Stats
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Browser</td>
+                            <td style="text-align:left;">Known</td>
+                            <td style="text-align:left;">Unknown</td>
+                            <td style="text-align:left;">All</td>
+                        </tr>
+                        for (var i = 0; i < dtBrowser.Rows.Count; i++)
+                        {
+                            <tr>
+                                <td style="width: 50px;">
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("chrome"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgChrome.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("firefox"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgFirefox.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("ie"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgIE.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("mozilla"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgFirefox.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("safari"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgSafari.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("ucbrowser"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgUC.png" alt="" />
+                                    }
+                                    @if (@dtBrowser.Rows[i]["Browser"].ToString().ToLower().Contains("unknown"))
+                                    {
+                                        <img src="/ecn.domaintracking/Content/Images/imgOther.png" alt="" />
+                                    }
+                                </td>
+                                <td style="font-size: small; font-weight: 400; text-align: left; width: 150px;">
+                                    @dtBrowser.Rows[i]["Browser"].ToString()
+                                </td>
+
+                                <td style="font-weight: bold; text-align: left;">
+                                    @dtBrowser.Rows[i]["Known"].ToString()
+                                </td>
+                                <td style="font-weight: bold; text-align: left;">
+                                    @dtBrowser.Rows[i]["Unknown"].ToString()
+                                </td>
+                                <td style="font-weight: bold; text-align: left;">
+                                    @dtBrowser.Rows[i]["Total"].ToString()
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                           
+                            <td colspan="3">
+                                Browser Stats
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: small; font-weight: normal; text-align: center;">
+                                No data to show.
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <br /><br /><br /><br />
+            <br /><br /><br /><br />
+            <table style="float: right; font-size: medium; font-weight: bold; text-align: center;">
+
+
+                @if (dtPlatform != null && dtPlatform.Rows.Count > 0 && (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown")))
+                {
+                    <tr>
+                        <td colspan="3">
+                            <div style="font-size: medium; font-weight: bold; text-align: center;">Platform Stats</div>
+                        </td>
+                    </tr>
+                    for (var i = 0; i < dtPlatform.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td style="width: 50px;">
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("android"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgAndroid.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("ipad"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("iphone"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("macintosh"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("linux"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgLinux.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("windows"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgWindows.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("unknown"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgOther.png" alt="" />
+                                }
+                            </td>
+                            <td style="font-size: small; font-weight: 400; text-align: left; width: 150px;">
+                                @dtPlatform.Rows[i]["OS"].ToString()
+                            </td>
+
+                            <td style="font-weight: bold; text-align: left;">
+                                @dtPlatform.Rows[i]["Counts"].ToString()
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else if (dtPlatform != null && dtPlatform.Rows.Count > 0 && (Model.ShowUnknown && Model.TypeFilter.ToLower().Equals("all")))
+                {
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            Platform Stats
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div style="font-size: medium; font-weight: bold; text-align: center;">Platform</div>
+                        </td>
+
+                        <td>
+                            Known
+                        </td>
+                        <td>
+                            Unknown
+                        </td>
+                        <td>
+                            All
+                        </td>
+                    </tr>
+                    for (var i = 0; i < dtPlatform.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td style="width: 50px;">
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("android"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgAndroid.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("ipad"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("iphone"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("macintosh"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgApple.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("linux"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgLinux.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("windows"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgWindows.png" alt="" />
+                                }
+                                @if (@dtPlatform.Rows[i]["OS"].ToString().ToLower().Contains("unknown"))
+                                {
+                                    <img src="/ecn.domaintracking/Content/Images/imgOther.png" alt="" />
+                                }
+                            </td>
+                            <td style="font-size: small; font-weight: 400; text-align: left; width: 150px;">
+                                @dtPlatform.Rows[i]["OS"].ToString()
+                            </td>
+
+
+
+                            <td style="font-weight: bold; text-align: left;">
+                                @dtPlatform.Rows[i]["Known"].ToString()
+                            </td>
+                            <td style="font-weight: bold; text-align: left;">
+                                @dtPlatform.Rows[i]["Unknown"].ToString()
+                            </td>
+                            <td style="font-weight: bold; text-align: left;">
+                                @dtPlatform.Rows[i]["Total"].ToString()
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                    <td colspan="3">
+                        Platform Stats
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: small; font-weight: normal; text-align: center;">
+                            No data to show.
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+</table>
+
+<div style="padding-top: 20px">
+
+    <div style="float: left; width: 60%;">
+       
+        <div style="margin-left: 0px">
+            <span style="font-size:medium;font-weight:bold;">Heat Map</span>
+            @Html.Kendo().DropDownList().Name("mapRegion").BindTo(new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "USA only", Value = "USAonly" },
+                    new SelectListItem {Text = "World view", Value = "WorldView" },
+                    
+                    }).DataTextField("Text").DataValueField("Value").Events(x => x.Change("mapRegionChange"))
+            @*<select id="mapRegion" onchange=" mapRegionChange(); ">
+                <option value="USAonly">USA only</option>
+                <option value="WorldView">World view</option>
+            </select>*@
+        </div>
+        @if (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown"))
+        {
+            <div id="divWorldMapTarget">
+                @Html.Partial("_gvUsaMap", Model.HeatTbl)
+            </div>
+            <div id="divWorldWideTarget" style="display: none;">
+                @Html.Partial("_gvWorldMap", Model.HeatTblWorld)
+            </div>
+        }
+        else
+        {
+            <div id="divWorldMapTarget_Known" style="float:left;margin-top:10px;">
+                @Html.Partial("_gvUsaMap_Known", Model.HeatTbl)
+            </div>
+            <div id="divWorldWideTarget_Known" style="float:left;display: none;margin-top:10px;">
+                @Html.Partial("_gvWorldMap_Known", Model.HeatTblWorld)
+            </div>
+        }
+
+
+    </div>
+
+    <div style="float: left; width: 40%; padding-top: 34px">
+        <table id="LocationStatsUS" style="float: right; font-size: medium; font-weight: bold; text-align: center;">
+
+            @if (stateCountTbl != null && stateCountTbl.Rows.Count > 0 && (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown")))
+            {
+                <tr>
+                    <td colspan="3">
+                        <div style="font-size: medium; font-weight: bold; text-align: center;">Location Stats</div>
+                    </td>
+                </tr>
+                DataView dvState = stateCountTbl.DefaultView;
+                dvState.Sort = "Count desc";
+                DataTable dtStateSorted = dvState.ToTable();
+                for (var i = 0; i < dtStateSorted.Rows.Count; i++)
+                {
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; text-align: left; width: 200px;">
+                            @dtStateSorted.Rows[i][0].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @dtStateSorted.Rows[i][1].ToString()
+                        </td>
+                    </tr>
+                }
+            }
+            else if (stateCountTbl != null && stateCountTbl.Rows.Count > 0 && (Model.ShowUnknown && Model.TypeFilter.ToLower().Equals("all")))
+            {
+                <tr>
+                    
+                    <td colspan="4" style="width:100%;text-align:center;">
+                        Location Stats
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-size: medium; font-weight: bold; text-align: center;">Location</div>
+                    </td>
+                    
+                    <td>
+                        Known
+                    </td>
+                    <td>
+                        Unknown
+                    </td>
+                    <td>
+                        All
+                    </td>
+                </tr>
+                DataView dvState = stateCountTbl.DefaultView;
+                dvState.Sort = "Total desc";
+                DataTable dtStateSorted = dvState.ToTable();
+                for (var i = 0; i < dtStateSorted.Rows.Count; i++)
+                {
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; text-align: left; width: 200px;">
+                            @dtStateSorted.Rows[i][0].ToString()
+                        </td>
+                        
+                        <td style="font-weight: bold; text-align: left;">
+                            @dtStateSorted.Rows[i]["Known"].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @dtStateSorted.Rows[i]["Unknown"].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @dtStateSorted.Rows[i]["Total"].ToString()
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="4" style="width:100%;text-align:center;">
+                        Location Stats
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: small; font-weight: normal; text-align: center;">
+                        No data to show.
+                    </td>
+                </tr>
+            }
+        </table>
+        <table id="LocationStatsWorld" style="display: none; float: right; font-size: medium; font-weight: bold; text-align: center;">
+
+            @if (CountyCountTbl != null && CountyCountTbl.Rows.Count > 0 && (!Model.ShowUnknown || Model.TypeFilter.ToLower().Equals("known") || Model.TypeFilter.ToLower().Equals("unknown")))
+            {
+                <tr>
+                    <td colspan="3">
+                        <div style="font-size: medium; font-weight: bold; text-align: center;">Location Stats</div>
+                    </td>
+                </tr>
+                for (var i = 0; i < CountyCountTbl.Rows.Count; i++)
+                {
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; text-align: left; width: 200px;">
+                            @CountyCountTbl.Rows[i][0].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @CountyCountTbl.Rows[i][1].ToString()
+                        </td>
+                    </tr>
+                }
+            }
+            else if (CountyCountTbl != null && CountyCountTbl.Rows.Count > 0 && (Model.ShowUnknown && Model.TypeFilter.ToLower().Equals("all")))
+            {
+                <tr>
+                    <td colspan="4" style="width:100%;text-align:center;">
+                        Location Stats
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-size: medium; font-weight: bold; text-align: center;">Location</div>
+                    </td>
+                    
+                    <td>
+                        Known
+                    </td>
+                    <td>
+                        Unknown
+                    </td>
+                    <td>
+                        All
+                    </td>
+                </tr>
+                for (var i = 0; i < CountyCountTbl.Rows.Count; i++)
+                {
+                    <tr>
+                        <td style="font-size: small; font-weight: 400; text-align: left; width: 200px;">
+                            @CountyCountTbl.Rows[i][0].ToString()
+                        </td>
+                        
+                        <td style="font-weight: bold; text-align: left;">
+                            @CountyCountTbl.Rows[i]["Known"].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @CountyCountTbl.Rows[i]["Unknown"].ToString()
+                        </td>
+                        <td style="font-weight: bold; text-align: left;">
+                            @CountyCountTbl.Rows[i]["Total"].ToString()
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="4" style="width:100%;text-align:center;">
+                        Location Stats
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: small; font-weight: normal; text-align: center;">
+                        No data to show.
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>

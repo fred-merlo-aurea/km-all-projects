@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0864A557-07B2-4962-BFFB-9E59C3123F6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EmailMarketing.API.Specs</RootNamespace>
+    <AssemblyName>EmailMarketing.API.Specs</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Should, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Should.dll</HintPath>
+    </Reference>
+    <Reference Include="SpecRun.SpecFlowPlugin, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecRun.SpecFlow.1.5.2\lib\net45\SpecRun.SpecFlowPlugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="TechTalk.SpecFlow, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecFlow.2.1.0\lib\net45\TechTalk.SpecFlow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TechTalk.SpecRun, Version=1.5.2.0, Culture=neutral, PublicKeyToken=d0fc5cc18b3b389b, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecRun.SpecFlow.1.5.2\lib\net45\TechTalk.SpecRun.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="BaseChannel\BaseChannel.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BaseChannel.feature</DependentUpon>
+    </Compile>
+    <Compile Include="BaseChannel\BaseChannelSteps.cs" />
+    <Compile Include="Content\Content.feature.cs">
+      <DependentUpon>Content.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Content\ContentSteps.cs" />
+    <Compile Include="CustomField\CustomField.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CustomField.feature</DependentUpon>
+    </Compile>
+    <Compile Include="CustomField\CustomFieldSteps.cs" />
+    <Compile Include="EmailDirect\EmailDirect.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailDirect.feature</DependentUpon>
+    </Compile>
+    <Compile Include="EmailDirect\EmailDirectSteps.cs" />
+    <Compile Include="EmailGroup\ISubscriberTestDataProvider.cs" />
+    <Compile Include="EmailGroup\ManageSubscriber.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManageSubscriber.feature</DependentUpon>
+    </Compile>
+    <Compile Include="EmailGroup\ManageSubscriberSteps.cs" />
+    <Compile Include="EmailGroup\SubscriberTestDataProvider.cs" />
+    <Compile Include="EmailGroup\ManageSubscriberWithProfile.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManageSubscriberWithProfile.feature</DependentUpon>
+    </Compile>
+    <Compile Include="EmailGroup\ManageSubscriberWithProfileSteps.cs" />
+    <Compile Include="EmailGroup\SubscriberProfileTestDataProvider.cs" />
+    <Compile Include="Error\Error.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Error.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Error\ErrorSteps.cs" />
+    <Compile Include="Filter\Filter.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Filter.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Folder\Folder.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Folder.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Folder\FolderSteps.cs" />
+    <Compile Include="Forms\Forms.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Forms.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormsSteps.cs" />
+    <Compile Include="Group\Group.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Group.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Group\GroupSteps.cs" />
+    <Compile Include="Image\Image.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Image.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Image\ImageSteps.cs" />
+    <Compile Include="Message\Message.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Message.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Message\MessageSteps.cs" />
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EmailGroup\ManageSubscriberTestDataProviderTests.cs" />
+    <Compile Include="User\User.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>User.feature</DependentUpon>
+    </Compile>
+    <Compile Include="User\UserSteps.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="BaseChannel\BaseChannel.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BaseChannel.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Content\Content.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Content.feature.cs</LastGenOutput>
+    </None>
+    <None Include="CustomField\CustomField.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CustomField.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Default.srprofile">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="EmailDirect\EmailDirect.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EmailDirect.feature.cs</LastGenOutput>
+    </None>
+    <None Include="EmailGroup\ManageSubscriber.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ManageSubscriber.feature.cs</LastGenOutput>
+    </None>
+    <None Include="EmailGroup\ManageSubscriberWithProfile.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ManageSubscriberWithProfile.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Error\Error.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Error.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Filter\Filter.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Filter.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Folder\Folder.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Folder.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Forms\Forms.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Forms.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Group\Group.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Group.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Image\Image.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Image.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Message\Message.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Message.feature.cs</LastGenOutput>
+    </None>
+    <None Include="runtests.cmd" />
+    <None Include="SpecRunTestProfile.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SpecRunTestProfile_2011_09.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="User\User.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>User.feature.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1bce78e7-dd4d-48bc-85c3-d77fce995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmailMarketing.API\EmailMarketing.API.csproj">
+      <Project>{c9d0d7a6-20cc-494f-99c0-e2e90bad0c7c}</Project>
+      <Name>EmailMarketing.API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>-->
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

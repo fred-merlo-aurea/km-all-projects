@@ -1,0 +1,75 @@
+﻿<div id="ReportStat">
+
+
+
+@(Html.Kendo().Window()
+    .Name("ReportDialog")
+    .Title("Report").Visible(false)
+    .Content(@<text>
+    <div id="formStats"></div>
+      @(Html.Kendo().Grid<KMModels.PostModels.FormStatisticModel>()
+      .Name("gridStatistic").AutoBind(false)
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .PageSize(15)
+          .ServerOperation(true).Model(model => model.Id(c => c.FormStatistic_ID))
+          .Read(read => read.Action("Reports", "UploadStatistic").Data("getData"))
+       )
+      .Columns(c =>
+      {
+          c.Bound(x => x.Email).Width(200);
+          c.Bound(x => x.StartForm).ClientTemplate("#=Start#");
+          c.Bound(x => x.FinishForm).ClientTemplate("#=Finish#");
+          c.Bound(x => x.Duration).Width(200).Sortable(false);
+          c.Bound(x => x.TotalPages).Width(70).ClientTemplate("#if(TotalPages > 0){##:TotalPages##}else{##}#");
+      })
+                                                         .Pageable()
+                                                         .Sortable(x => x.AllowUnsort(false))
+
+                                                         .ClientDetailTemplateId("template"))
+
+    <script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<KMModels.PostModels.FormStatisticLogModel>()
+            .Name("grid_#=FormStatistic_ID#")
+            .Columns(columns =>
+            {
+                columns.Bound(o => o.Start);//.ClientTemplate("#=Start_Log#");
+                columns.Bound(o => o.Finish);//.ClientTemplate("#=Finish_Log#");
+                columns.Bound(o => o.Duration).Width(210);
+                columns.Bound(o => o.PageNumber).Width(70);
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("ReportsLog", "UploadStatistic", new { formStatisticID = "#=FormStatistic_ID#" }))
+            )
+            .ToClientTemplate()
+    )
+    </script>
+</text>).Animation(false).Modal(true)
+        )
+   </div>
+    <script>     
+        var uid = "";
+
+        function getData() {            
+            return { formUID: uid };
+        };
+
+        function ReportOpen(id) {
+            uid = id;
+            var data = { formUID: uid};
+            var url = "UploadStatistic/GetFormStats";
+                    $("#formStats").load(url, data);
+                    $("#gridStatistic").data("kendoGrid").dataSource.read();
+                    $('#gridStatistic').data('kendoGrid').refresh();                    
+                    var window = $("#ReportDialog").data("kendoWindow");
+                    window.center().open();
+                
+                
+            
+
+
+         
+        }
+    </script>
+  

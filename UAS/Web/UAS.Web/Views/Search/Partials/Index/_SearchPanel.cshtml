@@ -1,0 +1,91 @@
+﻿@model UAS.Web.Models.Circulations.Search
+<div>
+    <table style="width:100%;">
+        <tr>
+            <td colspan="8" align="right">
+                @Html.Kendo().Button().Name("Add").Content("Add New Subscription<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new {type="button", id = "btnNewSubscription", @class = "btn-blue2 float-right" })
+            </td>
+        </tr>
+        <tr>
+            <td><label class="lbl">Product:</label></td>
+            <td>
+                <input id="srch_ProductID" name="Product" style="width:70%;" />
+            </td>
+            <td><label class="lbl">Address: </label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.Address).HtmlAttributes(new { style = "width:70%;" , tabindex=4})
+            </td>
+            <td><label class="lbl">Title:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.UserTitle).HtmlAttributes(new { style = "width:70%;", tabindex = 9})
+            </td>
+            <td><label class="lbl">Phone:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.PhoneNumber).HtmlAttributes(new { style = "width:70%;",tabindex =12})
+            </td>
+        </tr>
+        <tr>
+            <td><label class="lbl">Sequence#:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.SequenceNumber).HtmlAttributes(new { style = "width:70%;" , tabindex = 1})
+            </td>
+            <td><label class="lbl">City:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.City).HtmlAttributes(new { style = "width:70%;", tabindex = 5 })
+            </td>
+            <td><label class="lbl">Company:</label></td>
+            <td>@Html.Kendo().TextBoxFor(x => x.Company).HtmlAttributes(new { style = "width:70%;",tabindex = 10})</td>
+            <td><label class="lbl">Email: </label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.Email).HtmlAttributes(new { style = "width:70%;", tabindex = 13 })
+            </td>
+        </tr>
+        <tr>
+            <td><label class="lbl">First Name:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.FirstName).HtmlAttributes(new { style = "width:70%;", tabindex = 2})
+            </td>
+            <td><label class="lbl">Country:</label></td>
+            <td>
+                @*@(Html.Kendo().DropDownList()
+                  .Name("CountryID")//The name of the DropDownList is mandatory. It specifies the "id" attribute of the widget.
+                  .DataTextField("ShortName") //Specify which property of the Product to be used by the DropDownList as a text.
+                  .DataValueField("CountryID") //Specify which property of the Product to be used by the DropDownList as a value.
+                  .OptionLabel(" ")
+                  .HtmlAttributes(new { style = "width:70%;", id = "srch_CountryID", tabindex = 6 })
+                  .BindTo(Model.Countries)
+                  )*@
+                <input id="srch_CountryID" name="Country" style="width:70%;" tabindex=6 />
+            </td>
+
+            <td><label class="lbl">Subscription ID:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.SubscriptionID).HtmlAttributes(new { style = "width:70%;", tabindex = 11 })
+
+            </td>
+            <td><label class="lbl">Old Acct#:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.AccountNumber).HtmlAttributes(new { style = "width:70%;", tabindex = 14 })
+            </td>
+        </tr>
+        <tr>
+            <td><label class="lbl">Last Name:</label></td>
+            <td>
+                @Html.Kendo().TextBoxFor(x => x.LastName).HtmlAttributes(new { style = "width:70%;", tabindex = 3 })
+            </td>
+            <td><label class="lbl">State:</label></td>
+            <td colspan="2">
+                <input id="State" name="State"  style = "width:30%;" tabindex = 7 />
+                <label class="lbl">Zip:</label>
+                @Html.Kendo().TextBoxFor(x => x.ZipCode).HtmlAttributes(new { style = "width:20%;", tabindex = 8 })
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div>
+        @*<button type="submit" class="btn btn-blue2 k-button" value="Search">Search</button>*@
+        <button type="button" class="btn-blue2" id="btnSearch">Search</button>
+        <button type="button" class="btn-blue2" id="btnReset" value="Reset">Reset</button>
+    </div>
+</div>
+<br />

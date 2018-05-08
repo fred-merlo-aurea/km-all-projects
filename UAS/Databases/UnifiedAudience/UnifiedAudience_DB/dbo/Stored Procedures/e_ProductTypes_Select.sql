@@ -1,0 +1,9 @@
+﻿CREATE PROCEDURE [dbo].[e_ProductTypes_Select]
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	SELECT * From PubTypes WITH (NOLOCK) 
+	ORDER BY SortOrder ASC
+
+END

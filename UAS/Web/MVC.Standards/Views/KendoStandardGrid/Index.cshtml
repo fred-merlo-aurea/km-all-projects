@@ -1,0 +1,168 @@
+﻿
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>SQL -Server Kendo Grid</span>
+    </div>
+</div>
+<div id="SearchPanel" style="margin:20px auto;">
+    @Html.Partial("_searchPanel")
+</div>
+<div id="serverGrid">
+    @Html.Partial("_serverKendoGrid")
+    @Html.Partial("_serverGridPager")
+</div>
+<script>
+    var targetUrl = '@Url.Action("Read_Data", "KendoStandardGrid")';
+    var firstGridLaod = true;
+    $(document).ready(function () {
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value:20,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+    });
+    //Events - Grid Event - Grid DataBound where you can get all the filters , sorts and other properties for Grid
+    function onDataBound(arg) {
+        if (firstGridLaod) {
+
+            firstGridLaod = false;
+            SetPagerWidget("firstpage");
+
+        }
+    }
+    //Enents -Page number input changed.
+    $("#pagerInputPageNumber").on("change", function (e) {
+        RebindOnPageOrSizeChange()
+
+    });
+
+    //Events - Page Size input changed
+    $("#ddPageSize").on("change", function (e) {
+        RebindOnPageOrSizeChange()
+
+    });
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data)
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        SetPagerWidget("firstpage");
+        firstGridLaod = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#grid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        })
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function filterGridParams() {
+
+        return {
+            Title: $("#UserTitle").val(),
+            PageNumber: $("#pagerInputPageNumber").val(),
+            PageSize: $("#ddPageSize").val()
+        };
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+
+        if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+            SetPagerWidget($("#pagerInputPageNumber").val());
+            var data = filterGridParams();
+            ReBindGrid(data);
+        }
+        else {
+            showMessage({
+                type: 'Error',
+                text: 'Please enter valid page number.',
+                autoClose: false
+            });
+            
+        } 
+
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#grid").data("kendoGrid");
+        if(grid.dataSource.view()[0]){
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalRecordCounts);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#pagerInputPageNumber").val());
+        var lastpage = parseInt(totalrecordCount / pagesize) + 1;
+
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+
+    }
+
+</script>

@@ -1,0 +1,51 @@
+﻿<Window x:Class="AMS_Desktop.Windows.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Icon="..\Unified_24.ico"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="MainWindow" Width="370" Height="430" WindowStyle="None" ScrollViewer.VerticalScrollBarVisibility="Disabled" WindowStartupLocation="CenterScreen" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown_1" Loaded="Window_Loaded">
+    <!--Title="Login" Height="360" Width="400" WindowStartupLocation="CenterScreen" Icon="..\Unified_24.ico">-->
+    <telerik:RadBusyIndicator Name="busyIcon">
+        <Border BorderBrush="#FFB1B1B4" BorderThickness="5,5,5,5" >
+            <DockPanel>
+                <Grid Name="HomeTop" DockPanel.Dock="Top" Style="{DynamicResource HomeTopGrid}" Height="163">
+                    <Image Source="/ImageLibrary;Component/Images/ApplicationLogos/FinalamslogoBLUE.png" VerticalAlignment="Bottom"  Style="{DynamicResource AMSLogoWindowHome}" />
+                </Grid>
+                <Grid x:Name="LayoutRoot" DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="Username" Grid.Row="0" Text="Username:" VerticalAlignment="Bottom" Margin="58.5,0,0,0" Style="{DynamicResource TextBlockLogin}" />
+                    <TextBox TabIndex="1" Name="tbUserName" Grid.Row="1" KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxLogin}" />
+                    <TextBlock x:Name="Password" Grid.Row="2" Text="Password:" VerticalAlignment="Bottom" Margin="58.5,0,0,0" Style="{DynamicResource TextBlockLogin}" />
+                    <PasswordBox TabIndex="2" Name="tbPassword" Grid.Row="3" HorizontalAlignment="Center" KeyUp="PasswordBox_KeyUp" Style="{DynamicResource PasswordLogin}" GotKeyboardFocus="tbPassword_GotKeyboardFocus" />
+                    <TextBlock Name="btnForgotPassword" Grid.Row="4" HorizontalAlignment="Center" Text="Forgot Password?" MouseDown="btnForgotPassword_Click" Style="{DynamicResource TextBlockLink}" />
+                    <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button TabIndex="3" Name="btnLogin" Content="Submit" Click="btnLogin_Click" HorizontalAlignment="Right" Margin="0,0,15,0" VerticalAlignment="Bottom" Width="75" IsCancel="True"></Button>
+                        <Button TabIndex="4" Name="btnCancel" Content="Cancel" Click="btnCancel_Click" HorizontalAlignment="Right" Margin="0,0,15,0" VerticalAlignment="Bottom" Width="75" IsCancel="True"></Button>
+                    </StackPanel>
+                    <StackPanel Grid.Row="7" Orientation="Horizontal"  Margin="0,0,0,2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="185"/>
+                                <ColumnDefinition Width="185"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="DimGray" Padding="2" Name="lbVersion"></Label>
+                            <Label Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="DimGray" Padding="2" Name="lbConn"></Label>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </DockPanel>
+        </Border>
+    </telerik:RadBusyIndicator>
+</Window>

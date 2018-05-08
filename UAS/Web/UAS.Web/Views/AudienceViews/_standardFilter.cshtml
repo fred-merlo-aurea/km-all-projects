@@ -1,0 +1,258 @@
+﻿@model UAS.Web.Models.UAD.Filter.StandardFilter
+<style>
+    .stdfilters{
+        font-family:Arial;
+        font-size:x-small;
+        text-transform:uppercase;
+        height:100px;
+       
+    }
+    td{
+        padding:0;
+        margin:0;
+    }
+   
+</style>
+
+<div class="standardFilterPanel">
+   
+        <table border="0" bordercolor="#cccccc" cellpadding="1" cellspacing="1" width="100%">
+            <tr style="background-color: #eeeeee; color: White; padding: 2px 0px 2px 0px; height: 20px;">
+                <td valign="middle" align="center"><a>Geo Code</a></td>
+                <td valign="middle" align="center"><a>State</a></td>
+                <td valign="middle" align="center"><a>Country Regions</a></td>
+                <td valign="middle" align="center"><a>Country</a></td>
+                <td valign="middle" align="center"><a>GeoLocation</a></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+
+                <td valign="top" align="center">
+                    @Html.ListBox("lstGeoCode",Model.regionGroupsList, new { @class = "stdfilters",style= "width:140px;" })
+                </td>
+                <td valign="top" align="center">
+                    @Html.ListBox("lstRegion", Model.regionList, new { @class = "stdfilters", style = "width:70px;" })
+                   
+                </td>
+                <td valign="top" align="center">
+                    @Html.ListBox("lstArea", Model.areaList, new { @class = "stdfilters", style = "width:140px;" })
+                  
+                </td>
+                <td valign="top" align="center">
+                    @Html.ListBox("lstCountry", Model.countryList, new { @class="stdfilters", style = "width:140px;" })
+                   
+                </td>
+                <td width="16%">
+                    <table border="0" cellspacing="1" cellpadding="0" width="100%">
+                        <tr>
+                            <td style="font-size: x-small" width="45%" align="right">
+                                COUNTRY&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <select ID="drpCountry" style="width:80px;height:20px;">
+                                    <option Value="UNITED STATES">United States</option>
+                                    <option Value="CANADA">Canada</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: x-small" width="45%" align="right">
+                                ZIP CODE&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @(Html.Kendo().MaskedTextBox().Name("ZipCode").Mask("00000-0000").HtmlAttributes(new { style = "width:80px;height:20px;", id = "ZipCode" }))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: x-small" align="right">
+                                RANGE (MIN)&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @(Html.Kendo().TextBox().Name("Range").HtmlAttributes(new { style = "width:40px;height:20px;", id = "RangeMin" }))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: x-small" align="right">
+                                RANGE (MAX)&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @(Html.Kendo().TextBox().Name("Range").HtmlAttributes(new { style = "width:40px;height:20px;", id = "RangeMax" }))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: xx-small" align="middle" colspan="2">
+                                Range (0 to 600 miles)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+            <tr>
+                <td valign="top" colspan="11">
+                    <table border="0" bordercolor="#cccccc" cellpadding="2" cellspacing="1" width="100%">
+                        <tr style="background-color: #5783BD; color: White; padding: 0px 0px 0px 0px; height: 20px;">
+                            <td class="labelsmall" style="color: white" colspan="5" align="center">
+                                <b>Contact Fields </b>
+                            </td>
+                            <td class="labelsmall" style="color: white"  colspan="7" align="center">
+                                <b>Permissions</b>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr style="background-color: #eeeeee; color: #5783BD; padding: 2px 0px 2px 0px; height: 20px;">
+                            <td align="center">
+                                <b>Email</b>
+                            </td>
+                            <td align="center">
+                                <b>Phone</b>
+                            </td>
+                            <td align="center">
+                                <b>Fax</b>
+                            </td>
+                            <td align="center">
+                                <b>Media</b>
+                            </td>
+                            <td align="center">
+                                <b>GeoLocated</b>
+                            </td>
+                            <td align="center">
+                                <b>Mail</b>
+                            </td>
+                            <td align="center">
+                                <b>Fax</b>
+                            </td>
+                            <td align="center">
+                                <b>Phone</b>
+                            </td>
+                            <td align="center">
+                                <b>Other Products</b>
+                            </td>
+                            <td align="center">
+                                <b>3rd Party</b>
+                            </td>
+                            <td align="center">
+                                <b>Email Renew</b>
+                            </td>
+                            <td align="center">
+                                <b>Text</b>
+                            </td>
+                            <td align="center">
+                                <b>Email Status</b>
+                            </td>
+
+                        </tr>
+                        <tr style="padding: 2px 0px 2px 0px; height: 20px;">
+                            <td align="center" valign="top">
+                                
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("ct_email")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text="Yes",Value="1"}, new SelectListItem() { Text = "No", Value = "0" } })
+                                  .HtmlAttributes(new { style="width:90px;"})
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("ct_phone")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } })
+                                  .HtmlAttributes(new { style = "width:90px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("ct_fax")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } })
+                                  .HtmlAttributes(new { style = "width:90px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("ct_media")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "PRINT", Value = "A" },
+                                      new SelectListItem() { Text = "DIGITAL", Value = "B" } ,
+                                  new SelectListItem() { Text = "BOTH", Value = "C" },
+                                  new SelectListItem() { Text = "OPT OUT", Value = "0" }})
+                                  .HtmlAttributes(new { style = "width:90px;" })
+                                )
+                               
+
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("ct_geolocated")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_Mail")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" },
+                                      new SelectListItem() { Text = "No", Value = "0" },
+                                   new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_Fax")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" },
+                                      new SelectListItem() { Text = "No", Value = "0" },
+                                   new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_Phone")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" },
+                                      new SelectListItem() { Text = "No", Value = "0" } ,
+                                    new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_OtherProducts")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" },
+                                      new SelectListItem() { Text = "No", Value = "0" },
+                                   new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_ThirdParty")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" }
+                                  , new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                            )
+                        </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_EmailRen")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" },
+                                   new SelectListItem() { Text = "Blank", Value = "" } })
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                            )
+                        </td>
+                            <td align="center" valign="top">
+                                @(Html.Kendo().MultiSelect()
+                                  .Name("perm_Text")
+                                  .BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Yes", Value = "1" },
+                                      new SelectListItem() { Text = "No", Value = "0" },
+                                  new SelectListItem() { Text = "Blank", Value = "" }})
+                                  .HtmlAttributes(new { style = "width:75px;" })
+                                )
+                            </td>
+                            <td align="center" valign="top">
+                             
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+ 
+</div>

@@ -1,0 +1,18 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+<script id="formruleoverwritedata-template" type="text/x-kendo-template">   
+    <div id="Rules_#=RuleNum#_OverwritePostValue_#=Num#" name="Rules[#=RuleNum#].OverwritePostValue[#=Num#].OverwriteDataValue" class="class_row_formruleoverwritedata">
+        <input type="hidden"value="#=Num#" name="Rules[#=RuleNum#].OverwritePostValue.Index"/>
+            <ul class="inline">
+                   <li class="formfield">  @Html.Kendo().DropDownList().Name(GetName<OverwriteDataValueModel>("Rules[#=RuleNum#].OverwritePostValue[#=Num#]", x => x.FormField)).HtmlAttributes(new { id = "#=FormattedOverwriteId#__FormField" }).BindTo((IEnumerable<KMModels.ControlModel>)ViewBag.SubVisibleControls).DataTextField("FieldLabel").DataValueField("Id").ToClientTemplate()</li>
+                   <li class="value">@Html.Kendo().TextBox().Name(GetName<OverwriteDataValueModel>("Rules[#=RuleNum#].OverwritePostValue[#=Num#]", x => x.Value)).HtmlAttributes(new { id = "#=FormattedOverwriteId#__Value" }).ToClientTemplate()</li>
+                   <li class="acts">
+                    @(Html.Kendo().Button().Content("Delete<i class='km-icon icon-kmcustom-delete'></i>").Name("Rules_#=RuleNum#_OverwritePostValue_#=Num#_OverDeleteBtn").HtmlAttributes(new { @class = "OverDeleteBtnClass btn btn-blue3", type = "button", id = "Rules_#=RuleNum#_OverwritePostValue_#=Num#_OverDeleteBtn" })
+                                         .ToClientTemplate())
+                </li>
+            </ul>
+        </div>
+</script>
+
+

@@ -1,0 +1,1 @@
+<%@ Page language="c#" Inherits="ecn.communicator.engines.SO_subscribe" Codebehind="SO_subscribe.aspx.cs" %>

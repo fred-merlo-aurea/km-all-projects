@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[StateCountry] (
+    [STATE_NAME] VARCHAR (255) NULL,
+    [STATE_ABR]  VARCHAR (255) NULL,
+    [COUNTRY]    VARCHAR (255) NULL
+);
+

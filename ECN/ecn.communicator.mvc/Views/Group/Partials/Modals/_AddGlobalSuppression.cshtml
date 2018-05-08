@@ -1,0 +1,81 @@
+﻿@using KMEnums
+<script type="text/javascript">
+    function AddEmailsToGlobal() {
+        clearValidationErrorMessages();
+        var lastControlError = [];
+        if ($('#AddEmailsGlobal').val() == "") {
+            lastControlError.push({ name: "AddEmailsGlobal", message: "Please enter a value for Emails", label: "", isKendo: false });
+            setValidationClient(lastControlError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddGlobalSuppression", "Group")",
+                data: { emailAddressToAdd: $('#AddEmailsGlobal').val() },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $('#AddEmailsGlobal').val("");
+                        $("#divEmailsAddedGlobalReport").html('<h3>RESULTS:</h3>' + response[1]);
+                        $("#channelGlobalGridDiv").html(response[2]);
+                        $("#CloseGlobal").text('Close');
+
+                    }
+                    else {
+                        CloseAddGlobal();
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+
+    function CloseAddGlobal()
+    {
+        clearValidationErrorMessages();
+        var win = $("#AddGlobalSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+</script>
+<div class="wrapper modal modaladdnewform" style="padding-left:25px; margin-top: 20px; width: 550px; display:inline-block;">
+    <fieldset class="no-border">
+        <legend>Add Emails to Global Suppression</legend>
+        <div class="formbox">
+            <div class="subtitle" style="width:500px;">
+                Add Emails to be suppressed across all Channels. <br />
+                Use comma "," (or) Press Enter for separating email addresses.
+            </div>
+            <div class="formitem">
+                @Html.TextArea("AddEmailsGlobal", "", new { style = "width:500px; height:300px; font-size: 13px; font-family: Arial;" })
+            </div>
+        </div>
+        <div class="wrapper modal modaladdnewform" style="width: 500px; display: block; vertical-align:top;">
+            <div class="formbox">
+                <div class="formitem formiteminline" id="divEmailsAddedGlobalReport">
+                </div>
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("AddGlobal").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "AddEmailsToGlobal()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("CloseGlobal").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "CloseAddGlobal()" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>

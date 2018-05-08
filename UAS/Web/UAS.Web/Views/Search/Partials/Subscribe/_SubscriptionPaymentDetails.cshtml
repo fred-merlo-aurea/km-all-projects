@@ -1,0 +1,66 @@
+﻿<div>
+    <table>
+        <tbody>
+            <tr>
+                <td><label>Subscription Price:</label></td>
+                <td><input kendo-numeric-text-box k-min="0" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.Amount" /></td>
+                <td><label>Amount Paid:</label></td>
+                <td><input kendo-numeric-text-box k-min="0" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.AmountPaid"></td>
+                <td><label>Pay Date:</label></td>
+                <td><input kendo-date-picker ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.PaidDate" id="PaidDate"/></td>
+            </tr>
+            <tr>
+                <td><label>Payment Method:</label></td>
+                <td>
+                    <select kendo-drop-down-list k-data-text-field="'Text'" id="paymentTypeID"
+                            k-data-value-field="'Value'"
+                            k-data-source="subscrberViewModel.entlst.PayMentTypeSelectList" ng-model="subscrberViewModel.MySubscriptionPaid.PaymentTypeID"></select>
+                </td>
+                <td><label>Copies:</label></td>
+                <td><input kendo-numerictextbox ng-change="PaymentDetailsChange()" value="1" k-min="1" ng-disabled="true" ng-model="subscrberViewModel.PubSubscription.Copies"></td>
+                <td><label>Start Issue:</label></td>
+                <td><input kendo-date-picker ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.StartIssueDate" id="StartIssueDate" /></td>
+            </tr>
+            <tr>
+                <td ng-show="ShowCommonDetails"><label>Name:</label></td>
+                <td ng-show="ShowCommonDetails"><input type="text" class="k-textbox" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.CCHolderName" /></td>
+                <td><label>Term:</label></td>
+                <td><input kendo-numeric-text-box k-min="0" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.Term" /></td>
+                <td><label>Expire Date:</label></td>
+                <td><input kendo-date-picker ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.ExpireIssueDate" id="ExpireIssueDate" /></td>
+            </tr>
+            <tr>
+                <td ng-show="ShowCheckDetails"><label>Check Number:</label></td>
+                <td ng-show="ShowCheckDetails"><input type="text" class="k-textbox" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.CheckNumber" /></td>
+                <td><label>Frequency:</label></td>
+                <td><input kendo-numeric-text-box k-min="0" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.Frequency" /></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr ng-show="ShowCreditCardDetails">
+                <td><label>Credit Card Last 4:</label></td>
+                <td>
+                    <input kendo-masked-text-box ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.CCNumber" k-mask="'0000'" />
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr ng-show="ShowCreditCardDetails">
+                <td><label>Credit Card Type:</label></td>
+                <td>
+                    <input id="creditCardType" ng-model="subscrberViewModel.MySubscriptionPaid.CreditCardTypeID" />
+                    @*<select kendo-drop-down-list k-data-text-field="'Text'" id="creditCardType"
+                        k-data-value-field="'Value'"
+                        k-data-source="subscrberViewModel.entlst.CreditCardTypeSelectList" ng-change="PaymentDetailsChange()" ng-model="subscrberViewModel.MySubscriptionPaid.CreditCardTypeID"></select>*@
+
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr ng-show="ShowCreditCardDetails">
+                <td><label>CC Year/Month:</label></td>
+                <td>
+                    <input id="creditCardMonth" ng-model="subscrberViewModel.MySubscriptionPaid.CCExpirationMonth" />/<input id="creditCardYear" ng-model="subscrberViewModel.MySubscriptionPaid.CCExpirationYear" />
+                </td>
+                <td colspan="4"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

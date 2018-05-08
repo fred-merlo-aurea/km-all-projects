@@ -1,0 +1,250 @@
+﻿@model UAD.DataCompare.Web.Models.FileDetails
+@{
+    ViewBag.Title = "Add New File";
+}
+
+@using (Html.BeginForm("ImportFileMapping", "Datacompare", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+        
+        <div>
+            <div class="gridttl">
+                <div class="gridttlbox">
+                    <span>@ViewBag.Title</span>
+                </div>
+            </div>
+            <input type="hidden" name="steps" id="steps" value="step0" />
+            
+            @(Html.Kendo().TabStrip()
+           .Name("Tabs")
+           .Items(tabstrip =>
+           {
+               tabstrip.Add().Text("File Details")
+                  .Selected(true)
+                  .Content(m => Html.Partial("Partials/ImportFileMapping/_ImportFile", m));
+
+               tabstrip.Add().Text("Map Columns")
+                   .Enabled(false)
+                   .Content(m => Html.Partial("Partials/ImportFileMapping/_SaveMpping", m));
+
+           })
+
+
+            )
+
+        </div>
+        }
+@(Html.Kendo().Window().Name("notification")
+    .Title("Notification")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(600)
+    .Scrollable(false)
+)
+
+<script type="text/x-kendo-template" id="statusUpdated">
+    <div class="wrapper modal modalsave">
+        <fieldset>
+            <legend>Success:</legend>
+            <p>
+                <h3>#= data #</h3>
+            </p>
+        </fieldset>
+    </div>
+</script>
+     <script>
+
+            var tabStrip = $("#Tabs").kendoTabStrip().data("kendoTabStrip");
+            var isKMStaff;
+            $(document).ready(function () {
+
+                tabStrip= $("#Tabs").data("kendoTabStrip");
+                var ImportSuccess=  @Html.Raw(Json.Encode(ViewBag.ImportSuccess));
+                var MappingSuccess=  @Html.Raw(Json.Encode(ViewBag.MappingSuccess));
+                var FieldSaveSuccess=  @Html.Raw(Json.Encode(ViewBag.FieldSaveSuccess));
+                var isModelValid = @Html.Raw(Json.Encode(ViewData.ModelState.IsValid));
+                isKMStaff =@Html.Raw(Json.Encode(Model.isKMStaff));
+                if(isModelValid){
+                    $("#ErrorNotificationDiv").hide();
+                }
+                else{
+                    $("#ErrorNotificationDiv").show();
+                }
+
+                $('.previewdetails').hide();
+
+                var importbillable = $("#IsImportBillable").val();
+                if(importbillable)
+                {
+                    if (importbillable.toLowerCase() == "no") {
+                        $("#trnotes").show();
+                    }
+                    else {
+                        $("#trnotes").hide();
+                    }
+                }
+
+                //$("#IsImportBillable").on("change", function () {
+                //    var importbillable = $(this).val();
+                //    if (importbillable.toLowerCase() == "no") {
+                //        $("#notes").show();
+                //    }
+                //    else {
+                //        $("#notes").hide();
+                //    }
+                //});
+
+                if(MappingSuccess){
+                    var message ="Columns are available to map. To Delete the mapping select Delete from dropdown.";
+                    showNotification(message);
+                    tabStrip.enable(tabStrip.tabGroup.children().eq(1));
+                    tabStrip.select(tabStrip.tabGroup.children().eq(1));
+                }
+                else if(FieldSaveSuccess){
+
+                    var message ="Field Mapping has been saved successfully.";
+                    if(importbillable){
+                        message = "The data compare file you mapped has been matched against your database and successfully saved. "
+                        message += "This file is now available within your unified audience database for viewing or additional comparison. "
+                        message += "A pending charge is currently listed on the view pricing page and will be billed after 2 weeks if the data comparison file has not been used. "
+                        message += "Downloading a file using segmentation by brand or product will update the amount due  and trigger the appropriate invoice."
+                    }
+                    showNotification(message)
+                    tabStrip.enable(tabStrip.tabGroup.children().eq(1));
+                    tabStrip.select(tabStrip.tabGroup.children().eq(0));
+                }
+                else if(ImportSuccess){
+                    var message ="Field Mapping has been saved successfully. File is imported to FTP location.";
+                     if(importbillable){
+                         message = "The data compare file you mapped has been matched against your database and successfully saved. "
+                         message += "This file is now available within your unified audience database for viewing or additional comparison. "
+                         message += "A pending charge is currently listed on the view pricing page and will be billed after 2 weeks if the data comparison file has not been used. "
+                         message += "Downloading a file using segmentation by brand or product will update the amount due  and trigger the appropriate invoice."
+                     }
+                     showNotification(message);
+                     tabStrip.enable(tabStrip.tabGroup.children().eq(1));
+                     tabStrip.select(tabStrip.tabGroup.children().eq(0));
+                }
+
+            });
+
+         function showNotification(meesage){
+             var notesTemplate = kendo.template($("#statusUpdated").html());
+             var wnd = $("#notification").data("kendoWindow");
+             wnd.content(notesTemplate(meesage));
+             wnd.center().open();
+         }
+
+           function validateEmail(trim) {
+                var group_members = $("#NotificationEmail").val();
+                var member_split = group_members.split(';');
+
+                var valid = true;
+                for (var n = 0; n < member_split.length; n++) {
+                    var member_info = trim ? member_split[n].trim() : member_split[n];
+                    var validRegExp = /^\w+((-\w+)|(\.\w+))*\@@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+
+                    if (member_info.search(validRegExp) === -1) {
+                        valid = false;
+                        break;
+                    }
+                }
+                return valid;
+           }
+
+           function checkNotes(){
+               var importbillable = $("#IsImportBillable").val();
+               if(importbillable)
+               {
+                   var notes = $("#Notes").val();
+                   if (importbillable.toLowerCase() == "no") {
+                       if(notes!=""){
+
+                           return true;
+                       }
+                       else{
+
+                           return false;
+                       }
+                   }
+                   else {
+                       return true;
+                   }
+               }
+               else {
+                   return false;
+               }
+           }
+           function ValidateModel(){
+               var checknotes =false;
+               if(isKMStaff){
+                   checknotes= checkNotes();
+               }else{
+                   checknotes=true;
+               }
+               var validEmail = validateEmail(true);
+               if(validEmail && checknotes) {
+                   $("#lblerrormessage").text("");
+                   $("#lblerrormessage").hide();
+                   $("#dverrormessage").hide();
+                   return true;
+               }
+               else{
+                   var errmsg="";
+                   if(!validEmail){
+                       errmsg ="Please enter valid email addresses.";
+                   }
+                   else{
+                       errmsg ="Notes cannot be blank."
+                   }
+                   $("#lblerrormessage").text(errmsg)
+                   $("#lblerrormessage").show();
+                   $("#dverrormessage").show();
+                   return false;
+
+               }
+           }
+           function MoveNext(e) {
+               if(ValidateModel()){
+                   $("#steps").val("Mapcolumns");
+                        return true;
+                   }
+                   else{
+
+                       tabStrip.disable(tabStrip.tabGroup.children().eq(1));
+                       tabStrip.select(tabStrip.tabGroup.children().eq(0));
+                       e.preventDefault();
+                       return false;
+                   }
+
+               }
+
+           function MovePrevious() {
+
+               tabStrip.select(tabStrip.tabGroup.children().eq(0));
+               return false;
+           }
+            function SaveMapping(e) {
+                if (ValidateModel()) {
+                    $("#steps").val("Savemapping");
+                    return true;
+                }
+                else {
+
+                    return false;
+                }
+            }
+            function SaveAndImportMapping(e) {
+
+                if (ValidateModel()) {
+                    $("#steps").val("SaveAndImport");
+                    return true;
+                }
+                else {
+
+                    return false;
+                }
+            }
+        </script>
+
+       

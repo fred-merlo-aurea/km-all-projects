@@ -1,0 +1,67 @@
+
+<html>
+<head>
+
+</head>
+<body>
+</body>
+
+<script type='text/javascript' src='http://webservices.ecn5.com/ECN_jQuery.min.js'></script>
+<script type='text/javascript'> 
+function getParamValue(paramName)
+{
+    var url = window.location.search.substring(1); //get rid of "?" in querystring
+    var qArray = url.split('&'); //get key-value pairs
+    for (var i = 0; i < qArray.length; i++) 
+    {
+        var pArr = qArray[i].split('='); //split key and value
+        if (pArr[0] == paramName) 
+            return pArr[1]; //return value
+    }
+}
+
+function searchForCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    var email = null;
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ')
+            c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0)
+            email = c.substring(nameEQ.length, c.length);
+    }
+    return email;
+}
+
+$(document).ready(function () {
+    var baseChannelID = getParamValue('baseChannelID');
+	var email = searchForCookie(baseChannelID + "_ECNEmailAddress");
+	if (email != null)
+	{
+		var qArray = document.referrer.split('?')
+		if (qArray[1])
+			window.location.href = document.referrer + '&emailAddress=' + email;
+		else
+			window.location.href = qArray[0] + '?emailAddress=' + email;
+	}
+	else // Cookie not found
+	{
+		var qArray = document.referrer.split('?')
+		if (qArray[1]) {
+			var newArr = '';
+			var qArray2 = qArray[1].split('&');
+			for (var i = 0; i < qArray2.length; i++) 
+			{
+				var pArr = qArray2[i].split('='); // Split key and value
+				if (pArr[0] != 'dtc') 
+					newArr = newArr + qArray2[i] + '&';
+			}
+			window.location.href = qArray[0] + '?' + newArr + 'dtc=2'; 
+		}
+		else
+			window.location.href = qArray[0] + '?dtc=2';
+	}
+});
+</script>
+</html>

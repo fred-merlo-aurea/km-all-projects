@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D7F7592D-AD6B-4AB0-B649-32C53E31A81B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AUT.ECN.Accounts.Tests</RootNamespace>
+    <AssemblyName>AUT.ECN.Accounts.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Albedo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=179ef6dd03497bbd, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Albedo.2.0.0\lib\net35\Albedo.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoFixture.4.2.1\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.AutoMoq, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoFixture.AutoMoq.4.2.1\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.Idioms, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoFixture.Idioms.4.2.1\lib\net452\AutoFixture.Idioms.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.NUnit3, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoFixture.NUnit3.4.2.1\lib\net452\AutoFixture.NUnit3.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.InteropServices.4.3.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoLoginTest.cs" />
+    <Compile Include="Classes\DateRangeTest.cs" />
+    <Compile Include="Classes\PayFlowPro\ParaListGeneratorTest.cs" />
+    <Compile Include="Classes\PayFlowPro\PayFlowProCreditCardProcessorTest.cs" />
+    <Compile Include="Classes\PayFlowPro\ProfileTest.cs" />
+    <Compile Include="Classes\PayFlowPro\ResponseParserTest.cs" />
+    <Compile Include="Classes\PayFlowPro\TransactionTest.cs" />
+    <Compile Include="Engines\QuoteApprovalTest.cs" />
+    <Compile Include="GlobalTest.cs" />
+    <Compile Include="Helpers\DataFunctionsAdapterTest.cs" />
+    <Compile Include="Includes\LoginTest.cs" />
+    <Compile Include="Includes\ThumbnailTest.cs" />
+    <Compile Include="LoginTest.cs" />
+    <Compile Include="Main\Channels\BaseChannelEditorTest.cs" />
+    <Compile Include="Main\Channels\ChannelsEditorTest.cs" />
+    <Compile Include="Main\Channels\TemplateseditorTest.cs" />
+    <Compile Include="Main\Channels\TemplatesTest.cs" />
+    <Compile Include="Main\Customers\CustomerEntryResultTest.cs" />
+    <Compile Include="Main\Customers\LicenseDetailTest.aspxTest.cs" />
+    <Compile Include="Main\Customers\LicenseEdit.aspxTest.cs" />
+    <Compile Include="Main\Digital\EditEditionTest.cs" />
+    <Compile Include="Main\Notification\NotificationsSetupTest.cs" />
+    <Compile Include="Main\Reports\BillingReport.aspxTest.cs" />
+    <Compile Include="Main\Reports\BlastStatusTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportAccountIntensityTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportBillingNotesTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportBillingReportTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportChannelLookTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportDigitalEditionTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportDiskMonitorTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportECNTodayTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportIRKMLogoClickTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportKMLogoClickTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportNewCustomerTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportnewUserTest.cs" />
+    <Compile Include="Main\Reports\CrystalReport\ReportNoUsageTest.cs" />
+    <Compile Include="Main\Reports\DigitalEditionTest.cs" />
+    <Compile Include="Main\Reports\DiskSpaceTest.cs" />
+    <Compile Include="Main\Reports\EcnTodayTest.cs" />
+    <Compile Include="Main\Reports\EmailDirectReportTest.cs" />
+    <Compile Include="Main\Reports\TotalBlastsForDayTest.cs" />
+    <Compile Include="Main\Users\EditUserProfileTest.cs" />
+    <Compile Include="Main\Users\UserDetailTest.cs" />
+    <Compile Include="MasterPages\AccountMenuFunctionsTest.cs" />
+    <Compile Include="MasterPages\Accounts.MasterTest.cs" />
+    <Compile Include="MasterPages\AccountsHomePage.MasterTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core.Utility\Core.Utilities.csproj">
+      <Project>{aac306a3-a54b-4e6d-b5e7-0170acdffe26}</Project>
+      <Name>Core.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.accounts\ecn.accounts.csproj">
+      <Project>{12cd8f7a-c08b-46a3-8e12-4c1bd5d8a5b2}</Project>
+      <Name>ecn.accounts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.FormDesigner\Projects\KMModels\KMModels.csproj">
+      <Project>{35bfa735-52d0-4d62-9db4-ffb654aba470}</Project>
+      <Name>KMModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.FormDesigner\Projects\KMSite\KMSite.csproj">
+      <Project>{347570d6-a43f-4e0a-ac0d-e1d48d2308c6}</Project>
+      <Name>KMSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1bce78e7-dd4d-48bc-85c3-d77fce995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EmailMarketing.API\EmailMarketing.API.csproj">
+      <Project>{c9d0d7a6-20cc-494f-99c0-e2e90bad0c7c}</Project>
+      <Name>EmailMarketing.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EmailMarketing.Site\EmailMarketing.Site.csproj">
+      <Project>{69f494ae-7a74-44e3-8039-de2b5bee773b}</Project>
+      <Name>EmailMarketing.Site</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AUT.ConfigureTestProjects\AUT.ConfigureTestProjects.csproj">
+      <Project>{05cd2711-9d4c-45e6-ae9f-730d15b31706}</Project>
+      <Name>AUT.ConfigureTestProjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\packages\NETStandard.Library.2.0.2\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.2\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\NETStandard.Library.2.0.2\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NETStandard.Library.2.0.2\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+</Project>

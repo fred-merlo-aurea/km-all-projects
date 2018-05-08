@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>UAS_DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{a42b5e90-77a0-407c-a919-d8a4916de154}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>UAS_DB</RootNamespace>
+    <AssemblyName>UAS_DB</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Comparisons" />
+    <Folder Include="dbo\Functions" />
+    <Folder Include="dbo\Assemblies" />
+    <Folder Include="Assemblies\" />
+    <Folder Include="Update Scripts" />
+    <Folder Include="Update Scripts\2015_Q1" />
+    <Folder Include="Update Scripts\2015_Q2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\SourceFile.sql" />
+    <Build Include="dbo\Tables\TransformDataMap.sql" />
+    <Build Include="dbo\Tables\TransformationPubMap.sql" />
+    <Build Include="dbo\Tables\TransformJoin.sql" />
+    <Build Include="dbo\Tables\TransformSplit.sql" />
+    <Build Include="dbo\Tables\Transformation.sql" />
+    <Build Include="dbo\Tables\StateCountry.sql" />
+    <Build Include="dbo\Tables\StateAbr.sql" />
+    <Build Include="dbo\Tables\TransformationFieldMap.sql" />
+    <Build Include="dbo\Tables\ClientFTP.sql" />
+    <Build Include="dbo\Tables\DataMapping.sql" />
+    <Build Include="dbo\Tables\TransformAssign.sql" />
+    <Build Include="dbo\Tables\ClientCustomProcedure.sql" />
+    <Build Include="dbo\Tables\FieldMapping.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\Jason.Meier.sql" />
+    <Build Include="Security\justin.wagner.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_ByClientAndName.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformAssign_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMap_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMap_Delete_TransformDataMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformJoin_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformSplit_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationPubMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformAssign_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformJoin_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformSplit_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformAssign_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_DeleteFieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationPubMap_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMapping_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformSplit_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformJoin_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Select_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_IsDeleted.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_ClientID_IsDeleted.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationPubMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationPubMap_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Select_BySourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationPubMap_Delete_TransformationIDandPubID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataMapping_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientCustomProcedure_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientCustomProcedure_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientFTP_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientFTP_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_ClientID_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Select_FieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_ClientName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_ClientName.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_SearchClientFileMapping.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Delete_MappingBySourceFile.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformAssign_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Select_ByClientSourceFile.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformDataMap_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Delete_SourceFileByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformSplit_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformJoin_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_AssignedMappings_ByFieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientCustomProcedure_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientFTP_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataMapping_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Select_AssignedMappings.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Save.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Delete_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Delete_FieldMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_Delete_FieldMappingID.sql" />
+    <Build Include="dbo\Tables\FileLog.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileLog_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\job_RebuildIndexes.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\rpt_ClientFileLog_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_ClientFileLog_ClientID_LogDate.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_ClientFileLog_ClientID_StartDate_EndDate.sql" />
+    <Build Include="dbo\Stored Procedures\e_RelationalPubCode_Select_ClientID.sql" />
+    <Build Include="dbo\Tables\RelationalPubCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_RelationalPubCode_Select_ClientID_SpecialFileName.sql" />
+    <Build Include="dbo\Tables\TransformSplitTrans.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SplitTransform_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SplitTransform_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SplitTransform_Select_By_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SplitTransform_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimension_Delete_SourceFileID.sql" />
+    <Build Include="dbo\Functions\fn_Split.sql" />
+    <Build Include="dbo\Tables\AdHocDimension.sql" />
+    <Build Include="dbo\Tables\AggregateDimension.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimension_Select_AdHocDimensionGroupId.sql" />
+    <Build Include="dbo\Stored Procedures\e_AggregateDimension_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Delete_TransformationID.sql" />
+    <Build Include="dbo\Functions\Levenshtein_Distance.sql" />
+    <Build Include="dbo\Functions\RemoveDups.sql" />
+    <Build Include="dbo\Functions\DistinctList.sql" />
+    <Build Include="dbo\Functions\Remove_Dup_Entry.sql" />
+    <Build Include="dbo\Functions\getRow.sql" />
+    <Build Include="dbo\Functions\CamelCase.sql" />
+    <Build Include="dbo\Functions\fn_Levenshtein.sql" />
+    <Build Include="dbo\Stored Procedures\sp_IndexAnalysis.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\ADMS_Admin.sql" />
+    <Build Include="dbo\Tables\FieldMultiMap.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Select_FieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Select_ByFieldMultiMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Delete_MappingByFieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Delete_FieldMultiMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMultiMap_Delete_MappingBySourceFileID.sql" />
+    <Build Include="dbo\Tables\TransformationFieldMultiMap.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_TransformationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Delete_ByFieldMultiMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Delete_BySourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Delete_ByFieldMappingID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMultiMap_Delete_BySourceFileID_FieldMultiMapID.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_TransformationCount_clientID.sql" />
+    <Build Include="dbo\Functions\fn_Table_Date.sql" />
+    <Build Include="dbo\Tables\DQMQue.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Select_IsQued.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Select_IsQued_IsCompleted.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Save.sql" />
+    <Build Include="dbo\Tables\AdHocDimensionGroup.sql" />
+    <Build Include="dbo\Tables\AdHocDimensionGroupPubcodeMap.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroupPubcodeMap_Select_AdHocDimensionGroupId.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroupPubcodeMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select_ClientID_AdHocDimensionGroupName.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select_AdHocDimensionGroupId.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select_ClientID_SourceFileID_AdHocDimensionGroupName.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdHocDimensionGroup_Select_ClientID_SourceFileID.sql" />
+    <Build Include="dbo\Tables\UASBridgeECN.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Select_ClientID_IsQued_1.sql" />
+    <Build Include="dbo\Tables\Filter.sql" />
+    <Build Include="dbo\Tables\FilterDetail.sql" />
+    <Build Include="dbo\Tables\FilterExportField.sql" />
+    <Build Include="dbo\Tables\FilterSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\e_Table_Select.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Table_ExportData.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Tables\FilterDetailSelectedValue.sql" />
+    <Build Include="dbo\Tables\FilterGroup.sql" />
+    <Build Include="dbo\Stored Procedures\e_Filter_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterSchedule_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterExportField_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterDetailSelectedValue_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileRuleMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Filter_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterDetail_Select_FilterID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FilterDetailSelectedValue_Select_FilterDetailID.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileLog_Select_TopOne_ProcessCode.sql" />
+    <Build Include="dbo\Tables\DataCompareCostBase.sql" />
+    <Build Include="dbo\Tables\DataCompareCostClient.sql" />
+    <Build Include="dbo\Tables\DataCompareCostUser.sql" />
+    <Build Include="dbo\Tables\DataCompareView.sql" />
+    <Build Include="dbo\Tables\DataCompareDownload.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareCostBase_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareCostClient_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareCostUser_Select_UserId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Select_UserId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Select_SourceFileId.sql" />
+    <None Include="Update Scripts\2015_Q1\04292015_UpdateUAS.sql" />
+    <Build Include="dbo\Stored Procedures\e_FieldMapping_ColumnOrder_AutoReorder.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationReport_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationSequence_Select_NextSeqID_PublicationID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationSequence_Select_PublicationID.sql" />
+    <Build Include="dbo\Tables\DataCompareDownloadCostDetail.sql" />
+    <Build Include="dbo\Stored Procedures\dt_DataCompareResult_CreateSummaryReportFile.sql" />
+    <Build Include="dbo\Stored Procedures\e_Filter_Select.sql" />
+    <Build Include="dbo\Tables\PublicationReports.sql" />
+    <Build Include="dbo\Tables\PublicationSequence.sql" />
+    <Build Include="dbo\Stored Procedures\dc_LikeDemoInsertDetail.sql" />
+    <Build Include="dbo\Stored Procedures\dc_MatchDemoInsertDetail.sql" />
+    <Build Include="dbo\Stored Procedures\dc_LikeProfileInsertDetail.sql" />
+    <Build Include="dbo\Stored Procedures\dc_MatchProfileInsertDetail.sql" />
+    <Build Include="dbo\Stored Procedures\dc_SelectPremiumList.sql" />
+    <Build Include="dbo\Stored Procedures\dc_SelectStandardList.sql" />
+    <Build Include="dbo\Stored Procedures\dc_SelectCustomList.sql" />
+    <Build Include="dbo\Stored Procedures\dc_DataCompareUserLikeCriteria_Count.sql" />
+    <Build Include="dbo\Stored Procedures\dc_DataCompareUserMatchCriteria_Count.sql" />
+    <Build Include="dbo\Stored Procedures\dc_NoDataSelectList.sql" />
+    <Build Include="dbo\Stored Procedures\dc_NoDataInsertDetail.sql" />
+    <Build Include="dbo\Stored Procedures\o_FileLog_SelectDistinctProcessCodePerSourceFile.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileLog_Select_FileLog.sql" />
+    <Build Include="dbo\Tables\FileProcessingStat.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileProcessingStat_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileProcessingStat_Select_ProcessDate.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileProcessingStat_Select_DateRange.sql" />
+    <Build Include="dbo\Tables\SubGenQue.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_UpdateComplete.sql" />
+    <Build Include="dbo\Stored Procedures\e_DQMQue_Select_ProcessCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_FileLog_Select_ProcessCode.sql" />
+    <Build Include="dbo\Tables\AdmsLog.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ClientId_FileStart.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ClientId_FileNameExact.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ProcessCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateFileStatus.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateAdmsStep.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateProcessingStatus.sql" />
+    <Build Include="dbo\Tables\EngineLog.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_UpdateRefresh_EngineLogId.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_UpdateRefresh.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_UpdateIsRunning_EngineLogId.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_UpdateIsRunning.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateExecutionPoint.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateStatusMessage.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateOriginalCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateTransformedCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateDuplicateCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateFailedCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateFinalCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_EngineLog_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateFileEnd.sql" />
+    <Build Include="dbo\Tables\ECNsyncUAD.sql" />
+    <Build Include="dbo\Tables\ClientName.sql" />
+    <Build Include="Security\INTERN.sql" />
+    <Build Include="Security\Tod.Murray.sql" />
+    <Build Include="Security\Robert.Boettcher.sql" />
+    <Build Include="Security\Micah.Matheson.sql" />
+    <Build Include="Security\Luke.Juusola.sql" />
+    <Build Include="Security\kay.molencamp.sql" />
+    <Build Include="Security\Cody.Wagner.sql" />
+    <Build Include="Security\Charles.Vashaw.sql" />
+    <Build Include="Security\agustin.mendoza.sql" />
+    <Build Include="dbo\Stored Procedures\TableSpaceUsed.sql" />
+    <Build Include="dbo\Stored Procedures\sp_RebuildIndex.sql" />
+    <Build Include="dbo\Stored Procedures\job_getCircDataForADMS_by_GroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_ClientId_FileType.sql" />
+    <Build Include="dbo\Tables\DataCompareRun.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRun_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRun_Select_SourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRun_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRun_Select_UserId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Select_DcRunId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownload_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownload_Select_UserId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownload_Select_SourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadCostDetail_Select_DcDownloadId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownload_Select_DcViewId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownload_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareCostThirdParty_Select_ClientId.sql" />
+    <Build Include="dbo\Tables\DataCompareCostThirdParty.sql" />
+    <Build Include="dbo\Stored Procedures\job_DataCompare_CreateCostDetail.sql" />
+    <Build Include="dbo\Tables\RuleSet_File_Map.sql" />
+    <Build Include="dbo\Tables\RuleSet.sql" />
+    <Build Include="dbo\Tables\RuleSet_Rule_Map.sql" />
+    <Build Include="dbo\Tables\Rule.sql" />
+    <Build Include="dbo\Tables\RuleValue.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleSet_Select_System.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleSet_Select_SourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\o_Rule_Select_System.sql" />
+    <Build Include="dbo\Stored Procedures\o_Rule_Select_System_RuleSetId.sql" />
+    <Build Include="dbo\Stored Procedures\o_Rule_Select_RuleSetId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleValue_Select_RuleId_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleValue_Select_RuleValueId_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleSet_Select_SourceFileId_ExecutionPointId.sql" />
+    <Build Include="dbo\Tables\DataCompareRecordPriceRange.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRecordPriceRange_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareRecordPriceRange_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadFilterDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadFilterGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadField_Save.sql" />
+    <Build Include="dbo\Tables\DataCompareDownloadFilterGroup.sql" />
+    <Build Include="dbo\Tables\DataCompareDownloadField.sql" />
+    <Build Include="dbo\Tables\DataCompareDownloadFilterDetail.sql" />
+    <Build Include="dbo\Tables\DataCompareDownloadDetail.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_CleanUp.sql" />
+    <Build Include="dbo\Stored Procedures\o_DataCompareViewCost_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataComparePricingView_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadView_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\o_Rule_Select_SourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleValue_Select_SourceFileId_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\o_SourceFile_IsFileNameUnique.sql" />
+    <Build Include="dbo\Stored Procedures\o_DataCompare_GetCost.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateFinalCountsAfterProcessToLive.sql" />
+    <Build Include="dbo\Stored Procedures\o_TransformSplitInfo_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadFilterGroup_Select_DcDownloadId.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareDownloadFilterDetail_Select_DcFilterGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleValue_Select_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataCompareView_Delete_DcViewID.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ClientId_RecordSource_StartDate_EndDate.sql" />
+    <Build Include="dbo\Tables\RuleCondition.sql" />
+    <Build Include="dbo\Tables\RuleResult.sql" />
+    <Build Include="dbo\Tables\RuleField.sql" />
+    <Build Include="dbo\Tables\RuleFieldPredefinedValue.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_UpdateDimensionCounts.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleCondition_Delete.sql" />
+    <Build Include="dbo\Tables\RuleSetRuleOrder.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSet_Select_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\o_CustomRuleGrid.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleFieldPredefinedValue_SelectAll.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleField_SelectAll.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSet_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSet_Update_Name_IsGlobal.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleCondition_Save.sql" />
+    <Build Include="dbo\Stored Procedures\job_RuleField_Setup.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleFieldNeedValue.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSetFileMap_SaveFromFileMapperWizard.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSetFileMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Select_RuleId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleCondition_Select_RuleId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSetRuleOrder_Save.sql" />
+    <Build Include="dbo\Stored Procedures\o_CustomRule_RuleSetId.sql" />
+    <Build Include="dbo\Stored Procedures\o_IsRuleNameUnique.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSetRuleOrder_UpdateExecutionOrder.sql" />
+    <Build Include="dbo\Stored Procedures\job_RuleSet_Copy.sql" />
+    <Build Include="dbo\Stored Procedures\job_Rule_Copy.sql" />
+    <Build Include="dbo\Stored Procedures\job_Rule_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_IsDelete_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Select_SourceFileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformationFieldMap_Delete_TransformationFieldMapID.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleFieldPredefinedValue_Select_RuleFieldId.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Select_SourceFileIds.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleField_Select_ClientId_Field_IsActive_1.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleField_Select_ClientId_DataTable_Field_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleField_Select_RuleFieldId.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleFieldSelectListItem_ClientId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleResult_Save.sql" />
+    <Build Include="dbo\Stored Procedures\o_CustomRuleInsertUpdateNew_RuleId.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Paging_Count_FileType_Product_FileName.sql" />
+    <Build Include="dbo\Stored Procedures\e_SourceFile_Paging_FileType_Product_FileName.sql" />
+    <Build Include="dbo\Stored Procedures\e_AdmsLog_Select_ClientId_SourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\e_RuleSet_Select_SourceFileId_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\m_Rule_Get_ruleSetId_sourceFileId.sql" />
+    <Build Include="dbo\Stored Procedures\m_Update_Get_ruleId.sql" />
+    <Build Include="dbo\Stored Procedures\o_RuleSet_RuleSetName_Exists.sql" />
+    <Build Include="dbo\Stored Procedures\o_Rule_Select_RuleId.sql" />
+    <Build Include="dbo\Stored Procedures\o_CustomRule_RuleId.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Paging_Count_IsTemplate_IsActive_TransformationTypeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_Transformation_Paging_IsTemplate_IsActive_TransformationTypeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransformAssign_Delete.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Comparisons\Code_to_241.scmp" />
+    <None Include="Comparisons\241_to_Code.scmp" />
+    <None Include="dbo\Assemblies\UserFunctions.sql" />
+    <None Include="Assemblies\UserFunctions.dll" />
+    <None Include="2015_Q1_UAS_PostDeploy.sql" />
+    <None Include="Update Scripts\2015_Q2\05192015_UpdateUAS.sql" />
+    <None Include="UAS.tfignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="UAS_DB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UserFunctions">
+      <HintPath>Assemblies\UserFunctions.dll</HintPath>
+      <SqlAssemblyName>UserFunctions</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>SAFE</SqlPermissionSet>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,198 @@
+﻿<UserControl x:Class="WpfControls.RecordUpdate"              
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfControls"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" Loaded="LoadBulkRecordUpdates" Name="control" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="400" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="filterDetailsTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding DisplayName}" VerticalAlignment="Top" Margin="5" TextWrapping="Wrap"/>
+                <TextBlock Grid.Column="1" Text="{Binding SelectedCriteria}" Margin="10,5,5,5" TextWrapping="Wrap"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="changesAppliedTemplate">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding Column}" Margin="1,1,1,1" />
+                <TextBlock Text="=" Margin="0,1,0,1" />
+                <TextBlock Text="{Binding Answer}" Margin="1,1,1,1" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <TabControl>
+            <!--<TabItem Header="Detail" Foreground="White" FontSize="14.667" Width="100" BorderThickness="1" Height="23">
+                <DockPanel Margin="10">
+                    <StackPanel DockPanel.Dock="Right" Margin="10,0,0,0" Width="100">
+                        <Button Name="btnSave" Click="btnSave_Click" Margin="0,5" IsEnabled="False">Save</Button>
+                    </StackPanel>
+                    <telerik:RadGridView x:Name="grdPubSubscriptions" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Stretch" EditTriggers="CellClick"
+                        RowIndicatorVisibility="Collapsed" IsEnabled="True" ItemsSource="{Binding Path=ProductCollection}" IsFilteringAllowed="true"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsTabStop="True" 
+                        AutoGenerateColumns="True" ShowGroupPanel="False" CellEditEnded="grdPubSubscriptions_CellEditEnded" 
+                        ActionOnLostFocus="None" AutoGeneratingColumn="grdPubSubscriptions_AutoGeneratingColumn" />
+                </DockPanel>
+            </TabItem>-->
+            <TabItem Header="Bulk" Foreground="White" FontSize="14.667" Width="100" BorderThickness="1" Height="23">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#045DA4" Grid.ColumnSpan="2" Height="25" VerticalAlignment="Top"/>
+                    <TextBlock Foreground="White" Text="Record Update" FontWeight="SemiBold" Margin="5,5,0,0" VerticalAlignment="Top"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Issue: " Margin="15,2,2,2" VerticalAlignment="Center" Foreground="Black" FontWeight="SemiBold" />
+                        <telerik:RadComboBox Name="rcbIssues" Margin="2" Width="150" ItemsSource="{Binding issueList}" DisplayMemberPath="IssueName" SelectedValuePath="IssueId" SelectionChanged="rcbIssues_SelectionChanged" />
+                        <telerik:RadButton Name="btnGenerateFilters" Content="Generate Filters" Height="24" Width="150" FontWeight="Bold" FontSize="16" VerticalAlignment="Top" Margin="8,2,2,2"
+                                Click="btnGenerateFilters_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Margin="5" Grid.ColumnSpan="2" Orientation="Vertical">
+                        <telerik:RadGridView Name="grdBulkDetail" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True" IsFilteringAllowed="False"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" RowIndicatorVisibility="Collapsed"
+                                      SelectionMode="Single" Margin="5,10,5,10" ShowGroupPanel="False" ShowColumnFooters="True" ItemsSource="{Binding BulkRecordUpdates}">
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewColumn Width="3*" Header="Filters">
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadExpander Margin="2">
+                                                <telerik:RadExpander.Style>
+                                                    <Style TargetType="{x:Type telerik:RadExpander}">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsExpanded" Value="True">
+                                                                <Setter Property="Header" Value="Hide Filters" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsExpanded" Value="False">
+                                                                <Setter Property="Header" Value="Show Filters" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </telerik:RadExpander.Style>
+                                                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                                    <ItemsControl Name="icFilterDetails" ItemsSource="{Binding Filters}" ItemTemplate="{StaticResource filterDetailsTemplate}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Vertical" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                            </telerik:RadExpander>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                                <telerik:GridViewDataColumn Name="AppliedChanges" Width="120" MinWidth="115" Header="Applied Changes">
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Vertical">
+                                                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                    <ItemsControl Name="icChangesApplied" ItemsSource="{Binding ChangesAppliedDetails}" ItemTemplate="{StaticResource changesAppliedTemplate}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Vertical" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                                <telerik:RadButton Margin="2" Click="AppliedChanges_Click">
+                                                    <telerik:RadButton.Style>
+                                                        <Style TargetType="{x:Type telerik:RadButton}" BasedOn="{StaticResource DefaultButtonTelerik}">
+                                                            <Style.Setters>
+                                                                <Setter Property="Content" Value="Changes" />
+                                                            </Style.Setters>
+                                                        </Style>
+                                                    </telerik:RadButton.Style>
+                                                </telerik:RadButton>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewDataColumn>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding ActualCount}" Header="Actual Count" />
+                                <telerik:GridViewColumn Name="DesiredCount" Width="Auto" Header="Desired Count">
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Name="txtRecordCount" Margin="2" Text="{Binding Path=DesiredCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            </TextBox>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                                <telerik:GridViewColumn Name="Delete" Width="50" MinWidth="50" MaxWidth="50" Header="Delete">
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Name="imgFilterDelete" Source="/ImageLibrary;Component/Images/32/x_lowercase-red-32.png" Height="20" Width="20" MouseUp="Delete_BulkRecordUpdates">
+                                                <Image.Style>
+                                                    <Style TargetType="{x:Type Image}">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Cursor" Value="Hand" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                                <telerik:GridViewColumn Name="Update" Width="65" MinWidth="65" MaxWidth="65" Header="Update">
+                                    <telerik:GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <telerik:RadButton Margin="2" Click="Apply_BulkRecordUpdates">
+                                                <telerik:RadButton.Style>
+                                                    <Style TargetType="{x:Type telerik:RadButton}" BasedOn="{StaticResource DefaultButtonTelerik}">
+                                                        <Style.Setters>
+                                                            <Setter Property="Content" Value="Update" />
+                                                        </Style.Setters>
+                                                    </Style>
+                                                </telerik:RadButton.Style>
+                                            </telerik:RadButton>
+                                        </DataTemplate>
+                                    </telerik:GridViewColumn.CellTemplate>
+                                </telerik:GridViewColumn>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Vertical">
+                        <telerik:RadButton Name="btnDownloadDetails" Grid.Row="3" Grid.Column="1" Height="23" Margin="5" Content="Download Details" Click="btnDownloadDetails_Click"/>
+                        <telerik:RadButton Name="btnPreview" Visibility="Collapsed" Grid.Row="3" Grid.Column="1" Height="23" Margin="5" Content="Preview" Click="btnPreview_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="#FF559EDB" CornerRadius="4,4,0,0" Margin="1,0" Background="#FF559EDB" >
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="TextBlock.Foreground" Value="White"/>
+                                        <Setter TargetName="Border" Property="Background" Value="#FF045DA4"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+        </TabControl>
+    </Grid>
+</UserControl>

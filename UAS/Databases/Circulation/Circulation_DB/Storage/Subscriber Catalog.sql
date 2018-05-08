@@ -1,0 +1,4 @@
+﻿CREATE FULLTEXT CATALOG [Subscriber Catalog]
+    WITH ACCENT_SENSITIVITY = OFF
+    AUTHORIZATION [dbo];
+

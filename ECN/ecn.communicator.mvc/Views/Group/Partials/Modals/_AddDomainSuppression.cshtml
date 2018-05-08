@@ -1,0 +1,98 @@
+﻿@model ECN_Framework_Entities.Communicator.DomainSuppression
+@using KMEnums
+<script>    
+    function AddDomainSuppresion() {
+        clearValidationErrorMessages();
+        var lastControlError = [];
+        var domainRegex = new RegExp("(([a-zA-Z0-9-_]+)[\.]([a-zA-Z0-9]{1,}))$");
+        if ($('#Domain').val() == "") {
+            lastControlError.push({ name: "Domain", message: "Please add a Domain", label: "DomainLabel", isKendo: false });
+            setValidationClient(lastControlError);
+            return;            
+        }
+        else if(!domainRegex.test($("#Domain").val()))
+        {
+            lastControlError.push({ name: "Domain", message: "Invalid Domain", label: "DomainLabel", isKendo: false });
+            setValidationClient(lastControlError);
+            return;
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddDomainSuppression", "Group")",
+                data: {
+                    DomainSuppressionID: -1,
+                    RbType: $('input[name=RadioB]:checked').val(),
+                    TxtDomain: $('#Domain').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#domainSuppressionGridDiv").html(response[1]);
+                        CancelAddDomainSuppresion();
+                    }
+                    else {
+                        CancelAddDomainSuppresion();
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+
+    
+</script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Add Domain Suppression</legend>
+        <div class="formbox">
+            <div class="subtitle">Type</div>
+            <div class="formitem formiteminline">
+                <input id="DomainSuppressionID" type="hidden" value="0" />
+                @if (KMPlatform.BusinessLogic.User.IsChannelAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser))
+                {
+                <input id="Channel"
+                       name="RadioB"
+                       type="radio"
+                       value="Channel" /><label>Channel</label>
+                }
+                <br />
+                <input checked="checked"
+                       id="Customer"
+                       name="RadioB"
+                       type="radio"
+                       value="Customer" /><label>Customer</label>
+            </div>
+        </div>
+
+        <div class="formbox">
+            <div class="subtitle" id="DomainLabel">Domain</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("Domain")
+            </div>
+        </div>
+
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%; text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "AddDomainSuppresion()" })
+                    </td>
+                    <td style="width:50%; text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "CancelAddDomainSuppresion()" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>

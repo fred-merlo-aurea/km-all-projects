@@ -1,0 +1,35 @@
+﻿@model UAS.Web.Models.Circulations.OpenClose
+<script>
+    $(document).ready(function(){
+        $("#btnFileStatus").click(function(){ // btn to load file status -- see index
+            GetFileStatus();
+        });
+    });
+    function GetFileStatus() {
+        var name = $('#Product').val();
+        var request = $.ajax({
+            type: "POST",
+            url: "/UAS.Web/Dashboard/GetFileStatus",
+            traditional: true,
+            cache: false,
+            data: { 'name': name }
+        });
+
+        request.done(function (message) {
+            $("#FileStatus").html(message);
+        });
+
+    }
+</script>
+<table style="width:100%;">
+    <tr>
+        <td><strong>Product:</strong></td>
+        <td class="modelProduct"> @Model.Product </td>
+    </tr>
+    <tr>
+        <td><strong>Current Issue:</strong></td>
+        <td class="modelCurrentIssue"> @Model.CurrentIssue </td>
+    </tr>
+</table>
+<div id="FileStatus">
+</div>

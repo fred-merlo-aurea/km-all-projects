@@ -1,0 +1,48 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerUsersViewModel
+@{
+    ViewBag.Title = "AddGroupResult";
+    List<string> resultList = Model.GetEmailAddResults();
+}
+
+<div style="float:right;text-align:right;">
+    @Html.ActionLink("Back to Domains", "Index", "Main", null, new { @class = "button-link" })
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <table height="67" width="80%" border="2" bordercolor="#a40000">
+        <tbody>
+            <tr>
+                <td valign="top" align="center" width="20%">
+                    <img style="padding: 0 0 0 15px;" src="/ecn.images/images/errorEx.jpg">
+                </td>
+                <td valign="middle" align="left" width="80%" height="100%">
+                    <span id="ctl00_ContentPlaceHolder1_lblErrorMessage" color="#a40000"><br>@ViewBag.Error</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+@if (resultList != null && resultList.Count > 0)
+{
+    <h4>Results of emails added to Group @ViewBag.GroupName  </h4>
+
+    <table class="grid" cellspacing="0" cellpadding="2" rules="all" border="1" id="ctl00_ContentPlaceHolder1_ResultsGrid" style="width:400px;border-collapse:collapse;">
+        <tbody>
+            <tr class="gridheader" align="center">
+                <td align="left" style="width:15%;">Description</td>
+                <td style="width:25%;">Totals</td>
+            </tr>
+            @for (int i = 0; i < resultList.Count; i += 2)
+            {
+                <tr align="center">
+                    <td align="left" style="width:75%;">@resultList[i]</td>
+                    <td style="width:25%;">@resultList[i + 1]</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}

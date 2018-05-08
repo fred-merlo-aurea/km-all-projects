@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx">
+      <s:element name="setupLogin">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="customerID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="userID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setupLoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="setupLoginResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getAutoLoginURL">
+        <s:complexType />
+      </s:element>
+      <s:element name="getAutoLoginURLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getAutoLoginURLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="setupLoginSoapIn">
+    <wsdl:part name="parameters" element="tns:setupLogin" />
+  </wsdl:message>
+  <wsdl:message name="setupLoginSoapOut">
+    <wsdl:part name="parameters" element="tns:setupLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="getAutoLoginURLSoapIn">
+    <wsdl:part name="parameters" element="tns:getAutoLoginURL" />
+  </wsdl:message>
+  <wsdl:message name="getAutoLoginURLSoapOut">
+    <wsdl:part name="parameters" element="tns:getAutoLoginURLResponse" />
+  </wsdl:message>
+  <wsdl:message name="setupLoginHttpGetIn">
+    <wsdl:part name="customerID" type="s:string" />
+    <wsdl:part name="userID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="setupLoginHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="getAutoLoginURLHttpGetIn" />
+  <wsdl:message name="getAutoLoginURLHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="setupLoginHttpPostIn">
+    <wsdl:part name="customerID" type="s:string" />
+    <wsdl:part name="userID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="setupLoginHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="getAutoLoginURLHttpPostIn" />
+  <wsdl:message name="getAutoLoginURLHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="ProcessLoginSoap">
+    <wsdl:operation name="setupLogin">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to SetUp Login to ECN for User under a Customer Account.&lt;br&gt;- Parameters passed are UserID &amp; CustomerID.&lt;br&gt;- Returns String AutoLogin Key value.&lt;br&gt;- This is is used only for FirstTime / New Customers who don't have a AutoLogin Key</documentation>
+      <wsdl:input message="tns:setupLoginSoapIn" />
+      <wsdl:output message="tns:setupLoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to get Auto Login URL.</documentation>
+      <wsdl:input message="tns:getAutoLoginURLSoapIn" />
+      <wsdl:output message="tns:getAutoLoginURLSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ProcessLoginHttpGet">
+    <wsdl:operation name="setupLogin">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to SetUp Login to ECN for User under a Customer Account.&lt;br&gt;- Parameters passed are UserID &amp; CustomerID.&lt;br&gt;- Returns String AutoLogin Key value.&lt;br&gt;- This is is used only for FirstTime / New Customers who don't have a AutoLogin Key</documentation>
+      <wsdl:input message="tns:setupLoginHttpGetIn" />
+      <wsdl:output message="tns:setupLoginHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to get Auto Login URL.</documentation>
+      <wsdl:input message="tns:getAutoLoginURLHttpGetIn" />
+      <wsdl:output message="tns:getAutoLoginURLHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ProcessLoginHttpPost">
+    <wsdl:operation name="setupLogin">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to SetUp Login to ECN for User under a Customer Account.&lt;br&gt;- Parameters passed are UserID &amp; CustomerID.&lt;br&gt;- Returns String AutoLogin Key value.&lt;br&gt;- This is is used only for FirstTime / New Customers who don't have a AutoLogin Key</documentation>
+      <wsdl:input message="tns:setupLoginHttpPostIn" />
+      <wsdl:output message="tns:setupLoginHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to get Auto Login URL.</documentation>
+      <wsdl:input message="tns:getAutoLoginURLHttpPostIn" />
+      <wsdl:output message="tns:getAutoLoginURLHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProcessLoginSoap" type="tns:ProcessLoginSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="setupLogin">
+      <soap:operation soapAction="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx/setupLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <soap:operation soapAction="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx/getAutoLoginURL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ProcessLoginHttpGet" type="tns:ProcessLoginHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="setupLogin">
+      <http:operation location="/setupLogin" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <http:operation location="/getAutoLoginURL" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ProcessLoginHttpPost" type="tns:ProcessLoginHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="setupLogin">
+      <http:operation location="/setupLogin" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutoLoginURL">
+      <http:operation location="/getAutoLoginURL" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProcessLogin">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Provides Access to Process Login to ECN.&lt;br&gt;* Use setupLogin() to setup the Login &amp; get AutoLogin Key for ECN. &lt;br&gt;* Use getAutoLoginURL() to Auto Login to ECN using Login Key [Usage: Response.redirect(getAutoLoginURL() + ##accesskey##].</documentation>
+    <wsdl:port name="ProcessLoginSoap" binding="tns:ProcessLoginSoap">
+      <soap:address location="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ProcessLoginHttpGet" binding="tns:ProcessLoginHttpGet">
+      <http:address location="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ProcessLoginHttpPost" binding="tns:ProcessLoginHttpPost">
+      <http:address location="http://wizard.ecn5.com/webservice/KM/ProcessLogin.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

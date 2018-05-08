@@ -1,0 +1,109 @@
+﻿@model UAS.Web.Models.Circulations.FileMapping
+
+<script>
+    $(document).ready(function () {
+        $('#btnRefresh').click(function () {
+            Refresh();
+        });
+        $('#btnDelete').click(function () {
+            Delete();
+        });
+        Refresh();
+    });
+    function Refresh() {
+        var client = $("#client").val();
+        var request = $.ajax({
+            type: "POST",
+            url: "@Url.Action("FileMapping_FileListRefresh")",
+            cache: false,
+            traditional: true,
+            data: {"client": client}
+        }).done(function(resp){
+            $("#fileListView").html(resp);
+            $('.fileListName').dblclick(function () {
+                var grid = $('#fileList').data("kendoGrid");
+                var row = $(this).closest("tr");
+                var item = grid.dataItem(row);
+                GoToStep2(item);
+            });
+        });
+    }
+    function Delete() {
+        var file = "abc";
+        var request = $.ajax({
+            type: "DELETE",
+            url: "@Url.Action("FileMapping_DeleteFile")",
+            cache: false,
+            traditional: true,
+            data: { file: file }
+        }).done(function (resp) {
+            $("#fileMappingNotificationDiv").html(resp);
+            $('#editFileMappingModalContent').css("height", "600px");
+            $('#btnDeleteSuccessClose').click(function () {
+                $('#editFileMappingModalContent').css("height", "525px");
+            });
+        });
+    }
+    function GoToStep2(file)
+    {
+        
+    }
+
+</script>
+<style>
+    #btnDelete{
+        margin-top: 15px;
+        float: right;
+    }
+    #btnRefresh{
+        float: right;
+    }
+    .k-button,
+    .btn {
+	    outline: none;
+	    display: inline-block;
+	    border-radius: 8px;
+	    border-width: 1px;
+	    box-shadow: none;
+	    text-decoration: none;	
+		font-size: 14px;
+	    font-weight: 500;
+	    padding:  0 10px;
+	    cursor: pointer;
+	    height: 27px;
+	    line-height: 26px;	 
+	    margin: 0 5px;
+	    box-shadow: 0;
+		vertical-align: inherit;
+		font-family: "Source Sans Pro",sans-serif;
+		box-sizing: content-box;
+	}
+</style>
+<div id="fileMappingNotificationDiv"></div>
+<table>
+    <tr>
+        <td>
+            Select a Client:
+        </td>
+        <td>
+            @Html.DropDownListFor(x => x.Client, Model.Clients.Select(item => new SelectListItem
+                {
+                    Value = item,
+                    Text = item
+                }
+                ))
+        </td> 
+    </tr>
+    <tr>
+        <td>
+            Select a file:
+        </td>
+        <td>
+            <img id="btnRefresh" src="~/Images/icon-sync.png" />
+        </td> 
+    </tr>
+</table>
+<div id="fileListView">
+</div>
+<button type="button" id="btnDelete" class="btn k-button"> Delete File </button>
+

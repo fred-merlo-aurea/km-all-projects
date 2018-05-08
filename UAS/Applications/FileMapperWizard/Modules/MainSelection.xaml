@@ -1,0 +1,153 @@
+﻿<UserControl x:Class="FileMapperWizard.Modules.MainSelection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="900" Width="900" Height="600">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <telerik:RadBusyIndicator Name="RadBusy" IsIndeterminate="False">
+        <Grid>
+            <Grid x:Name="grdCustomTiles" Visibility="Visible">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="newMappingTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="newMappingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="newMappingTile" Height="175" Width="250" Fill="#C7CACC" Margin="5"/>
+                                        <TextBlock Text="New Mapping" FontSize="18" Foreground="White" VerticalAlignment="Bottom" Margin="10" />
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/MapIcon.png" Height="64" Width="64"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="editExistingTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="editExistingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="editExistingTile" Height="175" Width="250" Fill="#F47E1F" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/EditExitingIcon.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="64"/>
+                                        <TextBlock Text="Edit Existing File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="transformTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="transformTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="transformTile" Height="175" Width="250" Fill="#4B87BC" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/EditExistingTransformation.png" Height="64" Width="64"/>
+                                        <TextBlock Text="View Existing Transformation" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10,0,0,10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="validateTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="validateTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="validateTile" Height="175" Width="250" Fill="#045DA4" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/Validating.png" Height="64" Width="64"/>
+                                        <TextBlock Text="Validate Existing File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="viewTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="viewTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="viewTile" Height="175" Width="250" Fill="#559EDB" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/ViewFile.png" Height="64" Width="64"/>
+                                        <TextBlock Text="View File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="statusTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="statusTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="statusTile" Height="175" Width="250" Fill="#9DA2A7" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/FileStatus.png" Height="64" Width="64"/>
+                                        <TextBlock Text="File Status" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="fileAuditTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="fileAuditTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="fileAuditTile" Height="175" Width="250" Fill="#5f6464" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/Search/SearchWhite-72.png" Height="64" Width="64"/>
+                                        <TextBlock Text="File Audit" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Click="Button_Click" BorderThickness="0" Tag="fileLogViewerTile">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="fileAuditTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="fileLogViewerTile" Height="175" Width="250" Fill="#f59a51" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/Data/View_Details-128.png" Height="64" Width="64"/>
+                                        <TextBlock Text="File Log Viewer" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>            
+        </Grid>
+    </telerik:RadBusyIndicator>    
+</UserControl>

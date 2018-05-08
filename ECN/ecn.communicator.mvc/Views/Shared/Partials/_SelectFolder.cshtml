@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Kendo.Mvc.UI.TreeViewItemModel>
+@using ecn.communicator.mvc.Infrastructure
+<script type="text/javascript">
+    
+</script>
+<div class="wrapper modal modaladdnewform">
+
+        <input type="hidden" id="selectedFolderID" />
+
+        <div id="folderPanel" style="max-height:500px;overflow-y:auto;">
+            
+            <span style="color: #f57f20; font-size: 16px; letter-spacing: 0.3pt; font-weight: 500;">Folders</span>
+            @(
+            Html.Kendo().TreeView().Name("tvSelectFolder")
+            .Events(x => x.Select("FolderSelected"))
+                .Name("FolderTree")
+                .BindTo(Model)
+            )
+            
+        </div>
+    <div>
+        <table style="width:100%;">
+            <tr>
+                <td style="text-align:center;">
+                    @Html.Kendo().Button().Name("btnCloseSelectFolder").Content("Close").Events(x => x.Click("btnCloseSelectFolder_Click"))
+                </td>
+            </tr>
+        </table>
+    </div>
+  
+</div>

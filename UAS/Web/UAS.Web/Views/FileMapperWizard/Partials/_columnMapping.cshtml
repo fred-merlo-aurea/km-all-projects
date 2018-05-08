@@ -1,0 +1,510 @@
+﻿@model UAS.Web.Models.FileMapperWizard.ColumnMappingViewModel
+
+<script>
+    $(document).ready(function () {
+        var showdetails = false;
+
+        $('.previewdetails').hide();
+
+        $(".togglePreview").on("click", function () {
+
+            if (showdetails) {
+                $('.previewdetails').hide();
+                showdetails = false;
+            }
+            else {
+                $('.previewdetails').show();
+                showdetails = true;
+            }
+
+        });
+
+        $("#tbColumnMapper").on('click', '.btnDelete', function () {
+            if (confirm("Do you want to delete this row?")) {
+                var closestRow = $(this).closest('tr');
+                closestRow.add(closestRow.next()).remove();
+            }
+            else {
+                return false;
+            }
+        });
+    });
+
+    function RefreshColumnMapping() {
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/RefreshColumnMapping",
+            type: "GET",
+            traditional: true,
+            cache: false,
+            success: function (returnData) {//returnData
+                tabs.select(1);
+
+                //1 = setup
+                //2 = MapColumns
+                //3 = Rules
+                //4 = Review
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    //This is called from ColumnMap prePerformTransformation function to save mapping before going forward with Transformations
+    //This will prevent the user from changing mapped column and then the wrong data showing up in transformations.
+    function SaveMappingBeforeLoadingTransformation (sfid, fmid, colname) {
+        SaveMapping(false, false, sfid, fmid, colname, 0);        
+    }
+
+    //This is called from _displayTransformations saveBeforeOpenEditTransformation function to save mapping before going forward with Transformations
+    //This will prevent the user from changing mapped column and then the wrong data showing up in transformations.
+    function SaveMappingBeforeLoadingExistingTransformation (sfid, fmid, tid) {
+        SaveMapping(false, true, sfid, fmid, "", tid);        
+    }
+    
+    function SaveMapping(goToNextTab, isExisting, sfid, fmid, colname, tid) {
+        //Get Validation Json
+        //Get Save Json foreach fieldMapping, multiMapping, additionalMapping
+        //ajax for validation. If good then pass Save Json to function for each save
+        var validateJson = "";
+        var mappingJson = "";
+        var multiJson = "";
+        var additionalJson = "";
+
+        var z = 0;
+        $('table[id^="mc_"]').each(function () {
+            //Start ValidationJson - FieldMapping
+            validateJson = validateJson.length > 0 ? validateJson + ",{" : validateJson + "[{";
+            validateJson = validateJson + '"Type":"Regular"';
+            var sc = $("#IncomingColumns_" + z + "__SourceColumn").val();
+            if (sc != undefined && sc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"SourceColumn":"' + sc.toString() + '"' : '"SourceColumn":"' + sc.toString() + '"');
+            }
+            var mc = $("#IncomingColumns_" + z + "__MappedColumn").val();
+            if (mc != undefined && mc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"MappedColumn":"' + mc.toString() + '"' : '"MappedColumn":"' + mc.toString() + '"');
+            }
+            var mc = $("#IncomingColumns_" + z + "__DemoUpdateID").val();
+            if (mc != undefined && mc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"DemoUpdateID":"' + mc.toString() + '"' : '"DemoUpdateID":"' + mc.toString() + '"');
+            }
+            validateJson = validateJson + '}'
+
+            //Setup the FieldMapping Json
+            mappingJson = mappingJson.length > 0 ? mappingJson + ",{" : mappingJson + "[{";
+            var sf = $("#IncomingColumns_" + z + "__SourceFileID").val();
+            if (sf != undefined && sf != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? '"SourceFileId":"' + sf.toString() + '"' : '"SourceFileId":"' + sf.toString() + '"');
+            }
+            var sc = $("#IncomingColumns_" + z + "__SourceColumn").val();
+            if (sc != undefined && sc != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? ',"SourceColumn":"' + sc.toString() + '"' : '"SourceColumn":"' + sc.toString() + '"');
+            }
+            var mc = $("#IncomingColumns_" + z + "__MappedColumn").val();
+            if (mc != undefined && mc != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? ',"MappedColumn":"' + mc.toString() + '"' : '"MappedColumn":"' + mc.toString() + '"');
+            }
+            var mc = $("#IncomingColumns_" + z + "__DemoUpdateID").val();
+            if (mc != undefined && mc != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? ',"DemoUpdateID":"' + mc.toString() + '"' : '"DemoUpdateID":"' + mc.toString() + '"');
+            }
+            var pv = $("#IncomingColumns_" + z + "__PreviewData").val();
+            if (pv != undefined && mc != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? ',"PreviewData":"' + pv.toString() + '"' : '"PreviewData":"' + pv.toString() + '"');
+            }
+
+            var id = $("#IncomingColumns_" + z + "__FieldMapID").val();
+            if (id != undefined && mc != "") {
+                mappingJson = mappingJson + (mappingJson.length > 0 ? ',"FieldMapId":"' + id.toString() + '"' : '"FieldMapId":"' + id.toString() + '"');
+            }
+
+            mappingJson = mappingJson + ',"FieldMapTypeId":"0" }';
+
+            //Add the MultiMap Validation and MultiMap Save
+            var fm = $("#IncomingColumns_" + z + "__FieldMapID").val();
+            if (fm != undefined && fm != "") {
+                fieldMappingID = fm;
+
+                var grid = $("#grid_MultiColumnMap_" + fieldMappingID).data("kendoGrid");
+                if (grid != null) {
+                    var totalItems = grid.dataSource._data.length;
+                    if (totalItems > 0) {
+                        for (var i = 0; i < grid.dataSource._data.length; i++) {
+
+                            var thisSelectedMAFField = grid.dataSource._data[i].selectedMAFField;
+                            var fieldMultiMapID = grid.dataSource._data[i].FieldMultiMapID;
+                            var fieldMappingID = grid.dataSource._data[i].FieldMappingID;
+                            var fieldMappingTypeID = grid.dataSource._data[i].FieldMappingTypeID;
+                            var columnOrder = grid.dataSource._data[i].ColumnOrder;
+                            var mcmIndex = grid.dataSource._data[i].MCMIndex;
+
+                            //Add MultiMap to validation json
+                            validateJson = validateJson.length > 0 ? validateJson + ",{" : validateJson + "[{";
+                            validateJson = validateJson + '"Type":"Multi"';
+                            validateJson = validateJson + ',"SourceColumn":"' + thisSelectedMAFField.Value.toString() + '"';
+                            validateJson = validateJson + ',"MappedColumn":"' + thisSelectedMAFField.Value.toString() + '"';
+                            validateJson = validateJson + ',"DemoUpdateID":"' + "0" + '" }';
+
+                            //Get MultiMap save json
+                            multiJson = multiJson.length > 0 ? multiJson + ",{" : multiJson + "[{";
+                            multiJson = multiJson + '"FieldMultiMapID":"' + fieldMultiMapID.toString() + '"';
+                            multiJson = multiJson + ',"FieldMappingID":"' + fieldMappingID.toString() + '"';
+                            multiJson = multiJson + ',"FieldMappingTypeID":"' + fieldMappingTypeID.toString() + '"';
+                            multiJson = multiJson + ',"ColumnOrder":"' + columnOrder.toString() + '"';
+                            multiJson = multiJson + ',"MAFField":"' + thisSelectedMAFField.Value.toString() + '" }';
+                        }
+                    }
+                }
+            }
+            z++;
+        });
+        if (mappingJson.length > 0) {
+            mappingJson = mappingJson + "]";
+        }
+        if (multiJson.length > 0) {
+            multiJson = multiJson + "]";
+        }
+
+        
+        z = 0;
+        $('table[id^="addedColumn_"]').each(function () {
+            var fieldMapID = $("#AdditionalColumns_" + z + "__FieldMapID").val();
+            validateJson = validateJson.length > 0 ? validateJson + ",{" : validateJson + "[{";
+            validateJson = validateJson + '"Type":"Additional"';
+            var sc = $("#AdditionalColumns_" + z + "__SourceColumn").val();
+            if (sc != undefined && sc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"SourceColumn":"' + sc.toString() + '"' : '"SourceColumn":"' + sc.toString() + '"');
+            }
+            //var mc = $("#AdditionalColumns_" + z + "__MappedColumn").val();
+            var mc = $("#ddl_mappedColumn_" + fieldMapID).val();
+            if (mc != undefined && mc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"MappedColumn":"' + mc.toString() + '"' : '"MappedColumn":"' + mc.toString() + '"');
+            }
+            var mc = $("#ddl_demoUpdate_" + fieldMapID).val();
+            if (mc != undefined && mc != "") {
+                validateJson = validateJson + (validateJson.length > 0 ? ',"DemoUpdateID":"' + mc.toString() + '"' : '"DemoUpdateID":"' + mc.toString() + '"');
+            }
+            validateJson = validateJson + '}';
+
+            //Setup the FieldMapping Json
+            additionalJson = additionalJson.length > 0 ? additionalJson + ",{" : additionalJson + "[{";
+            var id = $("#AdditionalColumns_" + z + "__FieldMapID").val();
+            if (id != undefined && mc != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? ',"FieldMappingID":"' + id.toString() + '"' : '"FieldMappingID":"' + id.toString() + '"');
+            }
+            var sf = $("#AdditionalColumns_" + z + "__SourceFileID").val();
+            if (sf != undefined && sf != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? '"SourceFileID":"' + sf.toString() + '"' : '"SourceFileID":"' + sf.toString() + '"');
+            }
+            var sc = $("#AdditionalColumns_" + z + "__SourceColumn").val();
+            if (sc != undefined && sc != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? ',"IncomingField":"' + sc.toString() + '"' : '"IncomingField":"' + sc.toString() + '"');
+            }
+            var mc = $("#ddl_mappedColumn_" + fieldMapID).val();
+            if (mc != undefined && mc != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? ',"MAFField":"' + mc.toString() + '"' : '"MAFField":"' + mc.toString() + '"');
+            }
+            var pv = $("#AdditionalColumns_" + z + "__ColumnOrder").val();
+            if (pv != undefined && mc != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? ',"ColumnOrder":"' + pv.toString() + '"' : '"ColumnOrder":"' + pv.toString() + '"');
+            }
+            var mc = $("#ddl_demoUpdate_" + fieldMapID).val();
+            if (mc != undefined && mc != "") {
+                additionalJson = additionalJson + (additionalJson.length > 0 ? ',"DemographicUpdateCodeId":"' + mc.toString() + '"' : '"DemographicUpdateCodeId":"' + mc.toString() + '"');
+            }                        
+
+            additionalJson = additionalJson + ',"FieldMapTypeId":"0" }';
+            z++;
+        });
+
+        if (additionalJson.length > 0) {
+            additionalJson = additionalJson + "]";
+        }
+        if (validateJson.length > 0) {
+            validateJson = validateJson + "]";
+        }
+
+        //Now all the json is built validate and then save if validation succeeds.
+        var modelData = {
+            "ValidateColumns": validateJson.toString()
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/ValidateMapping",
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+                if (returnData.IsValid) {   
+                    if (multiJson.length > 0 && goToNextTab) {
+                        var modelData2 = {
+                            "standardMappings": mappingJson,
+                            "multiMappings": multiJson
+                        }
+                        $.ajax({
+                            url: "/UAS.Web/FileMapperWizard/FormatMultiMapping",
+                            type: "POST",
+                            data: modelData2,
+                            traditional: true,
+                            cache: false,
+                            success: function (returnData) {
+                                var mapText = returnData.Text;
+                                showMessage({
+                                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                                    text: "The following field has a multiple mapping: " + mapText,
+                                    autoClose: false,
+                                    action: ConfirmedMultiMappingToProceed,
+                                    data: { JsonValidate: validateJson, JsonMapping: mappingJson, JsonMulti: multiJson, JsonAdditional: additionalJson, NextTab: goToNextTab, Exist: isExisting, SourceId: sfid, FieldId: fmid, Column: colname, TransId: tid },
+                                    IsOpen: false
+                                });                                
+                            },
+                            error: function () {
+                                alert("An error has occured!!!");
+                            }
+                        });   
+                    } else {
+                        var values = { JsonValidate: validateJson, JsonMapping: mappingJson, JsonMulti: multiJson, JsonAdditional: additionalJson, NextTab: goToNextTab, Exist: isExisting, SourceId: sfid, FieldId: fmid, Column: colname, TransId: tid }
+                        ConfirmedMultiMappingToProceed(values);
+                    }
+                    //SaveFieldMapping(mappingJson, multiJson, additionalJson, goToNextTab, isExisting, sfid, fmid, colname, tid);
+                } else {
+                    valid = false;
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: returnData.ErrorMessage,
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });        
+    }
+
+    function ConfirmedMultiMappingToProceed(values) {                
+        var mappingJson = values.JsonMapping;
+        var multiJson = values.JsonMulti;
+        var additionalJson = values.JsonAdditional;
+        var goToNextTab = values.NextTab;
+        var isExisting = values.Exist;
+        var sfid = values.SourceId;
+        var fmid = values.FieldId;
+        var colname = values.Column;
+        var tid = values.TransId;
+        SaveFieldMapping(mappingJson, multiJson, additionalJson, goToNextTab, isExisting, sfid, fmid, colname, tid);                
+    }
+
+    function SaveFieldMapping(mappingJson, multiMapJson, additionalJson, isNextTab, isExisting, sfid, fmid, colname, tid) {
+        var modelData = {
+            "MappedColumns": mappingJson.toString()//JSON.stringify(json)
+        }
+        $.ajax({
+            url: '/UAS.Web/FileMapperWizard/SaveMapping',
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+                SaveMultiMaps(multiMapJson);
+                SaveAdditionalMaps(additionalJson);
+                //If isNextTab then show the next tab else this should show the transformations screen.
+                if (isNextTab) {
+                    var tabs = $("#tabstrip").data("kendoTabStrip");
+                    if (tabs != null) {
+                        var tabIndex = 2;//vbCurrentStep;
+                        var prevIndex = tabIndex - 1;
+                        if(prevIndex <= 0){
+                            prevIndex = 0;
+                        }
+
+                        var item = tabs.contentElement(tabIndex);
+                        $("#columnMapping").html("");
+                        $(item).html(returnData);
+
+                        tabs.select(tabIndex);
+                        tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 3
+                        tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 2
+
+                    }
+
+                    return false;
+                } else {
+                    debugger;
+                    if (isExisting) {
+                        openEditTransformationFieldMap(tid, fmid);
+                    } else {
+                        performTransformation(sfid, fmid, colname);                        
+                    }
+                }
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function SaveMultiMaps(multiJson) {
+        //foreach multi map grid check data > 0 and save
+
+        var modelData = {
+            "MappedColumns": multiJson.toString()//JSON.stringify(json)
+        }
+        $.ajax({
+            url: '/UAS.Web/FileMapperWizard/SaveMultiMapping',
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+
+    }
+
+    function SaveAdditionalMaps(additionalJson) {
+
+        var modelData = {
+            "MappedColumns": additionalJson.toString()//JSON.stringify(json)
+        }
+        $.ajax({
+            url: '/UAS.Web/FileMapperWizard/SaveAdditionalMapping',
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function AddNewAdditionalColumn() {        
+        var sfid = @Html.Raw(Json.Encode(Model.SourceFileID));        
+
+        var modelData = {
+            SourceFileID: sfid
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/AddSoloAdditionalColumn",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: modelData,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {                
+                $("#divAdditionalColumnsPart2").append(returnData);                
+            },
+            error: function (data) {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',  
+                    text: "Error adding new column.",
+                    autoClose: false,
+                    IsOpen: false
+                });
+            }
+        });        
+    }
+
+    function LoadSetup() {        
+        var sourceFileID = @Model.SourceFileID;
+        var modelData = {
+            "ID": sourceFileID
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/ReloadSetup",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                debugger;
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 1;
+                    var prevIndex = tabIndex - 1;
+                    if (prevIndex < 0) {
+                        prevIndex = 0;
+                    }
+                    var item = tabs.contentElement(prevIndex);
+                    $("#columnMapping").html("");
+                    $(item).html("");
+                    $(item).html(returnData);
+
+                    tabs.select(prevIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), false); // disable Rules
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), true); // enable Transformations / load that view
+                }
+                return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+
+
+<div style="margin: 0 auto; width:99%">
+    <div id="columnMapping" style="margin:10px; border:solid 1px gray;">
+        <div style="width: 250px; margin-left:20px; text-align:left;">
+            <h3>Map Columns</h3>
+        </div>
+        <div style="margin:20px; width:250px; text-align:left;">
+            <button type="button" class="togglePreview btn btn-info">Preview<i class='km-icon icon-kmright-dir ralign'></i></button>
+        </div>
+        @Html.HiddenFor(m => m.FilePath)
+        @if (Model.IncomingColumns != null && Model.IncomingColumns.Count > 0)
+        {
+            <div id="divIncomingColumns" style="margin-left:20px; height:500px; overflow:scroll;">
+                @Html.EditorFor(m => m.IncomingColumns)
+            </div>
+        }
+        <div style="margin:10px 20px; width:99%; text-align:left;">
+            <button type="button" class="btn btn-blue2 k-button" onclick="AddNewAdditionalColumn();">Add New Column<i class='km-icon icon-kmplus-circled-1'></i></button>
+        </div>
+        @*<div id="divAdditionalColumns" style="margin-left:20px; width:50%;">
+            
+        </div>*@
+        <div id="divAdditionalColumnsPart2" style="margin-left:20px; width:50%;">
+            @if (Model.IncomingColumns != null && Model.IncomingColumns.Count > 0)
+            {
+                @Html.EditorFor(m => m.AdditionalColumns)
+            }
+        </div>
+    </div>
+
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("mappingPrevious").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return LoadSetup()" })
+            </div>
+            <div class="cbtns">
+
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return SaveMapping(true)" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

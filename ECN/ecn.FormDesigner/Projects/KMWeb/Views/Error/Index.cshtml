@@ -1,0 +1,36 @@
+﻿@using KMEnums
+
+@model ErrorType
+
+@{
+    ViewBag.Title = "Error Page";
+}
+
+@functions 
+{
+    string GetErrorMessage(ErrorType errorType)
+    {
+        switch (errorType)
+        {
+            case ErrorType.InvalidLink: return "Sorry! The link you are requesting appears to be invalid.";
+            case ErrorType.PageNotFound:
+            case ErrorType.NotFound: return "Sorry! The page you have requested does not exist.";
+            case ErrorType.Timeout:
+            case ErrorType.HardError:
+            case ErrorType.Other:
+                return "Sorry! We're having trouble processing your request right now.";
+        }
+        return null;
+    }
+}
+
+<div class="erroboxnotmodal wrapper modal modalnotify modal-error">
+    <div class="picon"></div>
+    <div class="text">
+        <div class="validation-summary-errors" data-valmsg-summary="true">
+            <ul>
+                <li>@GetErrorMessage(Model)</li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@Model DataTable
+
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.common-material.min.css" rel="stylesheet"/>
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.rtl.min.css" rel="stylesheet"/>
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.material.min.css" rel="stylesheet"/>
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.material.mobile.min.css" rel="stylesheet"/>
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.dataviz.min.css" rel="stylesheet"/>
+<link href="http://cdn.kendostatic.com/2015.1.408/styles/kendo.dataviz.material.min.css" rel="stylesheet" />
+<link href="http://demos.telerik.com/aspnet-mvc/content/shared/styles/examples.css" rel="stylesheet" />
+
+
+
+@*<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>*@
+<script src="http://cdn.kendostatic.com/2015.1.408/js/kendo.all.min.js"></script>
+<script src="http://cdn.kendostatic.com/2015.1.408/js/kendo.timezones.min.js"></script>
+
+<script src="http://demos.telerik.com/aspnet-mvc/content/shared/js/kendo-dojo.js"></script>
+<script src="http://demos.telerik.com/aspnet-mvc/content/shared/js/console.js"></script>
+<script src="http://demos.telerik.com/aspnet-mvc/content/shared/js/prettify.js"></script>
+
+
+<h1>|TEST|</h1>
+
+<div id="map"></div>
+@*<script>
+    function createMap() {
+        $("#map").kendoMap({
+            minZoom: 3,
+            maxZoom: 3,
+            //zoomStart: onZoomStart,
+            center: [30.268107, -97.744821],
+            zoom: 3,
+            layers: [{
+                type: "tile",
+                urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                subdomains: ["a", "b", "c"],
+                attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>"
+            }],
+            markers: [
+                {
+                    location: [30.268107, -97.744821],
+                    shape: "pinTarget",
+                    tooltip: {content: "Austin, TX"}
+                },
+                {
+                    location: [30.268107, -90.744821],
+                    shape: "pinTarget",
+                    tooltip: { content: "New, TX" }
+                }
+            ]
+        });
+    }
+
+    //function onZoomStart(e) {
+    //    e.preventDefault();
+    //}
+    
+    $("div[data-role='navigator']").hide();
+    $("div[data-role='zoomcontrol']").hide();
+
+    $(document).ready(createMap);
+</script>*@
+
+
+<script>
+    function createMap() {
+        $("#map").kendoMap({
+            center: [38.268107, -97.744821],
+            zoom: 3,
+            //center: [90.268107, -97.744821],
+            //zoom: 1,
+            layers: [
+                {
+                    type: "tile",
+                    urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                    subdomains: ["a", "b", "c"],
+                    attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>"
+                }
+            ],
+            markers: [
+                {
+                    location: [30.268107, -97.744821],
+                    shape: "pinTarget",
+                    tooltip: { content: "Austin, TX <br/>Page Requests: 41" }
+                },
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <text>
+                    {
+                        location: [30.268107, -90.744821],
+                        shape: "pinTarget",
+                        tooltip: { content: "New, TX <br/>Page Requests: 41" }
+                    },
+                    </text>
+                }
+            ]
+        });
+    }
+
+
+    $(document).ready(createMap);
+
+    $('#WFM').css({
+        'marginTop': "-=210px" //moves up
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var tooltip = $("#agglomerations").kendoTooltip({
+            filter: "a",
+            width: 120,
+            position: "top"
+        }).data("kendoTooltip");
+
+        tooltip.show($("#canton"));
+
+        $("#agglomerations").find("a").click(false);
+    });
+</script>

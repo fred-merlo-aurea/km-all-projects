@@ -1,0 +1,158 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using KMManagers.APITypes
+@using KMWeb.Models.Forms.Modals
+
+@model FormPostModel
+
+@{
+    var group = (ECN_Framework_Entities.Communicator.Group)ViewBag.Group;
+    var isCreate = (bool)ViewBag.IsCreate;
+}
+
+@Html.HiddenFor(x => x.Id, new Dictionary<string, object> { {"data-bind", "value:Id" } })
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="">
+        <legend></legend>
+        @if (isCreate)
+        {
+        <div class="formbox">
+            <div class="subtitle">Form Type</div>
+            <div class="formitem formiteminline">
+                @(
+                    Html.Kendo()
+                        .DropDownListFor(x => x.Type)
+                        .HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:Type" } })
+                        .Items(items =>
+                        {
+                            foreach (FormType type in Enum.GetValues(typeof(FormType)))
+                            {
+                                items.Add().Text(GetDisplayName(type)).Value(type.ToString()).Selected(Model.Type == Enum.GetName(typeof(FormType), type));
+                            }
+                        })
+                )
+            </div>
+        </div>
+        }
+        else
+        {
+            @Html.HiddenFor(x => x.Type, new Dictionary<string, object> { { "data-bind", "value:Type" } })
+        }
+        <div class="formbox">
+            <div class="subtitle">Form Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBoxFor(x => x.Name, new Dictionary<string, object> { {"data-bind", "value:Name" } } )
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Activation</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.Active).Label("Active").Value(FormActive.Active).Checked(Model.Active == FormActive.Active).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "checked:Active" } })
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.Active).Label("Inactive").Value(FormActive.Inactive).Checked(Model.Active == FormActive.Inactive).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "checked:Active" } })
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.Active).Label("Use Activation Dates").Value(FormActive.UseActivationDates).Checked(Model.Active == FormActive.UseActivationDates).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "checked:Active" } })
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Activation Dates/Times</div>
+            <div class="formitem formiteminline">
+                @Html.LabelFor(x => x.ActivationFrom, "From")
+                @Html.Kendo().DateTimePickerFor(x => x.ActivationFrom).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "value:ActivationFrom" } })
+            </div>
+            <div class="formitem formiteminline">
+                @Html.LabelFor(x => x.ActivationTo, "To")
+                @Html.Kendo().DateTimePickerFor(x => x.ActivationTo).HtmlAttributes(new Dictionary<string, object> { {"data-bind", "value:ActivationTo" } })
+            </div>
+        </div>
+        <div class="formbox">
+             <div class="subtitle">Select Group Name</div>
+            <div class="formitem">
+                <div>
+                    <input id="customerId" name="customerId" type="hidden" value="@(group != null ? group.CustomerID.ToString() : string.Empty)" />
+                    <input id="groupId" name="groupId" type="hidden" value="@(group != null ? group.GroupID.ToString() : string.Empty)" />
+                    <span id="groupName">
+                        @(group != null ? group.GroupName : "Group Name")
+                    </span>
+                    <button class="btn k-button" onclick="groupExplorer(groupSelected)" type="button">Select Group</button>
+                </div>
+            </div>
+        </div>
+        @Html.ValidationSummary()
+        <div class="buttonsgroup">
+            @Html.Kendo().Button().Name("Save").Content("Save And Continue").HtmlAttributes(new { @class = "btn" })
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('FormWindow')" })
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    $(function () {
+        $("input[name='Active']").change(initControls);
+        initControls();
+    });
+    function initControls() {
+        var val = $("input[name='Active']:checked").val();
+        var from = $("#ActivationFrom").data('kendoDateTimePicker');
+        var to = $("#ActivationTo").data('kendoDateTimePicker');
+        if (val == '@FormActive.UseActivationDates') {
+            from.enable(true);
+            to.enable(true);
+        }
+        else {
+            from.enable(false);
+            to.enable(false);
+            from.value(String.empty);
+            to.value(String.empty);
+        }
+    }
+
+    function groupSelected(e) {
+        var group = e.group;
+        if (group.GroupID == $("#GroupId").val()) {
+            return;
+        }
+        var nlGroupIds = @Html.Raw(
+            Json.Encode(
+                ((List<int>)ViewBag.nlGroupIds).Select(ctrls => new
+                {
+                    groupsIds = ctrls
+                })
+            )
+        );
+        var out = false;
+        $.each(nlGroupIds, function (itemIndex, item) {
+            if (item.groupsIds == group.GroupID) {
+                out = true;
+            }
+        });
+        if (out) {
+            showMessage({
+                type: '@MessageType.Warning',
+                text: "Form Group cannot be the same as the Newsletter Control Group."
+            });
+            return;
+        }
+
+        e.preventDefault();
+        var data = {
+            CustomerId: group.CustomerID,
+            GroupId: group.GroupID,
+            FormId: '@Model.Id',
+            ChangeFormGroup: false
+        }
+        openChangeGroupManager({
+            data: data,
+            action: function () {
+                $("#groupName").html(group.GroupName);
+                $("#groupId").val(group.GroupID);
+                $("#customerId").val(group.CustomerID);
+                //formPath.load();
+                e.sender.close();
+            }
+        });
+    }
+</script>        
+   

@@ -1,0 +1,15 @@
+﻿CREATE ROLE [INTERN]
+    AUTHORIZATION [dbo];
+
+
+GO
+--ALTER ROLE [INTERN] ADD MEMBER [Cody.Wagner];
+
+
+--GO
+--ALTER ROLE [INTERN] ADD MEMBER [Luke.Juusola];
+
+
+--GO
+--ALTER ROLE [INTERN] ADD MEMBER [Nick.DeNomme];
+

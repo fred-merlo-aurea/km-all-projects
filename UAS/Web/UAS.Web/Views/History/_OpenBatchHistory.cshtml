@@ -1,0 +1,47 @@
+﻿@model UAS.Web.Models.Circulations.History
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $("#btnRefresh").click(function () {
+            Refresh();
+        });
+        
+    });
+
+    function Refresh() {
+        //var request = $.ajax({
+        //    type: "POST",
+        //    url: "/UAS.Web/History/OpenBatchHistory",
+        //    traditional: true,
+        //    cache: false,
+        //}).done(function (message) {
+        //    $("#openBatches").html(message);
+        //});
+        $.ajax({
+            url: "/UAS.Web/History/OpenBatchHistory",
+            type: "POST",            
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                $("#openBatches").html(data);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+
+    }
+</script>
+<style>
+    #refreshButton{
+        margin-left: 95%;
+    }
+</style>
+<div style="text-align: right;">
+    <button id="btnRefresh" class="btn-blue2" style="width: 32px; height: 32px;">
+        <img src="~/Images/Reset_72.png" width="24" height="24" style="text-align: center; vertical-align: middle;" />
+    </button>    
+</div>
+<div id='openBatches'>
+     @Html.Partial("_OpenBatchResults", Model.ResultsOpen)
+</div>

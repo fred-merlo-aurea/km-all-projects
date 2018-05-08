@@ -1,0 +1,58 @@
+﻿@using KMEnums
+<script>
+    function deleteGroupConfirm() {
+        clearValidationErrorMessages();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Delete", "Group")",
+            data: { Id: $('#GroupID').val() },
+            success: function (response) {
+                if (response[0] == '200') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    closeWindow('DeleteWindow');
+                    window.location.href = "/ecn.communicator.mvc/Group/";
+                }
+                else {
+                    closeWindow('DeleteWindow');
+                    var errorArray = [];
+                    for (var i = 1; i < response.length; i++) {
+                        errorArray.push(response[i]);
+                    }
+                    setValidationServer(errorArray);
+                }
+            }
+        });
+    };
+</script>
+<div class="wrapper modal modaladdnewform">
+
+    @Html.Hidden("GroupID", null, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+    <div>
+        <div class="picon" style="margin: 0 auto; width: 100px;float:left;">
+
+            <img src="/ecn.communicator.mvc/Images/modal-icon-warning.png" border="0" />
+
+        </div>
+        <span style="position:absolute;padding-top:20px;">Are you sure you want to delete this item?</span>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:25%;"></td>
+                    <td style="width:25%;text-align:center;">
+                        @Html.Kendo().Button().Name("Delete").Content("Ok").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "deleteGroupConfirm()" })
+                    </td>
+                    <td style="width:25%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('DeleteWindow')" })
+                    </td>
+                    <td style="width:25%;"></td>
+                </tr>
+            </table>
+            
+            
+        </div>
+
+    </div>

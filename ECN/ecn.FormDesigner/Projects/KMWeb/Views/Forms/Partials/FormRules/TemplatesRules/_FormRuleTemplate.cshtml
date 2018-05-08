@@ -1,0 +1,152 @@
+﻿@using KMEnums
+@using KMModels
+@using KMModels.PostModels
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+}
+<script id="FormRules-template" type="text/x-kendo-template">
+    @{string nameRadio = GetName<RuleModel>("Rules[#=RuleNum#]", x => x.ResultOnSubmit);
+      string NonQRuleRadio = GetName<RuleModel>("Rules[#=RuleNum#]", x => x.IsNonQualifyRule);
+      string SuspendPostRadio = GetName<RuleModel>("Rules[#=RuleNum#]", x => x.IsSuspendPostDB);
+      string OverWriteRadio = GetName<RuleModel>("Rules[#=RuleNum#]", x => x.IsOverWriteDataPost);}
+    <div class="rulesbox RuleRowBox" id="Rules_#=RuleNum#__RuleRowBox">
+        <div class="rulesorderbox  float-right">
+            <span>Rule Order: </span>
+            @(Html.Kendo().Button().Content("Up <span class=\"k-icon k-i-arrow-60-up\"></span>").Name("Rules_#=RuleNum#__Up").HtmlAttributes(new { type = "button", @class = "UpRuleOrder" }).ToClientTemplate() )
+            @(Html.Kendo().Button().Content("Down <span class=\"k-icon k-i-arrow-60-down\"></span>").Name("Rules_#=RuleNum#__Down").HtmlAttributes(new { type = "button", @class = "DownRuleOrder" }).ToClientTemplate() )
+        </div>
+        <div class="rulesactionsbox float-right">
+            @(Html.Kendo().Button().Content("Copy Rule").Name("Rules_#=RuleNum#__CopyRule").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__CopyRule", @class = "CopyRule" }).ToClientTemplate() )
+            @(Html.Kendo().Button().Content("Delete Rule").Name("Rules_#=RuleNum#__DeleteRule").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__DeleteRule", @class = "DeleteRule" }).ToClientTemplate() )
+        </div>
+        <div class="formbox condbox" style="width:100%;">
+            <div class="subtitle">When Form is submitted:</div>
+            @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Id), 0))
+            @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Order), 0))
+            @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Type), RuleTypes.Form))
+            <input type="hidden" name="Rules.Index" value="#=RuleNum#" />
+               <div class="formitem formiteminline" style="float: left; width: 51%;">
+                <div class="formitem formiteminline">
+                    @Html.Kendo().RadioButton().Label("Show Message").Value(ResultType.Message).Name("Rules_#=RuleNum#__ResultOnSubmit").Checked(true).HtmlAttributes(new { @name = nameRadio, @class = "ResultOnSubmit" }).ToClientTemplate()
+                    @Html.Kendo().RadioButton().Label("Redirect to Website").Value(ResultType.URL).Name("Rules_#=RuleNum#__ResultOnSubmit").Checked(false).HtmlAttributes(new { @name = nameRadio, @class = "ResultOnSubmit" }).ToClientTemplate()
+                    <div  id="Rules_#=RuleNum#__RedirectURLText" style="display:none;">
+                        @Html.Kendo().TextBox().Name(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.UrlToRedirect)).HtmlAttributes(new { @class = "longinput" })
+                    </div>
+                        @Html.Kendo().RadioButton().Label("Redirect to KM Paid Page").Value(ResultType.KMPaidPage).Name("Rules_#=RuleNum#__ResultOnSubmit").Checked(false).HtmlAttributes(new { @name = nameRadio, @class = "ResultOnSubmit" }).ToClientTemplate()
+                    <div id="Rules_#=RuleNum#__KMPaidPageText" style="display:none;">
+                        @Html.Kendo().TextBox().Name(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.UrlToRedirectKM)).HtmlAttributes(new { @class = "longinput" })
+                    </div>
+                    </div>
+                   <div class="conditionsbox" >
+                       <div id="Rules_#=RuleNum#__RedirectURL" style="display:none;">
+                           <div class="subtitle">Querystring Parameters</div>
+                           @(Html.Kendo().Button().Content("Add <i class=\"km-icon icon-kmplus-circled-1\"></i>").Name("Rules_#=RuleNum#__"+ResultType.URL+"__Add").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__" + ResultType.URL + "__Add", @class = "AddResultTypeURL btn  btn-blue2  float-left" }).ToClientTemplate())
+                           @(Html.Kendo().Button().Content("Add All").Name("Rules_#=RuleNum#__" + ResultType.URL + "__AddAll").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__" + ResultType.URL + "__AddAll", @class = "AddAllURL btn  btn-blue2  float-left" }).ToClientTemplate())
+                           <div class="conditionslist">
+                               <ul class="inline title" id="titleParameters">
+                                   <li class="name">Name</li>
+                                   <li class="fld">Value</li>
+                                   <li class="comp">Actions</li>
+                               </ul>
+                               <div id="Rules_#=RuleNum#__URLListOfParameters" name="ListOfParameters">
+
+                               </div> 
+
+
+                           </div>
+                     
+
+                       </div>
+                       <div id="Rules_#=RuleNum#__KMPaidPage" style="display:none;">
+                           <div class="subtitle">Querystring Parameters</div>
+                           @(Html.Kendo().Button().Content("Add All").Name("Rules_#=RuleNum#__" + ResultType.KMPaidPage + "__AddAll").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__" + ResultType.KMPaidPage + "__AddAll", @class = "AddAllPaidPage btn  btn-blue2  float-left" }).ToClientTemplate())
+                           <div class="conditionslist">
+                               <ul class="inline title" id="titleParameters">
+                                   <li class="name">Name</li>
+                                   <li class="fld">Value</li>
+                                   <li class="comp">Actions</li>
+                               </ul>
+                               <div id="Rules_#=RuleNum#__PaidListOfParameters" name="ListOfParameters">
+
+                               </div> 
+
+
+                           </div>
+                       </div>
+                           @*@Html.Kendo().TextBox().Name(GetName<RuleModel>("Rules[#=RuleNum#]",x => x.Action)).HtmlAttributes( new { @class = "longinput"})*@
+                           <div id="Rules_#=RuleNum#__ShowMessage">
+                               @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.ActionJs), String.Empty))
+                               @(
+                        Html.Kendo()
+                            .Editor()
+                            .Name(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Action))
+                            .HtmlAttributes(new { @class = "editorRefresh_Rules" })
+                            .Messages(m => m.InsertHtml("Insert Snippet"))
+                            .Tools(t => t.ViewHtml()
+                                         .Snippets(s =>
+                                         {
+                                             foreach (var control in controls)
+                                             {
+                                                 s.Add(control.FieldLabel, GetControlSnippet(control));
+                                             }
+                                         })
+                                         .CustomButton(x => x.Name("custom").ToolTip("Insert Java Script").Exec(@<text> function(e) {onRuleCustomToolClick(e,"Rules[#=RuleNum#].ActionJs");}</text>))
+                                         .CustomButton(x => x.Name("maximize").Exec("maximize")) // maximize should be last in custom button
+                            )
+                            .ImageBrowser(imageBrowser => imageBrowser
+                            .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                            )
+                            .Encode(false)
+                            .ToClientTemplate()
+                            )
+                           </div>
+                       </div>
+
+                   
+            </div>
+            @if (ViewBag.FormType == Enum.GetName(typeof(FormType), FormType.Subscription))
+            {
+                <div class="formitem formiteminline" style="float: right; width: 47%;">
+                    <div class="conditionsbox" >
+                        <div class="formitem formiteminline" id="Rules_#=RuleNum#_NonQRuleOnSubmit" style="width:100%; display:block;">
+                            <label style="width: 200px; display: inline-block;">Is this a Non - Qualifying Rule?</label>
+                            @Html.Kendo().RadioButton().Label("Yes").Value(true).Name("Rules_#=RuleNum#__IsNonQualifyRule").Checked(false).HtmlAttributes(new { @name = NonQRuleRadio, @class = "IsNonQualifyRule" }).ToClientTemplate()
+                            @Html.Kendo().RadioButton().Label("No").Value(false).Name("Rules_#=RuleNum#__IsNonQualifyRule").Checked(true).HtmlAttributes(new { @name = NonQRuleRadio, @class = "IsNonQualifyRule" }).ToClientTemplate()
+                        </div>
+                        <div class="formitem formiteminline" id="Rules_#=RuleNum#__SuspendPostDB" style="width:100%; display:none;">
+                            <label style="width: 200px; display: inline-block;">Suspend posting to database?</label>
+                            @Html.Kendo().RadioButton().Label("Yes").Value(true).Name("Rules_#=RuleNum#__IsSuspendPostDB").Checked(false).HtmlAttributes(new { @name = SuspendPostRadio, @class = "IsSuspendPostDB" }).ToClientTemplate()
+                            @Html.Kendo().RadioButton().Label("No").Value(false).Name("Rules_#=RuleNum#__IsSuspendPostDB").Checked(true).HtmlAttributes(new { @name = SuspendPostRadio, @class = "IsSuspendPostDB" }).ToClientTemplate()
+                        </div>
+                        <div class="formitem formiteminline" id="Rules_#=RuleNum#__OverWriteDataPost" style="width:100%; display: block;">
+                            <label style="width: 200px; display: inline-block;">Overwrite data posting?</label>
+                            @Html.Kendo().RadioButton().Label("Yes").Value(true).Name("Rules_#=RuleNum#__IsOverWriteDataPost").Checked(false).HtmlAttributes(new { @name = OverWriteRadio, @class = "IsOverWriteDataPost" }).ToClientTemplate()
+                            @Html.Kendo().RadioButton().Label("No").Value(false).Name("Rules_#=RuleNum#__IsOverWriteDataPost").Checked(true).HtmlAttributes(new { @name = OverWriteRadio, @class = "IsOverWriteDataPost" }).ToClientTemplate()
+                            <div id="Rules_#=RuleNum#__OverWriteDataPost_True" style="display:none;">
+                                @(Html.Kendo().Button().Content("Add <i class=\"km-icon icon-kmplus-circled-1\"></i>").Name("Rules_#=RuleNum#__OverWriteDataPost__Add").HtmlAttributes(new { type = "button", id = "Rules_#=RuleNum#__OverWriteDataPost__Add", @class = "OverWriteDataAdd btn  btn-blue2  float-left" }).ToClientTemplate())
+                                <div class="conditionslist">
+                                    <ul class="inline title" id="OvertitleParameters">
+                                        <li class="name">Form Field</li>
+                                        <li class="fld">Value</li>
+                                        <li class="comp">Actions</li>
+                                    </ul>
+                                    <div id="Rules_#=RuleNum#__OverwriteListOfParameters" name="OverListOfParameters">
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="Rules_#=RuleNum#__GroupConditions">
+        </div>
+    </div>
+</script>

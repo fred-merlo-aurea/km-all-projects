@@ -1,0 +1,285 @@
+﻿@model UAD.Web.Admin.Models.ResponseGroups
+
+<script>
+    var targetUrl = '@Url.Action("Index", "ResponseGroup", new { id = "temp"})';
+
+    $(document).ready(function () {
+        //window.addEventListener('beforeunload', recordeCloseTime);
+        //Prevent user from submitting form using Enter
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetProducts", "CommonMethods")',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#ddlProduct").empty();
+                $.each(data, function (index, item) {
+                    $('#ddlProduct').append($('<option></option>').val(item.Value).html(item.Text));
+                });
+                if (@Model.PubID == 0)
+                    $('#ddlProduct').val("");
+                else
+                    $('#ddlProduct').val(@Model.PubID);
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCodeByCodeTypeName", "ResponseGroup")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#ddlResponseGroupTypeId").empty();
+                $.each(data, function (index, item) {
+                    $('#ddlResponseGroupTypeId').append($('<option></option>').val(item.Value).html(item.Text));
+                });
+
+                if (@Model.ResponseGroupTypeId == 0)
+                    $('#ddlResponseGroupTypeId').val("");
+                else
+                    $('#ddlResponseGroupTypeId').val(@Model.ResponseGroupTypeId);
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        $("#btnSave").click(function (e) {
+            if ($("#frmResponseGroup").valid()) {
+                e.preventDefault();
+                saveResponseGroup();
+            }
+        });
+
+        var saveResponseGroup=function() {
+            var modelData = {
+                ResponseGroupID: @Html.Raw(Json.Encode(Model.ResponseGroupID)),
+                PubID: $("#ddlProduct").val(),
+                DisplayName: $("#txtDisplayName").val(),
+                ResponseGroupName: $("#txtResponseGroupName").val(),
+                IsActive: $("#ddlIsActive").val(),
+                IsMultipleValue : $("#ddlIsMultipleValue").val(),
+                IsRequired : $("#ddlIsRequired").val(),
+                ResponseGroupTypeId : $("#ddlResponseGroupTypeId").val(),
+                DisplayOrder: @Html.Raw(Json.Encode(Model.DisplayOrder)),
+                WQT_ResponseGroupID: @Html.Raw(Json.Encode(Model.WQT_ResponseGroupID)),
+                DateCreated: @Html.Raw(Json.Encode(Model.DateCreated)),
+                CreatedByUserID: @Html.Raw(Json.Encode(Model.CreatedByUserID)),
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddEdit", "ResponseGroup")',
+                data: JSON.stringify( modelData ),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    var result =JSON.parse(response);
+                    if (result.Success)
+                    {
+                        var data = {
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                            text: result.Text,
+                            autoClose: false,
+                            action: closeResponseGroup,
+                            IsOpen: false
+                        }
+                        showMessage(data);
+                    }
+                    else
+                    {
+                        $("#alertMsg").html(result.Text);
+                        $("#alertDiv").show();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    });
+
+    function closeResponseGroup() {
+        window.location = targetUrl.replace("temp", $("#ddlProduct").val());
+    }
+
+    function showAlert() {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Any unsaved data will be lost by leaving this page. Do you wish to continue?",
+            autoClose: false,
+            IsOpen: false,
+            action: closeResponseGroup,
+        });
+        return false;
+    }
+</script>
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    .help-block ul {
+        list-style-type: none;
+    }
+
+    .has-error .help-block,
+    .has-error .control-label,
+    .has-error .form-control-feedback {
+        color: #e80c4d;
+    }
+
+    .has-error .form-control:focus,
+    .has-error .form-control {
+        border-color: #e80c4d;
+        box-shadow: #e80c4d;
+    }
+</style>
+<div class="gridttl" id="topDiv">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+@using (Html.BeginForm("AddEdit", "ResponseGroup", FormMethod.Post, new { role = "form", id = "frmResponseGroup", data_toggle = "validator" }))
+{
+    @Html.HiddenFor(e => e.ResponseGroupID)
+    @Html.HiddenFor(e => e.DateCreated)
+    @Html.HiddenFor(e => e.CreatedByUserID)
+    @Html.HiddenFor(e => e.DisplayOrder)
+    @Html.HiddenFor(e => e.WQT_ResponseGroupID)
+    <table>
+        <tr>
+            <td colspan="2">
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span style="float:left;"><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error" ></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"><span style="color:red">*</span>@Html.LabelFor(e => e.PubID, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left;"> 
+                        @Html.DropDownListFor(e => e.PubID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlProduct", required = "required", @class = "form-control", style = "height:70%; width:250px;", data_required_error = "Please select Product" })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle" width="50%"><span style="color:red">*</span>@Html.LabelFor(e => e.DisplayName, new { @class = "control-label" })</td>
+            <td width="50%">
+                <div class="form-group">
+                    <div style="float:left">
+                        @Html.TextBoxFor(e => e.DisplayName, new
+                   {
+                       id = "txtDisplayName",
+                       type = "text",
+                       required = "required",
+                       data_required_error = "Please provide Display Name",
+                       @maxlength = "100",
+                       style = "width:270px; Color:Black;",
+                   })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            <td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle" width="50%"><span style="color:red">*</span>@Html.LabelFor(e => e.ResponseGroupName, new { @class = "control-label" })</td>
+            <td width="50%">
+                <div class="form-group">
+                    <div style="float:left">
+                        @Html.TextBoxFor(e => e.ResponseGroupName, new
+                   {
+                       id = "txtResponseGroupName",
+                       type = "text",
+                       required = "required",
+                       data_required_error = " Please provide Name",
+                       @maxlength = "100",
+                       style = "width:270px; Color:Black;",
+                   })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            <td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.IsActive, new { @class = "control-label" })</td>
+            <td>
+                @Html.DropDownListFor(e => e.IsActive,
+                new List<SelectListItem>
+                    {
+                       new SelectListItem { Value = "True" , Text = "Yes" },
+                       new SelectListItem { Value = "False" , Text = "No" },
+                    },
+                     new {style = "height:70%; width:270px;", id= "ddlIsActive" })
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.IsMultipleValue, new { @class = "control-label" })</td>
+            <td>
+                @Html.DropDownListFor(e => e.IsMultipleValue,
+                new List<SelectListItem>
+                    {
+                       new SelectListItem { Value = "True" , Text = "Yes" },
+                       new SelectListItem { Value = "False" , Text = "No" },
+                    },
+                     new {style = "height:70%; width:270px;", id = "ddlIsMultipleValue" })
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.IsRequired, new { @class = "control-label" })</td>
+            <td>
+                @Html.DropDownListFor(e => e.IsRequired,
+                new List<SelectListItem>
+                    {
+                       new SelectListItem { Value = "True" , Text = "Yes" },
+                       new SelectListItem { Value = "False" , Text = "No" },
+                    },
+                     new {style = "height:70%; width:270px;", id = "ddlIsRequired" })
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"><span style="color:red">*</span>@Html.LabelFor(e => e.ResponseGroupTypeId, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left">
+                        @Html.DropDownListFor(e => e.ResponseGroupTypeId, new SelectList(string.Empty, "Value", "Text"), "Select KM Product", new { id = "ddlResponseGroupTypeId", @class="form-control", required = "required", style = "height:70%; width:250px;", data_required_error = "Please select KM Product" })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit" class="btn-blue2" id="btnSave">Save</button>
+                <button type="button" class="btn-blue2" id="btnCancel" onclick="return showAlert()">Cancel</button>
+            </td>
+        </tr>
+    </table>
+}
+
+
+

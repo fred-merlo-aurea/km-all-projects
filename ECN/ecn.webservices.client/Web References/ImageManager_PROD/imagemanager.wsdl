@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webservices.ecn5.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://webservices.ecn5.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your Images in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.ecn5.com/">
+      <s:element name="GetFolders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFoldersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFoldersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFoldersWithinFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FolderName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFoldersWithinFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFoldersWithinFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FolderName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderWithinFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FolderName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ParentFolderName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderWithinFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderWithinFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImages">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImagesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImagesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImagesFromFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FolderName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetImagesFromFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImagesFromFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddImage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Image" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="ImageName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddImageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddImageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddImageToFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Image" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="ImageName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FolderName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddImageToFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddImageToFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetFoldersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFolders" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFoldersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersWithinFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFoldersWithinFolder" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersWithinFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFoldersWithinFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderWithinFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolderWithinFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderWithinFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderWithinFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImagesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImages" />
+  </wsdl:message>
+  <wsdl:message name="GetImagesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImagesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetImagesFromFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImagesFromFolder" />
+  </wsdl:message>
+  <wsdl:message name="GetImagesFromFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImagesFromFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddImageSoapIn">
+    <wsdl:part name="parameters" element="tns:AddImage" />
+  </wsdl:message>
+  <wsdl:message name="AddImageSoapOut">
+    <wsdl:part name="parameters" element="tns:AddImageResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddImageToFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddImageToFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddImageToFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddImageToFolderResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ImageManagerSoap">
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Image Folders in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersSoapIn" />
+      <wsdl:output message="tns:GetFoldersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Image Folders within a folder in ECN. </wsdl:documentation>
+      <wsdl:input name="GetFoldersWithinFolder" message="tns:GetFoldersWithinFolderSoapIn" />
+      <wsdl:output name="GetFoldersWithinFolder" message="tns:GetFoldersWithinFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Image Folder to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderSoapIn" />
+      <wsdl:output message="tns:AddFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Image Folder within a folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderWithinFolder" message="tns:AddFolderWithinFolderSoapIn" />
+      <wsdl:output name="AddFolderWithinFolder" message="tns:AddFolderWithinFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Images from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetImagesSoapIn" />
+      <wsdl:output message="tns:GetImagesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Images within a folder in ECN. </wsdl:documentation>
+      <wsdl:input name="GetImagesFromFolder" message="tns:GetImagesFromFolderSoapIn" />
+      <wsdl:output name="GetImagesFromFolder" message="tns:GetImagesFromFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Image to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddImageSoapIn" />
+      <wsdl:output message="tns:AddImageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Image to a folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddImageToFolder" message="tns:AddImageToFolderSoapIn" />
+      <wsdl:output name="AddImageToFolder" message="tns:AddImageToFolderSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ImageManagerSoap" type="tns:ImageManagerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFolders">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetFoldersWithinFolder" style="document" />
+      <wsdl:input name="GetFoldersWithinFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="GetFoldersWithinFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolderWithinFolder" style="document" />
+      <wsdl:input name="AddFolderWithinFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderWithinFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetImages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetImagesFromFolder" style="document" />
+      <wsdl:input name="GetImagesFromFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="GetImagesFromFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddImage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddImageToFolder" style="document" />
+      <wsdl:input name="AddImageToFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddImageToFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ImageManagerSoap12" type="tns:ImageManagerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFolders">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetFoldersWithinFolder" style="document" />
+      <wsdl:input name="GetFoldersWithinFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="GetFoldersWithinFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolderWithinFolder" style="document" />
+      <wsdl:input name="AddFolderWithinFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderWithinFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetImages" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetImages">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetImagesFromFolder" style="document" />
+      <wsdl:input name="GetImagesFromFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="GetImagesFromFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddImage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddImage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddImageToFolder" style="document" />
+      <wsdl:input name="AddImageToFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddImageToFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ImageManager">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your Images in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+    <wsdl:port name="ImageManagerSoap" binding="tns:ImageManagerSoap">
+      <soap:address location="http://webservices.ecn5.com/imagemanager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ImageManagerSoap12" binding="tns:ImageManagerSoap12">
+      <soap12:address location="http://webservices.ecn5.com/imagemanager.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

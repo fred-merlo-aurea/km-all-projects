@@ -1,0 +1,26 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+@{
+    ViewBag.Title = "Group Subscribers";
+}
+<style>
+    td, th{
+        padding: 3px;
+    }
+</style>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="#">Subscribers</a></li>
+</ol>
+<input type="hidden" value="@(HttpContext.Current.Session["url"] = Request.Url.ToString())" />
+
+<input type="hidden" id="hfGroupID" name="hfGroupID" value="@Model.group.GroupID"/>
+<hr />
+<div id="panelFilterExport">
+    @Html.Partial("Partials/_GroupEditor_Export", Model)
+</div>
+<hr />
+<div id="gridEmails">
+    @Html.Partial("Partials/_GroupEditor_Subscribers", Model.group.GroupID)
+</div>

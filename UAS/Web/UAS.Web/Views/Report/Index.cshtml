@@ -1,0 +1,613 @@
+﻿@model UAS.Web.Models.UAD.Filter.FilterViewModel
+@using Telerik.Reporting
+@using Telerik.ReportViewer.Mvc
+@{
+    ViewBag.Title = "Reports";
+}
+
+
+<style>
+    .errorhighlight{
+        border:1px solid red;
+    }
+    .errorlabel{
+        color:red;
+    }
+    #reportViewer1 {
+        width:100%;
+        height:800px;
+        overflow:auto;
+    }
+   .k-splitter {
+    position: relative;
+    min-height: 1400px;
+    }
+
+    /*#reportViewer1 {
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 120px;
+        bottom: 5px;
+        overflow: hidden;
+        clear: both;
+    }*/
+
+    /*#FilterSummaryDetails .k-grid-header{ display:none;}
+    #FilterSummaryDetails tr:nth-child(even) {background: #CCC}
+    #FilterSummaryDetails tr:nth-child(odd) {background: #FFF}
+    #FilterSummaryDetails table {border:1px solid gray;}*/
+</style>
+<input type="hidden" id="parentViewDivId" value="lpane" />
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div id="mainview">
+    <div id="lpane" style="height:100%;">
+        @*Partial View For Filter*@
+    </div>
+    <div id="rpane" style="height:100%;padding-left:5px;">
+        <div style="margin:0;">
+            <table style="width:100%;margin:0px;">
+                <tr>
+                    <td style="padding:0;margin:0;">
+                        <button id="toggleLeftPane" class="pull-left" style="border:0;color:orange;background-color:#dadada;"><span id="pinLeft" class="k-icon k-i-pin" style="font-size:25px;"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%">
+                        <div style="width:100%">
+                            <label class="labelsmall-black">Report:</label>
+                            <input id="kddlReports" name="Reports" style="width:300px;" /> &nbsp;
+                            <span style="padding-left:20px">
+                                <label class="labelsmall-black">Issue:</label>
+                                <input id="kddlIssues" name="Issue" style="width:300px;" />
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                         <button class="accordion" id="accShowFilter" style="padding-left:-5px;" ><b>Report Filters</b><span id="reportFilterShowHide">(Show...)</span></button>
+                         <div class="accordion-panel" style="border:1px solid #e8e8e8;  width:100%; margin:-5px 0px 0px 0px;">
+                             <div style="margin:0px 5px 5px 0px; text-align:right;">
+                                 <button class="btn-blue2 k-button" id="btnsavefilter" type="button" data-role="button" role="button" aria-disabled="false" tabindex="0">Save</button>
+                             </div>
+                             <div id="FilterSummaryDetails" style="margin: 0px 15px 0px 15px;">
+
+                             </div>
+                         </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="panel panel-default" id="ReportViewerPanel" style="display:none;">
+                            <!-- Default panel contents ShowSelectedFilters -->
+                            <div class="panel-heading" style="height:30px;">
+                                <label id="lblreportlabel" class="PanelHeaderlbl-black float-left">Report</label>
+                                <input type="button" name="btnDownLoadReport" onclick="OpenDownLoadDetails()" value="Download Details" class="btn-blue2 k-button float-right" style="width:120px;">
+                            </div>
+                          
+                            <div class="panel-body" id="divReportViewer">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("BPAPopup")
+        .Content(@<text>
+            @Html.Partial("_bpaReportPopup")
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+<script type="text/javascript">
+    //#region Document Ready
+    var CurrentReportNo = 0;
+    var TotalReports = 0;
+    $(document).ready(function () {
+        $("#mainview").kendoSplitter({
+            orientation: "horizontal",
+            panes: [{ collapsible: true, size: "20%", collapsedSize: "0%" },
+                { collapsible: true, size: "80%", collapsedSize: "0%" }
+            ]
+        });
+        $("#toggleLeftPane").click(function (e) {
+            var splitterElement = $("#mainview");
+            var leftPane = $("#lpane");
+            var splitter = splitterElement.data("kendoSplitter");
+            if (leftPane.width() > 0) {
+                $("#pinLeft").removeClass('k-i-pin').addClass('k-i-unpin');
+            }
+            else {
+                $("#pinLeft").removeClass('k-i-unpin').addClass('k-i-pin');
+            }
+            splitter[leftPane.width() > 0 ? "collapse" : "expand"](leftPane);
+        });
+        
+        function onFilterGridDataBound(e) {
+
+            var grid = $("#FilterSummaryDetails").data("kendoGrid");
+            var gridData = grid.dataSource.view();
+
+            for (var i = 0; i < gridData.length; i++) {
+                var currentUid = gridData[i].uid;
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                var deleteButton = $(currenRow).find("ul.k-widget.k-reset.k-header.k-menu.k-menu-vertical");
+                //deleteButton.removeClass("k-button").addClass('actionButton');
+                if (gridData[i].Name == 'Product') {
+                    deleteButton.hide();
+                }
+            }
+        }
+        $.ajax({
+            url: '/uas.web/filter/GetFilterViewModel?brandId=0&IsCirc=true&vwType=ProductView&pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#lpane").html(response);
+                $("#FilterSummaryDetails").kendoGrid({
+                    dataSource: {
+                        data:getGridData(),// { Name: '', Value: '', ElementID: '' },
+                        schema: {
+                            model: {
+                                fields: {
+                                    Name: { type: "string" },
+                                    Text: { type: "string" },
+                                    ElementID: { type: "string" }
+                                }
+                            }
+                        }
+                    },
+                    dataBound: onFilterGridDataBound,
+                    scrollable: false,
+                    sortable: false,
+                    filterable: false,
+                    pageable: false,
+                    columns: [
+                        { field: "ElementID", hidden: true },
+                        { field: "Name", title: 'Field Name', width: "150px" },
+                        { field: "Value", title: 'Value(s)', width: "800px" },
+                        { template: "<ul class='k-widget k-reset k-header k-menu k-menu-vertical' style='text-align:center;'  width='80px;' data-role='menu' tabindex='0' role='menubar'><li class='k-item k-menu-actions k-state-default k-first k-last' role='menuitem' style='z-index: auto;' onclick='DeleteFilter(this);'><span class='k-link'>Delete<span class='k-icon k-i-close-circle k-i-x-circle'></span></span></li></ul>", width: "80px" },
+                        //{
+                        //    command: {
+                        //        text: 'Delete',
+                        //        click: showDetails,
+                        //    },
+                        //   title: '', width: "90px"
+                        //}
+                    ]
+                });
+                var showfilterelement = document.getElementById("accShowFilter");
+                showfilterelement.classList.toggle("active");
+                /* Toggle between hiding and showing the active panel */
+                var panel = showfilterelement.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                    if ($("#reportFilterShowHide") && (showfilterelement.id=='accShowFilter')) {
+                        $("#reportFilterShowHide").text("(Show...)");
+                    }
+
+                } else {
+                    panel.style.display = "block";
+                    if ($("#reportFilterShowHide")) {
+                        $("#reportFilterShowHide").text("(Hide...)");
+                    }
+
+                }
+
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+
+        BindDropDownList({
+            ControlID: "kddlIssues",
+            URL: "/uas.web/Report/GetCircIssues?pubID=" + $("#SelectedProductID").val(),
+            TextField: "IssueName",
+            ValueField: "IssueId",
+            OptionLabel: "",
+            DataType: "json"
+        });
+        BindDropDownList({
+            ControlID: "kddlReports",
+            URL: "/uas.web/Report/GetReports?pubID=" + $("#SelectedProductID").val(),
+            TextField: "ReportName",
+            ValueField: "ReportID",
+            OptionLabel: "",
+            DataType: "json"
+        });
+
+        $('#drpReport').change(function () {
+            GetReport($(this).val());
+        });
+        $('#kddlReports').change(function () {
+            GetReport();
+        });
+        $('#btnsavefilter').click(function (e) {
+            e.stopPropagation();
+            OpneSaveFilterPanel();
+        });
+        
+
+
+    });
+    //#endregion Document Ready
+    function getGridData() {
+        var filter = getFilter();
+        var gridData = [];
+        var serachcondition = "";
+        $.each(filter.Fields, function (i, obj) {
+            if (obj.SearchCondition) {
+                serachcondition = obj.SearchCondition + " - ";
+            } else {
+                serachcondition = ""
+            }
+            if (obj.Name == 'Adhoc') {
+                gridData.push({ Name: obj.Name, Value: obj.Text + " - " + serachcondition + obj.Values, ElementID: obj.ElementID })
+
+            } else if (obj.Name == 'Product') {
+                gridData.push({ Name: obj.Name, Value: obj.Text, ElementID: '' })
+            }
+            else {
+                gridData.push({ Name: obj.Name, Value: serachcondition + obj.Text, ElementID: obj.ElementID })
+            }
+
+        });
+        return gridData;
+    }
+    function validate(selectedID) {
+        clearValidationErrorMessages();
+        var lastControlsError = [];
+        if ($.trim(selectedID) === "" || selectedID === "-1") {
+            lastControlsError.push({ name: "kddlReports", message: "Please select report.", label: "lblreporterror", isKendo: true });
+            setValidationClient(lastControlsError);
+            $(".validationMessage").css("display","inline" );
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function GetReport() {
+        var drpReport = $("#kddlReports").data("kendoDropDownList");
+        var selectedReportID = drpReport.value();
+
+        if (validate(selectedReportID)) {
+            if (selectedReportID == "0") {
+                openPopUp("BPAPopup");
+
+            }
+            else {
+                LoadReportViewer();
+            }
+        }
+    }
+    function ShowFilterDetails() {
+        var grid = $("#FilterSummaryDetails").data("kendoGrid");
+        var options = grid.getOptions();
+        options.dataSource.data = getGridData();
+        grid.setOptions(options);
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function DeleteFilter(deleteelement) {
+        var ele = $(deleteelement).parent().parent().parent().find(">:first-child").text();
+        if (ele) {
+            var ids = ele.split("|");
+            var kendodrpDown;
+            var kendoMultiselect;
+            for (var i = 0; i < ids.length ; i++) {
+                $("#" + ids[i]).val('');
+                kendodrpDown = $("#" + ids[i]).data("kendoDropDownList");
+                kendoMultiselect = $("#" + ids[i]).data("kendoMultiSelect");
+                if (kendodrpDown) {
+                    if (ids[i].includes("drpAdHocVarchar")) {
+                        kendodrpDown.value("Contains");
+                        $("#txtSearchValue_" + ids[i].split('_')[1]).show();
+                        $("#RangeDiv_" +ids[i].split('_')[1]).removeClass("displayInline").addClass("displayNone");
+                        $("#SearchValueDiv_" + ids[i].split('_')[1]).removeClass("displayNone").addClass("displayInline");
+                    } else {
+                        kendodrpDown.value('')
+                    }
+                }
+                else if (kendoMultiselect) {
+                    kendoMultiselect.value('')
+                }
+            }
+            ShowFilterDetails();
+            GetReport();
+        }
+
+    }
+    function OpneSaveFilterPanel() {
+
+        var saveModel = {
+            viewType: "ProductView",
+            IsCirc: true,
+            PubID: $("#SelectedProductID").val(),
+            BrandID: 0,
+            Mode: "AddNew",
+            FilterIDs: "",
+            SourcePage: "SaveFilterPanel"
+        }
+        GetSaveFilterPanel(saveModel);
+    }
+    function ApplyFilter() {
+        ShowFilterDetails();
+        GetReport();
+    }
+    function LoadCircDefaultFilters() {
+        LoadDefaultFilters(ApplyFilter);
+       
+    }
+    function ResetAllFilter() {
+        resetFilter(false);
+        ShowFilterDetails();
+        $('#ReportViewerPanel').hide();
+    }
+    function LoadSavedFilterPanelGrid(FilterId, callback) {
+        LoadFilterData(FilterId, callback);//in _filter.chtml
+    }
+
+    //function OpenDownLoadDetails() {
+    //    var filter = getFilter();
+    //    var FrameworkUAD = {
+    //        BusinessLogic: {
+    //            Enums: {
+    //                ViewType: {
+    //                    None: 0,
+    //                    ConsensusView: 1,
+    //                    ProductView: 2,
+    //                    CrossProductView: 3,
+    //                    RecencyView: 4,
+    //                    RecordDetails: 5,
+    //                    AMSView: 6
+    //                }
+    //            }
+    //        }
+    //    }
+    //    var downloadmodel = {
+    //        ViewType: FrameworkUAD.BusinessLogic.Enums.ViewType.ProductView,
+    //        BrandID: filter.BrandID,
+    //        PubIDs: [filter.PubID],
+    //        IsCirc: true,
+    //        IssueID: $("#kddlIssues").val(),
+    //        CustomerClientGroupID:$("#SelectedClientGroupID").val(),
+    //        PermissionText: "",
+    //        CodeSheetIDText: "",
+    //        SelectedFilterNos: "",
+    //        SuppressedFilterNos: "",
+    //        SelectedFilterOperation: "Single",
+    //        SuppressedFilterOperation: "",
+    //        filtermvc: filter
+    //    }
+    //    ShowDownloadDetailsPopUp(downloadmodel)
+    //}
+
+
+    function OpenDownLoadDetails() {
+        var filter = getFilter();
+        var flist = [];
+        flist.push(filter); //Create all filter list
+        var downloadmodel = {
+            PubID: filter.PubID, //Current Product ID
+            IssueID: $("#kddlIssues").val(), //Current Issue ID
+            CustomerClientGroupID: $("#SelectedClientGroupID").val(), //Client GroupID is required only for Report
+            DownloadFor:"Report",//Values:  IssueSplit, AddRemove, RecordUpdate
+            FilterList: flist
+        }
+        GetDownloadDetailsPopUp(downloadmodel) //Get Download Details Popup in _Filter.chtml
+    }
+
+   function OpneSavedFiltersPanel() {
+
+        var saveModel = {
+            viewType: "ProductView",
+            IsCirc: true,
+            PubID: $("#SelectedProductID").val(),
+            FilterIDs: "",
+            SourcePage: 'Report'
+        }
+        GetSavedFiltersPanel(saveModel); //in _filter.chtml
+    }
+
+    function onTelerikReportingBegin() {
+        showloading = false;
+        showLoadingWindow();
+    }
+
+    function onTelerikReportingEnd() {
+        showloading = true;
+        closeLoadingWindow();
+    }
+
+    function LoadReportViewer() {
+
+        var filter = getFilter();
+        var drpIssues = $("#kddlIssues").data("kendoDropDownList");
+        var drpReport = $("#kddlReports").data("kendoDropDownList");
+        var drpProduct = $("#SelectedProductID").data("kendoDropDownList");
+
+        
+        $("#lblreportlabel").text(drpReport.text());
+
+        var rptmodel = {
+            ClientID: $("#SelectedClientID").val(),
+            reportname: drpReport.text(),
+            ReportID: drpReport.value(),
+            IssueID: drpIssues.value(),
+            IssueName: drpIssues.text(),
+            ProductName: drpProduct.text(),
+            PubID: $("#SelectedProductID").val()
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Report/RenderReport',
+            data: JSON.stringify({ 'filter': filter, 'reportmodel': rptmodel }),
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function () {
+                showloading = false;
+                showLoadingWindow();
+            },
+
+            success: function (data) {
+                $('#ReportViewerPanel').show();
+                /* data is the pure html returned from action method, load it to your page */
+                $('#divReportViewer').html(data);
+            },
+            error: function (response) {
+                console.log(response);
+                showloading = false;
+                $('#divReportViewer').html("<span style='color:red;'>There is some issue in loading report. If this issue persist, please contact system administrator.</span>");
+               
+            }
+        });
+    }
+    function guid() {
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+    }
+
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    function GetReportPackage() {
+       
+        var filter = getFilter();
+        var drpIssues = $("#kddlIssues").data("kendoDropDownList");
+        var drpReport = $("#kddlReports").data("kendoDropDownList");
+        var lstRpt = [];
+        var klb = $("#BPASelectedReports option");
+
+        $.each(klb, function (i, e) {
+            lstRpt.push({ Value: e.value, Text: e.text });
+        });
+        var rptmodel = {
+            ClientID: $("#SelectedClientID").val(),
+            reportname: drpReport.text(),
+            ReportID: drpReport.value(),
+            IssueID: drpIssues.value(),
+            IssueName: drpIssues.text(),
+            ProductName: $("#SelectedProductID option:selected").text(),
+            PubID: $("#SelectedProductID").val(),
+            ReportIDs: lstRpt
+        }
+        var uuid = guid();
+        CurrentReportNo = 0;
+        TotalReports = lstRpt.length;
+        // openPopUp("CurrentRunningReport");
+        // Declare an array of Deferred objects.
+        var deferredsArray = [];
+        for (var i = 0; i < lstRpt.length; i++) {
+            rptmodel.ReportID = lstRpt[i].Value;
+           
+            // Add Ajax request.
+            CreateReport(i,rptmodel, filter, uuid, deferredsArray);
+
+        }
+        //CloseWindow("CurrentRunningReport");
+        //CloseWindow('BPAPopup');
+        //window.location = "/UAS.web/Report/DownloadCombinePDF?folder=" + uuid;
+        $.when.apply(null, deferredsArray).done(function () {
+            // Refresh my flagged items tab.
+            CloseWindow('BPAPopup');
+            window.location = "/UAS.web/Report/DownloadCombinePDF?folder=" + uuid;
+        });
+       
+
+        @*$.ajax({
+            type: 'POST',
+            url: '/UAS.web/Report/ExportReportPackages',
+            data: JSON.stringify({ 'filter': filter, 'reportmodel': rptmodel }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                CloseWindow('BPAPopup');
+                if (data == "0") {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: "Report Package export failed. Please try again.",
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                } else {
+                    alert(data);
+                    /* data is the pure html returned from action method, load it to your page */
+                    var url = "/UAS.web/Report/GetFile?guid=" + data + "&PubID=" + $("#SelectedProductID").val()
+                    /* little fade in effect */
+                    window.location = url;
+                }
+               
+            },
+            error: function (response) {
+
+                console.log(response)
+
+
+            }
+        });*@
+    }
+    function CreateReport(i,rptmodel, filter, uuid, deferredsArray) {
+        var ajaxRequest = $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Report/ExportReportBPA',
+            data: JSON.stringify({ 'filter': filter, 'reportmodel': rptmodel, 'folderid': uuid }),
+            contentType: "application/json; charset=utf-8",
+            //async: false,
+            success: function (data) {
+
+                if (data == "0") {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: "Report Package export failed. Please try again.",
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                } else {
+                    CurrentReportNo = CurrentReportNo + 1;
+                    Progress(rptmodel.ReportIDs[i].Text);
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+        deferredsArray.push(ajaxRequest);
+    }
+
+    function Progress(currentreport) {
+        $("#currentRunningReportlbl").text("Generating " + currentreport);
+        var current_progress = ((CurrentReportNo / TotalReports) * 100.00).toFixed(0);
+        $("#dynamicReportProgress")
+        .css("width", current_progress + "%")
+        .attr("aria-valuenow", current_progress)
+        .text(current_progress + "% Complete");
+    }
+    
+
+
+</script>
+

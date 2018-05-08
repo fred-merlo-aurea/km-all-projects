@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getSubcribedNewsletters">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailaddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getSubcribedNewslettersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getSubcribedNewslettersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="getSubcribedNewslettersSoapIn">
+    <wsdl:part name="parameters" element="tns:getSubcribedNewsletters" />
+  </wsdl:message>
+  <wsdl:message name="getSubcribedNewslettersSoapOut">
+    <wsdl:part name="parameters" element="tns:getSubcribedNewslettersResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PharmaliveServicesSoap">
+    <wsdl:operation name="Login">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Authentication for PharmaLive Account. Parameters passed are username &amp; password .&lt;br&gt;- Returns UserID or 0(failed login).</wsdl:documentation>
+      <wsdl:input message="tns:LoginSoapIn" />
+      <wsdl:output message="tns:LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getSubcribedNewsletters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">returns subscribed newsletters groupIDs- delimited by comma(,)</wsdl:documentation>
+      <wsdl:input message="tns:getSubcribedNewslettersSoapIn" />
+      <wsdl:output message="tns:getSubcribedNewslettersSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PharmaliveServicesSoap" type="tns:PharmaliveServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSubcribedNewsletters">
+      <soap:operation soapAction="http://tempuri.org/getSubcribedNewsletters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PharmaliveServicesSoap12" type="tns:PharmaliveServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSubcribedNewsletters">
+      <soap12:operation soapAction="http://tempuri.org/getSubcribedNewsletters" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PharmaliveServices">
+    <wsdl:port name="PharmaliveServicesSoap" binding="tns:PharmaliveServicesSoap">
+      <soap:address location="http://webservices.ecn5.com/CustomAPI/Pharmaliveservices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PharmaliveServicesSoap12" binding="tns:PharmaliveServicesSoap12">
+      <soap12:address location="http://webservices.ecn5.com/CustomAPI/Pharmaliveservices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

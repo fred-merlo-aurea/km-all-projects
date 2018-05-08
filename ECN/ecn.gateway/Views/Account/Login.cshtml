@@ -1,0 +1,168 @@
+﻿@using System.Collections.Concurrent
+@model ecn.gateway.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+<style>
+    .ValidateCustomLabel {
+        font-family: Verdana;
+        font-size: 14px;
+    }
+</style>
+
+
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var tmp = $(".hSignupText").val();
+        if (tmp !== "") {
+            $("#SignIn").val(tmp);
+        }
+        tmp = $(".hSubmitText").val();
+        if (tmp !== "") {
+            $("#Login").val(tmp);
+        }
+    });
+</script>
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+</head>
+
+<body>
+@if (Session["TypeCode"].ToString().Length > 0 && Session["PubCode"].ToString().Length > 0)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(m => m.Gateway.CustomerID)
+        @Html.HiddenFor(m => m.Gateway.GroupID)
+        @Html.HiddenFor(m => m.Gateway.GatewayID)
+        @Html.HiddenFor(m => m.Gateway.LoginOrCapture)
+        @Html.HiddenFor(m => m.Gateway.ValidateCustom)
+
+        <header>
+           
+        </header>
+
+        <fieldset>
+
+            <legend>Log in Form</legend>
+            @Html.ValidationMessage("LoginModel.GateWayVSProfile")
+            <ol>
+                <li>
+                    <div class="username-label username-label-custom" style="font-size: 1.2em">
+                        @Html.LabelFor(m => m.EMail)
+                    </div>
+
+                    <div class="username-textbox" style="font-size: 1.2em">
+                        @Html.TextBoxFor(m => m.EMail)
+                    </div>
+
+                    <div class="username-validation">
+                        @Html.ValidationMessageFor(m => m.EMail)
+                        @Html.ValidationMessage("LoginModel.Email")
+                    </div>
+                </li>
+                <li>
+                    @if (Model.Gateway.ValidatePassword)
+                    {
+                        <div class="password-label">
+                            @Html.LabelFor(m => m.Password)
+                        </div>
+                        <div class="password-textbox">
+                            @Html.PasswordFor(m => m.Password)
+                            <br />
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                    }
+                        <div class="password-validation">
+                            
+                            @Html.ValidationMessage("LoginModel.Password")
+                        </div>
+                    
+                </li>
+                <li>
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox RememberMe-Custom" })
+                </li>
+            </ol>
+
+            <div>
+
+                @if (Model.Gateway.GatewayValues.Count > 0)
+                {
+                    for (int i = 0; i < Model.Gateway.GatewayValues.Count; i++)
+                    {
+                        if (!Model.Gateway.GatewayValues[i].IsStatic)
+                        {
+                            <div class="ValidateCustomLabel GatewayValues-Custom">
+                                @Model.Gateway.GatewayValues[i].Label
+                            </div>
+                            <div>
+                                @if (Model.Gateway.GatewayValues[i].IsBlank)
+                                {
+                                    @Html.TextBoxFor(m => Model.Gateway.GatewayValues[i].Value, new { @class = "errorClass" })
+                                    <label style="color: #e80c4d; font-size: .85em; font-weight: bold; font-family: Segoe UI, Verdana, Helvetica, Sans-Serif;">@string.Format("The {0} field is required", Model.Gateway.GatewayValues[i].Field)</label>
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(m => Model.Gateway.GatewayValues[i].Value)
+                                }
+                                @Html.HiddenFor(m => Model.Gateway.GatewayValues[i].GatewayValueID)
+                                @Html.HiddenFor(m => Model.Gateway.GatewayValues[i].Field)
+                                @Html.HiddenFor(m => Model.Gateway.GatewayValues[i].Label)
+                                @Html.HiddenFor(m => Model.Gateway.GatewayValues[i].Comparator)
+                                @Html.HiddenFor(m => Model.Gateway.GatewayValues[i].FieldType)
+                            </div>
+                        }
+
+                    }
+                }
+            </div>
+
+            @if (Session["TypeCode"].ToString().Length > 0 && Session["PubCode"].ToString().Length > 0)
+            {
+                <input type="submit" id="Login" name="Command" class="login-button login-button-custom" value="Login" />
+                @Html.HiddenFor(m => m.Gateway.SubmitText, new { @class = "hSubmitText" })
+
+                <br/>
+                if (Model.Gateway.ShowSignup && Model.Gateway.LoginOrCapture.ToLower() != "capture")
+                {
+                        @Html.HiddenFor(m => m.Gateway.SignupText, new { @class = "hSignupText" })
+                        <input id="SignIn" type="button" name="Command" onclick="@("window.location.href='" + Session["SubscribeURL"] + "'"); " class="signin-button signin-button-correction signin-button-custom" value="Sign Up" style="border: 0"/>
+                }
+            }
+        </fieldset>
+
+        <br/>
+        if (Model.Gateway.ShowForgotPassword && Model.Gateway.LoginOrCapture.ToLower() != "capture")
+        {
+            <div id="SendPassword">
+                @Html.ActionLink(!string.IsNullOrWhiteSpace(Model.Gateway.ForgotPasswordText) ? Model.Gateway.ForgotPasswordText : "Forgot Password?", "SendPassword", new { pubcode = Session["PubCode"].ToString(), typecode = Session["TypeCode"].ToString() }, new { @class = "SendPassword-Corrections SendPassword-custom" })
+                @*@Html.ActionLink(!string.IsNullOrWhiteSpace(Model.Gateway.ForgotPasswordText) ? Model.Gateway.ForgotPasswordText : "Forgot Password?", "SendPassword", new { pubcode = Session["PubCode"].ToString(), typecode = Session["TypeCode"].ToString() })*@
+            </div>
+        }
+    }
+}
+else
+{
+    <div id="NoAccess">
+        @Html.ValidationMessage("LoginModel.Invalid")
+    </div>
+}
+</body>
+
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://eforms.kmpsgroup.com/WattWebService/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://eforms.kmpsgroup.com/WattWebService/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://eforms.kmpsgroup.com/WattWebService/">
+      <s:element name="AddProfile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Profile" type="tns:CustomerData" />
+            <s:element minOccurs="0" maxOccurs="1" name="hUDF" type="tns:ArrayOfArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CustomerData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="EktronUserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PubCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BirthDay" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FullName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Occupation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Website" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Age" type="s:short" />
+          <s:element minOccurs="1" maxOccurs="1" name="Income" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Gender" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hUDF" type="tns:ArrayOfArrayOfAnyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfAnyType" nillable="true" type="tns:ArrayOfAnyType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AddProfileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddProfileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProfile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Emailaddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pubCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetProfileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetProfileResult" type="tns:CustomerData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUDF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pubcode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newUDF" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUDFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateUDFResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUDFList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pubCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GroupDataField">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="GroupDataFieldsID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="GroupID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShortName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LongName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SurveyID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="DataFieldSetID" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IsPublic" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPrimaryKey" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfGroupDataField">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GroupDataField" nillable="true" type="tns:GroupDataField" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetUDFListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUDFListResult" type="tns:ArrayOfGroupDataField" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AddProfileSoapIn">
+    <wsdl:part name="parameters" element="tns:AddProfile" />
+  </wsdl:message>
+  <wsdl:message name="AddProfileSoapOut">
+    <wsdl:part name="parameters" element="tns:AddProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetProfileSoapIn">
+    <wsdl:part name="parameters" element="tns:GetProfile" />
+  </wsdl:message>
+  <wsdl:message name="GetProfileSoapOut">
+    <wsdl:part name="parameters" element="tns:GetProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateUDFSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateUDF" />
+  </wsdl:message>
+  <wsdl:message name="CreateUDFSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateUDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUDFListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUDFList" />
+  </wsdl:message>
+  <wsdl:message name="GetUDFListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUDFListResponse" />
+  </wsdl:message>
+  <wsdl:portType name="KmWattServiceSoap">
+    <wsdl:operation name="AddProfile">
+      <wsdl:input message="tns:AddProfileSoapIn" />
+      <wsdl:output message="tns:AddProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProfile">
+      <wsdl:input message="tns:GetProfileSoapIn" />
+      <wsdl:output message="tns:GetProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUDF">
+      <wsdl:input message="tns:CreateUDFSoapIn" />
+      <wsdl:output message="tns:CreateUDFSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUDFList">
+      <wsdl:input message="tns:GetUDFListSoapIn" />
+      <wsdl:output message="tns:GetUDFListSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="KmWattServiceSoap" type="tns:KmWattServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddProfile">
+      <soap:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/AddProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProfile">
+      <soap:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/GetProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUDF">
+      <soap:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/CreateUDF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUDFList">
+      <soap:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/GetUDFList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="KmWattServiceSoap12" type="tns:KmWattServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddProfile">
+      <soap12:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/AddProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProfile">
+      <soap12:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/GetProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUDF">
+      <soap12:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/CreateUDF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUDFList">
+      <soap12:operation soapAction="http://eforms.kmpsgroup.com/WattWebService/GetUDFList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KmWattService">
+    <wsdl:port name="KmWattServiceSoap" binding="tns:KmWattServiceSoap">
+      <soap:address location="http://eforms.kmpsgroup.com/KMWattWS/kmwattservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="KmWattServiceSoap12" binding="tns:KmWattServiceSoap12">
+      <soap12:address location="http://eforms.kmpsgroup.com/KMWattWS/kmwattservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

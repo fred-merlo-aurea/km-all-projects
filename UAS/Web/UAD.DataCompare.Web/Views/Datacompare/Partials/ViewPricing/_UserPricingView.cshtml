@@ -1,0 +1,73 @@
+﻿@model List<UAD.DataCompare.Web.Models.ViewPricingListModel>
+    <style>
+        .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
+    color: #787878;
+    font-weight: bold;
+    background-color: #eeeeee;
+}
+
+        a {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+     </style>
+<div>
+    @(
+            Html.Kendo()
+               .Grid(Model)
+               .Name("Grid")
+               .Pageable()
+               .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+               .Sortable(sortable => sortable
+                        .AllowUnsort(true)
+                        .SortMode(GridSortMode.SingleColumn))
+               .Columns(columns =>
+               {
+                   columns.Bound(e => e.DcViewID).Hidden(true);
+                   columns.Bound(e => e.FileName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title("File Name");
+                   columns.Bound(e => e.DateCompared).Format("{0:MM/dd/yyyy hh:mm:ss}").Title("Date Compared").Filterable(false);
+                   columns.Bound(e => e.User).Title("User").HtmlAttributes(new { style = "overflow:hidden;" }).Filterable(false);
+                   columns.Bound(e => e.Target).Title("Target").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+                   columns.Bound(e => e.Scope).Title("Scope").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+                   columns.Bound(e => e.TypeOfComparision).Title("Type").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)))
+                   .ClientFooterTemplate("<div style='text-align:right;'><strong>Total:</strong></div>");
+                   columns.Bound(e => e.TotalDownloaded).Title("Downloads").Filterable(false).HeaderHtmlAttributes(new { @style = "text-align:right;" })
+                   .ClientFooterTemplate("<div align='right'><strong>#=sum#</strong></div>")
+                   .ClientTemplate("<a  onclick =\"ShowViewDownLoadforFile('#=SourceFileID#','#=TargetId#','#=ScopeId#','#=TypeId#')\">#=TotalDownloaded#</a>").HtmlAttributes(new { style = "text-align:right;", id="totalDownloads" });
+                   columns.Bound(e => e.Price).Filterable(false).Title("Price").HeaderHtmlAttributes(new { @style = "text-align:right;" })
+                   .ClientFooterTemplate("<div  align='right'><strong>#:kendo.toString(sum, 'c')#</strong></div>")
+                   .ClientTemplate("# if ( Billable == 'Yes') { #" +
+                                            "<a  onclick =\"showDownLoadDetails('#=TotalRecordCount#','#=FileRecordCount#','#=FileComaprsionCost#','#=TotalDownLoadCost#')\">" +
+                                            "#:kendo.toString(Price, 'c')#" +
+                                            "</a> " +
+                                            "# } else {#" +
+                                             "<span style='float:right;'>" +
+                                            "#:kendo.toString(Price, 'c')#" +
+                                             "</span> " +
+                                             "# }  # "
+                                             )
+                   .HtmlAttributes(new { style = "text-align:right" });
+                   columns.Bound(e => e.Billable).Title("Billable").Filterable(false)
+                          .ClientTemplate("# if ( Billable == 'No' && IsAdmin) { #" +
+                                            "<a  onclick =\"showNotesDetails('#=Notes#')\">" +
+                                            "#=Billable# " +
+                                            "</a> " +
+                                            "# } else {#" +
+                                             "<span>" +
+                                            "#=Billable# " +
+                                             "</span> " +
+                                             "# }  # "
+                                             ).HtmlAttributes(new { style = "text-align:center" }).Width(50);
+
+               })
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(10)
+                        .ServerOperation(false)
+                        .Aggregates(agr => agr.Add(p => p.TotalDownloaded).Sum())
+                        .Aggregates(agr => agr.Add(p => p.Price).Sum())
+                        //.Group(grp => grp.Add(p => p.FileName))
+                        //.Sort(sort => sort.Add("DateCompared").Descending())
+
+                    ))
+</div>

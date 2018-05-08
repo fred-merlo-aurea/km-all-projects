@@ -1,0 +1,83 @@
+﻿@model UAS.Web.Models.Circulations.BatchHistory
+
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $('#btnPrint').click(function () {
+            openPrintWindow();
+        });
+    });
+
+    function closeKendoWindow() {
+        var window = $("#myWindow").data('kendoWindow');
+        window.close();
+
+        $.ajax({
+            url: "/UAS.Web/History/OpenBatchHistory",
+            type: "POST",
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                $("#openBatches").html(data);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function openPrintWindow() {
+        var window = $("#myWindow").data('kendoWindow');
+        window.close();
+        
+        $.ajax({
+            url: "/UAS.Web/History/OpenBatchHistory",
+            type: "POST",
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                $("#openBatches").html(data);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+
+        var id = @Model.BatchID;        
+
+        var modelData = {
+            BatchID: id
+        }
+
+        var win = $("#printWindow").data('kendoWindow');
+        win.center().open();
+
+        $.ajax({
+            url: "/UAS.Web/History/PrintWindow",
+            type: "GET",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (result) {                                   
+                win.content(result);                
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });                       
+    }
+    
+</script>
+
+<div>
+    <div>
+        <span style="font-size: 20px; font-weight: bold;">Save/Print</span>
+    </div>
+    <div style="margin: 5px 5px 5px 5px;">
+        <span>Batch number @Model.BatchNumber was finalized. Would you like to save or print batch report?</span>
+    </div>
+    <div>
+        @Html.ActionLink("Save", "SaveReport", "History", new { BatchID = Model.BatchID, BatchNumber = Model.BatchNumber }, new { @class = "btn k-button", @style = "color: white; width: 50px; height: 24px;", onclick = "closeKendoWindow();" })        
+        <button id="btnPrint" class="btn k-button" style="width: 50px; height: 24px;">Print</button>
+    </div>
+</div>

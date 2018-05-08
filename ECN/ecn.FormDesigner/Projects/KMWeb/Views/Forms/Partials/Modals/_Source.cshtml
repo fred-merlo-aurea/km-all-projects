@@ -1,0 +1,156 @@
+﻿
+@{
+    var embededCode = "<iframe style=\"border:0;width:100%;height:100%;\" src=\"Url\"></iframe>";
+    var responsiveEmbededCode = "<style>.intrinsic-container{position:relative;height:0;overflow:hidden;margin-bottom:1.5rem;}.intrinsic-container-ratio{padding-bottom:75%}"+
+                  ".intrinsic-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;margin:0!important;border:0;}</style><div class=\"intrinsic-container intrinsic-container-ratio\">"+
+                  "<iframe src=\"Url\"></iframe></div>";
+    var formUrl = Config("GetFormHandlerUrl");
+    var autoUrl = Config("AutoSubmitFormHandlerUrl");
+  }
+<script>
+
+    function SourceOpen(token, type) {
+        var formUlr = "@formUrl";
+        var autoUlr = "@autoUrl";
+        try {
+            if (type == 'Auto-Submit') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/KMWeb/Forms/GetFormQueryString',
+                    data: "token=" + token,
+                    success: function (response) {
+                        $("#FileAuto").val(autoUlr + "?tokenuid=" + token + response);
+                    }
+                });
+                
+                $("#FormNoAuto").hide();
+                $("#FormAuto").show();
+            }
+            else {
+                $("#File").val(formUlr + "?tokenuid=" + token);
+                $("#EmbededCode").html("@embededCode".replace("Url", formUlr + "?tokenuid=" + token + "&isIFrame=true"));
+                $("#ResponsiveEmbededCode").html("@responsiveEmbededCode".replace("Url", formUlr + "?tokenuid=" + token + "&isIFrame=true"));
+                $("#FormNoAuto").show();
+                $("#FormAuto").hide();
+            }
+
+            $("#SourceDialog").kendoWindow({ animation: false, visible: false, modal: true })
+            var window = $("#SourceDialog").data("kendoWindow");
+            window.center().open();
+        } catch (e) { alert(e); }
+    }
+
+    function SourceClose() {
+        var window = $("#SourceDialog").data("kendoWindow");
+        window.close();
+    }
+</script>
+
+<div id="SourceDialog" style="display:none" class="wrapper modal getformsource">  
+  <fieldset title="Source">
+    <legend>Source</legend>
+    <ul class="formlist">
+        <div class="formbox" id="FormNoAuto" style="display:none">
+            <li>
+                <div class="subtitle">Direct Link</div>
+                <div class="formitem formiteminline">
+                    <label>This is a permanent URL that references your form. It does not change when you change the form's title. This is the recommended way to share your form.</label>
+
+                    @Html.TextArea("File", new { @readonly = "true", style = "height: 3em" })
+                    
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyFile")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object> 
+                                            { 
+                                                { "data-clipboard-target", "#File" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+                                     
+                </div>
+            </li>
+            <li>
+                <div class="subtitle">Embed Code</div>
+                <div class="formitem formiteminline">
+                    <label>Use this embed code to place your form into your pages on your own site.</label>
+
+                    @Html.TextArea("EmbededCode", embededCode, new { @readonly = "true", style = "height: 4em" })
+                    
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyCode")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object> 
+                                            { 
+                                                { "data-clipboard-target", "#EmbededCode" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+                                       
+                </div>
+            </li>
+            <li>
+                <div class="subtitle">Responsive Embed Code</div>
+                <div class="formitem formiteminline">
+                    <label>Use this responsive embed code to place your form into your pages on your own site. 
+                    NOTE: The content height is based on width. To change this ratio change the % on .intrinsic-container-ratio{padding-bottom:75%}, e.g. 150% = tall container, 50% = short-wide container.</label>
+
+                    @Html.TextArea("ResponsiveEmbededCode", responsiveEmbededCode, new { @readonly = "true", style = "height: 7em" })
+
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyRCode")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object>
+                                            {
+                                                { "data-clipboard-target", "#ResponsiveEmbededCode" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+
+                </div>
+            </li>
+
+
+              
+        </div>
+        <div class="formbox" id="FormAuto" style="display:none">
+            <li>
+                <div class="subtitle">Auto Submit</div>
+                <div class="formitem formiteminline">
+                    <label>Use this information as your Third Party Output from your source form.</label>
+
+                    @Html.TextArea("FileAuto", new { @readonly = "true", style = "height: 7em" })
+
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyFileAuto")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object>
+                                            {
+                                                { "data-clipboard-target", "#FileAuto" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+
+                </div>
+            </li>
+        </div>
+
+    </ul>
+      </fieldset>
+    </div>
+
+
+
+

@@ -1,0 +1,249 @@
+﻿@model UAS.Web.Models.FileMapperWizard.ReviewViewModel
+
+@{
+    ViewBag.Title = "File Review";
+
+    List<FrameworkUAS.Entity.FieldMapping> fieldMapping = Model.fieldMappings;
+    List<FrameworkUAS.Entity.TransformationFieldMap> transformationFieldMapping = Model.transformationFieldMappings;
+    List<FrameworkUAS.Entity.Transformation> transformation = Model.transformations;
+    List<FrameworkUAD_Lookup.Entity.Code> transformationType = Model.transformationTypes;
+    List<FrameworkUAD_Lookup.Entity.Code> demoUpdateType = Model.demoUpdateTypes;
+    List<FrameworkUAD_Lookup.Entity.Code> fieldMappingType = Model.fieldMappingTypes;
+    FrameworkUAD_Lookup.Entity.Code demographic = fieldMappingType.FirstOrDefault(x => x.CodeName.Equals(FrameworkUAD_Lookup.Enums.FieldMappingTypes.Demographic.ToString(), StringComparison.CurrentCultureIgnoreCase));
+}
+
+<script>
+    $(document).ready(function () {
+        var showdetails = false;
+
+        $(".togglePreview").on("click", function () {
+
+            if (showdetails) {
+                $('.previewdetails').hide();
+                showdetails = false;
+            }
+            else {
+                $('.previewdetails').show();
+                showdetails = true;
+            }
+
+        });
+
+        $("#tbColumnMapper").on('click', '.btnDelete', function () {
+            if (confirm("Do you want to delete this row?")) {
+                var closestRow = $(this).closest('tr');
+                closestRow.add(closestRow.next()).remove();
+            }
+            else {
+                return false;
+            }
+        });
+    });
+    function FinishReview() {
+        //need to use jQuery to find table for each sourceColumn
+
+        var modelData = {
+
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/ReviewSave",
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+                debugger;
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 4;//vbCurrentStep;
+                    var prevIndex = tabIndex - 1;
+                    if(prevIndex <= 0){
+                        prevIndex = 0;
+                    }
+                    var item = tabs.contentElement(tabIndex);
+                    $(item).html(returnData);
+
+
+                    tabs.select(tabIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 1
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+
+                }
+
+                sessionStorage.removeItem('isCustomRule');
+                sessionStorage.removeItem('activeRuleTab');
+                sessionStorage.removeItem('acitveRuleTabIndex');
+                sessionStorage.removeItem('ruleCurrentIndex');
+                sessionStorage.removeItem('ruleSetId');
+                debugger;
+
+                window.location.href = "/UAS.Web/Home/Index";
+                //where to now? - step1 reset or a home screen?
+                return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function LoadRuleSet()
+    {
+        var modelData = {
+            "SourceFileId": @Html.Raw(Json.Encode(Model.SourceFileId)),
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadRuleSet",
+            type: "GET",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                debugger;
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 4;
+                    var prevIndex = tabIndex - 1;
+                    if (prevIndex < 0) {
+                        prevIndex = 0;
+                    }
+                    var item = tabs.contentElement(prevIndex);
+                    $(item).html(returnData);
+
+                    tabs.select(prevIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), false); // disable Rules
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), true); // enable Transformations / load that view
+                }
+                return false;
+                //1 = setup
+                //2 = Transformations
+                //3 = Rules
+                //4 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+
+<style>
+    #sourceBox {
+        border: 1px solid #045da4;
+        padding: 5px;
+        text-align: left;
+    }
+    #roundCornerBox {
+        border-radius: 10px;
+        border: 1px solid #045da4;
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+
+@*<div style="width:700px;">
+    <div style="margin:10px 190px;border:solid 1px gray;">
+        <div style="width: 50%; margin: 0 auto;">
+            <h3>Review Mapped Columns</h3>
+        </div>*@
+<div style="width:700px;">
+    <div style="margin:10px; border:solid 1px gray;">
+        <div style="width: 250px; margin-left:20px; text-align:left;">
+            <h3>Review Mapped Columns</h3>
+        </div>
+        @*<p style="margin:20px 20px;">
+                <button type="button" class="togglePreview btn btn-info">Preview<i class='km-icon icon-kmright-dir ralign'></i></button>
+            </p>*@
+        @*@Html.HiddenFor(m => m.FilePath)
+            @Html.HiddenFor(m => m.Extention)*@
+        @*@if (Model.MappingColumns != null && Model.MappingColumns.Count > 0)
+            {
+
+                @Html.EditorFor(m => m.MappingColumns)
+
+            }*@
+        <table style="font-size: 12px; width: 100%; margin: 5px;">
+            @foreach (FrameworkUAS.Entity.FieldMapping fm in fieldMapping.OrderBy(x => x.ColumnOrder))
+            {
+                @* FieldMapping *@
+                <tr>
+                    <td style="width: 42%;">
+                        @if (fm.IsNonFileColumn)
+                        {
+                        <div></div>
+                        }
+                        else
+                        {
+                        <div id="sourceBox">@fm.IncomingField.ToUpper()</div>
+                        }
+                    </td>
+                    <td style="width: 42%;">
+                        <div id="roundCornerBox">@fm.MAFField.ToUpper()</div>
+                    </td>
+                    <td style="width: 16%;">
+                        @if (fm.FieldMappingTypeID == demographic.CodeId)
+                        {
+                            FrameworkUAD_Lookup.Entity.Code demoUpate = demoUpdateType.FirstOrDefault(x => x.CodeId == fm.DemographicUpdateCodeId);
+                        <div id="roundCornerBox">@demoUpate.DisplayName</div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        @if (transformationFieldMapping.Count(x => x.FieldMappingID == fm.FieldMappingID) > 0)
+                        {
+                        <div id="roundCornerBox" style="text-align: left;">
+                            @* Transformation *@
+                            @foreach (FrameworkUAS.Entity.TransformationFieldMap tfm in transformationFieldMapping.Where(x => x.FieldMappingID == fm.FieldMappingID).ToList())
+                                {
+                                    string transformationName = "";
+                                    string transformationTypeName = "";
+                                    FrameworkUAS.Entity.Transformation t = transformation.FirstOrDefault(x => x.TransformationID == tfm.TransformationID);
+                                    transformationName = t.TransformationName;
+                                    FrameworkUAD_Lookup.Entity.Code c = transformationType.FirstOrDefault(x => x.CodeId == t.TransformationTypeID);
+                                    transformationTypeName = c.DisplayName;
+
+                                <div>TRANSFORMATION: @transformationTypeName.ToUpper() - @transformationName.ToUpper()</div>
+                                }
+                        </div>
+                        }
+                    </td>
+                </tr>
+                @* FieldMultiMap *@
+                if (fm.HasMultiMapping)
+                {
+                    foreach (FrameworkUAS.Entity.FieldMultiMap fmm in fm.FieldMultiMappings)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div id="roundCornerBox">@fmm.MAFField.ToUpper()</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+
+    </div>
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("Previous").Content("Previous<i class='km-icon icon-kmleft-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return LoadRuleSet()" })
+            </div>
+            <div class="cbtns">
+
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Finish").Content("Finish<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return FinishReview()" })
+            </div>
+        </div>
+    </div>
+</div>

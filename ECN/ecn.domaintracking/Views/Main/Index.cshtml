@@ -1,0 +1,382 @@
+﻿@using System
+@using System.Linq
+@using Kendo.Mvc.UI;
+@model System.Collections.Generic.IEnumerable<ECN_Framework_Entities.DomainTracker.DomainTracker>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string webServicesURL = System.Configuration.ConfigurationManager.AppSettings["webServicesURL"].ToString();
+    string getJQueryURL = System.Configuration.ConfigurationManager.AppSettings["jQueryURL"].ToString();
+    string getAdapterURL = System.Configuration.ConfigurationManager.AppSettings["AdapterURL"].ToString();
+    string scriptJQy = "<script type='text/javascript'> var TrackerKey = '" + "tkey" + "'; var url = '" + webServicesURL.ToString() + "'; var script = document.createElement('script'); script.setAttribute('src', url); script.setAttribute('type', 'text/javascript'); document.body.appendChild(script);endscript";
+    string scriptNJQy = "<script type='text/javascript' src='" + getJQueryURL.ToString() + "'>endscript<script type='text/javascript'> var TrackerKey = '" + "tkey" + "'; var url = '" + webServicesURL.ToString() + "';     var script = document.createElement('script'); script.setAttribute('src', url); script.setAttribute('type', 'text/javascript'); document.body.appendChild(script);endscript";
+    string scriptAdapter = "<script type='text/javascript' src='" + getAdapterURL.ToString() + "'>endscript";
+    int currentPage = (int)TempData["page"];
+    int records = Model.Count();
+    string trackAnon = ViewBag.TrackAnonymous.ToString().ToLower();
+    if (trackAnon == "true")
+    {
+        scriptJQy = scriptAdapter + scriptJQy;
+        scriptNJQy = scriptAdapter + scriptNJQy;
+    }
+}
+<script language="JavaScript" type="text/JavaScript">
+    var wsUrl = "@webServicesURL";
+    var jQUrl = "@getJQueryURL";
+
+    var CurrentTrackerKey = '';
+
+    function showScriptPopup(trackerKey) {
+        CurrentTrackerKey = trackerKey;
+
+        var rdHttp = $('#rdHttp')[0];
+        var rdHttps = $('#rdHttps')[0];
+        var rdJq = $('#rdJq')[0];
+        var rdNJq = $('#rdNJq')[0];
+
+        var display = "@Html.Raw(@scriptJQy)";
+        rdHttps.checked = true;
+        rdJq.checked = true;
+        display = display.replace(/tkey/g, CurrentTrackerKey);
+        display = display.replace(/endscript/g, "<\/script>");
+        display = display.replace(/http/g, 'https');
+        if ('@trackAnon' == 'false') {
+            display = display.replace("ECN_tracker.js", "ECN_tracker_Secure.js");
+        }
+        else {
+            display = display.replace("ECN_tracker.js", "ECN_tracker_Anon_Secure.js");
+        }
+        var txtArea = $('#txtScript')[0];
+        txtArea.value = display;
+        var el = $('#modalForm')[0];
+        el.style.visibility = 'visible';
+    }
+
+    function closePopup() {
+        var win = $("#ScriptWindow");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    function popupAction(rbtn) {
+        var flagvalue = 0;
+        var rdHttp = $('#rdHttp')[0];
+        var rdHttps = $('#rdHttps')[0];
+        var rdJq = $('#rdJq')[0];
+        var rdNJq = $('#rdNJq')[0];
+        var display = '';
+
+        if ((rbtn == 'jquery') || (rdJq.checked)) {
+            display = "@Html.Raw(@scriptJQy)";
+            display = display.replace(/tkey/g, CurrentTrackerKey);
+            display = display.replace(/endscript/g, "<\/script>");
+            var txtArea = $('#txtScript')[0];
+            txtArea.value = display;
+        }
+        if ((rbtn == 'nonjquery') || (rdNJq.checked)) {
+            display = "@Html.Raw(@scriptNJQy)";
+            display = display.replace(/tkey/g, CurrentTrackerKey);
+            display = display.replace(/endscript/g, "<\/script>");
+            var txtArea = $('#txtScript')[0];
+            txtArea.value = display;
+        }
+        if ((rbtn == 'http') || (rdHttp.checked)) {
+            display = $('#txtScript').val();
+            display = display.replace(/https/g, 'http');
+			if('@trackAnon' == 'true')
+			{
+				display = display.replace("ECN_tracker.js", "ECN_tracker_Anon.js");
+			}
+            var txtArea = $('#txtScript')[0];
+            txtArea.value = display;
+        }
+        if ((rbtn == 'https') || (rdHttps.checked)) {
+            display = $('#txtScript').val();
+            display = display.replace(/http/g, 'https');
+            if ('@trackAnon' == 'false') {
+                display = display.replace("ECN_tracker.js", "ECN_tracker_Secure.js");
+            }
+            else{
+                display = display.replace("ECN_tracker.js", "ECN_tracker_Anon_Secure.js");
+            }
+            var txtArea = $('#txtScript')[0];
+            txtArea.value = display;
+        }
+        else {
+            if ('@trackAnon' == 'true') {
+                display = display.replace("ECN_tracker.js", "ECN_tracker_Anon.js");
+            }
+
+        }
+    }
+
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+
+    function showScriptPopup(trackerKey) {
+        var win = $("#ScriptWindow");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Domain Tracking Script');
+        CurrentTrackerKey = trackerKey;
+
+        var rdHttp = $('#rdHttp')[0];
+        var rdHttps = $('#rdHttps')[0];
+        var rdJq = $('#rdJq')[0];
+        var rdNJq = $('#rdNJq')[0];
+
+        var display = "@Html.Raw(@scriptJQy)";
+        rdHttps.checked = true;
+        rdJq.checked = true;
+        display = display.replace(/tkey/g, CurrentTrackerKey);
+        display = display.replace(/endscript/g, "<\/script>");
+        display = display.replace(/http/g, 'https');
+        if ('@trackAnon' == 'false') {
+            display = display.replace("ECN_tracker.js", "ECN_tracker_Secure.js");
+        }
+        else {
+            display = display.replace("ECN_tracker.js", "ECN_tracker_Anon_Secure.js");
+        }
+        var txtArea = $('#txtScript')[0];
+        txtArea.value = display;
+        kendoWindow.center().open();
+
+    }
+
+    function Search()
+    {
+        var grid = $("#DomainGrid").data("kendoGrid");
+        var filterArray = new Array();
+        var domainSearch = $("#DomainName").val();
+        var newFilter = { field: "Domain", operator: "contains", value: domainSearch };
+        filterArray.push(newFilter);
+        grid.dataSource.filter(filterArray);
+    }
+
+    function deleteDomainTracker(id)
+    {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+
+        kendoWindow.title('Delete');
+        kendoWindow.center().open();
+
+    }
+
+    function closeWindow(windowName)
+    {
+        var win = $("#" + windowName);
+        if (win) {
+            var kendoWindow = win.data('kendoWindow');
+            kendoWindow.close();
+        }
+    }
+</script>
+
+<style type="text/css">
+    #modalForm {
+        visibility: hidden;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        z-index: 1000;
+        background: url('/ecn.domaintracking/Content/Images/ie.png');
+        background: -moz-linear-gradient(rgba(11,11,11,0.1), rgba(11,11,11,0.6)) repeat-x rgba(11,11,11,0.2);
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(11,11,11,0.1)), to(rgba(11,11,11,0.6))) repeat-x rgba(11,11,11,0.2);
+    }
+
+        #modalForm div {
+            width: 320px;
+            margin: 100px auto;
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 15px;
+            text-align: center;
+        }
+
+    .likeabutton {
+        text-decoration: none;
+        font: menu;
+        display: inline-block;
+        padding: 2px 8px;
+        background: ButtonFace;
+        color: ButtonText;
+        border-style: solid;
+        border-width: 2px;
+        border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+    }
+
+        .likeabutton:active {
+            border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+        }
+</style>
+
+
+<div id="divContent">
+    @{
+        ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+    }
+    <div class="gridttl">
+        <div class="gridttlbox">
+            <span>DOMAIN TRACKING</span>
+        </div>
+    </div>
+    <div id="divHeader">
+        <br />
+        
+        @{
+            if (KM.Platform.User.IsAdministrator(UserSession.CurrentUser) || KMPlatform.BusinessLogic.User.HasAccess(UserSession.CurrentUser, KMPlatform.Enums.Services.DOMAINTRACKING, KMPlatform.Enums.ServiceFeatures.DomainSetup, KMPlatform.Enums.Access.Edit))
+            {
+                <div style="float: right;text-align:right;">@Html.ActionLink("Create New Domain", "Add", "Main", null, new { @class = "btn k-button", onclick="showLoadingWindow()" })</div>
+            }
+        }
+    </div>
+    <br />
+    <br />
+    <div id="SearchPanel" style="margin:20px auto;">
+
+        <span style="margin:20px"> <label class="lbl">Domain:</label>
+            @Html.Kendo().TextBox().Name("DomainName").HtmlAttributes(new { style = "overflow: hidden; width:20%" })
+        </span>
+        <input type="button" class="k-button" value="Search" id="search" onclick="Search()" />
+    </div>
+    <div id="divMainSection">
+
+        @(Html.Kendo()
+        .Grid(Model)
+        .Name("DomainGrid")
+        .Events(x => x.DataBound("dataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.Domain).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Domain").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" });
+            columns.Bound(e => e.TrackerKey).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("TrackerKey").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" });
+
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" }); ;
+        })
+        .Pageable(x => x.Enabled(true).Info(true).Input(true).Numeric(true).PageSizes(true))
+        .Sortable()
+        .HtmlAttributes(new { style = "min-width:100px;border-bottom:none;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.DomainTrackerID);
+            })
+            .PageSize(10)
+            .ServerOperation(false)
+        )
+        )
+
+
+    </div>
+</div>
+
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Domain#=DomainTrackerID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("Script").HtmlAttributes(new { onclick = "showScriptPopup('#=TrackerKey#')" });
+                    innerItems.Add().Text("Users").Action("Users", "Main", new { id = "#=DomainTrackerID#"}).HtmlAttributes(new { onclick = "showLoadingWindow()" });
+                    innerItems.Add().Text("Reports").Action("Reports", "Main", new { id = "#=DomainTrackerID#" }).HtmlAttributes(new { onclick = "showLoadingWindow()" });
+                    innerItems.Add().Text("Edit").Action("Edit", "Main", new { id = "#=DomainTrackerID#" }).HtmlAttributes(new { onclick = "showLoadingWindow()" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteDomainTracker(#=DomainTrackerID#)" });
+
+                }
+            )
+        ).ToClientTemplate())
+}
+
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("ScriptWindow")
+        .Actions(x => x.Clear())
+        .Title("Domain Tracking Script")
+        .Content(
+        @<text>
+            <div>
+                <fieldset title="Domain Tracking Script">
+                    <legend>Domain Tracking Script</legend>
+                    <table style="width: 200px; height: 300px; background-color: white; border-radius: 10px; padding: 10px;">
+                        
+                        <tr>
+                            <td style="text-align: left; padding-left: 10px; font-size:10px; height: 10%;">
+                                <form>
+                                    <input type="radio" name="httpvalue" value="http" onclick="popupAction('http');" id="rdHttp">HTTP&nbsp;&nbsp;
+                                    <input type="radio" name="httpvalue" value="https" checked="checked" onclick="popupAction('https');" id="rdHttps">HTTPS
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 10px; height: 10%;font-size:10px;">
+                                <form>
+                                    <input type="radio" name="jqueryvalue" value="jq" checked="checked" onclick="popupAction('jquery');" id="rdJq">Page with jQuery&nbsp;&nbsp;
+                                    <input type="radio" name="jqueryvalue" value="njq" onclick="popupAction('nonjquery');" id="rdNJq">Page without jQuery
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; height: 25%;width:100%;">
+                                <textarea id="txtScript" cols="20" rows="10" style="width:575px;"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: center; height: 20%;">
+                                <input id="btnClose" type="button" value="Close" style="border:none;" onclick="closePopup();" />
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+        </text>
+)
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            
+                <div id="deleteDiv">
+                    @Html.Partial("_DeleteDomain")
+                </div>
+            
+        </text>
+)
+        .Visible(false)
+        .Render();
+}
+
+
+
+
+
+

@@ -1,0 +1,87 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ecn.communicator.mvc.Models.EmailUDFDataValue
+@{ 
+    var gdfList = ECN_Framework_BusinessLayer.Communicator.GroupDataFields.GetByGroupID(Model.GroupID, ecn.communicator.mvc.Infrastructure.ConvenienceMethods.GetCurrentUser());
+    var list = (from src in gdfList
+                  where src.DatafieldSetID == null
+                  select src).ToList();    
+}
+<script>
+    $(document).ready(function () {
+        //$("#udf option:contains(" + @Model.UDFName + ")").attr('selected', 'selected');
+        //$('#udf').val('@Model.GroupDataFieldsID');
+        $('#data').val('@Model.Data');
+    });
+    function editUDFData() {
+        if ($('#data').val() == "") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please enter a value for UDF Data'
+            });
+        }
+        else if ($('#udf').val() == "0") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please select a UDF'
+            });
+        }
+       else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddEditUDFData", "Subscriber")",
+                data: { groupDataFieldsID: @Model.GroupDataFieldsID, value: $('#data').val(), emailID : @Model.EmailID, groupID : @Model.GroupID },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('EditUDFData');
+                        $("#divUDFsDataGrid").html(response[1]);
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        }
+    };
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="AddUDF" class="no-border">
+        <legend>Edit UDF Data</legend>
+        <div class="formbox">
+            <div class="subtitle">UDF Name</div>
+            <div class="formitem formiteminline">
+                @Html.Label(list.FirstOrDefault(x => x.GroupDataFieldsID == Model.GroupDataFieldsID).ShortName)
+               
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Data</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("data") 
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Update").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "editUDFData()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('EditUDFData')" })
+                    </td>
+                </tr>
+            </table>
+            
+            
+        </div>
+    </fieldset>
+</div>     
+   

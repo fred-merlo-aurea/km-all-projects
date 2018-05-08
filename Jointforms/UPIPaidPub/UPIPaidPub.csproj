@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6465AF49-AA06-4949-8370-21C3F23FB9E6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UPIPaidPub</RootNamespace>
+    <AssemblyName>UPIPaidPub</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthorizeNet">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AuthorizeNet.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthorizeNet.Helpers">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AuthorizeNet.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsFabric.Common">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.WindowsFabric.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsFabric.Data.Common">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Default\Default.css" />
+    <Content Include="CSS\styles.css" />
+    <Content Include="Default.aspx" />
+    <None Include="scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="scripts\jquery-1.8.2.js" />
+    <Content Include="scripts\jquery-1.8.2.min.js" />
+    <Content Include="scripts\jquery-ui-1.8.24.js" />
+    <Content Include="scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="scripts\modernizr-2.6.2.js" />
+    <None Include="scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapter\DropDownListAdapter.cs" />
+    <Compile Include="Default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="nonqual.aspx.cs">
+      <DependentUpon>nonqual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="nonqual.aspx.designer.cs">
+      <DependentUpon>nonqual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DataFunctions.cs" />
+    <Compile Include="Objects\Item.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="subscribe.aspx.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="subscribe.aspx.designer.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="upi_thankyou.aspx.cs">
+      <DependentUpon>upi_thankyou.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="upi_thankyou.aspx.designer.cs">
+      <DependentUpon>upi_thankyou.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Default\Default.skin" />
+    <Content Include="images\animated-loading-orange.gif" />
+    <Content Include="images\body_bg.gif" />
+    <Content Include="images\cabinet_cover.gif" />
+    <Content Include="images\centrefocus.jpg" />
+    <Content Include="images\egg_cover.gif" />
+    <Content Include="images\error.png" />
+    <Content Include="images\fi_cover.gif" />
+    <Content Include="images\fm_cover.gif" />
+    <Content Include="images\ia_cover.gif" />
+    <Content Include="images\pet_cover.gif" />
+    <Content Include="images\pig_cover.gif" />
+    <Content Include="images\pi_cover.gif" />
+    <Content Include="images\wattbot.gif" />
+    <Content Include="images\watthead.gif" />
+    <Content Include="images\watt_logo.jpg" />
+    <Content Include="images\wp_cover.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Browsers\BrowserFile.browser" />
+    <Content Include="App_Themes\HMEDB\Default.css" />
+    <Content Include="Error.aspx" />
+    <Content Include="images\HMES_Cover.jpg" />
+    <Content Include="images\HMETB_Cover.jpg" />
+    <Content Include="images\SSNT_Cover.jpg" />
+    <Content Include="nonqual.aspx" />
+    <Content Include="subscribe.aspx" />
+    <Content Include="upi_thankyou.aspx" />
+    <Content Include="xml\MagList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\HMEDB\Default.skin" />
+    <Content Include="App_Themes\HMES\Default.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\HMES\Default.skin" />
+    <Content Include="App_Themes\HMETB\Default.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\HMETB\Default.skin" />
+    <Content Include="App_Themes\SSNT\Default.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\SSNT\Default.skin" />
+    <Content Include="images\CVN.jpg" />
+    <Content Include="images\errorEX.png" />
+    <Content Include="images\HMEDatabankHeader.jpg" />
+    <Content Include="images\HMEDB_Cover.jpg" />
+    <Content Include="images\HMESummitHeader.jpg" />
+    <Content Include="images\HMESummitL.jpg" />
+    <Content Include="images\HMESummitP.jpg" />
+    <Content Include="images\HMESummitP_720.jpg" />
+    <Content Include="images\HMES_Logo.jpg" />
+    <Content Include="images\HMEToolkitHeader.jpg" />
+    <Content Include="images\required_field.jpg" />
+    <Content Include="images\TechSecHeader.jpg" />
+    <Content Include="images\TechSecL.jpg" />
+    <Content Include="images\TechSecP.jpg" />
+    <Content Include="images\TechSecP_720.jpg" />
+    <Content Include="images\TechSec_Logo.jpg" />
+    <Content Include="scripts\calendar\agenda.js" />
+    <Content Include="scripts\calendar\calbtn.gif" />
+    <Content Include="scripts\calendar\fck_dialog.css" />
+    <Content Include="scripts\calendar\ipopeng.htm" />
+    <Content Include="scripts\calendar\normal.css" />
+    <Content Include="scripts\calendar\normal.js" />
+    <Content Include="scripts\calendar\plugins.js" />
+    <Content Include="scripts\calendar\Templatestyle.js" />
+    <Content Include="scripts\highslide\graphics\close.png" />
+    <Content Include="scripts\highslide\graphics\controlbar2.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar3.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4-hover.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4.gif" />
+    <Content Include="scripts\highslide\graphics\fullexpand.gif" />
+    <Content Include="scripts\highslide\graphics\geckodimmer.png" />
+    <Content Include="scripts\highslide\graphics\loader.gif" />
+    <Content Include="scripts\highslide\graphics\loader.white.gif" />
+    <Content Include="scripts\highslide\graphics\outlines\beveled.png" />
+    <Content Include="scripts\highslide\graphics\outlines\drop-shadow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\glossy-dark.png" />
+    <Content Include="scripts\highslide\graphics\outlines\outer-glow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-black.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-white.png" />
+    <Content Include="scripts\highslide\graphics\resize.gif" />
+    <Content Include="scripts\highslide\graphics\zoomin.cur" />
+    <Content Include="scripts\highslide\graphics\zoomout.cur" />
+    <Content Include="scripts\highslide\highslide-full.js" />
+    <Content Include="scripts\highslide\highslide-full.packed.js" />
+    <Content Include="scripts\highslide\highslide-with-html.js" />
+    <Content Include="scripts\highslide\highslide-with-html.packed.js" />
+    <Content Include="scripts\highslide\highslide.js" />
+    <Content Include="scripts\highslide\highslide.packed.js" />
+    <Content Include="scripts\highslide\swfobject.js" />
+    <Content Include="scripts\jQuery\jquery-1.4.3.js" />
+    <Content Include="scripts\Thickbox\jquery.js" />
+    <Content Include="scripts\Thickbox\thickbox.css" />
+    <Content Include="scripts\Thickbox\thickbox.js" />
+    <Content Include="scripts\Validation.js" />
+    <Content Include="xml\MagListTest.xml" />
+    <Content Include="xml\Promocodes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\UpiPaid.pubxml" />
+    <None Include="scripts\highslide\graphics\outlines\Outlines.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ECN\ECN\ECN.csproj">
+      <Project>{8bbeb645-dd44-4e47-a204-95341f4d87c2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMPS_JF_Objects\KMPS_JF_Objects.csproj">
+      <Project>{d9d1f242-e750-4b2e-95f6-79c75e77f7c8}</Project>
+      <Name>KMPS_JF_Objects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>22692</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/upipaidpub</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/upipaidpub</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

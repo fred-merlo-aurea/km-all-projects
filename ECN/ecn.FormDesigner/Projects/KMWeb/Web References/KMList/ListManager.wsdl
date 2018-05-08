@@ -1,0 +1,2664 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webservices.ecn5.com/" xmlns:s1="ecn.webServices.communicator" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://webservices.ecn5.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your LISTS in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.ecn5.com/">
+      <s:element name="GetFolders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFoldersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFoldersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListEmailProfilesByEmailAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListEmailProfilesByEmailAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListEmailProfilesByEmailAddressResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomFields">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomFieldsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomFieldsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFilters">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFiltersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFiltersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listDescription" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddListToFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listDescription" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddListToFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddListToFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderDescription" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderToParent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderDescription" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentFolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderToParentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderToParentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLists">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListByNameResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListsByFolderID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListsByFolderIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetListsByFolderIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="GroupID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubscriberCountResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSubscriber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteSubscriberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteSubscriberResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteCustomField">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="UDFID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteCustomFieldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteCustomFieldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnsubscribeSubscriber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLEmails" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnsubscribeSubscriberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnsubscribeSubscriberResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewListName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewListDescription" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateListWithFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewListName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewListDescription" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="NewFolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateListWithFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateListWithFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateCustomField">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="udfID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="customFieldName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customFieldDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="isPublic" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateCustomFieldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateCustomFieldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddCustomField">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="customFieldName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customFieldDescription" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="isPublic" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddCustomFieldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddCustomFieldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="subscriptionType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="formatType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlString" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddSubscribersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribersWithDupes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="subscriptionType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="formatType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="compositeKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="overwriteWithNULL" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlString" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribersWithDupesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddSubscribersWithDupesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribersWithDupesUsingSmartForm">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="subscriptionType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="formatType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="compositeKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="overwriteWithNULL" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlString" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="SFID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscribersWithDupesUsingSmartFormResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddSubscribersWithDupesUsingSmartFormResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscriberUsingSmartForm">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="subscriptionType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="formatType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlString" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="sfID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddSubscriberUsingSmartFormResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddSubscriberUsingSmartFormResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddToMasterSuppressionList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlString" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddToMasterSuppressionListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddToMasterSuppressionListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLists_Internal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLists_InternalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLists_InternalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubscriberStatusResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="ecn.webServices.communicator">
+      <s:element name="ImportEmailProfilesRequestSFUpdate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecn_accessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ecn_listID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ecn_emailProfilesXMLString" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="oldEmailAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newEmailAddress" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="sfID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ResponseSFUpdate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateEmailAddressResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetFoldersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFolders" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFoldersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressSoapIn">
+    <wsdl:part name="parameters" element="tns:GetListEmailProfilesByEmailAddress" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListEmailProfilesByEmailAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomFields" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomFieldsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFilters" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFiltersResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddListSoapIn">
+    <wsdl:part name="parameters" element="tns:AddList" />
+  </wsdl:message>
+  <wsdl:message name="AddListSoapOut">
+    <wsdl:part name="parameters" element="tns:AddListResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddListToFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddListToFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolderToParent" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderToParentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLists" />
+  </wsdl:message>
+  <wsdl:message name="GetListsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:GetListByName" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetListsByFolderID" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetListsByFolderIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubscriberCount" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubscriberCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteFolder" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteList" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteListResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteSubscriber" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteSubscriberResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteCustomField" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteCustomFieldResponse" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberSoapIn">
+    <wsdl:part name="parameters" element="tns:UnsubscribeSubscriber" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberSoapOut">
+    <wsdl:part name="parameters" element="tns:UnsubscribeSubscriberResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateList" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateListResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateListWithFolder" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateListWithFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateCustomField" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateCustomFieldResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldSoapIn">
+    <wsdl:part name="parameters" element="tns:AddCustomField" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldSoapOut">
+    <wsdl:part name="parameters" element="tns:AddCustomFieldResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersSoapIn">
+    <wsdl:part name="parameters" element="tns:AddSubscribers" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersSoapOut">
+    <wsdl:part name="parameters" element="tns:AddSubscribersResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesSoapIn">
+    <wsdl:part name="parameters" element="tns:AddSubscribersWithDupes" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesSoapOut">
+    <wsdl:part name="parameters" element="tns:AddSubscribersWithDupesResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormSoapIn">
+    <wsdl:part name="parameters" element="tns:AddSubscribersWithDupesUsingSmartForm" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormSoapOut">
+    <wsdl:part name="parameters" element="tns:AddSubscribersWithDupesUsingSmartFormResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormSoapIn">
+    <wsdl:part name="parameters" element="tns:AddSubscriberUsingSmartForm" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormSoapOut">
+    <wsdl:part name="parameters" element="tns:AddSubscriberUsingSmartFormResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListSoapIn">
+    <wsdl:part name="parameters" element="tns:AddToMasterSuppressionList" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListSoapOut">
+    <wsdl:part name="parameters" element="tns:AddToMasterSuppressionListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLists_Internal" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLists_InternalResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubscriberStatus" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubscriberStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressSoapIn">
+    <wsdl:part name="parameters" element="s1:ImportEmailProfilesRequestSFUpdate" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressSoapOut">
+    <wsdl:part name="parameters" element="s1:ResponseSFUpdate" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="emailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listName" type="s:string" />
+    <wsdl:part name="listDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listName" type="s:string" />
+    <wsdl:part name="listDescription" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+    <wsdl:part name="parentFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Name" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="EmailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="UDFID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="XMLEmails" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="NewListName" type="s:string" />
+    <wsdl:part name="NewListDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="NewListName" type="s:string" />
+    <wsdl:part name="NewListDescription" type="s:string" />
+    <wsdl:part name="NewFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="udfID" type="s:string" />
+    <wsdl:part name="customFieldName" type="s:string" />
+    <wsdl:part name="customFieldDescription" type="s:string" />
+    <wsdl:part name="isPublic" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="customFieldName" type="s:string" />
+    <wsdl:part name="customFieldDescription" type="s:string" />
+    <wsdl:part name="isPublic" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="compositeKey" type="s:string" />
+    <wsdl:part name="overwriteWithNULL" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="compositeKey" type="s:string" />
+    <wsdl:part name="overwriteWithNULL" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+    <wsdl:part name="SFID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+    <wsdl:part name="sfID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="emailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressHttpGetIn">
+    <wsdl:part name="ecn_accessKey" type="s:string" />
+    <wsdl:part name="ecn_listID" type="s:string" />
+    <wsdl:part name="ecn_emailProfilesXMLString" type="s:string" />
+    <wsdl:part name="oldEmailAddress" type="s:string" />
+    <wsdl:part name="newEmailAddress" type="s:string" />
+    <wsdl:part name="sfID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="emailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListEmailProfilesByEmailAddressHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFiltersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listName" type="s:string" />
+    <wsdl:part name="listDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listName" type="s:string" />
+    <wsdl:part name="listDescription" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddListToFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+    <wsdl:part name="parentFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Name" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListByNameHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetListsByFolderIDHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="EmailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSubscriberHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="UDFID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCustomFieldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="XMLEmails" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeSubscriberHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="NewListName" type="s:string" />
+    <wsdl:part name="NewListDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="NewListName" type="s:string" />
+    <wsdl:part name="NewListDescription" type="s:string" />
+    <wsdl:part name="NewFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateListWithFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="udfID" type="s:string" />
+    <wsdl:part name="customFieldName" type="s:string" />
+    <wsdl:part name="customFieldDescription" type="s:string" />
+    <wsdl:part name="isPublic" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomFieldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="customFieldName" type="s:string" />
+    <wsdl:part name="customFieldDescription" type="s:string" />
+    <wsdl:part name="isPublic" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomFieldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="compositeKey" type="s:string" />
+    <wsdl:part name="overwriteWithNULL" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="compositeKey" type="s:string" />
+    <wsdl:part name="overwriteWithNULL" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+    <wsdl:part name="SFID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscribersWithDupesUsingSmartFormHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="listID" type="s:string" />
+    <wsdl:part name="subscriptionType" type="s:string" />
+    <wsdl:part name="formatType" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+    <wsdl:part name="sfID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddSubscriberUsingSmartFormHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="xmlString" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddToMasterSuppressionListHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLists_InternalHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="emailAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberStatusHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressHttpPostIn">
+    <wsdl:part name="ecn_accessKey" type="s:string" />
+    <wsdl:part name="ecn_listID" type="s:string" />
+    <wsdl:part name="ecn_emailProfilesXMLString" type="s:string" />
+    <wsdl:part name="oldEmailAddress" type="s:string" />
+    <wsdl:part name="newEmailAddress" type="s:string" />
+    <wsdl:part name="sfID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateEmailAddressHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="ListManagerSoap">
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersSoapIn" />
+      <wsdl:output message="tns:GetFoldersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Profiles from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListEmailProfilesByEmailAddressSoapIn" />
+      <wsdl:output message="tns:GetListEmailProfilesByEmailAddressSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Custom Fields from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomFieldsSoapIn" />
+      <wsdl:output message="tns:GetCustomFieldsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Filters from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFiltersSoapIn" />
+      <wsdl:output message="tns:GetFiltersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddListSoapIn" />
+      <wsdl:output message="tns:AddListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddListToFolder" message="tns:AddListToFolderSoapIn" />
+      <wsdl:output name="AddListToFolder" message="tns:AddListToFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderSoapIn" />
+      <wsdl:output message="tns:AddFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentSoapIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsSoapIn" />
+      <wsdl:output message="tns:GetListsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetListByNameSoapIn" />
+      <wsdl:output message="tns:GetListByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsByFolderIDSoapIn" />
+      <wsdl:output message="tns:GetListsByFolderIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountSoapIn" />
+      <wsdl:output message="tns:GetSubscriberCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderSoapIn" />
+      <wsdl:output message="tns:DeleteFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteListSoapIn" />
+      <wsdl:output message="tns:DeleteListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Subscriber from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteSubscriberSoapIn" />
+      <wsdl:output message="tns:DeleteSubscriberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Custom Field from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteCustomFieldSoapIn" />
+      <wsdl:output message="tns:DeleteCustomFieldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Unsubscribe a Subscriber in a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UnsubscribeSubscriberSoapIn" />
+      <wsdl:output message="tns:UnsubscribeSubscriberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateListSoapIn" />
+      <wsdl:output message="tns:UpdateListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List with Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="UpdateListWithFolder" message="tns:UpdateListWithFolderSoapIn" />
+      <wsdl:output name="UpdateListWithFolder" message="tns:UpdateListWithFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Custom Field in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomFieldSoapIn" />
+      <wsdl:output message="tns:UpdateCustomFieldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Custom Field to a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomFieldSoapIn" />
+      <wsdl:output message="tns:AddCustomFieldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersSoapIn" />
+      <wsdl:output message="tns:AddSubscribersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesSoapIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesUsingSmartFormSoapIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesUsingSmartFormSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscriberUsingSmartFormSoapIn" />
+      <wsdl:output message="tns:AddSubscriberUsingSmartFormSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Email Addresses to the Master Suppression List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddToMasterSuppressionListSoapIn" />
+      <wsdl:output message="tns:AddToMasterSuppressionListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetLists_InternalSoapIn" />
+      <wsdl:output message="tns:GetLists_InternalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets the status of the subscriber</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberStatusSoapIn" />
+      <wsdl:output message="tns:GetSubscriberStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method call will import the email profiles in the XML string and alos updates the emailaddress.&lt;br&gt;Parameters to this method&lt;br&gt;* ecn_listID - is the ID of the list to import the email profiles.&lt;br&gt;* ecn_emailProfilesXMLString - is XML string that has the profile data to be imported.&lt;br&gt;* NOTE: the XML should have &lt;u&gt;no line breaks&lt;/u&gt; OR &lt;u&gt;special characters&lt;/u&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdateEmailAddressSoapIn" />
+      <wsdl:output message="tns:UpdateEmailAddressSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ListManagerHttpGet">
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersHttpGetIn" />
+      <wsdl:output message="tns:GetFoldersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Profiles from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListEmailProfilesByEmailAddressHttpGetIn" />
+      <wsdl:output message="tns:GetListEmailProfilesByEmailAddressHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Custom Fields from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomFieldsHttpGetIn" />
+      <wsdl:output message="tns:GetCustomFieldsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Filters from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFiltersHttpGetIn" />
+      <wsdl:output message="tns:GetFiltersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddListHttpGetIn" />
+      <wsdl:output message="tns:AddListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddListToFolder" message="tns:AddListToFolderHttpGetIn" />
+      <wsdl:output name="AddListToFolder" message="tns:AddListToFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderHttpGetIn" />
+      <wsdl:output message="tns:AddFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentHttpGetIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsHttpGetIn" />
+      <wsdl:output message="tns:GetListsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetListByNameHttpGetIn" />
+      <wsdl:output message="tns:GetListByNameHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsByFolderIDHttpGetIn" />
+      <wsdl:output message="tns:GetListsByFolderIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountHttpGetIn" />
+      <wsdl:output message="tns:GetSubscriberCountHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderHttpGetIn" />
+      <wsdl:output message="tns:DeleteFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteListHttpGetIn" />
+      <wsdl:output message="tns:DeleteListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Subscriber from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteSubscriberHttpGetIn" />
+      <wsdl:output message="tns:DeleteSubscriberHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Custom Field from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteCustomFieldHttpGetIn" />
+      <wsdl:output message="tns:DeleteCustomFieldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Unsubscribe a Subscriber in a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UnsubscribeSubscriberHttpGetIn" />
+      <wsdl:output message="tns:UnsubscribeSubscriberHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateListHttpGetIn" />
+      <wsdl:output message="tns:UpdateListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List with Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="UpdateListWithFolder" message="tns:UpdateListWithFolderHttpGetIn" />
+      <wsdl:output name="UpdateListWithFolder" message="tns:UpdateListWithFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Custom Field in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomFieldHttpGetIn" />
+      <wsdl:output message="tns:UpdateCustomFieldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Custom Field to a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomFieldHttpGetIn" />
+      <wsdl:output message="tns:AddCustomFieldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersHttpGetIn" />
+      <wsdl:output message="tns:AddSubscribersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesHttpGetIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesUsingSmartFormHttpGetIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesUsingSmartFormHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscriberUsingSmartFormHttpGetIn" />
+      <wsdl:output message="tns:AddSubscriberUsingSmartFormHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Email Addresses to the Master Suppression List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddToMasterSuppressionListHttpGetIn" />
+      <wsdl:output message="tns:AddToMasterSuppressionListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetLists_InternalHttpGetIn" />
+      <wsdl:output message="tns:GetLists_InternalHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets the status of the subscriber</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberStatusHttpGetIn" />
+      <wsdl:output message="tns:GetSubscriberStatusHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method call will import the email profiles in the XML string and alos updates the emailaddress.&lt;br&gt;Parameters to this method&lt;br&gt;* ecn_listID - is the ID of the list to import the email profiles.&lt;br&gt;* ecn_emailProfilesXMLString - is XML string that has the profile data to be imported.&lt;br&gt;* NOTE: the XML should have &lt;u&gt;no line breaks&lt;/u&gt; OR &lt;u&gt;special characters&lt;/u&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdateEmailAddressHttpGetIn" />
+      <wsdl:output message="tns:UpdateEmailAddressHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ListManagerHttpPost">
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersHttpPostIn" />
+      <wsdl:output message="tns:GetFoldersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Profiles from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListEmailProfilesByEmailAddressHttpPostIn" />
+      <wsdl:output message="tns:GetListEmailProfilesByEmailAddressHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Group Custom Fields from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomFieldsHttpPostIn" />
+      <wsdl:output message="tns:GetCustomFieldsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Filters from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFiltersHttpPostIn" />
+      <wsdl:output message="tns:GetFiltersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddListHttpPostIn" />
+      <wsdl:output message="tns:AddListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new List to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddListToFolder" message="tns:AddListToFolderHttpPostIn" />
+      <wsdl:output name="AddListToFolder" message="tns:AddListToFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderHttpPostIn" />
+      <wsdl:output message="tns:AddFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentHttpPostIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsHttpPostIn" />
+      <wsdl:output message="tns:GetListsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Email List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetListByNameHttpPostIn" />
+      <wsdl:output message="tns:GetListByNameHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Lists from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetListsByFolderIDHttpPostIn" />
+      <wsdl:output message="tns:GetListsByFolderIDHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountHttpPostIn" />
+      <wsdl:output message="tns:GetSubscriberCountHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderHttpPostIn" />
+      <wsdl:output message="tns:DeleteFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a List from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteListHttpPostIn" />
+      <wsdl:output message="tns:DeleteListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Subscriber from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteSubscriberHttpPostIn" />
+      <wsdl:output message="tns:DeleteSubscriberHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Custom Field from a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteCustomFieldHttpPostIn" />
+      <wsdl:output message="tns:DeleteCustomFieldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Unsubscribe a Subscriber in a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UnsubscribeSubscriberHttpPostIn" />
+      <wsdl:output message="tns:UnsubscribeSubscriberHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateListHttpPostIn" />
+      <wsdl:output message="tns:UpdateListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a List with Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="UpdateListWithFolder" message="tns:UpdateListWithFolderHttpPostIn" />
+      <wsdl:output name="UpdateListWithFolder" message="tns:UpdateListWithFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Custom Field in ECN</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomFieldHttpPostIn" />
+      <wsdl:output message="tns:UpdateCustomFieldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Custom Field to a List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomFieldHttpPostIn" />
+      <wsdl:output message="tns:AddCustomFieldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersHttpPostIn" />
+      <wsdl:output message="tns:AddSubscribersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesHttpPostIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscribersWithDupesUsingSmartFormHttpPostIn" />
+      <wsdl:output message="tns:AddSubscribersWithDupesUsingSmartFormHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Import email profiles &amp; its associated profile data to an Existing List thru XML file. &lt;br&gt;* XMLstring that has the profile data to be imported. NOTE: the XML should NOT have line breaks OR special characters (Sample: &lt;a href='http://www.ecn5.com/documents/emails.xml'&gt;XML&lt;/a&gt;, &lt;a href='http://www.ecn5.com/documents/emails.xsd'&gt;Schema&lt;/a&gt;)</wsdl:documentation>
+      <wsdl:input message="tns:AddSubscriberUsingSmartFormHttpPostIn" />
+      <wsdl:output message="tns:AddSubscriberUsingSmartFormHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add Email Addresses to the Master Suppression List in ECN</wsdl:documentation>
+      <wsdl:input message="tns:AddToMasterSuppressionListHttpPostIn" />
+      <wsdl:output message="tns:AddToMasterSuppressionListHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetLists_InternalHttpPostIn" />
+      <wsdl:output message="tns:GetLists_InternalHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets the status of the subscriber</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberStatusHttpPostIn" />
+      <wsdl:output message="tns:GetSubscriberStatusHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method call will import the email profiles in the XML string and alos updates the emailaddress.&lt;br&gt;Parameters to this method&lt;br&gt;* ecn_listID - is the ID of the list to import the email profiles.&lt;br&gt;* ecn_emailProfilesXMLString - is XML string that has the profile data to be imported.&lt;br&gt;* NOTE: the XML should have &lt;u&gt;no line breaks&lt;/u&gt; OR &lt;u&gt;special characters&lt;/u&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdateEmailAddressHttpPostIn" />
+      <wsdl:output message="tns:UpdateEmailAddressHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ListManagerSoap" type="tns:ListManagerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFolders">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetListEmailProfilesByEmailAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetCustomFields" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetFilters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddListToFolder" style="document" />
+      <wsdl:input name="AddListToFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddListToFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolderToParent" style="document" />
+      <wsdl:input name="AddFolderToParent">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetLists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetListByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetListsByFolderID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetSubscriberCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteSubscriber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteCustomField" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <soap:operation soapAction="http://webservices.ecn5.com/UnsubscribeSubscriber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <soap:operation soapAction="http://webservices.ecn5.com/UpdateList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <soap:operation soapAction="http://webservices.ecn5.com/UpdateListWithFolder" style="document" />
+      <wsdl:input name="UpdateListWithFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="UpdateListWithFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <soap:operation soapAction="http://webservices.ecn5.com/UpdateCustomField" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddCustomField" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddSubscribers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddSubscribersWithDupes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddSubscribersWithDupesUsingSmartForm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddSubscriberUsingSmartForm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddToMasterSuppressionList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetLists_Internal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetSubscriberStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <soap:operation soapAction="http://webservices.ecn5.com/ListManager.asmx?op=UpdateEmailAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ListManagerSoap12" type="tns:ListManagerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFolders">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetListEmailProfilesByEmailAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetCustomFields" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetFilters" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddListToFolder" style="document" />
+      <wsdl:input name="AddListToFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddListToFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolderToParent" style="document" />
+      <wsdl:input name="AddFolderToParent">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetLists" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetListByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetListsByFolderID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetSubscriberCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteSubscriber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteCustomField" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UnsubscribeSubscriber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UpdateList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UpdateListWithFolder" style="document" />
+      <wsdl:input name="UpdateListWithFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="UpdateListWithFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UpdateCustomField" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddCustomField" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddSubscribers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddSubscribersWithDupes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddSubscribersWithDupesUsingSmartForm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddSubscriberUsingSmartForm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddToMasterSuppressionList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetLists_Internal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetSubscriberStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <soap12:operation soapAction="http://webservices.ecn5.com/ListManager.asmx?op=UpdateEmailAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ListManagerHttpGet" type="tns:ListManagerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetFolders">
+      <http:operation location="/GetFolders" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <http:operation location="/GetListEmailProfilesByEmailAddress" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <http:operation location="/GetCustomFields" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <http:operation location="/GetFilters" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <http:operation location="/AddList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <http:operation location="/AddListToFolder" />
+      <wsdl:input name="AddListToFolder">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddListToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolder" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolderToParent" />
+      <wsdl:input name="AddFolderToParent">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <http:operation location="/GetLists" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <http:operation location="/GetListByName" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <http:operation location="/GetListsByFolderID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <http:operation location="/GetSubscriberCount" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <http:operation location="/DeleteFolder" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <http:operation location="/DeleteList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <http:operation location="/DeleteSubscriber" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <http:operation location="/DeleteCustomField" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <http:operation location="/UnsubscribeSubscriber" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <http:operation location="/UpdateList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <http:operation location="/UpdateListWithFolder" />
+      <wsdl:input name="UpdateListWithFolder">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="UpdateListWithFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <http:operation location="/UpdateCustomField" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <http:operation location="/AddCustomField" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <http:operation location="/AddSubscribers" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <http:operation location="/AddSubscribersWithDupes" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <http:operation location="/AddSubscribersWithDupesUsingSmartForm" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <http:operation location="/AddSubscriberUsingSmartForm" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <http:operation location="/AddToMasterSuppressionList" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <http:operation location="/GetLists_Internal" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <http:operation location="/GetSubscriberStatus" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <http:operation location="/UpdateEmailAddress" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ListManagerHttpPost" type="tns:ListManagerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetFolders">
+      <http:operation location="/GetFolders" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListEmailProfilesByEmailAddress">
+      <http:operation location="/GetListEmailProfilesByEmailAddress" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFields">
+      <http:operation location="/GetCustomFields" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFilters">
+      <http:operation location="/GetFilters" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <http:operation location="/AddList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddList">
+      <http:operation location="/AddListToFolder" />
+      <wsdl:input name="AddListToFolder">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddListToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolder" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolderToParent" />
+      <wsdl:input name="AddFolderToParent">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists">
+      <http:operation location="/GetLists" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListByName">
+      <http:operation location="/GetListByName" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListsByFolderID">
+      <http:operation location="/GetListsByFolderID" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberCount">
+      <http:operation location="/GetSubscriberCount" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <http:operation location="/DeleteFolder" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteList">
+      <http:operation location="/DeleteList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteSubscriber">
+      <http:operation location="/DeleteSubscriber" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCustomField">
+      <http:operation location="/DeleteCustomField" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnsubscribeSubscriber">
+      <http:operation location="/UnsubscribeSubscriber" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <http:operation location="/UpdateList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateList">
+      <http:operation location="/UpdateListWithFolder" />
+      <wsdl:input name="UpdateListWithFolder">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="UpdateListWithFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomField">
+      <http:operation location="/UpdateCustomField" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomField">
+      <http:operation location="/AddCustomField" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribers">
+      <http:operation location="/AddSubscribers" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupes">
+      <http:operation location="/AddSubscribersWithDupes" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscribersWithDupesUsingSmartForm">
+      <http:operation location="/AddSubscribersWithDupesUsingSmartForm" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSubscriberUsingSmartForm">
+      <http:operation location="/AddSubscriberUsingSmartForm" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddToMasterSuppressionList">
+      <http:operation location="/AddToMasterSuppressionList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLists_Internal">
+      <http:operation location="/GetLists_Internal" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSubscriberStatus">
+      <http:operation location="/GetSubscriberStatus" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateEmailAddress">
+      <http:operation location="/UpdateEmailAddress" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ListManager">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your LISTS in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+    <wsdl:port name="ListManagerSoap" binding="tns:ListManagerSoap">
+      <soap:address location="http://webservices.ecn5.com/ListManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ListManagerSoap12" binding="tns:ListManagerSoap12">
+      <soap12:address location="http://webservices.ecn5.com/ListManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ListManagerHttpGet" binding="tns:ListManagerHttpGet">
+      <http:address location="http://webservices.ecn5.com/ListManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ListManagerHttpPost" binding="tns:ListManagerHttpPost">
+      <http:address location="http://webservices.ecn5.com/ListManager.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

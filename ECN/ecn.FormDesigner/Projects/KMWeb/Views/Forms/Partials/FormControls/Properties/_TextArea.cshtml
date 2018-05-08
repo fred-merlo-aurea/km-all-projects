@@ -1,0 +1,72 @@
+﻿@using KMEnums
+
+<script type="text/ng-template" id="@(ControlType.TextArea)Properties">
+    <ng-form name="form">
+        <div class="proptitle">TextArea Properties</div>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Field Name:</label>
+                <input type="text" ng-model="control.Label" />
+            </div>
+            <div class="formitem formitemlabeltop">
+                <label>Database Field:</label>
+                <select kendo-drop-down-list="fieldList" ng-model="control.FieldId" name="FieldId" k-option-label="'Select'" data-message-required="Field ID Required" required 
+                        k-options='{ dataTextField: "ShortName", dataValueField: "GroupDataFieldsID", dataSource: fieldsDataSource }'>
+                </select>
+                <span class="error" ng-show="form.submitted && form.FieldId.$invalid">
+                    <span ng-show="form.FieldId.$error.required">Select Field ID</span>
+                </span>
+            </div>
+            <div class="formitem">
+                <button type="button" ng-click="openAddFieldWindow()" class="btn btn-blue2 k-button">Add<i class="km-icon icon-kmplus-circled-1"></i></button>
+            </div>
+            <div class="formitem">
+                <label>Field Label (HTML Editor):</label>
+                <textarea kendo-editor="LabelHTML" class="editorForRefresh" ng-model="control.LabelHTML" k-options="$parent.$parent.editorOptionsNoImage" k-encoded="false" k-on-select="onEditorSelect(kendoEvent)"></textarea>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Options</div>
+            <div class="formbox">
+                <div class="formitem" ng-if="control.Type != @((int)ControlType.Email) && control.FormType != @((int)FormType.AutoSubmit)">
+                    <input type="checkbox" ng-model="control.Required" />
+                    <label>Required</label>
+                </div>
+                <div class="formitem">
+                    <select kendo-drop-down-list ng-model="control.Size">
+                        @foreach (var type in Enum.GetValues(typeof(FieldSize)))
+                        { 
+                            <option value="@((int)type)">@type.ToString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Characters</div>
+            <div class="formbox">
+                <div class="formitem formitemlabeltop">
+                    <label>Min</label>
+                    <input type="text" name="Min" class="shortinput" ng-model="control.Min" kendo-numerictextbox k-options="{ decimals: 0, format: '#', min: 0 }"
+                        required data-message-required="Min Characters required" maximum="{{maximumAllowed()}}" data-message-maximum="Min Characters exceeded maximum"  />
+                    <span class="error" ng-show="form.submitted && form.Min.$invalid">
+                        <span ng-show="form.Min.$error.maximum">Value exceeded maximum</span>
+                        <span ng-show="form.Min.$error.required">Value required</span>
+                    </span>
+                </div>
+                <div class="formitem formitemlabeltop">
+                    <label>Max</label>
+                    <input type="text" name="Max" class="shortinput" ng-model="control.Max" kendo-numerictextbox k-options="{ decimals: 0, format: '#', min: 0 }" 
+                       required data-message-required="Max Characters required" maximum="{{maximumAllowed()}}" data-message-maximum="Max Characters exceeded maximum" />
+                    <span class="error" ng-show="form.submitted && form.Max.$invalid">
+                        <span ng-show="form.Max.$error.maximum">Value exceeded maximum</span>
+                        <span ng-show="form.Max.$error.required">Value required</span>
+                    </span>
+                </div>
+                <div class="formitem">
+                    <label>Maximum allowed is {{maximumAllowed()}}</label>
+                </div>
+            </div>
+        </div>
+    </ng-form>
+</script>

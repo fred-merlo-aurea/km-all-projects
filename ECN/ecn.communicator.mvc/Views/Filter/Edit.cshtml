@@ -1,0 +1,374 @@
+﻿@model ECN_Framework_Entities.Communicator.Filter
+@using ecn.communicator.mvc.Infrastructure;
+@using KMEnums
+@{
+    ViewBag.Title = "Edit Filter";
+}
+<script>
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+    function getFilterGroupGrid(filterID) {
+        if (filterID > 0) {
+            $.ajax({
+                url: "@Url.Action("LoadGroupGrid", "Filter")",
+                type: "GET",
+                data: { filterID: filterID },
+                success: function (partialViewResult) {
+                    $("#divFilterGrid").html(partialViewResult);
+                }
+            });
+        }
+    }
+    function getFilterGroupConditions(filterGroupID) {
+        if (filterGroupID > 0) {
+            $.ajax({
+                url: "@Url.Action("LoadConditionGrid", "Filter")",
+                type: "GET",
+                data: { filterGroupID: filterGroupID },
+                success: function (partialViewResult) {
+                    $("#divFilterGrid").html(partialViewResult);
+                }
+            });
+        }
+    }
+    function btnUpdate() {
+        var filterObj = {
+            FilterName: $('#FilterName').val(),
+            GroupCompareType: $('#FilterGroupCompareType').val(),
+            FilterID: '@Model.FilterID'
+        };
+        $.ajax({
+            url: '@Url.Action("Update")',
+            type: 'POST',
+            data: JSON.stringify(filterObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response[0] == '200') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    window.location.href = response[1];
+                }
+                else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: response[1]
+                    });
+                }
+            }
+        });
+    }
+
+    function addFilterGroup() {
+        var win = $("#CreateFilterGroup");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add Filter Group');
+        kendoWindow.center().open();
+    }
+    function editFilterGroup(id) {
+        var win = $("#EditFilterGroup");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Edit Filter Group');
+        $("#editFilterGroupDiv").load('@Url.Action("LoadEditFilterGroup")', { filterGroupID: id }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function deleteFilterGroup(id) {
+        var win = $("#DeleteFilterGroup");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+
+    function addConditionFilterGroup(filterGroupID) {
+        getFilterGroupConditions(filterGroupID);
+        var win = $("#CreateFilterCondition");
+        var kendoWindow = win.data('kendoWindow');
+        var dateWin = $("#SelectDateWindow_Create");
+        var dateKendoWind = dateWin.data('kendoWindow');
+        if (dateKendoWind) {
+            dateKendoWind.destroy();
+        }
+
+        kendoWindow.title('Add Filter Condition');
+        $("#createFilterConditionDiv").empty();
+        $("#createFilterConditionDiv").load('@Url.Action("LoadAddFilterCondition")', { filterGroupID: filterGroupID }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function editConditionFilterGroup(filterConditionID) {
+        var win = $("#EditFilterCondition");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Edit Filter Condition');
+        var dateWin = $("#SelectDateWindow_Edit");
+        var dateKendoWind = dateWin.data('kendoWindow');
+        if (dateKendoWind)
+        {
+            dateKendoWind.destroy();
+        }
+        $("#editFilterConditionDiv").empty();
+        $("#editFilterConditionDiv").load('@Url.Action("LoadEditFilterCondition")', { filterConditionID: filterConditionID }, function () {
+            kendoWindow.refresh();
+            kendoWindow.center().open();
+        });
+    }
+    function deleteConditionFilterGroup(filterConditionID) {
+        var win = $("#DeleteFilterCondition");
+        kendo.bind(win, { Id: filterConditionID });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+
+    function closeWindow(id) {
+        if (id.length > 0)
+            $("#" + id).data('kendoWindow').close();
+        else
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please save a filter to preview'
+            });
+    }
+
+    function popManagerWindow() {
+        window.open('/ecn.communicator.mvc/Filter/Preview/' + '@Model.FilterID', 'Preview', 'width=550,height=500,resizable=yes,scrollbars=yes,status=yes');
+    }
+
+    function closeCreateFilterCondition()
+    {
+        closeWindow('CreateFilterCondition');
+        $("#divSelectDateWindow_C").remove();
+    }
+    function closeEditFilterCondition()
+    {
+        closeWindow('EditFilterCondition');
+        //$("#selectDateWindowDiv").remove();
+    }
+
+
+</script>
+<style>
+    #folderPanel {
+        width: 15%;
+        float: left;
+    }
+
+    #divFilterGrid {
+        width: 85%;
+        float: right;
+    }
+</style>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="@Url.Action("Index", "Filter", new { id = Model.GroupID})">Filters</a></li>
+</ol>
+<hr />
+<div>
+    <table>
+        <tr>
+            <td>Filter Name</td>
+            <td> @Html.TextBox("FilterName") </td>
+            <td>Filter Group Connector</td>
+            <td>
+                @{
+                    int dDindex = 0;
+                    int typesIndex = 0;
+                }
+                @(
+                    Html.Kendo()
+                        .DropDownListFor(x => x.GroupCompareType)
+                        .Name("FilterGroupCompareType")
+                        .HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:Type" } })
+                        .Items(items =>
+                        {
+                            foreach (ConditionType type in Enum.GetValues(typeof(ConditionType)))
+                            {
+                                items.Add().Text(type.ToString().ToUpper()).Value(type.ToString().ToUpper());
+                                if (type.ToString().ToUpper() == Model.GroupCompareType.ToUpper())
+                                {
+                                    dDindex = typesIndex;
+                                }
+                                typesIndex++;
+                            }
+                        })
+                        .SelectedIndex(dDindex)
+                )
+            </td>
+            <td><button type="button" class="btn k-button" onclick="btnUpdate()">Update</button></td>
+            <td><button type="button" class="btn k-button" onclick="return popManagerWindow();">Preview</button></td>
+        </tr>
+    </table>
+</div>
+<hr style="margin-bottom: -10px;" />
+<!-- Folder panel in partial view-->
+<div id="folderPanel">
+    <h3>Filter Details</h3>
+    <a style="float: left; cursor:pointer;text-decoration:none;" onclick="getFilterGroupGrid('@Model.FilterID')">
+        @Model.FilterName
+    </a>
+    <br />
+    @{
+        foreach (var fg in Model.FilterGroupList)
+        {
+            <a style="margin-left:20px; cursor:pointer;text-decoration:none;" onclick="getFilterGroupConditions('@fg.FilterGroupID')">@if (fg.SortOrder > 1) {@fg.ConditionCompareType.ToUpper()} @fg.Name</a><br />
+        }
+    }
+</div>
+<div id="divFilterGrid">
+    @Html.Partial("Partials/_FilterGroupGrid", Model.FilterGroupList)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(p => p.Clear())
+        .Title(false)
+        .Name("CreateFilterGroup")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("CreateFilterGroup", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divFilterGrid"
+            }))
+            {
+                <div id="createFilterGroupDiv">
+                    @Html.Partial("Partials/Modals/_CreateFilterGroup", new ECN_Framework_Entities.Communicator.FilterGroup())
+                </div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(p => p.Clear())
+        .Title(false)
+        .Name("EditFilterGroup")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("EditFilterGroup", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "editFilterGroupDiv"
+            }))
+            {
+                <div id="editFilterGroupDiv"></div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(p => p.Clear())
+        .Name("DeleteFilterGroup")
+        .Title(false)
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("DeleteFilterGroup", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "deleteFilterGroupDiv",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="deleteFilterGroupDiv">
+                    @Html.Partial("Partials/Modals/_DeleteFilterGroup")
+                </div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@*Condition*@
+@{
+    Html.Kendo()
+        .Window()
+        .Actions(p => p.Clear())
+        .Modal(true)
+        .Animation(false)
+        .Title(false)
+        .Name("CreateFilterCondition")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("CreateFilterCondition", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "createFilterConditionDiv"
+            }))
+            {
+                <div id="createFilterConditionDiv"></div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(p => p.Clear())        
+        .Title(false)
+        .Name("EditFilterCondition")
+        .Content(
+        @<text>            
+            <div id="editFilterConditionDiv"></div>            
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Actions(p => p.Clear())
+        .Modal(true)
+        .Animation(false)        
+        .Name("DeleteFilterCondition")
+        .Title(false)
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("DeleteFilterCondition", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "deleteFilterConditionDiv",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="deleteFilterConditionDiv">
+                    @Html.Partial("Partials/Modals/_DeleteFilterCondition")
+                </div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+
+

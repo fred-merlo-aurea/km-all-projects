@@ -1,0 +1,20 @@
+﻿   
+@using KMEnums
+@using KMModels.PostModels
+
+@model RuleModel
+
+<div class="formbox">    
+    <div class="formitem formiteminline" >                         
+        @Html.HiddenFor(x=>x.Type, new { @value = RuleTypes.Field} )        
+        @Html.HiddenFor(x=>x.Order)        
+    <label>Field</label>
+        @Html.Kendo().DropDownListFor(x => x.ControlId).BindTo(ViewContext.Controller.ViewBag.VisibleControls).DataTextField("FieldLabel").DataValueField("Id")                              
+    </div>
+    <div class="formitem  formiteminline" >                             
+        @Html.Kendo().RadioButtonFor(x=>x.Show).Value(true).Label("Show").Checked(Model.Show == true)                                                                
+    </div>
+    <div class="formitem formiteminline">        
+        @Html.Kendo().RadioButtonFor(x=>x.Show).Value(false).Label("Hide").Checked(Model.Show == false)                                                       
+    </div>
+</div>

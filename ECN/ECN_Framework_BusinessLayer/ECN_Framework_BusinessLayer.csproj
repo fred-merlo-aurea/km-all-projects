@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECN_Framework_BusinessLayer</RootNamespace>
+    <AssemblyName>ECN_Framework_BusinessLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Local\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Prod\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RouteDebugger, Version=2.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\RouteDebugger.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\Action.cs" />
+    <Compile Include="Accounts\BaseChannel.cs" />
+    <Compile Include="Accounts\CustomerManager.cs" />
+    <Compile Include="Accounts\Interfaces\ICustomerManager.cs" />
+    <Compile Include="Accounts\Interfaces\ITotalBlastsForDayProxy.cs" />
+    <Compile Include="Accounts\Report\EmailDirectReportProxy.cs" />
+    <Compile Include="Accounts\Report\IEmailDirectReportProxy.cs" />
+    <Compile Include="Accounts\TotalBlastsForDayProxy.cs" />
+    <Compile Include="Accounts\BillingReport.cs" />
+    <Compile Include="Accounts\BillingReportItem.cs" />
+    <Compile Include="Accounts\Channel.cs" />
+    <Compile Include="Accounts\Code.cs" />
+    <Compile Include="Accounts\Contact.cs" />
+    <Compile Include="Accounts\Customer.cs" />
+    <Compile Include="Accounts\CustomerConfig.cs" />
+    <Compile Include="Accounts\CustomerContact.cs" />
+    <Compile Include="Accounts\CustomerDepartment.cs" />
+    <Compile Include="Accounts\CustomerDiskUsage.cs" />
+    <Compile Include="Accounts\CustomerLicense.cs" />
+    <Compile Include="Accounts\CustomerNote.cs" />
+    <Compile Include="Accounts\CustomerProduct.cs" />
+    <Compile Include="Accounts\CustomerTemplate.cs" />
+    <Compile Include="Accounts\LandingPage.cs" />
+    <Compile Include="Accounts\LandingPageAssign.cs" />
+    <Compile Include="Accounts\LandingPageAssignContent.cs" />
+    <Compile Include="Accounts\LandingPageOption.cs" />
+    <Compile Include="Accounts\License.cs" />
+    <Compile Include="Accounts\Notification.cs" />
+    <Compile Include="Accounts\Product.cs" />
+    <Compile Include="Accounts\ProductDetail.cs" />
+    <Compile Include="Accounts\Quote.cs" />
+    <Compile Include="Accounts\QuoteItem.cs" />
+    <Compile Include="Accounts\QuoteOption.cs" />
+    <Compile Include="Accounts\Report\EmailDirectReport.cs" />
+    <Compile Include="Accounts\Role.cs" />
+    <Compile Include="Accounts\RoleAction.cs" />
+    <Compile Include="Accounts\SFSettings.cs" />
+    <Compile Include="Accounts\Staff.cs" />
+    <Compile Include="Accounts\SubscriptionManagement.cs" />
+    <Compile Include="Accounts\SubscriptionManagementGroup.cs" />
+    <Compile Include="Accounts\SubscriptionManagementReason.cs" />
+    <Compile Include="Accounts\SubscriptionManagementUDF.cs" />
+    <Compile Include="Accounts\TotalBlastsForDay.cs" />
+    <Compile Include="Accounts\User.cs" />
+    <Compile Include="Accounts\UserAction.cs" />
+    <Compile Include="Accounts\UserDepartment.cs" />
+    <Compile Include="Accounts\View\CustomerDiskUsage.cs" />
+    <Compile Include="Accounts\View\ProductActionInfo.cs" />
+    <Compile Include="Accounts\View\ProductFeatureInfo.cs" />
+    <Compile Include="Activity\BlastActivityBounces.cs" />
+    <Compile Include="Activity\BlastActivityClicks.cs" />
+    <Compile Include="Activity\BlastActivityConversion.cs" />
+    <Compile Include="Activity\BlastActivityOpens.cs" />
+    <Compile Include="Activity\BlastActivityRefer.cs" />
+    <Compile Include="Activity\BlastActivityResends.cs" />
+    <Compile Include="Activity\BlastActivitySends.cs" />
+    <Compile Include="Activity\BlastActivitySocial.cs" />
+    <Compile Include="Activity\BlastActivitySuppressed.cs" />
+    <Compile Include="Activity\BlastActivityUnSubscribes.cs" />
+    <Compile Include="Activity\EmailActivityUpdate.cs" />
+    <Compile Include="Activity\EmailClients.cs" />
+    <Compile Include="Activity\Platforms.cs" />
+    <Compile Include="Activity\Report\ABSummaryReport.cs" />
+    <Compile Include="Activity\Report\AdvertiserClickReportProxy.cs" />
+    <Compile Include="Activity\Report\AudienceEngagementReportProxy.cs" />
+    <Compile Include="Activity\Report\AudienceEngagementReport.cs" />
+    <Compile Include="Activity\Report\BlastActivityOpensReport.cs" />
+    <Compile Include="Activity\Report\BlastClickDetail.cs" />
+    <Compile Include="Activity\Report\BlastClickReport.cs" />
+    <Compile Include="Activity\Report\BlastClickSummary.cs" />
+    <Compile Include="Activity\Report\BlastClickSummary_SubReport.cs" />
+    <Compile Include="Activity\Report\BlastComparision.cs" />
+    <Compile Include="Activity\Report\CampaignStatisticsReportProxy.cs" />
+    <Compile Include="Activity\Report\BlastDeliveryProxy.cs" />
+    <Compile Include="Activity\Report\BlastDelivery.cs" />
+    <Compile Include="Activity\Report\BlastOpensByTime.cs" />
+    <Compile Include="Activity\Report\BlastReport.cs" />
+    <Compile Include="Activity\Report\BlastReportDetail.cs" />
+    <Compile Include="Activity\Report\BlastReportPerformance.cs" />
+    <Compile Include="Activity\Report\BlastResponseDetail.cs" />
+    <Compile Include="Activity\Report\BounceByDomain.cs" />
+    <Compile Include="Activity\Report\CampaignStatisticsReport.cs" />
+    <Compile Include="Activity\Report\ABSummaryReportProxy.cs" />
+    <Compile Include="Activity\Report\ChampionAuditReportProxy.cs" />
+    <Compile Include="Activity\Report\ChampionAuditReport.cs" />
+    <Compile Include="Activity\Report\DataDumpReport.cs" />
+    <Compile Include="Activity\Report\EmailFatigueReport.cs" />
+    <Compile Include="Activity\Report\EmailPerformanceByDomainReportProxy.cs" />
+    <Compile Include="Activity\Report\EmailPerformanceByDomainReport.cs" />
+    <Compile Include="Activity\Report\EmailsDeliveredByPercentage.cs" />
+    <Compile Include="Activity\Report\Interfaces\ICampaignStatisticsReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IAdvertiserClickReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IAudienceEngagementReportProxy.cs" />
+    <Compile Include="Activity\Report\GroupStatisticsReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IGroupStatisticsReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IOnOffsByFieldProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IBlastDeliveryProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IABSummaryReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IChampionAuditReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IStatisticsByFieldProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IEmailPerformanceByDomainReportProxy.cs" />
+    <Compile Include="Activity\Report\Interfaces\IUndeliverableReportProxy.cs" />
+    <Compile Include="Activity\Report\MasterSuppressionSourceReportDetails.cs" />
+    <Compile Include="Activity\Report\FlashReport.cs" />
+    <Compile Include="Activity\Report\GroupStatisticsReport.cs" />
+    <Compile Include="Activity\Report\LinkDetails.cs" />
+    <Compile Include="Activity\Report\LinkReportList.cs" />
+    <Compile Include="Activity\Report\MasterSuppressionSourceReport.cs" />
+    <Compile Include="Activity\Report\OnOffsByFieldProxy.cs" />
+    <Compile Include="Activity\Report\OnOffsByField.cs" />
+    <Compile Include="Activity\Report\PerformanceByDayAndTimeReport.cs" />
+    <Compile Include="Activity\Report\ReportViewerExport.cs" />
+    <Compile Include="Activity\Report\SocialDetail.cs" />
+    <Compile Include="Activity\Report\SocialShareChart.cs" />
+    <Compile Include="Activity\Report\SocialSummary.cs" />
+    <Compile Include="Activity\Report\StatisticsByFieldProxy.cs" />
+    <Compile Include="Activity\Report\StatisticsByField.cs" />
+    <Compile Include="Activity\Report\TopEvangelists.cs" />
+    <Compile Include="Activity\Report\TopEvangelistsLists.cs" />
+    <Compile Include="Activity\Report\UndeliverableReportProxy.cs" />
+    <Compile Include="Activity\Report\UndeliverableReport.cs" />
+    <Compile Include="Activity\Report\UnsubscribeReason.cs" />
+    <Compile Include="Activity\Report\UnsubscribeReasonDetail.cs" />
+    <Compile Include="Activity\SuppressedCodes.cs" />
+    <Compile Include="Activity\View\BlastActivity.cs" />
+    <Compile Include="Application\ActivityEnginesApplicationErrorHandler.cs" />
+    <Compile Include="Application\CommunicatorMvcApplicationErrorHandler.cs" />
+    <Compile Include="Application\CreatorApplicationErrorHandler.cs" />
+    <Compile Include="Application\DigitalEditionApplicationErrorHandler.cs" />
+    <Compile Include="Application\AccountApplicationErrorHandler.cs" />
+    <Compile Include="Application\AuthenticationTicket.cs" />
+    <Compile Include="Application\DomainTrackingApplicationErrorHandler.cs" />
+    <Compile Include="Application\ECNSession.cs" />
+    <Compile Include="Application\GatewayApplicationErrorHandler.cs" />
+    <Compile Include="Application\GlobalApplicationErrorHandlerBase.cs" />
+    <Compile Include="Application\GlobalExceptionLogging.cs" />
+    <Compile Include="Application\Interfaces\ISessionDataProvider.cs" />
+    <Compile Include="Application\ECNSessionDataProvider.cs" />
+    <Compile Include="Application\PublisherApplicationErrorHandler.cs" />
+    <Compile Include="Application\WebPageHelper.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Collector\GridStatements.cs" />
+    <Compile Include="Collector\Page.cs" />
+    <Compile Include="Collector\Participant.cs" />
+    <Compile Include="Collector\Question.cs" />
+    <Compile Include="Collector\Response.cs" />
+    <Compile Include="Collector\ResponseOptions.cs" />
+    <Compile Include="Collector\SurveyBranching.cs" />
+    <Compile Include="Collector\SurveyStyles.cs" />
+    <Compile Include="Collector\Templates.cs" />
+    <Compile Include="Communicator\AccessCheckManager.cs" />
+    <Compile Include="Communicator\APILoggingManager.cs" />
+    <Compile Include="Communicator\APILogging.cs" />
+    <Compile Include="Communicator\ApplicationCode.cs" />
+    <Compile Include="Communicator\AutoResponders.cs" />
+    <Compile Include="Communicator\Base\UserValidation.cs" />
+    <Compile Include="Communicator\BlastEngines.cs" />
+    <Compile Include="Communicator\BlastEnvelope.cs" />
+    <Compile Include="Communicator\BlastFieldsName.cs" />
+    <Compile Include="Communicator\BlastFieldsValue.cs" />
+    <Compile Include="Communicator\BlastLink.cs" />
+    <Compile Include="Communicator\BlastLinks.cs" />
+    <Compile Include="Communicator\BlastPlans.cs" />
+    <Compile Include="Communicator\BlastRSS.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\BlastScheduleAssistant.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\BlastScheduleAssistantIncludeToday.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\BlastSetupInfoNextDayFinder.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\BlastSetupInfoFactory.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\BlastSetupInfoNextDayFinderIncludingToday.cs" />
+    <Compile Include="Communicator\BlastSetupInfoBuilding\IBlastScheduleAssistant.cs" />
+    <Compile Include="Communicator\BlastSingle.cs" />
+    <Compile Include="Communicator\Blast\Abstract\BlastExtendedAbstract.cs" />
+    <Compile Include="Communicator\Blast\Abstract\BlastStandardAbstract.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromABCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromCampaignAbstract.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromCampaignCreator.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromChampionCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromLayoutCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromNoOpenCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromRegularSaleforceCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromSMSCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\BlastFromPersonalizationCampaign.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastCreator\CreateBlastTypeEnum.cs" />
+    <Compile Include="Communicator\Blast\Base\BlastManager.cs" />
+    <Compile Include="Communicator\Blast\Base\Blast.cs" />
+    <Compile Include="Communicator\Blast\Abstract\BlastAbstract.cs" />
+    <Compile Include="Communicator\BlastFields.cs" />
+    <Compile Include="Communicator\BlastSchedule.cs" />
+    <Compile Include="Communicator\BlastScheduleDays.cs" />
+    <Compile Include="Communicator\BlastSetupInfo.cs" />
+    <Compile Include="Communicator\Blast\Base\IBlastManager.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastAB.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastABMaster.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastChampion.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastLayout.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastNoOpen.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastPersonalization.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastRegular.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastSMS.cs" />
+    <Compile Include="Communicator\Blast\Object\BlastSocial.cs" />
+    <Compile Include="Communicator\CampaignItemBlastManager.cs" />
+    <Compile Include="Communicator\CampaignItemBlastRefBlastManager.cs" />
+    <Compile Include="Communicator\CampaignItemTestBlastManager.cs" />
+    <Compile Include="Communicator\CampaignManager.cs" />
+    <Compile Include="Communicator\Campaign.cs" />
+    <Compile Include="Communicator\CampaignItemManager.cs" />
+    <Compile Include="Communicator\CampaignItem.cs" />
+    <Compile Include="Communicator\CampaignItemBlast.cs" />
+    <Compile Include="Communicator\CampaignItemBlastFilter.cs" />
+    <Compile Include="Communicator\CampaignItemBlastRefBlast.cs" />
+    <Compile Include="Communicator\CampaignItemLinkTracking.cs" />
+    <Compile Include="Communicator\CampaignItemMetaTag.cs" />
+    <Compile Include="Communicator\CampaignItemOptOutGroup.cs" />
+    <Compile Include="Communicator\CampaignItemSocialMedia.cs" />
+    <Compile Include="Communicator\CampaignItemSuppression.cs" />
+    <Compile Include="Communicator\CampaignItemTemplate.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateFilter.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateOptoutGroup.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateGroup.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateSuppressionGroup.cs" />
+    <Compile Include="Communicator\CampaignItemTestBlast.cs" />
+    <Compile Include="Communicator\ChampionAudit.cs" />
+    <Compile Include="Communicator\ChannelMasterSuppressionList.cs" />
+    <Compile Include="Communicator\ChannelNoThresholdList.cs" />
+    <Compile Include="Communicator\Code.cs" />
+    <Compile Include="Communicator\Content.cs" />
+    <Compile Include="Communicator\ContentFilter.cs" />
+    <Compile Include="Communicator\ContentFilterDetail.cs" />
+    <Compile Include="Communicator\ConversionLinksManager.cs" />
+    <Compile Include="Communicator\EmailGroupsImport.cs" />
+    <Compile Include="Communicator\EmailGroupsImportBase.cs" />
+    <Compile Include="Communicator\EmailGroupsImportNoAccess.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicStrings.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicStringsBase.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicStringsTemplate.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicTags.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicTagsAbstract.cs" />
+    <Compile Include="Communicator\GroupValidateDynamicTagsAmbientTransaction.cs" />
+    <Compile Include="Communicator\Interfaces\IConversionLinksManager.cs" />
+    <Compile Include="Communicator\LayoutPlansValidate.cs" />
+    <Compile Include="Communicator\LayoutPlansValidateBase.cs" />
+    <Compile Include="Communicator\LayoutPlansValidateUseAmbient.cs" />
+    <Compile Include="Communicator\MessageTypeManager.cs" />
+    <Compile Include="Communicator\TemplateManager.cs" />
+    <Compile Include="Communicator\FolderManager.cs" />
+    <Compile Include="Communicator\ContentManager.cs" />
+    <Compile Include="Communicator\ContentReplacement\ContextReplacementBase.cs" />
+    <Compile Include="Communicator\ContentReplacement\RSSFeed.cs" />
+    <Compile Include="Communicator\ConversionLinks.cs" />
+    <Compile Include="Communicator\CustomerLinkTracking.cs" />
+    <Compile Include="Communicator\DataFieldSets.cs" />
+    <Compile Include="Communicator\DomainSuppression.cs" />
+    <Compile Include="Communicator\DynamicTag.cs" />
+    <Compile Include="Communicator\DynamicTagRule.cs" />
+    <Compile Include="Communicator\EmailActivityLog.cs" />
+    <Compile Include="Communicator\EmailDataValues.cs" />
+    <Compile Include="Communicator\EmailDirect.cs" />
+    <Compile Include="Communicator\EmailGroups.cs" />
+    <Compile Include="Communicator\EmailHistory.cs" />
+    <Compile Include="Communicator\EmailPreview.cs" />
+    <Compile Include="Communicator\EmailManager.cs" />
+    <Compile Include="Communicator\Emails.cs" />
+    <Compile Include="Communicator\EventOrganizer.cs" />
+    <Compile Include="Communicator\Filter.cs" />
+    <Compile Include="Communicator\FilterBase.cs" />
+    <Compile Include="Communicator\FilterCondition.cs" />
+    <Compile Include="Communicator\FilterGroup.cs" />
+    <Compile Include="Communicator\GroupManager.cs" />
+    <Compile Include="Communicator\Interfaces\IAccessCheckManager.cs" />
+    <Compile Include="Communicator\Interfaces\ICampaignItemBlastRefBlastManager.cs" />
+    <Compile Include="Communicator\Interfaces\ICampaignItemTestBlastManager.cs" />
+    <Compile Include="Communicator\Interfaces\ICampaignItemBlastManager.cs" />
+    <Compile Include="Communicator\Interfaces\IAPILoggingManager.cs" />
+    <Compile Include="Communicator\Interfaces\IMessageTypeManager.cs" />
+    <Compile Include="Communicator\Interfaces\IFolderManager.cs" />
+    <Compile Include="Communicator\Interfaces\ITemplateManager.cs" />
+    <Compile Include="Communicator\Interfaces\ILayoutPlansManager.cs" />
+    <Compile Include="Communicator\Interfaces\ICampaignManager.cs" />
+    <Compile Include="Communicator\Interfaces\ICampaignItemManager.cs" />
+    <Compile Include="Communicator\Interfaces\IEmailManager.cs" />
+    <Compile Include="Communicator\Interfaces\ILinkAliasManager.cs" />
+    <Compile Include="Communicator\Interfaces\ILayoutManager.cs" />
+    <Compile Include="Communicator\Interfaces\IGroupManager.cs" />
+    <Compile Include="Communicator\Interfaces\IContentManager.cs" />
+    <Compile Include="Communicator\Interfaces\IUserManager.cs" />
+    <Compile Include="Communicator\LayoutManager.cs" />
+    <Compile Include="Communicator\LayoutPlansManager.cs" />
+    <Compile Include="Communicator\LinkAliasManager.cs" />
+    <Compile Include="Communicator\QuickTestBlast.cs" />
+    <Compile Include="Communicator\QuickTestBlastConfig.cs" />
+    <Compile Include="Communicator\Folder.cs" />
+    <Compile Include="Communicator\Gateway.cs" />
+    <Compile Include="Communicator\GatewayValue.cs" />
+    <Compile Include="Communicator\GlobalMasterSuppressionList.cs" />
+    <Compile Include="Communicator\Group.cs" />
+    <Compile Include="Communicator\GroupConfig.cs" />
+    <Compile Include="Communicator\GroupDataFields.cs" />
+    <Compile Include="Communicator\GroupDataFieldsDefault.cs" />
+    <Compile Include="Communicator\Layout.cs" />
+    <Compile Include="Communicator\LayoutPlans.cs" />
+    <Compile Include="Communicator\LinkAlias.cs" />
+    <Compile Include="Communicator\LinkOwnerIndex.cs" />
+    <Compile Include="Communicator\LinkTracking.cs" />
+    <Compile Include="Communicator\LinkTrackingDomain.cs" />
+    <Compile Include="Communicator\LinkTrackingParam.cs" />
+    <Compile Include="Communicator\LinkTrackingParamSettings.cs" />
+    <Compile Include="Communicator\LinkTrackingSettings.cs" />
+    <Compile Include="Communicator\MAConnector.cs" />
+    <Compile Include="Communicator\MAControl.cs" />
+    <Compile Include="Communicator\MarketingAutomation.cs" />
+    <Compile Include="Communicator\MarketingAutomationHistory.cs" />
+    <Compile Include="Communicator\MessageType.cs" />
+    <Compile Include="Activity\Report\AdvertiserClickReport.cs" />
+    <Compile Include="Communicator\NewFile.cs" />
+    <Compile Include="Communicator\ReportQueue.cs" />
+    <Compile Include="Communicator\Reports.cs" />
+    <Compile Include="Communicator\ReportSchedule.cs" />
+    <Compile Include="Communicator\Report\Deliverability.cs" />
+    <Compile Include="Communicator\Report\EmailPreviewUsage.cs" />
+    <Compile Include="Communicator\Report\Interfaces\IListSizeOvertimeReportProxy.cs" />
+    <Compile Include="Communicator\Report\ListSizeOvertimeReportProxy.cs" />
+    <Compile Include="Communicator\Report\ListSizeOvertimeReport.cs" />
+    <Compile Include="Communicator\RSSFeed.cs" />
+    <Compile Include="Communicator\Rule.cs" />
+    <Compile Include="Communicator\RuleCondition.cs" />
+    <Compile Include="Communicator\Samples.cs" />
+    <Compile Include="Communicator\AccessCheck.cs" />
+    <Compile Include="Communicator\SimpleShareDetail.cs" />
+    <Compile Include="Communicator\SmartFormActivityLog.cs" />
+    <Compile Include="Communicator\SmartFormsHistory.cs" />
+    <Compile Include="Communicator\SmartFormsPrePopFields.cs" />
+    <Compile Include="Communicator\SmartFormTracking.cs" />
+    <Compile Include="Communicator\SmartSegment.cs" />
+    <Compile Include="Communicator\SocialMedia.cs" />
+    <Compile Include="Communicator\SocialMediaAuth.cs" />
+    <Compile Include="Communicator\SocialMediaErrorCodes.cs" />
+    <Compile Include="Communicator\Template.cs" />
+    <Compile Include="Communicator\TriggerPlans.cs" />
+    <Compile Include="Communicator\UnicodeLookup.cs" />
+    <Compile Include="Communicator\UniqueLink.cs" />
+    <Compile Include="Communicator\UploadLog.cs" />
+    <Compile Include="Communicator\UserGroup.cs" />
+    <Compile Include="Communicator\UserManager.cs" />
+    <Compile Include="Communicator\Wizard.cs" />
+    <Compile Include="Content\PersonalizedContent.cs" />
+    <Compile Include="Content\PersonalizedContentErrorCodes.cs" />
+    <Compile Include="Creator\Code.cs" />
+    <Compile Include="Collector\Survey.cs" />
+    <Compile Include="Communicator\LinkTrackingParamOption.cs" />
+    <Compile Include="DomainTracker\DomainTracker.cs" />
+    <Compile Include="DomainTracker\DomainTrackerActivity.cs" />
+    <Compile Include="DomainTracker\DomainTrackerFields.cs" />
+    <Compile Include="DomainTracker\DomainTrackerUserProfile.cs" />
+    <Compile Include="DomainTracker\DomainTrackerValue.cs" />
+    <Compile Include="FormDesigner\Condition.cs" />
+    <Compile Include="FormDesigner\ConditionGroup.cs" />
+    <Compile Include="FormDesigner\Form.cs" />
+    <Compile Include="FormDesigner\Newsletter.cs" />
+    <Compile Include="FormDesigner\OverwriteDataPost.cs" />
+    <Compile Include="FormDesigner\RequestQueryValue.cs" />
+    <Compile Include="FormDesigner\Rule.cs" />
+    <Compile Include="Helpers\CustomerAdapter.cs" />
+    <Compile Include="Helpers\UserAdapter.cs" />
+    <Compile Include="Interfaces\ICustomer.cs" />
+    <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="MVCModels\PostModels.cs" />
+    <Compile Include="Publisher\EditionActivityLog.cs" />
+    <Compile Include="Publisher\EditionHistory.cs" />
+    <Compile Include="Publisher\Frequency.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Publisher\Category.cs" />
+    <Compile Include="Publisher\Edition.cs" />
+    <Compile Include="Publisher\Link.cs" />
+    <Compile Include="Publisher\Page.cs" />
+    <Compile Include="Publisher\Publication.cs" />
+    <Compile Include="Publisher\Report\ActivityClicksDetails.cs" />
+    <Compile Include="Publisher\Report\ActivityDEReport.cs" />
+    <Compile Include="Publisher\Report\ActivityForwardsDetails.cs" />
+    <Compile Include="Publisher\Report\ActivityPrintsPerPage.cs" />
+    <Compile Include="Publisher\Report\ActivitySearchDetails.cs" />
+    <Compile Include="Publisher\Report\ActivitySubscribesDetails.cs" />
+    <Compile Include="Publisher\Report\ActivitySummary.cs" />
+    <Compile Include="Publisher\Report\ActivityTopClicks.cs" />
+    <Compile Include="Publisher\Report\ActivityTopClicksDownload.cs" />
+    <Compile Include="Publisher\Report\ActivityVisitPerPage.cs" />
+    <Compile Include="Publisher\Report\ActivityVisitTop20.cs" />
+    <Compile Include="Publisher\Rule.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1BCE78E7-DD4D-48BC-85C3-D77FCE995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <!--<Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    -->
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

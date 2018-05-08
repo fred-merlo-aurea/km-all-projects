@@ -1,0 +1,228 @@
+﻿@model  UAS.Web.Models.FileMapperWizard.TransformationModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {       
+        var isEdit = @Html.Raw(Json.Encode(Model.IsEdit));
+        var transformationTypeId = @Html.Raw(Json.Encode(Model.TransformationTypeId));
+        var transformationId = @Html.Raw(Json.Encode(Model.TransformationId));
+
+        if (isEdit) {
+            BindDropDownList({
+                ControlID: "transformationSetup_kddlTransformTypes",
+                URL: targetTransformationTypesUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "",
+                DataType: "json",
+                SelectedValue: transformationTypeId.toString()
+            });
+
+            var type = $("#transformationSetup_kddlTransformTypes").data("kendoDropDownList").text();
+
+            var model = { TransformationTypeID: transformationTypeId, TransformationID: transformationId }
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/LoadTransformationDetail",
+                data: model,
+                traditional: true,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                cache: !0,
+                datatype: "html",
+                success: function (returnData) {
+                    $("#div_TransformationDetailSection").html(returnData);                    
+                },
+                error: function (data) {
+                    alert("An error has occured!!!");
+                }
+            });
+        } else {
+            BindDropDownList({
+                ControlID: "transformationSetup_kddlTransformTypes",
+                URL: targetTransformationTypesUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "",
+                DataType: "json"
+            });
+        }
+    });
+
+    function SearchTransformation() {
+        var win = $("#transformationSearchWindow").data('kendoWindow');
+        $("#transformationSearchWindow").html("");
+        win.content("Loading...");
+        win.center();
+        win.open();
+
+        var transformationTypeId = $("#transformationSetup_kddlTransformTypes").val();
+        var model = { TransformationTypeID: transformationTypeId }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationSearch",
+            data: model,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                win.content(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function refreshTransformationGrid(SourceFileID, FieldMappingID) {
+        var sourcefileid = SourceFileID;
+        var fieldmappingid = FieldMappingID;
+
+        var modelData =
+        {
+            SourceFileID: sourcefileid,
+            FieldMappingID: fieldmappingid
+        }
+
+        var targetName = "div_Transformations_" + fieldmappingid;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationGrid",
+            data: modelData,
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                $("#" + targetName).show();
+                $("#" + targetName).html(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function hideButtons() {
+        $("#btnApplyAssign").css("display", "none");    
+        $("#btnApplyDataMap").css("display", "none");    
+        $("#btnApplyJoin").css("display", "none");    
+        $("#btnApplySplit").css("display", "none");
+    }
+
+    function kddlTransformTypes_Change()
+    {        
+        debugger;
+        hideButtons();
+        var transformationTypeId = $("#transformationSetup_kddlTransformTypes").val();
+        var type = $("#transformationSetup_kddlTransformTypes").data("kendoDropDownList").text();
+
+        document.getElementById("transformationField_TransformationTypeId").value = transformationTypeId;
+        document.getElementById("transformationField_TransformationName").value = "";
+        document.getElementById("transformationField_TransformationName").value = "";
+
+        var transformationId = @Html.Raw(Json.Encode(Model.TransformationId));
+
+        if (transformationTypeId > 0) {
+            var model = { TransformationTypeID: transformationTypeId, TransformationID: transformationId }
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/LoadTransformationDetail",
+                data: model,
+                traditional: true,
+                contentType: "application/html; charset=utf-8",
+                type: "GET",
+                cache: !0,
+                datatype: "html",
+                success: function (returnData) {
+                    $("#div_TransformationDetailSection").html(returnData);
+
+                    //if (type == "Assign Value") {
+                    //    $("#btnApplyAssign").css("display", "");
+                    //} else if (type == "Change Value") {                    
+                    //    $("#btnApplyDataMap").css("display", "");
+                    //} else if (type == "Join Columns") {
+                    //    $("#btnApplyJoin").css("display", "");
+                    //} else if (type == "Split Into Rows") {
+                    //    $("#btnApplySplit").css("display", "");
+                    //}
+                },
+                error: function (data) {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    }
+</script>
+
+@Html.HiddenFor(m => m.TransformationId, new { id = "transformationField_TransformationId" })
+@Html.HiddenFor(m => m.TransformationTypeId, new { id = "transformationField_TransformationTypeId" })
+
+<div style="margin: 5px 10px 5px 10px;">
+    <div>
+        <h4>Transformations for @Model.ColumnName.ToUpper()</h4>
+    </div>   
+    <table class="filedetails" width="100%">
+        <tr class="filedetailsrow">
+            <td style="text-align: right;">
+                @Html.LabelFor(m => m.TransformationTypeId)
+            </td>
+            <td>
+                <input id="transformationSetup_kddlTransformTypes" name="TransformationTypes" onchange="kddlTransformTypes_Change();" style="width: 200px;" />
+            </td>
+            <td></td>
+        </tr> 
+        <tr class="filedetailsrow">
+            <td style="text-align: right;">
+                @Html.LabelFor(m => m.TransformationName)<span style="color:red;"><strong>*</strong></span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.TransformationName, new { id = "transformationField_TransformationName", style = "width: 200px;" })
+                <img src="~/Images/search-64.png" width="24" height="24" onclick="SearchTransformation();" />
+            </td>
+            <td style="text-align: left;">
+                
+            </td>
+        </tr>
+        <tr class="filedetailsrow">
+            <td style="text-align: right;">
+                @Html.LabelFor(m => m.TransformationDescription)<span style="color:red;"><strong>*</strong></span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.TransformationDescription, new { id = "transformationField_TransformationDesc", style = "width: 200px;" })
+            </td>
+            <td></td>
+        </tr>        
+        <tr class="filedetailsrow">
+            <td colspan="3" width="100%" height="325px">
+                <div id="div_TransformationDetailSection">
+
+                </div>
+            </td>
+        </tr>  
+        <tr class="filedetailsrow">
+            <td colspan="3">
+                <div style="text-align: center; vertical-align: middle;">
+                    @Html.CheckBoxFor(m => m.IsTemplate, new { id = "transformationField_TransformationTemplate" })
+                    @Html.LabelFor(m => m.IsTemplate)
+                </div>
+            </td>
+        </tr> 
+        <tr class="filedetailsrow">
+            <td colspan="3">
+                <div style="text-align: center; vertical-align: middle;">
+                    @(Html.Kendo().Button().Name("btnApplyAssign").Content("Apply")
+                        .HtmlAttributes(new { @style = "display: none;", @class = "btn k-button", type = "button", onclick = "ApplyTransformationInAssign();" }))
+                    @(Html.Kendo().Button().Name("btnApplyDataMap").Content("Apply")
+                        .HtmlAttributes(new { @style = "display: none;", @class = "btn k-button", type = "button", onclick = "ApplyTransformDataMap();" }))
+                    @(Html.Kendo().Button().Name("btnApplyJoin").Content("Apply")
+                        .HtmlAttributes(new { @style = "display: none;", @class = "btn k-button", type = "button", onclick = "ApplyTransformationInJoin();" }))
+                    @(Html.Kendo().Button().Name("btnApplySplit").Content("Apply")
+                        .HtmlAttributes(new { @style = "display: none;", @class = "btn k-button", type = "button", onclick = "ApplyTransformationInSplit();" }))
+                </div>
+            </td>
+        </tr>                      
+    </table>
+</div>

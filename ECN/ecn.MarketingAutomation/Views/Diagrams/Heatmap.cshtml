@@ -1,0 +1,1477 @@
+﻿@using ecn.MarketingAutomation.Models
+@using KMEnums
+
+@model DiagramViewModel
+
+@{
+    ViewBag.Title = "Heat Map";
+}
+<script src="../../Scripts/kendo.all.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/moment-timezone.min.js"></script>
+<style>
+    #splitter {
+        height: 800px;
+    }
+
+    #controlPropertiesPanel {
+        overflow-y: auto;
+    }
+
+    #diagram {
+        height: 774px;
+    }
+
+    #automationControlsPanel .k-panel .k-item {
+        display: inline-block;
+        width: 50%;
+    }
+
+    .shapeItem {
+        margin: 50px;
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        background-image: url("../../Images/diagram-toolbox.png");
+        background-size: auto 100%;
+    }
+
+    #automationControlsPanel span {
+        text-align: center;
+        display: block;
+    }
+
+    .buttonsgroup {
+        position: absolute;
+        top: 760px;
+        left: 20%;
+    }
+
+    .propertyItem {
+        display: block;
+        margin: 5px 0 0 5px;
+    }
+    .propertyTitle {
+        text-align: center;
+        background-color: #f5f5f5;
+        margin: 2px;
+        height: 25px;
+        color: #f07b05;
+        font-size: 16px;
+        font-weight: 600;
+        padding-top: 15px;
+    }
+</style>
+<h2 style="font-family: arial; color: #2a6ebb; margin-top: 10px; text-align:center">@Model.Name</h2>
+<h4 style="font-family: arial; color: #2a6ebb; margin-top: 10px; text-align:center">Automation Dates from @Model.StartDate.Value.ToString("M/d/yyyy") to @Model.EndDate.Value.ToString("M/d/yyyy")</h4>
+<h4 style="font-family: arial; color: #2a6ebb; margin-top: 10px; text-align:center">Automation Goal: @Model.Goal</h4>
+<div style="text-align:right;">@Html.Kendo().Button().Name("Print").Content("Print").HtmlAttributes(new { @class = "btn", type = "button", onclick = "printAsPDF()" })</div>
+<div id="splitter">
+    <div id="center-pane">
+        <div id="myCenterDivOverlay" style="background-color:#E0E0E0; opacity:0.7; z-index:1000; width: 98%; height: 97%;position:absolute; top:10px; left:10px; visibility:hidden"></div>
+        <div class="pane-content">
+            <h3 style="text-align:center; margin-top: 5px">Automation Canvas</h3>
+            <button id="zoomIn" style="border:none;padding:0;background-color:#E0E0E0;background-color: Transparent;"><img src="~/Images/Zoom_In.png" style="width:80%;height:80%;" alt="Zoom In" /></button>
+            <button id="zoomOut" style="border:none;padding:0;background-color:#E0E0E0;background-color: Transparent;"><img src="~/Images/Zoom_Out.png" style="width:80%;height:80%;" alt="Zoom Out" /></button>
+            <div id="diagram" style="border: none;"></div>
+        </div>
+    </div>
+    <div id="right-pane">
+        
+        <div id="controlPropertiesPanel" class="pane-content">
+            @Html.Partial("Partials/ControlProperties/_Campaign")
+            @Html.Partial("Partials/ControlProperties/_Group")
+            @Html.Partial("Partials/ControlProperties/_Decision")
+            @Html.Partial("Partials/ControlProperties/_Wait")
+            @Html.Partial("Partials/ControlProperties/_EmailClick")
+            @Html.Partial("Partials/ControlProperties/_EmailControl")
+        </div>
+    </div>
+</div>
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("PopupWindow")
+        .Content(
+        @<text>
+            @using (Ajax.BeginForm("Action", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "PopupContent",
+                //OnFailure = "onError"
+            }))
+            {
+                <div id="PopupContent"></div>
+            }
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+<script>
+
+    var sends = new Array();
+    sends.push("CampaignItem");
+    sends.push("Click");
+    sends.push("Open");
+    sends.push("Sent");
+    sends.push("NotSent");
+    sends.push("Open_NoClick");
+    sends.push("Suppressed");
+    sends.push("NoClick");
+    sends.push("NoOpen");
+    sends.push("Direct_Click");
+    sends.push("Form");
+    sends.push("FormSubmit");
+    sends.push("FormAbandon");
+    sends.push("Direct_NoOpen");
+    sends.push("Direct_Open");
+    sends.push("Subscribe");
+    sends.push("Unsubscribe");
+    sends.push("Wait");
+    var highestShape;
+
+    $(document).ready(function () {
+        $("#diagram").kendoDiagram();
+        var diagram = $("#diagram").data("kendoDiagram");
+        var diagramNS = kendo.dataviz.diagram;
+        var shape1 = diagram.addShape(new diagramNS.Point(100, 100));
+        $("#zoomIn").on("click", function () {
+            var zoom = $("#diagram").data("kendoDiagram").zoom();
+            $("#diagram").data("kendoDiagram").zoom(zoom + 0.1,
+                    {point: new diagramNS.Point(100, 100)});
+        });
+        $("#zoomOut").on("click", function () {
+            var zoom = $("#diagram").data("kendoDiagram").zoom();
+            $("#diagram").data("kendoDiagram").zoom(zoom - 0.1,
+                    {point: new diagramNS.Point(100, 100)});
+        });
+    });
+
+    $(function() {
+        var Shape = kendo.dataviz.diagram.Shape,
+            Connection = kendo.dataviz.diagram.Connection,
+            Rect = kendo.dataviz.diagram.Rect,
+            Point = kendo.dataviz.diagram.Point,
+            selected,
+            lastItemSelected,
+            newItemSelected;
+
+        var diagram = $("#diagram").kendoDiagram({
+            editable: {
+                rotate: false,
+                resize: false
+            },
+            shapeDefaults: {
+                width: 100,
+                height: 100,
+                fill: "#0093f5"
+            },
+            layout: {
+                type: "tree",
+                subtype: "down"
+            },
+            select: function (e) {
+                if (e.selected.length) {
+                    selected = e.selected;
+                    var element = e.selected[0];
+                    // Set selected item index
+                    for (var i = 0; i < diagram.shapes.length; i++) {
+                        if (diagram.shapes[i].id == element.id)
+                            lastItemSelected = i;
+                    }
+                    if (element instanceof Shape) {
+                        onSelectedItem(element.options);
+                    } else {
+                        updateConnectionProperties(element.options);
+                    }
+                }
+            },
+            dragStart: onDragStart
+        }).getKendoDiagram();
+        // To disable the diagram Zoom Feature
+        $("#diagram").unbind("mousewheel");
+        $("#diagram").unbind("DOMMouseScroll");
+        // Load initial diagram from Controller
+        loadDiagram(diagram,JSON.parse(@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Model.Diagram, true))));
+        //diagram.load(JSON.parse(@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Model.Diagram, true))));
+        initDiagram();
+
+
+
+        var model = @Html.Raw(Json.Encode(Model));
+        model.StartDate = '@Model.StartDate.Value.ToString("M/d/yyyy")';
+        model.EndDate = '@Model.EndDate.Value.ToString("M/d/yyyy")';
+        model.Status = '@Model.Status';
+        MarketingAutomationID = parseInt('@Model.Id.ToString()');
+        //draw header info
+        var DName = new kendo.dataviz.diagram.Shape({
+            type: "rectangle",
+            x: 20,
+            y: highestShape - 120,
+            width: 300,
+            height: 30,
+            fill: "#FFFFFF",
+            category: "Header_Name",
+            stroke:{color:"#FFFFFF"},
+            content: {
+                //text: model.Name,
+                fontSize: 18, color: "#000"
+            },
+            editable: {
+                connect : false
+            },
+            connectors: [],
+            selectable: false
+        });
+
+        DName.visual.append(new kendo.dataviz.diagram.TextBlock({x:0,y:0,text: "Name:" + model.Name}));
+        DName.visual.append(new kendo.dataviz.diagram.TextBlock({x:0,y:20,text:"Start Date:" +model.StartDate}));
+        DName.visual.append(new kendo.dataviz.diagram.TextBlock({x:0,y:40,text:"End Date:" + model.EndDate}));
+        DName.visual.append(new kendo.dataviz.diagram.TextBlock({x:0,y:60,text:"Goal:" + model.Goal}));
+        var currentDate = new Date();
+        var systemtz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (systemtz != 'America/Chicago')
+        {
+            var sysDatetime = new Date();
+            var m = moment.utc(sysDatetime, "DD-MM-YYYY h:mm:ss A"); // parse input as UTC
+            var tz = 'America/Chicago'; 
+            var csttime =m.clone().tz(tz).format("MM/DD/YYYY h:mm:ss A");
+            currentDate = new Date(csttime);
+        }     
+        var dd = currentDate.getDate();
+        var mm = currentDate.getMonth() + 1; //January is 0!
+        var yyyy = currentDate.getFullYear();
+        var hours = currentDate.getHours();
+        var min = currentDate.getMinutes();
+        var seconds = currentDate.getSeconds();
+        var AMPM= "AM";
+        if (hours > 12) {
+            AMPM = "PM";
+            hours = hours - 12;}
+        else if (hours == 12) { AMPM = "PM"; hours = hours }
+        else if (hours == 0) { hours = 12;}
+
+        DName.visual.append(new kendo.dataviz.diagram.TextBlock({x:0,y:80,text:'As of: ' + mm + '/' + dd + '/' + yyyy + ' ' + hours + ':' + (min < 10 ? '0' + min : min)  + ':' + (seconds < 10 ? '0' + seconds : seconds) + ' ' + AMPM}));
+
+        //heatmap.visual.append(new kendo.dataviz.diagram.TextBlock({x:10,y:20,text: element.options.HeatMapStats}));
+        diagram.addShape(DName);
+        //diagram.bringIntoView(DName);
+
+        diagram.pan(new Point(-20, -100));
+        propsClear();
+
+        function onDragStart(e){
+           e.preventDefault();
+
+        }
+        function getParent(shape)
+        {
+            var traceShape;
+            var tracer = true;
+            while (tracer){
+                for (var i = 0; i < diagram.connections.length; i++) {
+                    if (shape.id == diagram.connections[i].to.id) {
+                        traceShape = diagram.connections[i].from.options;
+                        tracer = false;
+                        break;
+                    }
+                }
+                tracer = false;
+            }
+            return traceShape;
+        }
+        function getChild(shape)
+        {
+            var traceShape;
+            var tracer = true;
+            while (tracer){
+                for (var i = 0; i < diagram.connections.length; i++) {
+                    if (shape.id == diagram.connections[i].from.id) {
+                        traceShape = diagram.connections[i].to.options;
+                        tracer = false;
+                        break;
+                    }
+                }
+                tracer = false;
+            }
+            return traceShape;
+        }
+        function getChildfromConn(connector)
+        {
+            var traceShape;
+            var tracer = true;
+            while (tracer){
+                for (var i = 0; i < diagram.shapes.length; i++) {
+                    if (connector.to.shapeId == diagram.shapes[i].id) {
+                        traceShape = diagram.shapes[i].options;
+                        tracer = false;
+                        break;
+                    }
+                }
+                tracer = false;
+            }
+            return traceShape;
+        }
+        function getParentfromConn(connector)
+        {
+            var traceShape;
+            var tracer = true;
+            while (tracer){
+                for (var i = 0; i < diagram.shapes.length; i++) {
+                    if (connector.from.shapeId == diagram.shapes[i].id) {
+                        traceShape = diagram.shapes[i].options;
+                        tracer = false;
+                        break;
+                    }
+                }
+                tracer = false;
+            }
+            var parentShape;
+            var parenttracer = true;
+            while (parenttracer){
+                for (var i = 0; i < diagram.connections.length; i++) {
+                    if (traceShape.id == diagram.connections[i].to.id) {
+                        parentShape = diagram.connections[i].from.options;
+                        parenttracer = false;
+                        break;
+                    }
+                }
+                parenttracer = false;
+            }
+          return parentShape;
+        }
+        function onSelectedItem(shape) {
+
+            propsClear();
+
+            switch (shape.category){
+                case "Start":
+                    break;
+                case "Group":
+                    fadeInProp('#GroupProp');
+                    propsGroup(shape,true,true);
+                    break;
+                case "CampaignItem":
+                    fadeInProp('#CampaignProp');
+                    var parentSendTime = traceSendTime(shape);
+
+                    propsCampaign(shape, model.StartDate,model.EndDate,true,true,parentSendTime, model.Status);
+                    break;
+                case "NoClick":
+                case "NoOpen":
+                case "Open_NoClick":
+                case "Sent":
+                case "NotSent":
+                case "Suppressed":
+                case "Click":
+                case "Open":
+                    fadeInProp('#EmailControlProp');
+                    propsEmailControl(shape, traceCustomerId(shape),true, traceSendTime(shape), true);
+                    break;
+                case "Direct_Click":
+                case "Form":
+                    fadeInProp('#EmailClickProp');
+                    propsEmailClick(shape, traceCustomerId(shape),true, null,traceLayoutID(shape),null,MarketingAutomationID,true);
+                    break;
+                case "FormSubmit":
+                case "FormAbandon":
+                    fadeInProp('#EmailClickProp');
+                    propsEmailClick(shape, traceCustomerId(shape),true, null,traceLayoutID(shape),traceFormID(shape),MarketingAutomationID,true);
+                    break;
+                case "Direct_Open":
+                case "Direct_NoOpen":
+                case "Subscribe":
+                    fadeInProp('#EmailControlProp');
+                    propsEmailControl(shape, traceCustomerId(shape),true, traceSendTime(shape), true);
+                    break;
+                case "Unsubscribe":
+                    fadeInProp('#EmailControlProp');
+                    propsEmailControl(shape, traceCustomerId(shape),true, traceSendTime(shape), true);
+                    break;
+                case "Wait":
+                    fadeInProp('#WaitProp');
+                    var parentShape = getParent(shape);
+                    var childShape = getChild(shape);
+                    propsWait(shape,true,false,parentShape,childShape,false);
+                    break;
+                case "End":
+                    break;
+                case "Heatmap_Group":
+                    break;
+                case "Heatmap_CampaignItem":
+                case "Heatmap_NoClick":
+                case "Heatmap_NoOpen":
+                case "Heatmap_Open_NoClick":
+                case "Heatmap_Sent":
+                case "Heatmap_NotSent":
+                case "Heatmap_Suppressed":
+                case "Heatmap_Click":
+                case "Heatmap_Open":
+                    break;
+                case "Heatmap_Direct_NoOpen":
+                    break;
+                case "Heatmap_Direct_Click":
+                    break;
+                case "Heatmap_Direct_Open":
+                    break;
+                case "Heatmap_Subscribe":
+                    break;
+                case "Heatmap_Unsubscribe":
+                    break;
+
+            }
+        }
+
+        function updateConnectionProperties(shape) {
+            propsClear();
+            fadeInProp('#WaitProp');
+            var childShape = getChildfromConn(shape);
+            var parentShape = getParentfromConn(shape);
+            propsWait(shape,true,false,parentShape,childShape,true);
+        }
+       
+        function propsClear() {
+            var ancestor = document.getElementById('controlPropertiesPanel'),
+            descendents = ancestor.getElementsByTagName('div');
+            var i, e, d;
+            for (i = 0; i < descendents.length; i++) {
+                e = descendents[i];
+                e.style.display = 'none';
+            }
+        }
+
+        $("#splitter").kendoSplitter({
+            panes: [
+                { collapsible: false, scrollable: false },
+                { collapsible: true, size: "250px" }
+            ]
+        });
+
+        function initDiagram() {
+            if (diagram.shapes.length == 0)
+                propsClear();
+            else {
+                diagram.select(diagram.shapes[0]);
+                drawHeatMaps();
+            }
+        }
+        function drawHeatMapPopUp (shape) {
+            var window = $("#PopupWindow");
+            var kendoWindow = window.data('kendoWindow');
+            window.find("form").attr('action', '');
+            kendoWindow.title('Subscription Renewal Clicks');
+            $("#PopupContent").load('/ecn.MarketingAutomation/Diagrams/SubscriptionRenewalClicks', null, function () {
+                window.find('legend').text('Subscription Renewal Clicks');
+                kendoWindow.center().open();
+            });
+        }
+
+        function fadeInProp(prop) {
+            $(prop).removeAttr("style")
+        }
+
+
+        function drawHeatMaps() {
+
+            highestShape = diagram.shapes[0].options.y;
+            for(var i = 0;i< diagram.shapes.length; i++)
+            {
+                if(diagram.shapes[i].options.y < highestShape)
+                    highestShape = diagram.shapes[i].options.y;
+
+            }
+            for (var i = 0; i < diagram.shapes.length; i++) {
+
+
+                if(sends.indexOf(diagram.shapes[i].options.category) >= 0)
+                {
+                    if(diagram.shapes[i].options.HeatMapStats > 0)
+                    {
+                        if(diagram.shapes[i].options.category == "Wait")
+                        {
+                              diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "/ecn.MarketingAutomation/Images/SmallGrey2.png",
+                                x:90,
+                                y:-30,
+                                width:83,
+                                height:43
+                            }));
+
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.TextBlock({
+                                text: parseInt(diagram.shapes[i].options.HeatMapStats),
+                                x: 105,
+                                y: -10,
+                                color: "#000000",
+                                fontSize:12,
+                                fontWeight:600
+                            }));
+                        }
+                        else
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "/ecn.MarketingAutomation/Images/SmallGrey2.png",
+                                x:160,
+                                y:-30,
+                                width:83,
+                                height:43
+                            }));
+
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.TextBlock({
+                                text: parseInt(diagram.shapes[i].options.HeatMapStats),
+                                x: 175,
+                                y: -10,
+                                color: "#000000",
+                                fontSize:12,
+                                fontWeight:600
+                            }));
+
+                        }
+                    }
+
+
+                }
+                else if(diagram.shapes[i].options.category == "Group")
+                {
+                    diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                        source: "/ecn.MarketingAutomation/Images/SmallGrey2.png",
+                        x:160,
+                        y:-30,
+                        width:83,
+                        height:43
+                    }));
+
+                    diagram.shapes[i].visual.append(new kendo.dataviz.diagram.TextBlock({
+                        text: diagram.shapes[i].options.Subscribed,
+                        x: 175,
+                        y: -20,
+                        color: "#000000",
+                        fontSize:12,
+                        fontWeight:600
+                    }));
+
+
+                }
+            }
+
+            for (var i = 0; i < diagram.connections.length; i++)
+            {
+                if(diagram.connections[i].options.HeatMapStats > 0)
+                {
+                    var sourcePoint = diagram.connections[i].sourcePoint();
+                    var endPoint = diagram.connections[i].targetPoint();
+                    var heatMapX = (sourcePoint.x + endPoint.x) / 2;
+                    var heatMapY = (sourcePoint.y + endPoint.y) / 2;
+
+                    diagram.connections[i].visual.append(new kendo.dataviz.diagram.Image({
+                        source: "/ecn.MarketingAutomation/Images/SmallGrey2.png",
+                        x:heatMapX - 10,
+                        y:heatMapY - 20,
+                        width:83,
+                        height:43
+                    }));
+
+                    diagram.connections[i].visual.append(new kendo.dataviz.diagram.TextBlock({
+                        text: parseInt(diagram.connections[i].options.HeatMapStats),
+                        x: heatMapX + 20,
+                        y: heatMapY - 10,
+                        color: "#000000",
+                        fontSize:12,
+                        fontWeight:600
+                    }));
+                }
+                else
+                {
+                    diagram.connections[i].options.selectable=false;
+                }
+          }
+        }
+        function traceCustomerId(shape) {
+
+            var customerId = null;
+            var traceShape = shape;
+            var tracer = true;
+            while (tracer){
+                for (var i = 0; i < diagram.connections.length; i++) {
+                    if (traceShape.id == diagram.connections[i].to.id) {
+                        traceShape = diagram.connections[i].from.options;
+                        if (traceShape.category == "CampaignItem" || traceShape.category == "Group") {
+                            customerId = traceShape.customerid;
+                            tracer = false
+                        }
+                    }
+                }
+            }
+            return customerId;
+        }
+        function traceLayoutID(shape)
+        {
+            var traceShape = shape;
+            var lastShapeIndex = 0;
+            var lastConnectorIndex = 0;
+            var message ={
+                messageID:0,
+                messageName:''
+            };
+            var tracer = true;
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                if (diagram.shapes[i].id == shape.id) {
+                    lastShapeIndex = i;
+                    break;
+                }
+            }
+            var toConn = diagram.shapes[lastShapeIndex].connections("in");
+            for (var i = 0; i < diagram.connections.length; i++) {
+                if (diagram.connections[i].id == toConn[0].id) {
+                    lastConnectorIndex = i;
+                    break;
+                }
+            }
+            while(tracer)
+            {
+                traceShape = diagram.connections[lastConnectorIndex].from.options;
+                if(traceShape.category != "Wait")
+                {
+                    message.messageID = traceShape.messageId;
+                    message.messageName = traceShape.message;
+                    tracer = false;
+                }
+                else
+                {
+                    for (var i = 0; i < diagram.shapes.length; i++) {
+                        if (diagram.shapes[i].id == traceShape.id) {
+                            lastShapeIndex = i;
+                            break;
+                        }
+                    }
+                    toConn = diagram.shapes[lastShapeIndex].connections("in");
+
+                    for (var i = 0; i < diagram.connections.length; i++) {
+                        if (diagram.connections[i].id == toConn[0].id) {
+                            lastConnectorIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+            }
+            //while (tracer){
+            //    for (var i = 0; i < diagram.connections.length; i++) {
+            //        if(diagram.connections[i].from.options.category == "CampaignItem")
+            //        {
+            //            if (traceShape.id == diagram.connections[i].to.id) {
+            //                traceShape = diagram.connections[i].from.options;
+
+            //                if (traceShape.category == "CampaignItem") {
+            //                    message.messageID = traceShape.messageId;
+            //                    message.messageName = traceShape.message;
+            //                    tracer = false;
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //        else if(diagram.connections[i].from.options.category == "Wait")
+            //        {
+            //            traceShape = diagram.connections[i].to.options;
+            //        }
+            //    }
+            //    tracer = false;
+            //}
+            return message;
+        }
+        function traceFormID(shape)
+        {
+            var traceShape = shape;
+            var lastShapeIndex = 0;
+            var lastConnectorIndex = 0;
+            var form ={
+                formID:0,
+                formName:''
+            };
+            var tracer = true;
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                if (diagram.shapes[i].id == shape.id) {
+                    lastShapeIndex = i;
+                    break;
+                }
+            }
+            var toConn = diagram.shapes[lastShapeIndex].connections("in");
+            for (var i = 0; i < diagram.connections.length; i++) {
+                if (diagram.connections[i].id == toConn[0].id) {
+                    lastConnectorIndex = i;
+                    break;
+                }
+            }
+            while(tracer)
+            {
+                traceShape = diagram.connections[lastConnectorIndex].from.options;
+                if(traceShape.category != "Wait")
+                {
+                    form.formID = traceShape.formId;
+                    form.formName = traceShape.formname;
+                    tracer = false;
+                }
+                else
+                {
+                    for (var i = 0; i < diagram.shapes.length; i++) {
+                        if (diagram.shapes[i].id == traceShape.id) {
+                            lastShapeIndex = i;
+                            break;
+                        }
+                    }
+                    toConn = diagram.shapes[lastShapeIndex].connections("in");
+
+                    for (var i = 0; i < diagram.connections.length; i++) {
+                        if (diagram.connections[i].id == toConn[0].id) {
+                            lastConnectorIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+            }
+            return form;
+        }
+        function traceSendTime(shape)
+        {
+            try
+            {
+                var parentSendTime;
+                var days = 0;
+                var hours = 0;
+                var minutes = 0;
+                var traceShape = shape;
+                var tracer = true;
+                while (tracer){
+                    for (var i = 0; i < diagram.connections.length; i++) {
+                        if (traceShape.id == diagram.connections[i].to.id) {
+                            traceShape = diagram.connections[i].from.options;
+
+                            if (traceShape.category == "Wait") {
+
+                                if(traceShape.days.length > 0)
+                                    days = parseInt(traceShape.days);
+                                if(traceShape.hours.length > 0)
+                                    hours = parseInt(traceShape.hours);
+                                if(traceShape.minutes.length > 0)
+                                    minutes = parseInt(traceShape.minutes);
+                                tracer = false;
+                                break;
+                            }
+                        }
+                    }
+                    tracer = false;
+                }
+
+                tracer = true;
+                //traceShape = shape;
+                while(tracer)
+                {
+                    for (var i = 0; i < diagram.connections.length; i++) {
+
+                        if (traceShape.id == diagram.connections[i].to.id) {
+                            traceShape = diagram.connections[i].from.options;
+
+                            if (traceShape.category == "CampaignItem") {
+                                parentSendTime = traceShape.schedule;
+                                tracer = false;
+                                break;
+                            }
+                        }
+
+                    }
+                    tracer = false;
+                }
+
+                if(parentSendTime != "Invalid Date" && parentSendTime != "" && parentSendTime != undefined)
+                {
+                    var parentDate = new Date(parentSendTime);
+                    var parentyear = parentDate.getFullYear();
+                    var parentmonth = parentDate.getMonth();
+                    var parentdays = parentDate.getDate();
+                    var parenthours = checkTime(parentDate.getHours());
+                    var parentminutes = checkTime(parentDate.getMinutes());
+                    var parentseconds = checkTime(parentDate.getSeconds());
+                    if(parentdays != null && parentdays > 0)
+                    {
+                        days += parseInt(parentdays);
+                    }
+                    if(parenthours != null && parenthours > 0)
+                        hours += parseInt(parenthours);
+                    if(parentminutes != null && parentminutes > 0)
+                        minutes += parseInt(parentminutes);
+
+                    var waitDate = new Date(parentyear,parentmonth,days, hours, minutes,parentseconds,0);
+
+
+                    return waitDate;
+                }
+                else
+                {return null;}
+            }
+            catch(error)
+            {
+                return null;
+            }
+        }
+
+    });
+
+
+
+    function loadDiagram(diagram, diag) {
+        diagram.load(diag);
+        for (var i = 0; i < diagram.shapes.length; i++) {
+
+                var item = diagram.shapes[i].options;
+                var shapeItem = new kendo.dataviz.diagram.Shape(item);
+                switch (item.category) {
+                    case "CampaignItem":
+                        var connIn = diagram.shapes[i].connections("in");
+                        for(var j = 0;j < diagram.shapes.length; j++)
+                        {
+                            var currentShape = diagram.shapes[j].options;
+                            if(currentShape.id == connIn.from && currentShape.category != "Start")
+                            {
+                                diagram.shapes[i].options.subcategory = "Group";
+                            }
+                        }
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/OrangeBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Campaign_Orange.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbCampaignItem = new kendo.dataviz.diagram.TextBlock({
+                            text: "Campaign Item",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbCampaignItem);
+                        break;
+                    case "Group":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/OrangeBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Group_Orange.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbGroup = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbGroup);
+                        break;
+                    case "Open_NoClick":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbOpen_NoClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Open - No Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbOpen_NoClick);
+                        break;
+                    case "Suppressed":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbSuppressed = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Suppressed",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbSuppressed);
+                        break;
+                    case "Click":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbClick);
+                        break;
+                    case "Open":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbOpen);
+                        break;
+                    case "NoOpen":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbNoOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email No Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbNoOpen);
+                        break;
+                    case "NoClick":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbNoClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email No Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbNoClick);
+                        break;
+                    case "Sent":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbSent = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Sent",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbSent);
+                        break;
+                    case "NotSent":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreyBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/SmartSegment_1.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbNotSent = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Not Sent",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbNotSent);
+                        break;
+                    case "Subscribe":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Subscribe_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbSubsribe = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Subscribe",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbSubsribe);
+                        break;
+                    case "Unsubscribe":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Unsubscribe_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbUnsub = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Unsubscribe",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbUnsub);
+                        break;
+                    case "Wait":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/YellowBox.png",
+                            x:0,
+                            y:0,
+                            width:140,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Yellow_Wait.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbWait = new kendo.dataviz.diagram.TextBlock({
+                            text: "Wait",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbWait);
+                        break;
+                    case "Direct_Click":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/DirectClick_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbDClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbDClick);
+                        break;
+                    case "Form":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/OrangeBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Form_Orange.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbGroup = new kendo.dataviz.diagram.TextBlock({
+                            text: "Form",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbGroup);
+                        break;
+                    case "FormSubmit":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/FormSubmission_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbformSub = new kendo.dataviz.diagram.TextBlock({
+                            text: "Form Submit",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbformSub);
+                        break;
+                    case "FormAbandon":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/FormAbandon_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbformAband = new kendo.dataviz.diagram.TextBlock({
+                            text: "Form Abandon",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbformAband);
+                        break;
+                    case "Direct_Open":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/DirectOpen_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbDOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbDOpen);
+                        break;
+                    case "Direct_NoOpen":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/BlueBox.png",
+                            x:0,
+                            y:0,
+                            width:200,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/DirectNoOpen_Blue.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbDNoOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email No Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        if(item.isCancelled)
+                        {
+                            diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                                source: "../../Images/Red_Cancel.png",
+                                x:175,
+                                y:5,
+                                width:30,
+                                height:30,
+                            }));
+                        }
+                        diagram.shapes[i].visual.append(tbDNoOpen);
+                        break;
+                    case "Start":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/GreenBox.png",
+                            x:0,
+                            y:0,
+                            width:140,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Green_Start.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbStart = new kendo.dataviz.diagram.TextBlock({
+                            text: "Start",
+                            x: 15,
+                            y: 5,
+                            color: "#000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbStart);
+                        break;
+                    case "End":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/RedBox.png",
+                            x:0,
+                            y:0,
+                            width:140,
+                            height:40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/Red_End.png",
+                            x:-15,
+                            y:5,
+                            width:30,
+                            height:30
+                        }));
+                        var tbEnd = new kendo.dataviz.diagram.TextBlock({
+                            text: "End",
+                            x: 15,
+                            y: 5,
+                            color: "#000",
+                            fontSize:12,
+                            fontWeight:600
+                        });
+                        diagram.shapes[i].visual.append(tbEnd);
+                        break;
+                    default:
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "../../Images/shapeBck.png",
+                            x: 0,
+                            y: 0,
+                            width: 150,
+                            height: 40
+                        }));
+                        break;
+                }
+
+
+                if(diagram.shapes[i].options.category != "Start" && diagram.shapes[i].options.category != "End")
+                {
+                    tb = new kendo.dataviz.diagram.TextBlock({
+                        text: diagram.shapes[i].options.control_text,
+                        x: 15,
+                        y: 20,
+                        color: "#000000",
+                        fontSize:12
+                    });
+                    diagram.shapes[i].visual.append(tb);
+                }
+                //diagram.shapes[i] = shapeItem;
+            }
+
+            diagram.save();
+    }
+
+    function printAsPDF()
+    {
+        var diagramName = '@Model.Name.Trim()';
+        var diagram = $("#diagram").getKendoDiagram();
+        diagram.exportPDF({ paperSize: "auto", margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" } }).done(function(data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: diagramName + ".pdf"
+            });
+        });
+    }
+</script>

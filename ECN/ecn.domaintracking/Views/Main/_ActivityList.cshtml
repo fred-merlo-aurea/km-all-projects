@@ -1,0 +1,139 @@
+﻿@using ECN_Framework_Entities.DomainTracker
+@model ecn.domaintracking.Models.UserActivitiesModel
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        SetTabClassName();
+    });
+    function SetTabClassName() {
+        var myGuid = guid();
+        $(".partialId").addClass("guid_" + myGuid);
+        $(".partialId").removeClass("partialId");
+    }
+    function guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + "-" + s4() + "-" + s4() + "-" +
+            s4() + "-" + s4() + s4() + s4();
+    }   
+</script>
+<input type=hidden id="abcId" name="abcName" value="Wall Street! Money Never Sleep" />
+<tr>
+    <td colspan="2" style="border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; height: 60px; margin: 0px; padding: 0px; text-align: center; vertical-align: middle; width: 100%;">
+        <table style="border: 1px solid gray; height: 90%; text-align: center; vertical-align: middle; width: 100%;">
+            <tr>
+                <td>
+                    <div>
+                        <ul style="list-style-type: none; margin-left: 10px; padding: 0; text-align: center;">
+                            <li class="button-link toggle1 partialId activetab" style="border: none; float: left; list-style: none; margin: 0px 5px;" onclick="ToggleActivityColors(toggle = 'toggle1', className = this.className)">
+                                <a href="#" onclick="ToggleActivityTabs(tab = 'tab1', className = this.className); return false;" class="partialId">Standard Data Points</a>
+                            </li>
+                            <li class="button-link toggle2 partialId" style="border: none; float: left; list-style: none; margin: 0px 5px;" onclick="ToggleActivityColors(toggle = 'toggle2', className = this.className)">
+                                <a href="#" onclick="ToggleActivityTabs(tab = 'tab2', className = this.className); return false;" class="partialId">Additional Data Points</a>
+                            </li>
+                        </ul>
+                        <div>
+                            <div id="tab1" class="partialId">
+                                <table style="border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; width: 100%;">
+                                    @if (Model.Activities.Count > 0)
+                                    {
+                                        <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 55%;">
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 120px;">ActivityID</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 50%;">PageURL</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">IPAddress</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">OS</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">Browser</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center;">TimeStamp</th>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 100%;">
+                                            <td>
+                                                No data to show.
+                                            </td>
+                                        </tr>
+                                    }
+                                    @foreach (DomainTrackerActivity t in Model.Activities)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <small>@t.DomainTrackerActivityID</small>
+                                            </td>
+                                            <td style="text-align: left; width: 55%;">
+                                                <div style="width: 518px; word-wrap: break-word">
+                                                    <small>@t.PageURL</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <small>@t.IPAddress</small>
+                                            </td>
+                                            <td>
+                                                <small>@t.OS</small>
+                                            </td>
+                                            <td>
+                                                <small>@t.Browser</small>
+                                            </td>
+                                            <td>
+                                                <small>@t.TimeStamp</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                            <div id="tab2" class="partialId" style="display: none">
+                                <table style="border: 1px solid black; border-collapse: collapse; border-spacing: 0px; width: 948px">
+                                    @if (Model.FieldsValuePairList.Count > 0)
+                                    {
+                                        <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 55%;">
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 10%;">ActivityID</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 12%;">FieldName</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 8%;">Value</th>
+                                            <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; text-align: center; width: 20%;">ReferringURL</th>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle; width: 100%;">
+                                            <td>
+                                                No data to show.
+                                            </td>
+                                        </tr>
+                                    }
+                                    @foreach (FieldsValuePair t in Model.FieldsValuePairList)
+                                    {
+                                        <tr>
+                                            <td style="font-size: 11px; text-align: left;">
+                                                <div style="width: 100px; word-wrap: break-word; text-align:center">
+                                                    @t.DomainTrackerActivityID
+                                                </div>
+                                            </td>
+                                            <td style="font-size: 11px; text-align: left;">
+                                                <div style="width: 100px; word-wrap: break-word; text-align:center">
+                                                    @t.FieldName
+                                                </div>
+                                            </td>
+                                            <td style="font-size: 11px; text-align: left;">
+                                                <div style="width: 86px; word-wrap: break-word; text-align:center">
+                                                    @t.Value
+                                                </div>
+                                            </td>
+                                            <td style="font-size: 11px; text-align: left;">
+                                                <div style="width: 645px; word-wrap: break-word; text-align:center">
+                                                    @t.ReferralURL                                                    
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

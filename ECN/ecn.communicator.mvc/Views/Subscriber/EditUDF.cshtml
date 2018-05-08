@@ -1,0 +1,153 @@
+﻿@model ecn.communicator.mvc.Models.EmailUDFData
+@{
+    ViewBag.Title = "Edit UDF Data";
+}
+<script>
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+
+    function addUDFDataModal() {
+        var win = $("#AddUDFData");
+        
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add User Defined Fields Data');
+        kendoWindow.center().open();
+        $("#AddUDFDataDiv").load('@Url.Action("LoadAddUDFData")', {groupID: @Model.GroupID, emailID: @Model.EmailID }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function editUDFDataModal(id) {
+        var win = $("#EditUDFData");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Edit Data Fields');
+        $("#EditUDFDataDiv").load('@Url.Action("LoadEditUDFData")', { groupDataFieldsID: id, emailID: @Model.EmailID, groupID: @Model.GroupID  }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function ViewTransaction(DataFieldSetID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("LoadUDFHistoryData", "Subscriber")",
+            data: { DataFieldSetID: DataFieldSetID, emailID: @Model.EmailID, groupID: @Model.GroupID },
+            success: function (response) {
+                if (response[0] == '200') {
+
+                    $("#transactionViewer").html(response[1]);
+                }
+                else {
+                    $("#transactionViewer").html(response[1]);
+                }
+            }
+        });
+    }
+</script>
+
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Subscriber", new { id = Model.GroupID})">Subscribers /</a></li>
+    <li class="breadcrumb-item active"><a href="">Edit UDF Data for Email Address: @Model.Email</a></li>
+</ul>
+
+<div style="min-height:450px;">
+    <table style="width:100%">
+        <tr>
+            <td colspan="1" style="float: right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="addUDFDataModal()">Add/Edit UDF Data</button></td>
+        </tr>
+    </table>
+    <div id="divUDFsDataGrid">
+        @Html.Partial("Partials/_UDFsDataGrid", Model.eudfdv)
+    </div>
+
+    @if (Model.datafieldSets.Count > 0)
+    {
+        <text>
+            <span style="font-weight: bold; font-size: 16px;">Transactions</span>
+
+            <div id="transactions" class="k-widget k-grid" style="min-height:200px;width:100%;border:none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <td style="font-weight: bold; font-size:14px;">Transaction Name</td>
+                            <td style="font-weight: bold; font-size:14px; width:100px; text-align:center;">View</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.datafieldSets)
+                        {
+                            <text>
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td style="width:100px;"><button class='btn k-button' onclick="ViewTransaction(@item.DataFieldSetID)" type='button'>View<i class='km-icon icon-kmcustom-edit'></i></button></td>
+                                </tr></text>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="transactionViewer" class="k-widget k-grid" style="min-height:200px;width:100%;max-width:inherit;border:none;overflow-x:auto;"></div>
+
+        </text>
+        @*@(Html.Kendo()
+            .Grid(Model.datafieldSets)
+            .Name("TransactionsGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.Name).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Transaction Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+                columns.Bound(e => e).Title("View").ClientTemplate("<button class='btn k-button' onclick=\"ViewTransaction(#=DataFieldSetID#)\" type='button'>View<i class='km-icon icon-kmcustom-edit'></i></button>").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" });
+            })
+            .Pageable()
+            .Sortable()
+            .HtmlAttributes(new { style = "min-height:200px;min-width:100px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(m =>
+                {
+                    m.Id(y => y.DataFieldSetID);
+                })
+                .PageSize(15)
+                .ServerOperation(false)
+            )
+        )*@
+    }
+
+    
+
+</div>
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("AddUDFData")
+        .Content(
+        @<text>
+            <div id="AddUDFDataDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("EditUDFData")
+        .Content(
+        @<text>
+            <div id="EditUDFDataDiv"></div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

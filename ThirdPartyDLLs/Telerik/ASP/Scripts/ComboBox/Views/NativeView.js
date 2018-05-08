@@ -1,0 +1,12 @@
+(function(a,b){if(!b.RadComboBox.Views){b.RadComboBox.Views={};
+}b.RadComboBox.Views.Native=function(c){b.RadComboBox.makeEventHandler(this);
+this._owner=c;
+this._enabled=c.get_enabled(),this._wrapper=$telerik.getFirstChildByTagName(c.get_element(),"span",0);
+};
+b.RadComboBox.Views.Native.prototype={initialize:function(){},dispose:function(){this.disposeEvents();
+this._nulifyEventExpandos();
+},readOnly:function(c){},disable:function(){},enable:function(){},repaint:function(){},focus:function(c){},blur:function(c){},toggleReadOnlyState:function(){},_nulifyEventExpandos:function(){if(this._wrapper){this._wrapper.events=null;
+this._wrapper=null;
+}},get_wrapper:function(){return this._wrapper;
+}};
+})($telerik.$,Telerik.Web.UI);

@@ -1,0 +1,642 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{30A36579-D515-477E-B21A-82CD22743FFA}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.activityengines</RootNamespace>
+    <AssemblyName>ecn.activityengines</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.7.123, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions.Design" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\handheld.css" />
+    <Content Include="App_Themes\jquery.qtip.css" />
+    <Content Include="App_Themes\reset.css" />
+    <Content Include="App_Themes\style.css" />
+    <Content Include="Click.aspx" />
+    <Content Include="EncryptionTestSubmitter.aspx" />
+    <Content Include="engines\BlastEmailPreview.aspx" />
+    <Content Include="engines\CanonUnsubscribe.html" />
+    <Content Include="engines\conversion.aspx" />
+    <Content Include="engines\ATHB_SO_subscribe.aspx" />
+    <Content Include="engines\ecnProfileManager.aspx" />
+    <Content Include="engines\editProfileOnly.aspx" />
+    <Content Include="engines\EmailDirectOpen.aspx" />
+    <Content Include="engines\emailProfileManager.aspx" />
+    <Content Include="engines\emailtofriend.aspx" />
+    <Content Include="engines\linkfrom.aspx" />
+    <Content Include="engines\LoadTest.aspx" />
+    <Content Include="engines\ManageSubscriptions.aspx" />
+    <Content Include="engines\open.aspx" />
+    <Content Include="engines\PrePopForms.aspx" />
+    <Content Include="engines\publicPreview.aspx" />
+    <Content Include="engines\pubSubscriptions_SO_subscribe.aspx" />
+    <Content Include="engines\read.aspx" />
+    <Content Include="engines\reportSpam.aspx" />
+    <Content Include="engines\SO_subscribe.aspx" />
+    <Content Include="engines\subscribe.aspx" />
+    <Content Include="engines\SubscriptionManagement.aspx" />
+    <Content Include="engines\Unsubscribe.aspx" />
+    <Content Include="engines\unsubscribeDirect.aspx" />
+    <Content Include="engines\UpdateEmailAddress.aspx" />
+    <Content Include="engines\websubscribe.aspx" />
+    <Content Include="engines\whitelistEmailAddress.aspx" />
+    <Content Include="Error.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="includes\emailProfile_Base.ascx" />
+    <Content Include="includes\emailProfile_DigitalEdition.ascx" />
+    <Content Include="includes\emailProfile_EmailActivity.ascx" />
+    <Content Include="includes\emailProfile_ListSubscriptions.ascx" />
+    <Content Include="includes\emailProfile_Notes.ascx" />
+    <Content Include="includes\emailProfile_Survey.ascx" />
+    <Content Include="includes\emailProfile_UDF.ascx" />
+    <Content Include="includes\emailProfile_UDFHistory.ascx" />
+    <Content Include="includes\footer.ascx" />
+    <Content Include="includes\header.ascx" />
+    <Content Include="engines\SO_multigroup_subscribe.aspx" />
+    <Content Include="MasterPages\ECN_Controls.css" />
+    <Content Include="SClick.aspx" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
+    <None Include="Properties\PublishProfiles\Temp.pubxml" />
+    <None Include="scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="scripts\jquery-1.7.1.js" />
+    <Content Include="scripts\jquery-1.7.1.min.js" />
+    <Content Include="scripts\js.cookie.js" />
+    <Content Include="scripts\Modernizr.js" />
+    <Content Include="scripts\Respond.js" />
+    <Content Include="scripts\twemoji-picker.css" />
+    <Content Include="scripts\twemoji-picker.js" />
+    <Content Include="scripts\twemoji.js" />
+    <Content Include="SPreview.aspx" />
+    <Content Include="Status.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_GlobalResources\Resource.it.designer.cs">
+      <DependentUpon>Resource.it.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\Resource.de.designer.cs">
+      <DependentUpon>Resource.de.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Resource.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Click.aspx.cs">
+      <DependentUpon>Click.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Click.aspx.designer.cs">
+      <DependentUpon>Click.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EncryptionTestSubmitter.aspx.cs">
+      <DependentUpon>EncryptionTestSubmitter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EncryptionTestSubmitter.aspx.designer.cs">
+      <DependentUpon>EncryptionTestSubmitter.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\BlastEmailPreview.aspx.cs">
+      <DependentUpon>BlastEmailPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\BlastEmailPreview.aspx.designer.cs">
+      <DependentUpon>BlastEmailPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\conversion.aspx.cs">
+      <DependentUpon>conversion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\conversion.aspx.designer.cs">
+      <DependentUpon>conversion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\ATHB_SO_subscribe.aspx.cs">
+      <DependentUpon>ATHB_SO_subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\ATHB_SO_subscribe.aspx.designer.cs">
+      <DependentUpon>ATHB_SO_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\CopyToGroup.aspx.cs">
+      <DependentUpon>CopyToGroup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\CopyToGroup.aspx.designer.cs">
+      <DependentUpon>CopyToGroup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\EmailDirectOpen.aspx.cs">
+      <DependentUpon>EmailDirectOpen.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\EmailDirectOpen.aspx.designer.cs">
+      <DependentUpon>EmailDirectOpen.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\HtmlBuilder.cs" />
+    <Compile Include="engines\LoadTest.aspx.cs">
+      <DependentUpon>LoadTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\LoadTest.aspx.designer.cs">
+      <DependentUpon>LoadTest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\publicPreview.PageLoad.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\ProcessLoadArgs.cs" />
+    <Compile Include="engines\SubscriptionManagement.aspx.cs">
+      <DependentUpon>SubscriptionManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\SubscriptionManagement.aspx.designer.cs">
+      <DependentUpon>SubscriptionManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\Unsubscribe.aspx.cs">
+      <DependentUpon>Unsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\Unsubscribe.aspx.designer.cs">
+      <DependentUpon>Unsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\UpdateEmailAddress.aspx.cs">
+      <DependentUpon>UpdateEmailAddress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\UpdateEmailAddress.aspx.designer.cs">
+      <DependentUpon>UpdateEmailAddress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\WattUnsubscribe.aspx.cs">
+      <DependentUpon>WattUnsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\WattUnsubscribe.aspx.designer.cs">
+      <DependentUpon>WattUnsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\LinkFromWithTopic.aspx.cs">
+      <DependentUpon>LinkFromWithTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\LinkFromWithTopic.aspx.designer.cs">
+      <DependentUpon>LinkFromWithTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\Optin.aspx.cs">
+      <DependentUpon>Optin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\Optin.aspx.designer.cs">
+      <DependentUpon>Optin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\ecnProfileManager.aspx.cs">
+      <DependentUpon>ecnProfileManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\ecnProfileManager.aspx.designer.cs">
+      <DependentUpon>ecnProfileManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\editProfileOnly.aspx.cs">
+      <DependentUpon>editProfileOnly.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\editProfileOnly.aspx.designer.cs">
+      <DependentUpon>editProfileOnly.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\emailProfileManager.aspx.cs">
+      <DependentUpon>emailProfileManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\emailProfileManager.aspx.designer.cs">
+      <DependentUpon>emailProfileManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\emailtofriend.aspx.cs">
+      <DependentUpon>emailtofriend.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\emailtofriend.aspx.designer.cs">
+      <DependentUpon>emailtofriend.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\linkfrom.aspx.cs">
+      <DependentUpon>linkfrom.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\linkfrom.aspx.designer.cs">
+      <DependentUpon>linkfrom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\ManageSubscriptions.aspx.cs">
+      <DependentUpon>ManageSubscriptions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\ManageSubscriptions.aspx.designer.cs">
+      <DependentUpon>ManageSubscriptions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\open.aspx.cs">
+      <DependentUpon>open.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\open.aspx.designer.cs">
+      <DependentUpon>open.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\PrePopForms.aspx.cs">
+      <DependentUpon>PrePopForms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\PrePopForms.aspx.designer.cs">
+      <DependentUpon>PrePopForms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\publicPreview.aspx.cs">
+      <DependentUpon>publicPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\publicPreview.aspx.designer.cs">
+      <DependentUpon>publicPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\pubSubscriptions_SO_subscribe.aspx.cs">
+      <DependentUpon>pubSubscriptions_SO_subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\pubSubscriptions_SO_subscribe.aspx.designer.cs">
+      <DependentUpon>pubSubscriptions_SO_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\read.aspx.cs">
+      <DependentUpon>read.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\read.aspx.designer.cs">
+      <DependentUpon>read.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\referralProgram.aspx.cs">
+      <DependentUpon>referralProgram.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\referralProgram.aspx.designer.cs">
+      <DependentUpon>referralProgram.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\reportSpam.aspx.cs">
+      <DependentUpon>reportSpam.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\reportSpam.aspx.designer.cs">
+      <DependentUpon>reportSpam.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\SO_subscribe.aspx.cs">
+      <DependentUpon>SO_subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\SO_subscribe.aspx.designer.cs">
+      <DependentUpon>SO_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\subscribe.aspx.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\subscribe.aspx.designer.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\unsubscribeDirect.aspx.cs">
+      <DependentUpon>unsubscribeDirect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\unsubscribeDirect.aspx.designer.cs">
+      <DependentUpon>unsubscribeDirect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\websubscribe.aspx.cs">
+      <DependentUpon>websubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\websubscribe.aspx.designer.cs">
+      <DependentUpon>websubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\whitelistEmailAddress.aspx.cs">
+      <DependentUpon>whitelistEmailAddress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\whitelistEmailAddress.aspx.designer.cs">
+      <DependentUpon>whitelistEmailAddress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="includes\emailProfile_Base.ascx.cs">
+      <DependentUpon>emailProfile_Base.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_Base.ascx.designer.cs">
+      <DependentUpon>emailProfile_Base.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_DigitalEdition.ascx.cs">
+      <DependentUpon>emailProfile_DigitalEdition.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_DigitalEdition.ascx.designer.cs">
+      <DependentUpon>emailProfile_DigitalEdition.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_EmailActivity.ascx.cs">
+      <DependentUpon>emailProfile_EmailActivity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_EmailActivity.ascx.designer.cs">
+      <DependentUpon>emailProfile_EmailActivity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_ListSubscriptions.ascx.cs">
+      <DependentUpon>emailProfile_ListSubscriptions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_ListSubscriptions.ascx.designer.cs">
+      <DependentUpon>emailProfile_ListSubscriptions.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_Notes.ascx.cs">
+      <DependentUpon>emailProfile_Notes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_Notes.ascx.designer.cs">
+      <DependentUpon>emailProfile_Notes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_Survey.ascx.cs">
+      <DependentUpon>emailProfile_Survey.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_Survey.ascx.designer.cs">
+      <DependentUpon>emailProfile_Survey.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDF.ascx.cs">
+      <DependentUpon>emailProfile_UDF.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDF.ascx.designer.cs">
+      <DependentUpon>emailProfile_UDF.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDFHistory.ascx.cs">
+      <DependentUpon>emailProfile_UDFHistory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDFHistory.ascx.designer.cs">
+      <DependentUpon>emailProfile_UDFHistory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\footer.ascx.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\footer.ascx.designer.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.designer.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\SO_multigroup_subscribe.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>SO_multigroup_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\SO_multigroup_subscribe.aspx.designer.cs">
+      <DependentUpon>SO_multigroup_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Activity.Master.cs">
+      <DependentUpon>Activity.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Activity.Master.designer.cs">
+      <DependentUpon>Activity.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="PreviewBasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SClick.aspx.cs">
+      <DependentUpon>SClick.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SClick.aspx.designer.cs">
+      <DependentUpon>SClick.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SPreview.aspx.cs">
+      <DependentUpon>SPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SPreview.aspx.designer.cs">
+      <DependentUpon>SPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Status.aspx.cs">
+      <DependentUpon>Status.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Status.aspx.designer.cs">
+      <DependentUpon>Status.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\KM.Framework.Web.WebForms\KM.Framework.Web.WebForms.csproj">
+      <Project>{5de18bc0-1320-46c4-bcef-4107069065c1}</Project>
+      <Name>KM.Framework.Web.WebForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.EmailPreview\ecn.EmailPreview.csproj">
+      <Project>{4bf970d0-3b03-4949-a105-e23593af6c34}</Project>
+      <Name>ecn.EmailPreview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Resource.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Resource.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.fr.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Resource.de.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.de.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Resource.it.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.it.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="engines\CopyToGroup.aspx" />
+    <Content Include="engines\WattUnsubscribe.aspx" />
+    <Content Include="engines\LinkFromWithTopic.aspx" />
+    <Content Include="engines\Optin.aspx" />
+    <Content Include="engines\referralProgram.aspx" />
+    <Content Include="engines\xd_receiver.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MasterPages\Activity.Master" />
+    <None Include="Properties\PublishProfiles\ECN_ActivityEngines.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>22763</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ecn.activityengines</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

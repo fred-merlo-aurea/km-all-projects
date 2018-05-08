@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.km.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.504/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.504/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/angular-messages.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.504/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.504/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/validator.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/main.js")"></script>
+    <script src="@Url.Content("~/Scripts/editor.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.blockUI.js")"></script>
+    <script src="@Url.Content("~/Scripts/underscore-min.js")"></script>
+    <script src="@Url.Content("~/Scripts/KMCommonHelper.js")"></script>
+    <script src="@Url.Content("~/Scripts/app.js")"></script>
+    <style>
+        *, *:before, *:after {
+            box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+        }
+
+        .k-widget [role='gridcell'] {
+            overflow: visible;
+        }
+
+        /* BS Modal Centering */
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+        .modal:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -4px;
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    @{
+        ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+    }
+    @{
+        ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.PostMenu Menu = new ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.PostMenu("/uad.web.admin", UserSession.ClientID, "UAD Admin", Request.Url.PathAndQuery.Substring(0, Request.Url.PathAndQuery.IndexOf("?") > 0 ? Request.Url.PathAndQuery.IndexOf("?") : Request.Url.PathAndQuery.Length));
+    }
+    <main>
+        <section class="content-wrapper main-content clear-fix">
+            @Html.Partial("Partials/_Message")
+            @Html.Partial("Partials/_LoadingBox")
+            @Html.Partial("~/Menu/Views/Shared/Index.cshtml", Menu)
+            @RenderBody()
+            @RenderSection("Scripts", false/*required*/)
+        </section>
+    </main>
+    <footer>
+        <nav class="footernav"><a href="http://www.knowledgemarketing.com/privacy-policy">Privacy Policy</a> | <a href="http://www.knowledgemarketing.com/anti-spam-policy">Anti-Spam Policy</a> | <a href="http://www.knowledgemarketing.com/index.php/about-km/contact-us/">Contact Us</a></nav>
+        <span class="copyrights">Copyright© @DateTime.Now.Year.ToString() Knowledge Marketing, Inc., All Rights Reserved.</span>
+    </footer>
+</body>
+</html>

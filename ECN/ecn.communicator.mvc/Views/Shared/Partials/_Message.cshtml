@@ -1,0 +1,122 @@
+﻿@using KMEnums
+
+<div id="MessageBox"></div>
+
+<script>
+
+    function MessageBox(options) {
+        this.messageType = options.type;
+        this.messageText = options.text;
+        this.action = options.action;
+        this.autoClose = options.autoClose;
+        this.show = function () {
+            var messageTemplate = kendo.template($("#MessageTemplate").html());
+            var content = messageTemplate({
+                MessageType: this.messageType,
+                MessageText: this.messageText
+            });
+            var options = {
+                title: String.empty,
+                modal: true,
+                visible: false,
+                animation: false,
+                actions:["Clear"]
+            };
+            if (this.autoClose) {
+                options.animation = {
+                    close: {
+                        duration: 2000
+                    }
+                }
+            }
+            var container = $("#MessageBox");
+            var widget = kendo.widgetInstance(container);
+            if (widget) {
+                widget.destroy();
+            }
+            container.kendoWindow(options);
+            var window = container.data("kendoWindow");
+            
+            window.content(content);
+            window.center().open();
+            if (this.autoClose) {
+                window.close();
+            }
+        }
+        this.close = function () {
+            $("#MessageBox").data('kendoWindow').close();
+        }
+        this.performAction = function () {
+            this.close();
+            if (this.action) {
+                this.action();
+            }
+        }
+    }
+    var messageBox;
+    function showMessage(options) {
+        messageBox = new MessageBox(options);
+        messageBox.show();
+    }
+    function actionVisible(messageType, action) {
+        var visible;
+        switch (messageType) {
+            case '@MessageType.Info':
+            case '@MessageType.Warning':
+            case '@MessageType.Error': {
+                if (action == 'Ok') visible = false;
+                if (action == 'Cancel') visible = false;
+                if (action == 'Close') visible = true;
+            };
+                break;
+            case '@MessageType.Success': visible = false;
+                break;
+            case '@MessageType.Confirm': {
+                if (action == 'Ok') visible = true;
+                if (action == 'Cancel') visible = true;
+                if (action == 'Close') visible = false;
+            }; break;
+        }
+        return visible ? 'display:inline-block' : 'display:none';
+    }
+</script>
+
+<script type="text/ng-template" id="MessageTemplate">
+    # var modalClass = "modal-" + MessageType.toLowerCase(); #
+    <div class="wrapper modal modalnotify #= modalClass #">
+
+            <div class="picon"></div>
+            <div class="text">
+                # if(MessageType == '@MessageType.Success') { #
+                Success
+                # } else { #
+                #= MessageText #
+                # } #
+            </div>
+            
+
+    </div>
+    <div class="buttons">
+        <table style="width:100%;">
+            <tr>
+                <td style="width:25%">&nbsp;</td>
+                <td style="width:25%;text-align:center;">
+                    <button class="btn btn-blue2" style="#= actionVisible(MessageType, 'Ok') #" onclick="messageBox.performAction()">Ok</button>
+                </td>
+                
+                <td style="width:25%;text-align:center;">
+                    <button class="btn btn-blue2" style="#= actionVisible(MessageType, 'Cancel') #" onclick="messageBox.close()">Cancel</button>
+                </td>
+                <td style="width:25%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="width:100%;text-align:center;">
+                    <button class="btn btn-blue2" style="#= actionVisible(MessageType, 'Close') #" onclick="messageBox.performAction()">Ok</button>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </div>
+</script>

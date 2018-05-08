@@ -1,0 +1,27 @@
+﻿<div id="resultgrid">
+    <input type="hidden" value="1" id="latestpagehdn" />
+    @(Html.Kendo().Grid<MVC.Standards.Models.ContentViewModel>()
+             .Name("grid")
+             .Events(e => e.DataBound("onDataBound"))
+             .Columns(columns =>
+             {
+                 columns.Bound(c => c.TotalRecordCounts).Hidden(true);
+                 columns.Bound(c => c.ContentTitle).Title("Title").Filterable(filter => { filter.Cell(cell => cell.Enabled(false).ShowOperators(false)); });
+                 columns.Bound(c => c.CreatedDate).Title("Created Date").Format("{0:MM/dd/yyyy hh:mm:ss}").Filterable(filter => filter.Enabled(false));
+                 columns.Bound(c => c.ContentType).Title("Type").Filterable(filter => filter.Enabled(false));
+             })
+             .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))//Sort Based on Single column at a time, you can cnfigure allow for unsorting
+             .Pageable(page => page.Enabled(false))
+             .Filterable(filter => filter.Enabled(false))
+             .DataSource(dataSource => dataSource // Configure the grid data source
+                    .Ajax() // Specify that ajax binding is used
+                    .Read(read => read.Data("filterGridParams").Action("Read_Data", "KendoStandardGrid"))// Set the action method which will return the data in JSON format
+                    .PageSize(20) //Set up page size
+                    .ServerOperation(true) //Get Data from Server
+
+            )
+
+
+    )
+</div>
+

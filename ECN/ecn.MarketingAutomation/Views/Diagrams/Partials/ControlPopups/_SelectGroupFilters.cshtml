@@ -1,0 +1,313 @@
+﻿<script>
+    var selectedClass = 'k-state-selected';
+
+    function FiltersExplorerMulti(options) {
+        this.customerID = options.customerID;
+        this.open = function () {
+            var window = $("#FiltersExplorer").data("kendoWindow");
+            window.center().open();
+        };
+        this.close = function () {
+            var window = $("#FiltersExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }
+
+    function bindSelectFilters()
+    {
+        $('#AvailableFilters').empty();
+        $('#Filters_GroupsSelected').empty();
+        if (Campaign_SelectedGroups != null && Campaign_SelectedGroups.length > 0) {
+            var itemlist = '';
+            for (var g = 0; g < Campaign_SelectedGroups.length; g++) {
+                var group = Campaign_SelectedGroups[g];
+                itemlist += '<li id="' + group.GroupID + "_" + group.FolderID + '" >' + group.GroupName + '</li>';
+            }
+            $('#Filters_GroupsSelected').append(itemlist);
+        }    
+
+        // Filtering data with selected Filters
+        $('#SelectedFilters').empty();
+        if (Campaign_SelectedGroupFilters != null) {
+            var itemlist = '';
+            for (var g = 0; g < Campaign_SelectedGroupFilters.length; g++) {
+                var filter = Campaign_SelectedGroupFilters[g];
+                itemlist += '<li id="' + filter.GroupID + "_" + filter.FilterID + '" >' + filter.FilterName + '</li>';
+            }
+            $('#SelectedFilters').append(itemlist);
+        }
+
+    }
+    var explorer;
+    var _customerID;
+    function filtersExplorerMulti(customerID) {
+        explorer = new FiltersExplorerMulti({
+            customerID: customerID
+        });
+        _customerID = customerID;
+        explorer.open();
+    }
+
+    function selectGroup(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var group = this.dataItem(item);
+        e.sender.clearSelection();
+        var event = $.Event("GroupSelected");
+        event.sender = explorer;
+        event.group = group;
+        $("#FiltersExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+    }
+    function onFiltersExplorerOpen() {
+        bindSelectFilters();
+        $("#openAddGroupButton").prop('disabled', true);
+    }
+    function onFiltersExplorerClose() {
+        $(".k-overlay").remove();
+    }
+    function openAddGroupWindow() {
+
+        var grid = $("#Filters_Filters").data("kendoGrid");
+        var selected = tree.select();
+        if (selected.length != 0) {
+            var data = tree.dataItem(selected);
+            var options = {
+                customerId: data.CustomerID,
+                folderId: data.FolderID,
+                groupAdded: function (group) {
+                    grid.dataSource.read({
+                        CustomerId: data.CustomerID,
+                        FolderId: data.FolderID
+                    });
+                }
+            }
+            openAddGroup(options);
+        }
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("Filters Explorer")
+                       .Name("FiltersExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onFiltersExplorerOpen")
+                                    .Close("onFiltersExplorerClose"))
+                       .Visible(false);
+
+    explorer.Render();
+}
+
+@helper Content()
+{
+    <style>
+        #AvailableFilters li, #SelectedFilters li ,#Filters_GroupsSelected li {
+            border-bottom: 1px dotted Gray;
+        }
+         li.selected {
+             background-color: #115fa9;
+             color: white;
+        }
+        #AvailableFilters li.selected, #SelectedFilters li.selected {
+            background-color: #115fa9;
+            color: white;
+        }
+
+        .droptrue {
+            width: 12em;
+            height: 20em;
+            line-height: 2em;
+            border: 1px solid #ccc;
+            padding: 0;
+            margin: 0;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+
+        .dataItems {
+            outline: none;
+            background-color: transparent;
+            border: 0px solid;
+            color: #115fa9;
+            font-weight: 300;
+            font-size: 12px;
+            color: #115fa9;
+            font-family: 'Arial';
+            width: 56px;
+        }
+
+            .dataItems:focus, input:focus {
+                outline: none;
+                background-color: transparent;
+                border: 1px solid #115fa9;
+            }
+
+        .buttonsselectgroup {
+            margin: 520px 0 0 830px;
+        }
+        #FiltersExplorer {
+            width: 1320px;
+            overflow:auto;
+        }
+    </style>
+
+    <div class="wrapper modal modalgroupexplorer">
+        <fieldset title="Group Explorer">
+            
+    <legend>Select Group Filter(s)</legend>
+            <div class="formbox">
+                <div class="formitem formiteminline">
+                    <fieldset title="Customer/Folder ">
+                        <legend>Selected Groups</legend>
+                        <ul id="Filters_GroupsSelected" style="list-style-type: none; border:1px solid Black; width:300px; height:400px; display:inline-block; vertical-align:top; padding:0;"></ul>
+                    </fieldset>
+                </div>
+                <div class="formitem formiteminline" style="float:left;width:100px;margin-right:10px;display:table;margin-top:70px;">
+                    <p>Click on a Group to see available filters for the group.</p>
+                </div>
+
+                <div class="formitem formiteminline">
+                    <fieldset title="Group">
+                        <legend>Select Group Filter(s)</legend>
+                        <ul id="AvailableFilters" class="droptrue" style="list-style-type: none; border:1px solid Black; width:300px; height:400px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+                    </fieldset>
+                </div>
+                <div class="formitem formiteminline" style="float:left;width:90px;margin-right:10px;display:table;margin-top:70px;">
+                    <p>Drag and Drop your Group filters.</p>
+                    <p>Click to select individual filter. Ctrl + Click or Shift + Click to select multiple filters.</p>
+                </div>
+                <div class="formitem formiteminline">
+                    <fieldset title="Selected Group">
+                        <legend>Selected Group Filter(s)</legend>
+                        <ul id="SelectedFilters" class="droptrue" style="list-style-type: none; border:1px solid Black; width:300px; height:400px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+                    </fieldset>
+                </div>
+                <div class="formitem formiteminline" style="margin: 0 auto; width: 850px; text-align: right;">
+                    @Html.Kendo().Button().Name("Continue").Content("Continue").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "continueGroupFilterWindow()" })
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow()" })
+                </div>
+            </div>
+           
+    </fieldset>
+     
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var prev = -1;
+        $(".droptrue").on('click', 'li', function (e) {
+            var curr = $(this).index();
+            if (e.ctrlKey || e.metaKey) {
+                $(this).addClass("selected");
+            } else if (e.shiftKey && prev > -1) {
+                if ($(this).parent().attr("id") == "AvailableFilters")
+                    $("ul#AvailableFilters.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                if ($(this).parent().attr("id") == "SelectedFilters")
+                    $("ul#SelectedFilters.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+            } else {
+                prev = curr;
+                $(this).addClass("selected").siblings().removeClass("selected");
+            }
+        }).sortable({
+            connectWith: "ul.droptrue",
+            delay: 150, //Needed to prevent accidental drag when trying to select
+            revert: 0,
+            helper: function (e, item) {
+
+                if (!item.hasClass('selected')) { //If you grab an unhighlighted item to drag, it will deselect (unhighlight) everything else
+                    item.addClass('selected').siblings().removeClass('selected');
+                }
+                //Clone the selected items into an array
+                var elements = item.parent().children('.selected').clone();
+                item.data('multidrag', elements).siblings('.selected').remove();
+                var helper = $('<li/>');
+                return helper.append(elements);
+            },
+            stop: function (e, ui) {
+                var elements = ui.item.data('multidrag');
+                ui.item.after(elements).remove();
+            }
+
+        });
+        var fPrev = 1;
+        $("#Filters_GroupsSelected").on('click', 'li', function (e) {
+           // debugger;
+            var fcurr = $(this).index();
+            if (e.ctrlKey || e.metaKey) {
+                $(this).toggleClass("selected").siblings().removeClass("selected");
+            }
+            else {
+                fprev = fcurr;
+                $(this).addClass("selected").siblings().removeClass("selected");
+            }
+            $('#AvailableFilters').empty();
+            var dataItem = this.id;
+            var IDS = dataItem.split('_');
+            var groupID = IDS[0];
+            var folderID = IDS[1];
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: '/ecn.MarketingAutomation/Web/GetFilters',
+                data: "groupID=" + groupID,
+                success: function (response) {
+                    var itemlist = '';
+                    $.each(response, function (i, inputItem) {
+                        var s = inputItem;
+                        if ($("#" + inputItem.GroupID + "_" + inputItem.FilterID).length == 0) {
+                            itemlist += '<li id="' + inputItem.GroupID + "_" + inputItem.FilterID + '" >' + inputItem.FilterName + '</li>';
+                        }
+                    });
+                    $('#AvailableFilters').append(itemlist);
+                }
+            });
+        });
+    });
+
+    function continueGroupFilterWindow() {
+        var template = kendo.template($("#filterTemplate").html());
+        $('#AvailableFilters').empty();
+        var phrases = [];
+        $('#SelectedFilters').each(function () {
+            var phrase = [];
+            $(this).find('li').each(function () {
+                var current = $(this);
+                if (current.children().size() > 0) { return true; }
+                phrase += current.text();
+                liID = $(this).attr('id');
+                var IDS = liID.split('_');
+                var groupID = IDS[0];
+                var filterID = IDS[1];
+
+                var filter = { GroupID: groupID, FilterID: filterID, FilterName: current.text() };
+                phrases.push(filter);
+
+            });
+        });
+
+        var dataSource = new kendo.data.DataSource({
+            data: phrases,
+            change: function () { // subscribe to the CHANGE event of the data source
+                $("#selectedGroupFilters tbody").html(kendo.render(template, this.view())); // populate the table
+            }
+        });
+        dataSource.read();
+        Campaign_SelectedGroupFilters = dataSource.data(); // Store SelectedGroups data in global variable
+
+        closeWindow();
+    };
+    function closeWindow() {
+         explorer.close();
+    };
+    </script>
+}

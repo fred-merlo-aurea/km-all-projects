@@ -1,0 +1,64 @@
+﻿@using KMEnums
+
+<script type="text/ng-template" id="@(ControlType.Grid)Properties">
+    <ng-form name="form">
+        <div class="proptitle">Grid Properties</div>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Field Name:</label>
+                <input type="text" ng-model="control.Label" />
+            </div>
+            <div class="formitem formitemlabeltop">
+                <label>Database Field:</label>
+                <select kendo-drop-down-list="fieldList" ng-model="control.FieldId" name="FieldId" k-option-label="'Select'" data-message-required="Field ID Required" required 
+                        k-options='{ dataTextField: "ShortName", dataValueField: "GroupDataFieldsID", dataSource: fieldsDataSource }'>
+                </select>
+                <span class="error" ng-show="form.submitted && form.FieldId.$invalid">
+                    <span ng-show="form.FieldId.$error.required">Select Field ID</span>
+                </span>
+            </div>
+            <div class="formitem">
+                <button type="button" ng-click="openAddFieldWindow()" class="btn btn-blue2 k-button">Add<i class="km-icon icon-kmplus-circled-1"></i></button>
+            </div>
+            <div class="formitem">
+                <label>Field Label (HTML Editor):</label>
+                <textarea kendo-editor="LabelHTML" class="editorForRefresh" ng-model="control.LabelHTML" k-options="$parent.$parent.editorOptionsNoImage" k-encoded="false" k-on-select="onEditorSelect(kendoEvent)"></textarea>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Grid Controls</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <label><input type="radio" ng-value="@((int)GridControl.RadioButtons)" ng-model="control.Controls">Radio Buttons</label>
+                </div>
+                <div class="formitem">
+                    <label><input type="radio" ng-value="@((int)GridControl.Checkboxes)" ng-model="control.Controls">Check Boxes</label>
+                </div>
+            </div>
+            <div class="formbox">
+                <select kendo-drop-down-list ng-model="control.Validation">
+                    @foreach (var type in Enum.GetValues(typeof(GridValidation))) 
+                    { 
+                        <option value="@((int)type)">@type.ToString()</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Rows</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <textarea ng-model="control.rowData" ng-change="changeRows()"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Columns</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <textarea ng-model="control.columnData" ng-change="changeColumns()"></textarea>
+                </div>
+            </div>
+        </div>
+    </ng-form>
+</script>

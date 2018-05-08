@@ -1,0 +1,438 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using KMManagers.APITypes
+@using KMWeb.Models.Forms.Modals
+@using KMWeb.Models.Forms
+@using KMModels
+
+@model FormPropertiesPostModel
+
+@*@if (ViewBag.FormInfo != null)
+{ 
+    var formInfo = (FormInfo)ViewBag.FormInfo;
+    <script>
+        $(function () {
+            $("#customer").text('@formInfo.CustomerName');
+            $("#group").text('@formInfo.GroupName');
+            $("#form").text('@formInfo.FormName');
+        });
+    </script>
+}*@
+
+@{
+    var group = (ECN_Framework_Entities.Communicator.Group)ViewBag.Group;
+    var controls = (IEnumerable<ControlModel>)ViewBag.Controls;
+    var currentCustID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+    bool viewOnly = false;
+    if(ViewBag.ViewOnly!=null)
+    {
+        viewOnly = (bool)ViewBag.ViewOnly;
+    }
+ }
+
+<script>
+    var currentCustID = '@(currentCustID.ToString())';
+</script>
+
+@Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.GroupId)
+@Html.HiddenFor(x => x.CustomerId)
+<div class="form-wrapper formedit-formProperties">     
+    <div class="formbox">
+        <div class="formitem" >
+            @Html.LabelFor(x => x.Name, "Form Name")
+            @Html.TextBoxFor(x => x.Name)
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle">Select Group Name</div>
+        <div class="formitem">
+            <div>
+                <span id="GroupName">
+                    @(group != null ? group.GroupName : "Group Name")
+                </span>
+                <button class="btn k-button" onclick="selectGroup()" type="button">Select Group</button>
+            </div>
+        </div>
+    </div>
+    <div class="subtitle">Activation</div>
+    <div class="formbox">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Active").Value(FormActive.Active).Checked(Model.Active == FormActive.Active)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Inactive").Value(FormActive.Inactive).Checked(Model.Active == FormActive.Inactive)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Active).Label("Use Activation Dates").Value(FormActive.UseActivationDates).Checked(Model.Active == FormActive.UseActivationDates)
+        </div>
+    </div>
+    <div class="subtitle">Activation Dates/Times</div>
+    <div class="formitem formiteminline" >
+        @Html.LabelFor(x => x.ActivationFrom, "From")
+        @Html.Kendo().DateTimePickerFor(x => x.ActivationFrom).HtmlAttributes(new { @class = "calendar-black"})
+    </div><div class="formitem formiteminline">
+        @Html.LabelFor(x => x.ActivationTo, "To")
+        @Html.Kendo().DateTimePickerFor(x => x.ActivationTo)
+    </div>
+
+@if (ViewBag.FormType == Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+{
+    @Html.HiddenFor(x => x.ConfirmationPageType)
+    @Html.HiddenFor(x => x.ConfirmationPageUrl)
+    @Html.HiddenFor(x => x.ConfirmationPageMessage)
+    @Html.HiddenFor(x => x.ConfirmationPageMAUUrl)
+    @Html.HiddenFor(x => x.ConfirmationPageMAUMessage)
+    @Html.HiddenFor(x => x.ConfirmationPageJsMessage)
+    @Html.HiddenFor(x => x.ConfirmationPageJsMAUMessage)
+    @Html.HiddenFor(x => x.Delay)
+    @Html.HiddenFor(x => x.InactiveRedirectType)
+    @Html.HiddenFor(x => x.InactiveRedirectUrl)
+    @Html.HiddenFor(x => x.InactiveRedirectMessage)
+    @Html.HiddenFor(x => x.Iframe)
+}
+else
+{
+    @Html.HiddenFor(x => x.ConfirmationPageJsMessage)
+    @Html.HiddenFor(x => x.ConfirmationPageJsMAUMessage)
+    <div class="formbox">
+        <div class="subtitle">Are you hosting the form in an iframe?</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Iframe).Label("Yes").Value(true).Checked(Model.Iframe)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.Iframe).Label("No").Value(false).Checked(!Model.Iframe)
+        </div>
+    </div>
+    <div class="subtitle">Confirmation Page</div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("URL").Value(ResultType.URL).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.URL)
+            @Html.TextBoxFor(x => x.ConfirmationPageUrl, new { @maxlength = "1791" })            
+        </div>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("Message").Value(ResultType.Message).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.Message)
+            @(Html.Kendo()
+                .EditorFor(x => x.ConfirmationPageMessage)
+                .Messages(m => m.InsertHtml("Insert Snippet"))
+                .Tools(t => t
+                        .ViewHtml()
+                                .Snippets(s =>
+                                {
+                                    foreach (var control in controls)
+                                    {
+                                        s.Add(control.FieldLabel, GetControlSnippet(control));
+                                    }
+                                })
+                         .CustomButton(x => x.Name("custom").ToolTip("Insert Java Script").Exec(@<text> function(e) {onCustomToolClick(e,'@ResultType.Message');}</text>))
+                         .CustomButton(x => x.Name("maximize").Exec("maximize"))// maximize should be last in custom button
+            ).ImageBrowser(imageBrowser => imageBrowser
+            .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ConfirmationPageType).Label("Message and URL").Value(ResultType.MessageAndURL).Checked(Model.ConfirmationPageType.HasValue && Model.ConfirmationPageType.Value == ResultType.MessageAndURL)
+            @Html.TextBoxFor(x => x.ConfirmationPageMAUUrl, new { @maxlength = "1791" }) 
+            @(Html.Kendo()
+                .EditorFor(x => x.ConfirmationPageMAUMessage)
+                .Messages(m => m.InsertHtml("Insert Snippet"))
+                .Tools(t => t
+                        .ViewHtml()
+                                .Snippets(s =>
+                                {
+                                    foreach (var control in controls)
+                                    {
+                                        s.Add(control.FieldLabel, GetControlSnippet(control));
+                                    }
+                                })
+                        .CustomButton(x => x.Name("custom").ToolTip("Insert Java Script").Exec(@<text> function(e) {onCustomToolClick(e,'@ResultType.MessageAndURL');}</text>))
+                        .CustomButton(x => x.Name("maximize").Exec("maximize"))
+            ).ImageBrowser(imageBrowser => imageBrowser
+            .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>        
+    </div>
+    <div class="formbox">
+        <div class="formitem formiteminline" id="delayRedirect" style="display:none">
+            @Html.LabelFor(x => x.Delay, "Delay (in seconds) before redirect:")
+            @Html.TextBoxFor(x => x.Delay)
+        </div>
+    </div>
+    <div class="subtitle">Inactive Redirect</div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.InactiveRedirectType).Label("URL").Value(ResultType.URL).Checked(Model.InactiveRedirectType.HasValue && Model.InactiveRedirectType.Value == ResultType.URL)
+            @Html.TextBoxFor(x => x.InactiveRedirectUrl, new { @maxlength = "1791" })
+        </div>
+    </div>
+    <div class="formbox  formtabled">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.InactiveRedirectType).Label("Message").Value(ResultType.Message).Checked(Model.InactiveRedirectType.HasValue && Model.InactiveRedirectType.Value == ResultType.Message)
+            @(Html.Kendo()
+                .EditorFor(x => x.InactiveRedirectMessage)
+                .Messages(m => m.InsertHtml("Insert Snippet"))
+                .Tools(t => t
+                        .ViewHtml()
+                                .Snippets(s =>
+                                {
+                                    foreach (var control in controls)
+                                    {
+                                        s.Add(control.FieldLabel, GetControlSnippet(control));
+                                    }
+                                })
+                        .CustomButton(x => x.Name("maximize").Exec("maximize"))
+            ).ImageBrowser(imageBrowser => imageBrowser
+            .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                .Read("Read", "ImageBrowser")
+                .Destroy("Destroy", "ImageBrowser")
+                .Upload("Upload", "ImageBrowser")
+                .Thumbnail("Thumbnail", "ImageBrowser")
+            )
+                .Encode(false)
+            )
+        </div>
+    </div>
+    }
+
+    <div class="formbox">
+        <div class="subtitle">Opt In</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.OptInType).Label("Single Opt-In").Value(OptInType.Single).Checked(Model.OptInType == OptInType.Single)
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.OptInType).Label("Double Opt-in").Value(OptInType.Double).Checked(Model.OptInType == OptInType.Double)
+        </div>
+    </div>
+
+
+    @if (ViewBag.FormType == Enum.GetName(typeof(FormType), FormType.AutoSubmit))
+    {
+        @Html.HiddenFor(x => x.LanguageTranslationType)
+        @Html.HiddenFor(x => x.SubmitButtonText)
+    }
+    else
+    {
+        <div class="formbox">
+            <div class="subtitle">Language Translation</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.LanguageTranslationType).Label("Show Language Translation").Value(true).Checked(Model.LanguageTranslationType)
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.LanguageTranslationType).Label("Hide Language Translation").Value(false).Checked(!Model.LanguageTranslationType)
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Button Text</div>
+            <div class="formitem formiteminline">
+                @Html.LabelFor(x => x.SubmitButtonText, "Submit Button Text")
+                @Html.TextBoxFor(x => x.SubmitButtonText)
+            </div>
+        </div>
+    }
+</div>
+
+@if(!ViewContext.ViewData.ModelState.IsValid)
+{
+    var summary = Html.ValidationSummary().ToString();
+
+    var errors = Html.Raw(HttpUtility.JavaScriptStringEncode(summary));
+    
+    <script>
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@errors'
+        });
+    </script>
+}
+
+<script>
+    $(function () {
+        $("input[name='Active']").change(initActivationDates);
+        initActivationDates();
+
+        $("input[name='ConfirmationPageType']").click(function () {
+            if ($('input:radio[name=ConfirmationPageType]')[2].checked) {
+                $("#delayRedirect").show();
+            }
+            else {
+                $("#delayRedirect").hide();
+            }
+        });
+        if ($('input:radio[name=ConfirmationPageType]').length) {
+            if ($('input:radio[name=ConfirmationPageType]')[2].checked) {
+                $("#delayRedirect").show();
+            }
+            else {
+                $("#delayRedirect").hide();
+            }
+        }
+    });
+    function onCustomToolClick (e,pageType) {
+        var popupHtml = null;
+        if ('@viewOnly' == 'false' || '@viewOnly' == 'False')
+        {
+            popupHtml =
+            '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                '<fieldset title="Java Script">' +
+                '<div style="padding: 0 1em;">' +
+                '<p><h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea></p>' +
+              '</div>' +
+              '<div class="k-edit-buttons k-state-default">' +
+                '<button class="k-dialog-insert k-button k-primary">Update</button>' +
+                '<button class="k-dialog-close k-button">Cancel</button>' +
+              '</div>' +'</fieldset>' +
+            '</div>';
+        }
+        else
+        {
+            popupHtml =
+                      '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                          '<fieldset title="Java Script">' +
+                          '<div style="padding: 0 1em;">' +
+                          '<p><h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea></p>' +
+                        '</div>'  +'</fieldset>' +
+                      '</div>';
+        }
+
+        // create a modal Window from a new DOM element
+        var popupWindow = $(popupHtml)
+        .appendTo(document.body)
+        .kendoWindow({
+            // modality is recommended in this scenario
+            modal: true,
+            width: 600,
+            resizable: false,
+            // ensure opening animation
+            visible: false,
+            // remove the Window from the DOM after closing animation is finished
+            deactivate: function(e){ e.sender.destroy(); }
+        }).data("kendoWindow")
+         .center().open();
+        if(pageType == '@ResultType.Message')
+        {
+            popupWindow.element.find("textarea").val($("#ConfirmationPageJsMessage").val());
+        }
+        else
+        {
+            popupWindow.element.find("textarea").val($("#ConfirmationPageJsMAUMessage").val());
+        }
+        // insert the new content in the Editor when the Insert button is clicked
+        popupWindow.element.find(".k-dialog-insert").click(function(){
+            debugger;
+            var rawinput = null;
+            rawinput = popupWindow.element.find("textarea").val();
+            if(rawinput!=null)
+            {
+                var regx = new RegExp(/(<script[\S\s]*?>[\S\s]*?<\/script>)/gmi);
+                var fullJS = "";
+                var result;
+                while(result = regx.exec(rawinput))
+                {
+                    var matchJs =result[1];
+                    fullJS += matchJs;
+                }
+                if(pageType == '@ResultType.Message')
+                {
+                   $("#ConfirmationPageJsMessage").val(fullJS);
+                 }
+                else
+                {
+                    $("#ConfirmationPageJsMAUMessage").val(fullJS);
+                }
+            }
+         });
+
+        // close the Window when any button is clicked
+        popupWindow.element.find(".k-edit-buttons button").click(function(){
+            // detach custom event handlers to prevent memory leaks
+            popupWindow.element.find(".k-edit-buttons button").off();
+            popupWindow.close();
+        });
+    }
+    function initActivationDates() {
+        var val = $("input[name='Active']:checked").val();
+        var from = $("#ActivationFrom").data('kendoDateTimePicker');
+        var to = $("#ActivationTo").data('kendoDateTimePicker');
+        if (val == '@FormActive.UseActivationDates') {
+            from.enable(true);
+            to.enable(true);
+        }
+        else {
+            from.enable(false);
+            to.enable(false);
+            from.value(String.empty);
+            to.value(String.empty);
+        }
+    }
+    function selectGroup() {
+        showMessage({
+            type: '@MessageType.Confirm',
+            text: "When changing the Form Group the changes\
+                will be saved at the time you select the new Group. Continue?",
+            action: function () {
+                groupExplorer(groupSelected);
+            }
+        });
+    }
+    function groupSelected(e) {
+        var group = e.group;
+        if (group.GroupID == $("#GroupId").val()) {
+            return;
+        }
+        var nlGroupIds = @Html.Raw(
+            Json.Encode(
+                ((List<int>)ViewBag.nlGroupIds).Select(ctrls => new
+                {
+                    groupsIds = ctrls
+                })
+            )
+        );
+        var out = false;
+        $.each(nlGroupIds, function (itemIndex, item) {
+            if (item.groupsIds == group.GroupID) {
+                out = true;
+            }
+        });
+        if (out) {
+            showMessage({
+                type: '@MessageType.Warning',
+                text: "Form Group cannot be the same as the Newsletter Control Group."
+            });
+            return;
+        }
+
+        e.preventDefault();
+        var data = {
+            CustomerId: group.CustomerID,
+            GroupId: group.GroupID,
+            FormId: '@Model.Id',
+            ChangeFormGroup: true
+        }
+        openChangeGroupManager({
+            data: data,
+            action: function () {
+                $("#GroupName").html(group.GroupName);
+                $("#GroupId").val(group.GroupID);
+                $("#CustomerId").val(group.CustomerID);
+                formPath.load();
+                e.sender.close();
+            }
+        });
+    }
+</script>

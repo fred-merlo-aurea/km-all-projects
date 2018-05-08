@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="ControlCenter.Modules.ApplicationControls.ApplicationSecurityDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400">
+    <Grid>
+        <Grid DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Name="btnMinimize" Style="{DynamicResource WindowButton}"  Content="_" VerticalAlignment="Top" Width="23" Height="20" BorderThickness="0" Padding="0" FontWeight="Bold" Click="btnMinimize_Click"/>
+                <Button Name="btnMaximize" Style="{DynamicResource WindowButton}" Content="+" VerticalAlignment="Top" Width="23" Height="20" BorderThickness="0" Padding="0" FontWeight="Bold" Click="btnMaximize_Click"/>
+                <Button Name="btnClose" Style="{DynamicResource WindowButton}" Content="X" VerticalAlignment="Top" Width="23" Padding="0" BorderThickness="0" IsCancel="True" Height="20" FontWeight="Bold" Click="btnClose_Click"/>
+            </StackPanel>
+        </Grid>
+        <telerik:RadGridView Name="grdCustom" Width="390" Height="350" Margin="5,10,0,0" VerticalAlignment="Center"
+                                 telerik:StyleManager.Theme="Expression_Dark" EditTriggers="CellClick" IsReadOnly="True" ActionOnLostFocus="None"
+                                 RowDetailsVisibilityMode="VisibleWhenSelected" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 AutoGenerateColumns="False" ItemsSource="{Binding ApplicationSecurityGroupMap}">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding SecurityGroupID}" Header="Security Group ID" />
+                <telerik:GridViewCheckBoxColumn DataMemberBinding="{Binding HasAccess}" Header="Has Access" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        <Grid>
+            
+        </Grid>
+    </Grid>
+</UserControl>

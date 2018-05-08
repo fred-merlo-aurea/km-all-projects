@@ -1,0 +1,2 @@
+﻿CREATE USER [DS_Admin] WITHOUT LOGIN;
+

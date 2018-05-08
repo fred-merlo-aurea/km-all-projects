@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\ECN.UnitTests\packages\xunit.runner.visualstudio.2.0.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\ECN.UnitTests\packages\xunit.runner.visualstudio.2.0.0\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\ECN.UnitTests\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\ECN.UnitTests\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\ECN.UnitTests\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\ECN.UnitTests\packages\NUnit.3.10.1\build\NUnit.props')" />
+  <Import Project="..\ECN.UnitTests\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\ECN.UnitTests\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{53B3872B-FBB1-4DFC-8033-80E953F4D069}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECN_Framework_Entities.Tests</RootNamespace>
+    <AssemblyName>ECN_Framework_Entities.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Albedo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=179ef6dd03497bbd, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Albedo.2.0.0\lib\net35\Albedo.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\AutoFixture.4.2.0\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.AutoMoq, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\AutoFixture.AutoMoq.4.2.0\lib\net452\AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.Idioms, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\AutoFixture.Idioms.4.2.0\lib\net452\AutoFixture.Idioms.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.NUnit3, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\AutoFixture.NUnit3.4.2.0\lib\net452\AutoFixture.NUnit3.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_Entities.Fakes">
+      <HintPath>..\ECN.UnitTests\ECN.BlastEngine.Tests\FakesAssemblies\ECN_Framework_Entities.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Microsoft.Win32.Primitives.4.0.1\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.4.0.0.0.Fakes">
+      <HintPath>..\ECN.UnitTests\ECN.Communicator.Tests\FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Calendars, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Globalization.Calendars.4.0.1\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.IO.Compression.4.1.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.IO.Compression.ZipFile.4.0.1\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Net.Http.4.1.0\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Net.Sockets.4.1.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Loader, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Runtime.Loader.4.0.0\lib\netstandard1.5\System.Runtime.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\ECN.UnitTests\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise />
+  </Choose>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN.UnitTests\ECN.TestHelpers\ECN.TestHelpers.csproj">
+      <Project>{a57be2fc-17f7-4be3-82ff-1d641ed68294}</Project>
+      <Name>ECN.TestHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmailMarketing.API\EmailMarketing.API.csproj">
+      <Project>{C9D0D7A6-20CC-494F-99C0-E2E90BAD0C7C}</Project>
+      <Name>EmailMarketing.API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\CustomerPlanTest.cs" />
+    <Compile Include="Accounts\Report\ChannelReportTest.cs" />
+    <Compile Include="Accounts\Report\TotalBlastsForDayTest.cs" />
+    <Compile Include="Accounts\View\CustomerDiskUsageTest.cs" />
+    <Compile Include="Accounts\View\ProductActionInfoTest.cs" />
+    <Compile Include="Accounts\View\ProductFeatureInfoTest.cs" />
+    <Compile Include="Accounts\View\ProductInfoTest.cs" />
+    <Compile Include="Activity\Report\ABSummaryReportTest.cs" />
+    <Compile Include="Activity\Report\AdvertiserClickReportTest.cs" />
+    <Compile Include="Activity\Report\AudienceEngagementReportTest.cs" />
+    <Compile Include="Activity\Report\BlastActivityOpensReportTest.cs" />
+    <Compile Include="Activity\Report\BlastClickDetailTest.cs" />
+    <Compile Include="Activity\Report\BlastClickReportTest.cs" />
+    <Compile Include="Activity\Report\BlastClickSummaryTest.cs" />
+    <Compile Include="Activity\Report\BlastClickSummary_SubReportTest.cs" />
+    <Compile Include="Activity\Report\BlastComparisionTest.cs" />
+    <Compile Include="Activity\Report\BlastDeliveryTest.cs" />
+    <Compile Include="Activity\Report\BlastOpensByTimeTest.cs" />
+    <Compile Include="Activity\Report\BlastReportDetailTest.cs" />
+    <Compile Include="Activity\Report\BlastReportPerformanceTest.cs" />
+    <Compile Include="Activity\Report\BlastReportTest.cs" />
+    <Compile Include="Activity\Report\BlastResponseDetailTest.cs" />
+    <Compile Include="Activity\Report\BounceByDomainTest.cs" />
+    <Compile Include="Activity\Report\CampaignStatisticsReportTest.cs" />
+    <Compile Include="Activity\Report\ChampionAuditReportTest.cs" />
+    <Compile Include="Activity\Report\DataDumpReportTest.cs" />
+    <Compile Include="Activity\Report\EmailFatigueReportTest.cs" />
+    <Compile Include="Activity\Report\EmailPerformanceByDomainReportTest.cs" />
+    <Compile Include="Activity\Report\EmailsDeliveredByPercentageTest.cs" />
+    <Compile Include="Activity\Report\FlashReportTest.cs" />
+    <Compile Include="Activity\Report\GroupStatisticsReportTest.cs" />
+    <Compile Include="Activity\Report\LinkDetailsTest.cs" />
+    <Compile Include="Activity\Report\LinkReportListTest.cs" />
+    <Compile Include="Activity\Report\MasterSuppressionSourceReportDetailsTest.cs" />
+    <Compile Include="Activity\Report\MasterSuppressionSourceReportTest.cs" />
+    <Compile Include="Activity\Report\OnOffsByFieldTest.cs" />
+    <Compile Include="Activity\Report\PerformanceByDayAndTimeReportTest.cs" />
+    <Compile Include="Activity\Report\PlatformDetailTest.cs" />
+    <Compile Include="Activity\Report\ReportViewerExportTest.cs" />
+    <Compile Include="Activity\Report\SocialDetailTest.cs" />
+    <Compile Include="Activity\Report\SocialShareChartTest.cs" />
+    <Compile Include="Activity\Report\SocialSummaryTest.cs" />
+    <Compile Include="Activity\Report\StatisticsByFieldTest.cs" />
+    <Compile Include="Activity\Report\Undeliverable\UndeliverableTest.cs" />
+    <Compile Include="Activity\Report\UnsubscribeReasonDetailTest.cs" />
+    <Compile Include="Activity\Report\UnsubscribeReasonTest.cs" />
+    <Compile Include="Activity\View\ActivitylogSearchTest.cs" />
+    <Compile Include="Activity\View\BlastActivityTest.cs" />
+    <Compile Include="Activity\View\ProductInfoTest.cs" />
+    <Compile Include="Application\AuthenticationTicketTest.cs" />
+    <Compile Include="Collector\GridStatementsTest.cs" />
+    <Compile Include="Collector\PageTest.cs" />
+    <Compile Include="Collector\QuestionTest.cs" />
+    <Compile Include="Collector\ResponseOptionsTest.cs" />
+    <Compile Include="Collector\ResponseTest.cs" />
+    <Compile Include="Collector\SurveyBranchingTest.cs" />
+    <Compile Include="Collector\SurveyStylesTest.cs" />
+    <Compile Include="Collector\SurveyTest.cs" />
+    <Compile Include="Collector\TemplatesTest.cs" />
+    <Compile Include="Communicator\APILoggingTest.cs" />
+    <Compile Include="Communicator\ApplicationCodeTest.cs" />
+    <Compile Include="Communicator\AutoRespondersTest.cs" />
+    <Compile Include="Communicator\BlastEnvelopeTest.cs" />
+    <Compile Include="Communicator\BlastFieldsNameTest.cs" />
+    <Compile Include="Communicator\BlastFieldsTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastABMasterTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastABTest.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateGroupTest.cs" />
+    <Compile Include="Communicator\BlastFieldsValueTest.cs" />
+    <Compile Include="Communicator\BlastLinkTest.cs" />
+    <Compile Include="Communicator\BlastPlansTest.cs" />
+    <Compile Include="Communicator\BlastRSSTest.cs" />
+    <Compile Include="Communicator\BlastScheduleDaysTest.cs" />
+    <Compile Include="Communicator\BlastSetupInfoTest.cs" />
+    <Compile Include="Communicator\BlastSingleTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastChampionTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastLayoutTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastNoOpenTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastPersonalizationTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastRegularTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastSMSTest.cs" />
+    <Compile Include="Communicator\Blast\Objects\BlastSocialTest.cs" />
+    <Compile Include="Communicator\CampaignItemBlastFilterTest.cs" />
+    <Compile Include="Communicator\CampaignItemBlastRefBlastTest.cs" />
+    <Compile Include="Communicator\CampaignItemBlastTest.cs" />
+    <Compile Include="Communicator\CampaignItemLinkTrackingTest.cs" />
+    <Compile Include="Communicator\CampaignItemMetaTagTest.cs" />
+    <Compile Include="Communicator\CampaignItemOptOutGroupTest.cs" />
+    <Compile Include="Communicator\CampaignItemSocialMediaTest.cs" />
+    <Compile Include="Communicator\CampaignItemSuppressionTest.cs" />
+    <Compile Include="Communicator\ContentReplacement\ContentReplacementEventArgsTest.cs" />
+    <Compile Include="Communicator\ContentReplacement\RSSFeedByCampaignItemTokenReplacementContextTest.cs" />
+    <Compile Include="Communicator\EmailGroupTest.cs" />
+    <Compile Include="Communicator\EmailPreviewTest.cs" />
+    <Compile Include="Communicator\EmailTest.cs" />
+    <Compile Include="Communicator\EventOrganizerTest.cs" />
+    <Compile Include="Communicator\ImageFolderTest.cs" />
+    <Compile Include="Communicator\PersonalizationContentErrorCodesTest.cs" />
+    <Compile Include="Communicator\Report\EmailPreviewUsageTest.cs" />
+    <Compile Include="Communicator\Report\ListSizeOvertimeReportTest.cs" />
+    <Compile Include="Communicator\View\LayoutPlanSummaryTest.cs" />
+    <Compile Include="Content\PersonalizedContentErrorCodesTest.cs" />
+    <Compile Include="DomainTracker\FieldsValuePairTest.cs" />
+    <Compile Include="FormDesigner\ConditionTest.cs" />
+    <Compile Include="FormDesigner\OverwriteDataPostTest.cs" />
+    <Compile Include="Helpers\SalesForce\AuthenticationHelperTest.cs" />
+    <Compile Include="Accounts\SubscriptionManagementGroupTest.cs" />
+    <Compile Include="Accounts\SubscriptionManagementReasonTest.cs" />
+    <Compile Include="Accounts\SubscriptionManagementUDFTest.cs" />
+    <Compile Include="Accounts\SubscriptionManagmentTest.cs" />
+    <Compile Include="Accounts\UserActionTest.cs" />
+    <Compile Include="Accounts\UserDepartmentTest.cs" />
+    <Compile Include="Activity\BlastActivityBouncesTest.cs" />
+    <Compile Include="Activity\BlastActivityClicksTest.cs" />
+    <Compile Include="Activity\BlastActivityConversionTest.cs" />
+    <Compile Include="Activity\BlastActivityOpensTest.cs" />
+    <Compile Include="Activity\BlastActivityReferTest.cs" />
+    <Compile Include="Activity\BlastActivityResendsTest.cs" />
+    <Compile Include="Activity\BlastActivitySendsTest.cs" />
+    <Compile Include="Activity\BlastActivitySocialTest.cs" />
+    <Compile Include="Activity\BlastActivitySuppressedTest.cs" />
+    <Compile Include="Activity\BlastActivityUnSubscribesTest.cs" />
+    <Compile Include="Activity\EmailActivityUpdateTest.cs" />
+    <Compile Include="Activity\EmailClientsTest.cs" />
+    <Compile Include="Activity\PlatformsTest.cs" />
+    <Compile Include="Activity\SuppressedCodesTest.cs" />
+    <Compile Include="ConfigureProject\AbstractGenericTest.cs" />
+    <Compile Include="Accounts\ActionTest.cs" />
+    <Compile Include="Accounts\BaseChannelTest.cs" />
+    <Compile Include="Accounts\BillingReportItemTest.cs" />
+    <Compile Include="Accounts\BillingReportTest.cs" />
+    <Compile Include="Accounts\BillItemTest.cs" />
+    <Compile Include="Accounts\BillTest.cs" />
+    <Compile Include="Accounts\CallRecordTest.cs" />
+    <Compile Include="Accounts\ChannelTest.cs" />
+    <Compile Include="Accounts\CodeTest.cs" />
+    <Compile Include="Accounts\ContactTest.cs" />
+    <Compile Include="Accounts\CustomerConfigTest.cs" />
+    <Compile Include="Accounts\CustomerContactTest.cs" />
+    <Compile Include="Accounts\CustomerDepartmentTest.cs" />
+    <Compile Include="Accounts\CustomerDiskUsageTest.cs" />
+    <Compile Include="Accounts\CustomerLicenseTest.cs" />
+    <Compile Include="Accounts\CustomerNoteTest.cs" />
+    <Compile Include="Accounts\CustomerProductTest.cs" />
+    <Compile Include="Accounts\CustomerTemplateTest.cs" />
+    <Compile Include="Accounts\CustomerTest.cs" />
+    <Compile Include="Accounts\LandingPageAssignContentTest.cs" />
+    <Compile Include="Accounts\LandingPageAssignTest.cs" />
+    <Compile Include="Accounts\LandingPageOptionTest.cs" />
+    <Compile Include="Accounts\LandingPageTest.cs" />
+    <Compile Include="Accounts\LicenseTest.cs" />
+    <Compile Include="Accounts\NotificationTest.cs" />
+    <Compile Include="Accounts\ProductDetailTest.cs" />
+    <Compile Include="Accounts\ProductTest.cs" />
+    <Compile Include="Accounts\QuoteItemTest.cs" />
+    <Compile Include="Accounts\QuoteOptionTest.cs" />
+    <Compile Include="Accounts\QuoteTest.cs" />
+    <Compile Include="Accounts\RoleActionTest.cs" />
+    <Compile Include="Accounts\RoleTest.cs" />
+    <Compile Include="Accounts\SFSettingsTest.cs" />
+    <Compile Include="Communicator\BlastScheduleTest.cs" />
+    <Compile Include="Communicator\EmailDirectTest.cs" />
+    <Compile Include="Communicator\MarketingAutomationHistoryTest.cs" />
+    <Compile Include="Communicator\SimpleShareDetailTest.cs" />
+    <Compile Include="Communicator\SmartFormActivityLogTest.cs" />
+    <Compile Include="Communicator\SmartFormsHistoryTest.cs" />
+    <Compile Include="Communicator\SmartFormsPrePopFieldsTest.cs" />
+    <Compile Include="Communicator\SmartFormTrackingTest.cs" />
+    <Compile Include="Communicator\SmartSegmentTest.cs" />
+    <Compile Include="Communicator\SocialMediaAuthTest.cs" />
+    <Compile Include="Communicator\SocialMediaTest.cs" />
+    <Compile Include="Communicator\SocialShareDetailTest.cs" />
+    <Compile Include="Communicator\TemplateTest.cs" />
+    <Compile Include="Communicator\TriggerPlansTest.cs" />
+    <Compile Include="Communicator\UploadLogTest.cs" />
+    <Compile Include="Communicator\UserGroupTest.cs" />
+    <Compile Include="Communicator\View\ContentFilterDetailTest.cs" />
+    <Compile Include="Communicator\WizardTest.cs" />
+    <Compile Include="ConfigureProject\AutoMoqPropertiesCustomization.cs" />
+    <Compile Include="ConfigureProject\PropertiesPostprocessor.cs" />
+    <Compile Include="Content\PersonalizedContentTest.cs" />
+    <Compile Include="Creator\CodeTest.cs" />
+    <Compile Include="DigitalEdition\DigitalSessionTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerActivityTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerFieldsTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerUserActivityToExportTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerUserProfileTest.cs" />
+    <Compile Include="DomainTracker\DomainTrackerValueTest.cs" />
+    <Compile Include="Extension\ContactExtension.cs" />
+    <Compile Include="Extension\DateTimeExtension.cs" />
+    <Compile Include="FormDesigner\ConditionGroupTest.cs" />
+    <Compile Include="FormDesigner\FormTest.cs" />
+    <Compile Include="FormDesigner\RuleTest.cs" />
+    <Compile Include="Helpers\SalesForce\JobUtilityTest.cs" />
+    <Compile Include="Helpers\SalesForce\PropertyHelperTest.cs" />
+    <Compile Include="Helpers\SalesForce\SFUtilitiesAdapterTest.cs" />
+    <Compile Include="Publisher\CategoryTest.cs" />
+    <Compile Include="Publisher\EditionActivityLogTest.cs" />
+    <Compile Include="Publisher\EditionHistoryTest.cs" />
+    <Compile Include="Publisher\EditionTest.cs" />
+    <Compile Include="Publisher\FrequencyTest.cs" />
+    <Compile Include="Publisher\LinkTest.cs" />
+    <Compile Include="Publisher\PageTest.cs" />
+    <Compile Include="Publisher\PublicationTest.cs" />
+    <Compile Include="Publisher\RuleTest.cs" />
+    <Compile Include="SalesForce.Aut\Helpers\SFUtilitiesAdapterTest.cs" />
+    <Compile Include="SalesForce\Helpers\JobUtilityTest.cs" />
+    <Compile Include="SalesForce\Helpers\SFUtilitiesAdapterTest.cs" />
+    <Compile Include="SalesForce\SalesForceTestBase.cs" />
+    <Compile Include="SalesForce\SF_CampaignMemberTest.cs" />
+    <Compile Include="SalesForce\SF_ContactTest.cs" />
+    <Compile Include="SalesForce\SF_CampaignTest.cs" />
+    <Compile Include="SalesForce\SF_LeadTest.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateOptoutGroupTest.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateSuppressionGroupTest.cs" />
+    <Compile Include="Communicator\CampaignItemTemplateTest.cs" />
+    <Compile Include="Communicator\CampaignItemTest.cs" />
+    <Compile Include="Communicator\CampaignItemTestBlastTest.cs" />
+    <Compile Include="Communicator\CampaignTest.cs" />
+    <Compile Include="Communicator\ChampionAuditTest.cs" />
+    <Compile Include="Communicator\ChannelMasterSuppressionListTest.cs" />
+    <Compile Include="Communicator\ChannelNoThresholdListTest.cs" />
+    <Compile Include="Communicator\CodeTest.cs" />
+    <Compile Include="Communicator\ContentFilterDetailTest.cs" />
+    <Compile Include="Communicator\ContentFilterTest.cs" />
+    <Compile Include="Communicator\ContentTest.cs" />
+    <Compile Include="Communicator\ConversionLinksTest.cs" />
+    <Compile Include="Communicator\CustomerLinkTrackingTest.cs" />
+    <Compile Include="Communicator\DataFieldSetsTest.cs" />
+    <Compile Include="Communicator\DomainSuppressionTest.cs" />
+    <Compile Include="Communicator\DynamicTagRuleTest.cs" />
+    <Compile Include="Communicator\DynamicTagTest.cs" />
+    <Compile Include="Communicator\EmailActivityLogTest.cs" />
+    <Compile Include="Communicator\EmailDataValuesTest.cs" />
+    <Compile Include="Communicator\EmailHistoryTest.cs" />
+    <Compile Include="Communicator\EmailSearchCSVTest.cs" />
+    <Compile Include="Communicator\EmailSearchTest.cs" />
+    <Compile Include="Communicator\FilterConditionTest.cs" />
+    <Compile Include="Communicator\FilterGroupTest.cs" />
+    <Compile Include="Communicator\FilterTest.cs" />
+    <Compile Include="Communicator\FolderTest.cs" />
+    <Compile Include="Communicator\GatewayTest.cs" />
+    <Compile Include="Communicator\GatewayValueTest.cs" />
+    <Compile Include="Communicator\GlobalMasterSuppressionListTest.cs" />
+    <Compile Include="Communicator\GroupConfigTest.cs" />
+    <Compile Include="Communicator\GroupDataFieldsDefaultTest.cs" />
+    <Compile Include="Communicator\GroupDataFieldsTest.cs" />
+    <Compile Include="Communicator\GroupTest.cs" />
+    <Compile Include="Communicator\ImageTest.cs" />
+    <Compile Include="Communicator\LayoutPlansTest.cs" />
+    <Compile Include="Communicator\LayoutTest.cs" />
+    <Compile Include="Communicator\LinkAliasTest.cs" />
+    <Compile Include="Communicator\LinkOwnerIndexTest.cs" />
+    <Compile Include="Communicator\LinkTrackingDomainTest.cs" />
+    <Compile Include="Communicator\LinkTrackingParamOptionTest.cs" />
+    <Compile Include="Communicator\LinkTrackingParamSettingsTest.cs" />
+    <Compile Include="Communicator\LinkTrackingParamTest.cs" />
+    <Compile Include="Communicator\LinkTrackingSettingsTest.cs" />
+    <Compile Include="Communicator\LinkTrackingTest.cs" />
+    <Compile Include="Communicator\MAConnectorTest.cs" />
+    <Compile Include="Communicator\MAControlTest.cs" />
+    <Compile Include="Communicator\MarketingAutomationTest.cs" />
+    <Compile Include="Communicator\MessageTypeTest.cs" />
+    <Compile Include="Communicator\QuickTestBlastConfigTest.cs" />
+    <Compile Include="Communicator\ReportQueueTest.cs" />
+    <Compile Include="Communicator\ReportScheduleTest.cs" />
+    <Compile Include="Communicator\ReportsTest.cs" />
+    <Compile Include="Communicator\RSSFeedTest.cs" />
+    <Compile Include="Communicator\RuleConditionTest.cs" />
+    <Compile Include="Communicator\RuleTest.cs" />
+    <Compile Include="Communicator\SampleTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesForce\SF_UtilitiesTest.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\ECN.UnitTests\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\ECN.UnitTests\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

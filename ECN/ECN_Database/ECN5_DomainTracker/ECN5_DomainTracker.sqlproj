@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ECN5_DomainTracker</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{5611c2e9-f406-4784-917e-c4c6d574798d}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ECN5_DomainTracker</RootNamespace>
+    <AssemblyName>ECN5_DomainTracker</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\DomainTrackerFields.sql" />
+    <Build Include="dbo\Tables\DomainTrackerActivity.sql" />
+    <Build Include="dbo\Tables\DomainTracker.sql" />
+    <Build Include="dbo\Tables\DomainTrackerValue.sql" />
+    <Build Include="dbo\Tables\DomainTrackerUserProfile.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\ecn5.sql" />
+    <Build Include="Security\ecn5_1.sql" />
+    <Build Include="Security\ecn5writer.sql" />
+    <Build Include="Security\ecn5writer_1.sql" />
+    <Build Include="Security\reader.sql" />
+    <Build Include="Security\reader_1.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="Security\webuser_1.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\bill_1.hipps.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\justin_1.welter.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\latha_1.sunil.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerValue_Select_ProfileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerValue_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerUserProfile_Select_DomainTrackerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerUserProfile_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerUserProfile_GetByEmailAddress.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerUserProfile_Exists.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Select_DomainTrackerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Delete_Single.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Delete_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_Select_ProfileID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetURLStats.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetTotalViews.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetPageViews.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetOSStats.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetBrowserStats.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Select_TrackerKey.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Select_DomainTrackerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Delete.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTracker_Select_BaseChannelID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerUserProfile_Select_DomainTrackerID_ByEmail.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_User_Export.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Select_FieldValuePairs.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_HeatMapStats.sql" />
+    <Build Include="dbo\Tables\IPLocationRanges.sql" />
+    <Build Include="dbo\Tables\IPLocationDetailed.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_MergeAnonActivity.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_GetFieldValuePairs.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_HeatMapStats_Known_Unknown.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetOSStats_Known_Unknown.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetBrowserStats_Known_Unknown.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetURLStats_Known.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerActivity_GetPageViews_Known.sql" />
+    <Build Include="dbo\Stored Procedures\e_DomainTrackerFields_Exists_Name_DomainTrackerID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeploymentScript09162014.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ECN5_DomainTracker.refactorlog" />
+  </ItemGroup>
+</Project>

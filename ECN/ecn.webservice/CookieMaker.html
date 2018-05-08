@@ -1,0 +1,95 @@
+
+<html>
+<head>
+
+</head>
+<body>
+</body>
+
+<script type='text/javascript' src='http://webservices.ecn5.com/ECN_jQuery.min.js'></script>
+<script type='text/javascript'> 
+function getParamValue(paramName)
+{
+    var url = window.location.search.substring(1); //get rid of "?" in querystring
+    var qArray = url.split('&'); //get key-value pairs
+    for (var i = 0; i < qArray.length; i++) 
+    {
+        var pArr = qArray[i].split('='); //split key and value
+        if (pArr[0] == paramName) 
+            return pArr[1]; //return value
+    }
+}
+
+var docCookies = {
+  getItem: function (sKey) {
+    if (!sKey) { return null; }
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  },
+  setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+    var sExpires = "";
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 2115 23:59:59 GMT" : "; max-age=" + vEnd;
+          break;
+        case String:
+          sExpires = "; expires=" + vEnd;
+          break;
+        case Date:
+          sExpires = "; expires=" + vEnd.toUTCString();
+          break;
+      }
+    }
+    document.cookie = sKey + "=" + sValue + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    return true;
+  },
+  removeItem: function (sKey, sPath, sDomain) {
+    if (!this.hasItem(sKey)) { return false; }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+    return true;
+  },
+  hasItem: function (sKey) {
+    if (!sKey) { return false; }
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+  },
+  keys: function () {
+    var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+    for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+    return aKeys;
+  }
+};
+
+var value = getParamValue('value');
+var name = getParamValue('name');
+
+docCookies.setItem(name, value, Infinity, '/', '.ecn5.com');
+if (!docCookies.getItem(name)) {
+  
+  var notice = document.createElement('p');
+  notice.appendChild(document.createTextNode('I could not set cookie on codepen domain. If you embedded me via iFrame, please make sure you wasted at least a few hours debugging it\'s cross-browser implementation, especially pay attention to IE and Safari :) Regarding Safari, it allows 3rd-party cookie creation only if there is already at least one cookie in Set-Cookie response header from that 3rd-party domain'));
+  document.getElementsByTagName('body')[0].appendChild(notice);
+  
+}
+$(document).ready(function () {
+	var value = getParamValue('value');
+	var name = getParamValue('name');
+	docCookies.setItem(name, value, Infinity, '/', '.ecn5.com');
+	
+	var qArray = document.referrer.split('?');
+	if (qArray[1]) {
+		var newArr = '';
+		var qArray2 = qArray[1].split('&');
+		for (var i = 0; i < qArray2.length; i++) 
+		{
+			var pArr = qArray2[i].split('='); //split key and value
+			if (pArr[0] != 'dtc') 
+				newArr = newArr + qArray2[i] + '&';
+		}
+		window.location.href = qArray[0] + '?' + newArr + 'dtc=1';
+	}
+	else
+		window.location.href = qArray[0] + '?dtc=1';
+});
+</script>
+</html>

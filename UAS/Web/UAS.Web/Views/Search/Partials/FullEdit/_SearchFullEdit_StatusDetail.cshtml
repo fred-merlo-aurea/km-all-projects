@@ -1,0 +1,58 @@
+﻿@model UAS.Web.Models.Circulations.SubscriptionStatusInfo
+
+
+@Html.HiddenFor(m => Model.ReactivateEnabled)
+@Html.HiddenFor(m => Model.btnPersonKill)
+@Html.HiddenFor(m => Model.btnPOKill)
+@Html.HiddenFor(m => Model.btnOnBehalfKill)
+@Html.HiddenFor(m => Model.categoryDropdownsEnabled)
+@Html.HiddenFor(m => Model.TransactionCodeID)
+
+<table class="tableformatter">
+    <tr>
+        <td><h4>Subscribe</h4></td>
+        <td></td>
+        <td>
+            <h4 id="transactionname" class="header-items">@Model.TransactionName</h4>
+        </td>
+    </tr>
+    <tr>
+        <td><button type="button" id="reactivateBtn" class="btn k-button reactivate" disabled="@Model.ReactivateEnabled">Reactivation</button></td>
+        <td> Free/Paid:<span style="color:red;">*</span></td>
+        <td>
+            @Html.DropDownListFor(m => Model.catCodeTypeID, Model.catTypeSelectList, new SelectListItem { Text = "", Value = "" })
+        </td>
+    </tr>
+    <tr>
+        <td height="10px;" colspan="3"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>Category Type:<span style="color:red;">*</span></td>
+        <td>@Html.DropDownListFor(m => Model.CategoryCodeID, Model.catCodeSelectList, new SelectListItem { Text = "", Value = "" })</td>
+    </tr>
+</table>
+<table style="width:75%;">
+    <tr>
+        <td colspan="2">Unsubscribe</td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        @if (!Model.IsPaid && !Model.IsNewSubscription)
+        {
+            <td><button type="button" id="postOfficeBtn" class="btn k-button">Post Office</button></td>
+            <td><button type="button" id="personalRequestBtn" class="btn k-button">Personal Request</button></td>
+            <td><button type="button" id="behalfBtn" class="btn k-button">On Behalf Request</button></td>
+            <td>@Html.TextBoxFor(model => Model.OnBehalfOf, new { type = "text" }) </td>
+        }
+        else if (Model.IsPaid && !Model.IsNewSubscription)
+        {
+            <td><button type="button" id="paidPostOfficeBtn" class="btn k-button">Post Office</button></td>
+            <td><button type="button" id="paidExpieCancel" class="btn k-button">Paid Expire Cancel</button></td>
+            <td><button type="button" id="paidCreditCancel" class="btn k-button">Paid Credit Cancel</button></td>
+            <td></td>
+        }
+    </tr>
+</table>

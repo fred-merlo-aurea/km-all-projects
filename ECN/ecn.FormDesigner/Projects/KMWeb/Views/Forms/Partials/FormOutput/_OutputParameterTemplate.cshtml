@@ -1,0 +1,14 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+<script id="output-template" type="text/x-kendo-template">    
+   <div id ="#=Num#_Row"  class ="class_row_output">
+       <input type="hidden" name="ThirdPartyQueryValue.Index" value="#=Num#" />
+       <ul class="inline">
+           <li class="name">@Html.Kendo().TextBox().Name(GetName<ThirdPartyQueryValueModel>("ThirdPartyQueryValue[#=Num#]", x => x.Name)).ToClientTemplate()</li>
+           <li class="value">  @Html.Kendo().DropDownList().Name(GetName<ThirdPartyQueryValueModel>("ThirdPartyQueryValue[#=Num#]", x => x.Value)).BindTo((IEnumerable<KMModels.ControlModel>)ViewBag.Controls).DataTextField("FieldLabel").DataValueField("Id").ToClientTemplate()</li>
+           <li class="acts">
+    
+                            @(Html.Kendo().Button().Content( "Delete<i class='km-icon icon-kmcustom-delete'></i>" ).Name("#=Num#_DeleteBtn").HtmlAttributes(new { @class="DeleteBtnClass btn btn-blue3"  , type = "button" }).ToClientTemplate())</li>
+       </ul>
+   </div>
+</script>

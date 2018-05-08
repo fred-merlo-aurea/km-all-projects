@@ -1,0 +1,442 @@
+﻿@model ecn.communicator.mvc.Models.FolderExplorer
+@using ecn.communicator.mvc.Infrastructure
+@{ 
+    int channelID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().BaseChannelID;
+    int cuID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+    bool isSysAdmin = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.IsPlatformAdministrator;
+}
+<style>
+    #folderPanel
+    {
+        width: 25%;
+        /*height: 625px;*/
+        float: left;
+        overflow: auto;
+        margin-top:36px;
+    }
+    #panelDownload {
+        width: 100%;
+        /*float: left;*/
+        margin-top:-15px;
+    }
+
+    #SearchPanel {
+        width: 75%;
+        float: right;
+    }
+
+    td, th {
+        padding: 3px;
+    }
+    </style>
+<script type="text/javascript">
+    function getArchiveButtonText(Archived) {
+        if (Archived) return 'Unarchive';
+        else return 'Archive';
+    }
+
+    var targetUrl = '@Url.Action("GroupsReadToGrid", "Group")';
+    var firstGridLoad = true;
+    function dataBound() {
+        var grid = this;
+        $(".menuCell").each(function () {
+
+            var cell = $(this), item = grid.dataItem(cell.closest("tr"));
+            var endScript = cell.children("script").last().html();
+            eval(cell.children("script").last().html());
+        });
+        if (firstGridLoad) {
+
+            firstGridLoad = false;
+            SetPagerWidget("firstpage");
+
+            if (currentFolderID == 0) {
+                var folderTree = $("#FolderTree").data('kendoTreeView');
+                var root = folderTree.findByText('Root');
+                folderTree.select(root)
+            }
+        }
+        adjustContainers();
+
+        if(($('#allFolders:checked').length > 0))
+        {
+            this.showColumn(1);
+        }
+        else {
+            this.hideColumn(1);
+        }
+
+        var items = grid.dataSource.data();
+        var rows = grid.items();
+        for (var i = 0; i < rows.length; i++) {
+            var groupID = items[i].GroupID;
+            var newlink = "";
+            if($("#searchType").data('kendoDropDownList').value() == 'Group')
+            {
+                newlink = "/ecn.communicator.mvc/Subscriber/Index/" + groupID;
+            }
+            else 
+            {
+                var comparator = $("#searchCriterion").data('kendoDropDownList').value();
+                var value = $("#profileName").val();
+                newlink = "/ecn.communicator.mvc/Subscriber/Index/" + groupID + "?comparator=" + comparator + "&value=" + encodeURIComponent(value);
+            }
+            var innerHTML = rows[i].cells[4].innerHTML;
+            var newInner = innerHTML.replace("linkToBeChanged", newlink);
+            $(rows[i].cells[4]).html(newInner);
+
+            innerHTML = rows[i].cells[6].innerHTML;
+            newInner = innerHTML.replace("linkToBeChanged", newlink);
+            $(rows[i].cells[6]).html(newInner);
+        }
+    }
+
+    $(document).ready(function () {
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+        
+    });
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data)
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        SetPagerWidget("firstpage");
+        firstGridLoad = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function filterGridParams() {
+
+        return {
+            searchType: $('#searchType').data('kendoDropDownList').value(),
+            searchCriterion: $('#searchCriterion').data('kendoDropDownList').value(),
+            profileName: $('#profileName').val(),
+            archiveFilter: $('#archiveFilter').data('kendoDropDownList').value(),
+            allFolders: ($('#allFolders:checked').length > 0) ? true : false,
+            folderID: currentFolderID, // defined in _FolderTree.cshtml
+            PageNumber: $("#pagerInputPageNumber").val(),
+            PageSize: $("#ddPageSize").val()
+        };
+
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#groupsGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+
+        SetPagerWidget("firstpage");
+        firstGridLoad = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#groupsGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalCount);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#pagerInputPageNumber").val());
+        var lastpage = 0;
+        if (totalrecordCount % pagesize > 0) {
+            lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+        else {
+            lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+
+        adjustContainers();
+
+    }
+
+    function adjustContainers()
+    {
+        var groupsDiv = $("#groupsGridDiv");
+        var height = groupsDiv.height() - 32;
+        var folderDiv = $("#FolderTree");
+        folderDiv.css({"height": height + "px"});
+    }
+
+    function checkChange(e) {
+        RebindOnPageOrSizeChange()
+    }
+
+    function btn_EditSubscribers_Click(groupID)
+    {
+        showLoadingWindow();
+        if($("#searchType").data('kendoDropDownList').value() == 'Group')
+        {
+            window.location = '/ecn.communicator.mvc/Subscriber/Index/' + groupID;
+        }
+        else {
+            var comparator = $("#searchCriterion").data('kendoDropDownList').value();
+            var value = $("#profileName").val();
+            window.location = "/ecn.communicator.mvc/Subscriber/Index/" + groupID + "?comparator=" + comparator + "&value=" + encodeURIComponent(value);
+        }
+
+    }
+
+    function smartFormRedirect(groupID)
+    {
+        showLoadingWindow();
+        window.location = "/ecn.communicator/main/lists/groupsubscribe.aspx?GroupID=" + groupID + "&chID=" + @channelID.ToString() + "&cuID=" + @cuID.ToString();
+        //http://ecn5.com/ecn.communicator/main/lists/groupsubscribe.aspx?GroupID=282384&chID=92&cuID=1
+    }
+    function InputPageNumber_KeyDown() {
+
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+                if (typeof e != 'undefined') {
+                    SetPagerWidget(e.target.id);
+                }
+                else {
+                    var spage = $("#pagerInputPageNumber").val();
+                    SetPagerWidget(spage);
+                }
+                var data = filterGridParams();
+                ReBindGrid(data);
+            }
+            else {
+                showMessage({
+                    type: 'Error',
+                    text: 'Please enter valid page number.',
+                    autoClose: false,
+                    action:function()
+                    {
+                        SetPagerWidget("firstpage");
+                        firstGridLoad = true;
+                        var data = filterGridParams();
+                        ReBindGrid(data);
+                    }
+                });
+              
+            }
+        }
+    }
+    function ClearSearch()
+    {
+        $('#allFolders').removeAttr('checked');
+        $('#profileName').val('');
+        $("#archiveFilter").data('kendoDropDownList').value("active");
+        $("#searchType").data('kendoDropDownList').value("Group");
+        $("#searchCriterion").data('kendoDropDownList').value("like");
+        var folderTree = $("#FolderTree").data('kendoTreeView');
+        var item = folderTree.dataSource.get(0);
+        var selectItem = folderTree.findByUid(item.uid);
+        folderTree.select(selectItem);
+        currentFolderID = 0;
+        Search();
+    }
+</script>
+<div>
+    <div id="searchToolbarPanel" style="display:inline;">
+        <div id="SearchPanel" >
+            <table style="margin-top:0px; float: left;">
+                <tr>
+                    <td>
+                        @Html.Kendo().DropDownList().Name("searchType").BindTo(new List<SelectListItem> {
+            new SelectListItem { Text = "Group", Value = "Group" },
+            new SelectListItem { Text = "Profile in Group", Value = "Profile" }
+            }).DataTextField("Text").DataValueField("Value")
+                    </td>
+                    <td>
+                        @Html.Kendo().DropDownList().Name("searchCriterion").BindTo( new List<SelectListItem> {
+            new SelectListItem { Text = "contains", Value = "like" },
+            new SelectListItem { Text = "equals", Value = "equals" },
+            new SelectListItem { Text = "starts with", Value = "starts" },
+            new SelectListItem { Text = "ends with", Value = "ends" }
+            }).DataTextField("Text").DataValueField("Value")
+                    </td>
+                    <td> @Html.TextBox("profileName") </td>
+                    <td>
+                        @Html.Kendo().DropDownList().Name("archiveFilter").BindTo( new List<SelectListItem>{
+            new SelectListItem { Text = "Active", Value = "active" },
+            new SelectListItem { Text = "Archived", Value = "archived" },
+            new SelectListItem { Text = "All", Value = "all" }
+            }).DataTextField("Text").DataValueField("Value")
+                    </td>
+                    <td>@Html.Kendo().CheckBox().Name("allFolders").Label("All Folders")</td>
+                    <td><input type="button" class="k-button" value="Search" id="search" onclick="Search()" /></td>
+                    <td><input type="button" class="k-button" value="Clear Search" id="clearSearch" onclick="ClearSearch()" /></td>                    
+                </tr>
+            </table>
+            <div style="float: right; margin-top: 3px;"><input type="button" class="k-button" value="Download" onclick="DownloadWindow()" /></div>
+        </div>        
+    </div>
+
+    @Html.Partial("Partials/_FolderTree", Model.FolderTree)
+    <div id="groupsGridDiv" style="width:75%;float:left">
+        @(Html.Kendo()
+    .Grid<ecn.communicator.mvc.Models.Group>(Model.GroupsGrid)
+    .Name("groupsGrid")
+    .Events(e => e.DataBound("dataBound"))
+    .DataSource(dataSource => dataSource
+    .Ajax() //Specify that Ajax binding is used.
+    .PageSize(10)
+    .Read(read => read
+        .Action("GroupsReadToGrid", "Group")
+        .Data("filterGridParams")
+    ) //Get Data from Server//Set the action method which will return the data in JSON format.
+
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.TotalCount).Hidden(true);
+        columns.Bound(e => e.FolderName).Title("Folder Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).Hidden(true);
+        columns.Bound(e => e.GroupName).Title("Group Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("<a class='gridCellEdit' href='/ecn.communicator.mvc/Group/Edit/#=GroupID#'>#=GroupName#</a>");
+        columns.Bound(e => e.IsSeedList).Title("Is Seed List").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("#if(IsSeedList){#<span>Yes</span>#}else{#<span>No</span>#}#");
+        columns.Bound(e => e.Subscribers).Title("Subscribers").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("<a class='gridCellEdit' href='linkToBeChanged'>#=Subscribers#</a>");
+        columns.Bound(e => e.Archived).Title("Archived").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("#if(Archived){#<span>Yes</span>#}else{#<span>No</span>#}#");
+        columns.Bound(p => p).Title("").Template(@<text></text>).ClientTemplate(GetActions().ToString()).HtmlAttributes(new { @class = "menuCell", @style = "width:95px;" }).Filterable(false).Sortable(false);
+    })
+    .Pageable(page => page.Enabled(false))
+    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+    .HtmlAttributes(new { style = "min-height:400px;min-width:600px;width:100%;" }))
+
+        <div id="pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+            <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+                <span onclick="GoToPage(event)" id="firstpage" class="k-icon k-i-seek-w">seek-w</span>
+            </a>
+            <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+                <span onclick="GoToPage(event)" id="prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+            </a>
+
+            <ul class="k-pager-numbers k-reset">
+                <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+                <li><span class="k-state-selected" id="currentpage">1</span></li>
+
+            </ul>
+            <span class="k-pager-input k-label">Page<input class="k-textbox" id="pagerInputPageNumber" onkeydown="InputPageNumber_KeyDown()">of <span id="pagerTotalItems"></span></span>
+            <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+                <span onclick="GoToPage(event)" id="nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+            </a>
+            <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+                <span onclick="GoToPage(event)" id="lastpage" class="k-icon k-i-seek-e">seek-e</span>
+            </a>
+
+            <span class="k-pager-sizes k-label">
+                <span title="" class="k-widget k-dropdown k-header">
+                    <input id="ddPageSize" onchange="checkChange()" />
+                </span>items per page
+            </span>
+            <span class="float-right" style="margin-right:10px;">
+                <lable id="pagerDisplay"></lable>
+            </span>
+        </div>
+    </div>
+    
+
+</div>
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=GroupID#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("Edit Group").Action("Edit", "Group", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Manage Subscribers").Url("linkToBeChanged");//.Action("Index", "Subscriber", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Manage UDFs").Action("Index", "DataField", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Manage Filters").Action("Index", "Filter", new { id = "#=GroupID#" });
+                    if (ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.IsPlatformAdministrator)
+                    {
+                        int channelID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().BaseChannelID;
+                        int cuID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+                        innerItems.Add().Text("Manage Smart Forms").Url("/ecn.communicator/main/lists/groupsubscribe.aspx?GroupID=#=GroupID#&chID=" + channelID.ToString() + "&cuID=" + cuID.ToString());//.HtmlAttributes(new { onclick = "smartFormRedirect(#=GroupID#)" });
+                    }
+                    if (KMPlatform.BusinessLogic.User.IsSystemAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser) ||
+                        KMPlatform.BusinessLogic.User.IsChannelAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser) ||
+                        KMPlatform.BusinessLogic.User.IsAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser))
+                    {
+                        innerItems.Add().Text("#=getArchiveButtonText(Archived)#").HtmlAttributes(new { onclick = "archiveGroup('#=GroupID#')" });
+                    }
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteGroup('#=GroupID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}

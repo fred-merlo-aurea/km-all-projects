@@ -1,0 +1,22 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model OverwriteDataValueModel
+@{
+    var htmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var current_id = htmlFieldPrefix.Replace(".", "").Replace("[", "_");
+  
+}
+
+<ul class="inline">
+    <li class="formfield">
+        @Html.Kendo().DropDownListFor(x => x.FormField).BindTo(ViewContext.Controller.ViewBag.SubVisibleControls).DataTextField("FieldLabel").DataValueField("Id")
+    </li>
+    <li class="value">
+        @Html.Kendo().TextBoxFor(x => x.Value)
+    </li>
+    <li class="acts">
+        @(Html.Kendo().Button().Content("Delete<i class='km-icon icon-kmcustom-delete'></i>").Name(string.Format("{0}", current_id+ "OverDeleteBtn")).HtmlAttributes(new { @class = "OverDeleteBtnClass btn btn-blue3", type = "button", id = @FormatID(current_id) + "OverDeleteBtn" }))
+    </li>
+</ul>
+  

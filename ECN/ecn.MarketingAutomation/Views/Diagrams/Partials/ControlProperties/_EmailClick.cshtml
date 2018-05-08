@@ -1,0 +1,813 @@
+﻿
+<div id="EmailClickProp">
+    <section class="propertyTitle"></section>
+    <section class="propertyItem" id="emailclick_download" style="text-align:center;">
+        @Html.Kendo().Button().Name("btn_EmailClickDownload").Content("Download").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btn_EmailClickDownload_Click()" })
+        <input id="emailclick_ECNID" type="hidden" />
+        <input id="emailclick_ControlType" type="hidden" />
+    </section>
+    <section class="propertyItem">
+        <span>Control Name:</span>
+        <input type="text" id="cli01" />
+    </section>
+    <section class="propertyItem" id="cinamesection">
+        <span>
+            Campaign Item Name:
+            <input type="text" id="emailclick_CampaignItemName" />
+        </span><br />
+    </section>
+    <section class="propertyItem" id="citemplatesection">
+        <span>
+            Create from Template?
+            <input type="radio" name="rbl_citemplateGE_selected" value="0"> Yes
+            <input type="radio" name="rbl_citemplateGE_selected" value="1"> No<br>
+        </span>
+        <section id="ciTemplateGESelectExisting" style="display:none;">
+            <span>
+                @Html.Kendo().Button().Name("ciTemplateGE").Content("Select Template").HtmlAttributes(new { @class = "btn", type = "button", onclick = "cli_btnSelectciTemplate_Click()" })
+            </span>
+            <br>
+            <strong style="margin-left:10px;">Campaign Item Template:</strong>
+            <span id="EmailCli_templateName"></span>
+        </section>
+        <input id="EmailCli_citemplateID" type="hidden" name="EmailCli_citemplateID" />
+    </section>
+    <section id="LinkAlias_messageSelectItem">
+        <section class="propertyItem">
+            <span>Link:</span><br>
+            <input type="radio" name="link" value="0" > Any Link <br>
+            <input type="radio" name="link" value="1"> Specific Link <br>
+            <section id="linkRB" style="display:none; margin-left:10px">
+                @Html.Kendo().Button().Name("SelectLinkAlias").Content("Select Link Alias").HtmlAttributes(new { @class = "btn", type = "button", onclick = "DEmailClick_btnSelectLinkAlias_Click()" })<br>
+                <strong style="margin-left:10px;">Link Alias:</strong>
+                <span id="LinkAlias_Alias"></span>
+                <input id="LinkAlias_Link" type="hidden" name="LinkAlias_Link" />
+            </section>
+        </section>
+    </section>
+    <input id="LinkAlias_customerID" type="hidden" name="LinkAlias_customerID" />
+    
+   
+    <section class="propertyItem" id="msgselectsection">
+        <span>Message:</span><br>
+        @Html.Kendo().Button().Name("clickMessageBtn").Content("Select Message to Send").HtmlAttributes(new { @class = "btn", type = "button", onclick = "DEmailClick_btnSelectMessage()" })<br>
+        <strong style="margin-left:10px;">Message:</strong>
+        <span id="LinkAlias_messageName"></span>
+        <input id="LinkAlias_messageID" type="hidden" name="LinkAlias_messageID" />
+        <input id="LinkAlias_messageForLinkAlias" type="hidden" name="LinkAlias_messageForLinkAlias" />
+    </section>
+    <section class="propertyItem" id="formsection">
+        <span>Form:</span><br>
+        @Html.Kendo().Button().Name("clickFormBtn").Content("Select Form").HtmlAttributes(new { @class = "btn", type = "button", onclick = "DEmailClick_btnSelectForm()" })<br>
+        <strong style="margin-left:10px;">Form:</strong>
+        <span id="LinkAlias_formName"></span>
+        <input id="LinkAlias_formID" type="hidden" name="LinkAlias_formID" />
+        <input id="LinkAlias_formForLinkAlias" type="hidden" name="LinkAlias_formForLinkAlias" />
+    </section>
+    <section class="propertyItem" id="blastfieldsection">
+        <span>Blast Fields:</span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="cli_blastfieldname1">Field 1:</label><input id="cli_blastfieldvalue1" style="margin-left:5px;margin-bottom:5px;" />
+            <span id="cli_blastfieldcustom1" style="display:none;"><input type="text" id="cli10" /></span><br>
+        </span>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="cli_blastfieldname2">Field 2:</label><input id="cli_blastfieldvalue2" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="cli_blastfieldcustom2" style="display:none;"><input type="text" id="cli11" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="cli_blastfieldname3">Field 3:</label><input id="cli_blastfieldvalue3" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="cli_blastfieldcustom3" style="display:none;"><input type="text" id="cli12" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="cli_blastfieldname4">Field 4:</label><input id="cli_blastfieldvalue4" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="cli_blastfieldcustom4" style="display:none;"><input type="text" id="cli13" /></span><br>
+        <span style="margin-left:10px;">
+            <label class="lbl" id="cli_blastfieldname5">Field 5:</label><input id="cli_blastfieldvalue5" style="margin-left:5px;margin-bottom:5px;" />
+        </span>
+        <span id="cli_blastfieldcustom5" style="display:none;"><input type="text" id="cli14" /></span><br>
+    </section>
+    <section class="propertyItem" id="envelopesection">
+        <span>Envelope:</span><br>
+        From Email <br><input type="text" id="cli06" /><br>
+        Reply To <br><input type="text" id="cli07" /><br>
+        From Name <br><input type="text" id="cli08" /><br>
+        Subject <br><input type="text" id="cli09" /><br>
+    </section>
+    <section class="propertyItem" id="emailClick_SendTime">
+        <span>Expected Send Time:</span>
+        <span id="emailClick_estSendTime"></span>
+    </section>
+    <section class="propertyItem" name="ClickCancelControl" id="ClickCancelControl">
+        <input type="radio" id="cancelClick" name="cancelClick" /><span><b>Cancel Automation Control</b></span>
+        <div id="cancelClickStats">
+            <span><b>Date Cancelled:</b></span>
+            <span id="cancelClickDate"></span>
+        </div>
+    </section>
+</div>
+
+<script>
+    var maID = -1;
+    var title = "";
+    var controlID = "";
+    $(document).ready(function () {
+        $("#cli_blastfieldvalue1").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#cli_blastfieldcustom1").show();
+                else
+                 {
+                    $("#cli_blastfieldcustom1").hide();
+                    $("#cli10").val(value);
+                }
+            }
+        });
+        $("#cli_blastfieldvalue2").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#cli_blastfieldcustom2").show();
+                else
+                {
+                    $("#cli_blastfieldcustom2").hide();
+                    $("#cli11").val(value);
+                }
+            }
+        });
+        $("#cli_blastfieldvalue3").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#cli_blastfieldcustom3").show();
+                else
+                {
+                    $("#cli_blastfieldcustom3").hide();
+                    $("#cli12").val(value);
+                }
+            }
+        });
+        $("#cli_blastfieldvalue4").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#cli_blastfieldcustom4").show();
+                else {
+                    $("#cli_blastfieldcustom4").hide();
+                    $("#cli13").val(value);
+                }
+            }
+        });
+        $("#cli_blastfieldvalue5").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            optionLabel: {
+                text: "-Select-",
+                value: ""
+            },
+            dataSource: [
+              { text: "Custom Value", value: "Custom" },
+            ],
+            change: function (e) {
+                var value = this.value();
+                if (value == 'Custom')
+                    $("#cli_blastfieldcustom5").show();
+                else {
+                    $("#cli_blastfieldcustom5").hide();
+                    $("#cli14").val(value);
+                }
+            }
+        });
+
+            $("input[name$='link']").click(function () {
+            if ($('input:radio[name=link]')[0].checked) {
+                $("#linkRB").hide();
+            }
+            else {
+                $("#linkRB").show();
+            }
+        });
+
+        $("input:radio[name=cancelClick]").click(cancelClick_Click);
+    });
+
+    function cancelClick_Click()
+    {
+        var cancel = $(this);
+        if(cancel.is(":checked"))
+        {
+            $("#cancelClickDate").text("");
+            $("#cancelClickStats").hide();
+        }
+    }
+    $("input[name$='rbl_citemplateGE_selected']").click(function () {
+        if ($('input:radio[name=rbl_citemplateGE_selected]')[0].checked)
+        {
+            $("#ciTemplateGESelectExisting").show();
+        }
+        else
+        {
+            $("#ciTemplateGESelectExisting").hide();
+        }
+        $("#EmailCli_citemplateID").val(-1);
+        $("#EmailCli_templateName").text('');
+        $("#LinkAlias_messageName").text('');
+        $("#LinkAlias_messageID").val(0);
+        $("#cli06").val('');
+        $("#cli07").val('');
+        $("#cli08").val('');
+        $("#cli09").val('');
+        $("#cli10").val('');
+        $("#cli11").val('');
+        $("#cli12").val('');
+        $("#cli13").val('');
+        $("#cli14").val('');
+        var customerid = $("#LinkAlias_customerID").val();
+        linkfillblastfields(customerid);
+        var bfv1 = $("#cli_blastfieldvalue1").data("kendoDropDownList");
+        bfv1.select(0);
+        var bfv2 = $("#cli_blastfieldvalue2").data("kendoDropDownList");
+        bfv2.select(0);
+        var bfv3 = $("#cli_blastfieldvalue3").data("kendoDropDownList");
+        bfv3.select(0);
+        var bfv4 = $("#cli_blastfieldvalue4").data("kendoDropDownList");
+        bfv4.select(0);
+        var bfv5 = $("#cli_blastfieldvalue5").data("kendoDropDownList");
+        bfv5.select(0);
+    });
+    function campaign_btnSelectciTemplateGE_Click() {
+        var customerID = $("#campaignItem_customerID").val();
+        campaignItemTemplateExplorer(campaign_ciTemplateSelected, customerID);
+    }
+    function propsEmailClick(shape, customerId, isHeatMap, est_sendTime, message,form,MAID, canEdit) {
+        $("#cancelClick").prop("checked", false);
+        maID = MAID;
+        title = shape.category;
+        controlID = shape.id;
+        if (customerId != null)
+            $("#LinkAlias_customerID").val(customerId);
+        $("#cli01").val(shape.control_text);
+        if (shape.linkRb) {
+            $('input:radio[name=link]')[0].checked = true;
+        }
+        else {
+            $('input:radio[name=link]')[1].checked = true;
+        }
+
+         switch (shape.category) {
+            case "Direct_Click":
+                $('section.propertyTitle').html('Direct Email Click');
+                $("#formsection").hide();
+                $("#LinkAlias_messageSelectItem").show();
+                $("#emailClick_SendTime").show();
+                $("#citemplatesection").show();
+                $("#cinamesection").show();
+                $("#envelopesection").show();
+                $("#blastfieldsection").show();
+                $("#msgselectsection").show();
+                $("#ClickCancelControl").show();
+                break;
+             case "Form":
+                 $('section.propertyTitle').html('Form');
+                 $("#formsection").show();
+                 $("#clickFormBtn").show();
+                 $("#LinkAlias_messageSelectItem").show();
+                 $("#citemplatesection").hide();
+                 $("#cinamesection").hide();
+                 $("#envelopesection").hide();
+                 $("#blastfieldsection").hide();
+                 $("#msgselectsection").hide();
+                 $("#ClickCancelControl").hide();
+                 $("#emailClick_SendTime").hide();
+                 $('input:radio[name=link]')[1].checked = true;
+                 $("#LinkAlias_formID").val(shape.formId);
+                 $("#LinkAlias_formName").text(shape.formname);
+                 $("#linkRB").show();
+                 break;
+             case "FormAbandon":
+                 $('section.propertyTitle').html('Form Abandon');
+                 $("#formsection").hide();
+                 $("#LinkAlias_messageSelectItem").hide();
+                 $("#LinkAlias_formID").val(form.formID);
+                 $("#LinkAlias_formName").text(form.formName);
+                 $("#clickFormBtn").hide();
+                 $("#ClickCancelControl").show();
+                 $("#emailClick_SendTime").show();
+                 $("#citemplatesection").show();
+                 $("#cinamesection").show();
+                 $("#envelopesection").show();
+                 $("#blastfieldsection").show();
+                 $("#msgselectsection").show();
+                 $("#ClickCancelControl").show();
+                 shape.link = form.link;
+                 break;
+             case "FormSubmit":
+                 $('section.propertyTitle').html('Form Submit');
+                 $("#formsection").hide();
+                 $("#LinkAlias_messageSelectItem").hide();
+                 $("#clickFormBtn").hide();
+                 $("#LinkAlias_formID").val(form.formID);
+                 $("#LinkAlias_formName").text(form.formName);
+                 $("#ClickCancelControl").show();
+                 $("#emailClick_SendTime").show();
+                 $("#citemplatesection").show();
+                 $("#cinamesection").show();
+                 $("#envelopesection").show();
+                 $("#blastfieldsection").show();
+                 $("#msgselectsection").show();
+                 $("#ClickCancelControl").show();
+                 shape.link = form.link;
+                 break;
+        }
+
+        if (shape.campaign_itemtemplateID > 0) {
+            $('input:radio[name=rbl_citemplateGE_selected]')[0].checked = true;
+            $("#ciTemplateGESelectExisting").show();
+            $("#EmailCli_templateName").text(shape.citemplatename);
+            $("#EmailCli_citemplateID").val(shape.campaign_itemtemplateID);
+        }
+        else {
+            $('input:radio[name=rbl_citemplateGE_selected]')[1].checked = true;
+            $("#ciTemplateGESelectExisting").hide();
+            $("#EmailCli_templateName").text = '';
+            $("#EmailCli_citemplateID").val(-1);
+        }
+        $("#LinkAlias_messageID").val(shape.messageId);
+        $("#LinkAlias_messageForLinkAlias").val(message.messageID);
+        $("#LinkAlias_messageName").text(shape.message);
+        $("#emailclick_CampaignItemName").val(shape.campaign_item_name);
+
+        $("#cli06").val(shape.from_email);
+        $("#cli07").val(shape.reply_to);
+        $("#cli08").val(shape.from_name);
+        $("#cli09").val(shape.subject);
+
+        $("#LinkAlias_Link").val(shape.link);
+        $("#LinkAlias_Alias").text(shape.link_alias);
+        linkfillblastfields(customerId);
+        var bfv1 = $("#cli_blastfieldvalue1").data("kendoDropDownList");
+        bfv1.select(0);
+        bfv1.trigger("change");
+        if (!shape.blastfield1 == "") {
+            bfv1.search(shape.blastfield1)
+            if (bfv1.text() != shape.blastfield1) {
+                $("#cli10").val(shape.blastfield1);
+                $("#cli_blastfieldcustom1").show();
+                bfv1.select(1);
+            }
+            else {
+                $("#cli10").val('');
+                $("#cli_blastfieldcustom1").hide();
+            }
+        }
+        else
+        {
+            $("#cli10").val('');
+            $("#cli_blastfieldcustom1").hide();
+            bfv1.select(0);
+        }
+        var bfv2 = $("#cli_blastfieldvalue2").data("kendoDropDownList");
+        bfv2.select(0);
+        bfv2.trigger("change");
+        if (!shape.blastfield2 == "") {
+            bfv2.search(shape.blastfield2)
+            if (bfv2.text() != shape.blastfield2) {
+                $("#cli11").val(shape.blastfield2);
+                $("#cli_blastfieldcustom2").show();
+                bfv2.select(1);
+            }
+            else {
+                $("#cli11").val('');
+                $("#cli_blastfieldcustom2").hide();
+            }
+        }
+        else {
+            $("#cli11").val('');
+            $("#cli_blastfieldcustom2").hide();
+            bfv2.select(0);
+        }
+        var bfv3 = $("#cli_blastfieldvalue3").data("kendoDropDownList");
+        bfv3.select(0);
+        bfv3.trigger("change");
+        if (!shape.blastfield3 == "") {
+            bfv3.search(shape.blastfield3)
+            if (bfv3.text() != shape.blastfield3) {
+                $("#cli12").val(shape.blastfield3);
+                $("#cli_blastfieldcustom3").show();
+                bfv3.select(1);
+            }
+            else {
+                $("#cli12").val('');
+                $("#cli_blastfieldcustom3").hide();
+            }
+        }
+        else {
+            $("#cli12").val('');
+            $("#cli_blastfieldcustom3").hide();
+            bfv3.select(0);
+        }
+        var bfv4 = $("#cli_blastfieldvalue4").data("kendoDropDownList");
+        bfv4.select(0);
+        bfv4.trigger("change");
+        if (!shape.blastfield4 == "") {
+            bfv4.search(shape.blastfield4)
+            if (bfv4.text() != shape.blastfield4) {
+                $("#cli13").val(shape.blastfield4);
+                $("#cli_blastfieldcustom4").show();
+                bfv4.select(1);
+            }
+            else {
+                $("#cli13").val('');
+                $("#cli_blastfieldcustom4").hide();
+            }
+        }
+        else {
+            $("#cli13").val('');
+            $("#cli_blastfieldcustom4").hide();
+            bfv4.select(0);
+        }
+        var bfv5 = $("#cli_blastfieldvalue5").data("kendoDropDownList");
+        bfv5.select(0);
+        bfv5.trigger("change");
+        if (!shape.blastfield5 == "") {
+            bfv5.search(shape.blastfield5)
+            if (bfv5.text() != shape.blastfield5) {
+                $("#cli14").val(shape.blastfield5);
+                $("#cli_blastfieldcustom5").show();
+                bfv5.select(1);
+            }
+            else {
+                $("#cli14").val('');
+                $("#cli_blastfieldcustom5").hide();
+            }
+        }
+        else {
+            $("#cli14").val('');
+            $("#cli_blastfieldcustom5").hide();
+            bfv5.select(0);
+        }
+        if (est_sendTime != null) {
+            $("#emailClick_SendTime").show();
+            var AMPM = "AM";
+            var adjustedHours = est_sendTime.getHours();
+            if (adjustedHours > 12) {
+                AMPM = "PM";
+                adjustedHours = adjustedHours - 12;
+            }
+            $("#emailClick_estSendTime").text((est_sendTime.getMonth() + 1) + "/" + (est_sendTime.getDate()) + "/" + est_sendTime.getFullYear() + " " + adjustedHours + ":" + est_sendTime.getMinutes());
+        }
+        else {
+            $("#emailClick_SendTime").hide();
+            $("#emailClick_estSendTime").text("");
+        }
+
+       if ($('input:radio[name=link]')[0].checked) {
+           $("#linkRB").hide();
+        }
+        else {
+            $("#linkRB").show();
+        }
+        //if (shape.message != "")
+        //    $("#LinkAlias_messageSelectItem").removeAttr("style");
+        //else
+        //    $("#LinkAlias_messageSelectItem").css("display", "none
+
+       
+
+       if ((shape.ECNID > 0) && (shape.category !="Form")) {
+            $("#ClickCancelControl").show();
+            if (shape.isCancelled)  {
+                $("#cancelClick").prop("checked", true).attr("disabled", true);
+                if (shape.cancelDate != '') {
+                        var IsISOFormat = shape.cancelDate.search('T');
+                        if (IsISOFormat > 0)
+                            var cancelDate = new Date(parseIsoDatetime(shape.cancelDate));
+                        else
+                            var cancelDate = new Date(shape.cancelDate);
+                        var AMPM = "AM";
+                        var adjustedHours = cancelDate.getHours();
+
+                        if (adjustedHours > 12) {
+                            AMPM = "PM";
+                            adjustedHours = adjustedHours - 12;
+                        }
+                        else if (adjustedHours == 12) { AMPM = "PM"; adjustedHours = adjustedHours }
+                        else if (adjustedHours == 0) { adjustedHours = 12; }
+                        $("#cancelClickDate").text((cancelDate.getMonth() + 1) + "/" + (cancelDate.getDate()) + "/" + cancelDate.getFullYear() + " " + adjustedHours + ":" + (cancelDate.getMinutes() < 10 ? '0' : '') + cancelDate.getMinutes() + " " + AMPM);
+                        $("#cancelClickStats").show();
+
+                    }
+
+            }
+            else {
+                $("#cancelClickDate").text("");
+                $("#cancelClick").prop("checked", false).attr("disabled", false);
+                $("#cancelClickStats").hide();
+            }
+        }
+        else
+        {
+            $("#ClickCancelControl").hide();
+        }
+
+
+        if (shape.editable.remove == false) {
+
+            if (!shape.isCancelled)
+            {
+                $("#EmailClickProp :input").attr("disabled", false);
+                shape.cancelDate = '';
+                cli_enableblastfields(true);
+            }
+            else
+            {
+                $("#EmailClickProp :input").attr("disabled", true);
+                cli_enableblastfields(false);
+            }
+            $("#cli01").attr("disabled", false);
+        }
+        else {
+            $("#EmailClickProp :input").attr("disabled", false);
+            cli_enableblastfields(true);
+        }
+
+
+        if (isHeatMap) {
+            $("#emailclick_ECNID").val(shape.ECNID);
+            $("#emailclick_ControlType").val(shape.category);
+            $("#EmailClickProp :input").attr("disabled", true);
+            cli_enableblastfields(false);
+            $("#emailclick_download").show();
+            $("#btn_EmailClickDownload").attr("disabled",false);
+        }
+        else {
+            $("#emailclick_download").hide();
+            $("#btn_EmailClickDownload").attr("disabled", true);
+        }
+        if (shape.category == 'Form')
+        {
+            var rbDisable = $('input:radio[name=link]');
+            rbDisable.attr('disabled', true);
+        }
+
+    }
+    function linkfillblastfields(customerId)
+    {
+    $.ajax({
+        type: 'GET',
+        url: '@Url.Action("GetBlastFieldInformation", "Web")?customerID=' + customerId,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (response) {
+            if (response.length > 0) { 
+               if (response[0].BlastFieldName.length > 0 || response[1].BlastFieldName.length > 0 || response[2].BlastFieldName.length > 0 || response[4].BlastFieldName.length > 0) {
+                   if (response.length > 0) {
+
+                       $("#cli_blastfieldname1").text(response[0].BlastFieldName);
+                       var bfv1 = $("#cli_blastfieldvalue1").data("kendoDropDownList");
+                       if (bfv1.dataSource.data().length == 1) {
+                           response[0].BlastFieldValues.forEach(function (entry) {
+                               $("#cli_blastfieldvalue1").data("kendoDropDownList")
+                              .dataSource.add({ "text": entry, "value": entry });
+                           });
+                       }
+                   }
+                   if (response.length > 1) {
+                       $("#cli_blastfieldname2").text(response[1].BlastFieldName);
+                       var bfv2 = $("#cli_blastfieldvalue2").data("kendoDropDownList");
+                       if (bfv2.dataSource.data().length == 1) {
+                           response[1].BlastFieldValues.forEach(function (entry) {
+                               $("#cli_blastfieldvalue2").data("kendoDropDownList")
+                              .dataSource.add({ "text": entry, "value": entry });
+                           });
+                       }
+                   }
+                   if (response.length > 2) {
+                       $("#cli_blastfieldname3").text(response[2].BlastFieldName);
+                       var bfv3 = $("#cli_blastfieldvalue3").data("kendoDropDownList");
+                       if (bfv3.dataSource.data().length == 1) {
+                           response[2].BlastFieldValues.forEach(function (entry) {
+                               $("#cli_blastfieldvalue3").data("kendoDropDownList")
+                              .dataSource.add({ "text": entry, "value": entry });
+                           });
+                       }
+                   }
+                   if (response.length > 3) {
+                       $("#cli_blastfieldname4").text(response[3].BlastFieldName);
+                       var bfv4 = $("#cli_blastfieldvalue4").data("kendoDropDownList");
+                       if (bfv4.dataSource.data().length == 1) {
+                           response[3].BlastFieldValues.forEach(function (entry) {
+                               $("#cli_blastfieldvalue4").data("kendoDropDownList")
+                              .dataSource.add({ "text": entry, "value": entry });
+                           });
+                       }
+                   }
+                   if (response.length > 4) {
+                       $("#cli_blastfieldname5").text(response[4].BlastFieldName);
+                       var bfv5 = $("#cli_blastfieldvalue5").data("kendoDropDownList");
+                       if (bfv5.dataSource.data().length == 1) {
+                           response[4].BlastFieldValues.forEach(function (entry) {
+                               $("#cli_blastfieldvalue5").data("kendoDropDownList")
+                              .dataSource.add({ "text": entry, "value": entry });
+                           });
+                       }
+                   }
+               
+               
+               
+               
+               
+            }
+        }
+        },
+        error: function (e) {
+
+        }
+    });
+    }
+    //Button Events
+    function cli_btnSelectciTemplate_Click()
+    {
+        var customerID = $("#LinkAlias_customerID").val();
+        campaignItemTemplateExplorer(Cli_ciTemplateSelected, customerID);
+    }
+    function DEmailClick_btnSelectMessage() {
+        var customerID = $("#LinkAlias_customerID").val();
+        messageExplorer(DEmail_MessageSelected, customerID);
+    }
+    function DEmailClick_btnSelectForm() {
+        var customerID = $("#LinkAlias_customerID").val();
+        formExplorer(DEmail_FormSelected, customerID);
+    }
+    function DEmailClick_btnSelectLinkAlias_Click() {
+        var customerID = $("#LinkAlias_customerID").val();
+        var layoutID = $("#LinkAlias_messageForLinkAlias").val();
+        linkAliasExplorer(DEmail_linkAliasSelected, customerID, layoutID);
+    }
+    function btn_EmailClickDownload_Click() {
+        window.location = "/ecn.MarketingAutomation/Diagrams/DownloadEmails?ECNID=" + $("#emailclick_ECNID").val() + "&controlType=" + $("#emailclick_ControlType").val() + "&isWait=false"+ "&maID="+maID + "&controlID=" + controlID;
+
+       }
+    //Callback functions
+    function Cli_ciTemplateSelected(select) {
+        var citemplate = select.citemplate;
+        $("#EmailCli_citemplateID").val(citemplate.CITemplateID);
+        $("#EmailCli_templateName").text(citemplate.TemplateName);
+        $("#LinkAlias_messageID").val(citemplate.MessageID);
+        $("#LinkAlias_messageName").text(citemplate.MessageName);
+        $("#cli06").val(citemplate.FromEmail);
+        $("#cli07").val(citemplate.ReplyTo);
+        $("#cli08").val(citemplate.FromName);
+        $("#cli09").val(citemplate.Subject);
+        if (citemplate.BlastField1 != null) {
+            var bf1 = $("#cli_blastfieldvalue1").data("kendoDropDownList");
+            var bfData = bf1.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf1.dataSource.remove(bfData[i]); //remove all
+            }
+            bf1.value("Custom");
+            $("#cli_blastfieldcustom1").show();
+            $("#cli10").val(citemplate.BlastField1);
+        }
+        if (citemplate.BlastField2 != null) {
+            var bf2 = $("#cli_blastfieldvalue2").data("kendoDropDownList");
+            var bfData = bf2.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf2.dataSource.remove(bfData[i]); //remove all
+            }
+            bf2.value("Custom");
+            $("#cli_blastfieldcustom2").show();
+            $("#cli11").val(citemplate.BlastField2);
+        }
+        if (citemplate.BlastField3 != null) {
+            var bf3 = $("#cli_blastfieldvalue3").data("kendoDropDownList");
+            var bfData = bf3.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf3.dataSource.remove(bfData[i]); //remove all
+            }
+            bf3.value("Custom");
+            $("#cli_blastfieldcustom3").show();
+            $("#cli12").val(citemplate.BlastField3);
+        }
+        if (citemplate.BlastField4 != null) {
+            var bf4 = $("#cli_blastfieldvalue4").data("kendoDropDownList");
+            var bfData = bf4.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf4.dataSource.remove(bfData[i]); //remove all
+            }
+            bf4.value("Custom");
+            $("#cli_blastfieldcustom4").show();
+            $("#cli13").val(citemplate.BlastField4);
+        }
+        if (citemplate.BlastField5 != null) {
+            var bf5 = $("#cli_blastfieldvalue5").data("kendoDropDownList");
+            var bfData = bf5.dataSource.data();
+            for (i = 1; i = bfData.length - 1; i++) {
+                bf5.dataSource.remove(bfData[i]); //remove all
+            }
+            bf5.value("Custom");
+            $("#cli_blastfieldcustom5").show();
+            $("#cli14").val(citemplate.BlastField5);
+        }
+    }
+    function DEmail_FormSelected(select) {
+        var form = select.form;
+        $("#LinkAlias_formID").val(form.Id);
+        $("#LinkAlias_formName").text(form.Name);
+        if (form.Name != "")
+            $("#LinkAlias_formSelectItem").removeAttr("style");
+        else
+            $("#LinkAlias_formSelectItem").css("display", "none");
+    }
+    function DEmail_MessageSelected(select) {
+        var message = select.message;
+        $("#LinkAlias_messageID").val(message.MessageID);
+        $("#LinkAlias_messageName").text(message.MessageName);
+        if (title == 'Direct_Click')
+        {
+            if (message.MessageName != "")
+                $("#LinkAlias_messageSelectItem").removeAttr("style");
+            else
+                $("#LinkAlias_messageSelectItem").css("display", "none");
+        }
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetMessageEnvelope", "Web")?messageID=' + message.MessageID,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            success: function (response) {
+                if (response.FromEmail.length > 0 && response.ReplyTo.length > 0 && response.FromName.length > 0 && response.EmailSubject.length > 0) {
+                    $("#cli06").val(response.FromEmail);
+                    $("#cli07").val(response.ReplyTo);
+                    $("#cli08").val(response.FromName);
+                    $("#cli09").val(response.EmailSubject);
+                }
+
+            },
+            error: function (e) {
+
+            }
+        });
+
+    }
+    function DEmail_linkAliasSelected(select) {
+        var link = select.link;
+        $("#LinkAlias_Link").val(link.Link);
+        $("#LinkAlias_Alias").text(link.Alias);
+    }
+    function disbleEmailClickControls()
+    {
+        $("#EmailClickProp :input").attr("disabled", true);
+        cli_enableblastfields(false);
+        $("#cli01").attr("disabled", true);
+
+    }
+    function cli_enableblastfields(enable) {
+        $("#cli_blastfieldvalue1").data("kendoDropDownList").enable(enable);
+        $("#cli_blastfieldvalue2").data("kendoDropDownList").enable(enable);
+        $("#cli_blastfieldvalue3").data("kendoDropDownList").enable(enable);
+        $("#cli_blastfieldvalue4").data("kendoDropDownList").enable(enable);
+        $("#cli_blastfieldvalue5").data("kendoDropDownList").enable(enable);
+    }
+    function parseIsoDatetime(dtstr) {
+        var dt = dtstr.split(/[: T-]/).map(parseFloat);
+        return new Date(dt[0], dt[1] - 1, dt[2], dt[3] || 0, dt[4] || 0, dt[5] || 0, 0);
+    }
+</script>

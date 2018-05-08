@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="MozaicAuthentication" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <xs:element name="GetPublishers">
+        <xs:complexType>
+          <xs:sequence/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPublishersResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetPublishersResult" nillable="true" type="q1:ArrayOfPublisher" xmlns:q1="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPublications">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="publisherID" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetPublicationsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetPublicationsResult" nillable="true" type="q2:ArrayOfPublication" xmlns:q2="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetIssues">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="publicationID" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetIssuesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetIssuesResult" nillable="true" type="q3:ArrayOfIssue" xmlns:q3="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetUrlTokenPlaceholder">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueID" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetUrlTokenPlaceholderResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="GetUrlTokenPlaceholderResult" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SendEditionNotification">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueID" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="notification" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SendEditionNotificationResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="SendEditionNotificationResult" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AuthorizeByToken">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueTokenAuthentication" nillable="true" type="q4:IssueTokenAuthentication" xmlns:q4="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AuthorizeByTokenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="AuthorizeByTokenResult" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="authorizeByKey">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueKeyAuthentication" nillable="true" type="q5:IssueKeyAuthentication" xmlns:q5="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="authorizeByKeyResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="authorizeByKeyResult" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAuthorizedIssues">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="publicationTokenAuthentication" nillable="true" type="q6:PublicationTokenAuthentication" xmlns:q6="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getAuthorizedIssuesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="getAuthorizedIssuesResult" nillable="true" type="q7:ArrayOfstring" xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getEntitledVersionsForIssueByToken">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueTokenAuthentication" nillable="true" type="q8:IssueTokenAuthentication" xmlns:q8="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getEntitledVersionsForIssueByTokenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="getEntitledVersionsForIssueByTokenResult" nillable="true" type="q9:ArrayOfstring" xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getEntitledVersionsForIssueByKey">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="issueKeyAuthentication" nillable="true" type="q10:IssueKeyAuthentication" xmlns:q10="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getEntitledVersionsForIssueByKeyResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="getEntitledVersionsForIssueByKeyResult" nillable="true" type="q11:ArrayOfstring" xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AuthorizationRenewal">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="readerEnvironment" type="q12:enuReaderEnvironment" xmlns:q12="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AuthorizationRenewalResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="AuthorizationRenewalResult" nillable="true" type="xs:dateTime"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/">
+      <xs:element name="anyType" nillable="true" type="xs:anyType"/>
+      <xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+      <xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+      <xs:element name="boolean" nillable="true" type="xs:boolean"/>
+      <xs:element name="byte" nillable="true" type="xs:byte"/>
+      <xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+      <xs:element name="decimal" nillable="true" type="xs:decimal"/>
+      <xs:element name="double" nillable="true" type="xs:double"/>
+      <xs:element name="float" nillable="true" type="xs:float"/>
+      <xs:element name="int" nillable="true" type="xs:int"/>
+      <xs:element name="long" nillable="true" type="xs:long"/>
+      <xs:element name="QName" nillable="true" type="xs:QName"/>
+      <xs:element name="short" nillable="true" type="xs:short"/>
+      <xs:element name="string" nillable="true" type="xs:string"/>
+      <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+      <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+      <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+      <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+      <xs:element name="char" nillable="true" type="tns:char"/>
+      <xs:simpleType name="char">
+        <xs:restriction base="xs:int"/>
+      </xs:simpleType>
+      <xs:element name="duration" nillable="true" type="tns:duration"/>
+      <xs:simpleType name="duration">
+        <xs:restriction base="xs:duration">
+          <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+          <xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+          <xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="guid" nillable="true" type="tns:guid"/>
+      <xs:simpleType name="guid">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:attribute name="FactoryType" type="xs:QName"/>
+      <xs:attribute name="Id" type="xs:ID"/>
+      <xs:attribute name="Ref" type="xs:IDREF"/>
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/MetaPress.ThirdPartyAPI">
+      <xs:complexType name="ArrayOfPublisher">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Publisher" nillable="true" type="tns:Publisher"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPublisher" nillable="true" type="tns:ArrayOfPublisher"/>
+      <xs:complexType name="Publisher">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Publisher" nillable="true" type="tns:Publisher"/>
+      <xs:complexType name="ArrayOfPublication">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Publication" nillable="true" type="tns:Publication"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfPublication" nillable="true" type="tns:ArrayOfPublication"/>
+      <xs:complexType name="Publication">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Publication" nillable="true" type="tns:Publication"/>
+      <xs:complexType name="ArrayOfIssue">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Issue" nillable="true" type="tns:Issue"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfIssue" nillable="true" type="tns:ArrayOfIssue"/>
+      <xs:complexType name="Issue">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Issue" nillable="true" type="tns:Issue"/>
+      <xs:complexType name="IssueTokenAuthentication">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IssueID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="SubscriberToken" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="IssueTokenAuthentication" nillable="true" type="tns:IssueTokenAuthentication"/>
+      <xs:complexType name="IssueKeyAuthentication">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IssueID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="SubscriberKey" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="IssueKeyAuthentication" nillable="true" type="tns:IssueKeyAuthentication"/>
+      <xs:complexType name="PublicationTokenAuthentication">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PublicationID" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="SubscriberToken" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="PublicationTokenAuthentication" nillable="true" type="tns:PublicationTokenAuthentication"/>
+      <xs:simpleType name="enuReaderEnvironment">
+        <xs:annotation>
+          <xs:appinfo>
+            <ActualType Name="unsignedByte" Namespace="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+      </xs:simpleType>
+      <xs:element name="enuReaderEnvironment" nillable="true" type="tns:enuReaderEnvironment"/>
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+      <xs:complexType name="ArrayOfstring">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="IMozaicContentMapping_GetPublishers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublishers"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetPublishers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublishersResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetPublications_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublications"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetPublications_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPublicationsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetIssues_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetIssues"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetIssues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetIssuesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetUrlTokenPlaceholder_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUrlTokenPlaceholder"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_GetUrlTokenPlaceholder_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUrlTokenPlaceholderResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_SendEditionNotification_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendEditionNotification"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicContentMapping_SendEditionNotification_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendEditionNotificationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_AuthorizeByToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizeByToken"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_AuthorizeByToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizeByTokenResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_authorizeByKey_InputMessage">
+    <wsdl:part name="parameters" element="tns:authorizeByKey"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_authorizeByKey_OutputMessage">
+    <wsdl:part name="parameters" element="tns:authorizeByKeyResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getAuthorizedIssues_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAuthorizedIssues"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getAuthorizedIssues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAuthorizedIssuesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getEntitledVersionsForIssueByToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:getEntitledVersionsForIssueByToken"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getEntitledVersionsForIssueByToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getEntitledVersionsForIssueByTokenResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getEntitledVersionsForIssueByKey_InputMessage">
+    <wsdl:part name="parameters" element="tns:getEntitledVersionsForIssueByKey"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_getEntitledVersionsForIssueByKey_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getEntitledVersionsForIssueByKeyResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_AuthorizationRenewal_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizationRenewal"/>
+  </wsdl:message>
+  <wsdl:message name="IMozaicAuthentication_AuthorizationRenewal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthorizationRenewalResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="IMozaicContentMapping">
+    <wsdl:operation name="GetPublishers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetPublishers" message="tns:IMozaicContentMapping_GetPublishers_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetPublishersResponse" message="tns:IMozaicContentMapping_GetPublishers_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetPublications">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetPublications" message="tns:IMozaicContentMapping_GetPublications_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetPublicationsResponse" message="tns:IMozaicContentMapping_GetPublications_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssues">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetIssues" message="tns:IMozaicContentMapping_GetIssues_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetIssuesResponse" message="tns:IMozaicContentMapping_GetIssues_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetUrlTokenPlaceholder">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetUrlTokenPlaceholder" message="tns:IMozaicContentMapping_GetUrlTokenPlaceholder_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicContentMapping/GetUrlTokenPlaceholderResponse" message="tns:IMozaicContentMapping_GetUrlTokenPlaceholder_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="SendEditionNotification">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicContentMapping/SendEditionNotification" message="tns:IMozaicContentMapping_SendEditionNotification_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicContentMapping/SendEditionNotificationResponse" message="tns:IMozaicContentMapping_SendEditionNotification_OutputMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IMozaicAuthentication">
+    <wsdl:operation name="AuthorizeByToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/AuthorizeByToken" message="tns:IMozaicAuthentication_AuthorizeByToken_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/AuthorizeByTokenResponse" message="tns:IMozaicAuthentication_AuthorizeByToken_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="authorizeByKey">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/authorizeByKey" message="tns:IMozaicAuthentication_authorizeByKey_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/authorizeByKeyResponse" message="tns:IMozaicAuthentication_authorizeByKey_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="getAuthorizedIssues">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/getAuthorizedIssues" message="tns:IMozaicAuthentication_getAuthorizedIssues_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/getAuthorizedIssuesResponse" message="tns:IMozaicAuthentication_getAuthorizedIssues_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="getEntitledVersionsForIssueByToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByToken" message="tns:IMozaicAuthentication_getEntitledVersionsForIssueByToken_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByTokenResponse" message="tns:IMozaicAuthentication_getEntitledVersionsForIssueByToken_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="getEntitledVersionsForIssueByKey">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByKey" message="tns:IMozaicAuthentication_getEntitledVersionsForIssueByKey_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByKeyResponse" message="tns:IMozaicAuthentication_getEntitledVersionsForIssueByKey_OutputMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="AuthorizationRenewal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMozaicAuthentication/AuthorizationRenewal" message="tns:IMozaicAuthentication_AuthorizationRenewal_InputMessage"/>
+      <wsdl:output wsaw:Action="http://tempuri.org/IMozaicAuthentication/AuthorizationRenewalResponse" message="tns:IMozaicAuthentication_AuthorizationRenewal_OutputMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IMozaicContentMapping" type="tns:IMozaicContentMapping">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetPublishers">
+      <soap:operation soapAction="http://tempuri.org/IMozaicContentMapping/GetPublishers" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPublications">
+      <soap:operation soapAction="http://tempuri.org/IMozaicContentMapping/GetPublications" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssues">
+      <soap:operation soapAction="http://tempuri.org/IMozaicContentMapping/GetIssues" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUrlTokenPlaceholder">
+      <soap:operation soapAction="http://tempuri.org/IMozaicContentMapping/GetUrlTokenPlaceholder" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendEditionNotification">
+      <soap:operation soapAction="http://tempuri.org/IMozaicContentMapping/SendEditionNotification" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_IMozaicAuthentication" type="tns:IMozaicAuthentication">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AuthorizeByToken">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/AuthorizeByToken" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authorizeByKey">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/authorizeByKey" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAuthorizedIssues">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/getAuthorizedIssues" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEntitledVersionsForIssueByToken">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByToken" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEntitledVersionsForIssueByKey">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/getEntitledVersionsForIssueByKey" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthorizationRenewal">
+      <soap:operation soapAction="http://tempuri.org/IMozaicAuthentication/AuthorizationRenewal" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MozaicAuthentication">
+    <wsdl:port name="BasicHttpBinding_IMozaicContentMapping" binding="tns:BasicHttpBinding_IMozaicContentMapping">
+      <soap:address location="http://dev.thirdpartyapi.mozaic.com/MozaicAuthentication.svc"/>
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_IMozaicAuthentication" binding="tns:BasicHttpBinding_IMozaicAuthentication">
+      <soap:address location="http://dev.thirdpartyapi.mozaic.com/MozaicAuthentication.svc"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

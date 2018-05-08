@@ -1,0 +1,51 @@
+﻿@using KMEnums
+
+<script type="text/ng-template" id="@(ControlType.Hidden)Properties">
+    <ng-form name="form">
+        <div class="proptitle">Hidden Properties</div>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Field Name:</label>
+                <input type="text" ng-model="control.Label" />
+            </div>
+            <div class="formitem formitemlabeltop">
+                <label>Database Field:</label>
+                <select kendo-drop-down-list="fieldList" ng-model="control.FieldId" name="FieldId" k-option-label="'Select'" data-message-required="Field ID Required" required 
+                        k-options='{ dataTextField: "ShortName", dataValueField: "GroupDataFieldsID", dataSource: fieldsDataSource }'>
+                </select>
+                <span class="error" ng-show="form.submitted && form.FieldId.$invalid">
+                    <span ng-show="form.FieldId.$error.required">Select Field ID</span>
+                </span>
+            </div>
+            <div class="formitem">
+                <button type="button" ng-click="openAddFieldWindow()" class="btn btn-blue2 k-button">Add<i class="km-icon icon-kmplus-circled-1"></i></button>
+            </div>
+        </div>
+        <div class="params">
+            <div class="subtitle">Value</div>
+            <div class="formbox">
+                <div class="formitem">
+                    <input type="text" ng-model="control.Value">
+                </div>
+                <div class="formitem" ng-if="control.FormType != @((int)FormType.AutoSubmit)">
+                    <span style="display: block">
+                        <label><input type="radio" ng-model="control.PopulationType" value="@((int)PopulationType.None)" />Do not prepopulate</label>
+                    </span>
+                    <span style="display: block">
+                        <label><input type="radio" ng-model="control.PopulationType" value="@((int)PopulationType.Querystring)" />Prepopulate from querystring</label>
+                    </span>
+                    @*<span style="display: block">
+                        <label><input type="radio" ng-model="control.PopulationType" value="@((int)PopulationType.Database)" />Prepopulate from database</label>
+                    </span>*@
+                </div>
+                <div class="formitem" ng-if="control.FormType == @((int)FormType.AutoSubmit)" ng-init="control.PopulationType=@((int)PopulationType.Querystring)">
+                    <label><input type="radio" ng-model="control.PopulationType" value="@((int)PopulationType.Querystring)" />Prepopulate from querystring</label>
+                </div>
+                <div class="formitem formitemlabeltop" ng-show="control.PopulationType == @((int)PopulationType.Querystring)">
+                    <label>Querystring Name</label>
+                    <input type="text" ng-model="control.Parameter" />
+                </div>
+            </div>
+        </div>
+    </ng-form>
+</script>

@@ -1,0 +1,36 @@
+﻿@using Kendo.Mvc.UI
+
+<style>
+    .k-list > .k-item.k-first {
+        padding-top: 2em;        
+    }
+    .k-list > .k-item.k-first > .k-group {
+        font-size: 10px;
+    }
+    .k-popup > .k-group-header, .k-popup > .k-virtual-wrap > .k-group-header {
+        font-size: 10px;
+    }
+</style>
+
+@(Html.Kendo().DropDownList()
+              .Name("selectedMAFField")
+              .DataTextField("Text")
+              .DataValueField("Value")
+              .Events(e =>
+              {
+                  e.Select("onSelectMAFField");
+                  e.Change("onChangeMAFField");
+              })
+            .DataSource(d => d.Read(r => r.Action("GetMAFFields", "FileMapperWizard")))
+            //  .DataSource(source => source
+            //    .Custom()
+            //    //.Group(g => g.Add("Group", typeof(string)))
+            //    .Transport(transport => transport
+            //        .Read(read =>
+            //        {
+            //            read.Action("GetMAFFields", "FileMapperWizard");
+            //        })
+            //    )
+            //)
+        )                  
+

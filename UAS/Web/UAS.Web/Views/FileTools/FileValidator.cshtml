@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "File Validator";
+}
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Upload").click(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            var has_selected_file = $('#FileUpload').filter(function () {
+                return $.trim(this.value) != ''
+            }).length > 0;
+
+            if (has_selected_file == true) {
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("FileUpload").files[i];
+
+                    formData.append("FileUpload", file);
+                }
+                var pt = $('input[name=Processing]:checked').val();
+                formData.append("ProcessType", pt.toString());
+                $.ajax({
+                    type: "POST",
+                    url: '/UAS.Web/FileTools/FileValidator',
+                    data: formData,
+                    //dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $("#divShowResults").html(data);
+                    },
+                    error: function (error) {
+                        alert("An error has occured!!!" + JSON.stringify(error));
+                    }
+                });
+            }
+            else {
+                alert("No file was selected.");
+            }
+        });
+    });
+</script>
+
+<style>
+    .iradio_line-blue 
+    {
+        float: left;
+        margin: 0px 5px 10px 5px;
+        font-size: 13px;
+        color: #fff;
+        background: #2489c5;
+        border: none;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        padding: 0px 5px 0px 5px;
+    }     
+</style>
+
+@using (Html.BeginForm("FileValidator", "FileTools", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <div style="float: left; margin: 10px;">
+            <label class="form-lable" for="FileUpload">Select a File to Validate:</label>
+        </div>
+        <div style="float: left; margin: 10px;">
+            <input type="file" id="FileUpload" />
+        </div>
+    </div>
+    <div style="clear: both; margin: 0px 0px 0px 10px;">
+        <label class="form-lable">Select a Processing Type:</label>
+    </div>
+    <div style="clear: both;">
+        <div class="iradio_line-blue">
+            @Html.RadioButton("Processing", "Local", new { id = "local", @checked = true })
+            @Html.Label("local", "Local Processing")
+        </div>
+        <div class="iradio_line-blue">
+            @Html.RadioButton("Processing", "Offline", new { id = "offline" })
+            @Html.Label("offline", "Offline Processing")
+        </div>
+    </div>
+    <div style="clear: both;">
+        <input type="button" id="Upload" value="Upload" class="btn btn-blue2 k-button" />
+    </div>
+}
+
+<div style="float: left; margin: 10px">
+    @{
+        if (ViewBag.Message != null && string.IsNullOrEmpty(ViewBag.Message) == false)
+        {
+            if (ViewBag.IsError)
+            {
+                <span style="color:red;">@ViewBag.Message</span>
+            }
+            else
+            {
+                <span style="color:green;">@ViewBag.Message</span>
+            }
+        }
+    }
+</div>
+
+<div id="divShowResults" style="margin: 20px 10px 10px 10px;">
+
+</div>

@@ -1,0 +1,721 @@
+﻿@model UAS.Web.Models.FileMapperWizard.SetupViewModel
+
+<script language="JavaScript" type="text/JavaScript">
+
+    $(function(){
+        $("#setupNext").click(function(){
+            if (!$("#frmSetupFMW").valid()){
+                $("#fileNameErrorMsg").text("Unique file name is required");
+                return false;
+            }
+            else{
+                $("#fileNameErrorMsg").text("");
+                ValidateSetup();
+            }
+        });
+    });
+
+    $(document).ready(function () {        
+        sessionStorage.isCustomRule = false;
+        sessionStorage.activeRuleTab = "";
+        sessionStorage.acitveRuleTabIndex = -1;
+        sessionStorage.ruleCurrentIndex = -1;
+        sessionStorage.ruleSetId = 0;
+
+        var extension = @Html.Raw(Json.Encode(Model.Extension));
+
+        if (@Html.Raw(Json.Encode(Model.IsNewFile)) == true) {
+            $("#trDelimeter").hide();
+            $("#trQuotes").hide();
+        } else if (extension.toString().toUpperCase() == '.XLS' || extension.toString().toUpperCase() == '.XLSX') {
+            $("#trDelimeter").hide();
+            $("#trQuotes").hide();
+        }
+
+        var servFeatID = @Model.ServiceFeatureID;
+        var circ = @Html.Raw(Json.Encode(Model.isCirc));
+        var qdate = '@Model.QDateFormat';
+        if (qdate == '') {
+            qdate = 'MMDDYYYY';
+        }
+        var delimiter = '@Model.Delimeter';
+        var hasQuote = '@Model.HasQuotation';
+        var isFull = '@Model.IsFullFile';
+
+        if (circ == true) {
+            var productId = @Model.PublicationID;
+            var dbFileTypeId = @Model.DatabaseFileTypeID;
+
+            BindDropDownList({
+                ControlID: "fileSetup_kddlProduct",
+                URL: targetProductsNoDefaultUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "-- Select --",
+                DataType: "json",
+                SelectedValue: productId
+            });    
+            $("#fileSetup_kddlProduct").closest('.k-dropdown').addClass('form-control');        
+            BindDropDownList({
+                ControlID: "fileSetup_kddlServiceFeature",
+                URL: targetDatabaseFileTypesNoDefaultUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "-- Select --",
+                DataType: "json",
+                SelectedValue: dbFileTypeId
+            });
+        } else {
+            BindDropDownList({
+                ControlID: "fileSetup_kddlServiceFeature",
+                URL: targetUadServiceFeaturesNoDefaultUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "-- Select --",
+                DataType: "json",
+                SelectedValue: servFeatID
+            });
+        }
+
+        BindDropDownList({
+            ControlID: "fileSetup_kddlQDateFormat",
+            URL: targetQDateFormatUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: qdate
+        });
+        BindDropDownList({
+            ControlID: "fileSetup_kddlDelimiter",
+            URL: targetSourceFileDelimiterUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: delimiter
+        });
+        BindDropDownList({
+            ControlID: "fileSetup_kddlHasQuotation",
+            URL: targetYesNoUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: hasQuote
+        });
+        BindDropDownList({
+            ControlID: "fileSetup_kddlIsFullFile",
+            URL: targetYesNoUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json",
+            SelectedValue: isFull
+        });
+
+        $("#fileSetup_kddlServiceFeature").closest('.k-dropdown').addClass('form-control');
+        $("#fileSetup_kddlQDateFormat").closest('.k-dropdown').addClass('form-control');
+        $("#fileSetup_kddlDelimiter").closest('.k-dropdown').addClass('form-control');
+        $("#fileSetup_kddlHasQuotation").closest('.k-dropdown').addClass('form-control');
+        $("#fileSetup_kddlIsFullFile").closest('.k-dropdown').addClass('form-control');
+    });
+
+    function hideProductValidation() {  
+        $("#fileSetup_kddlProduct").closest('.form-group').find('div.help-block').html('');              
+        $("#fileSetup_kddlProduct").kendoValidator().data("kendoValidator").hideMessages();
+    }
+
+    function hideProcessValidation() {          
+        $("#fileSetup_kddlServiceFeature").closest('.form-group').find('div.help-block').html('');      
+        $("#fileSetup_kddlServiceFeature").kendoValidator().data("kendoValidator").hideMessages();
+    }
+
+    function ValidateSetup() {
+        var errors = "";
+        var hasError = false;
+        var pubid = 0;
+        var sfid = 0;
+        var dbft = 0;
+        var qdate = "";
+        var delimiter = "";
+        var hasQuote = "";
+        var isFull = "";
+        
+        var productDropdownList = $("#fileSetup_kddlProduct").data("kendoDropDownList");
+        if (productDropdownList != null && productDropdownList.value() != "Product") {
+            pubid = productDropdownList.value();
+        }
+
+        var serviceFeatureDropdownList = $("#fileSetup_kddlServiceFeature").data("kendoDropDownList");
+        if (serviceFeatureDropdownList.value() != "0") {
+            sfid = serviceFeatureDropdownList.value();
+        }
+
+        var databaseFileTypeDropdownList = $("#fileSetup_kddlServiceFeature").data("kendoDropDownList");
+        if (databaseFileTypeDropdownList != null && databaseFileTypeDropdownList.value() != "0") {
+            dbft = databaseFileTypeDropdownList.value();
+        }
+
+        var qDateFormatDropdownList = $("#fileSetup_kddlQDateFormat").data("kendoDropDownList");
+        qdate = qDateFormatDropdownList.value();
+
+        var delimiterDropdownList = $("#fileSetup_kddlDelimiter").data("kendoDropDownList");
+        delimiter = delimiterDropdownList.value();
+
+        var hasQuotationDropdownList = $("#fileSetup_kddlHasQuotation").data("kendoDropDownList");
+        hasQuote = hasQuotationDropdownList.value();
+
+        var isFullFileproductDropdownList = $("#fileSetup_kddlIsFullFile").data("kendoDropDownList");
+        isFull = isFullFileproductDropdownList.value();
+       
+        var isCirc = @Html.Raw(Json.Encode(Model.isCirc));
+                
+        var productValidator = $("#fileSetup_kddlProduct").kendoValidator().data("kendoValidator");        
+        if (isCirc) {            
+            if (!productValidator.validate()) {      
+                hasError = true;          
+                productValidator.hideMessages();
+                $("#fileSetup_kddlProduct").closest('.form-group').removeClass('has-success has-error').addClass('has-error');                
+                $("#fileSetup_kddlProduct").closest('.form-group').find('span.field-validation-error').text('');
+                $("#fileSetup_kddlProduct").closest('.form-group').find('div.help-block').html('<ul class="list-unstyled" style="color: #b94a48;"><li>Please fill out this field.</li></ul>');
+            }
+        }
+
+        var processValidator = $("#fileSetup_kddlServiceFeature").kendoValidator().data("kendoValidator");                   
+        if (!processValidator.validate()) {  
+            hasError = true;              
+            processValidator.hideMessages();
+            $("#fileSetup_kddlServiceFeature").closest('.form-group').removeClass('has-success has-error').addClass('has-error');                
+            $("#fileSetup_kddlServiceFeature").closest('.form-group').find('span.field-validation-error').text('');
+            $("#fileSetup_kddlServiceFeature").closest('.form-group').find('div.help-block').html('<ul class="list-unstyled" style="color: #b94a48;"><li>Please fill out this field.</li></ul>');
+        }        
+
+
+        if (isCirc && pubid == "") {            
+            hasError = true;
+        }        
+        if (sfid == "") {            
+            hasError = true;
+        }
+        if (qdate == "") {            
+            hasError = true;
+        }
+        if (delimiter == "") {            
+            hasError = true;
+        }
+        if (hasQuote == "") {            
+            hasError = true;
+        }
+        if (isFull == "") {            
+            hasError = true;
+        }
+
+        var modelData = {
+            FileSaveAsName: $("#FileSaveAsName").val(),
+            SourceFileID: $("#SourceFileId").val()
+        }
+        $.ajax({
+            url: '/UAS.Web/FileMapperWizard/ValidateSetup',
+            type: "POST",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+                if (!returnData.IsValid) {
+                    errors = errors + "<li>" + returnData.ErrorMessage + "</li>";
+                    hasError = true;
+                }
+                if (hasError) {
+                    if (errors.length > 0) {
+                        errors = "<h3>Errors</h3><ul style='list-style-type:disc; color: #b94a48;'>" + errors + "</ul>";
+                        $("#div_SetupErrorList").html(errors);
+                    }
+                } else {
+                    $("#div_SetupErrorList").html("");
+                    SaveSetup();
+                }
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+
+
+    }
+
+    function SaveSetup() {
+        var pubid = 0;
+        var sfid = 0;
+        var dbft = 0;
+        var qdate = "";
+        var delimiter = "";
+        var hasQuote = "";
+        var isFull = "";
+        var ext = "";
+
+        var productDropdownList = $("#fileSetup_kddlProduct").data("kendoDropDownList");
+        if (productDropdownList != null && productDropdownList.value() != "Product")
+            pubid = productDropdownList.value();
+
+        var serviceFeatureDropdownList = $("#fileSetup_kddlServiceFeature").data("kendoDropDownList");
+        if (serviceFeatureDropdownList.value() != "0")
+            sfid = serviceFeatureDropdownList.value();
+
+        var databaseFileTypeDropdownList = $("#fileSetup_kddlServiceFeature").data("kendoDropDownList");
+        if (databaseFileTypeDropdownList != null && databaseFileTypeDropdownList.value() != "0")
+            dbft = databaseFileTypeDropdownList.value();
+
+        var qDateFormatDropdownList = $("#fileSetup_kddlQDateFormat").data("kendoDropDownList");
+        qdate = qDateFormatDropdownList.value();
+
+        var delimiterDropdownList = $("#fileSetup_kddlDelimiter").data("kendoDropDownList");
+        delimiter = delimiterDropdownList.value();
+
+        var hasQuotationDropdownList = $("#fileSetup_kddlHasQuotation").data("kendoDropDownList");
+        hasQuote = hasQuotationDropdownList.value();
+
+        var isFullFileproductDropdownList = $("#fileSetup_kddlIsFullFile").data("kendoDropDownList");
+        isFull = isFullFileproductDropdownList.value();
+
+        var isCirc = @Html.Raw(Json.Encode(Model.isCirc));
+
+        var modelData = {
+            IsCirculation: isCirc,
+            ClientId: @Html.Raw(Json.Encode(Model.ClientId)),
+            SourceFileID:  $("#SourceFileId").val(),//@Html.Raw(Json.Encode(Model.SourceFileId)),//if this was a unique file name we will have SFid
+            IsNewFile: $("#IsNewFile").val(),//get from UI via jQuery
+            ServiceFeatureID: sfid,//$("#ddlServiceFeature").val(),//get from UI via jQuery
+            FileSaveAsName: $("#FileSaveAsName").val(),//get from UI via jQuery
+            FilePath: $("#IncomingFile").val(),
+            IsFullFile: isFull,//$("#ddlIsFullFile").val(),//get from UI via jQuery
+            Matching: "",//$("#ddlMatching").val(), //get from UI via jQuery - during column mapping validation if "default" not selected for Matching make sure field selected is mapped
+            Delimeter: delimiter,//$("#ddlDelimiter").val(),//get from UI via jQuery
+            HasQuotation: hasQuote,//$("#ddlHasQuotes").val(),//get from UI via jQuery
+            QDateFormat: qdate,//$("#ddlQDateFormat").val(),//get from UI via jQuery
+            ServiceID: $("#ServiceID").val(),
+            DatabaseFileTypeID: dbft,//$("#ddlFeatures").val(),
+            PublicationID: pubid,
+            Extension: $("#Extension").val()
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/SaveSetup",
+            //type: "POST",
+            data: modelData,
+            traditional: true,
+            //cache: false,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if(tabs != null){
+                    var tabIndex = 1;//vbCurrentStep;//currentStep + 1
+                    var prevIndex = tabIndex - 1;//currentStep on Index
+                    if(prevIndex <= 0){
+                        prevIndex = 0;
+                    }
+                    $("#setuptab").html('');
+                    var item = tabs.contentElement(tabIndex);
+                    $(item).html(returnData);
+
+                    tabs.select(tabIndex);
+                    //order is important here incase we return back an error and need to display step 1 again
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), false);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), true);
+
+                    $("#fileNameErrorMsg").text("");
+                }
+                //return false;
+                //0 = setup
+                //1 = MapColumns
+                //2 = Rules
+                //3 = Review
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#fileUploadName").html('No file chosen.');
+
+        $('#NewFileUploadButton').bind("click" , function () {
+            $('#FileUpload').click();
+        });
+
+        $("input[name='FileUpload']").change(function() {            
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            var has_selected_file = $('#FileUpload').filter(function () {
+                return $.trim(this.value) != ''
+            }).length > 0;
+
+            if (totalFiles > 1) {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                    text: "Multiple files were selected. Please only select one to map.",
+                    autoClose: false,
+                    IsOpen: false
+                });
+            } else if (has_selected_file == true) {
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("FileUpload").files[i];
+
+                    formData.append("DataFile", file);
+                }                
+                formData.append("messageId", MessageId);
+                formData.append("isNewFile", $("#IsNewFile").val());                
+                
+                var fileElement = document.getElementById("FileUpload").files[0];
+                var fileExtension = "";
+                if (fileElement.name.lastIndexOf(".") > 0) {
+                    fileExtension = fileElement.name.substring(fileElement.name.lastIndexOf(".") + 1, fileElement.name.length);
+                }
+                
+                if (fileExtension.toLowerCase() == "xls" || fileExtension.toLowerCase() == "xlsx" || fileExtension.toLowerCase() == "csv" || fileExtension.toLowerCase() == "tsv" ||
+                    fileExtension.toLowerCase() == "txt" || fileExtension.toLowerCase() == "json" || fileExtension.toLowerCase() == "xml") {
+                    $("#fileUploadName").html(fileElement.name);                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/UAS.Web/FileMapperWizard/UploadTempFiles",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            FileCheckResults(data);
+                        },
+                        error: function (error) {
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                                text: "Error occurred loading choosen file.",
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        }
+                    });
+                }
+                else {
+                    $("#FileUpload").replaceWith($("#FileUpload").val('').clone(true));
+                    $("#fileUploadName").html('No file chosen.');
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: "You must select one of the following file formats for upload. 'xls, xlsx, csv, tsv, txt, json, xml'",
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }                
+            }
+            else {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                    text: "No file was selected.",
+                    autoClose: false,
+                    IsOpen: false
+                });
+            }
+        });
+    });
+
+
+    function checkFileName(clientId) {        
+        var isNew = $("#IsNewFile").val() == "True" || $("#IsNewFile").val() == "true" ? true : false;
+        if(isNew == true)
+        {
+            if(clientId == 0)
+                clientId = @Html.Raw(Json.Encode(Model.ClientId));
+            var fn = $("#FileSaveAsName").val();
+            var filePath = $("#FileUpload").val();//$("#mapFile").val();  $("#IncomingFile").val()
+            var modelData = {
+                ClientId: clientId,
+                FileName: fn,
+                //FilePath: filePath,
+                IsNewFile: $("#IsNewFile").val()
+            }
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/CheckFileName",
+                type: "POST",
+                data: modelData,
+                traditional: true,
+                cache: false,
+                success: function (returnData) {
+                    FileCheckResults(returnData);
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    }
+    function FileCheckResults(response){
+        var resp = response.split('|')
+        //sfId.ToString() + "|" + physicalPath.ToString() + "|" + fNameNoExt + "|" + ext + "|" + error
+        var sfId = resp[0].replace("{\"status\":\"","");
+        var filePath = resp[1];
+        var fullName = resp[2];
+        var ext = resp[3];
+        var error = resp[4].replace("}","");
+
+        //var clientId = @Html.Raw(Json.Encode(Model.ClientId));
+        //var fileBrowser = $("#files");
+        //$("#files").val(fileBrowser.val());
+        //var fileNameWithExt = filePath.split('\\').pop().split('/').pop();//fileBrowser.value.split('\\').pop().split('/').pop();
+        document.getElementById('FileSaveAsName').value = fullName;
+        document.getElementById('Extension').value = "." + ext;
+
+        if (ext.endsWith("xls") || ext.endsWith("xlsx") || ext.endsWith("json") || ext.endsWith("xml"))
+        {
+            //hide delimeter / quotes
+            $("#trDelimeter").hide();
+            $("#trQuotes").hide();
+        }
+        else {
+            $("#trDelimeter").show();
+            $("#trQuotes").show();
+        }
+
+        //$("#IncomingFile").val(fullName);
+        $("#SourceFileId").val(sfId);
+        //var check =  $("#IncomingFile").val();
+        if (sfId == 0){
+            $("#FileSaveAsName").focus();
+            // $("#setupNext").prop("disabled", true );
+            $("#errorContainer").html(error);
+            $("#fileNameErrorMsg").text("Unique file name is required");
+        }
+        else{
+            //$("#setupNext").prop("disabled", false);
+            $("#errorContainer").html("");
+            $("#fileNameErrorMsg").text("");
+            $("#div_SetupErrorList").html("");
+        }
+    }
+    function CheckFileExtension(fileBrowser)
+    {
+        var clientId = @Html.Raw(Json.Encode(Model.ClientId));
+        //$("#IncomingFile").val(fileBrowser.value);
+        var fullName = fileBrowser.value.split('\\').pop().split('/').pop();
+        //document.getElementById('mapFileSaveAs').value = fullName;
+
+        if (fullName.endsWith("xls") || fullName.endsWith("xlsx") || fullName.endsWith("json") || fullName.endsWith("xml"))
+        {
+            //hide delimeter / quotes
+            $("#trDelimeter").hide();
+            $("#trQuotes").hide();
+        }
+        else {
+            $("#trDelimeter").show();
+            $("#trQuotes").show();
+        }
+
+        checkFileName(clientId);
+    }
+    function onComplete(e) {
+    }
+    function onSuccess(e) {
+        FileCheckResults(e.response.status);
+    }
+    function getFileInfo(e) {
+        return $.map(e.files, function(file) {
+            var info = file.name;
+
+            // File size is not available in all browsers
+            //if (file.size > 0) {
+            //    info  += " (" + Math.ceil(file.size / 1024) + " KB)";
+            //}
+            return info;
+        }).join(", ");
+    }
+    function onChangeIsNewFile(){
+        var v =  $("#IsNewFile").val();
+        IsNewFile =  v;
+    }
+    var MessageId ='@ViewBag.messageId';
+</script>
+
+
+@using (Html.BeginForm("Index", "FileMapperWizard", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "frmSetupFMW", data_toggle = "validator" }))
+{
+    @Html.HiddenFor(m => m.IncomingFile)
+    @Html.HiddenFor(m => m.SourceFileId)
+    @Html.HiddenFor(m => m.ServiceID)
+    @Html.HiddenFor(m => m.IsNewFile)
+    @Html.HiddenFor(m => m.Extension)
+
+    <div id="setuptab" style="margin: 0 auto; width:99%">
+        <div style="width: 50%; margin: 0 auto;">
+            <h3>Step 1 - File Schema</h3>
+        </div>
+        <div id="div_SetupErrorList">
+
+        </div>
+
+        <table class="filedetails">
+            <tr class="filedetailsrow">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.FileSaveAsName, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                @Html.TextBoxFor(m => m.FileSaveAsName, new
+                                   {
+                                       //@id = "mapFileSaveAs",
+                                       @onchange = "checkFileName(0)",
+                                       @class = "form-control",
+                                       style = "padding: 0px 4px 0px 4px;",
+                                       type = "text",
+                                       required = "required",
+                                       data_maxlength = "50",
+                                       data_required_error = "Please provide File Name.",
+                                       data_error = "File Name currently in use, file name must be unique."
+                                   })
+                            </div>
+                            <div style="float: right;">
+                                <div style="color: #b94a48;" id="fileNameErrorMsg" class="help-block with-errors"></div>
+                            </div>                            
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="filedetailsrow">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.DataFile, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <span id="fileUploadName"></span>
+                            <input type="button" id="NewFileUploadButton" value="Choose File" class="btn btn-blue2 k-button" />
+                            <input name="FileUpload" type="file" id="FileUpload" style="display: none;" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            @if (Model.isCirc)
+            {
+                <tr class="filedetailsrow">
+                    <td colspan="2">
+                        <div class="form-group" style="margin: 0px;">
+                            <div style="width: 175px; float: left;">
+                                @Html.LabelFor(m => m.PublicationID, new { @class = "control-label" })
+                            </div>
+                            <div style="width: 400px; float: right;">
+                                <div style="float: left;">
+                                    <input id="fileSetup_kddlProduct" name="Product" required="required" style="width:200px; border-radius: 10px; height: 100%;" onblur="hideProductValidation()"/>
+                                </div>
+                                <div style="float: right;">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            <tr class="filedetailsrow">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.ServiceFeatureID, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                <input id="fileSetup_kddlServiceFeature" name="ServiceFeature" required="required" style="width:200px; border-radius: 10px; height: 100%;" onblur="hideProcessValidation()" />
+                            </div>
+                            <div style="float: right;">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="filedetailsrow">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.QDateFormat, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                <input id="fileSetup_kddlQDateFormat" name="QDateFormat" required="required" style="width:200px; border-radius: 10px; height: 100%;" />
+                            </div>
+                            <div style="float: right;">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>                        
+            <tr class="filedetailsrow" id="trDelimeter">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.Delimeter, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                <input id="fileSetup_kddlDelimiter" name="Delimeter" required="required" style="width:200px; border-radius: 10px; height: 100%;" />
+                            </div>
+                            <div style="float: right;">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="filedetailsrow" id="trQuotes">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.HasQuotation, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                <input id="fileSetup_kddlHasQuotation" name="HasQuotation" required="required" style="width:200px; border-radius: 10px; height: 100%;" />
+                            </div>
+                            <div style="float: right;">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="filedetailsrow">
+                <td colspan="2">
+                    <div class="form-group" style="margin: 0px;">
+                        <div style="width: 175px; float: left;">
+                            @Html.LabelFor(m => m.IsFullFile, new { @class = "control-label" })
+                        </div>
+                        <div style="width: 400px; float: right;">
+                            <div style="float: left;">
+                                <input id="fileSetup_kddlIsFullFile" name="IsFullFile" required="required" style="width:200px; border-radius: 10px; height: 100%;" />
+                            </div>
+                            <div style="float: right;">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="bottomnavbox">
+            <div class="bottomnav">
+                <div class="lbtns">
+                </div>
+                <div class="cbtns">
+                </div>
+                <div class="rbtns">
+                    @Html.Kendo().Button().Name("setupNext").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5 btn-primary", type = "button" })  @*, onclick = "return SaveSetup()"*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

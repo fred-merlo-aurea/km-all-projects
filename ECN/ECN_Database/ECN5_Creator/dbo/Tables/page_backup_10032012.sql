@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[page_backup_10032012] (
+    [PageID]         INT           IDENTITY (1, 1) NOT NULL,
+    [CustomerID]     INT           NULL,
+    [HeaderFooterID] INT           NULL,
+    [QueryValue]     VARCHAR (50)  NULL,
+    [PageTypeCode]   VARCHAR (50)  NULL,
+    [PageName]       VARCHAR (255) NULL,
+    [SourceCode]     TEXT          NULL,
+    [AddDate]        DATETIME      NULL,
+    [HomePageFlag]   VARCHAR (1)   NULL,
+    [DisplayFlag]    VARCHAR (1)   NULL,
+    [PageProperties] VARCHAR (500) NULL,
+    [TemplateID]     INT           NULL,
+    [ContentSlot1]   INT           NULL,
+    [ContentSlot2]   INT           NULL,
+    [ContentSlot3]   INT           NULL,
+    [ContentSlot4]   INT           NULL,
+    [ContentSlot5]   INT           NULL,
+    [ContentSlot6]   INT           NULL,
+    [ContentSlot7]   INT           NULL,
+    [ContentSlot8]   INT           NULL,
+    [ContentSlot9]   INT           NULL,
+    [FolderID]       INT           NULL,
+    [UserID]         INT           NULL,
+    [ModifyDate]     DATETIME      NULL,
+    [PageSize]       INT           NULL
+);
+

@@ -1,0 +1,3758 @@
+﻿@model UAS.Web.Models.UAD.Filter.FilterViewModel
+<style>
+    .field-header {
+        font-family: Tahoma, Arial, sans-serif;
+        font-size: 13px;
+        color: #000000;
+    }
+
+    .k-multiselect-wrap.k-floatwrap .k-button {
+        background-color: white;
+        border: 1px solid gray;
+    }
+    
+    .filterButton {
+        border: solid 1px #015da3;
+        background-color: #015da3;
+        outline: none;
+        display: inline-block;
+        border-radius: 8px;
+        border-width: 1px;
+        box-shadow: none;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 10px;
+        cursor: pointer;
+        height: 27px;
+        color: #ffffff;
+        line-height: 26px;
+        margin: 0 5px;
+        box-shadow: 0;
+        vertical-align: inherit;
+        font-family: "Source Sans Pro",sans-serif;
+        box-sizing: content-box;
+    }
+    .actionButton {
+        background-color: #f47d1f;
+        border: solid 1px #f47d1f;
+        font-size: 12px;
+        width: 90px;
+        font-weight: 500;
+        color: #ffffff;
+        height: 25px;
+        cursor: pointer;
+        border-radius: 8px;
+        font-family: "Source Sans Pro",sans-serif;
+    }
+    .actionButton a{
+        text-decoration:none;
+        color:white;
+    }
+    
+    .labelsmall {
+        font-size: 12px;
+        font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .displayInline {
+        display: inline;
+    }
+
+    .displayNone {
+        display: none;
+    }
+
+    .k-multiselect-wrap > ul > li > span {
+        font-size: 9px;
+    }
+
+    #mainSplitter {
+        font-family: Tahoma, Arial, sans-serif;
+        font-size: 12px;
+    }
+
+        #mainSplitter td {
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        #mainSplitter a {
+            text-decoration: underline;
+        }
+
+            #mainSplitter a.showhide {
+                color: Black;
+                font-size: XX-Small;
+                text-decoration: none;
+            }
+
+            #mainSplitter a.publications, a.standard {
+                font-weight: bold;
+            }
+
+            #mainSplitter a.dimensions {
+                font-weight: normal;
+            }
+
+        #mainSplitter select {
+            border: #c8c8cb solid 1px;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #559edb;
+            font-size: 12px;
+            padding: 6px 0 6px 5px;
+        }
+
+    div.filterpopups td {
+        margin: 0;
+        padding: 0;
+    }
+
+    select[multiple].list_dynamicfilters {
+        width: 200px;
+        height: auto;
+        max-width: 250px;
+        min-width: 70px;
+    }
+
+    select[multiple].stdfilters {
+        width: 200px;
+        height: 100px;
+        max-width: 250px;
+        min-width: 70px;
+    }
+
+    #mainSplitter select option {
+        font-size: 12px;
+        padding: 0;
+    }
+
+
+</style>
+
+<input type="hidden" id="parentControl" value="" />
+<input type="hidden" id="viewtype" value="@Model.ViewType" />
+<input type="hidden" id="reportQuery" value="" />
+@foreach (var filter in Model.filters)
+{
+    <input type="hidden" id="hdnfilterQuery_@filter.FilterNo" value="@filter.FilterQuery" />
+}
+<div id="mainSplitter">
+    <div id="leftPanel" style="overflow-x:hidden;">
+        <div id="AddResetBtnPanel" style="margin-bottom:10px;">
+            <table style="width:95%;margin-left:2.5%;margin-right:2.5%;">
+                <tr>
+                    <td align="center">
+                        <div style="float:left;margin-right:5px;">
+                            @(Html.Kendo()
+                            .Menu()
+                            .Name("MenuLoadButton")
+                            .Direction(MenuDirection.Right)
+                            .Orientation(MenuOrientation.Vertical)
+                            .Animation(false)
+                            .HtmlAttributes(new { width = "90px;" })
+                            .Items(
+                                items => items.Add().Text("Filters").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                    innerItems =>
+                                    {
+                                        innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" }); ;
+                                        innerItems.Add().Text("Default-Circulation").HtmlAttributes(new { onclick = "LoadCircDefaultFilters()" });
+                                        innerItems.Add().Text("Saved").HtmlAttributes(new { onclick = "OpneSavedFiltersPanel()" });
+
+                                    }
+                                )
+                            ))
+                        </div>
+                        <div style="float:left;">
+                            <input type="button" name="btnApplySelectedFilter" onclick="ApplyFilter()" value="Apply" class="btn-blue2 k-button" style="width:60px;">
+                        </div>
+                        <div style="float:left;">
+                            <input type="button" name="btnResetAllFilter" onclick="ResetAllFilter()" value="Reset" class="btn-blue2 k-button" style="width:60px;">
+                        </div>
+                       
+                   </td>
+                </tr>
+            </table>
+        </div>
+        @if (Model.IsCirc)
+        {
+            <button class="accordion">Circulation</button>
+            <div id="circFilter" class="accordion-panel">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+
+                        <td align="left">
+                            <a id="lnkCircFilter" style="font-weight: bold;" onclick="openPopUp('CircPopUpWindow')">
+                                Circulation
+                            </a>
+                            <a id="showMoreLessCircFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                (Hide&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="CircFilterSummary">
+                        <td id="CircFilterSummaryTable"></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+        @if (Model.showBrandPanel && !Model.IsCirc)
+            {
+            <button class="accordion">Brand</button>
+            <div id="BrandFilterPanel" class="accordion-panel">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    @*<tr>
+                            <td><label class="labelsmall-black">Brand</label></td>
+                        </tr>*@
+
+                    <tr>
+                        <td>
+                            @(Html.Kendo().DropDownList()
+                                .Name("ddlBrand")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .BindTo(Model.BrandFilterList)
+                                .OptionLabel("")
+                                //.Events(e => e.Change("onBrandChange"))
+                            )
+
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        }
+
+        @if (Model.showProductPanel && !Model.IsCirc)
+        {
+            <button class="accordion">Product</button>
+            <div id="ProductFilter" class="accordion-panel">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+                        <td align="left">
+
+                            @(Html.Kendo().DropDownList()
+                                .Name("ddlProduct")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .BindTo(Model.ProductFilterList)
+                                .OptionLabel("")
+                                //.Events(e => e.Change("onProductChange"))
+                            )
+                        </td>
+                    </tr>
+                    <tr id="ProductFilterFilterSummary">
+                        <td id="ProductFilterFilterSummaryTable"></td>
+                    </tr>
+                </table>
+            </div>
+        }
+        <button class="accordion">Email</button>
+        <div id="EmailStatusFilter" class="accordion-panel">
+            <table style="width:80%;margin-left:10%;margin-right:10%;">
+                <tr>
+                    <td align="left"><label class="labelsmall-black">Email(Contact Field)</label></td>
+                </tr>
+                <tr>
+                    <td align="left">
+
+                        @(Html.Kendo().MultiSelect()
+                        .Name("lstCtEmail")
+                        .AutoClose(true)
+                        .TagMode(TagMode.Multiple)
+                        .BindTo(Model.standardFilter.YesNoSelectList)
+                        //.Events(e => e.Change("SelectEmail"))
+                        .ClearButton(false)
+                        .HtmlAttributes(new { style = "min-width:100px;max-width:150px;" }))
+                    </td>
+                </tr>
+                <tr id="EmailFilterSummary">
+                    <td id="EmailFilterSummaryTable"></td>
+                </tr>
+                <tr>
+                    <td height="10px"></td>
+                </tr>
+                <tr>
+                    <td align="left"><label class="labelsmall-black">Email Status</label></td>
+                </tr>
+                <tr>
+                    <td align="left">
+
+                        @(Html.Kendo().MultiSelect()
+                        .Name("lstEmailStatus")
+                        .AutoClose(true)
+                        .TagMode(TagMode.Multiple)
+                        .BindTo(Model.standardFilter.EmailStatusList)
+                        //.Events(e => e.Change("SelectEmailStatus"))
+                        .AutoWidth(false)
+                        .ClearButton(false).HtmlAttributes(new { style = "min-width:100px;max-width:150px;" }))
+                    </td>
+                </tr>
+                <tr id="EmailStatusFilterSummary">
+                    <td id="EmailStatusFilterSummaryTable"></td>
+                </tr>
+            </table>
+        </div>
+
+
+        @if (Model.showDCPanel && !Model.IsCirc)
+        {
+            if (Model.DcFilterList != null && Model.DcFilterList.Count > 0)
+            {
+                <button class="accordion">Data Compare File</button>
+                <div id="DCFilterPanel" class="accordion-panel">
+
+                    <table class="tblDynamicFilter" style="width:80%;margin-left:10%;margin-right:10%;">
+                        <tr>
+                            <td><label class="labelsmall-black">Data Compare File</label></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @(Html.Kendo().DropDownList()
+                    .Name("ddlDCFile")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(Model.DcFilterList)
+                    .OptionLabel("")
+                    .Value("")
+                                )
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+            }
+        }
+        @if (Model.showMarketPanel && Model.DynamicData.MarketFilterList != null && Model.DynamicData.MarketFilterList.Count > 0 && !Model.IsCirc)
+        {
+            <button class="accordion">Market</button>
+            <div id="dynamicMarketFilter" class="accordion-panel">
+
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+                        <td>
+                            <a id="lnkMarket" onclick="openMarketFilterPopUp(event)" class="publications">
+                                MARKET
+                            </a>
+                            <a id="showMoreLessMarket" data-showhide="1" onclick="showHideMarketFilterListBox(event)" class="showhide">
+                                (Show&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="trMarket" style="display:none;">
+                        <td>
+                            @Html.ListBox("lstMarket", Model.DynamicData.MarketFilterList, new { onchange = "OnMarketSelectionChanged(this.id)" })
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+
+        @if (Model.showPubTypePanel && Model.DynamicData.PubTypeFilterList != null && Model.DynamicData.PubTypeFilterList.Count > 0 && !Model.IsCirc)
+        {
+            <button class="accordion">Pub Types</button>
+            <div id="dynamicPubTypeFilter" class="accordion-panel">
+                @for (int i = 0; i < Model.DynamicData.PubTypeFilterList.Count; i++)
+                {
+                    if (Model.DynamicData.PubTypeFilterList[i].PubList != null && Model.DynamicData.PubTypeFilterList[i].PubList.Count > 0)
+                    {
+
+                        <table style="width:80%;margin-left:10%;margin-right:10%;">
+                            <tr>
+                                <td>
+                                    <a data-pubtype="@Model.DynamicData.PubTypeFilterList[i].PubTypeID" class="publications" id="lnkPubType_@Model.DynamicData.PubTypeFilterList[i].PubTypeID" onclick="openPubFilterPopUp(event)">
+                                        @Model.DynamicData.PubTypeFilterList[i].PubTypeDisplayName
+                                    </a>
+                                    <a id="showMoreLessPubType_@Model.DynamicData.PubTypeFilterList[i].PubTypeID" data-showhide="1" onclick="showHidePubFilterListBox(event)" class="showhide">
+                                        (Show&hellip;)
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="trPubType_@Model.DynamicData.PubTypeFilterList[i].PubTypeID.ToString()" style="display:none;">
+                                <td>
+                                    @Html.ListBox("lstPubType_" + Model.DynamicData.PubTypeFilterList[i].PubTypeID.ToString(), Model.DynamicData.PubTypeFilterList[i].PubList.ConvertAll(a =>
+                                   {
+                                       return new SelectListItem()
+                                       {
+                                           Text = a.PubName.ToString(),
+                                           Value = a.PubID.ToString(),
+                                           Selected = false
+                                       };
+                                   }), new { @class = "list_dynamicfilters" })
+                                </td>
+                            </tr>
+
+                        </table>
+                    }
+                }
+            </div>
+        }
+        @if (Model.showDimensionPanel && Model.DynamicData.DimensionFilterList != null && Model.DynamicData.DimensionFilterList.Count > 0 && !Model.IsCirc)
+        {
+            <button class="accordion">Demo's</button>
+            <div id="dynamicDemoFilter" class="accordion-panel">
+                @for (int i = 0; i < Model.DynamicData.DimensionFilterList.Count; i++)
+                {
+                    if (Model.DynamicData.DimensionFilterList[i] != null && Model.DynamicData.DimensionFilterList.Count > 0)
+                    {
+                        <table style="width:80%;margin-left:10%;margin-right:10%;">
+                            <tr>
+                                <td>
+                                    <a data-pubtype="@Model.DynamicData.DimensionFilterList[i].Value" class="dimensions" id="lnkDimension_@Model.DynamicData.DimensionFilterList[i].Value" onclick="openDimensionPopup(event)">
+                                        @Model.DynamicData.DimensionFilterList[i].Text
+                                    </a>
+                                    <a id="showMoreLessDimension_@Model.DynamicData.DimensionFilterList[i].Value" data-showhide="1" onclick="showHideDimensionListBox(event)" class="showhide">
+                                        (Show&hellip;)
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="trDimension_@Model.DynamicData.DimensionFilterList[i].Value" style="display:none;">
+                                <td>
+                                    @*<select id="lstDimension_@Model.DynamicData.DimensionFilterList[i].Value" multiple="multiple" name="lstDimension_@Model.DynamicData.DimensionFilterList[i].Value" onchange="ShowSelected(this.id)" data-columref="@Model.DynamicData.DimensionFilterList[i].RefColumn" class="list_dynamicfilters"></select>*@
+                                    @Html.ListBox("lstDimension_" + Model.DynamicData.DimensionFilterList[i].Value.ToString(), Model.DynamicData.DimensionFilterList[i].DimList.ConvertAll(a =>
+                                   {
+                                       return new SelectListItem()
+                                       {
+                                           Text = a.MasterDesc + ' ' + '(' + a.MasterValue + ')',
+                                           Value = a.MasterID.ToString(),
+                                           Selected = false
+                                       };
+                                   }), new { @class = "list_dynamicfilters", data_columref = @Model.DynamicData.DimensionFilterList[i].RefColumn })
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    }
+
+                }
+            </div>
+        }
+
+        @if (Model.showDemoPanel && Model.DynamicData.DemosFilterList != null && Model.DynamicData.DemosFilterList.Count > 0 && Model.IsCirc)
+        {
+            <button class="accordion">Demo's</button>
+            <div id="dynamicDemoFilter" class="accordion-panel">
+                @for (int i = 0; i < Model.DynamicData.DemosFilterList.Count; i++)
+                {
+                    if (Model.DynamicData.DemosFilterList[i] != null && Model.DynamicData.DemosFilterList.Count > 0)
+                    {
+                        <table style="width:80%;margin-left:10%;margin-right:10%;">
+                            <tr>
+                                <td>
+                                    <a class="dimensions" id="lnkDemo_@Model.DynamicData.DemosFilterList[i].Value" onclick="openDemoPopup(event)">
+                                        @Model.DynamicData.DemosFilterList[i].Text
+                                    </a>
+                                    <a id="showMoreLessDemo_@Model.DynamicData.DemosFilterList[i].Value" data-loaded="0"  data-showhide="1" onclick="showHideDemoListBox(event)" class="showhide">
+                                        (Show&hellip;)
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="trDemo_@Model.DynamicData.DemosFilterList[i].Value" style="display:none;">
+                                <td>
+                                    @Html.ListBox("lstDemo_" + Model.DynamicData.DemosFilterList[i].Value.ToString(), Model.DynamicData.DemosFilterList[i].DimList.ConvertAll(a =>
+                                   {
+                                       return new SelectListItem()
+                                       {
+                                           Text = a.ResponseDesc + ' ' + '(' + a.ResponseValue + ')',
+                                           Value = a.CodeSheetID.ToString(),
+                                           Selected = false
+                                       };
+                                   }), new { @class = "list_dynamicfilters", data_columref = @Model.DynamicData.DemosFilterList[i].RefColumn })
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    }
+
+                }
+            </div>
+        }
+
+        <button class="accordion">Activity</button>
+        <div id="ActivityFilter" class="accordion-panel">
+            <table style="width:80%;margin-left:10%;margin-right:10%;">
+                <tr>
+
+                    <td align="left">
+                        <a id="lnkOpenActivityFilter" style="font-weight: bold;" onclick="openPopUp('OpenActivityPopUpWindow')">
+                            Open Activity
+                        </a>
+                        <a id="showMoreLessOpenActivityFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                            (Hide&hellip;)
+                        </a>
+                    </td>
+                </tr>
+                <tr id="OpenActivityFilterSummary">
+                    <td id="OpenActivityFilterSummaryTable"></td>
+                </tr>
+            </table>
+            <table style="width:80%;margin-left:10%;margin-right:10%;">
+                <tr>
+
+                    <td align="left">
+                        <a id="lnkClickActivityFilter" style="font-weight: bold;" onclick="openPopUp('ClickActivityPopUpWindow')">
+                            Click Activity
+                        </a>
+                        <a id="showMoreLessClickActivityFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                            (Hide&hellip;)
+                        </a>
+                    </td>
+                </tr>
+                <tr id="ClickActivityFilterSummary">
+                    <td id="ClickActivityFilterSummaryTable"></td>
+                </tr>
+            </table>
+            <table style="width:80%;margin-left:10%;margin-right:10%;">
+                <tr>
+
+                    <td align="left">
+                        <a id="lnkVisitActivityFilter" style="font-weight: bold;" onclick="openPopUp('VisitActivityPopUpWindow')">
+                            Visit Activity
+                        </a>
+                        <a id="showMoreLessVisitActivityFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                            (Hide&hellip;)
+                        </a>
+                    </td>
+                </tr>
+                <tr id="VisitActivityFilterSummary">
+                    <td id="VisitActivityFilterSummaryTable"></td>
+                </tr>
+            </table>
+        </div>
+        <button class="accordion">Others</button>
+        <div id="OtherFilterPanel" class="accordion-panel">
+            <div id="contactFieldFilter">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+
+                        <td align="left">
+                            <a id="lnkContactFieldFilter" style="font-weight: bold;" onclick="openPopUp('ContactFieldPopUpWindow')">
+                                Other Contact Fields
+                            </a>
+                            <a id="showMoreLessContactFieldFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                (Hide&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="ContactFieldFilterSummary">
+                        <td id="ContactFieldFilterSummaryTable"></td>
+                    </tr>
+                </table>
+            </div>
+            @if (!Model.IsCirc)
+            {
+                <div id="circFilter">
+                    <table style="width:80%;margin-left:10%;margin-right:10%;">
+                        <tr>
+
+                            <td align="left">
+                                <a id="lnkCircFilter" style="font-weight: bold;" onclick="openPopUp('CircPopUpWindow')">
+                                    Circulation
+                                </a>
+                                <a id="showMoreLessCircFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                    (Hide&hellip;)
+                                </a>
+                            </td>
+                        </tr>
+                        <tr id="CircFilterSummary">
+                            <td id="CircFilterSummaryTable"></td>
+                        </tr>
+                    </table>
+
+                </div>
+            }
+            
+            <div id="adHocFilter">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+
+                        <td align="left">
+                            <a id="lnkAdHocFilter" style="font-weight: bold;" onclick="openAdHocPopUp('AdHocPopUpWindow')">
+                                Adhocs
+                            </a>
+                            <a id="showMoreLessAdHocFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                (Hide&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="AdHocFilterSummary">
+                        <td id="AdHocFilterSummaryTable"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="permissionFieldFilter">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+
+                        <td align="left">
+                            <a id="lnkPermissionFieldFilter" style="font-weight: bold;" onclick="openPopUp('PermissionFieldPopUpWindow')">
+                                Other Permission Fields
+                            </a>
+                            <a id="showMoreLessPermissionFieldFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                (Hide&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="PermissionFieldFilterSummary">
+                        <td id="PermissionFieldFilterSummaryTable"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="geoFieldFilter">
+                <table style="width:80%;margin-left:10%;margin-right:10%;">
+                    <tr>
+
+                        <td align="left">
+                            <a id="lnkGeoFieldFilter" style="font-weight: bold;" onclick="openPopUp('GeoFieldPopUpWindow')">
+                                Geo Fields
+                            </a>
+                            <a id="showMoreLessGeoFieldFilterSummary" data-showhide="0" onclick="showHideSummary(event)" class="showhide">
+                                (Hide&hellip;)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr id="GeoFieldFilterSummary">
+                        <td id="GeoFieldFilterSummaryTable"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{Html.Kendo()
+                .Window()
+                .Width(800)
+                .Modal(true)
+                .Title(false)
+                .Animation(false)
+                .Name("ContactFieldPopUpWindow")
+                .Content(@<text>
+                    <div id="contactFieldFilterContent" class="filterpopups">
+                        @Html.Partial("Partials/Filter/_contactFieldFilter", Model.standardFilter)
+                    </div>
+                </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1200)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("CircPopUpWindow")
+        .Content(@<text>
+            <div id="circFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_circFilter", Model.CircFilter)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("OpenActivityPopUpWindow")
+        .Content(@<text>
+            <div id="openActivityFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_openActivityFilter", Model)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("ClickActivityPopUpWindow")
+        .Content(@<text>
+            <div id="clickActivityFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_clickActivityFilter", Model)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("VisitActivityPopUpWindow")
+        .Content(@<text>
+            <div id="VisitActivityFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_visitActivityFilter", Model)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Height(600)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("AdHocPopUpWindow")
+        .Content(@<text>
+            <div id="adHocFilterContent" class="filterpopups">
+                @*@Html.Action("GetAdHocListFilter","Filter")*@
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("PermissionFieldPopUpWindow")
+        .Content(@<text>
+            <div class="filterpopups">
+                @Html.Partial("Partials/Filter/_permissionFieldFilter", Model.standardFilter)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("GeoFieldPopUpWindow")
+        .Content(@<text>
+            <div id="geoFieldFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_geoFilter", Model.geoFilter)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("SavedFilterPopUpWindow")
+        .Content(@<text>
+            <div id="savedFilterContent" class="filterpopups">
+                @*@Html.Partial("Partials/Filter/_savedFilter")*@
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("DimensionPopUpWindow")
+        .Content(@<text>
+            <div id="DimensionFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Filter/_filterPopup", Model)
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("DownloadDetailsPopup")
+        .Content(@<text>
+            <div id="DownloadDetailsPopupContent" class="filterpopups">
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(500)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("customDatePicker")
+        .Content(@<text>
+            <div id="circFilterContent" class="filterpopups">
+                @Html.Partial("Partials/Common/_customDatePicker")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+@{
+    Html.Kendo()
+        .Window()
+        .Width(800)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("SaveFilterPanelPopUpWindow")
+        .Content(@<text>
+            <div id="saveFilterContent" class="filterpopups">
+               
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+<script>
+    
+    var adhocloaded = false;
+    //#region pollyfill
+    if (!String.prototype.includes) {
+        String.prototype.includes = function (search, start) {
+            'use strict';
+            if (typeof start !== 'number') {
+                start = 0;
+            }
+
+            if (start + search.length > this.length) {
+                return false;
+            } else {
+                return this.indexOf(search, start) !== -1;
+            }
+        };
+    }
+    //#endregion
+    $(document).ready(function () {
+         
+      
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+       
+        for (i = 0; i < acc.length; i++) {
+            acc[i].onclick = function () {
+                /* Toggle between adding and removing the "active" class,
+                to highlight the button that controls the panel */
+                this.classList.toggle("active");
+                /* Toggle between hiding and showing the active panel */
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                    if ($("#reportFilterShowHide") && (this.id == 'accShowFilter')) {
+                        $("#reportFilterShowHide").text("(Show...)");
+                    }
+                    
+                } else {
+                    panel.style.display = "block";
+                    if ($("#reportFilterShowHide") && (this.id == 'accShowFilter')) {
+                        $("#reportFilterShowHide").text("(Hide...)");
+                    }
+                    
+                }
+            }
+        }
+
+        $("#lstEmailStatus").on("change", function () {
+
+            SelectEmailStatus();
+
+        });
+        $("#lstCtEmail").on("change", function () {
+
+            SelectEmail();
+
+        });
+        $("#ddlBrand").on("change", function () {
+            onBrandChange()
+        });
+
+    });
+
+
+    //#region Events
+    function onBrandChange() {
+        adhocloaded = false;
+        var prevbrandid = $("#ddlBrand").val();
+        if (prevbrandid) {
+
+        } else {
+            prevbrandid = 0;
+        }
+
+        $.ajax({
+            url: '/uas.web/filter/GetFilterViewModel?brandId=' + prevbrandid,
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#" + $("#parentViewDivId").val()).html(response);
+                var ddlbrnd = $("#ddlBrand").data("kendoDropDownList");
+                ddlbrnd.value(prevbrandid);
+                setSpitters();
+            },
+            error: function () {
+                $("#" + $("#parentViewDivId").val()).html(response);
+            }
+        });
+
+
+    }
+    function setSpitters() {
+        resetFilter(true);
+        var splitterElement = $("#mainSplitter");
+        var splitter = splitterElement.data("kendoSplitter");
+        // var rightpane = $("#adhocactivitycircFilter");
+        var leftPane = $("#leftPanel");
+        var centerpane = $("#standardFilter");
+        var splitterleft = splitterElement.data("kendoSplitter");
+        splitter["expand"](leftPane);
+        splitter["expand"](centerpane);
+        //splitter["expand"](rightpane);
+
+
+    }
+    function onAdHocLastXDaysChange() {
+        var replacedId = this.element.attr("id").replace("drpLastXDays", "");
+        if (this.value().toLowerCase() == "custom") {
+            $("#spCustomDays" + replacedId).show();
+        } else {
+            $("#spCustomDays" + replacedId).hide();
+        }
+    }
+    function onAdHocVarcharChange() {
+        var replacedId = this.element.attr("id").replace("drpAdHocVarcharField", "");
+        var value = this.value().toLowerCase();
+        if (value == "range") {
+            $("#RangeDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+            $("#SearchValueDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+
+        } else {
+            if(value == "does not contain" || value == "contains" || value == "end with" || value == "start with" || value == "equal") {
+                $("#txtSearchValue" + replacedId).prop("disabled", false);
+                $("#txtSearchValue" + replacedId).show();
+            } else if (value == "is empty" || value == "is not empty") {
+                $("#txtSearchValue" + replacedId).prop("disabled", true);
+                $("#txtSearchValue" + replacedId).hide();
+            }else {
+                $("#txtSearchValue" + replacedId).show();
+            }
+            $("#RangeDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+            $("#SearchValueDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+        }
+    }
+    
+    function onAdHocDateDrpChange() {
+        var replacedId = this.element.attr("id").replace("drpAdHocDateField", "");
+        if (this.value().toLowerCase() == "daterange") {
+            $("#LastXDaysDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+            $("#DateRangeDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+            $("#YearDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+        } else if (this.value().toLowerCase() == "xdays") {
+            $("#DateRangeDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+            $("#LastXDaysDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+            $("#YearDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+        } else if (this.value().toLowerCase() == "year") {
+            $("#DateRangeDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+            $("#YearDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+            $("#LastXDaysDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+        }
+    }
+    function onAdHocIntDrpChange() {
+        var replacedId = this.element.attr("id").replace("drpAdHocIntField", "");
+        if (this.value().toLowerCase() == "range") {
+            $("#RangeDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+            $("#SearchValueDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+
+        } else {
+            $("#RangeDiv" + replacedId).removeClass("displayInline").addClass("displayNone");
+            $("#SearchValueDiv" + replacedId).removeClass("displayNone").addClass("displayInline");
+        }
+    }
+
+    function OnMarketSelectionChanged(e) {
+        var marketid = "";
+        var brandId = $("#ddlBrand").val();
+        $("#" + e + " option:selected").each(function () {
+            var $this = $(this);
+            if ($this.length) {
+                var selText = $this.text();
+                var selVal = $this.val();
+                if (marketid == "") {
+                    marketid = selVal;
+                } else {
+                    marketid = marketid + "," + selVal;
+                }
+            }
+        });
+
+        $.ajax
+            ({
+                url: "/uas.web/Filter/GetSelectedListByMarketID?brandID=" + brandId + "&MarketIDs=" + marketid.toString(),
+                contentType: "application/json; charset=utf-8",
+                type: "Get",
+                cache: !0,
+                datatype: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data) {
+                     
+                        $(".list_dynamicfilters option:selected").prop("selected", false);
+                        $.each(data, function (key, value) {
+                            var key = Object.keys(value)[0];
+                            $("#" + key).selectedIndex = -1;
+                            $.each(Object.values(value)[0].split(','), function (i, e) {
+                                $("#" + key + " option[value='" + e + "']").prop("selected", true);
+
+                                var elementID = key.replace("lst", "tr");
+                                var showhide = key.replace("lst", "showMoreLess");
+                                $("#" + elementID).show();
+                                $("#" + showhide).data("showhide", "0");
+                                $("#" + showhide).text("(Hide...)");
+                                $("#dynamicDemoFilter").attr("style", "display:block;");
+                                $("#dynamicPubTypeFilter").attr("style", "display:block;");
+
+                            });
+
+                        });
+                    }
+                    else //error
+                    {
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
+    }
+
+    function OnGeoCodeSelectionChanged(e) {
+        var regionGroupIds = "";
+        //$("#" + e + " option:selected").each(function () {
+        //    var $this = $(this);
+        //    if ($this.length) {
+        //        var selVal = $this.val();
+        //        if (regionGroupIds == "") {
+        //            regionGroupIds = selVal;
+        //        } else {
+        //            regionGroupIds = regionGroupIds + "," + selVal;
+        //        }
+        //    }
+        //});
+        regionGroupIds = $("#" + e + " option:selected").map(function () {
+            return $(this).val();
+        }).get().join(',');
+        $.ajax
+            ({
+                url: "/uas.web/Filter/GetSelectedRegionFiltersByRegionGroups?regionGroupIDs=" + regionGroupIds.toString(),
+                contentType: "application/json; charset=utf-8",
+                type: "Get",
+                cache: !0,
+                datatype: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data) {
+                        $("#lstRegion option").prop("selected", false);
+                        $.each(data, function (key, value) {
+                            $("#lstRegion option[value='" + value.Value + "']").prop("selected", true);
+                        });
+                    }
+                    else //error
+                    {
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+    }
+
+    function OnCountryRegionSelectionChanged(e) {
+        var areaNames = "";
+        areaNames = $("#" + e + " option:selected").map(function () {
+            return $(this).val();
+        }).get().join(',');
+        $.ajax
+            ({
+                url: "/uas.web/Filter/GetSelectedContryFiltersByCountryRegion?areaNames=" + areaNames,
+                contentType: "application/json; charset=utf-8",
+                type: "Get",
+                cache: !0,
+                datatype: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data) {
+                        $("#lstCountry option").prop("selected", false);
+                        $.each(data, function (key, value) {
+                            $("#lstCountry option[value='" + value.Value + "']").prop("selected", true);
+                        });
+                    }
+                    else //error
+                    {
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+    }
+    //#endregion Events
+
+    //#region Right Pane Filter Selection/Reset
+    function SelectEmailStatus() {
+        var Fields = [];
+        if ($("#lstEmailStatus").val()) {
+            var value = $("#lstEmailStatus").val().join(',');
+            var selectedtext = "";
+            selectedtext = getCommaSeperatedListBoxText('lstEmailStatus');
+
+            Fields.push({ Name: "Email Status", Values: value, Text: selectedtext, SearchCondition: '', FilterType: 'Standard', Group: 'EMAILSTATUS' });
+        }
+      
+        //$('#EmailStatusFilterSummaryTable').html('');
+        //$('#EmailStatusFilterSummaryTable').append(getSummaryTable(Fields));
+
+    }
+    function SelectEmail() {
+        var Fields = [];
+        if ($("#lstCtEmail").val()) {
+            var value = $("#lstCtEmail").val().join(',');
+            var selectedtext = "";
+            selectedtext = getCommaSeperatedListBoxText('lstCtEmail');
+            if (selectedtext.includes("Yes")) {
+                var multiselect = $("#lstEmailStatus").data("kendoMultiSelect");
+                multiselect.value(1);
+                SelectEmailStatus();
+            }
+            Fields.push({ Name: "Email", Values: value, Text: selectedtext, SearchCondition: '', FilterType: 'Standard', Group: 'EMAIL' });
+        }
+       
+        //$('#EmailFilterSummaryTable').html('');
+        //$('#EmailFilterSummaryTable').append(getSummaryTable(Fields));
+
+
+    }
+    function SelectCloseContactFieldFilter() {
+        var Fields = [];
+        if ($("#lstCtGeoLocated").val()) {
+            var value = $("#lstCtGeoLocated").val().join(',');
+            Fields.push({ Name: "GeoLocated", Values: value, Text: getCommaSeperatedListBoxText('lstCtGeoLocated'), SearchCondition: '', FilterType: 'Standard', Group: 'ISLATLONVALID' });
+        }
+        if ($("#lstCtPhone").val()) {
+            var value = $("#lstCtPhone").val().join(',');
+            Fields.push({ Name: "Phone", Values: value, Text: getCommaSeperatedListBoxText('lstCtPhone'), SearchCondition: '', FilterType: 'Standard', Group: 'PHONE' });
+        }
+        //if ($("#lstCtMedia").val()) {
+        //    var value = $("#lstCtMedia").val().join(',');
+        //    Fields.push({ Name: "Media", Values: value, Text: getCommaSeperatedListBoxText('lstCtMedia'), SearchCondition: '', FilterType: 'Standard', Group: 'MEDIA' });
+        //}
+        if ($("#lstCtFax").val()) {
+            var value = $("#lstCtFax").val().join(',');
+            Fields.push({ Name: "Fax", Values: value, Text: getCommaSeperatedListBoxText('lstCtFax'), SearchCondition: '', FilterType: 'Standard', Group: 'FAX' });
+        }
+        
+        //$('#ContactFieldFilterSummaryTable').html('');
+        //$('#ContactFieldFilterSummaryTable').append(getSummaryTable(Fields));
+
+        CloseWindow("ContactFieldPopUpWindow");
+    }
+    function ResetCloseContactFieldFilter() {
+        ResetContactFieldFilter();
+        //CloseWindow("ContactFieldPopUpWindow");
+    }
+    function SelectClosePermissionFieldFilter() {
+        var Fields = [];
+        if ($("#lstPermText").val()) {
+            var value = $("#lstPermText").val().join(',');
+            Fields.push({ Name: "TextPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermText'), SearchCondition: '', FilterType: 'Standard', Group: 'TEXTPERMISSION' });
+        }
+        if ($("#lstPermPhone").val()) {
+            var value = $("#lstPermPhone").val().join(',');
+            Fields.push({ Name: "PhonePermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermPhone'), SearchCondition: '', FilterType: 'Standard', Group: 'PHONEPERMISSION' });
+        }
+        if ($("#lstPermFax").val()) {
+            var value = $("#lstPermFax").val().join(',');
+            Fields.push({ Name: "FaxPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermFax'), SearchCondition: '', FilterType: 'Standard', Group: 'FAXPERMISSION' });
+        }
+        if ($("#lstPermMail").val()) {
+            var value = $("#lstPermMail").val().join(',');
+            Fields.push({ Name: "MailPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermMail'), SearchCondition: '', FilterType: 'Standard', Group: 'MAILPERMISSION' });
+        }
+        if ($("#lstPermOtherProducts").val()) {
+            var value = $("#lstPermOtherProducts").val().join(',');
+            Fields.push({ Name: "OtherProductsPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermOtherProducts'), SearchCondition: '', FilterType: 'Standard', Group: 'OTHERPRODUCTSPERMISSION' });
+        }
+        if ($("#lstPermThirdParty").val()) {
+            var value = $("#lstPermThirdParty").val().join(',');
+            Fields.push({ Name: "ThirdPartyPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermThirdParty'), SearchCondition: '', FilterType: 'Standard', Group: 'THIRDPARTYPERMISSION' });
+        }
+        if ($("#lstPermEmailRenew").val()) {
+            var value = $("#lstPermEmailRenew").val().join(',');
+            Fields.push({ Name: "EmailRenewPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermEmailRenew'), SearchCondition: '', FilterType: 'Standard', Group: 'EMAILRENEWPERMISSION' });
+        }
+       
+        //$('#PermissionFieldFilterSummaryTable').html('');
+        //$('#PermissionFieldFilterSummaryTable').append(getSummaryTable(Fields));
+        CloseWindow("PermissionFieldPopUpWindow");
+    }
+    function ResetClosePermissionFieldFilter() {
+        ResetPermissionFieldFilter();
+        //CloseWindow("PermissionFieldPopUpWindow");
+    }
+    function SelectCloseGeoFieldFilter() {
+        var Fields = [];
+        //Country /Region
+        if ($("#lstCountry").val()) {
+            var value = $("#lstCountry").val().join(',');
+            Fields.push({ Name: "Country", Values: value, Text: getCommaSeperatedListBoxText('lstCountry'), SearchCondition: '', FilterType: 'Standard', Group: 'COUNTRY' });
+        }
+        if ($("#lstRegion").val()) {
+            var value = $("#lstRegion").val().join(',');
+            Fields.push({ Name: "State", Values: value, Text: getCommaSeperatedListBoxText('lstRegion'), SearchCondition: '', FilterType: 'Standard', Group: 'STATE' });
+        }
+        //Geo Filter
+        if ($("#ZipCode").val()) {
+            if ($("#RangeMin").val() && $("#RangeMax").val() && (parseInt($("#RangeMax").val()) > parseInt($("#RangeMin").val()))) {
+                var drpGeoCountry = $("#drpCountry").data("kendoDropDownList");
+                var postalcode = $("#ZipCode").val();
+                var mylocation = {
+                    PostalCode: postalcode,
+                    Country: drpGeoCountry.value()
+                }
+                mylocation = validateLocation(mylocation);
+                setTimeout(function () {
+                    if (mylocation.IsValid) {
+                        var PI_180 = Math.PI / 180.00;
+                        var salonLat = parseFloat(mylocation.lattitude);
+                        var salonLon = parseFloat(mylocation.langitude);
+
+                        var radiusLatTotal_RangeMax = parseFloat($("#RangeMax").val()) / 69.00;
+                        var minLat_RangeMax = salonLat - radiusLatTotal_RangeMax;
+                        var maxLat_RangeMax = salonLat + radiusLatTotal_RangeMax;
+                        var minLon_RangeMax = salonLon + (radiusLatTotal_RangeMax / Math.cos(minLat_RangeMax * PI_180));
+                        var maxLon_RangeMax = salonLon - (radiusLatTotal_RangeMax / Math.cos(maxLat_RangeMax * PI_180));
+
+                        var radiusLatTotal_RangeMin = parseFloat($("#RangeMin").val()) / 69.00;
+                        var minLat_RangeMin = salonLat - radiusLatTotal_RangeMin;
+                        var maxLat_RangeMin = salonLat + radiusLatTotal_RangeMin;
+                        var minLon_RangeMin = salonLon + (radiusLatTotal_RangeMin / Math.cos(minLat_RangeMin * PI_180));
+                        var maxLon_RangeMin = salonLon - (radiusLatTotal_RangeMin / Math.cos(maxLat_RangeMin * PI_180));
+
+                        var temp;
+
+                        if ((minLat_RangeMin > maxLat_RangeMin) && (minLon_RangeMin < maxLon_RangeMin)) {
+                            temp = maxLat_RangeMin;
+                            maxLat_RangeMin = minLat_RangeMin;
+                            minLat_RangeMin = temp;
+                        }
+                        else if ((minLat_RangeMin < maxLat_RangeMin) && (minLon_RangeMin > maxLon_RangeMin)) {
+                            temp = maxLon_RangeMin;
+                            maxLon_RangeMin = minLon_RangeMin;
+                            minLon_RangeMin = temp;
+
+                        }
+                        else if ((minLat_RangeMin > maxLat_RangeMin) && (minLon_RangeMin > maxLon_RangeMin)) {
+                            temp = maxLat_RangeMin;
+                            maxLat_RangeMin = minLat_RangeMin;
+                            minLat_RangeMin = temp;
+
+                            temp = maxLon_RangeMin;
+                            maxLon_RangeMin = minLon_RangeMin;
+                            minLon_RangeMin = temp;
+                        }
+
+                        if ((minLat_RangeMax > maxLat_RangeMax) && (minLon_RangeMax < maxLon_RangeMax)) {
+                            temp = maxLat_RangeMax;
+                            maxLat_RangeMax = minLat_RangeMax;
+                            minLat_RangeMax = temp;
+                        }
+                        else if ((minLat_RangeMax < maxLat_RangeMax) && (minLon_RangeMax > maxLon_RangeMax)) {
+                            temp = maxLon_RangeMax;
+                            maxLon_RangeMax = minLon_RangeMax;
+                            minLon_RangeMax = temp;
+
+                        }
+                        else if ((minLat_RangeMax > maxLat_RangeMax) && (minLon_RangeMax > maxLon_RangeMax)) {
+                            temp = maxLat_RangeMax;
+                            maxLat_RangeMax = minLat_RangeMax;
+                            minLat_RangeMax = temp;
+
+                            temp = maxLon_RangeMax;
+                            maxLon_RangeMax = minLon_RangeMax;
+                            minLon_RangeMax = temp;
+                        }
+                        Fields.push({
+                            Name: "Zipcode-Radius",
+                            Values: minLat_RangeMax + "|" + maxLat_RangeMax + "|" + minLon_RangeMax + "|" + maxLon_RangeMax + "|" + minLat_RangeMin + "|" + maxLat_RangeMin + "|" + minLon_RangeMin + "|" + maxLon_RangeMin,
+                            Text: $("#ZipCode").val() + " & " + $("#RangeMin").val() + " miles - " + $("#RangeMax").val() + " miles",
+                            SearchCondition: $("#ZipCode").val() + "|" + $("#RangeMin").val() + "|" + $("#RangeMax").val(),
+                            FilterType: 'Geo',
+                            Group: 'ZIPCODE-RADIUS'
+                        });
+
+                    }
+
+                }, 1000);
+
+
+            }
+
+        }
+        
+        //$('#GeoFieldFilterSummaryTable').html('');
+        //$('#GeoFieldFilterSummaryTable').append(getSummaryTable(Fields));
+        CloseWindow("GeoFieldPopUpWindow");
+    }
+    function ResetCloseGeoFieldFilter() {
+        ResetGeoFieldFilter();
+        //CloseWindow("GeoFieldPopUpWindow");
+    }
+    function SelectCloseCircFilter() {
+        var filters = [];
+        var category = ShowSelected("lstCircCatCode");
+        var transaction = ShowSelected("lstCircTransactionType");
+        var categoryCodeType = ShowSelected("lstCircCatCodeType");
+        var transactionCodes = ShowSelected("lstCircTransaction");
+        var qsource = ShowSelected("lstCircQSourceType");
+        var qsourceCode = ShowSelected("lstCircQSource");
+        var media = ShowSelected("lstMedia");
+        var year = ShowSelected("lstYear");
+
+        var text = "";
+        var value = "";
+        if (categoryCodeType.length > 0) {
+            for (var i = 0; i < categoryCodeType.length; i++) {
+                text = text + categoryCodeType[i].text + ',';
+                value = value + categoryCodeType[i].value + ',';
+            }
+            filters.push({ Name: 'Category Type', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'CATEGORYTYPE', ElementID: 'lstCircCatCodeType' });
+
+        }
+        var text = "";
+        var value = "";
+        if (category.length > 0) {
+            for (var i = 0; i < category.length; i++) {
+                text = text + category[i].text + ',';
+                value = value + category[i].value + ',';
+            }
+            filters.push({ Name: 'Category Code', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'CATCODES', ElementID: 'lstCircCatCode' });
+
+        }
+
+        text = "";
+        value = "";
+        if (transaction.length > 0) {
+            for (var i = 0; i < transaction.length; i++) {
+                text = text + transaction[i].text + ',';
+                value = value + transaction[i].value + ',';
+            }
+            filters.push({ Name: 'XACT', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'TRANSACTION', ElementID: 'lstCircTransactionType' });
+
+        }
+        text = "";
+        value = "";
+        if (transactionCodes.length > 0) {
+            for (var i = 0; i < transactionCodes.length; i++) {
+                text = text + transactionCodes[i].text + ',';
+                value = value + transactionCodes[i].value + ',';
+            }
+            filters.push({ Name: 'Transaction Code', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'TRANSACTIONCODE', ElementID: 'lstCircTransaction' });
+
+        }
+        text = "";
+        value = "";
+        if (qsource.length > 0) {
+            for (var i = 0; i < qsource.length; i++) {
+                text = text + qsource[i].text + ',';
+                value = value + qsource[i].value + ',';
+            }
+            filters.push({ Name: 'QSource Type', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'QUALSOURCETYPE', ElementID: 'lstCircQSourceType' });
+
+        }
+        text = "";
+        value = "";
+        if (qsourceCode.length > 0) {
+            for (var i = 0; i < qsourceCode.length; i++) {
+                text = text + qsourceCode[i].text + ',';
+                value = value + qsourceCode[i].value + ',';
+            }
+            filters.push({ Name: 'QSource Code', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'QUALSOURCECODE', ElementID: 'lstCircQSource' });
+
+        }
+        text = "";
+        value = "";
+        if (media.length > 0) {
+            for (var i = 0; i < media.length; i++) {
+                text = text + media[i].text + ',';
+                value = value + media[i].value + ',';
+            }
+            filters.push({ Name: 'Media', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'Media', ElementID: 'lstMedia' });
+
+        }
+        text = "";
+        value = "";
+        if (year.length > 0) {
+            for (var i = 0; i < year.length; i++) {
+                text = text + year[i].text + ',';
+                value = value + year[i].value + ',';
+            }
+            filters.push({ Name: 'QualificationYear', Values: value.substring(0, value.length - 1), Text: text.substring(0, text.length - 1), SearchCondition: '', FilterType: 'Circulation', Group: 'QualificationYear', ElementID: 'lstYear' });
+
+        }
+        if ($("#QDateFrom").val()) {
+            filters.push({ Name: 'QFrom', Values: $("#QDateFrom").val(), Text: $("#QDateFrom").val(), SearchCondition: '', FilterType: 'Circulation', Group: 'QDate', ElementID: 'QDateFrom' });
+
+        }
+        if ($("#QDateTo").val()) {
+            filters.push({ Name: 'QTo', Values: $("#QDateTo").val(), Text: $("#QDateTo").val(), SearchCondition: '', FilterType: 'Circulation', Group: 'QDate', ElementID: 'QDateTo' });
+
+        }
+        if ($("#drpIsWaveMailing").val()) {
+            var wavemaling = $("#drpIsWaveMailing").data("kendoDropDownList");
+            filters.push({ Name: 'Wave Mailing', Values: $("#drpIsWaveMailing").val(), Text: wavemaling.text(), SearchCondition: '', FilterType: 'Circulation', Group: 'WaveMailing', ElementID: 'drpIsWaveMailing' });
+
+        }
+        
+        //$('#CircFilterSummaryTable').html('');
+        //$('#CircFilterSummaryTable').append(getSummaryTable(filters));
+        CloseWindow("CircPopUpWindow");
+        return filters;
+    }
+    function ResetCloseCircFilter() {
+
+        ResetCircFilter();
+        //CloseWindow("CircPopUpWindow");
+    }
+    function SelectCloseActivityFilter(id) {
+        var filters = [];
+        switch (id) {
+            //Open Activity
+            case 'Open':
+                var drpOpenedCtr = $("#OpenedCtr").data("kendoDropDownList");
+                var drpOpenCtr_OpenedDate = $("#OpenCtr_OpenedDate").data("kendoDropDownList");
+                var drpOpenCtr_OpenedDate_LastXDays = $("#OpenCtr_OpenedDate_LastXDays").data("kendoDropDownList");
+                var msOpenCtr_Campaigns = $("#OpenCtr_Campaigns").data("kendoMultiSelect");
+                var msOpenCtr_CampaignsDataItem = msOpenCtr_Campaigns.dataItems();
+                var drpOpenCtr_EmailSentDate = $("#OpenCtr_EmailSentDate").data("kendoDropDownList");
+                var drpOpenCtr_EmailSentDate_LastXDays = $("#OpenCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                var o_opendate = drpOpenCtr_OpenedDate.value().toString().toUpperCase();
+                var o_emailsentdate = drpOpenCtr_EmailSentDate.value().toString().toUpperCase();
+                var o_searchCriteria = "Search All";
+                $("input[name='OpenCriteriaSearch']:checked").each(function () {
+                    var idVal = $(this).attr("id");
+                    o_searchCriteria = $("label[for='" + idVal + "']").text();
+                });
+                if (drpOpenedCtr.value()) {
+                    filters.push({ Name: 'Open Criteria', Values: drpOpenedCtr.value(), Text: drpOpenedCtr.text(), SearchCondition: o_searchCriteria, FilterType: 'Activity', Group: 'OPENCRITERIA', ElementID: "OpenedCtr" });
+                    if (o_opendate == "DATERANGE") {
+                        if ($("#OpenCtr_OpenedDate_DateRangeFrom").val() || $("#OpenCtr_OpenedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Open Activity", Values: $("#OpenCtr_OpenedDate_DateRangeFrom").val() + "|" + $("#OpenCtr_OpenedDate_DateRangeTo").val(), Text: $("#OpenCtr_OpenedDate_DateRangeFrom").val() + "|" + $("#OpenCtr_OpenedDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID:"OpenCtr_OpenedDate_DateRangeFrom|OpenCtr_OpenedDate_DateRangeTo" });
+                        }
+                    } else if (o_opendate == "XDAYS") {
+                        filters.push({ Name: "Open Activity", Values: drpOpenCtr_OpenedDate_LastXDays.value(), Text: drpOpenCtr_OpenedDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID: "OpenCtr_OpenedDate_LastXDays" });
+                    } else if (o_opendate == "YEAR") {
+                        if ($("#OpenCtr_OpenedDate_YearFrom").val() || $("#OpenCtr_OpenedDate_YearTo").val()) {
+                            filters.push({ Name: "Open Activity", Values: $("#OpenCtr_OpenedDate_YearFrom").val() + "|" + $("#OpenCtr_OpenedDate_YearTo").val(), Text: $("#OpenCtr_OpenedDate_YearFrom").val() + "|" + $("#OpenCtr_OpenedDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID:"OpenCtr_OpenedDate_YearFrom|OpenCtr_OpenedDate_YearTo" });
+                        }
+                    }
+                    if ($("#OpenCtr_BlastID").val()) {
+                        filters.push({ Name: 'Open BlastID', Values: $("#OpenCtr_BlastID").val(), Text: $("#OpenCtr_BlastID").val(), SearchCondition: '', FilterType: 'Activity', Group: 'OPENBLASTID', ElementID:"OpenCtr_BlastID" });
+                    }
+                    if (msOpenCtr_CampaignsDataItem.length > 0) {
+                        var campaignText = "";
+                        var campaignValues = "";
+                        $.each(msOpenCtr_CampaignsDataItem, function (index, Value) {
+                            campaignText = campaignText + Value.Text + ","
+                            campaignValues = campaignValues + Value.Value + ","
+                        })
+                        filters.push({ Name: 'Open Campaigns', Values: campaignValues.substring(0, campaignValues.length - 1), Text: campaignText.substring(0, campaignText.length - 1), SearchCondition: '', FilterType: 'Activity', Group: 'OPENCAMPAIGNS', ElementID:"OpenCtr_Campaigns" });
+                    }
+                    if ($("#OpenCtr_EmailSubject").val()) {
+                        filters.push({ Name: 'Open Email Subject', Values: $("#OpenCtr_EmailSubject").val(), Text: $("#OpenCtr_EmailSubject").val(), SearchCondition: '', FilterType: 'Activity', Group: 'OPENEMAILSUBJECT', ElementID:"OpenCtr_EmailSubject" });
+                    }
+
+                    if (o_emailsentdate == "DATERANGE") {
+                        if ($("#OpenCtr_EmailSentDate_DateRangeFrom").val() || $("#OpenCtr_EmailSentDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Open Email Sent Date", Values: $("#OpenCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#OpenCtr_EmailSentDate_DateRangeTo").val(), Text: $("#OpenCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#OpenCtr_EmailSentDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID: "OpenCtr_EmailSentDate_DateRangeFrom|OpenCtr_EmailSentDate_DateRangeTo" });
+                        }
+                    } else if (o_emailsentdate == "XDAYS") {
+                        filters.push({ Name: "Open Email Sent Date", Values: drpOpenCtr_EmailSentDate_LastXDays.value(), Text: drpOpenCtr_EmailSentDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID:"OpenCtr_EmailSentDate_LastXDays" });
+                    } else if (o_emailsentdate == "YEAR") {
+                        if ($("#OpenCtr_EmailSentDate_YearFrom").val() || $("#OpenCtr_EmailSentDate_YearTo").val()) {
+                            filters.push({ Name: "Open Email Sent Date", Values: $("#OpenCtr_EmailSentDate_YearFrom").val() + "|" + $("#OpenCtr_EmailSentDate_YearTo").val(), Text: $("#OpenCtr_EmailSentDate_YearFrom").val() + "|" + $("#OpenCtr_EmailSentDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID:"OpenCtr_EmailSentDate_YearFrom" });
+                        }
+                    }
+                }
+               
+                //$('#OpenActivityFilterSummaryTable').html('');
+                //$('#OpenActivityFilterSummaryTable').append(getSummaryTable(filters));
+                CloseWindow("OpenActivityPopUpWindow");
+                break;
+                //Click Activity
+            case 'Click':
+                var drpClickedCtr = $("#ClickedCtr").data("kendoDropDownList");
+                var drpClickedCtr_ClickedDate = $("#ClickedCtr_ClickedDate").data("kendoDropDownList");
+                var drpClickedCtr_ClickedDate_LastXDays = $("#ClickedCtr_ClickedDate_LastXDays").data("kendoDropDownList");
+                var msClickedCtr_Campaigns = $("#ClickedCtr_Campaigns").data("kendoMultiSelect");
+                var msClickedCtr_CampaignsDataItem = msClickedCtr_Campaigns.dataItems();
+                var drpClickedCtr_EmailSentDate = $("#ClickedCtr_EmailSentDate").data("kendoDropDownList");
+                var drpClickedCtr_EmailSentDate_LastXDays = $("#ClickedCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                var c_Clickeddate = drpClickedCtr_ClickedDate.value().toString().toUpperCase();
+                var c_emailsentdate = drpClickedCtr_EmailSentDate.value().toString().toUpperCase();
+                var c_searchCriteria = "Search All";
+                $("input[name='ClickCriteriaSearch']:checked").each(function () {
+                    var idVal = $(this).attr("id");
+                    c_searchCriteria = $("label[for='" + idVal + "']").text();
+                });
+                if (drpClickedCtr.value()) {
+                    filters.push({ Name: 'Click Criteria', Values: drpClickedCtr.value(), Text: drpClickedCtr.text(), SearchCondition: c_searchCriteria, FilterType: 'Activity', Group: 'CLICKCRITERIA', ElementID: "ClickedCtr" });
+                    if (c_Clickeddate == "DATERANGE") {
+                        if ($("#ClickedCtr_ClickedDate_DateRangeFrom").val() || $("#ClickedCtr_ClickedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Click Activity", Values: $("#ClickedCtr_ClickedDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_ClickedDate_DateRangeTo").val(), Text: $("#ClickedCtr_ClickedDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_ClickedDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "CLICKACTIVITY", ElementID:"ClickedCtr_ClickedDate_DateRangeFrom|ClickedCtr_ClickedDate_DateRangeTo" });
+                        }
+                    } else if (c_Clickeddate == "XDAYS") {
+                        filters.push({ Name: "Click Activity", Values: drpClickedCtr_ClickedDate_LastXDays.value(), Text: drpClickedCtr_ClickedDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "CLICKACTIVITY", ElementID:"ClickedCtr_ClickedDate_LastXDays" });
+                    } else if (c_Clickeddate == "YEAR") {
+                        if ($("#ClickedCtr_ClickedDate_YearFrom").val() || $("#ClickedCtr_ClickedDate_YearTo").val()) {
+                            filters.push({ Name: "Click Activity", Values: $("#ClickedCtr_ClickedDate_YearFrom").val() + "|" + $("#ClickedCtr_ClickedDate_YearTo").val(), Text: $("#ClickedCtr_ClickedDate_YearFrom").val() + "|" + $("#ClickedCtr_ClickedDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "CLICKACTIVITY" , ElementID:"ClickedCtr_ClickedDate_YearFrom|ClickedCtr_ClickedDate_YearTo"});
+                        }
+                    }
+                    if ($("#ClickedCtr_Url").val().length > 0) {
+                        filters.push({ Name: 'Link', Values: $("#ClickedCtr_Url").val(), Text: $("#ClickedCtr_Url").val(), SearchCondition: '', FilterType: 'Activity', Group: 'LINK' , ElementID:"ClickedCtr_Url"});
+                    }
+                    if ($("#ClickedCtr_BlastID").val()) {
+                        filters.push({ Name: 'Click BlastID', Values: $("#ClickedCtr_BlastID").val(), Text: $("#ClickedCtr_BlastID").val(), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKBLASTID', ElementID:"ClickedCtr_BlastID" });
+                    }
+                    if (msClickedCtr_CampaignsDataItem.length > 0) {
+                        var campaignText = "";
+                        var campaignValues = "";
+                        $.each(msClickedCtr_CampaignsDataItem, function (index, Value) {
+                            campaignText = campaignText + Value.Text + ","
+                            campaignValues = campaignValues + Value.Value + ","
+                        })
+                        filters.push({ Name: 'Click Campaigns', Values: campaignValues.substring(0, campaignValues.length - 1), Text: campaignText.substring(0, campaignText.length - 1), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKCAMPAIGNS', ElementID:"ClickedCtr_Campaigns" });
+                    }
+                    if ($("#ClickedCtr_EmailSubject").val()) {
+                        filters.push({ Name: 'Click Email Subject', Values: $("#ClickedCtr_EmailSubject").val(), Text: $("#ClickedCtr_EmailSubject").val(), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKEMAILSUBJECT', ElementID:"ClickedCtr_EmailSubject" });
+                    }
+
+                    if (c_emailsentdate == "DATERANGE") {
+                        if ($("#ClickedCtr_EmailSentDate_DateRangeFrom").val() || $("#ClickedCtr_EmailSentDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Click Email Sent Date", Values: $("#ClickedCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_DateRangeTo").val(), Text: $("#ClickedCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE" , ElementID:"ClickedCtr_EmailSentDate_DateRangeFrom|ClickedCtr_EmailSentDate_DateRangeTo"});
+                        }
+                    } else if (c_emailsentdate == "XDAYS") {
+                        filters.push({ Name: "Click Email Sent Date", Values: drpClickedCtr_EmailSentDate_LastXDays.value(), Text: drpClickedCtr_EmailSentDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE", ElementID:"ClickedCtr_EmailSentDate_LastXDays" });
+                    } else if (c_emailsentdate == "YEAR") {
+                        if ($("#ClickedCtr_EmailSentDate_YearFrom").val() || $("#ClickedCtr_EmailSentDate_YearTo").val()) {
+                            filters.push({ Name: "Click Email Sent Date", Values: $("#ClickedCtr_EmailSentDate_YearFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_YearTo").val(), Text: $("#ClickedCtr_EmailSentDate_YearFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE", ElementID:"ClickedCtr_EmailSentDate_YearFrom|ClickedCtr_EmailSentDate_YearTo" });
+                        }
+                    }
+                }
+                
+                CloseWindow("ClickActivityPopUpWindow");
+                break;
+                //Visit Activity
+            case 'Visit':
+                var drpVisitedCtr = $("#VisitedCtr").data("kendoDropDownList");
+                var drpVisitedCtr_VisitedDate = $("#VisitedCtr_VisitedDate").data("kendoDropDownList");
+                var drpVisitedCtr_DomainTracking = $("#VisitedCtr_Domain").data("kendoDropDownList");
+                var drpVisitedCtr_VisitedDate_LastXDays = $("#VisitedCtr_VisitedDate_LastXDays").data("kendoDropDownList");
+                var v_Visitedddate = drpVisitedCtr_VisitedDate.value().toString().toUpperCase();
+
+
+                if (drpVisitedCtr.value()) {
+                    filters.push({ Name: 'Visit Criteria', Values: drpVisitedCtr.value(), Text: drpVisitedCtr.text(), SearchCondition: '', FilterType: 'Activity', Group: 'VISITCRITERIA', ElementID:"VisitedCtr" });
+                    if (v_Visitedddate == "DATERANGE") {
+                        if ($("#VisitedCtr_VisitedDate_DateRangeFrom").val() || $("#VisitedCtr_VisitedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Visit Activity", Values: $("#VisitedCtr_VisitedDate_DateRangeFrom").val() + "|" + $("#VisitedCtr_VisitedDate_DateRangeTo").val(), Text: $("#VisitedCtr_VisitedDate_DateRangeFrom").val() + "|" + $("#VisitedCtr_VisitedDate_DateRangeTo").val(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY",ElementID:"VisitedCtr_VisitedDate_DateRangeFrom|VisitedCtr_VisitedDate_DateRangeTo" });
+                        }
+                    } else if (v_Visitedddate == "XDAYS") {
+                        filters.push({ Name: "Visit Activity", Values: drpVisitedCtr_VisitedDate_LastXDays.value(), Text: drpVisitedCtr_VisitedDate_LastXDays.text(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY",ElementID:"VisitedCtr_VisitedDate_LastXDays" });
+                    } else if (v_Visitedddate == "YEAR") {
+                        if ($("#VisitedCtr_VisitedDate_YearFrom").val() || $("#VisitedCtr_VisitedDate_YearTo").val()) {
+                            filters.push({ Name: "Visit Activity", Values: $("#VisitedCtr_VisitedDate_YearFrom").val() + "|" + $("#VisitedCtr_VisitedDate_YearTo").val(), Text: $("#VisitedCtr_VisitedDate_YearFrom").val() + "|" + $("#VisitedCtr_VisitedDate_YearTo").val(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY" ,ElementID:"VisitedCtr_VisitedDate_YearFrom|VisitedCtr_VisitedDate_YearTo"});
+                        }
+                    }
+                    if ($("#VisitedCtr_Url").val().length > 0) {
+                        filters.push({ Name: 'URL', Values: $("#VisitedCtr_Url").val(), Text: $("#VisitedCtr_Url").val(), SearchCondition: '', FilterType: 'Activity', Group: 'URL',ElementID:"VisitedCtr_Url" });
+                    }
+                    if (drpVisitedCtr_DomainTracking.value().length > 0) {
+                        filters.push({ Name: 'Domain Tracking', Values: drpVisitedCtr_DomainTracking.value(), Text: drpVisitedCtr_DomainTracking.text(), SearchCondition: '', FilterType: 'Activity', Group: 'DOMAINTRACKING',ElementID:"VisitedCtr_Domain" });
+                    }
+
+                }
+               
+                //$('#VisitActivityFilterSummaryTable').html('');
+                //$('#VisitActivityFilterSummaryTable').append(getSummaryTable(filters));
+                CloseWindow("VisitActivityPopUpWindow");
+                break;
+            default:
+                //Open Activity
+                var drpOpenedCtr = $("#OpenedCtr").data("kendoDropDownList");
+                var drpOpenCtr_OpenedDate = $("#OpenCtr_OpenedDate").data("kendoDropDownList");
+                var drpOpenCtr_OpenedDate_LastXDays = $("#OpenCtr_OpenedDate_LastXDays").data("kendoDropDownList");
+                var msOpenCtr_Campaigns = $("#OpenCtr_Campaigns").data("kendoMultiSelect");
+                var msOpenCtr_CampaignsDataItem = msOpenCtr_Campaigns.dataItems();
+                var drpOpenCtr_EmailSentDate = $("#OpenCtr_EmailSentDate").data("kendoDropDownList");
+                var drpOpenCtr_EmailSentDate_LastXDays = $("#OpenCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                var o_opendate = drpOpenCtr_OpenedDate.value().toString().toUpperCase();
+                var o_emailsentdate = drpOpenCtr_EmailSentDate.value().toString().toUpperCase();
+                var o_searchCriteria = "Search All";
+                $("input[name='OpenCriteriaSearch']:checked").each(function () {
+                    var idVal = $(this).attr("id");
+                    o_searchCriteria = $("label[for='" + idVal + "']").text();
+                });
+                if (drpOpenedCtr.value()) {
+                    filters.push({ Name: 'Open Criteria', Values: drpOpenedCtr.value(), Text: drpOpenedCtr.text(), SearchCondition: o_searchCriteria, FilterType: 'Activity', Group: 'OPENCRITERIA', ElementID: "OpenedCtr" });
+                    if (o_opendate == "DATERANGE") {
+                        if ($("#OpenCtr_OpenedDate_DateRangeFrom").val() || $("#OpenCtr_OpenedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Open Activity", Values: $("#OpenCtr_OpenedDate_DateRangeFrom").val() + "|" + $("#OpenCtr_OpenedDate_DateRangeTo").val(), Text: $("#OpenCtr_OpenedDate_DateRangeFrom").val() + "|" + $("#OpenCtr_OpenedDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID: "OpenCtr_OpenedDate_DateRangeFrom|OpenCtr_OpenedDate_DateRangeTo" });
+                        }
+                    } else if (o_opendate == "XDAYS") {
+                        filters.push({ Name: "Open Activity", Values: drpOpenCtr_OpenedDate_LastXDays.value(), Text: drpOpenCtr_OpenedDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID: "OpenCtr_OpenedDate_LastXDays" });
+                    } else if (o_opendate == "YEAR") {
+                        if ($("#OpenCtr_OpenedDate_YearFrom").val() || $("#OpenCtr_OpenedDate_YearTo").val()) {
+                            filters.push({ Name: "Open Activity", Values: $("#OpenCtr_OpenedDate_YearFrom").val() + "|" + $("#OpenCtr_OpenedDate_YearTo").val(), Text: $("#OpenCtr_OpenedDate_YearFrom").val() + "|" + $("#OpenCtr_OpenedDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "OPENACTIVITY", ElementID: "OpenCtr_OpenedDate_YearFrom|OpenCtr_OpenedDate_YearTo" });
+                        }
+                    }
+                    if ($("#OpenCtr_BlastID").val()) {
+                        filters.push({ Name: 'Open BlastID', Values: $("#OpenCtr_BlastID").val(), Text: $("#OpenCtr_BlastID").val(), SearchCondition: '', FilterType: 'Activity', Group: 'OPENBLASTID', ElementID: "OpenCtr_BlastID" });
+                    }
+                    if (msOpenCtr_CampaignsDataItem.length > 0) {
+                        var campaignText = "";
+                        var campaignValues = "";
+                        $.each(msOpenCtr_CampaignsDataItem, function (index, Value) {
+                            campaignText = campaignText + Value.Text + ","
+                            campaignValues = campaignValues + Value.Value + ","
+                        })
+                        filters.push({ Name: 'Open Campaigns', Values: campaignValues.substring(0, campaignValues.length - 1), Text: campaignText.substring(0, campaignText.length - 1), SearchCondition: '', FilterType: 'Activity', Group: 'OPENCAMPAIGNS', ElementID: "OpenCtr_Campaigns" });
+                    }
+                    if ($("#OpenCtr_EmailSubject").val()) {
+                        filters.push({ Name: 'Open Email Subject', Values: $("#OpenCtr_EmailSubject").val(), Text: $("#OpenCtr_EmailSubject").val(), SearchCondition: '', FilterType: 'Activity', Group: 'OPENEMAILSUBJECT', ElementID: "OpenCtr_EmailSubject" });
+                    }
+
+                    if (o_emailsentdate == "DATERANGE") {
+                        if ($("#OpenCtr_EmailSentDate_DateRangeFrom").val() || $("#OpenCtr_EmailSentDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Open Email Sent Date", Values: $("#OpenCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#OpenCtr_EmailSentDate_DateRangeTo").val(), Text: $("#OpenCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#OpenCtr_EmailSentDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID: "OpenCtr_EmailSentDate_DateRangeFrom|OpenCtr_EmailSentDate_DateRangeTo" });
+                        }
+                    } else if (o_emailsentdate == "XDAYS") {
+                        filters.push({ Name: "Open Email Sent Date", Values: drpOpenCtr_EmailSentDate_LastXDays.value(), Text: drpOpenCtr_EmailSentDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID: "OpenCtr_EmailSentDate_LastXDays" });
+                    } else if (o_emailsentdate == "YEAR") {
+                        if ($("#OpenCtr_EmailSentDate_YearFrom").val() || $("#OpenCtr_EmailSentDate_YearTo").val()) {
+                            filters.push({ Name: "Open Email Sent Date", Values: $("#OpenCtr_EmailSentDate_YearFrom").val() + "|" + $("#OpenCtr_EmailSentDate_YearTo").val(), Text: $("#OpenCtr_EmailSentDate_YearFrom").val() + "|" + $("#OpenCtr_EmailSentDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "OPENEMAILSENTDATE", ElementID: "OpenCtr_EmailSentDate_YearFrom" });
+                        }
+                    }
+                }
+                //Clicked Activity
+                var drpClickedCtr = $("#ClickedCtr").data("kendoDropDownList");
+                var drpClickedCtr_ClickedDate = $("#ClickedCtr_ClickedDate").data("kendoDropDownList");
+                var drpClickedCtr_ClickedDate_LastXDays = $("#ClickedCtr_ClickedDate_LastXDays").data("kendoDropDownList");
+                var msClickedCtr_Campaigns = $("#ClickedCtr_Campaigns").data("kendoMultiSelect");
+                var msClickedCtr_CampaignsDataItem = msClickedCtr_Campaigns.dataItems();
+                var drpClickedCtr_EmailSentDate = $("#ClickedCtr_EmailSentDate").data("kendoDropDownList");
+                var drpClickedCtr_EmailSentDate_LastXDays = $("#ClickedCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                var c_Clickeddate = drpClickedCtr_ClickedDate.value().toString().toUpperCase();
+                var c_emailsentdate = drpClickedCtr_EmailSentDate.value().toString().toUpperCase();
+                var c_searchCriteria = "Search All";
+                $("input[name='ClickCriteriaSearch']:checked").each(function () {
+                    var idVal = $(this).attr("id");
+                    c_searchCriteria = $("label[for='" + idVal + "']").text();
+                });
+                if (drpClickedCtr.value()) {
+                    filters.push({ Name: 'Click Criteria', Values: drpClickedCtr.value(), Text: drpClickedCtr.text(), SearchCondition: c_searchCriteria, FilterType: 'Activity', Group: 'CLICKCRITERIA', ElementID: "ClickedCtr" });
+                    if (c_Clickeddate == "DATERANGE") {
+                        if ($("#ClickedCtr_ClickedDate_DateRangeFrom").val() || $("#ClickedCtr_ClickedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Click Activity", Values: $("#ClickedCtr_ClickedDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_ClickedDate_DateRangeTo").val(), Text: $("#ClickedCtr_ClickedDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_ClickedDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "CLICKACTIVITY", ElementID: "ClickedCtr_ClickedDate_DateRangeFrom|ClickedCtr_ClickedDate_DateRangeTo" });
+                        }
+                    } else if (c_Clickeddate == "XDAYS") {
+                        filters.push({ Name: "Click Activity", Values: drpClickedCtr_ClickedDate_LastXDays.value(), Text: drpClickedCtr_ClickedDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "CLICKACTIVITY", ElementID: "ClickedCtr_ClickedDate_LastXDays" });
+                    } else if (c_Clickeddate == "YEAR") {
+                        if ($("#ClickedCtr_ClickedDate_YearFrom").val() || $("#ClickedCtr_ClickedDate_YearTo").val()) {
+                            filters.push({ Name: "Click Activity", Values: $("#ClickedCtr_ClickedDate_YearFrom").val() + "|" + $("#ClickedCtr_ClickedDate_YearTo").val(), Text: $("#ClickedCtr_ClickedDate_YearFrom").val() + "|" + $("#ClickedCtr_ClickedDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "CLICKACTIVITY", ElementID: "ClickedCtr_ClickedDate_YearFrom|ClickedCtr_ClickedDate_YearTo" });
+                        }
+                    }
+                    if ($("#ClickedCtr_Url").val().length > 0) {
+                        filters.push({ Name: 'Link', Values: $("#ClickedCtr_Url").val(), Text: $("#ClickedCtr_Url").val(), SearchCondition: '', FilterType: 'Activity', Group: 'LINK', ElementID: "ClickedCtr_Url" });
+                    }
+                    if ($("#ClickedCtr_BlastID").val()) {
+                        filters.push({ Name: 'Click BlastID', Values: $("#ClickedCtr_BlastID").val(), Text: $("#ClickedCtr_BlastID").val(), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKBLASTID', ElementID: "ClickedCtr_BlastID" });
+                    }
+                    if (msClickedCtr_CampaignsDataItem.length > 0) {
+                        var campaignText = "";
+                        var campaignValues = "";
+                        $.each(msClickedCtr_CampaignsDataItem, function (index, Value) {
+                            campaignText = campaignText + Value.Text + ","
+                            campaignValues = campaignValues + Value.Value + ","
+                        })
+                        filters.push({ Name: 'Click Campaigns', Values: campaignValues.substring(0, campaignValues.length - 1), Text: campaignText.substring(0, campaignText.length - 1), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKCAMPAIGNS', ElementID: "ClickedCtr_Campaigns" });
+                    }
+                    if ($("#ClickedCtr_EmailSubject").val()) {
+                        filters.push({ Name: 'Click Email Subject', Values: $("#ClickedCtr_EmailSubject").val(), Text: $("#ClickedCtr_EmailSubject").val(), SearchCondition: '', FilterType: 'Activity', Group: 'CLICKEMAILSUBJECT', ElementID: "ClickedCtr_EmailSubject" });
+                    }
+
+                    if (c_emailsentdate == "DATERANGE") {
+                        if ($("#ClickedCtr_EmailSentDate_DateRangeFrom").val() || $("#ClickedCtr_EmailSentDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Click Email Sent Date", Values: $("#ClickedCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_DateRangeTo").val(), Text: $("#ClickedCtr_EmailSentDate_DateRangeFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_DateRangeTo").val(), SearchCondition: "DateRange", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE", ElementID: "ClickedCtr_EmailSentDate_DateRangeFrom|ClickedCtr_EmailSentDate_DateRangeTo" });
+                        }
+                    } else if (c_emailsentdate == "XDAYS") {
+                        filters.push({ Name: "Click Email Sent Date", Values: drpClickedCtr_EmailSentDate_LastXDays.value(), Text: drpClickedCtr_EmailSentDate_LastXDays.text(), SearchCondition: "XDays", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE", ElementID: "ClickedCtr_EmailSentDate_LastXDays" });
+                    } else if (c_emailsentdate == "YEAR") {
+                        if ($("#ClickedCtr_EmailSentDate_YearFrom").val() || $("#ClickedCtr_EmailSentDate_YearTo").val()) {
+                            filters.push({ Name: "Click Email Sent Date", Values: $("#ClickedCtr_EmailSentDate_YearFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_YearTo").val(), Text: $("#ClickedCtr_EmailSentDate_YearFrom").val() + "|" + $("#ClickedCtr_EmailSentDate_YearTo").val(), SearchCondition: "Year", FilterType: 'Activity', Group: "CLICKEMAILSENTDATE", ElementID: "ClickedCtr_EmailSentDate_YearFrom|ClickedCtr_EmailSentDate_YearTo" });
+                        }
+                    }
+                }
+                //Visit Acrivity
+                var drpVisitedCtr = $("#VisitedCtr").data("kendoDropDownList");
+                var drpVisitedCtr_VisitedDate = $("#VisitedCtr_VisitedDate").data("kendoDropDownList");
+                var drpVisitedCtr_DomainTracking = $("#VisitedCtr_Domain").data("kendoDropDownList");
+                var drpVisitedCtr_VisitedDate_LastXDays = $("#VisitedCtr_VisitedDate_LastXDays").data("kendoDropDownList");
+                var v_Visitedddate = drpVisitedCtr_VisitedDate.value().toString().toUpperCase();
+
+
+                if (drpVisitedCtr.value()) {
+                    filters.push({ Name: 'Visit Criteria', Values: drpVisitedCtr.value(), Text: drpVisitedCtr.text(), SearchCondition: '', FilterType: 'Activity', Group: 'VISITCRITERIA', ElementID: "VisitedCtr" });
+                    if (v_Visitedddate == "DATERANGE") {
+                        if ($("#VisitedCtr_VisitedDate_DateRangeFrom").val() || $("#VisitedCtr_VisitedDate_DateRangeTo").val()) {
+                            filters.push({ Name: "Visit Activity", Values: $("#VisitedCtr_VisitedDate_DateRangeFrom").val() + "|" + $("#VisitedCtr_VisitedDate_DateRangeTo").val(), Text: $("#VisitedCtr_VisitedDate_DateRangeFrom").val() + "|" + $("#VisitedCtr_VisitedDate_DateRangeTo").val(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY", ElementID: "VisitedCtr_VisitedDate_DateRangeFrom|VisitedCtr_VisitedDate_DateRangeTo" });
+                        }
+                    } else if (v_Visitedddate == "XDAYS") {
+                        filters.push({ Name: "Visit Activity", Values: drpVisitedCtr_VisitedDate_LastXDays.value(), Text: drpVisitedCtr_VisitedDate_LastXDays.text(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY", ElementID: "VisitedCtr_VisitedDate_LastXDays" });
+                    } else if (v_Visitedddate == "YEAR") {
+                        if ($("#VisitedCtr_VisitedDate_YearFrom").val() || $("#VisitedCtr_VisitedDate_YearTo").val()) {
+                            filters.push({ Name: "Visit Activity", Values: $("#VisitedCtr_VisitedDate_YearFrom").val() + "|" + $("#VisitedCtr_VisitedDate_YearTo").val(), Text: $("#VisitedCtr_VisitedDate_YearFrom").val() + "|" + $("#VisitedCtr_VisitedDate_YearTo").val(), SearchCondition: drpVisitedCtr_VisitedDate.value(), FilterType: 'Activity', Group: "VISITACTIVITY", ElementID: "VisitedCtr_VisitedDate_YearFrom|VisitedCtr_VisitedDate_YearTo" });
+                        }
+                    }
+                    if ($("#VisitedCtr_Url").val().length > 0) {
+                        filters.push({ Name: 'URL', Values: $("#VisitedCtr_Url").val(), Text: $("#VisitedCtr_Url").val(), SearchCondition: '', FilterType: 'Activity', Group: 'URL', ElementID: "VisitedCtr_Url" });
+                    }
+                    if (drpVisitedCtr_DomainTracking.value().length > 0) {
+                        filters.push({ Name: 'Domain Tracking', Values: drpVisitedCtr_DomainTracking.value(), Text: drpVisitedCtr_DomainTracking.text(), SearchCondition: '', FilterType: 'Activity', Group: 'DOMAINTRACKING', ElementID: "VisitedCtr_Domain" });
+                    }
+
+                }
+                break;
+        }
+
+        return filters;
+    }
+    function ResetCloseActivityFilter(id) {
+        $('#' + id + 'ActivityFilterSummaryTable').html('');
+        ResetActivityFilter(id);
+        //CloseWindow(id + "ActivityPopUpWindow");
+    }
+    function SelectCloseAdhocFilter() {
+       
+        var filters = [];
+        $(".tblAdhocList").find('>tbody> tr').each(function () {
+            var columnName = $(this).attr("id").toString().replace('tr_', '');
+            var DisplayName = $(this).find('td:first-child').text().trim();
+            var id = $(this).attr("id");
+            var columntype = $("#" + id).data("columntype");
+            var GroupName = $("#" + id).data("columnvalue");
+            if (!columntype) {
+                columntype = 'varchar';
+            }
+            if (columntype.includes("varchar") || columntype.includes("uniqueidentifier")) {
+                var drpVarchar = $("#drpAdHocVarcharField_" + columnName).data("kendoDropDownList");
+                var fieldValue="";
+                if (drpVarchar.value().toLowerCase() == 'range') {
+                    if($("#txtRangeFrom_" + columnName).val()){
+                        fieldValue = $("#txtRangeFrom_" + columnName).val();
+                    }
+                    if ($("#txtRangeTo_" + columnName).val()) {
+                        fieldValue = fieldValue + '|' + $("#txtRangeTo_" + columnName).val();
+                    }
+                    filters.push({ Name: "Adhoc", Values: fieldValue, Text: DisplayName, SearchCondition: drpVarchar.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtSearchValue_" + columnName + '|' + "txtRangeFrom_" + columnName + "|" + "txtRangeTo_" + columnName  });
+
+                } else {
+                    fieldValue=$("#txtSearchValue_" + columnName).val();
+                    if (drpVarchar.value().toLowerCase() == "does not contain" || drpVarchar.value().toLowerCase() == "contains" || drpVarchar.value().toLowerCase() == "end with" || drpVarchar.value().toLowerCase() == "start with" || drpVarchar.value().toLowerCase() == "equal") {
+                        if (fieldValue) {
+                            filters.push({ Name: "Adhoc", Values: $("#txtSearchValue_" + columnName).val(), Text: DisplayName, SearchCondition: drpVarchar.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtSearchValue_" + columnName + '|' + "txtRangeFrom_" + columnName + "|" + "txtRangeTo_" + columnName + "|drpAdHocVarcharField_" + columnName });
+                        }
+                    } else if (drpVarchar.value().toLowerCase() == "is empty" || drpVarchar.value().toLowerCase() == "is not empty") {
+                        filters.push({ Name: "Adhoc", Values: '  ', Text: DisplayName, SearchCondition: drpVarchar.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtSearchValue_" + columnName + '|' + "txtRangeFrom_" + columnName + "|" + "txtRangeTo_" + columnName + "|drpAdHocVarcharField_" + columnName });
+                    } 
+                }
+            }
+            else if (columntype.includes("date")) {
+                var drpDate = $("#drpAdHocDateField_" + columnName).data("kendoDropDownList");
+                var drpDateValue = drpDate.value().toUpperCase();
+                if (drpDateValue == "DATERANGE") {
+                    if ($("#txtDateRangeFrom_" + columnName).val().trim() != "" || $("#txtDateRangeTo_" + columnName).val().trim() != "") {
+                        filters.push({ Name: "Adhoc", Values: $("#txtDateRangeFrom_" + columnName).val() + "|" + $("#txtDateRangeTo_" + columnName).val(), Text: DisplayName, SearchCondition: drpDate.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtDateRangeFrom_" + columnName + "|" + "txtDateRangeTo_" + columnName });
+                    }
+                } else if (drpDateValue == "XDAYS") {
+                    var lastXDays = $("#drpLastXDays_" + columnName).data("kendoDropDownList");
+                    if (lastXDays.value() == 'Custom') {
+                        if ($("#txtCustomDays_" + columnName).val()) {
+                            filters.push({ Name: "Adhoc", Values: $("#txtCustomDays_" + columnName).val(), Text: DisplayName, SearchCondition: drpDate.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtCustomDays_" + columnName });
+                        }
+                        
+                    } else {
+                        filters.push({ Name: "Adhoc", Values: lastXDays.value(), Text: DisplayName, SearchCondition: drpDate.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "drpLastXDays_" + columnName });
+                    }
+                    
+                } else if (drpDateValue == "YEAR") {
+                    if ($("#txtYearFrom_" + columnName).val().trim() != "" || $("#txtYearTo_" + columnName).val().trim() != "") {
+                        filters.push({ Name: "Adhoc", Values: $("#txtYearFrom_" + columnName).val() + '|' + $("#txtYearTo_" + columnName).val(), Text: DisplayName, SearchCondition: drpDate.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtYearFrom_" + columnName + "|" + "txtYearTo_" + columnName });
+                    }
+                }
+             }
+            else if (columntype.includes("int")) {
+                var drpInt = $("#drpAdHocIntField_" + columnName).data("kendoDropDownList");
+                var drpIntValue = drpInt.value().toUpperCase();
+                if (drpIntValue == "RANGE") {
+
+                    if ($("#txtRangeFrom_" + columnName).val().trim() != "" || $("#txtRangeTo_" + columnName).val().trim() != "") {
+                        filters.push({ Name: "Adhoc", Values: $("#txtRangeFrom_" + columnName).val() + '|' + $("#txtRangeTo_" + columnName).val(), Text: DisplayName, SearchCondition: drpInt.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtRangeFrom_" + columnName +"|"+ "txtRangeTo_" + columnName });
+
+                    }
+
+                }
+            }
+            else if (columntype.includes("bit")) {
+                    
+                var drpbit = $("#drpAdHocBitField_" + columnName).val();
+                if (drpbit) {
+                    filters.push({ Name: "Adhoc", Values: drpbit, Text: DisplayName, SearchCondition: "", FilterType: 'Adhoc', Group: GroupName, ElementID: "drpAdHocBitField_" + columnName });
+                }
+            }
+            else {
+                if ($("#txtSearchValue_" + columnName).val().trim() != "") {
+                    filters.push({ Name: "Adhoc", Values: $("#txtSearchValue_" + columnName).val(), Text: DisplayName, SearchCondition: drpInt.value(), FilterType: 'Adhoc', Group: GroupName, ElementID: "txtSearchValue_" + columnName });
+                }
+            }
+
+            
+        });
+        //$('#AdHocFilterSummaryTable').html('');
+        // $('#AdHocFilterSummaryTable').append(  $("#showhidefilter").data("showfilters", 1);
+        CloseWindow("AdHocPopUpWindow");
+        return filters;
+    }
+    function ResetCloseAdhocFilter() {
+        ResetAdHocFilter();
+        //CloseWindow("AdHocPopUpWindow");
+    }
+
+    //#endregion Right Pane Filter Selection/Reset
+
+    //#region Show Hide Details
+    function showHideMarketFilterListBox(event) {
+
+        var showhide = $("#" + event.target.id).data("showhide");
+        var elementID = event.target.id.replace("showMoreLessMarket", "trMarket");
+        showHide(event.target.id, showhide, elementID);
+    }
+    function showHidePubFilterListBox(event) {
+
+        var showhide = $("#" + event.target.id).data("showhide");
+        var eventID = event.target.id;
+        var elementID = eventID.replace("showMoreLessPubType", "trPubType");
+        showHide(event.target.id, showhide, elementID);
+    }
+    function showHideDimensionListBox(event) {
+
+        var showhide = $("#" + event.target.id).data("showhide");
+        var eventID = event.target.id;
+        var elementID = eventID.replace("showMoreLessDimension", "trDimension");
+        showHide(event.target.id, showhide, elementID);
+
+    }
+    function showHideDemoListBox(event) {
+
+        var showhide = $("#" + event.target.id).data("showhide");
+        var dataloaded = $("#" + event.target.id).data("loaded");
+        var eventID = event.target.id;
+        var elementID = eventID.replace("showMoreLessDemo", "trDemo");
+        var listboxID = eventID.replace("showMoreLessDemo", "lstDemo");
+        var responsgroupID = eventID.replace("showMoreLessDemo_", "");
+        var pubID = $("#SelectedProductID").val();
+        if (dataloaded != '1') {
+            $.ajax({
+                //url: '/uas.web/filter/GetResponseGroupByID?PubID=' + pubID + "&responsegroupID=" + responsgroupID,
+                url: '/uas.web/filter/GetResponseGroupCodeSheetAjax?pubID=' + pubID + "&responsegroupID=" + responsgroupID,
+                type: 'GET',
+                cache: false,
+                async: false,
+                datatype: 'application/json',
+                success: function (data) {
+                    $("#" + listboxID).html('');
+                    var options = "";
+                    $.each(data, function (i, obj) {
+                        if (obj.Selected) {
+                            options = options + "<option value=" + obj.Value + " selected>" + obj.Text + "</option>";
+                        } else {
+                            options = options + "<option value=" + obj.Value + ">" + obj.Text + "</option>";
+                        }
+
+                    });
+                    $("#" + listboxID).append(options);
+                    $("#" + event.target.id).data("loaded", 1);
+                    showHide(event.target.id, showhide, elementID);
+                },
+                error: function (data) {
+
+                }
+            });
+        }
+        else{
+            showHide(event.target.id, showhide, elementID);
+        }
+    }
+    function showHideSummary(event) {
+        var showhide = $("#" + event.target.id).data("showhide");
+        var elementID = "";
+        elementID = event.target.id.replace("showMoreLess", "");
+        showHide(event.target.id, showhide, elementID);
+    }
+    //#endregion Show Hide Details
+
+    //#region Open popups
+    function openMarketFilterPopUp(event) {
+        console.log("Open Market Filter PopUp" + event.target.id);
+
+    }
+    function openPubFilterPopUp(event) {
+        var masterID = event.target.id.replace("lnkPubType_", "");
+        $("#masterLnkID").val(event.target.id);
+        $("#masterID").val(masterID);
+        $.ajax({
+            url: "/uas.web/Filter/GetProductsByProductType?pubTypeID=" + masterID,
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                CreateListBoxPopup(data);
+            },
+            error: function (data) {
+
+                console.log(data);
+            }
+        });
+        
+    }
+    function openDimensionPopup(event) {
+
+        var masterID = event.target.id.replace("lnkDimension_", "");
+        $("#masterLnkID").val(event.target.id);
+        $("#masterID").val(masterID);
+        $.ajax({
+            url: "/uas.web/Filter/GetMasterGroupCodeSheetAjax?masterGroupId=" + masterID,
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                CreateListBoxPopup(data);
+            },
+            error: function (data) {
+
+                console.log(data);
+            }
+        });
+        //var dataSource = new kendo.data.DataSource({
+        //    transport: {
+        //        read: {
+        //            url: "/uas.web/Filter/GetMasterGroupCodeSheetAjax?masterGroupId=" + masterID,
+        //            dataType: "json"
+        //        }
+        //    }
+        //})
+        //CreateListBoxPopup(dataSource);
+
+    }
+    function openDemoPopup(event) {
+        
+        var pubID = $("#SelectedProductID").val();
+        var masterID = event.target.id.replace("lnkDemo_", "");
+        $("#masterLnkID").val(event.target.id);
+        $("#masterID").val(masterID);
+
+        $.ajax({
+            url: "/uas.web/Filter/GetResponseGroupCodeSheetAjax?responseGroupId=" + masterID + "&pubID=" + pubID,
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                CreateListBoxPopup(data);
+            },
+            error: function (data) {
+                
+                console.log(data);
+            }
+        });
+        
+
+    }
+    function sortDimension(sortby) {
+        var pubID = $("#SelectedProductID").val();
+        var masterID = $("#masterID").val();
+        var sourcelink = $("#masterLnkID").val().split('_')[0];
+        var url = "";
+        if (sourcelink == "lnkDimension") {
+            url = "/uas.web/Filter/GetMasterGroupCodeSheetAjax?masterGroupId=" + masterID + "&OrderBy=" + sortby;
+        } else if (sourcelink == "lnkPubType") {
+            url = "/uas.web/Filter/GetProductsByProductType?pubTypeID=" + masterID + "&OrderBy=" + sortby;
+        } else if (sourcelink == "lnkDemo") {
+            url = "/uas.web/Filter/GetResponseGroupCodeSheetAjax?responseGroupId=" + masterID + "&pubID=" + pubID + "&OrderBy=" + sortby;
+        }
+
+        $.ajax({
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                CreateListBoxPopup(data);
+            },
+            error: function (data) {
+
+                console.log(data);
+            }
+        });
+        
+       
+    }
+   
+
+
+    function ResetListBox() {
+        var lnkID = $("#masterLnkID").val();
+        var showmorelesstextID = $("#masterLnkID").val().replace("lnk", "showMoreLess");
+        var elementID = lnkID.replace("lnk", "tr");
+        var listID = lnkID.replace("lnk", "lst");
+        var pubID = $("#SelectedProductID").val();
+        var masterID = $("#masterID").val();
+        $("#" + listID + " option:selected").prop("selected", false);
+        $.ajax({
+            url: "/uas.web/Filter/GetResponseGroupCodeSheetAjax?responseGroupId=" + masterID + "&pubID=" + pubID,
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                CreateListBoxPopup(data);
+            },
+            error: function (data) {
+
+                console.log(data);
+            }
+        });
+        showHide(showmorelesstextID, 0, elementID);
+        //CloseWindow("DimensionPopUpWindow");
+    }
+    function SelectAndCloseListBox() {
+        var lnkID = $("#masterLnkID").val();
+        var showmorelesstextID = $("#masterLnkID").val().replace("lnk", "showMoreLess");
+        var elementID = lnkID.replace("lnk", "tr");
+        var listID = lnkID.replace("lnk", "lst");
+        var optionsselected = $("#PopUpSelected option");
+        var optionsavailable = $("#PopUpOptions option");
+        var options = "";
+        $("#" + listID).html('');
+        $.each(optionsselected, function (i, obj) {
+
+            options = options + "<option value=" + obj.value + " selected>" + obj.text + "</option>";
+        });
+        $.each(optionsavailable, function (i, obj) {
+            options = options + "<option value=" + obj.value + ">" + obj.text + "</option>";
+        });
+        $("#" + listID).append(options);
+        showHide(showmorelesstextID, 1, elementID);
+        CloseWindow("DimensionPopUpWindow");
+    }
+
+    function CreateListBoxPopup(data) {
+        var dataSources = GenerateDataForListBox(data);
+        $("#PopUpHeader").text($("#" + $("#masterLnkID").val()).text());
+        if ($("#PopUpOptions").data("kendoListBox") && $("#PopUpSelected").data("kendoListBox")) {
+            $("#Popuptable .k-widget.k-listbox").remove();
+            $("#Popuptable> tbody>tr:nth-child(1)").find('td:nth-child(1)').html('<select id="PopUpOptions">');
+            $("#Popuptable> tbody>tr:nth-child(1)").find('td:nth-child(2)').html('<select id="PopUpSelected">')
+        }
+        $("#PopUpOptions").kendoListBox({
+            connectWith: "PopUpSelected",
+            dropSources: ["PopUpSelected"],
+            toolbar: {
+                position: "right",
+                tools: ["moveUp", "moveDown", "transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
+            },
+            selectable: "multiple",
+            dataSource: dataSources.AvailableDataSource,
+            dataTextField: "Text",
+            dataValueField: "Value"
+
+        });
+
+        $("#PopUpSelected").kendoListBox({
+            connectWith: "PopUpOptions",
+            dropSources: ["PopUpOptions"],
+            selectable: "multiple",
+            dataSource: dataSources.SelectedDataSource,
+            dataTextField: "Text",
+            dataValueField: "Value",
+            toolbar: {
+                position: "right",
+                tools: ["moveUp", "moveDown"]
+            }
+
+        });
+        var window = $("#DimensionPopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.center().open();
+
+
+    }
+
+    function GenerateDataForListBox(data) {
+        var selectedData = [];
+        var nonselectedData = [];
+        var ListID = $("#masterLnkID").val().replace("lnk", "lst");
+        //dataSource.read();
+        //dataSource.one("change", function () {
+        var selected = [];
+        selected = $("#" + ListID).val();
+        //var data = this.data().toJSON();
+
+        if ($("#" + ListID).val()) {
+            for (var i = 0; i < selected.length; i++) {
+                var arr = _.where(data, { Value: selected[i] });
+                selectedData.push({ Disabled: false, Group: null, Selected: true, Text: arr[0].Text, Value: arr[0].Value })
+            }
+        } else {
+            selected = [];
+        }
+        $.each(data, function (i, obj) {
+            var push = true;
+            for (var i = 0; i < selected.length; i++) {
+                if (obj.Value == selected[i]) {
+                    push = false;
+                    break;
+                }
+            }
+            if (push) {
+                nonselectedData.push({ Disabled: false, Group: null, Selected: true, Text: obj.Text, Value: obj.Value })
+            }
+        });
+        var selectedDataSource = new kendo.data.DataSource({ data: selectedData });
+        var nonSelectedDataSource = new kendo.data.DataSource({ data: nonselectedData });
+        var dataPoints = {
+            SelectedDataSource: selectedDataSource,
+            AvailableDataSource: nonSelectedDataSource
+        };
+        return dataPoints;
+    }
+   
+
+    //#endregion Open popups
+
+    //#region Custom DatePicker
+    function openCustomFilter(value) {
+        $("#parentControl").val(value);
+        var window = $("#customDatePicker");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    //#endregion Custom DatePicker
+
+    //#region Helper functions
+    function showhideFilterPanel(value, id) {
+
+        var no = "No" + id + "sSelected";
+        var plus = id + "PlusSelected"
+        if (value == '') {
+            $("." + no).hide();
+            $("." + plus).hide();
+        }
+        else if (value == '0') {
+            $("." + no).show();
+            $("." + plus).hide();
+        } else {
+            $("." + no).show();
+            $("." + plus).show();
+        }
+
+
+    }
+
+    function changeVisibility(id, value) {
+        switch (value.toLowerCase()) {
+            case 'daterange':
+                $("#" + id + "_DateRangeDiv").removeClass("displayNone").addClass("displayInline");
+                $("#" + id + "_LastXDaysDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_YearDiv").removeClass("displayInline").addClass("displayNone");
+                break;
+            case 'xdays':
+                $("#" + id + "_DateRangeDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_LastXDaysDiv").removeClass("displayNone").addClass("displayInline");
+                $("#" + id + "_YearDiv").removeClass("displayInline").addClass("displayNone");
+                break;
+            case 'year':
+
+                $("#" + id + "_DateRangeDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_LastXDaysDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_YearDiv").removeClass("displayNone").addClass("displayInline");
+                break;
+            case 'month':
+
+                $("#" + id + "_DateRangeDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_LastXDaysDiv").removeClass("displayInline").addClass("displayNone");
+                $("#" + id + "_YearDiv").removeClass("displayInline").addClass("displayNone");
+                break;
+        }
+    }
+
+
+
+    function showAllSelectedOptions() {
+        var selected = $('#mainSplitter option:selected');
+    }
+
+    function validateLocation(loc) {
+        var getUrl = 'http://dev.virtualearth.net/REST/v1/Locations?key=Al8sOe7CZ0GwR1p3arrayhzyfds0kyGs_oQVPoQeeTSTnHai4tZWgMdSS31TX4tS';
+        var countryRegion = 'US';
+        if (loc.Country == 'UNITED STATES') {
+            getUrl = getUrl + '&countryRegion=US';
+        } else {
+            getUrl = getUrl + '&countryRegion=CA';
+        }
+        if (loc.City) {
+            getUrl = getUrl + '&locality=' + loc.City;
+        }
+        if (loc.PostalCode) {
+            getUrl = getUrl + '&postalCode=' + loc.PostalCode;
+        }
+        if (loc.Region) {
+            getUrl = getUrl + '&adminDistrict=' + loc.Region;
+        }
+        if (loc.Address) {
+            getUrl = getUrl + '&addressLine=' + loc.Address;
+        }
+
+        $.ajax({
+            url: getUrl,
+            dataType: "jsonp",
+            jsonp: "jsonp",
+            success: function (r) {
+
+                loc.langitude = r.resourceSets[0].resources[0].point.coordinates[1];
+                loc.lattitude = r.resourceSets[0].resources[0].point.coordinates[0]
+
+                if (parseFloat(loc.lattitude) > 0 && parseFloat(loc.langitude) < 0) {
+                    loc.IsValid = true;
+                }
+                else {
+                    loc.IsValid = false;
+                }
+
+            },
+            error: function (e) {
+                loc.IsValid = false;
+
+            }
+        });
+
+        return loc;
+    }
+
+    function getRadioButtonGroupLabel(id) {
+        var searchCriteria = "Search All";
+        $("input[name='" + id + "']:checked").each(function () {
+            var idVal = $(this).attr("id");
+            searchCriteria = $("label[for='" + idVal + "']").text();
+        });
+        return searchCriteria;
+    }
+
+    function getCommaSeperatedListBoxText(id) {
+        var textelected = $("#" + id + " option:selected").map(function () {
+            return $(this).text();
+        }).get().join(',');
+        return textelected;
+    }
+
+    function ShowSelected(e) {
+        var selected = [];
+        $("#" + e + " option:selected").each(function () {
+            var $this = $(this);
+            if ($this.length) {
+                var selText = $this.text();
+                var selVal = $this.val();
+                selected.push({ 'value': selVal, 'text': selText })
+
+            }
+        });
+        return selected;
+    }
+
+    function showHide(id, showhide, elementID) {
+
+        if (showhide == 1) {
+            $("#" + elementID).show();
+            $("#" + id).data("showhide", "0");
+            $("#" + id).data("loaded", "1");
+            $("#" + id).text("(Hide...)");
+        } else {
+            $("#" + elementID).hide();
+            $("#" + id).data("showhide", "1");
+            $("#" + id).text("(Show...)");
+        }
+    }
+
+    //function getSummaryTable(objArr) {
+    //    var myTable = "";
+    //    var serachcondition = "";
+    //    $("#showhidefilter").data("showfilters", 1);
+    //    $("#showhidefilter").val("Refresh");
+    //    if (objArr.length > 0) {
+    //        myTable = "<table style='width:100%;border-radius:5px;'><tr><th style='border:1px solid gray;padding:5px;background-color:#045da4; color:white'>Type</th><th style='border:1px solid gray;padding:5px;background-color:#045da4; color:white'>Values</th></tr>"
+    //        for (var i = 0; i < objArr.length; i++) {
+    //            if (objArr[i].SearchCondition) {
+    //                serachcondition = objArr[i].SearchCondition + " - ";
+    //            } else {
+    //                serachcondition = ""
+    //            }
+    //            if (objArr[i].Name == 'Adhoc') {
+    //                myTable = myTable + "<tr><td style='border:1px solid gray;padding:5px;'>" + objArr[i].Name + "</td><td style='border:1px solid gray;padding:5px;'>" + objArr[i].Text + " - " + serachcondition + objArr[i].Values + "</td></tr>"
+    //            }
+    //            else {
+    //                myTable = myTable + "<tr><td style='border:1px solid gray;padding:5px;'>" + objArr[i].Name + "</td><td style='border:1px solid gray;padding:5px;'>" + serachcondition + objArr[i].Text + "</td></tr>"
+    //            }
+    //        }
+    //        myTable = myTable + "</table>";
+    //    }
+    //    return myTable;
+    //}
+
+    function openPopUp(id) {
+        var window = $("#" + id);
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+
+    function CloseWindow(id) {
+        var window = $("#" + id);
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    function getDimensionLstIds() {
+        var dimensionsIds = [];
+        $(".list_dynamicfilters").each(function () {
+            if ($(this).attr("id").includes('lstDimension')) {
+                dimensionsIds.push($(this).attr("id"));
+            }
+        });
+        return dimensionsIds;
+    }
+    function getDemoLstIds() {
+        var demosIds = [];
+        $(".list_dynamicfilters").each(function () {
+            if ($(this).attr("id").includes('lstDemo')) {
+                demosIds.push($(this).attr("id"));
+            }
+        });
+        return demosIds;
+    }
+
+    function getPubTypeLstIdsIds() {
+        var pubTypesIds = [];
+        $(".list_dynamicfilters").each(function () {
+            if ($(this).attr("id").includes('lstPubType')) {
+                pubTypesIds.push($(this).attr("id"));
+            }
+        });
+        return pubTypesIds;
+    }
+
+    function getSelectedProducts(pubTypesIds) {
+        var pubvalues = "";
+        var pubText = "";
+        $.each(pubTypesIds, function (index, ids) {
+            var option_all = $("#" + ids + " option:selected").map(function () {
+                return $(this).text();
+            }).get().join(',');
+            if (option_all) {
+                pubText = pubText + option_all + ',';
+            }
+            if ($("#" + ids).val()) {
+                pubvalues = pubvalues + $("#" + ids).val() + ',';
+            }
+        });
+        return { 'pubvalues': pubvalues, 'pubText': pubText }
+    }
+    //#endregion Helper functions
+
+    //#region Reset Filters
+    function ResetSelectFilters(FilterIds) {
+
+        $.each(FilterIds, function (index, ids) {
+            $("#" + ids + " option:selected").prop("selected", false);
+        })
+
+    }
+    function ResetAdHocFilter() {
+        $(".tblAdhocList").find('>tbody> tr').each(function () {
+            var id = $(this).attr("id");
+            var columnName = id.toString().replace('tr_', '');
+            var DisplayName = $(this).find('td:first-child').text().trim();
+
+            var columntype = $("#" + id).data("columntype");
+            if (!columntype) {
+                columntype = "varchar";
+            }
+            if (columntype.includes("varchar") || columntype.includes("uniqueidentifier")) {
+                var drpVarchar = $("#drpAdHocVarcharField_" + columnName).data("kendoDropDownList");
+                drpVarchar.value("Contains");
+                $("#RangeDiv_" + columnName).removeClass("displayInline").addClass("displayNone");
+                $("#SearchValueDiv_" + columnName).removeClass("displayNone").addClass("displayInline");
+                $("#txtSearchValue_" + columnName).show();
+                $("#txtSearchValue_" + columnName).val("");
+                $("#txtRangeFrom_" + columnName).val("");
+                $("#txtRangeTo_" + columnName).val("");
+            }
+            else if (columntype.includes("date")) {
+                var drpDate = $("#drpAdHocDateField_" + columnName).data("kendoDropDownList");
+                var drpLastXDays = $("#drpLastXDays_" + columnName).data("kendoDropDownList");
+                $("#LastXDaysDiv_" + columnName).removeClass("displayInline").addClass("displayNone");
+                $("#DateRangeDiv_" + columnName).removeClass("displayNone").addClass("displayInline");
+                $("#YearDiv_" + columnName).removeClass("displayInline").addClass("displayNone");
+                drpDate.value("DateRange");
+                $("#txtCustomDays_" + columnName).val("");
+                $("#txtDateRangeTo_" + columnName).val("");
+                $("#txtDateRangeFrom_" + columnName).val("");
+
+            }
+            else if (columntype.includes("int")) {
+                var drpInt = $("#drpAdHocIntField_" + columnName).data("kendoDropDownList");
+                drpInt.value("Range");
+                $("#RangeDiv_" + columnName).removeClass("displayNone").addClass("displayInline");
+                $("#SearchValueDiv_" + columnName).removeClass("displayInline").addClass("displayNone");
+                $("#txtRangeFrom_" + columnName).val("");
+                $("#txtRangeTo_" + columnName).val("");
+            }
+            else if (columntype.includes("bit")) {
+                $("#drpAdHocBitField_" + columnName).val('');
+            }
+           
+        });
+    }
+    function ResetCircFilter() {
+        $("#lstCircCatCode option:selected").prop("selected", false);
+        $("#lstCircTransaction option:selected").prop("selected", false);
+        $("#lstCircQSource option:selected").prop("selected", false);
+        $("#lstCircQSourceType option:selected").prop("selected", false);
+        $("#lstCircCatCodeType option:selected").prop("selected", false);
+        $("#lstCircTransactionType option:selected").prop("selected", false);
+        $("#lstMedia option:selected").prop("selected", false);
+        $("#lstYear option:selected").prop("selected", false);
+        $("#QDateFrom").val("");
+        $("#QDateTo").val("");
+        var wavemaling = $("#drpIsWaveMailing").data("kendoDropDownList");
+        wavemaling.value('');
+        $("#drpIsWaveMailing").val('');
+
+    }
+    function ResetActivityFilter(id) {
+        switch (id) {
+            //Open Activity
+            case 'Open':
+                var drpOpenedCtr = $("#OpenedCtr").data("kendoDropDownList");
+                drpOpenedCtr.value('');
+                $(".NoOpensSelected").hide();
+                $(".OpenPlusSelected").hide();
+                $('#OpenActivityFilterSummaryTable').html('');
+                break;
+                //Click Activity
+            case 'Click':
+                var drpClickedCtr = $("#ClickedCtr").data("kendoDropDownList");
+                drpClickedCtr.value('');
+                $(".NoClicksSelected").hide();
+                $(".ClickPlusSelected").hide();
+                $('#ClickActivityFilterSummaryTable').html('');
+                break;
+                //Visit Activity
+            case 'Visit':
+                var drpVisitedCtr = $("#VisitedCtr").data("kendoDropDownList");
+                drpVisitedCtr.value('');
+                $(".NoVisitsSelected").hide();
+                $(".VisitPlusSelected").hide();
+                $('#VisitActivityFilterSummaryTable').html('');
+                break;
+            default:
+                //Open Activity
+                var drpOpenedCtr = $("#OpenedCtr").data("kendoDropDownList");
+                drpOpenedCtr.value('');
+                $(".NoOpensSelected").hide();
+                $(".OpenPlusSelected").hide();
+                var drpClickedCtr = $("#ClickedCtr").data("kendoDropDownList");
+                drpClickedCtr.value('');
+                $(".NoClickSelected").hide();
+                $(".ClickPlusSelected").hide();
+                var drpVisitedCtr = $("#VisitedCtr").data("kendoDropDownList");
+                drpVisitedCtr.value('');
+                $(".NoVisitSelected").hide();
+                $(".VisitPlusSelected").hide();
+                $('#OpenActivityFilterSummaryTable').html('');
+                $('#ClickActivityFilterSummaryTable').html('');
+                $('#VisitActivityFilterSummaryTable').html('');
+                break;
+
+        }
+
+    }
+    function ResetGeoFieldFilter() {
+        $("#lstGeoCode option:selected").prop("selected", false);
+        $("#lstArea option:selected").prop("selected", false);
+        $("#lstCountry option:selected").prop("selected", false);
+        $("#lstRegion option:selected").prop("selected", false);
+        $("#ZipCode").val('');
+        $("#RangeMin").val('');
+        $("#RangeMax").val('');
+        $('#GeoFieldFilterSummaryTable').html('');
+
+    }
+    function ResetContactFieldFilter() {
+        $('#ContactFieldFilterSummaryTable').html('');
+        //$('#lstCtGeoLocated option').each(function (element) {
+        //    $(this).multiselect('deselect', $(this).val());
+        //});
+        //$('#lstCtMedia option').each(function (element) {
+        //    $(this).multiselect('deselect', $(this).val());
+        //});
+        //$('#lstCtFax option').each(function (element) {
+        //    $(this).multiselect('deselect', $(this).val());
+        //});
+        //$('#lstCtPhone option').each(function (element) {
+        //    $(this).multiselect('deselect', $(this).val());
+        //});
+        ////$("#lstCtGeoLocated option:selected").prop("selected", false);
+        ////$("#lstCtMedia option:selected").prop("selected", false);
+        ////$("#lstCtFax option:selected").prop("selected", false);
+        ////$("#lstCtPhone  option:selected").prop("selected", false);
+        $("#ContactFieldPopUpWindow [data-role='multiselect']").each(function (e) {
+            var multi = $(this).data("kendoMultiSelect");
+            multi.value('');
+        });
+    }
+    function ResetPermissionFieldFilter() {
+        $('#PermissionFieldFilterSummaryTable').html('');
+        $("#PermissionFieldPopUpWindow [data-role='multiselect']").each(function (e) {
+            var multi = $(this).data("kendoMultiSelect");
+            multi.value('');
+        });
+    }
+    function resetFilter(isBrandChange) {
+        $("#lstMarket option:selected").prop("selected", false);
+        var lstEmail = $("#lstCtEmail").data("kendoMultiSelect");
+        lstEmail.value('');
+        var lstEmailStatus = $("#lstEmailStatus").data("kendoMultiSelect");
+        lstEmailStatus.value('');
+        var viewType = $("#viewtype").val();
+        if (viewType == "ProductView") {
+            //Reset Demo Filter
+            var demoIds = getDemoLstIds();
+            ResetSelectFilters(demoIds);
+        } else {
+            if (isBrandChange) {
+
+            } else {
+                var drpbrand = $("#ddlBrand").data("kendoDropDownList");
+                drpbrand.value(0);
+            }
+            //Reset Dimension Filter
+            var pubTypesIds = getPubTypeLstIdsIds();
+            ResetSelectFilters(pubTypesIds);
+
+            //Reset Dimension Filter
+            var dimensionsIds = getDimensionLstIds();
+            ResetSelectFilters(dimensionsIds);
+
+        }
+        //reset Circ filter
+        ResetCircFilter();
+
+        //reset adHoc Filter
+        ResetAdHocFilter();
+
+        //reset Activity Filter
+        ResetActivityFilter();
+
+        //reset standard filter
+        ResetPermissionFieldFilter();
+
+        ResetContactFieldFilter();
+
+        ResetGeoFieldFilter();
+    }
+    //#endregion Reset Filters
+
+    //#region Get Filters
+    function getFilter() {
+
+        var viewType = $("#viewtype").val();
+        var FrameworkUAD = {
+            BusinessLogic: {
+                Enums: {
+                    ViewType: {
+                        None: 0,
+                        ConsensusView: 1,
+                        ProductView: 2,
+                        CrossProductView: 3,
+                        RecencyView: 4,
+                        RecordDetails: 5,
+                        AMSView: 6
+                    }
+                }
+            }
+        }
+        var filter = {
+            FilterNo: 0,
+            Count: 0,
+            PubID: $("#SelectedProductID").val(),
+            BrandID: 0,
+            ViewType: FrameworkUAD.BusinessLogic.Enums.ViewType.None,
+            FilterGroupID: 1,
+            FilterGroupName: '',
+            Executed: false,
+            Fields: []
+
+        };
+        switch (viewType) {
+            case "ConsensusView":
+                filter.ViewType = FrameworkUAD.BusinessLogic.Enums.ViewType.ConsensusView;
+                break;
+            //case "AMSView":
+            //    filter.ViewType = FrameworkUAD.BusinessLogic.Enums.ViewType.AMSView;
+            //    break;
+            case "ProductView":
+                filter.ViewType = FrameworkUAD.BusinessLogic.Enums.ViewType.ProductView;
+                break;
+            case "RecencyView":
+                filter.ViewType = FrameworkUAD.BusinessLogic.Enums.ViewType.RecencyView;
+                break;
+            case "RecordView":
+                filter.ViewType = FrameworkUAD.BusinessLogic.Enums.ViewType.RecordView;
+                break;
+        }
+        if (viewType == "ProductView") {
+            var drpProduct = $("#SelectedProductID").data("kendoDropDownList");
+
+            filter.Fields.push({ Name: "Product", Values: $("#SelectedProductID").val(), Text: drpProduct.text(), SearchCondition: '', FilterType: 'Product', Group: 'Product', ElementID: 'lstPubType' });
+
+            //Master Group Filter
+            var demoIDs = getDemoLstIds();
+            $.each(demoIDs, function (index, ids) {
+                var lnkid = ids.replace("lstDemo", "lnkDemo");
+                var textelected = $("#" + ids + " option:selected").map(function () {
+                    return $(this).text();
+                }).get().join(',');
+                var valuesselected = $("#" + ids + " option:selected").map(function () {
+                    return $(this).val();
+                }).get().join(',');
+                var grouptext = "";
+                var name = ""
+                if ($("#" + ids).val()) {
+                    //valuesselected = $("#" + ids).val();
+                    name = $("#" + lnkid).text().trim();
+                    grouptext = $("#" + ids).data("columref");
+                    filter.Fields.push({ Name: name, Values: valuesselected, Text: textelected, SearchCondition: '', FilterType: 'Dimension', Group: grouptext, ElementID: ids });
+                }
+
+            });
+
+        }
+        else {
+            var drpbrand = $("#ddlBrand").data("kendoDropDownList");
+            if (drpbrand.value() > 0) {
+                filter.Fields.push({ Name: "Brand", Values: drpbrand.value(), Text: drpbrand.text(), SearchCondition: '', FilterType: 'Brand', Group: 'BRAND', ElementID: "ddlBrand" });
+                filter.BrandID = drpbrand.value();
+            }
+            var ddlDCFile = $("#ddlDCFile").data("kendoDropDownList");
+            if (ddlDCFile.value()) {
+                filter.Fields.push({ Name: "DataCompare", Values: ddlDCFile.value().toString().split('|')[0] + '|', Text: ddlDCFile.text(), SearchCondition: '', FilterType: 'DataCompare', Group: 'DataCompare', ElementID: "ddlDCFile" });
+
+            }
+
+            //Pub Filter
+            var pubTypesIds = getPubTypeLstIdsIds();
+            var selectedpubs = getSelectedProducts(pubTypesIds);
+            if (selectedpubs.pubvalues) {
+                filter.Fields.push({ Name: "Product", Values: selectedpubs.pubvalues.substring(0, selectedpubs.pubvalues.length - 1), Text: selectedpubs.pubText.substring(0, selectedpubs.pubText.length - 1), SearchCondition: '', FilterType: 'Product', Group: 'Product', ElementID: 'lstPubType' });
+            }
+
+            //Master Group Filter
+            var dimensionsIds = getDimensionLstIds();
+            $.each(dimensionsIds, function (index, ids) {
+                var lnkid = ids.replace("lstDimension", "lnkDimension");
+                var textelected = $("#" + ids + " option:selected").map(function () {
+                    return $(this).text();
+                }).get().join(',');
+                var valuesselected = "";
+                var grouptext = "";
+                var name = ""
+                if ($("#" + ids).val()) {
+                    valuesselected = $("#" + ids).val();
+                    name = $("#" + lnkid).text().trim();
+                    grouptext = $("#" + ids).data("columref");
+                    filter.Fields.push({ Name: name, Values: valuesselected, Text: textelected, SearchCondition: '', FilterType: 'Dimension', Group: grouptext, ElementID: 'lstDimension' });
+                }
+
+            });
+        }
+
+        //Response Group Filter
+        //Validation of product selection
+        var drpOpenedCtr = $("#OpenedCtr").data("kendoDropDownList");
+        var drpClickedCtr = $("#ClickedCtr").data("kendoDropDownList");
+        var openedsearchcriteria = getRadioButtonGroupLabel('OpenCriteriaSearch');
+        var clickedsearchcriteria = getRadioButtonGroupLabel('ClickCriteriaSearch');
+        //if (drpOpenedCtr.value() >= 0 || drpClickedCtr.value() >= 0) {
+        //    if ((openedsearchcriteria == "Search Selected Products" || clickedsearchcriteria == "Search Selected Products") && selectedpubs.pubvalues.length > 0) {
+        //        //DisplayError("Please select at least one product or change search to 'Search All' in  Open Criteria.");
+        //        return;
+        //    }
+        //}
+        //Circ Filter
+        var circ = SelectCloseCircFilter();
+        $.each(circ, function (index, obj) {
+            filter.Fields.push(obj);
+        });
+        //Ad Hoc Filter
+        var adhoc = SelectCloseAdhocFilter();
+        $.each(adhoc, function (index, obj) {
+            filter.Fields.push(obj);
+        });
+        //Activity Filter
+        var activity = SelectCloseActivityFilter();
+        $.each(activity, function (index, obj) {
+            filter.Fields.push(obj);
+        });
+
+        //------Standard Filter----------------
+
+        //Contact Field Filter
+
+        if ($("#lstCtGeoLocated").val()) {
+            var value = $("#lstCtGeoLocated").val().join(',');
+            filter.Fields.push({ Name: "GeoLocated", Values: value, Text: getCommaSeperatedListBoxText('lstCtGeoLocated'), SearchCondition: '', FilterType: 'Standard', Group: 'ISLATLONVALID', ElementID: 'lstCtGeoLocated' });
+        }
+        if ($("#lstCtPhone").val()) {
+            var value = $("#lstCtPhone").val().join(',');
+            filter.Fields.push({ Name: "Phone", Values: value, Text: getCommaSeperatedListBoxText('lstCtPhone'), SearchCondition: '', FilterType: 'Standard', Group: 'PHONE', ElementID: 'lstCtPhone' });
+        }
+        if ($("#lstCtMedia").val()) {
+            var value = $("#lstCtMedia").val().join(',');
+            filter.Fields.push({ Name: "Media", Values: value, Text: getCommaSeperatedListBoxText('lstCtMedia'), SearchCondition: '', FilterType: 'Standard', Group: 'MEDIA', ElementID: 'lstCtMedia' });
+        }
+        if ($("#lstCtFax").val()) {
+            var value = $("#lstCtFax").val().join(',');
+            filter.Fields.push({ Name: "Fax", Values: value, Text: getCommaSeperatedListBoxText('lstCtFax'), SearchCondition: '', FilterType: 'Standard', Group: 'FAX', ElementID: 'lstCtFax' });
+        }
+        if ($("#lstCtEmail").val()) {
+            var value = $("#lstCtEmail").val().join(',');
+            filter.Fields.push({ Name: "Email", Values: value, Text: getCommaSeperatedListBoxText('lstCtEmail'), SearchCondition: '', FilterType: 'Standard', Group: 'EMAIL', ElementID: 'lstCtEmail' });
+        }
+
+        //permission filter
+        if ($("#lstPermText").val()) {
+            var value = $("#lstPermText").val().join(',');
+            filter.Fields.push({ Name: "TextPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermText'), SearchCondition: '', FilterType: 'Standard', Group: 'TEXTPERMISSION', ElementID: 'lstPermText' });
+        }
+        if ($("#lstPermPhone").val()) {
+            var value = $("#lstPermPhone").val().join(',');
+            filter.Fields.push({ Name: "PhonePermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermPhone'), SearchCondition: '', FilterType: 'Standard', Group: 'PHONEPERMISSION', ElementID: 'lstPermPhone' });
+        }
+        if ($("#lstPermFax").val()) {
+            var value = $("#lstPermFax").val().join(',');
+            filter.Fields.push({ Name: "FaxPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermFax'), SearchCondition: '', FilterType: 'Standard', Group: 'FAXPERMISSION', ElementID: 'lstPermFax' });
+        }
+        if ($("#lstPermMail").val()) {
+            var value = $("#lstPermMail").val().join(',');
+            filter.Fields.push({ Name: "MailPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermMail'), SearchCondition: '', FilterType: 'Standard', Group: 'MAILPERMISSION', ElementID: 'lstPermMail' });
+        }
+        if ($("#lstPermOtherProducts").val()) {
+            var value = $("#lstPermOtherProducts").val().join(',');
+            filter.Fields.push({ Name: "OtherProductsPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermOtherProducts'), SearchCondition: '', FilterType: 'Standard', Group: 'OTHERPRODUCTSPERMISSION', ElementID: 'lstPermOtherProducts' });
+        }
+        if ($("#lstPermThirdParty").val()) {
+            var value = $("#lstPermThirdParty").val().join(',');
+            filter.Fields.push({ Name: "ThirdPartyPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermThirdParty'), SearchCondition: '', FilterType: 'Standard', Group: 'THIRDPARTYPERMISSION', ElementID: 'lstPermThirdParty' });
+        }
+        if ($("#lstPermEmailRenew").val()) {
+            var value = $("#lstPermEmailRenew").val().join(',');
+            filter.Fields.push({ Name: "EmailRenewPermission", Values: value, Text: getCommaSeperatedListBoxText('lstPermEmailRenew'), SearchCondition: '', FilterType: 'Standard', Group: 'EMAILRENEWPERMISSION', ElementID: 'lstPermEmailRenew' });
+        }
+
+        //Email Status Filter
+        if ($("#lstEmailStatus").val()) {
+            var value = $("#lstEmailStatus").val().join(',');
+            filter.Fields.push({ Name: "Email Status", Values: value, Text: getCommaSeperatedListBoxText('lstEmailStatus'), SearchCondition: '', FilterType: 'Standard', Group: 'EMAILSTATUS', ElementID: 'lstEmailStatus' });
+        }
+        //Country /Region
+        if ($("#lstCountry").val()) {
+            var value = $("#lstCountry").val().join(',');
+            filter.Fields.push({ Name: "Country", Values: value, Text: getCommaSeperatedListBoxText('lstCountry'), SearchCondition: '', FilterType: 'Standard', Group: 'COUNTRY', ElementID: 'lstCountry' });
+        }
+        if ($("#lstRegion").val()) {
+            var value = $("#lstRegion").val().join(',');
+            filter.Fields.push({ Name: "State", Values: value, Text: getCommaSeperatedListBoxText('lstRegion'), SearchCondition: '', FilterType: 'Standard', Group: 'STATE', ElementID: 'lstRegion' });
+        }
+        //Geo Filter
+        if (viewType != "ProductView") {
+            if ($("#ZipCode").val()) {
+                if ($("#RangeMin").val() && $("#RangeMax").val() && (parseInt($("#RangeMax").val()) > parseInt($("#RangeMin").val()))) {
+                    var drpGeoCountry = $("#drpCountry").data("kendoDropDownList");
+                    var postalcode = $("#ZipCode").val();
+                    var mylocation = {
+                        PostalCode: postalcode,
+                        Country: drpGeoCountry.value()
+                    }
+                    mylocation = validateLocation(mylocation);
+                    setTimeout(function () {
+                        if (mylocation.IsValid) {
+                            var PI_180 = Math.PI / 180.00;
+                            var salonLat = parseFloat(mylocation.lattitude);
+                            var salonLon = parseFloat(mylocation.langitude);
+
+                            var radiusLatTotal_RangeMax = parseFloat($("#RangeMax").val()) / 69.00;
+                            var minLat_RangeMax = salonLat - radiusLatTotal_RangeMax;
+                            var maxLat_RangeMax = salonLat + radiusLatTotal_RangeMax;
+                            var minLon_RangeMax = salonLon + (radiusLatTotal_RangeMax / Math.cos(minLat_RangeMax * PI_180));
+                            var maxLon_RangeMax = salonLon - (radiusLatTotal_RangeMax / Math.cos(maxLat_RangeMax * PI_180));
+
+                            var radiusLatTotal_RangeMin = parseFloat($("#RangeMin").val()) / 69.00;
+                            var minLat_RangeMin = salonLat - radiusLatTotal_RangeMin;
+                            var maxLat_RangeMin = salonLat + radiusLatTotal_RangeMin;
+                            var minLon_RangeMin = salonLon + (radiusLatTotal_RangeMin / Math.cos(minLat_RangeMin * PI_180));
+                            var maxLon_RangeMin = salonLon - (radiusLatTotal_RangeMin / Math.cos(maxLat_RangeMin * PI_180));
+
+                            var temp;
+
+                            if ((minLat_RangeMin > maxLat_RangeMin) && (minLon_RangeMin < maxLon_RangeMin)) {
+                                temp = maxLat_RangeMin;
+                                maxLat_RangeMin = minLat_RangeMin;
+                                minLat_RangeMin = temp;
+                            }
+                            else if ((minLat_RangeMin < maxLat_RangeMin) && (minLon_RangeMin > maxLon_RangeMin)) {
+                                temp = maxLon_RangeMin;
+                                maxLon_RangeMin = minLon_RangeMin;
+                                minLon_RangeMin = temp;
+
+                            }
+                            else if ((minLat_RangeMin > maxLat_RangeMin) && (minLon_RangeMin > maxLon_RangeMin)) {
+                                temp = maxLat_RangeMin;
+                                maxLat_RangeMin = minLat_RangeMin;
+                                minLat_RangeMin = temp;
+
+                                temp = maxLon_RangeMin;
+                                maxLon_RangeMin = minLon_RangeMin;
+                                minLon_RangeMin = temp;
+                            }
+
+                            if ((minLat_RangeMax > maxLat_RangeMax) && (minLon_RangeMax < maxLon_RangeMax)) {
+                                temp = maxLat_RangeMax;
+                                maxLat_RangeMax = minLat_RangeMax;
+                                minLat_RangeMax = temp;
+                            }
+                            else if ((minLat_RangeMax < maxLat_RangeMax) && (minLon_RangeMax > maxLon_RangeMax)) {
+                                temp = maxLon_RangeMax;
+                                maxLon_RangeMax = minLon_RangeMax;
+                                minLon_RangeMax = temp;
+
+                            }
+                            else if ((minLat_RangeMax > maxLat_RangeMax) && (minLon_RangeMax > maxLon_RangeMax)) {
+                                temp = maxLat_RangeMax;
+                                maxLat_RangeMax = minLat_RangeMax;
+                                minLat_RangeMax = temp;
+
+                                temp = maxLon_RangeMax;
+                                maxLon_RangeMax = minLon_RangeMax;
+                                minLon_RangeMax = temp;
+                            }
+                            filter.Fields.push({
+                                Name: "Zipcode-Radius",
+                                Values: minLat_RangeMax + "|" + maxLat_RangeMax + "|" + minLon_RangeMax + "|" + maxLon_RangeMax + "|" + minLat_RangeMin + "|" + maxLat_RangeMin + "|" + minLon_RangeMin + "|" + maxLon_RangeMin,
+                                Text: $("#ZipCode").val() + " & " + $("#RangeMin").val() + " miles - " + $("#RangeMax").val() + " miles",
+                                SearchCondition: $("#ZipCode").val() + "|" + $("#RangeMin").val() + "|" + $("#RangeMax").val(),
+                                FilterType: 'Geo',
+                                Group: 'ZIPCODE-RADIUS'
+                            });
+
+                        }
+
+                    }, 1000);
+
+
+                }
+
+            }
+        }
+       
+        return filter;
+    }
+    function AddFilter() {
+        var filter = getFilter();
+        setTimeout(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '/uas.web/Filter/AddFilter',
+                data: JSON.stringify({ 'filter': filter }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#" + $("#parentViewDivId").val()).html(response);
+
+                },
+                error: function (response) {
+
+                    console.log(response)
+
+
+                }
+            });
+
+        }, 1000);
+    }
+
+    //#endregion Get Filters
+
+    //#region Saved Filter and Save Filter Panel
+    function GetSavedFiltersPanel(model) {
+        var window = $("#SavedFilterPopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.content('');
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Filter/GetSavedFiltersPanel',
+            data: JSON.stringify({ 'sfVM': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                kendoWindow.content(data);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+
+                console.log(response)
+
+
+            }
+
+        });
+    }
+    
+    function GetSaveFilterPanel(model) {
+        var window = $("#SaveFilterPanelPopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Filter/GetSaveFilterPanel',
+            data: JSON.stringify({ 'sfVM': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                kendoWindow.content(data);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+
+                console.log(response)
+
+
+            }
+
+        });
+    }
+    //#endregion
+
+    function LoadDefaultFilters(func) {
+        resetFilter(false);
+        $.ajax({
+            url: '/uas.web/filter/GetDefaultFilters',
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+                
+                $("#lstCircCatCodeType option").prop("selected", false);
+                $("#lstCircCatCode option").prop("selected", false);
+                $("#lstCircTransactionType option").prop("selected", false);
+                $("#lstCircTransaction option").prop("selected", false);
+                $.each(data.cc, function (i, e) {
+                    $("#lstCircCatCode option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.ct, function (i, e) {
+                    $("#lstCircCatCodeType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xc, function (i, e) {
+                    $("#lstCircTransaction option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xt, function (i, e) {
+                    $("#lstCircTransactionType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                
+                if (func) {
+                    func();
+                }
+                
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    function LoadFilterData(filterIDs,callback) {
+            
+            $.ajax({
+                url: '/uas.web/filter/GetFilter?filterID=' + filterIDs,
+                contentType: "application/json; charset=utf-8",
+                type: 'GET',
+                cache: !0,
+                datatype: 'application/json',
+                success: function (data) {
+                    //For Test
+                    LoadFilterDetails(data, callback);
+                },
+                error: function () {
+                    console.log(response);
+                }
+            });
+     }
+    function LoadFilterDetails(data, callback) {
+        //For Test
+        resetFilter(false);
+        data.FilterType = $("#viewtype").val();
+        var pubID = $("#SelectedProductID").val();
+        var profileFields = [];
+        var Activityfields = [];
+        var dimensionfields = [];
+        var AdHocFields = [];
+        for (var i = 0; i < data.Fields.length; i++) {
+            if ((data.Fields[i].FilterType != 1) && (data.Fields[i].FilterType != 4) && (data.Fields[i].FilterType != 5)) {
+                profileFields.push(data.Fields[i]);
+            } else if (data.Fields[i].FilterType == 4) {
+                Activityfields.push(data.Fields[i]);
+            } else if (data.Fields[i].FilterType == 1) {
+                dimensionfields.push(data.Fields[i]);
+            } else if (data.Fields[i].FilterType == 5) {
+                AdHocFields.push(data.Fields[i]);
+            }
+        }
+                   
+        if(profileFields.length>0) {
+            $.each(profileFields, function (i, field) {
+                var values= field.Values.split(',');
+                switch (field.Name.toUpperCase()) {
+                    case 'BRAND':
+                        $("#ddlBrand").val(values);
+                        break;
+                    case "EMAIL STATUS":
+                        var multiselect = $("#lstEmailStatus").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "EMAIL":
+                        var multiselect = $("#lstCtEmail").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "PHONE":
+                        var multiselect = $("#lstCtPhone").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "GEOLOCATED":
+                        var multiselect = $("#lstCtGeoLocated").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                                
+                    case "FAX":
+                        var multiselect = $("#lstCtFax").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "PHONEPERMISSION":
+                        var multiselect = $("#lstPermPhone").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "MAILPERMISSION":
+                        var multiselect = $("#lstPermMail").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "FAXPERMISSION":
+                        var multiselect = $("#lstPermFax").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "OTHERPRODUCTSPERMISSION":
+                        var multiselect = $("#lstPermOtherProducts").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "THIRDPARTYPERMISSION":
+                        var multiselect = $("#lstPermThirdParty").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "EMAILRENEWPERMISSION":
+                        var multiselect = $("#lstPermEmailRenew").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "TEXTPERMISSION":
+                        var multiselect = $("#lstPermText").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "CATEGORY TYPE":
+                        $("#lstCircCatCodeType").val(values);
+                        break;
+                    case "CATEGORY CODE":
+                        $("#lstCircCatCode").val(values);
+                        break;
+                    case "XACT":
+                        $("#lstCircTransactionType").val(values);
+                        break;
+                    case "TRANSACTION CODE":
+                        $("#lstCircTransaction").val(values);
+                        break;
+                    case "QSOURCE TYPE":
+                        $("#lstCircQSourceType").val(values);
+                        break;
+                    case "QSOURCE CODE":
+                        $("#lstCircQSource").val(values);
+                        break;
+                    case "MEDIA":
+                        $("#lstMedia").val(values);
+                        var multiselect = $("#lstCtMedia").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "QFROM":
+                        $("#QDateFrom").val(values);
+                        break;
+                    case "QTO":
+                        $("#QDateTo").val(values);
+                        break;
+                    case "STATE":
+                        $("#lstRegion").val(values)
+                        break;
+                    case "COUNTRY":
+                        $("#lstCountry").val(values);
+                        break;
+                    case "QUALIFICATIONYEAR":
+                        $("#lstYear").val(values);
+                        break;
+                    case "WAVE MAILING":
+                        var wavemaling = $("#drpIsWaveMailing").data("kendoDropDownList");
+                        wavemaling.value(field.Values);
+                        break;
+                       
+                }
+
+                        })
+                    }
+
+        if (dimensionfields.length > 0) {
+            var demoIDs = [];
+            if (data.FilterType == "ProductView") {
+                demoIDs = getDemoLstIds();
+            } else {
+                demoIDs = getDimensionLstIds();
+            }
+            $.each(dimensionfields, function (i, field) {
+                $.ajax({
+                    //url: '/uas.web/filter/GetResponseGroupByResponseGroup?PubID=' + pubID + "&ResponseGroup=" + field.Group,
+                    url: '/uas.web/filter/GetResponseGroupCodeSheetAjax?pubID=' + pubID + "&ResponseGroup=" + field.Group,
+                    type: 'GET',
+                    cache: !0,
+                    datatype: 'application/json',
+                    success: function (data) {
+                                   
+                        var listboxID = "lstDemo_" + data[0].ResponseGroupID;
+                        var showlessmore = "showMoreLessDemo_" + data[0].ResponseGroupID;
+                        var elementID = "trDemo_" + data[0].ResponseGroupID;
+                        $("#"+listboxID).html('');
+                        var options = "";
+                        $.each(data, function (i, obj) {
+                            options = options + "<option value=" + obj.Value + ">" + obj.Text + "</option>";
+                        });
+                        $("#" + listboxID).append(options);
+                        $("#" + listboxID).val(field.Values.split(','));
+                        $("#" + showlessmore).data("loaded", 1);
+                        showHide(showlessmore, 1, elementID);
+                        if (callback) {
+                            callback();
+                        }
+                        
+                    },
+                    error: function (data) {
+
+                                }
+                            });
+
+            });
+                       
+                        
+        }
+                    
+        if (Activityfields.length > 0) {
+            $.each(Activityfields, function (i, field) {
+                var SearchType = "";
+                if (field.SearchCondition) {
+                    SearchType = field.SearchCondition;
+                }
+                var values = field.Values.split(',');
+                switch (field.Name.toUpperCase()) {
+                    case "OPEN CRITERIA":
+                        var drp = $("#OpenedCtr").data("kendoDropDownList");
+                        drp.value(values);
+                        showhideFilterPanel(values, 'Open');
+                        break;
+                    case "CLICK CRITERIA":
+                        var drp = $("#ClickedCtr").data("kendoDropDownList");
+                        drp.value(values);
+                        showhideFilterPanel(values, 'Click');
+                        break;
+                    case "VISIT CRITERIA":
+                        var drp = $("#VisitedCtr").data("kendoDropDownList");
+                        drp.value(values);
+                        showhideFilterPanel(values, 'Visit');
+                        break;
+                    case "OPEN BLASTID":
+                        $("#OpenCtr_BlastID").val(field.Values);
+                        break;
+                    case "OPEN CAMPAIGNS":
+                        var multiselect = $("#OpenCtr_Campaigns").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "OPEN EMAIL SUBJECT":
+                        $("#OpenCtr_EmailSubject").val(field.Values);
+                        break;
+                    case "LINK":
+                        $("#ClickedCtr_Url").val(field.Values);
+                        break;
+                    case "CLICK BLASTID":
+                        $("#ClickedCtr_BlastID").val(field.Values);
+                        break;
+                    case "CLICK CAMPAIGNS":
+                        var multiselect = $("#ClickedCtr_Campaigns").data("kendoMultiSelect");
+                        multiselect.value(values);
+                        break;
+                    case "CLICK EMAIL SUBJECT":
+                        $("#ClickedCtr_EmailSubject").val(field.Values);
+                        break;
+                    case "DOMAIN TRACKING":
+                        var drp = $("#VisitedCtr_Domain").data("kendoDropDownList");
+                        drp.value(values);
+                        break;
+                    case "URL":
+                        $("#VisitedCtr_Url").val(field.Values);
+                        break;
+                    case "OPEN EMAIL SENT DATE":
+                        var drpOpenCtr_EmailSentDate = $("#OpenCtr_EmailSentDate").data("kendoDropDownList");
+                        var drpOpenCtr_EmailSentDate_LastXDays = $("#OpenCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                        drpOpenCtr_EmailSentDate.text(SearchType);
+                        changeVisibility('OpenCtr_EmailSentDate', SearchType);
+                        if (SearchType.toUpperCase() == "DATERANGE") {
+
+                                        var d_values = field.Values.split('|');
+                                        $("#OpenCtr_EmailSentDate_DateRangeFrom").val(d_values[0]);
+                                        $("#OpenCtr_EmailSentDate_DateRangeTo").val(d_values[1]);
+
+                                    } else if (SearchType.toUpperCase() == "XDAYS") {
+                                        drpOpenCtr_EmailSentDate_LastXDays.value(field.Values);
+                                    } else if (SearchType.toUpperCase() == "YEAR") {
+                                        var y_values = field.Values.split('|');
+                                        $("#OpenCtr_EmailSentDate_YearFrom").val(y_values[0]);
+                                        $("#OpenCtr_EmailSentDate_YearTo").val(y_values[1]);
+
+                                    }
+                                    break;
+                                case "CLICK EMAIL SENT DATE":
+                                    var drpClickedCtr_EmailSentDate = $("#ClickedCtr_EmailSentDate").data("kendoDropDownList");
+                                    var drpClickedCtr_EmailSentDate_LastXDays = $("#ClickedCtr_EmailSentDate_LastXDays").data("kendoDropDownList");
+                                    drpClickedCtr_EmailSentDate.text(SearchType);
+                                    changeVisibility('ClickedCtr_EmailSentDate', SearchType);
+                                    if (SearchType.toUpperCase() == "DATERANGE") {
+
+                                        var d_values = field.Values.split('|');
+                                        $("#ClickedCtr_EmailSentDate_DateRangeFrom").val(d_values[0]);
+                                        $("#ClickedCtr_EmailSentDate_DateRangeTo").val(d_values[1]);
+
+                                    } else if (SearchType.toUpperCase() == "XDAYS") {
+                                        drpClickedCtr_EmailSentDate_LastXDays.value(field.Values);
+                                    } else if (SearchType.toUpperCase() == "YEAR") {
+                                        var y_values = field.Values.split('|');
+                                        $("#ClickedCtr_EmailSentDate_YearFrom").val(y_values[0]);
+                                        $("#ClickedCtr_EmailSentDate_YearTo").val(y_values[1]);
+
+                                    }
+                                    break;
+                                case "OPEN ACTIVITY":
+                                    var drpOpenCtr_OpenedDate = $("#OpenCtr_OpenedDate").data("kendoDropDownList");
+                                    var drpOpenCtr_OpenedDate_LastXDays = $("#OpenCtr_OpenedDate_LastXDays").data("kendoDropDownList");
+                                    drpOpenCtr_OpenedDate.text(SearchType);
+                                    changeVisibility('OpenCtr_OpenedDate', SearchType);
+                                    if (SearchType.toUpperCase() == "DATERANGE") {
+                                       
+                                        var d_values = field.Values.split('|');
+                                        $("#OpenCtr_OpenedDate_DateRangeFrom").val(d_values[0]);
+                                        $("#OpenCtr_OpenedDate_DateRangeTo").val(d_values[1]);
+                                        
+                                    } else if (SearchType.toUpperCase() == "XDAYS") {
+                                        drpOpenCtr_OpenedDate_LastXDays.value(field.Values);
+                                    } else if (SearchType.toUpperCase() == "YEAR") {
+                                        var y_values = field.Values.split('|');
+                                        $("#OpenCtr_OpenedDate_YearFrom").val(y_values[0]);
+                                        $("#OpenCtr_OpenedDate_YearTo").val(y_values[1]);
+                                        
+                                    }
+                                    break;
+                                case "CLICK ACTIVITY":
+                                    var drpClickedCtr_ClickedDate = $("#ClickedCtr_ClickedDate").data("kendoDropDownList");
+                                    var drpClickedCtr_ClickedDate_LastXDays = $("#ClickedCtr_ClickedDate_LastXDays").data("kendoDropDownList");
+                                    drpClickedCtr_ClickedDate.text(SearchType);
+                                    changeVisibility('ClickedCtr_ClickedDate', SearchType);
+                                    if (SearchType.toUpperCase() == "DATERANGE") {
+                                       
+                                        var d_values = field.Values.split('|');
+                                        $("#ClickedCtr_ClickedDate_DateRangeFrom").val(d_values[0]);
+                                        $("#ClickedCtr_ClickedDate_DateRangeTo").val(d_values[1]);
+                                    } else if (SearchType.toUpperCase() == "XDAYS") {
+                                        drpClickedCtr_ClickedDate_LastXDays.value(field.Values);
+                                    } else if (SearchType.toUpperCase() == "YEAR") {
+                                        var y_values = field.Values.split('|');
+                                        $("#ClickedCtr_ClickedDate_YearFrom").val(y_values[0]);
+                                        $("#ClickedCtr_ClickedDate_YearTo").val(y_values[1]);
+                                    }
+                                    break;
+                                case "VISIT ACTIVITY":
+                                    var drpVisitedCtr_VisitedDate = $("#VisitedCtr_VisitedDate").data("kendoDropDownList");
+                                    var drpVisitedCtr_DomainTracking = $("#VisitedCtr_Domain").data("kendoDropDownList");
+                                    var drpVisitedCtr_VisitedDate_LastXDays = $("#VisitedCtr_VisitedDate_LastXDays").data("kendoDropDownList");
+                                    drpVisitedCtr_VisitedDate.text(SearchType);
+                                    changeVisibility('VisitedCtr_VisitedDate', SearchType);
+                                    if (SearchType.toUpperCase() == "DATERANGE") {
+                                        
+                                        var d_values = field.Values.split('|');
+                                        $("#VisitedCtr_VisitedDate_DateRangeFrom").val(d_values[0]);
+                                        $("#VisitedCtr_VisitedDate_DateRangeTo").val(d_values[1]);
+
+                                    } else if (SearchType.toUpperCase() == "XDAYS") {
+                                        drpVisitedCtr_VisitedDate_LastXDays.value(field.Values);
+                                    } else if (SearchType.toUpperCase() == "YEAR") {
+                                        var y_values = field.Values.split('|');
+                                        $("#VisitedCtr_VisitedDate_YearFrom").val(y_values[0]);
+                                        $("#VisitedCtr_VisitedDate_YearTo").val(y_values[1]);
+
+                                    }
+                                    break;
+                            }
+                        
+                        });
+                       
+                    }
+
+        if (AdHocFields.length > 0) {
+            var querypar = "";
+            var tempurl = "";
+            if (data.FilterType == "ProductView" || data.FilterType == "CrossProductView") {
+                tempurl = '@Url.Action("GetAdHocListFilter", "Filter",new { pubID = "temp"})';
+                querypar = pubID + "&Viewtype=" + data.FilterType;
+            }
+            else {
+                tempurl = '@Url.Action("GetAdHocListFilter", "Filter",new { brandID = "temp"})';
+                querypar = "brandID=" + $("#ddlBrand").val()?$("#ddlBrand").val():0 + "&Viewtype=" + data.FilterType;
+            }
+            var getUrl = tempurl.replace("temp", querypar);
+            if (!adhocloaded) {
+                $.ajax({
+                    url: getUrl,
+                    type: "GET",
+                    async: false,
+                    success: function (result) {
+                        adhocloaded = true;
+                        var kendoWindow = $("#AdHocPopUpWindow").data('kendoWindow');
+                        kendoWindow.content(result);
+                        $.each(AdHocFields, function (i, field) {
+                            LoadAdhocs(field);
+                            if (callback) {
+                                callback();
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                $.each(AdHocFields, function (i, field) {
+                    LoadAdhocs(field);
+                    if (callback) {
+                        callback();
+                    }
+                });
+            }
+                        
+                       
+        }
+        if (callback) {
+            callback();
+        }
+
+                   
+    }
+    function LoadAdhocs(field) {
+        var columnId = field.Group.replace("|", "").replace("[", "").replace("]", "").replace("|", "");
+        var SearchCondition = "";
+        if (field.SearchCondition) {
+            SearchCondition = field.SearchCondition.toLowerCase();
+        }
+        if (field.Group) {
+            var strID = field.Group.split('|');
+            switch (strID[0].toLowerCase()) {
+                case "e":
+                    switch (strID[2].toLowerCase()) {
+                        case "d":
+                            var strValue = field.Values.split('|');
+                            var drpAdHocDateField = $("#drpAdHocDateField_" + columnId).data("kendoDropDownList");
+                            drpAdHocDateField.value(field.SearchCondition);
+                            if (SearchCondition == "daterange") {
+                                $("#DateRangeDiv_" + columnId).show();
+                                $("#LastXDaysDiv_" + columnId).hide();
+                                $("#YearDiv_" + columnId).hide();
+                                $("#txtDateRangeFrom_" + columnId).val(strValue[0]);
+                                $("#txtDateRangeTo_" + columnId).val(strValue[1]);
+                            }
+                            else if (SearchCondition == "xdays") {
+                                $("#DateRangeDiv_" + columnId).hide();
+                                $("#LastXDaysDiv_" + columnId).show();
+                                $("#YearDiv_" + columnId).hide();
+                                var drpAdhocDays = $("#drpLastXDays_" + columnId).data("kendoDropDownList");
+                                drpAdhocDays.value(strValue[0]);
+                            }
+                            else if (SearchCondition == "year") {
+                                $("#DateRangeDiv_" + columnId).hide();
+                                $("#LastXDaysDiv_" + columnId).hide();
+                                $("#YearDiv_" + columnId).show();
+                                $("#txtYearFrom_" + columnId).val(strValue[0]);
+                                $("#txtYearTo_" + columnId).val(strValue[1]);
+                                
+                            }
+                            break;
+
+                        case "b":
+                            $("#drpAdHocBitField_" + columnId).val(field.Values);
+                            break;
+                        case "i":
+                        case "f":
+                            var drpAdHocIntField = $("#drpAdHocIntField_" + columnId).data("kendoDropDownList");
+                            drpAdHocIntField.value(field.SearchCondition);
+                            var strValues = field.Values.split('|');
+                            if (field.SearchCondition.toUpperCase() == "RANGE"){
+                                $("#txtRangeFrom_" + columnId).val(strValues[0]);
+                                $("#txtRangeTo_" + columnId).val(strValues[1]);
+                                $("#RangeDiv_" + columnId).show();
+                                $("#SearchValueDiv_" + columnId).hide();
+                                
+                             }
+                            else {
+                                $("#txtSearchValue_" + columnId).val(field.Values);
+                                $("#RangeDiv_" + columnId).hide();
+                                $("#SearchValueDiv_" + columnId).show();
+                            }
+                            break;
+                        default:
+                            var drpAdHocVarcharField = $("#drpAdHocVarcharField_" + columnId).data("kendoDropDownList");
+                            drpAdHocVarcharField.value(field.SearchCondition);
+                            $("#txtSearchValue_" + columnId).val(field.Values);
+                            break;
+                    }
+                    break;
+                case "d":
+                    var strValue = field.Values.split('|');
+                    var drpAdHocDateField = $("#drpAdHocDateField_" + columnId).data("kendoDropDownList");
+                    drpAdHocDateField.value(field.SearchCondition);
+                    if (SearchCondition == "daterange") {
+                        $("#DateRangeDiv_" + columnId).show();
+                        $("#LastXDaysDiv_" + columnId).hide();
+                        $("#YearDiv_" + columnId).hide();
+                        $("#txtDateRangeFrom_" + columnId).val(strValue[0]);
+                        $("#txtDateRangeTo_" + columnId).val(strValue[1]);
+                    }
+                    else if (SearchCondition == "xdays") {
+                        $("#DateRangeDiv_" + columnId).hide();
+                        $("#LastXDaysDiv_" + columnId).show();
+                        $("#YearDiv_" + columnId).hide();
+                        var drpAdhocDays = $("#drpLastXDays_" + columnId).data("kendoDropDownList");
+                        var flag = false;
+                        $.each(drpAdhocDays.options.dataSource, function (i, obj) {
+                            if (obj == strValue[0]) {
+                                flag = true;
+                            }
+                        });
+                        if (flag) {
+                            drpAdhocDays.value(strValue[0]);
+                            $("#spCustomDays_" + columnId).hide();
+                        } else {
+                            drpAdhocDays.value('Custom');
+                            $("#txtCustomDays_" + columnId).val(strValue[0]);
+                            $("#spCustomDays_" + columnId).show();
+                        }
+                    }
+                    else if (SearchCondition == "year") {
+                        $("#DateRangeDiv_" + columnId).hide();
+                        $("#LastXDaysDiv_" + columnId).hide();
+                        $("#YearDiv_" + columnId).show();
+                        $("#txtYearFrom_" + columnId).val(strValue[0]);
+                        $("#txtYearTo_" + columnId).val(strValue[1]);
+                    }
+                    break;
+
+                case "b":
+                    $("#drpAdHocBitField_" + columnId).val(field.Values);
+                    break;
+                    break;
+                case "i":
+                case "f":
+                    
+                    if (strID[1].Equals("[PRODUCT COUNT]", StringComparison.CurrentCultureIgnoreCase)) {
+                        $("#txtPubCount_" + columnId).val(field.Values);
+                        
+                    }
+                    else {
+                        var drpAdHocIntField = $("#drpAdHocIntField_" + columnId).data("kendoDropDownList");
+                        drpAdHocIntField.value(field.SearchCondition);
+                        var strValues = field.Values.split('|');
+                        if (field.SearchCondition.toUpperCase() == "RANGE") {
+                            $("#txtRangeFrom_" + columnId).val(strValues[0]);
+                            $("#txtRangeTo_" + columnId).val(strValues[1]);
+                            $("#RangeDiv_" + columnId).show();
+                            $("#SearchValueDiv_" + columnId).hide();
+
+                        }
+                        else {
+                            $("#txtSearchValue_" + columnId).val(field.Values);
+                            $("#RangeDiv_" + columnId).hide();
+                            $("#SearchValueDiv_" + columnId).show();
+                        }
+                    }
+                    break;
+                default:
+                    var strValue = field.Values.split('|');
+                    var drpAdHocVarcharField = $("#drpAdHocVarcharField_" + columnId).data("kendoDropDownList");
+                    drpAdHocVarcharField.value(field.SearchCondition);
+                    if (field.SearchCondition.toLowerCase() == 'range') {
+                        $("#txtRangeFrom_" + columnId).val(strValue[0]);
+                        $("#txtRangeTo_" + columnId).val(strValue[1]);
+                        $("#RangeDiv_" + columnId).show();
+                        $("#SearchValueDiv_" + columnId).hide();
+                     } else {
+                        $("#txtSearchValue_" + columnId).val(field.Values);
+                        $("#RangeDiv_" + columnId).hide();
+                        $("#SearchValueDiv_" + columnId).show();
+                    }
+                    
+                    break;
+            }
+        }
+    
+    }
+
+    function ShowSelectedFilters() {
+       
+        //if ($("#showhidefilter").data("showfilters") == 1) {
+            var filter = getFilter();
+            var tableSummary = "<table width='98%' align='center'>";
+            var rows = "";
+            var serachcondition = "";
+            $.each(filter.Fields, function (i, obj) {
+                if (obj.SearchCondition) {
+                    serachcondition = obj.SearchCondition + " - ";
+                } else {
+                    serachcondition = ""
+                }
+                if (obj.Name == 'Adhoc') {
+                    rows = rows + "<tr data-selvalues=" + obj.Values + " data-elementid=" + obj.ElementID + "><td align='center'>" + obj.Name + "</td><td align='center'>=</td>" + "<td>" + obj.Text + " - " + serachcondition + obj.Values + "</td><td><span  style='color:red' class='k-icon k-i-close k-i-x' onclick='DeleteFilter(this)'></span></td></tr>";
+
+                }else if(obj.Name == 'Product'){
+                    rows = rows + "<tr data-selvalues=" + obj.Values + " data-elementid=" + obj.ElementID + "><td align='center'>" + obj.Name + "</td><td align='center'>=</td>" + "<td>" + obj.Text + "</td><td></td></tr>";
+                }
+                else {
+                    rows = rows + "<tr data-selvalues=" + obj.Values + " data-elementid=" + obj.ElementID + "><td align='center'>" + obj.Name + "</td><td align='center'>=</td>" + "<td>" + serachcondition + obj.Text + "</td><td><span  style='color:red' class='k-icon k-i-close k-i-x' onclick='DeleteFilter(this)'></span></td></tr>";
+
+                }
+
+            });
+            tableSummary = tableSummary + rows + "</table>";
+            $("#FilterSummaryDetails").html(tableSummary);
+            //$("#showhidefilter").data("showfilters", 0);
+            $("#showhidefilter").val("Hide Filter");
+        //} else {
+        //    $("#FilterSummaryDetails").html('');
+        //    $("#showhidefilter").data("showfilters", 1);
+        //    $("#showhidefilter").val("Show Filter");
+        //}
+        
+        
+    }
+   
+
+    function openAdHocPopUp(id) {
+        var dd = $("#ddlBrand").val();
+        var pubID = $("#SelectedProductID").val();
+        var view = $("#viewtype").val();
+        var querypar = "";
+        var tempurl = "";
+        if (view == "ProductView" || view == "CrossProductView") {
+            tempurl = '@Url.Action("GetAdHocListFilter", "Filter",new { pubID = "temp"})';
+            querypar = pubID + "&Viewtype=" + view
+        }
+        else {
+            tempurl = '@Url.Action("GetAdHocListFilter", "Filter",new { brandID = "temp"})';
+            querypar = "brandID=" + dd
+        }
+        var getUrl = tempurl.replace("temp", querypar);
+        
+        var window = $("#" + id);
+        var kendoWindow = window.data('kendoWindow');
+        if (!adhocloaded) {
+            $.ajax({
+                url: getUrl,
+                type: "GET",
+                success: function (result) {
+                    adhocloaded = true;
+                    kendoWindow.content(result);
+                    kendoWindow.center().open();
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        else {
+            kendoWindow.content();
+            kendoWindow.center().open();
+        }
+    }
+
+    function loadSavedFilter() {
+        var window = $("#SavedFilterPopUpWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.content();
+        kendoWindow.center().open();
+
+    }
+
+    function GetDownloadDetailsPopUp(model) {
+
+        $("#DownloadDetailsPopup").empty();
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Filter/GetExportDetailsPopUp',
+            data: JSON.stringify({ 'dvm': model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var window = $("#DownloadDetailsPopup");
+                var kendoWindow = window.data('kendoWindow');
+                kendoWindow.content(data);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+    }
+
+    //function ShowDownloadDetailsPopUp(model) {
+    //    $("#DownloadDetailsPopup").empty();
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/UAS.web/Filter/GetDownloadDetailsPopUp',
+    //        data: JSON.stringify({ 'downloadmodel': model }),
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (data) {
+    //            var window = $("#DownloadDetailsPopup");
+    //            var kendoWindow = window.data('kendoWindow');
+    //            kendoWindow.content(data);
+    //            kendoWindow.center().open();
+    //        },
+    //        error: function (response) {
+
+    //            console.log(response)
+    //        }
+    //    });
+    //}
+
+
+    function processBeforeAdd(e) {
+
+        for (var i = 0; i < e.dataItems.length; i++) {
+            var type = e.dataItems[i].Value.split('|')[1];
+            e.dataItems[i].Text = type == 'varchar' ? e.dataItems[i].Text + "(Default)" : e.dataItems[i].Text;
+            e.dataItems[i].Value = type == 'varchar' ? e.dataItems[i].Value + "|Default" : e.dataItems[i].Value + "|None";
+
+        }
+
+
+
+    }
+
+    function processAfterRemoved(e) {
+        for (var i = 0; i < e.dataItems.length; i++) {
+            var type = e.dataItems[i].Value.split('|')[1];
+            e.dataItems[i].Text = e.dataItems[i].Text.toString().substring(0, e.dataItems[i].Text.lastIndexOf("("));
+            e.dataItems[i].Value = e.dataItems[i].Value.toString().substring(0, e.dataItems[i].Value.lastIndexOf("|"));
+            //e.dataItems[i].Text = type == 'varchar' ? e.dataItems[i].Text.replace("(Default)", "") : e.dataItems[i].Text;
+            //e.dataItems[i].Value = type == 'varchar' ? e.dataItems[i].Value.replace("|Default", "") : e.dataItems[i].Value.replace("|None", "");
+
+        }
+
+    }
+</script>
+
+

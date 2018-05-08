@@ -1,0 +1,34 @@
+﻿<script>
+    function changePublishType(type) {
+        var win = $("#PublishWindow");
+        var date = win.find("#PublishDate").data('kendoDateTimePicker');
+        if (type == 'now') {
+            date.enable(false);
+            date.value(String.empty);
+        } else {
+            date.enable(true);
+            date.value(new Date());
+        }
+    }
+</script>
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="Publish">
+        <legend>Publish</legend>
+        @Html.Hidden("Id", null, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+        <div class="formbox">
+            <div class="formitem">
+                @Html.Kendo().RadioButton().Name("PublishType").Label("Publish Now").Value(0).Checked(true).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Type" }, { "onclick", "changePublishType('now')" } })
+            </div>
+            <div class="formitem">
+                @Html.Kendo().RadioButton().Name("PublishType").Label("Specify Date/Time").Value(1).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Type" }, { "onclick", "changePublishType('date')" } })
+            </div>
+            <div class="formitem">
+                @Html.Kendo().DateTimePicker().Name("PublishDate").Enable(false).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:Date, disabled: Disabled" } })
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            @Html.Kendo().Button().Name("Publish").Content("Publish").HtmlAttributes(new { @class = "btn" })
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('PublishWindow')" })
+        </div>
+    </fieldset>
+</div>

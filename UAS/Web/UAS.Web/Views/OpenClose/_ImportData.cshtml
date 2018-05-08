@@ -1,0 +1,34 @@
+﻿@model UAS.Web.Models.Circulations.OpenClose
+
+<script>
+    $(document).ready(function () {
+        $("#fileSubmitForm").submit(function (event) {
+            event.preventDefault();
+            var request = $.ajax({
+                type: "POST",
+                url: "@Url.Action("ImportData")",
+                data: new FormData($(this)[0]),
+                traditional: true,
+                cache: false,
+                processData: false,
+                contentType: false
+            }).done(function (resp) {
+                $("#notificationDiv").html(resp);
+                $("#importDataModal").modal('hide');
+            });
+        });
+    });
+</script>
+<table>
+    <tr>
+        <td><h4>Product:</h4></td>
+        <td class="modelProduct">@Model.Product</td>
+    </tr>
+</table>
+<br />
+<br />
+<form id="fileSubmitForm" action="/UAS.Web/OpenClose/ImportData" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" id="fileSubmit"/>
+</form>

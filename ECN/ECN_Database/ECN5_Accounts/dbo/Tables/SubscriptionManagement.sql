@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[SubscriptionManagement]
+(
+	[SubscriptionManagementID] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] VARCHAR(100) NULL, 
+    [Header] VARCHAR(MAX) NULL, 
+    [Footer] VARCHAR(MAX) NULL, 
+    [EmailHeader] VARCHAR(MAX) NULL, 
+    [EmailFooter] VARCHAR(MAX) NULL, 
+    [AdminEmail] VARCHAR(100) NULL, 
+    [CreatedUserID] INT NULL, 
+    [CreatedDate] DATETIME NULL, 
+    [UpdatedUserID] INT NULL, 
+    [UpdatedDate] DATETIME NULL, 
+    [BaseChannelID] INT NOT NULL, 
+    [IsDeleted] BIT NULL, 
+    [MSMessage] VARCHAR(MAX) NULL, 
+    [IncludeMSGroups] BIT NULL, 
+    [UseReasonDropDown] BIT NULL, 
+    [ReasonVisible] BIT NULL, 
+    [ReasonLabel] VARCHAR(MAX) NULL, 
+    [UseThankYou] BIT NULL, 
+    [UseRedirect] BIT NULL, 
+    [RedirectURL] VARCHAR(100) NULL, 
+    [ThankYouLabel] VARCHAR(MAX) NULL, 
+    [RedirectDelay] INT NULL
+)

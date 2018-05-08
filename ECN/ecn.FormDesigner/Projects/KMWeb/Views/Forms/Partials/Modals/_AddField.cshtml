@@ -1,0 +1,65 @@
+﻿@using KMWeb.Models.Forms
+
+@{
+    var defaultContent = Html.Partial("Partials/Modals/_AddFieldContent", new AddFieldModel());
+    
+    Html.Kendo()
+        .Window()
+        .Title("Add New Field")
+        .Name("AddField")
+        .Modal(true)
+        .Animation(false)
+        .Content(
+            @<text>
+                @using (Ajax.BeginForm("AddField", new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnSuccess = "addFieldSuccess",
+                    OnFailure = "onError"
+                }))
+                {
+                    <div id="AddFieldContent"></div>
+                }
+            </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+<script>
+    function AddField(options) {
+        this.fieldAdded = options.fieldAdded;
+        this.CustomerId = options.CustomerId;
+        this.GroupId = options.GroupId;
+        this.open = function () {
+            var content = $("#AddFieldContent");
+            content.html('@Html.Raw(HttpUtility.JavaScriptStringEncode(defaultContent.ToString()))');
+            kendo.bind(content, {
+                CustomerId: this.CustomerId,
+                GroupId: this.GroupId
+            });
+            var window = $("#AddField").data("kendoWindow");
+            window.center().open();
+        }
+        this.close = function () {
+            var window = $("#AddField").data("kendoWindow");
+            window.close();
+        }
+    }
+    var addField;
+    function openAddField(options) {
+        addField = new AddField(options);
+        addField.open();
+    }
+    function addFieldSuccess(data) {
+        var content = $("#AddFieldContent");
+        if (data.success) {
+            if (addField.fieldAdded) {
+                addField.fieldAdded(data.field);
+            }
+            addField.close();
+        } else {
+            content.html(data);
+        }
+    }
+</script>

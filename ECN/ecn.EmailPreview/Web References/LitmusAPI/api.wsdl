@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://soapapi.litmusapp.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s0="https://soapapi.litmusapp.com/encodedTypes" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="https://soapapi.litmusapp.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://soapapi.litmusapp.com/encodedTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <s:complexType name="EmailTest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Results" nillable="true" type="s0:ArrayOfClient" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="State" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="InboxGUID" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="ID" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Source" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Subject" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Html" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="ZipFile" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="TestType" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Sandbox" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="UserGuid" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfClient">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:attribute wsdl:arrayType="s0:Client[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Client">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="State" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImageContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImageThumb" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="BusinessOrPopular" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImageThumbNoContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Completed" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImage" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="FoundInSpam" nillable="true" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Status" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImageNoContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="PlatformName" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="AverageTimeToProcess" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="SpamHeaders" type="s0:ArrayOfSpamHeader" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImageThumb" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="RenderedHtmlUrl" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="PlatformLongName" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImageThumbContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImage" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImageContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="SupportsContentBlocking" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="ApplicationName" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImageThumbNoContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="SpamScore" nillable="true" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="DesktopClient" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="WindowImageThumbContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="ResultType" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="FullpageImageNoContentBlocking" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="ApplicationLongName" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSpamHeader">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:attribute wsdl:arrayType="s0:SpamHeader[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="SpamHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Key" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Description" nillable="true" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Rating" nillable="true" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PageTest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Results" type="s0:ArrayOfClient" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="State" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="URL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="TestType" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="Sandbox" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="UserGuid" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:attribute wsdl:arrayType="s:string[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetEmailTestSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+    <wsdl:part name="emailTestID" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="GetEmailTestSoapOut">
+    <wsdl:part name="return" type="s0:EmailTest" />
+  </wsdl:message>
+  <wsdl:message name="GetPageTestSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+    <wsdl:part name="pageTestID" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="GetPageTestSoapOut">
+    <wsdl:part name="GetPageTestResult" type="s0:PageTest" />
+  </wsdl:message>
+  <wsdl:message name="GetPageTestClientsSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPageTestClientsSoapOut">
+    <wsdl:part name="GetPageTestClientsResult" type="s0:ArrayOfClient" />
+  </wsdl:message>
+  <wsdl:message name="CreatePageTestSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+    <wsdl:part name="pageTest" type="s0:PageTest" />
+  </wsdl:message>
+  <wsdl:message name="CreatePageTestSoapOut">
+    <wsdl:part name="CreatePageTestResult" type="s0:PageTest" />
+  </wsdl:message>
+  <wsdl:message name="GetEmailTestClientsSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmailTestClientsSoapOut">
+    <wsdl:part name="GetEmailTestClientsResult" type="s0:ArrayOfClient" />
+  </wsdl:message>
+  <wsdl:message name="CreateEmailTestSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+    <wsdl:part name="emailTest" type="s0:EmailTest" />
+  </wsdl:message>
+  <wsdl:message name="CreateEmailTestSoapOut">
+    <wsdl:part name="CreateEmailTestResult" type="s0:EmailTest" />
+  </wsdl:message>
+  <wsdl:message name="GetSpamSeedAddressesSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSpamSeedAddressesSoapOut">
+    <wsdl:part name="GetSpamSeedAddressesResult" type="s0:ArrayOfString" />
+  </wsdl:message>
+  <wsdl:message name="GetResultSoapIn">
+    <wsdl:part name="apiKey" type="s:string" />
+    <wsdl:part name="apiPass" type="s:string" />
+    <wsdl:part name="resultId" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="GetResultSoapOut">
+    <wsdl:part name="GetResultResult" type="s0:Client" />
+  </wsdl:message>
+  <wsdl:portType name="LitmusSoapApiSoap">
+    <wsdl:operation name="GetEmailTest">
+      <wsdl:input message="tns:GetEmailTestSoapIn" />
+      <wsdl:output message="tns:GetEmailTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTest">
+      <wsdl:input message="tns:GetPageTestSoapIn" />
+      <wsdl:output message="tns:GetPageTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTestClients">
+      <wsdl:input message="tns:GetPageTestClientsSoapIn" />
+      <wsdl:output message="tns:GetPageTestClientsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePageTest">
+      <wsdl:input message="tns:CreatePageTestSoapIn" />
+      <wsdl:output message="tns:CreatePageTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmailTestClients">
+      <wsdl:input message="tns:GetEmailTestClientsSoapIn" />
+      <wsdl:output message="tns:GetEmailTestClientsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateEmailTest">
+      <wsdl:input message="tns:CreateEmailTestSoapIn" />
+      <wsdl:output message="tns:CreateEmailTestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpamSeedAddresses">
+      <wsdl:input message="tns:GetSpamSeedAddressesSoapIn" />
+      <wsdl:output message="tns:GetSpamSeedAddressesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <wsdl:input message="tns:GetResultSoapIn" />
+      <wsdl:output message="tns:GetResultSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LitmusSoapApiSoap" type="tns:LitmusSoapApiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetEmailTest">
+      <soap:operation soapAction="GetEmailTest" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTest">
+      <soap:operation soapAction="GetPageTest" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTestClients">
+      <soap:operation soapAction="GetPageTestClients" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePageTest">
+      <soap:operation soapAction="CreatePageTest" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmailTestClients">
+      <soap:operation soapAction="GetEmailTestClients" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateEmailTest">
+      <soap:operation soapAction="CreateEmailTest" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpamSeedAddresses">
+      <soap:operation soapAction="GetSpamSeedAddresses" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <soap:operation soapAction="GetResult" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LitmusSoapApiSoap12" type="tns:LitmusSoapApiSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetEmailTest">
+      <soap12:operation soapAction="GetEmailTest" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTest">
+      <soap12:operation soapAction="GetPageTest" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPageTestClients">
+      <soap12:operation soapAction="GetPageTestClients" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePageTest">
+      <soap12:operation soapAction="CreatePageTest" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmailTestClients">
+      <soap12:operation soapAction="GetEmailTestClients" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateEmailTest">
+      <soap12:operation soapAction="CreateEmailTest" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpamSeedAddresses">
+      <soap12:operation soapAction="GetSpamSeedAddresses" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResult">
+      <soap12:operation soapAction="GetResult" style="rpc" />
+      <wsdl:input>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="encoded" namespace="https://soapapi.litmusapp.com/" encodingStyle="http://www.w3.org/2003/05/soap-encoding" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LitmusSoapApi">
+    <wsdl:port name="LitmusSoapApiSoap" binding="tns:LitmusSoapApiSoap">
+      <soap:address location="http://soapapi.litmusapp.com/2010-06-21/api.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LitmusSoapApiSoap12" binding="tns:LitmusSoapApiSoap12">
+      <soap12:address location="http://soapapi.litmusapp.com/2010-06-21/api.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

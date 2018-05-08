@@ -1,0 +1,657 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7E00609B-9028-4F9C-AFB1-4EA7E73BCE58}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECN.Communicator.Tests</RootNamespace>
+    <AssemblyName>ECN.Communicator.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AddressValidator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\AddressValidator.dll</HintPath>
+    </Reference>
+    <Reference Include="AddressValidator.1.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\AddressValidator.1.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxControlToolkit, Version=4.1.7.123, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AjaxControlToolkit.4.1.51116\lib\40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxControlToolkit.4.1.51116.0.Fakes">
+      <HintPath>FakesAssemblies\AjaxControlToolkit.4.1.51116.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ecn.communicator.Fakes">
+      <HintPath>FakesAssemblies\ecn.communicator.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN.Fakes">
+      <HintPath>FakesAssemblies\ECN.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CKEditor.NET, Version=3.6.2.0, Culture=neutral, PublicKeyToken=e379cdf2f8354999, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\CKEditor.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="ecn.communicator.Fakes">
+      <HintPath>FakesAssemblies\ecn.communicator.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_BusinessLayer.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_BusinessLayer.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_BusinessLayer.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_BusinessLayer.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_DataLayer.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_DataLayer.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_Entities.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_Entities.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_Common.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_Common.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="EmailPreview.Fakes">
+      <HintPath>FakesAssemblies\EmailPreview.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeHttpContext, Version=0.4.0.0, Culture=neutral, PublicKeyToken=7913106c84cef83e, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeHttpContext.0.4.0\lib\net45\FakeHttpContext.dll</HintPath>
+    </Reference>
+    <Reference Include="KM.Common.Fakes">
+      <HintPath>FakesAssemblies\KM.Common.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KM.Framework.Web.WebForms.Fakes">
+      <HintPath>FakesAssemblies\KM.Framework.Web.WebForms.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KMPlatform.Fakes">
+      <HintPath>FakesAssemblies\KMPlatform.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common">
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms.10.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\Microsoft.ReportViewer.WebForms.10.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PlatformUser.Fakes">
+      <HintPath>FakesAssemblies\PlatformUser.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.105.2.3.0.Fakes">
+      <HintPath>FakesAssemblies\RestSharp.105.2.3.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Configuration.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Data.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Drawing.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.4.0.0.0.Fakes">
+      <HintPath>..\EmailMarketing.API.Tests\FakesAssemblies\System.Net.Http.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Web.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.Extensions.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Web.Extensions.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Xml.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise />
+  </Choose>
+  <ItemGroup>
+    <Compile Include="CommunicatorBaseControlTests.cs" />
+    <Compile Include="CommunicatorBasePageTests.cs" />
+    <Compile Include="Classes\ECN_EmailActivityLogTest.cs" />
+    <Compile Include="Classes\ECN_BlastsTest.cs" />
+    <Compile Include="Classes\EmailFunctionsTest.cs" />
+    <Compile Include="Includes\EmailProfileBaseTest.Constants.cs">
+      <DependentUpon>EmailProfileBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Includes\EmailProfileBaseTest.cs" />
+    <Compile Include="Includes\EmailProfileBaseTest.PageControls.cs">
+      <DependentUpon>EmailProfileBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Includes\EmailProfileEmailActivityTest.cs" />
+    <Compile Include="Includes\EmailProfileSurveyTest.cs" />
+    <Compile Include="Includes\EmailProfileUDFHistoryTest.cs" />
+    <Compile Include="Includes\EmailProfileUDFTest.cs" />
+    <Compile Include="Includes\GalleryTest.cs" />
+    <Compile Include="Includes\FolderSystemTest.Constants.cs">
+      <DependentUpon>FolderSystemTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Includes\FolderSystemTest.cs" />
+    <Compile Include="Includes\ImageGalleryTest.cs" />
+    <Compile Include="Main\Admin\Gateway\GatewaySetupTest.btnSaveGateway_ClickTest.cs" />
+    <Compile Include="Main\Admin\Gateway\GatewaySetupTest.cs" />
+    <Compile Include="Main\Admin\Gateway\GatewaySetupTest.DisplayOrHideTest.cs" />
+    <Compile Include="Includes\EmailProfile_BaseTest.Constants.cs">
+      <DependentUpon>EmailProfile_BaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Includes\EmailProfile_BaseTest.cs" />
+    <Compile Include="Includes\EmailProfile_BaseTest.UpdateEmail.cs">
+      <DependentUpon>EmailProfile_BaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Admin\LandingPages\BaseChannelMainTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\CustomerMainTest.cs" />
+    <Compile Include="Main\Blasts\BaseBlastsTest.cs" />
+    <Compile Include="Main\Blasts\BlastCalendarViewTests.cs" />
+    <Compile Include="Main\Blasts\BlastEmailPreviewTest.BindPreview.cs" />
+    <Compile Include="Main\Blasts\BlastEmailPreviewTest.cs" />
+    <Compile Include="Main\Blasts\BouncesMainTest.cs" />
+    <Compile Include="Main\Blasts\ClicksMainTest.cs" />
+    <Compile Include="Main\Blasts\ClickThroughTest.cs" />
+    <Compile Include="Main\Blasts\ForwardsTest.cs" />
+    <Compile Include="Main\Blasts\ManageCampaignsTests.cs" />
+    <Compile Include="Main\Blasts\NoClicksTest.cs" />
+    <Compile Include="Main\Blasts\NoOpensTest.cs" />
+    <Compile Include="Main\Blasts\ReportGraphicalTest.Constants.cs">
+      <DependentUpon>ReportGraphicalTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportGraphicalTest.cs" />
+    <Compile Include="Main\Blasts\ReportGraphicalTest.DataTables.cs">
+      <DependentUpon>ReportGraphicalTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportsTest.Asserts.cs">
+      <DependentUpon>ReportsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportsTest.PageLoad.cs">
+      <DependentUpon>ReportsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportsTest.Constants.cs">
+      <DependentUpon>ReportsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportsTest.cs" />
+    <Compile Include="Main\Blasts\ReportsTest.DataTables.cs">
+      <DependentUpon>ReportsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\ReportsTest.LoadReportsData.cs">
+      <DependentUpon>ReportsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\Report\UndeliverableReportTest.cs" />
+    <Compile Include="Main\Blasts\Report\CampaignStatisticsReportTest.cs" />
+    <Compile Include="Main\Blasts\Report\EmailFatigueReportTest.cs" />
+    <Compile Include="Main\Blasts\Report\TopEvangelistsReportTest.cs" />
+    <Compile Include="Main\Blasts\Report\TopEvangelistsReportTest.GetResultsTable.cs" />
+    <Compile Include="Main\Blasts\Report\BlastComparisonReportTest.cs" />
+    <Compile Include="Main\Blasts\ResendsTest.cs" />
+    <Compile Include="Main\Blasts\SendsTest.cs" />
+    <Compile Include="GlobalTest.cs" />
+    <Compile Include="GlobalTest.Application_Error.cs">
+      <DependentUpon>GlobalTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\SimpleTest.cs" />
+    <Compile Include="Main\Blasts\SocialTest.cs" />
+    <Compile Include="Main\CommonControls\DateValidatorTests.cs" />
+    <Compile Include="Main\CommonControls\ErrorViewerTests.cs" />
+    <Compile Include="Main\CommonControls\StartEndDatesTests.cs" />
+    <Compile Include="Main\Content\SocialFileManagerTests.cs" />
+    <Compile Include="Main\Customers\MTAEditorTests.cs" />
+    <Compile Include="Main\dripmarketing\Controls\RegBlastTest.SaveCampaignItem_Smartsegment.cs" />
+    <Compile Include="Main\Content\ContentFiltersTest.cs" />
+    <Compile Include="Main\ECNWizard\Content\LayoutExplorerTest.cs" />
+    <Compile Include="Main\ECNWizard\Content\ContentExplorerTest.cs" />
+    <Compile Include="Main\ECNWizard\Content\DLTemplateItem.cs" />
+    <Compile Include="Main\ECNWizard\Content\LayoutEditorNewTest.cs" />
+    <Compile Include="Main\ECNWizard\Content\ContentEditorTest.cs" />
+    <Compile Include="Main\ECNWizard\Content\LayoutEditorTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreviewTest.gvSimpleShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_SFTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreviewTest.gvSubscriberShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_ABTest.gvSubscriberShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_SFTest.gvSubscriberShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_SFTest.gvSimpleShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_ABTest.gvSimpleShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardContent_ABTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardContentTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardCampaignTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardCampaignTest.Initialize.cs">
+      <DependentUpon>WizardCampaignTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\ECNWizard\Controls\WizardCampaignTest.LoadBlastFieldConfig.cs">
+      <DependentUpon>WizardCampaignTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\ECNWizard\Controls\WizardContent_ChampionTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardContent_ChampionTest.Save.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardGroupTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardGroupTest.Save.cs">
+      <DependentUpon>WizardGroupTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.gvSimpleShare_RowDataBound.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreviewTest.cs" />
+    <Compile Include="Main\Blasts\CH_28_CustomReportsTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardPreview_ABTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.InitializeTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.LoadSocialMediaTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardScheduleTest.ButtonScheduleClick.cs" />
+    <Compile Include="Main\Admin\Deliverability\DefaultTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardScheduleTest.cs" />
+    <Compile Include="Helpers\BasicShims.cs" />
+    <Compile Include="Helpers\ECNGroupComparer.cs" />
+    <Compile Include="Helpers\MockHelpers.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Main\Admin\LandingPages\BaseChannelForwardToFriendTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\CustomerForwardToFriendTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\BaseChannelAbuseTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\BaseChannelUnsubscribeTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\BaseChannelUpdateEmailTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\BaseChannelUpdateEmailTest.BtnSave_Click.cs">
+      <DependentUpon>BaseChannelUpdateEmailTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Admin\SubscriptionManagement\SubscriptionManagementEditTest.cs" />
+    <Compile Include="Main\Blasts\BlastSchedulerTest.CreateRecurring.cs">
+      <DependentUpon>BlastSchedulerTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\BlastSchedulerTest.CreateRecurring.Data.cs">
+      <DependentUpon>BlastSchedulerTest.CreateRecurring.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\BlastSchedulerTest.cs" />
+    <Compile Include="Main\Blasts\OpensTest.cs" />
+    <Compile Include="Main\Blasts\Report\PerformanceByDayAndTimeReportTest.cs" />
+    <Compile Include="Main\Blasts\Report\PerformanceByDayAndTimeReportTest.DDLFilterField2SelectedIndexChanged.cs">
+      <DependentUpon>PerformanceByDayAndTimeReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\Report\PerformanceByDayAndTimeReportTest.DrawDayChart.cs">
+      <DependentUpon>PerformanceByDayAndTimeReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\Report\PerformanceByDayAndTimeReportTest.DrawWeekChart.cs">
+      <DependentUpon>PerformanceByDayAndTimeReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Blasts\Report\PerformanceByDayAndTimeReportTest.ExportReport.cs">
+      <DependentUpon>PerformanceByDayAndTimeReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Content\MessageTypeSetupTests.cs" />
+    <Compile Include="Main\Content\TemplateView.cs" />
+    <Compile Include="Main\ECNWizard\Controls\WizardSFCampaignTest.CreateGroupFromSFCampaign.cs">
+      <DependentUpon>WizardSFCampaignTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\ECNWizard\Controls\WizardSFCampaignTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\AddGroupTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\FiltersTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\FiltersTest.PageLoad.cs" />
+    <Compile Include="Main\ECNWizard\Group\GroupExplorerTest.gvSupression_Command.cs" />
+    <Compile Include="Main\ECNWizard\Group\AddSubscribersTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\GroupExplorerTest.PageLoad.cs" />
+    <Compile Include="Main\ECNWizard\Group\TestGroupExplorerTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\TestGroupExplorerTest.PageLoad.cs" />
+    <Compile Include="Main\ECNWizard\OtherControls\AddTemplateTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\GroupExplorerTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\GroupExplorerTest.GvSelectedGroups_Command.cs" />
+    <Compile Include="Main\ECNWizard\QuickTestBlastTest.cs" />
+    <Compile Include="Main\ECNWizard\WizardScheduleTest.cs" />
+    <Compile Include="Main\ECNWizard\WizardScheduleTest.LoadLinkTrackingParamOptions.cs">
+      <DependentUpon>WizardScheduleTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\ECNWizard\WizardSetupTest.cs" />
+    <Compile Include="Main\ECNWizard\WizardSetup_Numbers.EnableTabBar.cs" />
+    <Compile Include="Main\ECNWizard\WizardSetup_NumbersTest.cs" />
+    <Compile Include="Main\Events\MessageTriggersTest.LoadLayoutPanelBase.cs" />
+    <Compile Include="Main\Events\MessageTriggersTest.GetBlastFromControlsBase.cs" />
+    <Compile Include="Main\Events\MessageTriggersTest.PageLoad.cs" />
+    <Compile Include="Main\Folders\FoldersEditorTest.cs" />
+    <Compile Include="Main\ECNWizard\WizardScheduleTest.SaveScheduleReport.cs" />
+    <Compile Include="Main\ECNWizard\WizardSetup.EnableTabBar.cs" />
+    <Compile Include="Main\Events\MessageTriggersTest.CreateButton_ClickTest.cs" />
+    <Compile Include="Main\Events\MessageTriggersTest.cs" />
+    <Compile Include="Main\Lists\BaseListsTest.cs" />
+    <Compile Include="Main\Lists\DomainTrackerUsersTest.cs" />
+    <Compile Include="Main\Lists\DomainTrackerEditTest.cs" />
+    <Compile Include="Main\Lists\EmailDataEditorTest.cs" />
+    <Compile Include="Main\Lists\CustomDefinedFieldEditorTest.cs" />
+    <Compile Include="Main\Lists\EmailEditorTest.Constants.cs">
+      <DependentUpon>EmailEditorTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Lists\EmailEditorTest.UpdateEmail.cs">
+      <DependentUpon>EmailEditorTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Lists\FiltersTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.SaveTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.SaveWithoutAdvanceTest.cs" />
+    <Compile Include="Main\ECNWizard\Controls\SocialShareTest.cs" />
+    <Compile Include="Main\ECNWizard\Group\ImportSubscriberTest.cs" />
+    <Compile Include="Main\Lists\GroupEditorTest.cs" />
+    <Compile Include="Main\Lists\ChannelNoThresholdListTest.cs" />
+    <Compile Include="Main\Lists\DomainTrackerReportTest.cs" />
+    <Compile Include="Main\Lists\ReferralProgramTest.cs" />
+    <Compile Include="Main\Lists\GroupSubscribePrePopScriptTest.cs" />
+    <Compile Include="Main\Lists\GroupSubscribeTest.cs" />
+    <Compile Include="Main\blasts\Report\ABSummaryReportTest.cs" />
+    <Compile Include="Main\blasts\Report\ChampionAuditReportTest.cs" />
+    <Compile Include="Main\Lists\ImportDatafromFileTest.cs" />
+    <Compile Include="Main\Lists\CustomerDefinedFieldsTest.cs" />
+    <Compile Include="Main\Lists\reports\AdvertiserReportTest.cs" />
+    <Compile Include="Main\Lists\reports\AudienceEngagementReportTest.cs" />
+    <Compile Include="Main\Lists\reports\DataDumpReportTest.btnReport_Click.cs" />
+    <Compile Include="Main\Lists\reports\DataDumpReportTest.cs" />
+    <Compile Include="Main\Lists\reports\GroupStatisticsReportTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\CustomerUnsubscribeTest.cs" />
+    <Compile Include="Main\Admin\LandingPages\CustomerAbuseTest.cs" />
+    <Compile Include="Main\dripmarketing\Controls\RegBlastTest.cs" />
+    <Compile Include="Main\ECNWizard\WizardContentRegularTest.cs" />
+    <Compile Include="Main\Lists\reports\StatisticsByFieldTest.cs" />
+    <Compile Include="Main\blasts\Report\EmailsPerformanceByDomainReportTest.cs" />
+    <Compile Include="Main\Lists\reports\ListSizeOvertimeReportTest.cs" />
+    <Compile Include="Main\Lists\reports\OnOffReportTest.cs" />
+    <Compile Include="Main\blasts\Report\BlastDeliveryReportTest.cs" />
+    <Compile Include="Main\Lists\SfIntegrationTest.cs" />
+    <Compile Include="Main\Lists\ATHBImportDataFromFileTest.cs" />
+    <Compile Include="Main\Lists\EmailEditorTest.cs" />
+    <Compile Include="Main\Lists\DownloadTest.cs" />
+    <Compile Include="Main\Lists\GroupsubscribePrePopSFTest.cs" />
+    <Compile Include="Main\Lists\ImportManagerTest.cs" />
+    <Compile Include="Main\Lists\SuppressionTest.cs" />
+    <Compile Include="Main\Lists\EmailSearchTest.cs" />
+    <Compile Include="Main\Lists\ChannelMasterSuppressionTest.cs" />
+    <Compile Include="Main\Omniture\OmnitureBaseChannelSetupTest.btnOmniEditSave_Click.cs" />
+    <Compile Include="Main\Omniture\OmnitureBaseChannelSetupTest.ButtonSaveSettingsClick.cs" />
+    <Compile Include="Main\Omniture\OmnitureCustomerSetupTest.cs" />
+    <Compile Include="Main\Omniture\OmnitureCustomerSetupTest.PageLoad.cs" />
+    <Compile Include="Main\Reports\BlastComparisonReportTest.CreateGraphDataTable.cs">
+      <DependentUpon>BlastComparisonReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Reports\BlastComparisonReportTest.CreateGridDataTable.cs">
+      <DependentUpon>BlastComparisonReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Reports\BlastComparisonReportTest.cs" />
+    <Compile Include="Main\Reports\ScheduledReportListTest.cs" />
+    <Compile Include="Main\Reports\ScheduledReportSetupTest.BtnSave_Click.cs">
+      <DependentUpon>ScheduledReportSetupTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Reports\ScheduledReportSetupTest.cs" />
+    <Compile Include="Main\Reports\ScheduledReportSetupTest.LoadReportDropDown.cs" />
+    <Compile Include="Main\Salesforce\Controls\SF_SearchTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\AuthenticationHelperTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\Converters\ContactConverterTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\Converters\EntityConverterBaseTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SalesForceTestBase.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_CampaignMemberStatusTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_CampaignMemberTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_UserTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_TagDefinitionTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_LeadTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_ContactTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_CampaignTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_AccountTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_UtilitiesTest-GetStateAbbrTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_UtilitiesTest-InsertResultTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\SF_UtilitiesTest.cs" />
+    <Compile Include="Main\Salesforce\Entity\Sorting\EntitySortTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SalesForcePageTestBase.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SessionStoragePageTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_AccountsTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_SuppressionTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_OptOutTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_CampaignGroupTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_CampaignActivityTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_ContactsTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\SF_LeadsTest.cs" />
+    <Compile Include="Main\Salesforce\SF_Pages\TestTemplateItem.cs" />
+    <Compile Include="Main\SMSWizard\Controls\GroupInfoTest.cs" />
+    <Compile Include="MasterPage\CommunicatorTest.cs" />
+    <Compile Include="MasterPage\CommunicatorTest.Menu_MenuItemDataBound.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Main\Salesforce\Entity\ECN_SortTest.cs" />
+    <Compile Include="Setup\Interfaces\IDirectory.cs" />
+    <Compile Include="Setup\Interfaces\ISecurityCheck.cs" />
+    <Compile Include="Setup\Interfaces\IServer.cs" />
+    <Compile Include="Setup\MocksContext.cs" />
+    <Compile Include="Setup\Mocks\DirectoryMock.cs" />
+    <Compile Include="Setup\Mocks\FileInfoMock.cs" />
+    <Compile Include="Setup\Mocks\ServerMock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\KM.Framework.Web.WebForms\KM.Framework.Web.WebForms.csproj">
+      <Project>{5de18bc0-1320-46c4-bcef-4107069065c1}</Project>
+      <Name>KM.Framework.Web.WebForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.controls\ecn.controls.csproj">
+      <Project>{FB0CACB3-28B6-45FC-A266-E5068537F136}</Project>
+      <Name>ecn.controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.EmailPreview\ecn.EmailPreview.csproj">
+      <Project>{4bf970d0-3b03-4949-a105-e23593af6c34}</Project>
+      <Name>ecn.EmailPreview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\ECN.csproj">
+      <Project>{8bbeb645-dd44-4e47-a204-95341f4d87c2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1bce78e7-dd4d-48bc-85c3-d77fce995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\ECN.csproj">
+      <Project>{8bbeb645-dd44-4e47-a204-95341f4d87c2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN.TestHelpers\ECN.TestHelpers.csproj">
+      <Project>{a57be2fc-17f7-4be3-82ff-1d641ed68294}</Project>
+      <Name>ECN.TestHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\KMCommon\KM.Common.csproj">
+      <Project>{65C7C665-2088-4291-AB27-AADBED47E370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AgileComponents\ActiveUp.WebControls.csproj">
+      <Project>{847ff6d7-b5c4-4884-933f-425fc3c3525f}</Project>
+      <Name>ActiveUp.WebControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecn.communicator\ecn.communicator.csproj">
+      <Project>{14338eb0-bc00-4feb-a10a-48b0478999f1}</Project>
+      <Name>ecn.communicator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN.Tests.Helpers\ECN.Tests.Helpers.csproj">
+      <Project>{a65dfbcf-14ca-4784-8206-5497255f5c56}</Project>
+      <Name>ECN.Tests.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Fakes Include="Fakes\ecn.communicator.fakes" />
+    <Fakes Include="Fakes\AjaxControlToolkit.fakes" />
+    <Fakes Include="Fakes\System.Web.fakes" />
+    <Fakes Include="Fakes\KM.Common.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_Common.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_Entities.fakes" />
+    <Fakes Include="Fakes\mscorlib.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
+    <Fakes Include="Fakes\Microsoft.ReportViewer.WebForms.fakes" />
+    <Compile Include="Main\Omniture\OmnitureBaseChannelSetupTest.PageLoad.cs" />
+    <Fakes Include="Fakes\ECN.fakes" />
+    <Fakes Include="Fakes\KMPlatform.fakes" />
+    <Fakes Include="Fakes\EmailPreview.fakes" />
+    <Fakes Include="Fakes\System.Configuration.fakes" />
+    <Fakes Include="Fakes\System.Data.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
+    <Fakes Include="Fakes\System.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
+    <Compile Include="Main\Omniture\OmnitureCustomerSetupTest.btnOmniEditSave_Click.cs" />
+    <Fakes Include="Fakes\System.Drawing.fakes" />
+    <Fakes Include="Fakes\KMPlatform.fakes" />
+    <Compile Include="Main\Folders\FoldersEditorTest.FoldersList_ItemDataBoundTest.cs" />
+    <Compile Include="Includes\ImageGalleryTest.loadImagesTable.cs" />
+    <Fakes Include="Fakes\PlatformUser.fakes" />
+    <Fakes Include="Fakes\PlatformUser.fakes" />
+    <Fakes Include="Fakes\AddressValidator.fakes" />
+    <Fakes Include="Fakes\System.Web.Extensions.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_DataLayer.fakes" />
+    <Fakes Include="Fakes\System.Xml.fakes" />
+    <Fakes Include="Fakes\RestSharp.fakes" />
+    <Fakes Include="Fakes\ECN_Framework.fakes" />
+    <Fakes Include="Fakes\KM.Framework.Web.WebForms.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_BusinessLayer.fakes" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
+</Project>

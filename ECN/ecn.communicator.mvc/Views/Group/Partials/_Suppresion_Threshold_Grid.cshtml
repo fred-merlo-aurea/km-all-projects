@@ -1,0 +1,242 @@
+﻿@model List<ECN_Framework_Entities.Communicator.ChannelNoThresholdList>
+
+<script type="text/javascript">
+    var NoT_targetUrl = '@Url.Action("NoT_ReadToGrid", "Group")';
+    var NoT_firstGridLoad = true;
+    function NoT_DataBound() {
+        var grid = this;
+
+        if (NoT_firstGridLoad) {
+            
+            NoT_firstGridLoad = false;
+            NoT_SetPagerWidget("NoT_firstpage");
+
+        }
+    }
+
+    $(document).ready(function () {
+        $("#NoT_ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+    });
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function NoT_GoToPage(e) {
+
+        NoT_SetPagerWidget(e.target.id);
+        var data = NoT_GridParams();
+        NoT_ReBindGrid(data);
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function NoT_Search() {
+        NoT_SetPagerWidget("NoT_firstpage");
+        NoT_firstGridLoad = true;
+        var data = NoT_GridParams();
+        NoT_ReBindGrid(data);
+    }
+    
+    function NoT_InputPageNumber_KeyDown() {
+
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            if (parseInt($("#NoT_pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#NoT_pagerInputPageNumber").val())) && $("#NoT_pagerInputPageNumber").val() <= parseInt($("#NoT_pagerTotalItems").text())) {
+                if (typeof e != 'undefined') {
+                    NoT_SetPagerWidget(e.target.id);
+                }
+                else {
+                    var spage = $("#NoT_pagerInputPageNumber").val();
+                    NoT_SetPagerWidget(spage);
+                }
+                var data = NoT_GridParams();
+                NoT_ReBindGrid(data);
+            }
+            else {
+                showMessage({
+                    type: 'Error',
+                    text: 'Please enter valid page number.',
+                    autoClose: false,
+                    action: function () {
+                        NoT_SetPagerWidget("NoT_firstpage");
+                        NoT_firstGridLoad = true;
+                        var data = NoT_GridParams();
+                        NoT_ReBindGrid(data);
+                    }
+                });
+               
+            }
+        }
+
+
+    }
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function NoT_GridParams() {
+
+        return {
+            ProfileName: $('#SearchNoThresholdTxt').val(),
+            PageNumber: $("#NoT_pagerInputPageNumber").val(),
+            PageSize: $("#NoT_ddPageSize").val()
+        };
+
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function NoT_ReBindGrid(obj) {
+        var grid = $("#channelNoThresholdGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: NoT_targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function NoT_RebindOnPageOrSizeChange() {
+        NoT_SetPagerWidget("NoT_firstpage");
+        NoT_firstGridLoad = true;
+        var data = NoT_GridParams();
+        NoT_ReBindGrid(data);
+     }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function NoT_SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#channelNoThresholdGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalCount);
+        }
+        var pagesize = parseInt($("#NoT_ddPageSize").val());
+        var currentpage = parseInt($("#NoT_pagerInputPageNumber").val());
+        var lastpage = 0;
+        if (totalrecordCount % pagesize > 0) {
+            lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+        else {
+            lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        var firstpage = 1;
+
+        if (id == "NoT_firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "NoT_prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "NoT_nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "NoT_lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#NoT_currentpage").text(currentpage);
+        $("#NoT_pagerDisplay").text(displaymessage);
+        $("#NoT_pagerTotalItems").text(lastpage);
+        $("#NoT_pagerInputPageNumber").val(currentpage);
+
+    }
+
+    function NoT_checkChange(e) {
+        NoT_RebindOnPageOrSizeChange()
+    }
+</script>
+
+
+@(Html.Kendo()
+        .Grid(Model)
+        .Name("channelNoThresholdGrid")
+        .Events(x => x.DataBound("NoT_DataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.TotalCount).Hidden(true);
+            columns.Bound(e => e.EmailAddress).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Email Address").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+            columns.Bound(e => e.CreatedDate).Format("{0:G}").Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Date Added").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+            columns.Bound(e => e).ClientTemplate("<button class='btn k-button' onclick=\"DeleteNoThresholdSuppression('#=CNTID#')\" type='button'>Delete<i class='km-icon icon-kmcustom-delete'></i></button>").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" });
+        })
+        .Pageable(x => x.Enabled(false))
+        .Sortable(x => x.SortMode(GridSortMode.SingleColumn))
+        .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+        .DataSource(dataSource => dataSource
+           .Ajax()
+           .PageSize(10)
+           .Read(read => read
+                .Action("NoT_ReadToGrid", "Group")
+                .Data("NoT_GridParams")
+            )
+            .Model(m =>
+            {
+                m.Id(y => y.CNTID);
+            })
+
+       )
+)
+
+<div id="NoT_pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+    <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+        <span onclick="NoT_GoToPage(event)" id="NoT_firstpage" class="k-icon k-i-seek-w">seek-w</span>
+    </a>
+    <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+        <span onclick="NoT_GoToPage(event)" id="NoT_prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+    </a>
+
+    <ul class="k-pager-numbers k-reset">
+        <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+        <li><span class="k-state-selected" id="NoT_currentpage">1</span></li>
+
+    </ul>
+    <span class="k-pager-input k-label">Page<input class="k-textbox" id="NoT_pagerInputPageNumber" onkeydown="NoT_InputPageNumber_KeyDown()">of <span id="NoT_pagerTotalItems"></span></span>
+    <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+        <span onclick="NoT_GoToPage(event)" id="NoT_nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+    </a>
+    <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+        <span onclick="NoT_GoToPage(event)" id="NoT_lastpage" class="k-icon k-i-seek-e">seek-e</span>
+    </a>
+
+    <span class="k-pager-sizes k-label">
+        <span title="" class="k-widget k-dropdown k-header">
+            <input id="NoT_ddPageSize" onchange="NoT_checkChange()" />
+        </span>items per page
+    </span>
+    <span class="float-right" style="margin-right:10px;">
+        <lable id="NoT_pagerDisplay"></lable>
+    </span>
+</div>

@@ -1,0 +1,387 @@
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ *
+ * Licensed under the terms of the GNU Lesser General Public License
+ * (http://www.opensource.org/licenses/lgpl-license.php)
+ *
+ * For further information go to http://www.fredck.com/FCKeditor/ 
+ * or contact fckeditor@fredck.com.
+ *
+ * fck_link.html: Link dialog box.
+ *
+ * Authors:
+ *   Frederico Caldeira Knabben (fckeditor@fredck.com)
+-->
+<html>
+	<head>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link rel="stylesheet" type="text/css" href="../css/fck_dialog.css">
+		<script language="javascript" src="../js/dhtmled.js"></script>
+		<script language="javascript">
+<!--
+// Get browsing configuration
+var bCanBrowse			= dialogArguments.config.LinkBrowser ;
+//var sBrowseURL			= dialogArguments.config.LinkBrowserURL ;
+var sBrowseURL			= "/ecn.communicator/main/content/editor/filemanager/browse/browseDoc.aspx";
+var iBrowseWindowWidth	= dialogArguments.config.LinkBrowserWindowWidth ;
+var iBrowseWindowHeight	= dialogArguments.config.LinkBrowserWindowHeight ;
+
+// Get upload configuration
+//var bCanUpload					= dialogArguments.config.LinkUpload && dialogArguments.BrowserInfo.IsIE55OrMore ;
+var bCanUpload					= "false";
+var sUploadURL					= dialogArguments.config.LinkUploadURL ;
+var iUploadWindowWidth			= dialogArguments.config.LinkUploadWindowWidth ;
+var iUploadWindowHeight			= dialogArguments.config.LinkUploadWindowHeight ;
+var sUploadAllowedExtensions	= dialogArguments.config.LinkUploadAllowedExtensions ;
+var sUploadDeniedExtensions		= dialogArguments.config.LinkUploadDeniedExtensions ;
+
+// Get target configuration
+var bCanTarget		= dialogArguments.config.LinkShowTargets ;
+var sTargets		= dialogArguments.config.LinkTargets ;
+var sDefaultTarget	= dialogArguments.config.LinkDefaultTarget ;
+
+// Gets the document DOM
+var oDOM = dialogArguments.objContent.DOM ;
+
+document.write("<title>" + dialogArguments.lang["DlgLnkWindowTitle"] + "</title>") ;
+
+function setDefaults()
+{
+	// First of all, translate the dialog box texts
+	dialogArguments.AvailableLangs.TranslatePage(document) ;
+	
+	var oLink = getSelectionLink() ;
+
+	if (oLink != null)
+	{
+		txtURL.value    = oLink.getAttribute("href",2) ;
+		var newURL = txtURL.value;
+		if(newURL.substring(0,7).toLowerCase() == "http://"){
+			newURL = newURL.substring(7, newURL.length);
+			txtURL.value = newURL;
+			protocolSelect.value = "http://";
+		}else 	if(newURL.substring(0,8).toLowerCase() == "https://"){
+			newURL = newURL.substring(8, newURL.length);
+			txtURL.value = newURL;
+			protocolSelect.value = "https://";
+		}else if(newURL.substring(0,6).toLowerCase() == "ftp://"){
+			newURL = newURL.substring(6, newURL.length);
+			txtURL.value = newURL;
+			protocolSelect.value = "ftp://";
+		}else if(newURL.substring(0,7).toLowerCase() == "mailto:"){
+			newURL = newURL.substring(7, newURL.length);
+			txtURL.value = newURL;
+			protocolSelect.value = "mailto:";
+		}else{
+			txtURL.value = newURL;
+		}
+
+		//txtURL.value    = oLink.href ;
+		txtTitle.value  = oLink.title ;
+		selTarget.value = oLink.target ;
+	}
+	
+	//check if there's Conversion Code snippet added
+	if(newURL != null ) {
+		if(newURL.length > 20 ) {
+			var convURL = newURL.substring(newURL.length-20, newURL.length);
+			if(convURL == "%%ConversionTrkCDE%%"){
+				conversionCheckbx.checked = true;
+			}
+		}
+	}
+}
+
+function getSelectionLink()
+{
+	var oParent ;
+	var oRange ;
+	
+	if (oDOM.selection.type == "Control")
+	{
+		oRange = oDOM.selection.createRange() ;
+		for ( i = 0 ; i < oRange.length ; i++ )
+		{
+			if (oRange(i).parentNode)
+			{
+				oParent = oRange(i).parentNode ;
+				break ;
+			}
+		}
+	}
+	else
+	{
+		oRange  = oDOM.selection.createRange() ;
+		oParent = oRange.parentElement() ;
+	}
+
+	while (oParent && oParent.nodeName != "A")
+	{
+		oParent = oParent.parentNode ;
+	}
+
+	if (oParent && oParent.nodeName == "A")
+	{
+		oDOM.selection.empty() ;
+		oRange = oDOM.selection.createRange() ;
+		oRange.moveToElementText( oParent ) ;
+		oRange.select() ;
+		
+		return oParent ;
+	}
+	else
+		return null ;
+}
+
+function ok()
+{
+	var protocol = protocolSelect.value;
+	if(protocol == ""){
+		protocol = "http://";
+	}
+	var sUrl = protocol+txtURL.value ;
+	var sTarget = ( bCanTarget && sTargets.length > 0 ) ? selTarget.value : sDefaultTarget ;
+	
+	if (sUrl == "")
+		dialogArguments.decCommand( DECMD_UNLINK ) ;
+	else
+	{
+		dialogArguments.decCommand( DECMD_HYPERLINK, OLECMDEXECOPT_DONTPROMPTUSER, "javascript:void(0);/*fckeditortemplink*/" ) ;
+		for (i = 0 ; i < oDOM.links.length ; i++)
+		{
+			if ( oDOM.links[i].href == "javascript:void(0);/*fckeditortemplink*/" )
+			{
+				oDOM.links[i].href = sUrl ;
+				
+				if ( txtTitle.value == "" )
+					oDOM.links[i].removeAttribute("title",0) ;
+				else
+					oDOM.links[i].title  = txtTitle.value ;
+					
+				if ( sTarget == null || sTarget == "" )
+					oDOM.links[i].removeAttribute("target",0) ;
+				else
+					oDOM.links[i].target = sTarget ;
+			}
+		}
+	}
+
+	cancel() ;
+}
+
+// Fired when the user press the CANCEL button.
+function cancel() 
+{
+	window.returnValue = null ;
+	window.close() ;
+}
+
+// Fired when the user check / uncheck Conversion Code Chk box.
+function conversion()  {
+	var newURL = "";
+	if(protocolSelect.value == "http://" || protocolSelect.value == "https://"){
+		if(conversionCheckbx.checked){
+			if (txtURL.value ==""){
+				alert('Please Enter a valid URL');
+				conversionCheckbx.checked = false;
+			}else{
+				newURL = txtURL.value + "%%ConversionTrkCDE%%";
+				txtURL.value = newURL;
+				//alert(txtURL.value);
+			}
+		}else{
+			newURL = txtURL.value;
+			txtURL.value = newURL.substring(0,(newURL.length - 20));
+		}
+	}else{
+		alert("Cannot add Conversion Code to this URL. Please choose http:// or https://");
+		conversionCheckbx.checked = false;
+	}
+}
+
+// Fired when the user click in the "Sent it to the Server" button.
+function uploadFile()
+{
+	var sFile = frmUpload.FCKeditor_File.value ;
+
+	if (sFile == "")
+	{
+		alert("Please select a file to upload.") ;
+		return ;
+	}
+	
+	var sExt = sFile.match( /\.[^\.]*$/ ) ;
+	sExt = sExt ? sExt[0].toLowerCase() : "." ;
+		
+	if ( sUploadAllowedExtensions != "" && sUploadAllowedExtensions != "*" )
+	{
+		if ( sUploadAllowedExtensions.indexOf( sExt ) < 0 )
+		{
+			alert( dialogArguments.lang["DlgLnkMsgWrongExtA"] ) ; 
+			return ;
+		}
+	}
+	
+	if ( sUploadDeniedExtensions != "" )
+	{
+		if ( sUploadDeniedExtensions.indexOf( sExt ) >= 0 )
+		{
+			alert( dialogArguments.lang["DlgLnkMsgWrongExtD"] ) ; 
+			return ;
+		}
+	}
+	
+	var oWindow = openNewWindow("", "UploadWindow", iUploadWindowWidth, iUploadWindowHeight) ;
+	frmUpload.submit() ;
+	oWindow.setImage = setImage ;
+}
+
+function browserServer()
+{
+	var oWindow = openNewWindow(sBrowseURL, "BrowseWindow", iBrowseWindowWidth, iBrowseWindowHeight,"no", "yes") ;
+	oWindow.setImage = setImage ;
+}
+
+function openNewWindow(sURL, sName, iWidth, iHeight, bResizable, bScrollbars)
+{
+	var iTop  = (screen.height - iHeight) / 2 ;
+	var iLeft = (screen.width  - iWidth) / 2 ;
+	
+	var sOptions = "toolbar=no" ;
+	sOptions += ",width=" + iWidth ; 
+	sOptions += ",height=" + iHeight ;
+	sOptions += ",resizable="  + (bResizable  ? "yes" : "no") ;
+	sOptions += ",scrollbars=" + (bScrollbars ? "yes" : "no") ;
+	sOptions += ",status=yes";		
+	sOptions += ",left=" + iLeft ;
+	sOptions += ",top=" + iTop ;
+	
+	var oWindow = window.open(sURL, sName, sOptions)
+	oWindow.focus();
+	
+	return oWindow ;
+}
+
+function setImage(sImageURL) {
+	txtURL.value = sImageURL ;
+}
+
+document.onkeydown = function ()
+{
+	switch ( event.keyCode )
+	{
+		case 13 : ok() ;		break ;	// ENTER
+		case 27 : cancel() ;	break ;	// ESC
+	}
+}
+//-->
+		</script>
+	</head>
+	<body bottommargin="5" leftmargin="5" topmargin="5" rightmargin="5" onload="setDefaults()">
+		<table cellspacing="1" cellpadding="1" border="0" width="100%" class="dlg" height="100%">
+			<tr>
+				<td>
+					<table cellspacing="0" cellpadding="0" width="100%" border="0" ID="Table1">
+						<tr>
+							<td valign="top" width="58"><BR>
+								<select id="protocolSelect" NAME="protocolSelect">
+									<option value="" selected></option>
+									<option value="http://">http://</option>
+									<option value="https://">https://</option>
+									<option value="ftp://">ftp://</option>
+									<option value="mailto:">mailto:</option>
+								</select>&nbsp;
+							</td>
+							<td valign="top" colspan="3"><span fckLang="DlgLnkURL">URL</span><BR>
+								<input style="WIDTH: 100%" type="text" id="txtURL" size="20" NAME="txtURL">
+							</td>
+						</tr>
+						<TR>
+							<TD style="HEIGHT: 13px" vAlign="top" align="right" width="58"></TD>
+							<TD style="HEIGHT: 30px" align="left" colspan="3" valign=top>
+								<span><input type="checkbox" value="" NAME="conversionCheckbx" onclick="conversion()">Add Conversion Tracking Code to URL</span>
+							</TD>
+						</TR>
+						<tr>
+							<td valign="top" align="right" width="58">
+								&nbsp;</td>
+							<td width="812" align="right">
+								&nbsp;<input type="button" onclick="ok();" fckLang="DlgBtnOK" value="Ok" ID="Button1" NAME="Button1"></td>
+							<td valign="top" width="63" align="center">
+								<input type="button" fckLang="DlgBtnCancel" value="Cancel" onclick="cancel();" ID="Button2"
+									NAME="Button2"></td>
+							<td valign="top" width="115" align="right">
+								<input type="button" value="Browse Files" onclick="browserServer();" id="btnBrowse" NAME="btnBrowse">
+							</td>
+						</tr>
+					</table>
+					<hr width="100%" color="#000000" size="1">
+					<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+						<tr>
+							<td id="tdTarget" style="DISPLAY: none"><span fckLang="DlgLnkTarget">Target</span><BR>
+								<select id="selTarget">
+									<option value="" fckLang="DlgLnkTargetNotSet" selected>&lt;Not set&gt;</option>
+								</select>
+							</td>
+							<td width="50%"><span fckLang="DlgLnkTitle">Title</span><br>
+								<input id="txtTitle" style="WIDTH: 100%" type="text">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<script language="javascript">
+/*if ( bCanUpload )
+{
+	tableUpload.style.display = "block" ;
+	frmUpload.action = sUploadURL ;
+}*/
+
+if ( bCanBrowse )
+	btnBrowse.style.display = "block" ;
+
+if ( bCanTarget && sTargets.length > 0 )
+{
+	tdTarget.style.display = "block" ;
+
+	// Load the configured targets
+	var asTargets = sTargets.split( ';' ) ;
+	
+	for ( var i = 0 ; i < asTargets.length ; i++ )
+	{
+		var oOption = document.createElement("OPTION") ;
+
+		selTarget.options.add(oOption) ;
+		
+		var sText ;
+		
+		switch ( asTargets[i] )
+		{
+			case "_blank" :
+				sText = dialogArguments.lang[ "DlgLnkTargetBlank" ] ;
+				break ;
+			case "_parent" :
+				sText = dialogArguments.lang[ "DlgLnkTargetParent" ] ;
+				break ;
+			case "_self" :
+				sText = dialogArguments.lang[ "DlgLnkTargetSelf" ] ;
+				break ;
+			case "_top" :
+				sText = dialogArguments.lang[ "DlgLnkTargetTop" ] ;
+				break ;
+			default :
+				sText = asTargets[i] ;
+				break ;
+		}
+
+		oOption.innerText = sText ;
+		oOption.value     = asTargets[i] ;
+	}
+	
+	selTarget.value = sDefaultTarget ;
+}
+</script>
+	</body>
+</html>

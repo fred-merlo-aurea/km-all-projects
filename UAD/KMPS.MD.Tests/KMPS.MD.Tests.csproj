@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{423478B6-2FBE-4C0C-8BE9-911BF6A6555A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KMPS.MD.Tests</RootNamespace>
+    <AssemblyName>KMPS.MD.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.7.123, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\OldDlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxControlToolkit.4.1.7.123.Fakes">
+      <HintPath>FakesAssemblies\AjaxControlToolkit.4.1.7.123.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_BusinessLayer.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_BusinessLayer.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FakeHttpContext, Version=0.4.0.0, Culture=neutral, PublicKeyToken=7913106c84cef83e, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeHttpContext.0.4.0\lib\net45\FakeHttpContext.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAD.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAD.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAD_Lookup.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAD_Lookup.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAS.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KM.Integration.Fakes">
+      <HintPath>FakesAssemblies\KM.Integration.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KMPlatform.Fakes">
+      <HintPath>FakesAssemblies\KMPlatform.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KMPS.MD.Fakes">
+      <HintPath>FakesAssemblies\KMPS.MD.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KMPS.MD.Objects.Fakes">
+      <HintPath>FakesAssemblies\KMPS.MD.Objects.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PlatformUser.Fakes">
+      <HintPath>FakesAssemblies\PlatformUser.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Data.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Web.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Web.Extensions.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Xml.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Linq.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Xml.Linq.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2016.3.1027.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.2016.3.1027.45.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Web.UI.2016.3.1027.45.Fakes.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administration\CodesheetImportTest.cs" />
+    <Compile Include="AudienceViews\CustomerServiceTests.SelectPubsForMarkets.cs" />
+    <Compile Include="AudienceViews\ProductViewTests.GridFiltersRowCommand.cs" />
+    <Compile Include="AudienceViews\ProductViewTests.LnkDataCompareCommand.cs" />
+    <Compile Include="AudienceViews\ReportTest.SelectPubsForMarkets.cs" />
+    <Compile Include="AudienceViews\ProductViewTests.BtnDcDownloadClick.cs" />
+    <Compile Include="AudienceViews\ReportTests.ButtonDcDownloadClick.cs" />
+    <Compile Include="AudienceViews\ReportTests.ButtonPopUpSaveCampaignClick.cs" />
+    <Compile Include="AudienceViews\ReportTests.GetAddlFilter.cs" />
+    <Compile Include="AudienceViews\ReportTests.LinkDataCompareCommand.cs" />
+    <Compile Include="AudienceViews\ReportTests.LinkPopupCommand.cs" />
+    <Compile Include="Controls\ActivityTests.BtnSelectDate_Click.cs" />
+    <Compile Include="Controls\ActivityTests.GetActivityFilters.cs" />
+    <Compile Include="Administration\DataLoadTest.cs" />
+    <Compile Include="AudienceViews\CrossProductViewTests.cs" />
+    <Compile Include="AudienceViews\CustomerServiceTests.cs" />
+    <Compile Include="AudienceViews\ProductViewTests.cs" />
+    <Compile Include="AudienceViews\ReportTests.cs" />
+    <Compile Include="BaseControlTests.cs" />
+    <Compile Include="BasePageTests.cs" />
+    <Compile Include="Controls\ActivityTests.LoadControls.cs" />
+    <Compile Include="Controls\DownloadPanelVTests.cs" />
+    <Compile Include="Controls\DownloadPanelBaseTests.cs" />
+    <Compile Include="Controls\DownloadPanelTests.DetailsDownload.cs" />
+    <Compile Include="Controls\DownloadPanel_CLVTests.cs" />
+    <Compile Include="Controls\DownloadPanel_EVTests.DetailsDownload.cs" />
+    <Compile Include="Controls\DownloadPanel_EVTests.cs" />
+    <Compile Include="Controls\DownloadPanelTests.cs" />
+    <Compile Include="Controls\DataCompareSummaryTests.cs" />
+    <Compile Include="Controls\FilterSavePanelTests.cs" />
+    <Compile Include="Controls\FiltersListPanelTests.cs" />
+    <Compile Include="Controls\FilterSegmentationSaveTests.cs" />
+    <Compile Include="Controls\MarketoTests.cs" />
+    <Compile Include="Controls\AdhocTests.cs" />
+    <Compile Include="Controls\ActivityTests.cs" />
+    <Compile Include="Controls\DownloadPanel_CLVTests.DetailsDownload.cs" />
+    <Compile Include="Controls\DownloadPanelTests.ValidateExportPermission.cs" />
+    <Compile Include="Helpers\AdhocDataListItemControlSetTests.cs" />
+    <Compile Include="Helpers\AdhocHelperTests.cs" />
+    <Compile Include="Helpers\AdhocHelperTests.SetDateStyleForMonth.cs" />
+    <Compile Include="Helpers\AdhocHelperTests.SetDefaultSettings.cs" />
+    <Compile Include="Helpers\AdhocHelperTests.SetSelectedTrue.cs" />
+    <Compile Include="Helpers\ControlsValidatorsTests.cs" />
+    <Compile Include="Helpers\JsonHelperTests.cs" />
+    <Compile Include="Main\BaseCategoryPageTests.cs" />
+    <Compile Include="Main\FilterExportTest.cs" />
+    <Compile Include="Main\FilterExportTest.ExportFields.cs" />
+    <Compile Include="Main\QuestionsTests.cs" />
+    <Compile Include="Main\MarketPenetrationTests.cs" />
+    <Compile Include="Main\MarketsTests.cs" />
+    <Compile Include="Main\FilterPenetrationTests.cs" />
+    <Compile Include="Main\FilterSchedulesTests.cs" />
+    <Compile Include="Main\FilterListTests.cs" />
+    <Compile Include="Main\FilterCategoryTests.cs" />
+    <Compile Include="Main\MarketsNewTests.cs" />
+    <Compile Include="Main\QuestionCategoryTests.cs" />
+    <Compile Include="Main\FilterListAspxTest.cs" />
+    <Compile Include="Main\FilterSchedulesTest.cs" />
+    <Compile Include="Main\Widgets\BaseWidgetsTests.cs" />
+    <Compile Include="Main\Widgets\ClickSubscriberGrowthTests.cs" />
+    <Compile Include="Main\Widgets\NetSubscriberGrowthTests.cs" />
+    <Compile Include="Main\Widgets\OpenSubscriberGrowthTests.cs" />
+    <Compile Include="Main\Widgets\TotalClicksTests.cs" />
+    <Compile Include="Main\Widgets\TotalGrossSubscribersTests.cs" />
+    <Compile Include="Main\Widgets\TotalOpensTests.cs" />
+    <Compile Include="Main\Widgets\TotalVisitsTests.cs" />
+    <Compile Include="Main\Widgets\VisitSubscriberGrowthTests.cs" />
+    <Compile Include="MasterPage\SiteTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\BrandSetupTests.cs" />
+    <Compile Include="Tools\GeocodeTests.cs" />
+    <Compile Include="Tools\DownloadTemplateSetupTests.cs" />
+    <Compile Include="Tools\RecordViewPDFSetupTests.cs" />
+    <Compile Include="Tools\MergeSubscriberTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Fakes Include="Fakes\System.fakes" />
+    <Fakes Include="Fakes\mscorlib.fakes" />
+    <None Include="app.config" />
+    <Fakes Include="Fakes\System.Web.fakes" />
+    <Fakes Include="Fakes\KMPS.MD.Objects.fakes" />
+    <Fakes Include="Fakes\KMPS.MD.fakes" />
+    <Fakes Include="Fakes\PlatformUser.fakes" />
+    <Fakes Include="Fakes\System.Data.fakes" />
+    <Fakes Include="Fakes\System.Xml.fakes" />
+    <Fakes Include="Fakes\KMPlatform.fakes" />
+    <Fakes Include="Fakes\FrameworkUAD.fakes" />
+    <Fakes Include="Fakes\System.Web.Extensions.fakes" />
+    <Fakes Include="Fakes\Telerik.Web.UI.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
+    <Fakes Include="Fakes\ECN_Framework_BusinessLayer.fakes" />
+    <Fakes Include="Fakes\FrameworkUAS.fakes" />
+    <Fakes Include="Fakes\FrameworkUAD_Lookup.fakes" />
+    <Fakes Include="Fakes\KM.Integration.fakes" />
+    <Fakes Include="Fakes\System.Xml.Linq.fakes" />
+    <Fakes Include="Fakes\AjaxControlToolkit.fakes" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ECN\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ECN\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UAS\Framework\FrameworkUAD\FrameworkUAD.csproj">
+      <Project>{cba5b2c6-3ce4-4782-bae0-570528690b4b}</Project>
+      <Name>FrameworkUAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UAS\Framework\FrameworkUAD_Lookup\FrameworkUAD_Lookup\FrameworkUAD_Lookup.csproj">
+      <Project>{8ad0b7b7-73a4-437a-b533-1f9d5a90f2be}</Project>
+      <Name>FrameworkUAD_Lookup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UAS\Framework\FrameworkUAS\FrameworkUAS.csproj">
+      <Project>{824833b3-d839-4878-ab71-b4dfdf802085}</Project>
+      <Name>FrameworkUAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.Integration\KM.Integration.csproj">
+      <Project>{659e84c5-97f5-4cc5-a5a1-ff2fc0374086}</Project>
+      <Name>KM.Integration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMPS.MD.Objects\KMPS.MD.Objects.csproj">
+      <Project>{4b81b92c-5d4f-4f05-9f2d-49362e8f98b4}</Project>
+      <Name>KMPS.MD.Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMPS.MD\KMPS.MD.csproj">
+      <Project>{50b2fb38-eadb-4e29-9ac8-e56b643357d4}</Project>
+      <Name>KMPS.MD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCommonHelpers\TestCommonHelpers.csproj">
+      <Project>{cc50ce8a-d8fa-4ac8-8722-f2b4058f17a7}</Project>
+      <Name>TestCommonHelpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+</Project>

@@ -1,0 +1,111 @@
+﻿
+@{var embededCode = "<iframe style=\"border:0;width:100%;height:100%;\" src=\"Url\"></iframe>";
+  var responsiveEmbededCode = "<style>.intrinsic-container{position:relative;height:0;overflow:hidden;margin-bottom:1.5rem;}.intrinsic-container-ratio{padding-bottom:75%}"+
+				".intrinsic-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;margin:0!important;border:0;}</style><div class=\"intrinsic-container intrinsic-container-ratio\">"+
+                "<iframe src=\"Url\"></iframe></div>";
+  var formUrl = Config("GetFormHandlerUrl");
+  }
+<script>
+
+    function SourceOpen(id) {
+        var formUlr = "@formUrl";
+        try {
+            $("#File").val(formUlr + "?tokenuid=" + id);
+            $("#EmbededCode").html("@embededCode".replace("Url", formUlr + "?tokenuid=" + id + "&isIFrame=true"));
+            $("#ResponsiveEmbededCode").html("@responsiveEmbededCode".replace("Url", formUlr + "?tokenuid=" + id + "&isIFrame=true"));
+
+            $("#SourceDialog").kendoWindow({ animation: false, visible: false, modal: true })
+            var window = $("#SourceDialog").data("kendoWindow");
+            window.center().open();
+        } catch (e) { alert(e); }
+    }
+
+    function SourceClose() {
+        var window = $("#SourceDialog").data("kendoWindow");
+        window.close();
+    }
+</script>
+
+<div id="SourceDialog" style="display:none" class="wrapper modal getformsource">  
+  <fieldset title="Source">
+    <legend>Source</legend>
+    <ul class="formlist">
+        <div class="formbox">
+            <li>
+                <div class="subtitle">Direct Link</div>
+                <div class="formitem formiteminline">
+                    <label>This is a permanent URL that references your form. It does not change when you change the form's title. This is the recommended way to share your form.</label>
+
+                    @Html.TextArea("File", new { @readonly = "true", style = "height: 3em" })
+                    
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyFile")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object> 
+                                            { 
+                                                { "data-clipboard-target", "#File" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+                                     
+                </div>
+            </li>
+            <li>
+                <div class="subtitle">Embed Code</div>
+                <div class="formitem formiteminline">
+                    <label>Use this embed code to place your form into your pages on your own site.</label>
+
+                    @Html.TextArea("EmbededCode", embededCode, new { @readonly = "true", style = "height: 4em" })
+                    
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyCode")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object> 
+                                            { 
+                                                { "data-clipboard-target", "#EmbededCode" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+                                       
+                </div>
+            </li>
+            <li>
+                <div class="subtitle">Responsive Embed Code</div>
+                <div class="formitem formiteminline">
+                    <label>Use this responsive embed code to place your form into your pages on your own site. 
+                    NOTE: The content height is based on width. To change this ratio change the % on .intrinsic-container-ratio{padding-bottom:75%}, e.g. 150% = tall container, 50% = short-wide container.</label>
+
+                    @Html.TextArea("ResponsiveEmbededCode", responsiveEmbededCode, new { @readonly = "true", style = "height: 7em" })
+
+                    @(
+                        Html.Kendo()
+                            .Button()
+                            .Name("CopyRCode")
+                            .Content("Copy")
+                            .HtmlAttributes(new Dictionary<string, object>
+                                            {
+                                                { "data-clipboard-target", "#ResponsiveEmbededCode" },
+                                                { "data-clipboard-action", "copy" },
+                                                { "class", "clipboard" }
+                                            })
+                    )
+
+                </div>
+            </li>
+
+
+              
+        </div>
+    </ul>
+      </fieldset>
+    </div>
+
+
+
+

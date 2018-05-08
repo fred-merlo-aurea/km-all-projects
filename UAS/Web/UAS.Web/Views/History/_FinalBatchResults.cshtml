@@ -1,0 +1,281 @@
+﻿@model UAS.Web.Models.Circulations.BatchHistoryWithName
+
+<script language="JavaScript" type="text/JavaScript">
+    function openReportPrintWindow(id) {
+        var modelData = {
+            BatchID: id
+        }
+
+        var win = $("#printWindow").data('kendoWindow');
+        win.center().open();
+
+        $.ajax({
+            url: "/UAS.Web/History/PrintWindow",
+            type: "GET",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (result) {
+                win.content(result);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function openDetailPrintWindow(id) {
+        var modelData = {
+            BatchID: id
+        }
+
+        var win = $("#printWindowDetail").data('kendoWindow');
+        win.center().open();
+
+        $.ajax({
+            url: "/UAS.Web/History/PrintWindowDetail",
+            type: "GET",
+            data: modelData,
+            traditional: true,
+            cache: false,
+            success: function (result) {
+                win.content(result);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function saveReport(id) {
+        var model = {
+            BatchID: id
+        }
+
+        $.load({
+            url: "/UAS.Web/History/SaveReport",
+            type: "GET",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (data) {
+
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function printReport(id) {
+        var model = {
+            BatchID: id
+        }
+
+        $.ajax({
+            url: "/UAS.Web/History/PrintReport",
+            type: "GET",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                alert("done");
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function saveDetail(id) {
+        var model = {
+            BatchID: id
+        }
+
+        $.ajax({
+            url: "/UAS.Web/History/SaveDetail",
+            type: "GET",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                alert("done");
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function printDetail(id) {
+        var model = {
+            BatchID: id
+        }
+
+        $.ajax({
+            url: "/UAS.Web/History/PrintDetail",
+            type: "GET",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                alert("done");
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function pubCodeFilter(element) {
+        element.kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: "@Url.Action("FileHistory_Filter_PubCode")",
+                    type: "GET",
+                    dataType: "json",
+                    create: {
+                        contentType: "application/json"
+                    }
+                }
+            },
+            dataTextField: "Value",
+            dataValueField: "Value",
+            valuePrimitive: true,
+            optionLabel: "-- Select --"
+        });
+    }
+
+    function userNameFilter(element) {
+        element.kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: "@Url.Action("FileHistory_Filter_User")",
+                    type: "get",
+                    dataType: "json",
+                }
+            },
+            dataTextField: "Value",
+            dataValueField: "Value",
+            optionLabel: "-- Select --"
+        });
+    }
+    //e.BatchID.ToString(), e.BatchID, e.BatchNumber, e.Product.Value
+    function getBatchId(batchHistory) {
+        return batchHistory.BatchID;
+    }
+    function getBatchNumber(batchHistory) {
+        return batchHistory.BatchNumber;
+    }
+    function getProductCode(batchHistory) {
+        return batchHistory.Product.Value;
+    }
+    function getActionColumn(batchHistory) {
+
+        return GetReportActions("grid_" + Model.BatchHistoryName + "_Report_" + batchHistory.BatchID.ToString(), batchHistory.BatchID, batchHistory.BatchNumber, batchHistory.Product.Value)
+    }
+    function initMenus(e) {
+        $(".templateCell").each(function () {
+            eval($(this).children("script").last().html());
+        });
+    }
+
+    function closeMenu(id) {        
+        var name = @Html.Raw(Json.Encode(Model.BatchHistoryName));
+        var menu = "grid_" + name + "_Report_" + id;
+        //This will close the slide out menu but will change the orientation and direction causing the menu button to look different
+        $("#" + menu).kendoMenu().data("kendoMenu").close();
+        //This will fix the orientation and direction issue previously
+        $("#" + menu).kendoMenu({ orientation: "vertical", direction: "right" });        
+    }
+</script>
+<script id="valueTemplate" type="text/x-kendo-template">
+    Value: #:data.Product#
+</script>
+<style type="text/css">
+    .k-widget .templateCell
+    {
+        overflow: visible;
+    }
+</style>
+<div id="finalizedBatches">
+    @LoadtoKendoGrid(Model.BatchHistoryIEnum)
+
+    @helper LoadtoKendoGrid(IEnumerable<UAS.Web.Models.Circulations.BatchHistory> source)
+    {
+
+    Html.Kendo()
+        .Grid(Model.BatchHistoryIEnum)
+        .Name("grid_" + Model.BatchHistoryName)
+        .Columns(columns =>
+        {
+
+            columns.Template(@<text></text>).HtmlAttributes(new { @class = "templateCell" }).Width(100).ClientTemplate(
+                        Html.Kendo()
+                            .Menu()
+                            .Name("grid_" + Model.BatchHistoryName + "_Report_#=BatchID#")
+                            .Direction(MenuDirection.Right)
+                            .Orientation(MenuOrientation.Vertical)
+                            .Animation(false)                      
+                            .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                            innerItems =>
+                                            {
+                                                innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                                innerItems.Add().Text("Save Batch Report").Action("SaveReport", "History", new { BatchID = "#=BatchID#", BatchNumber = "#=BatchNumber#", Pubcode = "#=Product.Value#" }).HtmlAttributes(new { onclick = "closeMenu(#=BatchID#);" });
+                                                innerItems.Add().Text("Print Batch Report").HtmlAttributes(new { onclick = "openReportPrintWindow(#=BatchID#);" });
+                                                innerItems.Add().Text("Save Batch Detail").Action("SaveDetail", "History", new { BatchID = "#=BatchID#", BatchNumber = "#=BatchNumber#", Pubcode = "#=Product.Value#" }).HtmlAttributes(new { onclick = "closeMenu(#=BatchID#);" });
+                                                //innerItems.Add().Text("Print Batch Detail").HtmlAttributes(new { onclick = "openDetailPrintWindow(#=BatchID#);" });
+                                            }
+                                        )
+                                    )
+                                    .ToClientTemplate().ToHtmlString()
+                                    );
+            columns.Bound(e => e.Product.Value).Title("Product").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);//.Filterable(filterable => filterable.Cell(c => c.DataTextField("Value").Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("pubCodeFilter"));
+            columns.Bound(e => e.BatchNumber).Title("Batch #").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);
+            columns.Bound(e => e.User.Value).Title("Username").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);//.Filterable(filterable => filterable.Cell(c => c.Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("userNameFilter")); ;
+            columns.Bound(e => e.DateCreated).Title("Date Created").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);
+            columns.Bound(e => e.DateFinalized).Title("Date Finalized").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);
+            columns.Bound(e => e.BatchCount).Title("Count").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).Filterable(false);
+        })
+        .Events(ev => ev.DataBound("initMenus"))
+        .Pageable()
+        .Scrollable()
+        .Sortable()
+        .HtmlAttributes(new { style = "height:550px;min-width:100px;" })
+        //.Filterable(f => f.Extra(false)
+        //                .Mode(GridFilterMode.Row | GridFilterMode.Menu)
+        //                .Operators(operators => operators
+        //                    .ForString(str => str.Clear()
+        //                    .StartsWith("Starts with")
+        //                    .IsEqualTo("Is equal to")
+        //                    .IsNotEqualTo("Is not equal to")
+        //                )))
+        .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(10)
+                    .ServerOperation(false)
+                    .Sort(sort => sort.Add(x => x.DateCreated).Descending()))
+        .Render();
+
+}
+</div>
+
+<div id="client-detail-modal">
+    @helper  GetReportActions(string name, int batchID, string batchNumber, string pubCode)
+{
+    @(Html.Kendo()
+            .Menu()
+            .Name("Menu_" + name)
+            .Direction(MenuDirection.Right)
+            .Orientation(MenuOrientation.Vertical)
+            .Animation(false)
+            .Items(
+                items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                    innerItems =>
+                    {
+                        innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                        innerItems.Add().Text("Save Batch Report").Action("SaveReport", "History", new { BatchID = batchID, BatchNumber = batchNumber, Pubcode = pubCode });
+                        innerItems.Add().Text("Print Batch Report").HtmlAttributes(new { onclick = "openReportPrintWindow(" + batchID + ");" });
+                        innerItems.Add().Text("Save Batch Detail").Action("SaveDetail", "History", new { BatchID = batchID, BatchNumber = batchNumber, Pubcode = pubCode });
+                        //innerItems.Add().Text("Print Batch Detail").HtmlAttributes(new { onclick = "openDetailPrintWindow(" + batchID + ");" });
+                    }
+                )
+            )
+    )
+}
+
+</div>

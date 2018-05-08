@@ -1,0 +1,48 @@
+﻿@using KMEnums
+@using KMModels
+@using KMModels.PostModels
+
+@{  
+    var selectValue = ((IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.PageBreaks).Select((r, i) => new { Id = r.Id, TextField = "Page " + (i + 1).ToString() + " (" + r.FieldLabel + ") " });
+    }
+
+<script id="PageRules-template" type="text/x-kendo-template">    
+      <div class="rulesbox RuleRowBox" id ="Rules_#=RuleNum#__RuleRowBox">
+                      
+                      <div class="formbox  formtabled">
+                        <input type="hidden" name = "Rules.Index" value = "#=RuleNum#" />
+                        @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Id), 0 ))         
+                        @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Order), 0 ))                    
+                        @(Html.Hidden(GetName<RuleModel>("Rules[#=RuleNum#]", x => x.Type),RuleTypes.Page))
+                        <div class="formitem formiteminline">
+                            Go to page number                             
+                            @Html.Kendo().DropDownList().Name(GetName<RuleModel>("#=PrefixRuleNum#", x => x.ControlId)).Items(items=>{              
+              foreach (var cm in selectValue) 
+              {
+                  items.Add().Text(cm.TextField).Value(cm.Id.ToString());
+              };
+                           items.Add().Text("End Form").Value("-1");
+                            }).HtmlAttributes(new { id = "Rules_#=RuleNum#___ControlId" }).ToClientTemplate()    
+                        </div>                  
+                    </div>  
+
+
+
+    <div class="rulesorderbox  float-right"> <span>Rule Order: </span>
+
+    
+    @(Html.Kendo().Button().Content("Up <span class=\"k-icon k-i-arrow-60-up\"></span>").Name("Rules_#=RuleNum#__Up").HtmlAttributes(new { type = "button", @class="UpRuleOrder" }).ToClientTemplate() )
+    @(Html.Kendo().Button().Content("Down <span class=\"k-icon k-i-arrow-60-down\"></span>").Name("Rules_#=RuleNum#__Down").HtmlAttributes(new { type = "button" , @class="DownRuleOrder"}).ToClientTemplate() )
+    
+   
+    </div>
+
+                        <div class="rulesactionsbox float-right "> 
+                            @(Html.Kendo().Button().Content( "Copy Rule" ).Name("Rules_#=RuleNum#__CopyRule").HtmlAttributes(new { type = "button", id="Rules_#=RuleNum#__CopyRule", @class="CopyRule" }).ToClientTemplate() )
+                            @(Html.Kendo().Button().Content( "Delete Rule" ).Name("Rules_#=RuleNum#__DeleteRule").HtmlAttributes(new { type = "button", id="Rules_#=RuleNum#__DeleteRule", @class="DeleteRule" }).ToClientTemplate() ) 
+                      </div>
+                    
+            <div id ="Rules_#=RuleNum#__GroupConditions"></div>
+    
+    </div>
+    </script>

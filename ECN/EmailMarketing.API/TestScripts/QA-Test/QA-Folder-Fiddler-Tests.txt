@@ -1,0 +1,155 @@
+POST http://test.api.ecn5.com/api/folder HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Content-type: application/json
+Content-length: 192
+Host: test.api.ecn5.com
+
+{ 
+              "FolderName":"POST TEST - MVC WebAPI - Folder",
+              "FolderType":"CNT",
+              "ParentID":0,
+              "FolderDescription":"MyNewFolderDescription"
+}
+HTTP/1.1 201 Created
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Location: http://test.api.ecn5.com/api/folder/11288
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:09:07 GMT
+Content-Length: 142
+
+{"FolderID":11288,"FolderName":"POST TEST - MVC WebAPI - Folder","ParentID":0,"FolderDescription":"MyNewFolderDescription","FolderType":"CNT"}
+
+------------------------------------------------------------------
+
+GET http://test.api.ecn5.com/api/folder/11288 HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Host: test.api.ecn5.com
+
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:10:09 GMT
+Content-Length: 142
+
+{"FolderID":11288,"FolderName":"POST TEST - MVC WebAPI - Folder","ParentID":0,"FolderDescription":"MyNewFolderDescription","FolderType":"CNT"}
+
+------------------------------------------------------------------
+
+PUT http://test.api.ecn5.com/api/folder/11288 HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Content-type: application/json
+Content-length: 228
+Host: test.api.ecn5.com
+
+{ 
+              "FolderID": 11288,
+              "FolderName":"PUT TEST - MVC WebAPI - Folder",
+              "FolderType":"GRP",
+              "ParentID":4091,
+              "FolderDescription":"MyNewFolderDescription"
+}
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Location: http://test.api.ecn5.com/api/folder/11288
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:12:18 GMT
+Content-Length: 144
+
+{"FolderID":11288,"FolderName":"PUT TEST - MVC WebAPI - Folder","ParentID":4091,"FolderDescription":"MyNewFolderDescription","FolderType":"GRP"}
+
+------------------------------------------------------------------
+
+GET http://test.api.ecn5.com/api/folder/11288 HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Host: test.api.ecn5.com
+
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:12:31 GMT
+Content-Length: 144
+
+{"FolderID":11288,"FolderName":"PUT TEST - MVC WebAPI - Folder","ParentID":4091,"FolderDescription":"MyNewFolderDescription","FolderType":"GRP"}
+
+------------------------------------------------------------------
+
+GET http://test.api.ecn5.com/api/search/folder HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Content-type: application/json
+Content-length: 123
+Host: test.api.ecn5.com
+
+[  
+       {  
+            "name":"Type",
+            "comparator":"=",
+            "valueSet":[ "GRP"  ]
+        }
+]
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:15:04 GMT
+Content-Length: 4702
+
+[{"ApiObject":{"FolderID":9397,"FolderName":"1","ParentID":8967,"FolderDescription":"1","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9397"},{"ApiObject":{"FolderID":9398,"FolderName":"2","ParentID":9397,"FolderDescription":"2","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9398"},{"ApiObject":{"FolderID":9399,"FolderName":"3","ParentID":9398,"FolderDescription":"3","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9399"},{"ApiObject":{"FolderID":9903,"FolderName":"4","ParentID":9399,"FolderDescription":"4","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9903"},{"ApiObject":{"FolderID":6534,"FolderName":"Allured","ParentID":0,"FolderDescription":" LeadGen","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/6534"},{"ApiObject":{"FolderID":4199,"FolderName":"APITest","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4199"},{"ApiObject":{"FolderID":4091,"FolderName":"Bill Group Folder","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4091"},{"ApiObject":{"FolderID":4222,"FolderName":"Bill Group Folder Child","ParentID":4091,"FolderDescription":"Bill Group Folder Child","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4222"},{"ApiObject":{"FolderID":8973,"FolderName":"Digital Editions","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/8973"},{"ApiObject":{"FolderID":7942,"FolderName":"Dynamic Tag Testing","ParentID":4091,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/7942"},{"ApiObject":{"FolderID":9696,"FolderName":"HVCB","ParentID":0,"FolderDescription":"Hawaii","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9696"},{"ApiObject":{"FolderID":11287,"FolderName":"Import Testing","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/11287"},{"ApiObject":{"FolderID":8967,"FolderName":"Jaime","ParentID":0,"FolderDescription":"Test Groups","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/8967"},{"ApiObject":{"FolderID":9375,"FolderName":"Justin test","ParentID":0,"FolderDescription":"justin test","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9375"},{"ApiObject":{"FolderID":11285,"FolderName":"Kate Cosgrove","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/11285"},{"ApiObject":{"FolderID":11283,"FolderName":"Kay Group Folder","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/11283"},{"ApiObject":{"FolderID":6517,"FolderName":"MTG","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/6517"},{"ApiObject":{"FolderID":4468,"FolderName":"New Blast Engine","ParentID":4091,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4468"},{"ApiObject":{"FolderID":6543,"FolderName":"Pennwell","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/6543"},{"ApiObject":{"FolderID":11288,"FolderName":"PUT TEST - MVC WebAPI - Folder","ParentID":4091,"FolderDescription":"MyNewFolderDescription","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/11288"},{"ApiObject":{"FolderID":11268,"FolderName":"Robs Group Folder","ParentID":0,"FolderDescription":"Robs Group Folder","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/11268"},{"ApiObject":{"FolderID":5984,"FolderName":"Rohit","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/5984"},{"ApiObject":{"FolderID":4134,"FolderName":"Sunil","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4134"},{"ApiObject":{"FolderID":9655,"FolderName":"taras folder","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9655"},{"ApiObject":{"FolderID":9781,"FolderName":"Training Test Folder","ParentID":0,"FolderDescription":"Optional Description","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/9781"},{"ApiObject":{"FolderID":4308,"FolderName":"Trigger Testing","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/4308"},{"ApiObject":{"FolderID":5596,"FolderName":"UPI Content Testing","ParentID":0,"FolderDescription":"","FolderType":"GRP"},"Location":"http://test.api.ecn5.com/api/folder/5596"}]
+
+------------------------------------------------------------------
+
+DELETE http://test.api.ecn5.com/api/folder/11288 HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Host: test.api.ecn5.com
+
+
+HTTP/1.1 204 No Content
+Cache-Control: no-cache
+Pragma: no-cache
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:17:17 GMT
+
+
+
+------------------------------------------------------------------
+

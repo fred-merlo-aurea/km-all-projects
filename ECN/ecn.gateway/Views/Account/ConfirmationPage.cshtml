@@ -1,0 +1,46 @@
+﻿@model ecn.gateway.Models.ConfirmationModel
+
+@{
+    ViewBag.Title = "Confirmation Page";
+}
+
+<hgroup class="title">
+</hgroup>
+
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+    @Html.ValidationSummary(true)
+
+    <header>
+        @Styles.Render("~/Content/css")
+    </header>
+    
+    <fieldset>
+        <legend>Confirmation Page Form</legend>
+        @*@if (!Model.HasError)
+        {*@
+            <h3>@Html.DisplayFor(m => m.Gateway.ConfirmationMessage)</h3>
+
+            @if (Model.Gateway.UseRedirect && Model.Gateway.UseConfirmation)
+            {
+                <a href="@Model.Gateway.RedirectURL">@Html.DisplayFor(m => m.Gateway.ConfirmationText)</a>
+                @Html.HiddenFor(m => m.Gateway.RedirectDelay, new { @class = "hRedirectDelay" })
+                @Html.HiddenFor(m => m.Gateway.RedirectURL, new { @class = "hRedirectURL" })
+                <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+                <script>
+                    $(function () {
+                        setTimeout(function () { location.href = $('.hRedirectURL').val() }, $('.hRedirectDelay').val());
+                    });
+                </script>
+            }
+
+            @if (Model.Gateway.UseRedirect && !Model.Gateway.UseConfirmation)
+            {
+                <a href="@Model.Gateway.RedirectURL">@Html.DisplayFor(m => m.Gateway.ConfirmationText)</a>
+            }
+        @*}
+        else
+        {
+            <label>@Model.ErrorMsg</label>
+        }*@
+    </fieldset>
+}

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1957E14C-15FB-40E9-AF45-219F58F31702}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KMDbManagers</RootNamespace>
+    <AssemblyName>KMDbManagers</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ThirdPartyDLLs\Dlls\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConditionDbManager.cs" />
+    <Compile Include="ConditionGroupDbManager.cs" />
+    <Compile Include="ControlDbManager.cs" />
+    <Compile Include="ControlPropertyDbManager.cs" />
+    <Compile Include="ControlTypeDbManager.cs" />
+    <Compile Include="CssClassDbManager.cs" />
+    <Compile Include="CssFileDbManager.cs" />
+    <Compile Include="DbManagerBase.cs" />
+    <Compile Include="DbResolver.cs" />
+    <Compile Include="ControlCategoryDbManager.cs" />
+    <Compile Include="NewsletterGroupUDFDbManager.cs" />
+    <Compile Include="NewsletterGroupDbManager.cs" />
+    <Compile Include="FormControlPropertyDbManager.cs" />
+    <Compile Include="FormControlPropertyGridDbManager.cs" />
+    <Compile Include="FormDbManager.cs" />
+    <Compile Include="FormResultDbManager.cs" />
+    <Compile Include="FormStatisticDbManager.cs" />
+    <Compile Include="FormStatisticLogDbManager.cs" />
+    <Compile Include="NotificationDbManager.cs" />
+    <Compile Include="OverwriteDataPostDbManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataTypePatternDbManager.cs" />
+    <Compile Include="RequestQueryUrlDbManager.cs" />
+    <Compile Include="RuleDbManager.cs" />
+    <Compile Include="SubmitHistoryDbManager.cs" />
+    <Compile Include="SubscriberLoginDbManager.cs" />
+    <Compile Include="ThirdPartyQueryValueDbManager.cs" />
+    <Compile Include="WebConfigUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1bce78e7-dd4d-48bc-85c3-d77fce995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMEntities\KMEntities.csproj">
+      <Project>{7263eae9-9653-42c2-9c0f-7b28b7ea9fe8}</Project>
+      <Name>KMEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KMEnums\KMEnums.csproj">
+      <Project>{fd4c7d87-f2e9-4ed1-8ad2-697272087751}</Project>
+      <Name>KMEnums</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

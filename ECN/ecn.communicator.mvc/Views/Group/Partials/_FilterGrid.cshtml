@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ECN_Framework_Entities.Communicator.Filter>
+
+@using ecn.communicator.mvc.Infrastructure
+
+@(
+ Html.Kendo()
+        .Grid(Model)
+    .Name("grid")
+    .Columns(columns =>
+    {
+        var imageStyle = "display: block; margin: auto;";
+        columns.Bound(e => e.FilterName).Title("Filter Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; text-align: center;" });
+        columns.Bound(e => e.CreatedDate).Title("Date Created").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; text-align: center;" });
+        columns.Bound("").Title("Edit").ClientTemplate(
+            Html.ActionImage("FilterEdit", "Group", new { GroupID = "#=GroupID#", FilterID = "#=FilterID#" }, "~/Images/icon-edits1.gif", "Image link for Editing", imageStyle: imageStyle).ToString()
+            ).Width(50).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; text-align: center;" });
+        columns.Bound("").Title("Delete").ClientTemplate(
+            Html.ActionImage("Index", "Home", null, "~/Images/icon-delete.gif", "Image link for Group Delete", imageStyle: imageStyle).ToString()
+            ).Width(75).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; text-align: center;" });
+        columns.Bound("").Title("Archived").ClientTemplate(
+            Html.ActionImage("Index", "Home", null, "~/Images/icon-groupFilter.gif", "Image link for Group Filters", imageStyle: imageStyle).ToString()
+            ).Width(85).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; text-align: center;" });
+    })
+    .Pageable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;min-width:100px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(30)
+        .ServerOperation(false)
+     )
+
+)
+

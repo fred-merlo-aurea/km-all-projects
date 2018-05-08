@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="KmWattService.asmx.cs" Debug="true" Class="WattWebService.KmWattService" %>

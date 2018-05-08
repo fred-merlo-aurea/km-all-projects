@@ -1,0 +1,1 @@
+<%@ Page language="c#" Inherits="ecn.collector.Index" Codebehind="default.aspx.cs" %>

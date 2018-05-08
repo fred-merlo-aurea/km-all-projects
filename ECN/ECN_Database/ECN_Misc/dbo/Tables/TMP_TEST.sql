@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[TMP_TEST] (
+    [TEST] NCHAR (10) NULL
+);
+

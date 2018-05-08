@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="Circulation.Modules.FileStatus"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="500">
+    <UserControl.Resources>
+        <DataTemplate x:Key="fileTemplate">
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Names"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="TimeText"/>
+                    <ColumnDefinition SharedSizeGroup="Info1"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="Info2"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.RowSpan="2" Text="{Binding FileName}" FontSize="20" Foreground="#045DA4" Margin="2" />
+                <Image Grid.RowSpan="2" Grid.Column="1" Height="40" Width="40" Margin="2">
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Source" Value="/ImageLibrary;Component/Images/128/clock-white-128.png" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="Processed">
+                                    <Setter Property="Source" Value="/ImageLibrary;Component/Images/128/checkmark-Green-128.png" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Invalid">
+                                    <Setter Property="Source" Value="/ImageLibrary;Component/Images/128/x_lowercase-red-128.png" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <TextBlock Grid.Column="2" Foreground="#9DA2A7" FontWeight="SemiBold" Margin="2,2,8,2">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Text" Value="Start Time: " />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="Processed">
+                                    <Setter Property="Text" Value="Date Imported: " />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Invalid">
+                                    <Setter Property="Text" Value="Date Failed: " />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Grid.Column="3" Text="{Binding Time}" Foreground="#9DA2A7" FontWeight="Light" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="Status: " Foreground="#9DA2A7" FontWeight="SemiBold" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Status}" Foreground="#9DA2A7" FontWeight="Light" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="4" Text="File Type: " Foreground="#9DA2A7" FontWeight="SemiBold" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="5" Text="{Binding FileType}" Foreground="#9DA2A7" FontWeight="Light" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="User: " Foreground="#9DA2A7" FontWeight="SemiBold" Margin="2,2,8,2" />
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding User}" Foreground="#9DA2A7" FontWeight="Light" Margin="2,2,8,2" />
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="vanillaButton" TargetType="{x:Type telerik:RadButton}">
+            <Setter Property="FontFamily" Value="Calibri"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadButton}">
+                        <Border x:Name="Border" CornerRadius="2" BorderThickness="0" 
+                                    Background="Transparent">
+                            <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <telerik:RadBusyIndicator Name="busy">
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <telerik:RadButton Style="{DynamicResource vanillaButton}" HorizontalAlignment="Right" Padding="0" IsCancel="True" Grid.Column="2" Height="36" Width="36"
+                    Margin="0,0,10,0" Click="Refresh_Files">
+                <Image Grid.Column="1" Height="32" Width="32" HorizontalAlignment="Right" Source="/ImageLibrary;Component/Images/72/Rescan_72White.png" ToolTipService.ToolTip="Refresh file list" />
+            </telerik:RadButton>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Product: " FontSize="20" Foreground="#9DA2A7" FontWeight="Bold"/>
+                <TextBlock Name="txtProduct" FontSize="20" Foreground="#9DA2A7" FontWeight="Light"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Issue: " FontSize="20" Foreground="#9DA2A7" FontWeight="Bold"/>
+                <TextBlock Name="txtIssue" FontSize="20" Foreground="#9DA2A7" FontWeight="Light"/>
+            </StackPanel>
+            <TextBlock Grid.Row="1" Text="Files: " FontSize="20" Foreground="#9DA2A7" FontWeight="Bold" Margin="10" />
+            <Grid Name="spFiles" Grid.Row="2" Grid.ColumnSpan="3" Margin="10" HorizontalAlignment="Center">
+                <ItemsControl Name="icFiles" ItemTemplate="{StaticResource fileTemplate}" Grid.IsSharedSizeScope="True" ScrollViewer.CanContentScroll="True" MaxHeight="500">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                        Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+                                <ScrollViewer Padding="{TemplateBinding Control.Padding}" Focusable="False">
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Margin="0,0,0,10" />
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

@@ -1,0 +1,94 @@
+﻿@model List<UAS.Web.Models.Circulations.AddKillContainer>
+@using System.Web.Script.Serialization;
+
+<div>
+    <table width="95%" id="AddKillGridTable" align="center" border="1" >
+        <thead class="k-grid-header">
+            <tr>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"></th>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Filter</span></th>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Type</span></th>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Actual Count</span></th>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Desired Count</span></th>
+                @*<th align="center" style="text-align:center;">Delete</th>
+                <th align="center" style="text-align:center;">Edit</th>*@
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Actions</span></th>
+                <th class="k-header" align="center" style="text-align:left;padding: .5em .6em .4em .6em;"><span class="k-link">Update</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var id = "addkill_" + Model[i].ContainerId;
+                var containerId = Model[i].ContainerId;
+                var dataid = i;
+                var filterdetails = new JavaScriptSerializer().Serialize(Model[i].Filter);
+                    <tr id="row_@id">
+                        <td style="width:3%;padding:0px;text-align:center;"><span id="spShowChildGrid_@id"></span></td>
+                        <td style="width:10%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;">                                                      
+                            <button id="spFilterCriteria_@id" data-filterdetails="@filterdetails" onclick="ShowFilter(id, @filterdetails)" style="border:1px solid #f47d1f;color:#fff;width:90%;height:20px;background-color:#f47d1f;">Show Filter<span id="icon_@id" class="k-icon k-i-arrow-chevron-right"></span></button>
+                        </td>
+                        <td style="width:5%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;">
+                            <span></span>
+                            <span id="spType_@id">@Model[i].Type</span>
+                        </td>
+                        <td style="width:10%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;">
+                            <span id="spActualCount_@id">@Model[i].ActualCount</span>
+                        </td>
+                        <td style="width:10%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;">
+                            <span id="txtDesiredRecords_@id">@Model[i].DesiredCount</span>
+                            @*<input type="text" id="txtDesiredRecords_@id" value="@Model[i].DesiredCount" class="k-textbox" style="width:90px;" disabled />*@ 
+                            @*<span class="k-icon k-i-hyperlink-open-sm" style="color:orange;" @if (!Model[i].Save) { <text> disabled</text> }></span>*@
+                        </td>
+                        @*<td style="width:5%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;"><span class="k-icon k-i-close k-i-x" id="@containerId" onclick="ConfirmAddKillDelete(this)" style="color:red;font-weight:bold;"></span></td>
+                        <td style="width:5%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;"><span class="k-icon k-i-pencil" id="edit_@id" onclick="EditFilter(event)"></span></td>*@
+                        <td style="width:5%;padding:0px;text-align:left;vertical-align:top;">
+                            <div id="divColumnMenu_@id" style="margin-right: 20px;">
+                            @(Html.Kendo()
+                                .Menu()
+                                .Name("menu_ColumnMap_" + id)
+                                .Direction(MenuDirection.Right)
+                                .Orientation(MenuOrientation.Vertical)
+                                .Animation(false)
+                                .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                        innerItems =>
+                                        {
+                                            innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                            innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "EditFilter('" + id + "')" });                                                            
+                                            innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "ConfirmAddKillDelete('" + id + "')" });
+                                            innerItems.Add().Text("Update Desired Count").HtmlAttributes(new { onclick = "PopUpDesireCountChange('" + id + "')" });
+                                        }
+                                    )
+                                )
+                            )
+                            </div>
+                        </td>
+                        <td style="width:10%;padding:0px;text-align:center;vertical-align:top;padding-top:6px;">
+                            @if (Model[i].NotUpdated)
+                            {
+                                if (Model[i].Update)
+                                {
+                                    @Html.Kendo().CheckBox().Name("chkNotUpdated_addkill_" + Model[i].ContainerId).Checked(true).HtmlAttributes(new { onchange = "CheckBoxChange(this)" })
+                                }
+                                else
+                                {
+                                    @Html.Kendo().CheckBox().Name("chkNotUpdated_addkill_" + Model[i].ContainerId).Checked(false).HtmlAttributes(new { onchange = "CheckBoxChange(this)" })
+                                }
+                                @*<input type='checkbox' class="k-checkbox-label" id="chkNotUpdated_@id" onchange="CheckBoxChange(this)" @if (Model[i].Update) { <text> checked </text>  } />*@
+                            }
+                            else
+                            {
+                                <span class='k-icon k-i-check-circle k-i-checkmark-circle' style='color:green;' id="spNotUpdated_@id"></span>
+                            }
+                        </td>
+
+                    </tr>
+                    <tr id="rowDisplay_@id" style="display:none;">
+                        <td colspan="7">
+                            <div id="filterDisplay_@id"></div>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>

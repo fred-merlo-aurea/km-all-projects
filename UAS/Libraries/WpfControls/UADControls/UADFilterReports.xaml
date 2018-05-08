@@ -1,0 +1,228 @@
+﻿<UserControl x:Class="WpfControls.UADControls.UADFilterReports"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="500">
+    <UserControl.Resources>
+        <Style x:Key="vanillaButton" TargetType="{x:Type telerik:RadButton}">
+            <Setter Property="FontFamily" Value="Calibri"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadButton}">
+                        <Border x:Name="Border" CornerRadius="2" BorderThickness="0" 
+                                    Background="Transparent">
+                            <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="roundedContent">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="txtMe" Text="{Binding Name}" Margin="8,0,0,0"/>
+                <telerik:RadButton Name="btnRemoveCol" Grid.Column="2" Content="X" FontSize="12" FontWeight="Bold" Style="{StaticResource vanillaButton}" Background="White" Width="25" HorizontalAlignment="Right" 
+                                   Click="btnRemoveCol_Click" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="builtExpression">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="txtMe" Text="{Binding}" Margin="8,0,0,0"/>
+                <telerik:RadButton Name="btnRemoveEx" Grid.Column="2" Content="X" FontSize="12" FontWeight="Bold" Style="{StaticResource vanillaButton}" Background="White" Width="25" HorizontalAlignment="Right" 
+                                   Click="btnRemoveEx_Click" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="reportCountTemplate">
+            <Grid Name="grdMain" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Names"/>
+                    <ColumnDefinition SharedSizeGroup="Counts"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding FilterName}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" FontSize="14"/>
+                <TextBlock Grid.Column="1" Text="{Binding Count}" Margin="5" VerticalAlignment="Center" FontSize="14" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="5" VerticalAlignment="Center">
+                    <Image Source="/ImageLibrary;Component/Images/32/UAD-GraphWhite.png" Height="20" Width="20" Margin="15"/>
+                    <Image Name="imgDownload" Source="/ImageLibrary;Component/Images/128/download-128.png" Height="20" Width="20" ToolTipService.ToolTip="Download Details" Margin="15" />
+                    <Image Name="imgGeoReport" Source="/ImageLibrary;Component/Images/128/earth_element-128.png" Height="20" Width="20" Margin="15" />
+                </StackPanel>
+            </Grid>
+            <DataTemplate.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="#e9e9e9" 
+                            TargetName="grdMain"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#d9d9d9" 
+                            TargetName="grdMain"></Setter>
+                </Trigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid Name="grdBuildReports" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.ColumnSpan="2" Text="Double click Filters and Expressions to build reports." Foreground="#559EDB" Margin="10,5,5,5" />
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="Filters" Foreground="#559EDB" Margin="2" />
+            <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Text="Expressions" Foreground="#559EDB" Margin="2" />
+            <telerik:RadListBox Name="rlbFilters" Grid.Row="2" Margin="10" MouseDoubleClick="rlbFilters_MouseDoubleClick" MaxHeight="400"/>
+            <telerik:RadListBox Name="rlbExpressions" Grid.Row="2" Grid.Column="1" Margin="10" MouseDoubleClick="rlbExpressions_MouseDoubleClick" MaxHeight="400"/>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <TextBlock Text="Current Expression: " Margin="10,2,2,2" Height="24" Foreground="#559EDB" VerticalAlignment="Center"/>
+                <telerik:RadListBox Name="rlbBuild" Width="350" Margin="2" ItemTemplate="{DynamicResource roundedContent}">
+                    <telerik:RadListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </telerik:RadListBox.ItemsPanel>
+                </telerik:RadListBox>
+                <Button Name="btnAddExpression" Style="{StaticResource DefaultButtonRound}" Content="Go" Height="20" Width="20" Click="btnAddExpression_Click" />
+            </StackPanel>
+            <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Report Expressions" Foreground="#559EDB" Margin="10,2,2,2" />
+            <telerik:RadListBox Name="rlbBuiltExpressions" Grid.Row="5" Grid.ColumnSpan="2" Margin="10" MinHeight="100" ItemTemplate="{DynamicResource builtExpression}" MaxHeight="400"/>
+            <telerik:RadButton Name="btnCalculate" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="5,5,10,5" Width="100" Height="23" Content="Calculate Reports" Click="btnCalculate_Click"/>
+        </Grid>
+        <Grid Name="grdReportCounts" Visibility="Collapsed" Background="#C7CACC">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Rectangle Height="50" Fill="#559EDB" VerticalAlignment="Top" />
+            <TextBlock Text="Filters" FontSize="24" Foreground="White" FontFamily="Calibri" Margin="10"/>
+            <!--<telerik:RadGridView Name="rgvReports" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="20" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" RowIndicatorVisibility="Collapsed" VerticalAlignment="Top"
+                                      SelectionMode="Single" ShowGroupPanel="False" IsFilteringAllowed="False">
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding FilterName}" Header="Filters">
+                    </telerik:GridViewDataColumn>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Count}" Header="Count">
+                    </telerik:GridViewDataColumn>
+                    <telerik:GridViewColumn Name="Reports" Header="Reports">
+                        <telerik:GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Name="imgStandardReport" Source="/ImageLibrary;Component/Images/128/bar-128.png" Height="20" Width="20" Margin="0,0,15,0" ToolTipService.InitialShowDelay="0">
+                                        <Image.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard TargetName="popStandard" TargetProperty="IsOpen">
+                                                        <BooleanAnimationUsingKeyFrames  FillBehavior="HoldEnd">
+                                                            <DiscreteBooleanKeyFrame
+                                                                            KeyTime="00:00:00"
+                                                                            Value="True" />
+                                                        </BooleanAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Image.Triggers>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Cursor" Value="Hand" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <Image Name="imgGeoReport" Source="/ImageLibrary;Component/Images/128/earth_element-128.png" Height="20" Width="20" Margin="0,0,15,0">
+                                        <Image.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard TargetName="popGeo" TargetProperty="IsOpen">
+                                                        <BooleanAnimationUsingKeyFrames  FillBehavior="HoldEnd">
+                                                            <DiscreteBooleanKeyFrame
+                                                                            KeyTime="00:00:00"
+                                                                            Value="True" />
+                                                        </BooleanAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Image.Triggers>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Cursor" Value="Hand" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <Image Name="imgDownload" Source="/ImageLibrary;Component/Images/128/download-128.png" Height="20" Width="20" ToolTipService.ToolTip="Download Details">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Cursor" Value="Hand" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <Popup Name="popStandard"
+                                       Placement="MousePoint"
+                                       HorizontalOffset="0" VerticalOffset="0"
+                                       StaysOpen="False">
+                                        <Border>
+                                            <ListBox Name="lbStandardReports" Loaded="lbPopUp_Loaded"/>
+                                        </Border>
+                                    </Popup>
+                                    <Popup Name="popGeo"
+                                       Placement="MousePoint"
+                                       HorizontalOffset="0" VerticalOffset="0"
+                                       StaysOpen="False">
+                                        <Border>
+                                            <ListBox Name="lbGeoReports" Loaded="lbPopUp_Loaded"/>
+                                        </Border>
+                                    </Popup>
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerik:GridViewColumn.CellTemplate>
+                    </telerik:GridViewColumn>
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>-->
+            <StackPanel Name="spRecordCounts" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Margin="20">
+                <ItemsControl Name="icReportCounts" ItemTemplate="{StaticResource reportCountTemplate}" Grid.IsSharedSizeScope="True" AlternationCount="2" HorizontalContentAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

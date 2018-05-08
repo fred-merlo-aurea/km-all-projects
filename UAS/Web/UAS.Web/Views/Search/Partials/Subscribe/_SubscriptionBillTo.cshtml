@@ -1,0 +1,102 @@
+﻿<table>
+    <tr>
+        <td align="left" colspan="3"><h3>Bill To:</h3></td>
+        <td align="left" colspan="3">
+            <label>Same As Profile:</label><input ng-model="subscrberViewModel.CopyProfile" type="checkbox" class="km-checkbox" ng-change="CopyProfile()">
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>First Name:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.FirstName" id="FirstNameBillTo" tabindex="41"/></td>
+        <td class="collabelwidth"><label>Address2:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.Address2" id="Address2BillTo" tabindex="47"/></td>
+        <td class="collabelwidth"><label>Phone:</label></td>
+        <td class="colinputwidth">
+            
+            <input  class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.PhonePrefix" id="PhoneCodeBilTo" disabled style="width:30px;background-color:#D3D3D3;"  />
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID==1 || subscrberViewModel.MyPaidBillTo.CountryID==2" ng-model="subscrberViewModel.MyPaidBillTo.Phone" k-mask="'000-000-0000'" style="width:140px;" id="PhoneBillTo" tabindex="54" />
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID!=1 && subscrberViewModel.MyPaidBillTo.CountryID!=2" ng-model="subscrberViewModel.MyPaidBillTo.Phone" k-mask="'0000000000'" style="width:140px;" id="PhoneBillTo" tabindex="54"/>
+            <input  class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.PhoneExt" ng-change="PaidBillToChange()" style="width:64px;"  id="PhoneExtBilTo" tabindex="55"/>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Last Name:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.LastName" ng-change="PaidBillToChange()" id="LastNameBillTo" tabindex="42" /></td>
+        <td class="collabelwidth"><label>Address 3:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.Address3" ng-change="PaidBillToChange()" id="Address3BillTo" tabindex="48"/></td>
+        <td class="collabelwidth"><label>Mobile:</label></td>
+        <td class="colinputwidth">
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID==1 || subscrberViewModel.MyPaidBillTo.CountryID==2" ng-model="subscrberViewModel.MyPaidBillTo.Mobile" k-mask="'000-000-0000'" style="width:250px;" id="MobileBillTo"  tabindex="56"/>
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID!=1 && subscrberViewModel.MyPaidBillTo.CountryID!=2" ng-model="subscrberViewModel.MyPaidBillTo.Mobile" k-mask="'0000000000'" style="width:250px;" id="MobileBillTo" tabindex="56"/>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Title:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.Title" ng-change="PaidBillToChange()" id="TitleBillTo" tabindex="43"/></td>
+        <td class="collabelwidth"><label>City:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.City" ng-change="PaidBillToChange()" id="CityBillTo" tabindex="49"/></td>
+        <td class="collabelwidth"><label>Fax:</label></td>
+        <td class="colinputwidth">
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID==1 || subscrberViewModel.MyPaidBillTo.CountryID==2" ng-model="subscrberViewModel.MyPaidBillTo.Fax" k-mask="'000-000-0000'" style="width:250px;" id="FaxBillTo" tabindex="57" />
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-show="subscrberViewModel.MyPaidBillTo.CountryID!=1 && subscrberViewModel.MyPaidBillTo.CountryID!=2" ng-model="subscrberViewModel.MyPaidBillTo.Fax" k-mask="'0000000000'" style="width:250px;" id="FaxBillTo" tabindex="57"/>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Company:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.Company"  id="CompanyBillTo" tabindex="44"/></td>
+        <td class="collabelwidth"><label>Country:</label></td>
+        <td class="colinputwidth">
+            <input id="CountryBillTo" ng-model="subscrberViewModel.MyPaidBillTo.CountryID" tabindex="50"/>
+
+        </td>
+        <td class="collabelwidth"><label>Email:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.Email" ng-change="PaidBillToChange()" id="EmailBillTo" style="width:250px;" tabindex="58"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Add-Type:</label></td>
+        <td class="colinputwidth">
+            <input id="AddressTypeBillTo" ng-model="subscrberViewModel.MyPaidBillTo.AddressTypeId" ng-change="PaidBillToChange()" tabindex="45"/>
+            @*<select kendo-drop-down-list k-data-text-field="'DisplayName'"
+                    k-data-value-field="'CodeId'"
+                    k-data-source="subscrberViewModel.entlst.addressTypeList"
+                    ng-change="PaidBillToChange()"
+                    ng-model="subscrberViewModel.MyPaidBillTo.AddressTypeCodeId"></select>*@
+        </td>
+        <td class="collabelwidth"><label>State:</label></td>
+        <td class="colinputwidth">
+            <input id="StateBillTo" ng-model="subscrberViewModel.MyPaidBillTo.RegionID" ng-change="PaidBillToChange()" tabindex="51"/>
+
+
+        </td>
+        <td class="collabelwidth"><label>Website:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.MyPaidBillTo.Website" ng-change="PaidBillToChange()" id="WebsiteBillTo" style="width:250px;"  tabindex="59"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Address 1:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.Address1" id="Address1BillTo" tabindex="46"/></td>
+        <td class="collabelwidth"><label>Zip:</label></td>
+        <td class="colinputwidth" ng-show="subscrberViewModel.MyPaidBillTo.CountryID==1">
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.ZipCode" k-mask="'00000'" id="ZipCodeBillTo" tabindex="52" style="width:30%" />
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.Plus4" k-mask="'0000'" id="Plus4BillTo" tabindex="52" style="width:20%"/>
+        </td>
+        <td class="colinputwidth" ng-show="subscrberViewModel.MyPaidBillTo.CountryID==2">
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.ZipCode" k-mask="'L0L-0L0'" id="ZipCodeBillTo" tabindex="52" />
+        </td>
+        <td class="colinputwidth" ng-show="subscrberViewModel.MyPaidBillTo.CountryID!=1 && subscrberViewModel.MyPaidBillTo.CountryID!=2">
+            <input kendo-masked-text-box ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.ZipCode" k-mask="'AAAAAAAAAAAAAA'" id="ZipCodeBillTo" tabindex="52" />
+        </td>
+        <td class="collabelwidth"><label>County:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-change="PaidBillToChange()" ng-model="subscrberViewModel.MyPaidBillTo.County" id="CountyBillTo" tabindex="60"/></td>
+        
+
+
+    </tr>
+
+</table>

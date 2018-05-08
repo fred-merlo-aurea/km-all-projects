@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [bill.hipps]
+    WITH PASSWORD = N'yeb?f`xdrtgcgvpyK{nKrgrymsFT7_&#$!~<.c|h?lxsbJaT', SID = 0xB2752FDAA12AC940A262C2DA7362EBA8, DEFAULT_DATABASE = [ECN5_ACCOUNTS], DEFAULT_LANGUAGE = [us_english];
+

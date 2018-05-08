@@ -1,0 +1,524 @@
+﻿<UserControl x:Class="Circulation.Modules.SubscriptionContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:maskedInput="clr-namespace:Telerik.Windows.Controls.MaskedInput;assembly=Telerik.Windows.Controls.Input"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:c="clr-namespace:Core_AMS.Utilities;assembly=Core_AMS.Utilities"
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             d:DesignHeight="720" d:DesignWidth="1100" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <Style TargetType="TabItem" x:Key="BlueTab">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" BorderThickness="0,0,0,0" BorderBrush="#FF045DA4" CornerRadius="4,4,0,0" Margin="1,0" Background="#FF045DA4" >
+                            <ContentPresenter x:Name="ContentSite"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            ContentSource="Header"
+                                            />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="TextBlock.Foreground" Value="#FF045DA4"/>
+                                <Setter TargetName="Border" Property="Background" Value="#FF559EDB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <c:ResizeButtonConverter x:Key="resize" />
+        <Style x:Key="MyFocusVisualStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="-2" StrokeThickness="1" Stroke="#045DA4" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading..." DisplayAfter="0">
+        <Grid>
+            <Grid Name="grdMain" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" Margin="15,0,15,15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <DockPanel Name="dpMain" Visibility="Visible">
+                    <Grid Name="dpProfile" DockPanel.Dock="Top" IsEnabled="{Binding Enabled}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="4*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="6*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Name="imgActive" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,8" Height="25" Width="25">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSubscribed}" Value="True" />
+                                                    <Condition Binding="{Binding IsProspect}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Source" Value="/ImageLibrary;component/Images/IsProspect/Prospect_72.png" />
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSubscribed}" Value="True" />
+                                                    <Condition Binding="{Binding IsProspect}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Source" Value="/ImageLibrary;component/Images/IsActive/Active_72.png" />
+                                            </MultiDataTrigger>
+                                            <DataTrigger Binding="{Binding IsSubscribed}" Value="False">
+                                                <Setter Property="Source" Value="/ImageLibrary;component/Images/IsInactive/InActive_72.png" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <TextBlock x:Name="lbFullName" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockBlue20}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="FirstName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" />
+                                        <Binding Path="LastName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <Grid Name="grdSequenceSearch" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Name="lbSequence" HorizontalAlignment="Left" Text="Sequence #:" VerticalAlignment="Center" IsEnabled="False" Style="{DynamicResource TextBlockC17}" Margin="0,0,0,0" />
+                                <TextBox x:Name="tbSeqSearch" Grid.Column="1" TabIndex="0" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center"
+                                     Style="{DynamicResource TextBoxC13}" MaxLength="50" />
+                                <telerik:RadButton Name="btnSearch" Grid.Column="2" Content="Search" Click="btnSearch_Click" Margin="4" HorizontalAlignment="Left" 
+                                               Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="White" FontFamily="Calibri" Padding="5" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}" />
+                            </Grid>
+                            <TextBlock x:Name="lbPublication" Grid.Column="3" TextWrapping="Wrap" Text="Publication Code" VerticalAlignment="Center" Foreground="#FF045DA4" IsEnabled="False" 
+                                   FontFamily="Calibri" FontSize="20" FontWeight="Normal" Margin="0,8,8,8" />
+                            <TextBlock x:Name="lbCategory" HorizontalAlignment="Right" TextWrapping="Wrap" Text="Category Type Name" VerticalAlignment="Center" IsEnabled="False" 
+                                   FontFamily="Calibri" FontWeight="Normal" FontSize="20" Foreground="#FF045DA4" Grid.Column="4" Margin="0,8,0,8" />
+                            <TextBlock x:Name="lbPublisher" TextWrapping="Wrap" VerticalAlignment="Center" IsEnabled="False" Text="Publisher" FontFamily="Calibri" FontSize="20" 
+                                   FontWeight="Normal" Foreground="#FF045DA4" Grid.Column="2" Margin="0,8" />
+                        </Grid>
+                        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Margin="0,2,2,2" Text="First Name:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox x:Name="tbFname" Grid.Column="1" Grid.Row="1" TabIndex="1" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="50"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,2,2" Text="Last Name:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbLname" Grid.Row="2" Grid.Column="1" TabIndex="2" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="50"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,2,2" Text="Title:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbTitle" Grid.Row="3" Grid.Column="1" TabIndex="3" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="255"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,2,2" Text="Company:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbCompany" Grid.Row="4" Grid.Column="1" TabIndex="6" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="100"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,2,2" Text="Address Type:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <telerik:RadComboBox Name="cbAddressType" Grid.Row="5" Grid.Column="1" TabIndex="7" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Style="{DynamicResource ComboBoxC14}"
+                                             SelectedValue="{Binding Path=AddressType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,2,2" Text="Address 1:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbAddress" Grid.Row="6" Grid.Column="1" TabIndex="8" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="100"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Address1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Address 2:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbAddress2" Grid.Row="1" Grid.Column="3" TabIndex="9" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="100" 
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Address2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Address 3:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbAddress3" Grid.Row="2" Grid.Column="3" TabIndex="9" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="100"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Address3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="City:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbCity" Grid.Row="3" Grid.Column="3" TabIndex="10" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" MaxLength="50"
+                             KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Country:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <telerik:RadComboBox Name="cbCountry" Grid.Row="4" Grid.Column="3" TabIndex="11" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center"
+                                          SelectedValue="{Binding Path=CountryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}">
+                            <telerik:RadComboBox.Style>
+                                <Style TargetType="{x:Type telerik:RadComboBox}" BasedOn="{StaticResource ComboBoxC14}">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsCountryEnabled}" Value="True">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </telerik:RadComboBox.Style>
+                        </telerik:RadComboBox>
+                        <TextBlock Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="State:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <Grid Grid.Row="5" Grid.Column="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            <telerik:RadComboBox x:Name="cbState" TabIndex="12" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Style="{DynamicResource ComboBoxC14}" 
+                                             SelectedValue="{Binding Path=RegionID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}" 
+                                             Validation.ErrorTemplate="{x:Null}"/>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="Zip:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="0,0,3,0" />
+                            <!--<TextBox Name="tbZip" Grid.Column="2" PreviewTextInput="tbZip_PreviewTextInput" LostFocus="tbZipPlus4_LostFocus" MouseDoubleClick="tbProfile_MouseDoubleClick" 
+                                 TabIndex="13" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}" MaxLength="10"
+                                 Text="{Binding Path=FullZip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyUp="TextBox_KeyUp" />-->
+                            <telerik:RadMaskedTextInput Name="tbZip" Grid.Row="3" Grid.Column="2" TabIndex="13" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Height="22"
+                                            Value="{Binding Path=FullZip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsClearButtonVisible="False">
+                                <telerik:RadMaskedTextInput.Style>
+                                    <Style TargetType="{x:Type telerik:RadMaskedTextInput}" BasedOn="{StaticResource MaskedInputPlain}">
+                                        <Setter Property="Mask" Value="" />
+                                        <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=CountryID}" Value="1">
+                                                <Setter Property="Mask" Value="#5-#4" />
+                                                <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="9" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=CountryID}" Value="2">
+                                                <Setter Property="Mask" Value="a3 a3" />
+                                                <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="6" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </telerik:RadMaskedTextInput.Style>
+                            </telerik:RadMaskedTextInput>
+                        </Grid>
+                        <TextBlock Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" Margin="5,2,2,2" Text="County:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbCounty" Grid.Row="6" Grid.Column="3" TabIndex="14" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" 
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=County, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="20" />
+                        <TextBlock Grid.Row="1" Grid.Column="4" Margin="5,2,2,2" Text="Phone:" VerticalAlignment="Center" HorizontalAlignment="Right" Style="{DynamicResource TextBlockC13}" />
+                        <Grid Grid.Row="1" Grid.Column="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="tbPhoneCode"  HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" IsEnabled="False" KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" />
+                            <telerik:RadMaskedTextInput Name="tbPhone" Grid.Column="1" TabIndex="15" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Height="22"
+                                            Value="{Binding Path=Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsClearButtonVisible="False">
+                                <telerik:RadMaskedTextInput.Style>
+                                    <Style TargetType="{x:Type telerik:RadMaskedTextInput}" BasedOn="{StaticResource MaskedInputPlain}">
+                                        <Setter Property="Mask" Value="" />
+                                        <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="25" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=CountryID}" Value="1">
+                                                <Setter Property="Mask" Value="#3-#3-#4" />
+                                                <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=CountryID}" Value="2">
+                                                <Setter Property="Mask" Value="#3-#3-#4" />
+                                                <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </telerik:RadMaskedTextInput.Style>
+                            </telerik:RadMaskedTextInput>
+                            <telerik:RadWatermarkTextBox Name="tbPhoneExt" Grid.Column="2" WatermarkContent="Ext." TabIndex="16" HorizontalAlignment="Stretch" Margin="2,2,0,2" VerticalAlignment="Center" 
+                                               MaxLength="25" KeyUp="TextBox_KeyUp" Style="{StaticResource TextBoxC13}" Foreground="#FF747474" TextBlock.Foreground="#FFC7CACC"
+                                               Text="{Binding Path=PhoneExt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            </telerik:RadWatermarkTextBox>
+                        </Grid>
+                        <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Right" Margin="5,2,0,2" Text="Mobile:" VerticalAlignment="Center"  Style="{DynamicResource TextBlockC13}" />
+                        <telerik:RadMaskedTextInput Name="tbMobile" Grid.Row="2" Grid.Column="5" TabIndex="17" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Height="22"
+                                            Value="{Binding Path=Mobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsClearButtonVisible="False">
+                            <telerik:RadMaskedTextInput.Style>
+                                <Style TargetType="{x:Type telerik:RadMaskedTextInput}" BasedOn="{StaticResource MaskedInputPlain}">
+                                    <Setter Property="Mask" Value="" />
+                                    <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="25" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=CountryID}" Value="1">
+                                            <Setter Property="Mask" Value="#3-#3-#4" />
+                                            <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=CountryID}" Value="2">
+                                            <Setter Property="Mask" Value="#3-#3-#4" />
+                                            <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </telerik:RadMaskedTextInput.Style>
+                        </telerik:RadMaskedTextInput>
+                        <TextBlock Grid.Row="3" Grid.Column="4" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Fax:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <telerik:RadMaskedTextInput Name="tbFax" Grid.Row="3" Grid.Column="5" TabIndex="18" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" Height="22"
+                                            Value="{Binding Path=Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsClearButtonVisible="False">
+                            <telerik:RadMaskedTextInput.Style>
+                                <Style TargetType="{x:Type telerik:RadMaskedTextInput}" BasedOn="{StaticResource MaskedInputPlain}">
+                                    <Setter Property="Mask" Value="" />
+                                    <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="25" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=CountryID}" Value="1">
+                                            <Setter Property="Mask" Value="#3-#3-#4" />
+                                            <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=CountryID}" Value="2">
+                                            <Setter Property="Mask" Value="#3-#3-#4" />
+                                            <Setter Property="maskedInput:MaskedInputExtensions.MaxTextLength" Value="10" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </telerik:RadMaskedTextInput.Style>
+                        </telerik:RadMaskedTextInput>
+                        <TextBlock Grid.Row="4" Grid.Column="4" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Email:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbEmail" Grid.Row="4" Grid.Column="5" TabIndex="19" HorizontalAlignment="Stretch" Margin="2,2,0,2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick"
+                                 KeyUp="TextBox_KeyUp" Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="255" />
+                        <TextBlock Grid.Row="5" Grid.Column="4" HorizontalAlignment="Right" Margin="5,2,2,2" Text="Website:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+                        <TextBox Name="tbWeb" Grid.Row="5" Grid.Column="5" TabIndex="20" HorizontalAlignment="Stretch" Margin="2,2,0,2" VerticalAlignment="Center" MouseDoubleClick="tbProfile_MouseDoubleClick" KeyUp="TextBox_KeyUp" 
+                                 Style="{DynamicResource TextBoxC13}" Text="{Binding Path=Website, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="255" />
+                        <TextBlock Grid.Row="6" Grid.Column="4" Margin="5,2,2,2" Text="Sequence #:" VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Left">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockC13}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Grid Grid.Row="6" Grid.Column="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="tbSequence" Grid.Column="0" IsEnabled="False" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="18" Margin="0,2">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxC13}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <TextBlock Grid.Column="1" Text="SubscriptionID:"  VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Left" Height="16" Margin="0,3" >
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockC13}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBox Name="tbSubID" Grid.Column="2" IsEnabled="False" HorizontalAlignment="Stretch" Margin="2,2,0,2" VerticalAlignment="Center" Height="18">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxC13}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </Grid>
+                    </Grid>
+                    <TabControl Name="tabControlTasks" TabIndex="21" BorderBrush="#FFC7CACC" BorderThickness="1" Background="Transparent" Margin="0,10,0,10" HorizontalAlignment="Stretch">
+                        <TabItem Name="tabSub" Tag="tviSub" TabIndex="22" Header="Status" Foreground="#FF559EDB" BorderThickness="1" FontFamily="Calibri" FontWeight="Normal" FontSize="14.667" Width="115" Height="23"
+                             Style="{StaticResource BlueTab}">
+                        </TabItem>
+                        <TabItem Name="tabSubInfo" TabIndex="24" Tag="tviSubInfo" Header="Marketing" Foreground="#FF559EDB" BorderThickness="1" FontFamily="Calibri" FontSize="14.667" FontWeight="Normal" Width="115" 
+                             Height="23" Style="{StaticResource BlueTab}">
+                        </TabItem>
+                        <TabItem Name="tabQual" TabIndex="26" Tag="tviQual" Header="Qualification" Foreground="#FF559EDB" BorderThickness="1" FontFamily="Calibri" FontSize="14.667" FontWeight="Normal" Width="115" 
+                             Height="23" Style="{StaticResource BlueTab}">
+                        </TabItem>
+                        <TabItem Name="tabAdHoc" TabIndex="26" Tag="tviAdHoc" Header="Ad Hoc" Foreground="#FF559EDB" BorderThickness="1" FontFamily="Calibri" FontSize="14.667" FontWeight="Normal" Width="115" 
+                            Height="23" Style="{StaticResource BlueTab}">
+                        </TabItem>
+                        <TabItem Name="tabPaid" TabIndex="28" Header="Paid" Foreground="#FF559EDB" BorderThickness="1" Width="115" Height="23" FontFamily="Calibri" FontSize="14.667" 
+                             FontWeight="Normal">
+                            <TabItem.Style>
+                                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource BlueTab}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsPaid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsPaid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TabItem.Style>
+                        </TabItem>
+                        <TabItem Name="tabBillTo" TabIndex="30" Header="Bill To" Foreground="#FF559EDB" BorderThickness="1" Width="115" FontFamily="Calibri" FontSize="14.667" FontWeight="Normal" 
+                             Height="23">
+                            <TabItem.Style>
+                                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource BlueTab}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsPaid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsPaid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TabItem.Style>
+                        </TabItem>
+                        <TabItem Name="tabHistory" TabIndex="32" Tag="tviHistory" Visibility="Hidden" Header="History" FontFamily="Calibri" FontWeight="Normal" FontSize="14.667" Width="115" BorderThickness="1" Foreground="#FF559EDB" 
+                             Height="23" Style="{StaticResource BlueTab}">
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+                <DockPanel Grid.Row="1">
+                    <TextBlock DockPanel.Dock="Left" Name="txtWaveMailAlert" TextWrapping="Wrap" Text="This subscriber is currently in an active Wave Mailing. Certain field changes will not take effect until the current issue is finalized." Foreground="Red">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsInActiveWaveMailing}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsInActiveWaveMailing}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <StackPanel x:Name="spButtons" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MaxHeight="40">
+                            <telerik:RadButton x:Name="btnReset" TabIndex="34" Content="Reset" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Stretch" Width="75" Click="btnReset_Click"
+                                            IsEnabled="{Binding Path=InfoChanged, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}"
+                                            Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=ActualHeight, Converter={StaticResource resize}}">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Viewbox>
+                                            <TextBlock>Reset</TextBlock>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </telerik:RadButton>
+                            <telerik:RadButton x:Name="btnSaveNew" TabIndex="34" HorizontalAlignment="Right" Margin="2"  Width="75" VerticalAlignment="Stretch" Click="btnSaveNew_Click" Visibility="Collapsed"
+                                            IsEnabled="{Binding Path=InfoChanged, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}"
+                                            Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=ActualHeight, Converter={StaticResource resize}}">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Viewbox>
+                                            <TextBlock>Save and New</TextBlock>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </telerik:RadButton>
+                            <telerik:RadButton x:Name="btnSave" TabIndex="35" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Stretch" Width="75" Click="btnSave_Click" IsDefault="True"
+                                            IsEnabled="{Binding Path=InfoChanged, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}"
+                                            Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=ActualHeight, Converter={StaticResource resize}}">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Viewbox>
+                                            <TextBlock>Save</TextBlock>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </telerik:RadButton>
+                            <telerik:RadButton x:Name="btnCancel" TabIndex="36" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Stretch" Width="75" IsCancel="True" Click="btnCancel_Click"
+                                            Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=ActualHeight, Converter={StaticResource resize}}"
+                                            FocusVisualStyle="{DynamicResource MyFocusVisualStyle}">
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Viewbox>
+                                            <TextBlock>Cancel</TextBlock>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </telerik:RadButton>
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+            <Border Name="brdPopUp" BorderThickness="4" BorderBrush="#559EDB" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Visibility="Collapsed" MaxWidth="600">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" />
+                </Border.Effect>
+                <Grid Name="test" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.ColumnSpan="3" Fill="#559EDB"/>
+                    <TextBlock Text="Alert" HorizontalAlignment="Left" FontSize="32" Foreground="White" Margin="5" />
+                    <TextBlock Grid.Row="1" Text="!" FontSize="60" Margin="2" HorizontalAlignment="Center" Foreground="#C7CACC" FontWeight="ExtraBold" />
+                    <TextBlock Name="txtPopUp" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="Data entry is currently closed. This is a test." TextWrapping="Wrap" FontSize="20" Margin="10" />
+                    <Separator Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0.5" />
+                    <telerik:RadButton Name="btnOk" Grid.Column="2" Grid.Row="3" Margin="5" Content="OK" Click="btnOk_Click" Width="95" Height="24" HorizontalAlignment="Right" />
+                </Grid>
+            </Border>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

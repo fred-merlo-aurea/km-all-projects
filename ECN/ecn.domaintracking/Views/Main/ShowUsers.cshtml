@@ -1,0 +1,592 @@
+﻿@using ecn.domaintracking.Models.Shared
+@model ecn.domaintracking.Models.DomainTrackerUsersViewModel
+@{
+    ViewBag.Title = "Show users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ECN_Framework_Entities.DomainTracker.DomainTrackerUserProfile> userList = Model.ProfileList;
+    List<List<ECN_Framework_Entities.DomainTracker.DomainTrackerActivity>> activityList = Model.ActivityList;
+    GroupSelectorModel GroupSelectorModel = Model.GroupSelectorModel;
+}
+
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.tablesorter.js"></script>*@
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function() {
+        
+        $("#FilterByEmailBtn").click(function() {
+            LoadResultsTable();
+        });
+    });
+
+    var targetUrl = '@Url.Action("GetProfiles", "Main")';
+    var firstGridLoad = true;
+    function usersDataBound() {
+        var grid = this;
+
+        if (firstGridLoad) {
+
+            firstGridLoad = false;
+            SetPagerWidget("firstpage");
+
+        }
+        showLoadingWindow();
+        closeLoadingWindow();
+    }
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data);
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        showLoadingWindow();
+        SetPagerWidget("firstpage");
+        firstGridLoad = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+        //closeLoadingWindow();
+    }
+
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function filterGridParams() {
+        var pageIndex = $("#pagerInputPageNumber").val();
+        if (pageIndex == '') {
+            pageIndex = 0;
+        }
+        else {
+            pageIndex = parseInt($("#pagerInputPageNumber").val()) - 1;
+        }
+        return {
+            EmailAddress: $('#FilterByEmailTxt').val(),
+            StartDate: kendo.toString($('#startDate').data('kendoDatePicker').value(), 'd'),
+            EndDate: kendo.toString($('#endDate').data('kendoDatePicker').value(), 'd'),
+            PageNumber: pageIndex,
+            PageSize: $("#ddPageSize").val(),
+            DomainTrackerID: '@Model.DomainTrackId',
+            TypeFilter: $("#ddlType").val()
+        };
+
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#UsersGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj,
+                    async: false
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    var lastPageIndex = 1;
+    function RebindOnPageOrSizeChange() {
+
+        if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+            SetPagerWidget($("#pagerInputPageNumber").val());
+            var data = filterGridParams();
+            ReBindGrid(data);
+            lastPageIndex = parseInt($("#pagerInputPageNumber").val());
+        }
+        else {
+            $("#pagerInputPageNumber").val(lastPageIndex);
+            //showMessage({
+            //    type: 'Error',
+            //    text: 'Please enter valid page number.',
+            //    autoClose: false
+            //});
+
+        }
+
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#UsersGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].ProfileCount);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#pagerInputPageNumber").val());
+        var lastpage = parseInt(totalrecordCount / pagesize) + 1;
+
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+        lastPageIndex = currentpage;
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+
+    }
+
+    function checkChange() {
+        RebindOnPageOrSizeChange()
+    }
+    
+    function LoadResultsTable() {
+        var url = '@Url.Action("ShowUsers")';
+        var request = $.ajax({
+            url: url,
+            type: "POST",
+            traditional: true,
+            cache: false,
+            data: {
+                id: $("#DomainTrackId").val(),
+                FilterEmail: $("#FilterByEmailTxt").val(),
+                FromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(), 
+                PageURL: $("#pageUrl").val()
+            }
+        });
+        request.done(function(message) {
+            $("#divShowUsersTarget").html(message);
+        });
+    }
+
+    $(function () {
+
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 15,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+        var sd = threeMonthsFromToday();
+        var ed = todayDate();
+
+        var startDate = $("#startDate");//.data('kendoDatePicker');
+        startDate.val(sd);
+        var endDate = $("#endDate");//.data('kendoDatePicker');
+        endDate.val(ed);//.min($('#startDate').data('kendoDatePicker').value()).max(todayDate());
+    });
+
+    function startDateChange() {
+        var startPicker = this;
+        $("#fromDate").val(kendo.toString(this.value(), 'd'));
+        var endPicker = $('#endDate').data('kendoDatePicker');
+        if (this.value() == '') {
+            endPicker.value('');
+            $('#FilterByEmailBtn').prop('disabled', true);
+        }
+        else {
+            var sd = kendo.toString(this.value(), 'd');
+            //if (checkDate(sd)) {
+            $('#FilterByEmailBtn').prop('disabled', false);
+            if (endPicker.value() != '') {
+                if (dateToNumeric(kendo.toString(startPicker.value(), 'd')) > dateToNumeric(kendo.toString(endPicker.value(), 'd'))) {
+                    endPicker.value(startPicker.value());
+                }
+            }
+            else
+                endPicker.value(startPicker.value());
+
+            endPicker.min(startPicker.value());
+            endPicker.max(todayDate());
+            //}
+        }
+    }
+
+    function endDateChange() {
+
+        var endPicker = this;
+        $("#toDate").val(kendo.toString(this.value(), 'd'));
+        var startPicker = $('#startDate').data('kendoDatePicker');
+        if (endPicker.value() == '') {
+            startPicker.value('');
+            $('#FilterByEmailBtn').prop('disabled', true);
+        }
+        else {
+            var sd = this.value();
+            //if (checkDate(sd)) {
+            $('#FilterByEmailBtn').prop('disabled', false);
+            if (startPicker.value() != '') {
+                if (dateToNumeric(kendo.toString(startPicker.value(), 'd')) > dateToNumeric(kendo.toString(endPicker.value(), 'd'))) {
+                    endPicker.value(startPicker.value());
+                }
+            }
+            else
+                startPicker.value(endPicker.value());
+            endPicker.min(startPicker.value());
+            endPicker.max(todayDate());
+            //}
+        }
+    }
+
+
+    function todayDate() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        today = mm + '/' + dd + '/' + yyyy;
+        return today;
+    }
+    function threeMonthsFromToday() {
+        var today = new Date();
+        today.setMonth(today.getMonth() - 3); // minus 3 months
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        today = mm + '/' + dd + '/' + yyyy;
+        return today;
+    }
+    function dateToNumeric(date) {
+        var items = date.split("/");
+        return items[2] + items[0] + items[1];
+    }
+    function checkDate(field) {
+        var allowBlank = true;
+        var minYear = 1900;
+        var maxYear = (new Date()).getFullYear();
+
+        var errorMsg = "";
+
+        // regular expression to match required date format
+        var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+
+        if (field.value != '') {
+            if (pattern.test(field)) {
+                var regs = field.split("/");
+                if (regs[1] < 1 || regs[1] > 31) {
+                    errorMsg = "Invalid value for day: " + regs[1];
+                } else if (regs[0] < 1 || regs[0] > 12) {
+                    errorMsg = "Invalid value for month: " + regs[0];
+                } else if (regs[2] < minYear || regs[2] > maxYear) {
+                    errorMsg = "Invalid value for year: " + regs[2] + " - must be between " + minYear + " and " + maxYear;
+                } else if (dateToNumeric(field) > dateToNumeric(todayDate())) {
+                    errorMsg = "Invalid value for date.";
+                }
+            } else {
+                errorMsg = "Invalid date format: " + field;
+            }
+        }
+
+        if (errorMsg != "") {
+            $('#FilterByEmailBtn').prop('disabled', true);
+            alert(errorMsg);
+            return false;
+        }
+
+        return true;
+    }
+    function getQueryStringByName(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS, 'i');
+        var results = regex.exec(window.location.search);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function ddlTypeChange() {
+        var chkExistingGroup = $("#cbxExistingGroup");
+        var chkNewGroup = $("#cbxNewGroup");
+        var lblExistingGroup = $("#lblExistingGroup");
+        var lblNewGroup = $("#lblNewGroup");
+        var chkFile = $("#cbxFile");
+
+        var selectedValue = this.selectedIndex;
+        if (selectedValue == 0) {
+            chkExistingGroup.show();
+            chkNewGroup.show();
+            lblExistingGroup.show();
+            lblNewGroup.show();
+        }
+        else if (selectedValue == 1 || selectedValue == 2) {
+            chkExistingGroup.hide();
+            chkNewGroup.hide();
+            lblExistingGroup.hide();
+            lblNewGroup.hide();
+            chkFile.prop('checked', 'checked');
+            chkExistingGroup.prop('checked', false);
+            chkNewGroup.prop('checked', false);
+        }
+
+        openGroupTypeDiv();
+
+
+    }
+
+</script>
+
+@Html.HiddenFor(g => GroupSelectorModel.DomainTrackId)
+@Html.HiddenFor(g => GroupSelectorModel.fromDate)
+@Html.HiddenFor(g => GroupSelectorModel.toDate)
+@Html.HiddenFor(g => GroupSelectorModel.pageUrl)
+<input id="hDomainTrackerID" type="hidden" value=@TempData["DomainTrackerID"] />
+<div style="float: left; font-size: medium; font-weight: bold; text-align: left;">Domain Tracking Report (@Model.DomainTracker.Domain)</div>
+<div style="float:right;text-align:right;">
+    @Html.ActionLink("Back to Domains", "Index", "Main", null, new { @class = "btn k-button" })
+</div>
+<br />
+<div>
+    @Html.Partial("~/Views/Shared/_GroupSelectorPartial.cshtml", Model.GroupSelectorModel)
+</div>
+<br />
+<div style="clear: both"></div>
+
+
+<div id="SearchPanel">
+    <table>
+        <tr>
+
+            <td>Email Address @Html.TextBox("FilterByEmailTxt") </td>
+            <td>
+                Start Date @Html.Kendo().DatePicker().Name("startDate").Events(x => x.Change("startDateChange"))
+                @Html.HiddenFor(x => x.toDate)
+            </td>
+
+            <td>
+                End Date @Html.Kendo().DatePicker().Name("endDate").Events(x => x.Change("endDateChange")).Max(DateTime.Now).Min(DateTime.Now.AddMonths(-3))
+                @Html.HiddenFor(x => x.fromDate)
+            </td>
+            <td>
+                User Type
+                @Html.Kendo().DropDownList().Name("ddlType").BindTo(new List<SelectListItem>() { new SelectListItem() { Text = "Known", Value = "known", Selected = true }, new SelectListItem() { Text = "Unknown", Value = "unknown" }, new SelectListItem() { Text = "All", Value = "all" } }).Events(x => x.Change("ddlTypeChange"))
+            </td>
+            <td> <input type="button" class="k-button" value="Search" id="search" onclick="Search()" /></td>
+        </tr>
+    </table>
+
+
+</div>
+<br />
+
+<div id="divShowUsersTarget">
+    @(Html.Kendo()
+        .Grid(Model.ProfileList)
+        .Name("UsersGrid")
+        .Events(x => x.DataBound("usersDataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.ProfileCount).Hidden();
+            columns.Bound(e => e.EmailAddress).Title("Email Address").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" });
+            columns.Bound(e => e.CreatedDate).Title("Created Date").Format("{0:MM/dd/yyyy hh:mm:ss}").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" });
+            columns.Bound(e => e.ConvertedDate).Title("Converted Date").Format("{0:MM/dd/yyyy hh:mm:ss}").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" });
+
+        })
+        .Pageable(page => page.Enabled(false))
+        .ClientDetailTemplateId("detailTemplate")
+        .Sortable(x => x.SortMode(GridSortMode.SingleColumn))
+        .HtmlAttributes(new { style = "min-width:100px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+
+            .Read(read => read
+                .Action("GetProfiles", "Main")
+                .Data("filterGridParams")
+
+            )
+            .Model(m =>
+            {
+                m.Id(y => y.ProfileID);
+            })
+            .PageSize(15)
+            .ServerOperation(true)
+        )
+    )
+    <div id="pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+        <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+            <span onclick="GoToPage(event)" id="firstpage" class="k-icon k-i-seek-w">seek-w</span>
+        </a>
+        <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+            <span onclick="GoToPage(event)" id="prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+        </a>
+
+        <ul class="k-pager-numbers k-reset">
+            <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+            <li><span class="k-state-selected" id="currentpage">1</span></li>
+
+        </ul>
+        <span class="k-pager-input k-label">Page<input class="k-textbox" id="pagerInputPageNumber" onchange="checkChange()">of <span id="pagerTotalItems"></span></span>
+        <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+            <span onclick="GoToPage(event)" id="nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+        </a>
+        <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+            <span onclick="GoToPage(event)" id="lastpage" class="k-icon k-i-seek-e">seek-e</span>
+        </a>
+
+        <span class="k-pager-sizes k-label">
+            <span title="" class="k-widget k-dropdown k-header">
+                <input id="ddPageSize" onchange="checkChange()" />
+            </span>items per page
+        </span>
+        <span class="float-right" style="margin-right:10px;">
+            <lable id="pagerDisplay"></lable>
+        </span>
+    </div>
+    <script id="detailTemplate" type="text/kendo-tmpl">
+        @(
+                Html.Kendo().TabStrip().Name("activityTabStrip_#=ProfileID#").Items(
+                    tabs =>
+                    {
+                    tabs.Add().Text("Standard Data Points").Selected(true).Content(@<text>
+                @(
+                            Html.Kendo().Grid<ECN_Framework_Entities.DomainTracker.DomainTrackerActivity>()
+                            .Name("grid_#=ProfileID#") // template expression, to be evaluated in the master context
+                            .Columns(columns =>
+                            {
+                                columns.Bound(o => o.DomainTrackerActivityID).Title("Activity ID").Width("5%");
+                                columns.Bound(o => o.PageURL).Width("60%");
+                                columns.Bound(o => o.IPAddress).Width("5%"); // escaped template expression, to be evaluated in the child/detail context
+                                columns.Bound(o => o.OS).Width("10%");
+                                columns.Bound(o => o.Browser).Width("10%");
+                                columns.Bound(o => o.TimeStamp).Width("10%").Format("{0:MM/dd/yyyy hh:mm:ss}");
+                            })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Read(read =>
+                                    read.Action("GetUserActivity", "Main", new { profileID = "#=ProfileID#", domainTrackerID = Model.DomainTrackId, StartDate = Model.fromDate, EndDate = Model.toDate })
+                                    )
+                            )
+                            .Pageable(x => x.Enabled(true))
+                            .Sortable(x => x.Enabled(false))
+                            .ToClientTemplate()
+                ) </text>
+                    );
+                    tabs.Add().Text("Additional Data Points").Content(
+                        @<text>
+                            @(
+                            Html.Kendo().Grid<ECN_Framework_Entities.DomainTracker.FieldsValuePair>()
+                            .Name("grid_add_#=ProfileID#") // template expression, to be evaluated in the master context
+                            .Columns(columns =>
+                            {
+                                columns.Bound(o => o.DomainTrackerActivityID).Title("Activity ID").Width("10%");
+                                columns.Bound(o => o.FieldName).Title("Field Name").Width("20%");
+                                columns.Bound(o => o.Value).Title("Value").Width("25%"); // escaped template expression, to be evaluated in the child/detail context
+                                columns.Bound(o => o.ReferralURL).Title("Referral URL").Width("35%");
+                                columns.Bound(o => o.CreatedDate).Title("Created Date").Width("10%").Format("{0:MM/dd/yyyy hh:mm:ss}");
+                            })
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .Read(read =>
+                            read.Action("GetUserActivity_AdditionalDataPoints", "Main", new { profileID = "#=ProfileID#", domainTrackerID = Model.DomainTrackId, StartDate = Model.fromDate, EndDate = Model.toDate })
+                            )
+                            )
+                            .Pageable(x => x.Enabled(true))
+                            .Sortable(x => x.Enabled(false))
+                            .ToClientTemplate()
+                            )
+                        </text>);
+                    }
+                        ).ToClientTemplate()
+
+        )
+
+
+
+
+    </script>
+
+</div>
+
+
+
+@*<div id="divShowUsersTarget" class="">
+    <table id="userActivity" style="width:100%;border-collapse:collapse;border-spacing:0px;border:1px" class="tablesorter">
+        <thead>
+            <tr style="border-collapse:collapse;font-weight: bolder;font-size: 11px;height: 20px;vertical-align: middle;font-family: Arial, Helvetica, Tahoma, sans-serif;background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; text-decoration: underline;">
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">Email</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">IPAddress</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">OS</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">Browser</th>
+                <th style="margin:0px;padding:0px;border:1px solid gray;border-spacing:0px;text-align:center;">TimeStamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProfileList.Count > 0)
+            {
+                for (int i = 0; i < Model.ProfileList.Count; i++)
+                {
+                    for (int b = 0; b < Model.ActivityList[i].Count; b++)
+                    {
+                        <tr style="text-align:center;border:1px solid gray;border-collapse:collapse;">
+                            <td style="text-align: center; border: 1px solid gray; border-collapse: collapse;"><small>@Model.ProfileList[i].EmailAddress</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].IPAddress</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].OS</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].Browser</small></td>
+                            <td style="text-align:center;border:1px solid gray;border-collapse:collapse;"><small>@Model.ActivityList[i][b].TimeStamp</small></td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>*@

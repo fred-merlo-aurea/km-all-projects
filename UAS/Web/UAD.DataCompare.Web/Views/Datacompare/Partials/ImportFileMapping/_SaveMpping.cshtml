@@ -1,0 +1,60 @@
+﻿@model UAD.DataCompare.Web.Models.FileDetails
+<script>
+    $(document).ready(function () {
+        var showdetails = false;
+
+        $(".togglePreview").on("click", function () {
+
+            if (showdetails) {
+                $('.previewdetails').hide();
+                showdetails = false;
+            }
+            else {
+                $('.previewdetails').show();
+                showdetails = true;
+            }
+
+        });
+
+        $("#tbColumnMapper").on('click', '.btnDelete', function () {
+            if (confirm("Do you want to delete this row?")) {
+                var closestRow = $(this).closest('tr');
+                closestRow.add(closestRow.next()).remove();
+            }
+            else {
+                return false;
+            }
+        });
+    });
+</script>
+
+    <div style="margin:10px 190px;border:solid 1px gray;">
+        <div style="width: 50%; margin: 0 auto;">
+            <h3>Map Columns</h3>
+        </div>
+        <p style="margin:20px 20px;">
+            <button type="button" class="togglePreview btn btn-info">Preview<i class='km-icon icon-kmright-dir ralign'></i></button>
+        </p>
+        @Html.HiddenFor(m => m.FilePath)
+        @Html.HiddenFor(m => m.Extention)
+        @if (Model.ColumnMapping != null && Model.ColumnMapping.Count>0)
+        {
+
+            @Html.EditorFor(m => m.ColumnMapping)
+
+        }
+    </div>
+        <div class="bottomnavbox">
+            <div class="bottomnav">
+                <div class="lbtns">
+                    @Html.Kendo().Button().Name("Previous").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return MovePrevious()" })
+                </div>
+                <div class="cbtns">
+                    @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn btn-blue5", type = "submit", onclick ="return SaveMapping()"})  
+                    @Html.Kendo().Button().Name("SaveImport").Content("Save And Import").HtmlAttributes(new { @class = "btn btn-blue5", type = "submit", onclick = "return SaveAndImportMapping()" })
+                </div>
+
+            </div>
+        </div>
+
+

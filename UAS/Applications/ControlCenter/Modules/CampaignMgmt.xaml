@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="ControlCenter.Modules.CampaignMgmt"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1080">
+    <Grid DataContext="{Binding campaignContainer}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="MyTemplate">
+                <Grid x:Name="MyGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Campaign Name:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding CampaignName, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Brand ID:</Label>
+                        <telerik:DataFormComboBoxField Margin="5,0,0,0" >
+                            <telerik:RadComboBox Name="cbBrand" Width="50" VerticalAlignment="Center"/>
+                        </telerik:DataFormComboBoxField>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal">
+                        <telerik:RadButton Name="rbCancel" HorizontalAlignment="Left" Margin="19,5,0,5" Content="Cancel" Width="80" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="rbCancel_Click" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <telerik:RadButton Name="rbNewCampaign" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="New Campaign" Click="rbNewCampaign_Click"/>
+        </StackPanel>
+        <telerik:RadGridView Name="grdCampaign" Grid.Row="3" Grid.ColumnSpan="4" Width="1000" Height="500" Margin="5,10,0,0" VerticalAlignment="Center"
+                                 telerik:StyleManager.Theme="Expression_Dark" EditTriggers="CellClick" IsReadOnly="True"
+                                 RowIndicatorVisibility="Collapsed"
+                                 RowDetailsVisibilityMode="VisibleWhenSelected" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 AutoGenerateColumns="False" EnableColumnVirtualization="False" ItemsSource="{Binding CampaignContainer}"
+
+                             RowDetailsVisibilityChanged="grdCampaign_RowDetailsVisibilityChanged">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewToggleRowDetailsColumn ExpandMode="Single" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CampaignID}" Header="ID" IsVisible="False" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CampaignName}" Header="Campaign Name" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DateAdded}" Header="Created" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CreatedByName}" Header="Added By" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="Updated" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding UpdatedByName}" Header="Updated By" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding BrandName}" Header="Brand" />
+            </telerik:RadGridView.Columns>
+            <telerik:RadGridView.SortDescriptors>
+                <telerik:SortDescriptor Member="CampaignName" SortDirection="Ascending" />
+            </telerik:RadGridView.SortDescriptors>
+            <telerik:RadGridView.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid Name="ItemDetails" Visibility="Visible" KeyboardNavigation.TabNavigation="Cycle">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Right" Margin="2" Text="Campaign Name:" VerticalAlignment="Bottom" Style="{DynamicResource TextBlockC14}" />
+                            <TextBox Name="tbCamName" TabIndex="0" Text="{Binding CampaignName}"  IsReadOnly="False" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Bottom" Width="100" Style="{DynamicResource TextBoxCG13}" MaxLength="50" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Right" Margin="2" Text="Brand:" VerticalAlignment="Bottom" Style="{DynamicResource TextBlockC14}" />
+                            <telerik:RadComboBox Name="cbBBrand" TabIndex="1" SelectedValue="{Binding BrandID}"  HorizontalAlignment="Right" Margin="2" VerticalAlignment="Bottom" Width="100" Style="{DynamicResource ComboBoxCS13}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal">
+                            <telerik:RadButton Name="btnSave" Content="Save" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Bottom" Width="75" Height="19" FontFamily="Calibri" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Click="btnSave_Click"  Foreground="#FFFDFBFB"/>
+                            <telerik:RadButton Name="rbCancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="2" Content="Cancel" Width="75" Height="19" FontFamily="Calibri" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="rbCancel_Click" />
+                        </StackPanel>
+                    </Grid>
+                    <!--<telerik:RadDataForm Name="rdForm" CurrentItem="{Binding}" Header="Edit Campaign:" HorizontalAlignment="Left" AutoGenerateFields="False"
+                           ReadOnlyTemplate="{StaticResource MyTemplate}" EditTemplate="{StaticResource MyTemplate}" EditEnded="rdForm_EditEnded" />-->
+                </DataTemplate>
+            </telerik:RadGridView.RowDetailsTemplate>
+        </telerik:RadGridView>
+
+        <Canvas Name="rwNew" Visibility="Collapsed" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="344" Height="141" Background="White">
+            <Border   BorderBrush="#045DA4" BorderThickness="5,5,5,5" CornerRadius="8,8,8,8" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Name:</telerik:Label>
+                        <TextBox Name="tbCampaignName" Width="250"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Left">
+                        <telerik:Label>Brand:</telerik:Label>
+                        <telerik:RadComboBox Name="cbBrand" Width="250" VerticalAlignment="Center"></telerik:RadComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:RadButton Name="btnNewSave" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Save" Click="btnNewSave_Click"/>
+                        <telerik:RadButton Name="btnNewCancel" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Cancel" Click="btnNewCancel_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Canvas>
+
+    </Grid>
+</UserControl>

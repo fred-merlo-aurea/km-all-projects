@@ -1,0 +1,35 @@
+﻿@model ecn.domaintracking.Models.ClientDropDown
+
+@{
+    ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+}
+@using(Html.BeginForm("_ClientDropDown","Main"))
+{ 
+<table style="text-align:right;width:100%;">
+    <tr>
+        <td style="text-align:right;">
+
+            <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                Channel:
+            </span>
+            @Html.HiddenFor(m => m.CurrentClientGroupID)
+            @Html.DropDownListFor(m => m.SelectedClientGroupID, Model.ClientGroupItems, new { onchange = "submit()" })
+
+        </td>
+        <td style="text-align:right;">
+
+            <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                &nbsp;
+                Customer:
+            </span>
+            @Html.HiddenFor(m => m.CurrentClientID)
+            @Html.DropDownListFor(m => m.SelectedClientID, Model.ClientItems, new { onchange = "submit()" })
+
+        </td>
+        <td style="text-align:right;">
+            <span class="ECNText10" style="vertical-align: bottom;">&nbsp;User:</span>
+            <span class="ECNText10" style="vertical-align: bottom;" runat="server" id="spanCurrentUser">@UserSession.CurrentUser.UserName</span>
+        </td>
+    </tr>
+</table>
+}

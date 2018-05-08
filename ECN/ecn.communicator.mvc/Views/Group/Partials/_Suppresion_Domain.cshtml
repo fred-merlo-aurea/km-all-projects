@@ -1,0 +1,215 @@
+﻿@using KMEnums
+@{ 
+    List<ECN_Framework_Entities.Communicator.DomainSuppression> domainSuppressionList = new List<ECN_Framework_Entities.Communicator.DomainSuppression>();
+    var CurrentUser = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser;
+    var CurrentCustomer = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentCustomer;
+
+    if (KM.Platform.User.HasAccess(CurrentUser, KMPlatform.Enums.Services.EMAILMARKETING, KMPlatform.Enums.ServiceFeatures.DomainSuppression, KMPlatform.Enums.Access.Edit))
+    {
+        domainSuppressionList = ECN_Framework_BusinessLayer.Communicator.DomainSuppression.GetByDomain("", CurrentCustomer.CustomerID, ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentBaseChannel.BaseChannelID, CurrentUser);
+    }
+    else
+    {
+        domainSuppressionList = ECN_Framework_BusinessLayer.Communicator.DomainSuppression.GetByDomain("", CurrentCustomer.CustomerID, null, CurrentUser);
+    }
+}
+<script>
+    function addDomainSuppressionModal() {
+        var win = $("#AddDomainSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add Domain Suppression');
+        $("#AddDomainSuppressionDiv").load('@Url.Action("LoadAddDomainSuppression")', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+
+    function editDomainSuppressionModal(domainSuppressionID)
+    {
+        var win = $("#EditDomainSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Edit Data Fields');
+        $("#EditDomainSuppressionDiv").load('@Url.Action("LoadEditDomainSuppression")', { DomainSuppressionID: domainSuppressionID }, function () {
+            kendoWindow.center().open();
+        });
+    }
+    function AddDomainSuppresion() {
+        if ($('#Domain').val() == "") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please add a Domain'
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddDomainSuppression", "Group")",
+                data: {
+                    DomainSuppressionID: $('#DomainSuppressionID').val(),
+                    RbType: $('input[name=RadioB]:checked').val(),
+                    TxtDomain: $('#Domain').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#domainSuppressionGridDiv").html(response[1]);
+                        $('#Domain').val("");
+                        $("#Customer").prop("checked", true);
+                        $('#DomainSuppressionID').val("0");
+                        $('#Add').html("Add Domain Suppression");
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        }
+    }
+    function CancelAddDomainSuppresion() {
+        
+        $('#Add').html("Add Domain Suppression");
+        $('#Domain').val("");
+        $("#Customer").prop("checked", true);
+
+        var win = $("#AddDomainSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+    function SearchDomainSuppresion(DomainSuppressionID) {
+       
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SearchDomainSuppression", "Group")",
+                data: { SearchDomain: $('#SearchDomain').val() },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        
+                        $("#domainSuppressionGridDiv").html(response[1]);
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        
+    }
+    function EditDomainSuppresion(DomainSuppressionID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SetEditDomainSuppression", "Group")",
+            data: { DomainSuppressionID: DomainSuppressionID },
+            success: function (response) {
+                if (response[0] == '200') {
+                    $('#Domain').val(response[1]);
+                    if (response[2] == "Channel")
+                        $("#Channel").prop("checked", true);
+                    else
+                        $("#Customer").prop("checked", true);
+                    $('#DomainSuppressionID').val(response[3]);
+                    $('#Add').html(response[4]);
+                }
+                else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: "Load Domain Suppression error."
+                    });
+                }
+            }
+        });
+    }
+    function DeleteDomainSuppresion(id) {
+        var win = $("#DeleteDomainSuppression");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+</script>
+
+<table style="width:100%; margin-top:0px;">
+    <tr>
+        <td style="float:right; padding-right: 0px;">
+            @Html.Kendo().Button().Content("Add Domain<i class='km-icon icon-kmplus-circled-1'></i>").Events(m => m.Click("addDomainSuppressionModal")).Name("AddDomain")
+        </td>
+    </tr>
+</table>
+<div style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Search Domain
+                @Html.TextBox("SearchDomain")
+                @Html.Kendo().Button().Name("Search").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "SearchDomainSuppresion()" })                
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="domainSuppressionGridDiv">
+    @Html.Partial("Partials/_Suppresion_Domain_Grid", domainSuppressionList)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteDomainSuppression")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="DeleteDomainSuppressionDiv">
+                @Html.Partial("Partials/Modals/_DeleteDomainSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("AddDomainSuppression")
+        .Actions(x => x.Clear())
+        .Title("Add")
+        .Content(
+        @<text>
+            <div id="AddDomainSuppressionDiv">
+                
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("EditDomainSuppression")
+        .Actions(x => x.Clear())
+        .Title("Add")
+        .Content(
+        @<text>
+            <div id="EditDomainSuppressionDiv">
+
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

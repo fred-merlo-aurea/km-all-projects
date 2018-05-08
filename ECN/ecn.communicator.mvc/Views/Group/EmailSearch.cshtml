@@ -1,0 +1,112 @@
+﻿@using KMEnums
+@{
+    ViewBag.Title = "Email Search ";
+}
+<script>
+    var lastControlsError = [];
+    function loadEmailGrid() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        if ($('#searchTermValue').val() == "") {
+            lastControlsError.push("Please enter a value for Search Term");
+            setValidationServer(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("LoadEmailGrid", "Group")",
+                data: {
+                    FilterTypeValue: $('#filterType').val(),
+                    searchTermValue: $('#searchTermValue').val()
+                },
+                success: function (response) {
+                    $("#divEmailsResults").html(response);
+                }
+            });
+        }
+    }
+    function downloadSearchResult() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        if ($('#searchTermValue').val() == "") {
+            lastControlsError.push("Please enter a value for Search Term");
+            setValidationServer(lastControlsError);
+        }
+        else {
+            window.location = '@Url.Content("~/Group/ExportReport")'
+                    + "?filterType=" + $('#filterType').val()
+                    + "&searchfor=" + encodeURIComponent($('#searchTermValue').val())
+                    + "&exportFormat=" + $('#exportFormat').val();
+        }
+    }
+</script>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="#">Email Search</a></li>
+</ol>
+
+<div class="wrapper modal modaladdnewform">
+    <div class="formbox">
+        <h3 style="margin-bottom: 20px;">
+            @if (KM.Platform.User.IsSystemAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser))
+            {
+                <text>Find email within all base channels </text>
+            }
+            else if (KM.Platform.User.IsChannelAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser) || ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.CurrentSecurityGroup.ClientGroupID > 0)
+            {
+                <text>Find email within all customers </text>
+            }
+            else
+            {
+                <text>Find email within current customer </text>
+            }
+        </h3>
+    </div>
+    <div class="formbox">
+        
+    </div>
+
+    <table style="width:100%; margin-top:-15px;">
+        <tr>
+            <td style="width:90%;">
+                <table>
+                    <tr>
+                        <td>Export this view to:</td>
+                        <td>
+                            @Html.Kendo().DropDownList().Name("exportFormat").BindTo(new List<SelectListItem> {
+                                        new SelectListItem { Text = "EXCEL [.xls]", Value = "XLS" },
+                                        new SelectListItem { Text = "CSV [.csv]", Value = "CSV" },
+                                        new SelectListItem { Text = "TXT [.txt]", Value = "TXT" }
+                                    }).DataTextField("Text").DataValueField("Value")
+                        </td>
+                        <td>
+                            @Html.Kendo().Button().Name("Export").Content("Download").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "downloadSearchResult()" })
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="text-align:center">
+        <table style="width:100%; margin-top:0px">
+            <tr>
+                <td style="width:100%;">
+                    Search Email
+                    @Html.Kendo().DropDownList().Name("filterType").BindTo(new List<SelectListItem> {
+                            new SelectListItem { Text = "Contains", Value = "like" },
+                            new SelectListItem { Text = "Equals", Value = "equals" },
+                            new SelectListItem { Text = "Starts with", Value = "starts" },
+                            new SelectListItem { Text = "Ends with", Value = "ends" }
+                        }).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "text-align:left;width: 120px;" })
+                    @Html.TextBox("searchTermValue")
+                    @Html.Kendo().Button().Name("GetResults").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "loadEmailGrid()" })
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="formbox">
+        <div id="divEmailsResults" style="width:100%;"></div>
+    </div>
+</div>

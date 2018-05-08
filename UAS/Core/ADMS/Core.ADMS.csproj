@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F1438266-1B41-48C2-AED3-AC0F56079DF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Core.ADMS</RootNamespace>
+    <AssemblyName>Core.ADMS</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Harmony.MessageBus">
+      <HintPath>..\..\..\ThirdPartyDLLs\Harmony.MessageBus.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseDirs.cs" />
+    <Compile Include="Events\CustomFileProcessed.cs" />
+    <Compile Include="Events\FileBase.cs" />
+    <Compile Include="Events\FileAddressGeocoded.cs" />
+    <Compile Include="Events\FileCleansed.cs" />
+    <Compile Include="Events\FileMoved.cs" />
+    <Compile Include="Events\FileProcessed.cs" />
+    <Compile Include="Events\FileValidated.cs" />
+    <Compile Include="Events\FileDetected.cs" />
+    <Compile Include="Events\Publisher\CustomFileProcessedPublisher.cs" />
+    <Compile Include="Events\Publisher\FileCleansedPublisher.cs" />
+    <Compile Include="Events\Publisher\FileMovedPublisher.cs" />
+    <Compile Include="Events\Publisher\FileProcessedPublisher.cs" />
+    <Compile Include="Events\Publisher\FileDetectedPublisher.cs" />
+    <Compile Include="Events\Publisher\FileValidatedPublisher.cs" />
+    <Compile Include="Events\RowValidated.cs" />
+    <Compile Include="Events\Subscriber\CustomFileProcessedSubscriber.cs" />
+    <Compile Include="Events\Subscriber\FileCleansedSubscriber.cs" />
+    <Compile Include="Events\Subscriber\FileMovedSubscriber.cs" />
+    <Compile Include="Events\Subscriber\FileProcessedSubscriber.cs" />
+    <Compile Include="Events\Subscriber\FileDetectedSubscriber.cs" />
+    <Compile Include="Events\Subscriber\FileValidatedSubscriber.cs" />
+    <Compile Include="FileProperty.cs" />
+    <Compile Include="FileSchemaAssociation.cs" />
+    <Compile Include="FileValidationTransformationHelper.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="TransformerFunctions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ECN\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD\FrameworkUAD.csproj">
+      <Project>{cba5b2c6-3ce4-4782-bae0-570528690b4b}</Project>
+      <Name>FrameworkUAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD_Lookup\FrameworkUAD_Lookup\FrameworkUAD_Lookup.csproj">
+      <Project>{8ad0b7b7-73a4-437a-b533-1f9d5a90f2be}</Project>
+      <Name>FrameworkUAD_Lookup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAS\FrameworkUAS.csproj">
+      <Project>{824833b3-d839-4878-ab71-b4dfdf802085}</Project>
+      <Name>FrameworkUAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Core_AMS.Utilities.csproj">
+      <Project>{aac306a3-a54b-4e6d-b5e7-0170acdffe26}</Project>
+      <Name>Core_AMS.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

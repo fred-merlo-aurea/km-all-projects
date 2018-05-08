@@ -1,0 +1,178 @@
+﻿@model IEnumerable<UAS.Web.Models.Circulations.FileHistory>
+
+<div>
+    <script type="text/javascript">
+        function pubCodeFilter(element) {
+            element.kendoDropDownList({
+                dataSource: {
+                    transport: {
+                        read: "@Url.Action("FileHistory_Filter_PubCode")",
+                        //FilterMenuCustomization_Cities
+                        //kendo.stringify( $("#grid").data("kendoGrid").dataSource.view() );
+                }
+            },
+                optionLabel: "-- Select --"
+        });
+        }
+
+        function fileTypeFilter(element) {
+            element.kendoDropDownList({
+                dataSource: {
+                    transport: {
+                        read: "@Url.Action("FileHistory_Filter_FileType")",
+                }
+            },
+                optionLabel: "-- Select --"
+        });
+        }
+
+        function openProcessedWindow(client, code, count) {
+            var modelData = {
+                ClientID: client,
+                ProcessCode: code,
+                FinalProcessCount: count
+            }
+
+            var win = $("#fileHistoryWindow").data('kendoWindow');
+            win.content("Loading...");
+            win.center().open();
+            
+            $.ajax({
+                url: "/UAS.Web/Dashboard/ProcessedRecords",
+                type: "GET",
+                data: modelData,
+                traditional: true,
+                cache: false,
+                success: function (result) {
+                    win.content(result);
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+
+        function openDimensionErrorWindow(client, code, profile, count) {
+            var modelData = {
+                ClientID: client,
+                ProcessCode: code,
+                DimensionProfileCount: profile,
+                DimensionRecordCount: count
+            }
+
+            var win = $("#fileHistoryWindow").data('kendoWindow');
+            win.content("Loading...");
+            win.center().open();
+
+            $.ajax({
+                url: "/UAS.Web/Dashboard/DimensionErrors",
+                type: "GET",
+                data: modelData,
+                traditional: true,
+                cache: false,
+                success: function (result) {
+                    win.content(result);
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    </script>
+    @(
+        Html.Kendo()
+        .Grid(Model)
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.PubCode).Title("PubCode").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(filterable => filterable.Cell(c => c.DataTextField("PubCode").Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("pubCodeFilter"));
+            columns.Bound(e => e.FileName).Title("File Name").ClientTemplate(
+            "<div style='word-break: break-all; word-wrap: break-word;'>#= FileName #</div>"
+            ).HtmlAttributes(new { @style = "width:25%; vertical-align:middle" }).Filterable(filterable => filterable.Cell(c => c.DataTextField("FileName").Operator("startswith").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)));
+            columns.Bound(e => e.FileType).Title("File Type").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(filterable => filterable.Cell(c => c.DataTextField("FileType").Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("fileTypeFilter"));
+            columns.Bound(e => e.DateImported).Format("{0:MM/dd/yyyy hh:mm:ss tt}").Title("Date Imported").Filterable(false);
+            columns.Bound(e => e.Status).Title("Status").Filterable(false).ClientTemplate(
+            "# if (Status == 'Completed') { #" +
+            "<span style='align:middle'><img src='" + Url.Content("~/Images/") + "icon-tick.gif' /></span>" +
+            "# } else { #" +
+            "<img src='" + Url.Content("~/Images/") + "icon-delete.gif' title='#= FailedReason #' />" +
+            "# } #"
+            ).HtmlAttributes(new { @style = "width:15%;text-align:center; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+            columns.Bound(e => e.RecordsTotal).Filterable(false).ClientTemplate(
+            "# if ((Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsTotal > 0) && HasDownLoadAccess) { # " +
+            "<a id='gridhref' href='" + Url.Content("~/Dashboard/ResultsDownload?processcode=#= ProcessCode #&type=all&clientid=#= ClientID #") + "'>#= RecordsTotal #</a>" +
+            "# } else { # <span>#= RecordsTotal #</span>" +
+            "# } #"
+            ).Title("# Records").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.RecordsInvalid).Filterable(false).ClientTemplate(
+            "# if ((Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsInvalid > 0) && HasDownLoadAccess) { # " +
+            "<a href='" + Url.Content("~/Dashboard/ResultsDownload?processcode=#= ProcessCode #&type=invalid&clientid=#= ClientID #") + "'>#= RecordsInvalid #</a>" +
+            "# } else { # <span>#= RecordsInvalid #</span>" +
+            "# } #"
+            ).Title("Invalids").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.RecordsTransformed).Filterable(false).ClientTemplate(
+            "# if ((Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsTransformed > 0) && HasDownLoadAccess) { # " +
+            "<a href='" + Url.Content("~/Dashboard/ResultsDownload?processcode=#= ProcessCode #&type=transformed&clientid=#= ClientID #") + "'>#= RecordsTransformed #</a>" +
+            "# } else { # <span>#= RecordsTransformed #</span>" +
+            "# } #"
+            ).Title("Transformed").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.RecordsDuplicates).Filterable(false).ClientTemplate(
+            "# if ((Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsDuplicates > 0) && HasDownLoadAccess) { # " +
+            "<a href='" + Url.Content("~/Dashboard/ResultsDownload?processcode=#= ProcessCode #&type=duplicates&clientid=#= ClientID #") + "'>#= RecordsDuplicates #</a>" +
+            "# } else { # <span>#= RecordsDuplicates #</span>" +
+            "# } #"
+            ).Title("Duplicates").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.RecordsIgnored).Filterable(false).ClientTemplate(
+            "# if ((Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsIgnored > 0) && HasDownLoadAccess) { # " +
+            "<a href='" + Url.Content("~/Dashboard/ResultsDownload?processcode=#= ProcessCode #&type=ignored&clientid=#= ClientID #") + "'>#= RecordsIgnored #</a>" +
+            "# } else { # <span>#= RecordsIgnored #</span>" +
+            "# } #"
+            ).Title("Ignored").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.RecordsProcessed).Filterable(false).ClientTemplate(
+            "# if (Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && RecordsProcessed > 0) { # " +
+            " <a onclick=\"openProcessedWindow(#= ClientID #, '#= ProcessCode #', #= RecordsProcessed #)\" href='\\#'>#= RecordsProcessed #</a> " +
+            "# } else { # <span>#= RecordsProcessed #</span>" +
+            "# } #"
+            ).Title("Processed").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+            columns.Bound(e => e.DimensionRecordCount).Filterable(false).ClientTemplate(
+            "# if (Math.round(Math.abs((new Date() - DateImported)/(86400000))) <= 14 && DimensionRecordCount > 0) { # " +
+            " <a onclick=\"openDimensionErrorWindow(#= ClientID #, '#= ProcessCode #', #= DimensionProfileCount #, #= DimensionRecordCount #)\" href='\\#'>#= DimensionRecordCount #</a> " +
+            "# } else { # <span>#= DimensionRecordCount #</span>" +
+            "# } #"
+            ).Title("Dimension Errors").HtmlAttributes(new { @style = "width:10%;text-align:right; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "text-align:right; vertical-align:middle" });
+        })
+        .Pageable()
+        .Sortable()
+        .Filterable(f => f.Extra(false)
+                          .Mode(GridFilterMode.Row | GridFilterMode.Menu)//Menu
+                          .Operators(operators => operators
+                              .ForString(str => str.Clear()
+                                .StartsWith("Starts with")
+                                .IsEqualTo("Is equal to")
+                                .IsNotEqualTo("Is not equal to")
+                            )))
+
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .ServerOperation(false)
+        .Sort(sort => sort.Add(x => x.DateImported).Descending())
+        )
+
+    )
+</div>
+
+@(Html.Kendo().Window()
+    .Name("fileHistoryWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+    .Title("Login") //set the title of the window
+    .Content(@<text>
+        Loading Data. Please Wait.
+    </text>)
+    .Draggable() //Enable dragging of the window
+    .Resizable() //Enable resizing of the window
+    .Width(400) //Set width of the window
+    .Height(250)
+    .Modal(true)
+    .Visible(false)
+    
+)

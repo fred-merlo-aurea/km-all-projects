@@ -1,0 +1,310 @@
+﻿@using KMWeb.Models.Forms
+@using KMEnums
+
+@model int
+
+@{
+    ViewBag.Title = "Edit";
+
+    var doubleOptInTabStyle = (OptInType)ViewBag.OptInType == OptInType.Single ? "display:none" : "display:inline-block";
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+
+@Html.Partial("Partials/_FormPath", Model)
+
+@if (ViewBag.FormType != Enum.GetName(typeof(FormType), FormType.AutoSubmit)) {
+    @(Html.Kendo()
+    .TabStrip()
+    .Name("Tabs")
+    .Animation(false)
+    .Navigatable(false)
+    .Events(x => x.Select("selectTab")/*.Error("onError")*/)
+    .Items(items =>
+    {
+        items.Add().Text("Forms Properties").LoadContentFrom("GetProperties", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Properties", standard = true }).Selected(true);
+        items.Add().Text("Subscriber Login").LoadContentFrom("GetSubscriberLogin", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "SubscriberLogin", standard = true });
+        items.Add().Text("CSS/Styles").LoadContentFrom("GetStyles", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Styles", standard = false });
+        items.Add().Text("Form Controls").LoadContentFrom("GetControls", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Controls", standard = false });
+        items.Add().Text("Rules").LoadContentFrom("GetRules", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Rules", standard = true });
+        items.Add().Text("Notifications").LoadContentFrom("GetNotifications", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Notifications", standard = true });
+        items.Add().Text("3rd Party Output").LoadContentFrom("GetOutput", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Output", standard = true });
+        items.Add().Text("Double Opt-In").LoadContentFrom("GetDoubleOptIn", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "DoubleOptIn", standard = true, style = doubleOptInTabStyle });
+        items.Add().Text("Summary").LoadContentFrom("GetSummary", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Summary", standard = true });
+    }))
+}
+else
+{
+    @(Html.Kendo()
+    .TabStrip()
+    .Name("Tabs")
+    .Animation(false)
+    .Navigatable(false)
+    .Events(x => x.Select("selectTab")/*.Error("onError")*/)
+    .Items(items =>
+    {
+        items.Add().Text("CSS/Styles").LoadContentFrom("GetStyles", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Styles", standard = false, style = "display:none" }); /*Hidden and unused, only to make Form Parameters to work.*/
+        items.Add().Text("Forms Properties").LoadContentFrom("GetProperties", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Properties", standard = true }).Selected(true);        
+        items.Add().Text("Form Parameters ").LoadContentFrom("GetControls", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Controls", standard = false });
+        items.Add().Text("Notifications").LoadContentFrom("GetNotifications", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Notifications", standard = true });
+        items.Add().Text("Double Opt-In").LoadContentFrom("GetDoubleOptIn", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "DoubleOptIn", standard = true, style = doubleOptInTabStyle });
+        items.Add().Text("Summary").LoadContentFrom("GetSummary", "Forms", new { id = Model, viewOnly = viewOnly })
+            .HtmlAttributes(new { tabName = "Summary", standard = true });
+    }))
+}
+
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("SaveDialog")
+        .Content(
+        @<text>
+            @Html.Partial("Partials/Modals/_Save")
+        </text>)
+        .Visible(false)
+        .Render();
+}
+
+
+<script>
+    $(function () {
+        Tabs = $("#Tabs");
+        TabStrip = Tabs.data("kendoTabStrip");
+        SaveDialog = $("#SaveDialog");
+        SaveDialogWindow = SaveDialog.data("kendoWindow");
+        Tabs.on("complete", function (e) {
+            var saved = dataSaved(e.event);
+            if (saved) {
+                var event = $.Event("saved");
+                event.saveActionDefined = e.saveActionDefined;
+                Tabs.trigger(event);
+            }
+        });
+        Tabs.on("saved", function (e) {
+            var tabInfo = getTabInfo();
+            if (tabInfo.name == "Properties") {
+                var optInType = $("[name=OptInType]:checked").val();
+                var doubleOptInTab = getTabByName("DoubleOptIn");
+                if (optInType == "@OptInType.Double") {
+                    doubleOptInTab.show();
+                } else {
+                    doubleOptInTab.hide();
+                }
+            }
+            if (!e.saveActionDefined) {
+                showMessage({
+                    type: '@MessageType.Success',
+                    autoClose: true
+                });
+            }
+        });
+        $(".navigationLink").click(function (e) {
+            var tabInfo = getTabInfo();
+            if (tabInfo.name == "Summary") {
+                return;
+            }
+            e.preventDefault();
+            SaveDialog.data("direction", "address");
+            SaveDialog.data("address", this.href);
+            var currentTab = TabStrip.select();
+            var currentIndex = currentTab.index();
+            var currentContent = TabStrip.contentElement(currentIndex);
+            var saveButton = $(currentContent).find("#Save");
+            SaveDialog.data("saveButton", saveButton);
+            @if (viewOnly)
+            {
+                <text>move();</text>
+            }
+            else
+            {
+                <text>SaveDialogWindow.center().open();</text>
+            }
+        });
+    });
+    function selectTab(e) {
+        e.preventDefault();
+        var targetIndex = $(e.item).index();
+        var tabInfo = getTabInfo();
+        if (tabInfo.name == "Summary") {
+            var tab = getTab(targetIndex);
+            moveToTab(tab);
+            return;
+        }
+        SaveDialog.data("direction", "index");
+        SaveDialog.data("index", targetIndex);
+        var currentTab = TabStrip.select();
+        var currentIndex = currentTab.index();
+        var currentContent = TabStrip.contentElement(currentIndex);
+        var saveButton = $(currentContent).find("#Save");
+        SaveDialog.data("saveButton", saveButton);
+        @if (viewOnly)
+        {
+            <text>move();</text>
+        }
+        else
+        {
+            <text>SaveDialogWindow.center().open();</text>
+        }
+    }
+    function reloadTab() {
+        TabStrip.reload(TabStrip.select());
+    }
+    function onComplete(e) {
+        var event = $.Event("complete");
+        event.event = e;
+        Tabs.trigger(event);
+    }
+    @*function onError(e) {
+        showMessage({
+            type: '@MessageType.Error',
+            text: 'Error Occurred'
+        });
+    }*@
+    function moveNext(element) {
+        SaveDialog.data("direction", "forward");
+        SaveDialog.data("saveButton", getSaveButton(element));
+        @if (viewOnly)
+        {
+            <text>move();</text>
+        }
+        else
+        {
+            <text>SaveDialogWindow.center().open();</text>
+        }
+    }
+    function movePrevious(element) {
+        SaveDialog.data("direction", "backward");
+        SaveDialog.data("saveButton", getSaveButton(element));
+        @if (viewOnly)
+        {
+            <text>move();</text>
+        }
+        else
+        {
+            <text>SaveDialogWindow.center().open();</text>
+        }
+    }
+    function getSaveButton(element) {
+        var nav = $(element).closest(".bottomnavbox");
+        return nav.find("#Save");
+    }
+    function saveAndMove() {
+        SaveDialogWindow.close();
+        saveTab(move);
+    }
+    function notSaveAndMove() {
+        SaveDialogWindow.close();
+        move();
+    }
+    function cancelMove() {
+        SaveDialogWindow.close();
+    }
+    function saveTab(onSave) {
+        var tabInfo = getTabInfo();
+        if (tabInfo.standard) {
+            Tabs.oneFirst("complete", function (e) {
+                e.saveActionDefined = true;
+                var saved = dataSaved(e.event);
+                if (saved) {
+                    Tabs.one("saved", onSave);
+                }
+            });
+            var saveButton = SaveDialog.data("saveButton");
+            saveButton.trigger("click");
+        } else {
+            switch (tabInfo.name) {
+                case 'Styles': saveStyles(onSave); break;
+                case 'Controls': saveControls(onSave); break;
+            }
+        }
+    }
+    function dataSaved(e) {
+        var header = e.getResponseHeader("Saved");
+        if (header) {
+            return Boolean.parse(header);
+        }
+        return false;
+    }
+    function getTabInfo() {
+        var tab = TabStrip.select();
+        return {
+            name: tab.attr('tabname'),
+            standard: Boolean.parse(tab.attr('standard'))
+        }
+    }
+    function move() {
+        var direction = SaveDialog.data("direction");
+        if (direction == "forward") {
+            moveNextTab();
+        }
+        else if (direction == "backward") {
+            movePreviousTab();
+        }
+        else if (direction == "index") {
+            var index = SaveDialog.data("index");
+            var tab = getTab(index);
+            moveToTab(tab);
+        }
+        else if (direction == "address") {
+            var address = SaveDialog.data("address");
+            location.href = address;
+        }
+    }
+    function moveNextTab() {
+        var index = TabStrip.select().index();
+        var nextTab = getTab(index + 1);
+        if (nextTab.is(":hidden")) //&& nextTab.index() == 6
+            nextTab = getTab(nextTab.index() + 1);
+
+        moveToTab(nextTab);
+    }
+    function movePreviousTab() {
+        var index = TabStrip.select().index();
+        var previousTab = getTab(index - 1);
+        if (previousTab.is(":hidden")) //&& nextTab.index() == 6
+            previousTab = getTab(previousTab.index() - 1);
+
+        moveToTab(previousTab);
+    }
+    function getTab(index) {
+        return TabStrip.tabGroup.children("li").eq(index);
+    }
+    function getTabByName(name) {
+        var tab;
+        $.each(TabStrip.tabGroup.children("li"), function (index, item) {
+            if ($(item).attr("tabName") == name) {
+                tab = $(item);
+            }
+        });
+        return tab;
+    }
+    function moveToTab(tab) {
+
+        var content = TabStrip.contentElement(tab.index());
+        $(content).html(String.empty);
+        TabStrip.activateTab(tab);
+    }
+</script>
+
+@Html.Partial("Partials/Modals/_AddField")
+@Html.Partial("Partials/Modals/_GroupExplorer")
+@Html.Partial("Partials/Modals/_ChangeGroupManager")
+
+<div id="editorContainer"></div>

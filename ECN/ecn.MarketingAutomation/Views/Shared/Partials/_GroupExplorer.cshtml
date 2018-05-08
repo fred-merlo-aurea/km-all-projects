@@ -1,0 +1,203 @@
+﻿@using KMEnums
+
+<script>
+    function GroupExplorer(options) {
+        this.select = options.select;
+        this.open = function () {
+            var window = $("#GroupExplorer").data("kendoWindow");
+            window.center().open();
+        };
+        this.close = function () {
+            var window = $("#GroupExplorer").data("kendoWindow");
+            window.close();
+        };
+    }
+    var explorer;
+    function groupExplorer(select) {
+        explorer = new GroupExplorer({
+            select: select
+        });
+        explorer.open();
+    }
+    function selectGroup(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var group = this.dataItem(item);
+        e.sender.clearSelection();
+        var event = $.Event("GroupSelected");
+        event.sender = explorer;
+        event.group = group;
+        $("#GroupExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+    }
+    function onGroupExplorerOpen() {
+        var tree = $("#Customers").data("kendoTreeView");
+        var grid = $("#Groups").data("kendoGrid");
+        tree.dataSource.read();
+        grid.dataSource.data([]);
+        $("#openAddGroupButton").prop('disabled', true);
+    }
+    function onGroupExplorerClose() {
+        $(".k-overlay").remove();
+    }
+    function openAddGroupWindow() {
+        var tree = $("#Customers").data("kendoTreeView");
+        var grid = $("#Groups").data("kendoGrid");
+        var selected = tree.select();
+        if (selected.length != 0) {
+            var data = tree.dataItem(selected);
+            var options = {
+                customerId: data.CustomerID,
+                folderId: data.FolderID,
+                groupAdded: function (group) {
+                    grid.dataSource.read({
+                        CustomerId: data.CustomerID,
+                        FolderId: data.FolderID
+                    });
+                }
+            }
+            openAddGroup(options);
+        }
+    }
+</script>
+
+@{ 
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("Group Explorer")
+                       .Name("GroupExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onGroupExplorerOpen")
+                                    .Close("onGroupExplorerClose"))
+                       .Visible(false);
+
+    explorer.Render();
+}
+
+@Html.Partial("Partials/_AddGroup")
+
+@helper Content()
+{
+    <div class="wrapper modal modalgroupexplorer">
+        <fieldset title="Group Explorer">
+            <legend>Group Explorer</legend>
+            <div class="customerlist">
+                <fieldset title="Customer/Folder ">
+                    <legend>Customer/Folder</legend>
+                    <div id="Customers"></div>
+                </fieldset>
+            </div>
+            <div class="grouplist">
+                <fieldset title="Group">
+                    <legend>Group</legend>
+                    @if(KMPlatform.BusinessLogic.User.HasAccess(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser, KMPlatform.Enums.Services.EMAILMARKETING, KMPlatform.Enums.ServiceFeatures.Groups, KMPlatform.Enums.Access.Edit))
+                    {
+                    <button class="btn k-button" onclick="openAddGroupWindow()" type="button" id="openAddGroupButton">Add New Group</button>
+                    }
+                    <div id="Groups"></div>
+                    <div id="NoGroups">No Groups</div>
+                </fieldset>
+            </div>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var Folders = {
+                    schema: {
+                        model: {
+                            id: "FolderID"
+                        }
+                    },
+                    transport: {
+                        read: {
+                            url: '@Url.Action("GetFolders", "Web")',
+                        data: function (data) {
+                            data.CustomerID = expandedItem.CustomerID;
+                        }
+                    }
+                }
+            };
+            var Customers = new kendo.data.HierarchicalDataSource({
+                transport: {
+                    read: {
+                        url: '@Url.Action("GetCustomers", "Web")'
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "CustomerID",
+                        children: Folders
+                    }
+                }
+            });
+            $("#Customers").kendoTreeView({
+                dataSource: Customers,
+                dataTextField: ["CustomerName", "FolderName"],
+                expand: function (e) {
+                    expandedItem = this.dataItem(e.node);
+                },
+                select: function (e) {
+                    $("#openAddGroupButton").prop('disabled', false);
+                    var grid = $("#Groups").data("kendoGrid");
+                    var dataItem = this.dataItem(e.node);
+                    grid.dataSource.read({
+                        CustomerId: dataItem.CustomerID,
+                        FolderId: dataItem.FolderID
+                    }).then(function () {
+                        var dataSource = grid.dataSource;
+                        var data = dataSource.data();
+                        if (data.length > 0) {
+                            dataSource.page(1);
+                        }
+                    });
+                },
+                autoBind: false
+            });
+            $("#Groups").kendoGrid({
+                columns: [
+                    { field: "GroupName" },
+                    { template: "<i class='km-icon icon-kmplus-circled-1'></i>" }
+                ],
+                selectable: "row",
+                change: selectGroup,
+                dataSource: {
+                    transport: {
+                        read: '@Url.Action("GetGroups", "Web")'
+                    },
+                    schema: {
+                        model: { id: "GroupID" }
+                    },
+                    pageSize: 10
+                },
+                pageable: {
+                    pageSizes: [10, 15, 20],
+                    buttonCount: 5
+                },
+                dataBound: function (e) {
+                    if (e.sender.dataSource.total() != 0) {
+                        $("#Groups").show();
+                        $("#NoGroups").hide();
+                    }
+                    else {
+                        $("#Groups").hide();
+                        $("#NoGroups").show();
+                    }
+                },
+                autoBind: false,
+                sortable: true
+            });
+            $("#GroupExplorer").on("GroupSelected", function (e) {
+                explorer.select(e);
+            });
+        });
+    </script>
+}
+
+

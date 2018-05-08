@@ -1,0 +1,136 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model RuleModel
+
+@{
+    var ruleId = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var currentRuleId = ruleId.Replace("Rules[", "").Replace("]", "");
+    var typeRule = Model.Type.ToString();
+    var formType = ViewContext.Controller.ViewBag.FormType;
+    var ShowNonQual = !Model.IsNonQualifyRule ? "display:none;" : "width:100%;display:block;";
+    var OverwrDP = !Model.IsOverWriteDataPost ? "display:none;" : "width:100%;display:block;";
+    var hideOverWriteOnLoad = Model.Type == RuleTypes.Form && Model.ResultOnSubmit == ResultType.Message && Model.IsSuspendPostDB ? "display:none;" : "width:100%;display:block;";
+}
+@Html.HiddenFor(x => x.Id)
+
+              <div class="rulesorderbox  float-right"> <span>Rule Order: </span>
+                      
+    @(Html.Kendo().Button().Content("Up <span class=\"k-icon k-i-arrow-60-up\"></span>").Name(FormatID(ruleId) + "_Up").HtmlAttributes(new { type = "button", @class="UpRuleOrder" }) )
+    @(Html.Kendo().Button().Content("Down <span class=\"k-icon k-i-arrow-60-down\"></span>").Name(FormatID(ruleId) + "_Down").HtmlAttributes(new { type = "button" , @class="DownRuleOrder"}) )
+    
+   
+    </div>
+<div class="rulesactionsbox float-right">
+    @(Html.Kendo().Button().Content("Copy Rule").Name(FormatID(ruleId) + "_CopyRule").HtmlAttributes(new { type = "button", @class = "CopyRule" }))
+    @(Html.Kendo().Button().Content("Delete Rule").Name(FormatID(ruleId) + "_DeleteRule").HtmlAttributes(new { type = "button", @class = "DeleteRule" }))
+</div>
+@if ((formType == Enum.GetName(typeof(FormType), FormType.Subscription)) && (typeRule == RuleTypes.Form.ToString()))
+{
+    <div class="formitem formiteminline" style="float: right; width: 47%;">
+        <div class="conditionsbox" style="width: 775px">
+            <div class="formitem formiteminline" id="@String.Format(FormatID(ruleId) + "_NonQRuleOnSubmit")" style="width:100%;display: block;">
+                <label style="width: 200px; display: inline-block;">Is this a Non - Qualifying Rule?</label>
+                @Html.Kendo().RadioButtonFor(x => x.IsNonQualifyRule).Label("Yes").Value(true).Checked(Model.IsNonQualifyRule).HtmlAttributes(new { @class = "IsNonQualifyRule" })
+                @Html.Kendo().RadioButtonFor(x => x.IsNonQualifyRule).Label("No").Value(false).Checked(!Model.IsNonQualifyRule).HtmlAttributes(new { @class = "IsNonQualifyRule" })
+            </div>
+            <div class="formitem formiteminline" id="@String.Format(FormatID(ruleId) + "_SuspendPostDB")" style="@ShowNonQual">
+                <label style="width: 200px; display: inline-block;">Suspend posting to database?</label>
+                @Html.Kendo().RadioButtonFor(x => x.IsSuspendPostDB).Label("Yes").Value(true).Checked(Model.IsSuspendPostDB).HtmlAttributes(new { @class = "IsSuspendPostDB" })
+                @Html.Kendo().RadioButtonFor(x => x.IsSuspendPostDB).Label("No").Value(false).Checked(!Model.IsSuspendPostDB).HtmlAttributes(new { @class = "IsSuspendPostDB" })
+            </div>
+            <div class="formitem formiteminline" id="@String.Format(FormatID(ruleId) + "_OverWriteDataPost")" style="@hideOverWriteOnLoad">
+                <label style="width: 200px; display: inline-block;">Overwrite data posting?</label>
+                @Html.Kendo().RadioButtonFor(x => x.IsOverWriteDataPost).Label("Yes").Value(true).Checked(Model.IsOverWriteDataPost).HtmlAttributes(new { @class = "IsOverWriteDataPost" })
+                @Html.Kendo().RadioButtonFor(x => x.IsOverWriteDataPost).Label("No").Value(false).Checked(!Model.IsOverWriteDataPost).HtmlAttributes(new { @class = "IsOverWriteDataPost" })
+                @*@Html.Kendo().RadioButtonFor(x => x.IsOverWriteDataPost).Label("No").Value(false).Checked(!Model.IsOverWriteDataPost).HtmlAttributes(new { @name = "Rules[" + ruleId + "].IsOverWriteDataPost", @class = "IsOverWriteDataPost" })*@
+
+                <div id="@String.Format(FormatID(ruleId) + "_OverWriteDataPost_True")" style="@OverwrDP">
+                    @(Html.Kendo().Button().Content("Add <i class=\"km-icon icon-kmplus-circled-1\"></i>").Name(FormatID(ruleId) + "__OverWriteDataPost__Add").HtmlAttributes(new { type = "button", @class = "OverWriteDataAdd btn  btn-blue2  float-left" }))
+                    <div class="conditionslist">
+                        <ul class="inline title" id="OvertitleParameters">
+                            <li class="name">Form Field</li>
+                            <li class="fld">Value</li>
+                            <li class="comp">Actions</li>
+                        </ul>
+                        <div id="@String.Format(FormatID(ruleId) + "_OverwriteListOfParameters")">
+                            @if (Model.OverwritePostValue != null)
+                            {
+                                foreach (var parameter in Model.OverwritePostValue.Select((OverwritePostValue, Index) => new { OverwritePostValue, Index }))
+                                {
+                                    var internalId = string.Format("{0}.OverwritePostValue[{1}]", ruleId, parameter.Index);
+                                    var indexid = string.Format("{0}.OverwritePostValue.Index", ruleId);
+                                    var divid = @String.Format(FormatID(ruleId) + "OverwritePostValue");
+                                    <div id="@String.Format(divid+"_{0}", parameter.Index)" name=@String.Format(internalId + ".OverwriteDataValue") class="class_row_formruleoverwritedata">
+                                        <input type="hidden" name=@String.Format(indexid) value="@parameter.Index" />
+                                        @Html.Partial("Partials/FormRules/_OverwriteData", parameter.OverwritePostValue, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = internalId } })
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id ="@String.Format(FormatID(ruleId) + "_GroupConditions")">
+
+    @foreach (var groupItem in Model.ConditionGroup.Select((ConditionGroup, Index) => new { Index, ConditionGroup }))
+    {
+        var conditionGroupId = string.Format(ruleId + ".ConditionGroup[{0}]", groupItem.Index);
+        var uid = Guid.NewGuid().ToString().Replace("-", "");
+
+        if (groupItem.ConditionGroup != Model.ConditionGroup.First())
+        {
+        <div class="formbox">
+            <div class="formitem formiteminline" id="@String.Format(FormatID(conditionGroupId) + "_GroupConnector")" >
+                <label>
+                    Group Condition Connector
+                </label>
+                @{
+                    int dDindex = 0;
+                    int typesIndex = 0;
+                }
+                @(Html.Kendo()
+                    .DropDownListFor(x => x.MainConditionGroup.LogicGroup)
+                    .Items(items =>
+                    {
+                        foreach (ConditionType type in Enum.GetValues(typeof(ConditionType)))
+                        {
+                            items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == Model.MainConditionGroup.LogicGroup);
+                            if (type == Model.MainConditionGroup.LogicGroup)
+                            {
+                                dDindex = typesIndex;
+                            }
+                            typesIndex++;
+                        }
+                    })
+                    .Events(e => e.Select(@<text>function(e){ changeConditionGroup('@ruleId', this, e); }</text>))
+                    .HtmlAttributes(new { id = FormatID(ruleId) + "_LogicGroup" + "_" + uid, @class = String.Format(FormatID(ruleId) + "_LogicGroup") })
+                    .SelectedIndex(dDindex)
+                )
+            </div>
+        </div>
+        }
+       
+                              
+        <div class=" @String.Format(FormatID(ruleId) + "_ConditionGroupRowBox")" id ="@String.Format(FormatID(ruleId) + "_ConditionGroup_{0}_" + "_ConditionGroupRowBox", @groupItem.Index)">
+            <div class="ruleitem">
+             
+                <input type="hidden" value="@groupItem.Index" name="@String.Format("{0}.ConditionGroup.Index", ruleId)" />
+                @Html.Partial("Partials/FormRules/_ConditionGroup", groupItem.ConditionGroup,
+                new ViewDataDictionary
+                {
+                    TemplateInfo = new TemplateInfo { HtmlFieldPrefix = conditionGroupId }
+                })
+            </div>
+
+        </div>   
+    }
+</div>
+
+
+
+
+

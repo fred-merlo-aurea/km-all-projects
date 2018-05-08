@@ -1,0 +1,363 @@
+﻿@model UAS.Web.Models.UAD.Filter.SaveFilterViewModel
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;" >
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Save Filter
+            </td>
+        </tr>
+        <tr>
+            <td><br /></td>
+        </tr>
+        <tr>
+            <td>
+                <div id="dvSaveErrorNotification" style="margin-left:20px;color:red;" class="displayNone">
+                    <span id="errorOnSaveText" style="color:red;"></span>
+                </div>
+            </td>
+        </tr>
+        <input type="hidden" id="hdnViewType"   value="@Model.viewType" />
+        <input type="hidden" id="hdnBrandID"    value="@Model.BrandID" />
+        <input type="hidden" id="hdnPubID"      value="@Model.PubID" />
+        <input type="hidden" id="hdnFilterIDS"  value="@Model.FilterIDs" />
+        <input type="hidden" id="hdnMode"       value="@Model.Mode" />
+        <input type="hidden" id="hdnFilterID" value="0" />
+        <tr id="pnlSaveNewExisting">
+            <td>
+               
+                <table width="90%" style="margin:0 5%;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="radio" name="rbtnSaveToNewExisting" id="rbtnSaveNew" onchange="ToggleOptions(this)" />
+                                <label for="rbtnSaveNew">New</label>
+                            </td>
+                            <td>
+                                <input type="radio" name="rbtnSaveToNewExisting" id="rbtnExisting" onchange="ToggleOptions(this)" />
+                                <label for="rbtnSaveNew">Existing</label>
+                            </td>
+                        </tr>
+                        @if (!Model.IsCirc)
+                        {
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" id="chkLockedForSharing" />
+                                    <label for="chkLockedForSharing">&nbsp;Locked for sharing</label>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2">
+                                <table width="100%" id="tblNewFilterDetails">
+                                    <tr>
+                                        <td align="left"><b>Filter Name:</b></td>
+                                        <td align="left">
+                                            <input type="text" class="k-textbox" id="txtSaveFilterName" />
+
+                                        </td>
+                                        <td>
+                                            <button id="btnSearchExistingFilter" class="displayNone" onclick="OpneExistingFilters()" style="width:28px;height:28px;background-color:orange;margin:0px;padding:0px;border-radius:5px;text-align:center;border:1px solid orange;">
+                                                <span class="k-icon k-i-zoom k-i-search"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top"><b>Filter Category</b></td>
+                                        <td valign="top">
+                                            <input type="text" class="k-textbox" id="txtFilterCategory" readonly/>
+                                            <span class="k-icon k-i-plus-circle" data-expand="true" style="color:orange;" id="expandTree"></span>
+                                            <input type="hidden" id="hdnFilterCategoryID" value="0" />
+
+                                        </td>
+                                        <td>
+                                            @(Html.Kendo().TreeView()
+                                              .Name("SaveFilterCategoryTree")
+                                              .BindTo(Model.FilterCategoryTree)
+                                              .ExpandAll(false)
+                                            )
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Notes:</b></td>
+                                        <td align="left">
+                                            <input type="text" class="k-textbox" id="txtFilterNotes" />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                       @if (!Model.IsCirc)
+                       {
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" id="chkAddToSalesView" />
+                                    <label for="chkAddToSalesView">&nbsp; <b>Add to Sales View</b></label>
+                                </td>
+                            </tr>
+                            <tr id="tblSalesViewlQuestion" class="displayNone">
+                                <td colspan="2">
+                                    <table width="100%">
+                                        <tr>
+                                            <td><b>Question Name</b></td>
+                                            <td>
+                                                <input type="text" class="k-textbox" id="txtQuestionName" />
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top"><b>Question Category</b></td>
+                                            <td valign="top">
+                                                <input type="text" class="k-textbox" id="txtQuestionCategory" readonly/>
+                                                <input type="hidden" id="hdnQuestionCategoryID" />
+
+                                            </td>
+                                            <td>
+                                                @(Html.Kendo().TreeView()
+                                              .Name("SaveQuestionCategoryTree")
+                                              .BindTo(Model.QuestionCategoryTree)
+                                              .ExpandAll(false)
+                                                )
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input type="button" name="btnSaveFilter" value="Save" onclick="SaveFilter()" class="k-button" style="width:60px;" />
+                                <input type="button" name="btnCancelSave" onclick="CloseWindow('SaveFilterPanelPopUpWindow')" value="Cancel" class="k-button" style="width:60px;" />
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+
+        $("#tblSalesViewlQuestion").hide();
+
+
+        $('#chkAddToSalesView').on('click', function () {
+        if ( $(this).is(':checked') ) {
+            $("#tblSalesViewlQuestion").show();
+        } 
+        else {
+            $("#tblSalesViewlQuestion").hide();
+        }
+        });
+
+        $('#expandTree').on('click', function () {
+            var treeView = $("#SaveFilterCategoryTree").data("kendoTreeView");
+            var dataExpand = $('#expandTree').data("expand");
+            if (dataExpand) {
+                treeView.expand(".k-item");
+                $('#expandTree').removeClass("k-i-plus-circle").addClass("k-i-minus-circle");
+                $('#expandTree').data("expand", false);
+            } else {
+                
+                treeView.collapse(".k-item");
+                $('#expandTree').removeClass("k-i-minus-circle").addClass("k-i-plus-circle");
+                $('#expandTree').data("expand", "true");
+            }
+        });
+        
+        //Event Fires On selection change of Tree
+        $('#SaveFilterCategoryTree li.k-item').hover(function () {
+            var id = $(this).attr('data-id');
+            
+            $(this).children('div').children('span.k-in').attr('data-id', id);
+        });
+        $('#SaveFilterCategoryTree li.k-item div span.k-in').click(function () {
+            $("#txtFilterCategory").val($(this).text());
+            $("#hdnFilterCategoryID").val(parseInt($(this).attr('data-id')));
+            var treeView = $("#SaveFilterCategoryTree").data("kendoTreeView");
+            treeView.collapse(".k-item");
+            $('#expandTree').removeClass("k-i-minus-circle").addClass("k-i-plus-circle");
+            $('#expandTree').data("expand", "true");
+        });
+        $('#SaveQuestionCategoryTree li.k-item').hover(function () {
+            var id = $(this).attr('data-id');
+            $(this).children('div').children('span.k-in').attr('data-id', id);
+        });
+        $('#SaveQuestionCategoryTree li.k-item div span.k-in').click(function () {
+            $("#txtQuestionCategory").val($(this).text());
+            $("#hdnQuestionCategoryID").val(parseInt($(this).attr('data-id')));
+            var treeView = $("#SaveQuestionCategoryTree").data("kendoTreeView");
+            treeView.collapse(".k-item");
+        });
+
+    })
+    function ToggleOptions(ele) {
+        if (ele.id == "rbtnExisting") {
+            $("#btnSearchExistingFilter").show();
+            $("#txtSaveFilterName").prop("disabled", true);
+            $("#chkLockedForSharing").prop("disabled", true);
+            $("#chkAddToSalesView").prop("disabled", true);
+            
+        } else {
+            $("#btnSearchExistingFilter").hide();
+            $("#txtSaveFilterName").prop("disabled", false);
+            $("#chkLockedForSharing").prop("disabled", false);
+            $("#chkAddToSalesView").prop("disabled", false);
+        }
+    }
+    function OpneExistingFilters() {
+
+        var saveModel = {
+            viewType: "ProductView",
+            IsCirc: true,
+            PubID: $("#SelectedProductID").val(),
+            FilterIDs: "",
+            SourcePage: 'SaveFilterPanel'
+        }
+        GetSavedFiltersPanel(saveModel); //in _filter.chtml
+    }
+
+    function SaveFilter() {
+        var filter = getFilter();
+        var errormessage = "";
+        var saveModel = {
+             IsNew: false,
+             IsLockedForSharing: false,
+             IsAddedToSalesView :false,
+             PubID: $("#hdnPubID").val(),
+             FilterIDs :$("#hdnFilterIDS").val()?$("#hdnFilterIDS").val():'1',
+             FilterName: $("#txtSaveFilterName").val(),
+             FilterCategoryID: $("#hdnFilterCategoryID").val(),
+             QuestionName: $("#txtQuestionName").val(),
+             QuestionCategoryID :"",
+             BrandID: $("#hdnBrandID").val(),
+             Mode: $("#hdnMode").val(),
+             FilterID: 0,
+             NewExisting:"",
+             viewType: $("#hdnViewType").val(),
+             CurrentFilter: filter,
+             Notes: $("#txtFilterNotes").val()
+        }
+        //New or Existing
+        var checkedID = $('input[type=radio][name=rbtnSaveToNewExisting]:checked').attr('id');
+        var errorflag = false;
+        if (checkedID == "rbtnExisting") {
+            saveModel.IsNew = false;
+            saveModel.NewExisting = "Existing";
+            saveModel.Mode = "AddExisting";
+            saveModel.FilterID = $("#hdnFilterID").val();
+
+        } else if (checkedID == "rbtnSaveNew") {
+            saveModel.IsNew = true;
+            saveModel.NewExisting = "New";
+            saveModel.Mode == "AddNew";
+
+            //Locked for sharing
+            if ($("#chkLockedForSharing").is(':checked')) {
+                saveModel.IsLockedForSharing = true;
+            } else {
+                saveModel.IsLockedForSharing = false;
+            }
+
+            //Added to Sales View
+            if ($('#chkAddToSalesView').is(':checked')) {
+                saveModel.IsAddedToSalesView = true;
+                if (!saveModel.QuestionName) {
+                    //Please provide valid Question Name.
+                    errormessage = '<li>Please provide valid Question Name.</li>';
+                    errorflag = true;
+                    
+                }
+
+                if ($("#hdnQuestionCategoryID").val()) {
+                    saveModel.QuestionCategoryID = $("#hdnQuestionCategoryID").val();
+                } else {
+                    //Please select Question Category.
+                    errormessage = errormessage+'<li>Please select Question Category.</li>';
+                    errorflag = true;
+                   
+                }
+
+            } else {
+                saveModel.QuestionCategoryID = 0;
+                saveModel.QuestionName = "";
+                saveModel.IsAddedToSalesView = false;
+            }
+        } else {
+            errormessage = errormessage + '<li>Plese select New or Existing option.</li>';
+            errorflag = true;
+           
+        }
+        //AddNew or AddExisting
+        if (saveModel.Mode == "AddNew" || saveModel.Mode == "Edit") {
+            if (!saveModel.FilterName) {
+                //"Please enter a valid filter name."
+                errormessage = errormessage + '<li>Please enter a valid filter name.</li>';
+                errorflag = true;
+                
+            }
+            if (saveModel.Mode == "Edit") {
+                saveModel.FilterID = $("#hdnFilterID").val();
+            }
+
+            //Check if Filtername Already Exist-Business Rule
+        }
+        else {
+            if (!saveModel.FilterID) {
+                //"Please select filter."
+                errormessage = errormessage + '<li>Please select filter.</li>';
+                errorflag = true;
+                
+            } else {
+                saveModel.FilterID = $("#hdnFilterID").val();
+            }
+
+        }
+        if ($("#txtFilterNotes").val()) {
+
+        } else {
+            errormessage = errormessage + '<li>Please provide Notes.</li>';
+            errorflag = true;
+        }
+        if (errorflag == true) {
+            $("#errorOnSaveText").html("<ul>" + errormessage + "</ul>");
+            $("#errorOnSaveText").show();
+            $("#dvSaveErrorNotification").show();
+            return false;
+        } else {
+            $("#errorOnSaveText").html('')
+            $("#errorOnSaveText").hide();
+            $("#dvSaveErrorNotification").hide();
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Filter/SaveFilter',
+            data: JSON.stringify({ 'saveModel': saveModel }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response.error) {
+                    $("#errorOnSaveText").html(response.errormessage);
+                    $("#errorOnSaveText").show();
+                    $("#dvSaveErrorNotification").show();
+                }
+                else {
+                    var window = $("#SaveFilterPanelPopUpWindow");
+                    var kendoWindow = window.data('kendoWindow');
+                    kendoWindow.content('');
+                    CloseWindow('SaveFilterPanelPopUpWindow');
+                   
+                }
+
+
+            },
+            error: function (response) {
+
+                console.log(response)
+
+
+            }
+        });
+    }
+</script>

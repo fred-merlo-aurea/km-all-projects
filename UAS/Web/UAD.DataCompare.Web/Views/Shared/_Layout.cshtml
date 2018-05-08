@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    	<link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/kendo/2015.1.429/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/fonts/frontello/css/kmform.css")" rel="stylesheet" type="text/css" />
+    	<link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic' rel='stylesheet' type='text/css'>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/ecn.communicator/MasterPages/ECN_MainMenu.css" />
+    <link rel="stylesheet" href="/ecn.communicator/MasterPages/ECN_Controls.css" />
+    	<link href="@Url.Content("~/Content/kendo/2017.2.504/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+	<script src="@Url.Content("~/Scripts/kendo/2017.2.504/jquery.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2017.2.504/jszip.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2017.2.504/kendo.all.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2017.2.504/kendo.aspnetmvc.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/clipboard.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/extensions.js")"></script>
+    <script src="@Url.Content("~/Scripts/main.js")"></script>
+    <script src="@Url.Content("~/Scripts/editor.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.blockUI.js")"></script>
+    <script src="@Url.Content("~/Infrastructure/ActionMenu.js")"></script>
+    <style>
+        .k-widget [role='gridcell'] {
+            overflow: visible;
+        }
+    </style>
+</head>
+<body>
+    @{
+        ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+    }
+
+    @{
+        string hlMAF = string.Empty;
+        string hlWQT = string.Empty;
+
+        if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.UAD))
+        {
+            KMPlatform.Entity.ClientGroup cg = (new KMPlatform.BusinessLogic.ClientGroup()).Select(UserSession.CurrentUser.CurrentClientGroup.ClientGroupID);
+
+            if (!String.IsNullOrEmpty(cg.UADUrl))
+            {
+                KM.Common.Entity.Encryption ec = KM.Common.Entity.Encryption.GetCurrentByApplicationID(int.Parse(System.Configuration.ConfigurationManager.AppSettings["KMCommon_Application"]));
+                string postbackUrl = cg.UADUrl;
+                string queryString = string.Format("{0}|&|{1}|&|{2}|&|{3}|&|{4}|&|{5}|&|{6}|&|{7}", KM.Common.ECNParameterTypes.UserName, UserSession.CurrentUser.UserName, KM.Common.ECNParameterTypes.Password, UserSession.CurrentUser.Password, "ClientGroupID", UserSession.ClientGroupID, "ClientID", UserSession.CurrentUser.CurrentClient.ClientID);
+                string queryStringHash = System.Web.HttpUtility.UrlEncode(KM.Common.Encryption.Base64Encrypt(queryString, ec));
+                hlMAF = string.Concat(postbackUrl, "?", queryStringHash);
+            }
+            else
+            {
+                hlMAF = HttpContext.Current.Request.Url.AbsoluteUri;
+            }
+        }
+
+
+        if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.PRT))
+        {
+            KM.Common.Entity.Encryption ecWqt = KM.Common.Entity.Encryption.GetCurrentByApplicationID(int.Parse(System.Configuration.ConfigurationManager.AppSettings["KMCommon_Application"]));
+            string postbackUrlWqt = System.Configuration.ConfigurationManager.AppSettings["WQTUrl"];
+            string queryStringWqt = string.Format("{0}|&|{1}|&|{2}|&|{3}|&|{4}|&|{5}|&|{6}|&|{7}", KM.Common.ECNParameterTypes.UserName, UserSession.CurrentUser.UserName, KM.Common.ECNParameterTypes.Password, UserSession.CurrentUser.Password, "ClientGroupID", UserSession.ClientGroupID, "ClientID", UserSession.CurrentUser.CurrentClient.ClientID);
+            string queryStringHashWqt = System.Web.HttpUtility.UrlEncode(KM.Common.Encryption.Base64Encrypt(queryStringWqt, ecWqt));
+
+            hlWQT = string.Concat(postbackUrlWqt, "?", queryStringHashWqt);
+        }
+    }
+
+    <header>
+        <div class="headerbox">
+            <div class="toplogo" style="width:100%;">
+                <ul class="ECN-AppLinks">
+                    <li>
+                        <table cellpadding="0" cellspacing="0">
+                            <tr valign="top">
+                                <td style="height:80px;">
+                                    <img src="/ecn.domaintracking/Content/Images/kmlogo.jpg" />
+                                </td>
+                            </tr>
+                        </table>
+                        <ul>
+                            <li>
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td colspan="2">
+                                            <table cellspacing="1" cellpadding="1" width="100%">
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.EMAILMARKETING))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-email.png" style="width:35px;height:25px;">
+                                                        </td>
+                                                        <td align="left" width="240px">
+                                                            <a href="/ecn.communicator/main/default.aspx" class="ECN-Label">Email Marketing</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.UAD))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-audience.png" style="width:31px;height:31px;">
+                                                        </td>
+                                                        <td align="left" width="240px">
+                                                            <a href=@hlMAF class="ECN-Label">Unified Audience Database</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.SURVEY))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-surveys.png" style="width:30px;height:30px;">
+                                                        </td>
+                                                        <td align="left" width="100px">
+                                                            <a href="/ecn.collector/main/survey/" class="ECN-Label">Surveys</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.PRT))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-wqt.png" style="width:30px;height:30px;">
+                                                        </td>
+                                                        <td align="left" width="100px">
+                                                            <a href=@hlWQT class="ECN-Label">Product Reporting</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.DIGITALEDITION))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-digitaleditions.png" style="width:30px;height:30px;">
+                                                        </td>
+                                                        <td align="left" width="100px">
+                                                            <a href="/ecn.publisher/main/edition/default.aspx" class="ECN-Label">Digital Editions</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.DOMAINTRACKING))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-domaintracking.jpg" style="width:30px;height:30px;" />
+                                                        </td>
+                                                        <td align="left" width="100px">
+                                                            <a href="/ecn.domaintracking/Main/Index/" class="ECN-Label">Domain Tracking</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.FORMSDESIGNER))
+                                                {
+                                                    <tr>
+                                                        <td width="40px" style="padding-left:10px">
+                                                            <img src="/ecn.communicator/images/ecn-icon-home-forms.png" style="width:31px;height:31px;">
+                                                        </td>
+                                                        <td align="left" width="100px">
+                                                            <a href="http://eforms.kmpsgroup.com/jointformssetup/" class="ECN-Label">Form Designer</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="toprigthbanner">
+                    <a href="http://www.kmlearningcenter.com/" class="tbanner" tabindex="KM Learning center"></a>
+                </div>
+            </div>
+            <section class="userinfobanner">
+                <div class="uinfo">
+                    @Html.Action("_ClientDropDown", "Home", new { cdd = new UAD.DataCompare.Web.Models.ClientDropDown() })
+                </div>
+            </section>
+        </div>
+        <nav>
+            <ul id="menu" style="float:left;margin:0; padding-left:10px;">
+                <li><a href="/ecn.Accounts/Main" class="navigationLink">Platform Home</a></li>
+            </ul>
+            @if (KM.Platform.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.UAD))
+            {
+                <ul id="menu" style="float:left;margin:0; padding-left:10px;">
+                    <li>@Html.ActionLink("Data Compare Home", "Index", "Datacompare", null, new { @class = "navigationLink" })</li>
+                </ul>
+                 <ul id="menu" style="float:left;margin:0; padding-left:10px;">
+                    <li>@Html.ActionLink("View Downloads", "Viewcomparision", "Datacompare", null, new { @class = "navigationLink" })</li>
+                </ul>
+                <ul id="menu" style="float:left;margin:0; padding-left:10px;">
+                    <li>@Html.ActionLink("View Pricing", "ViewPricing", "Datacompare", null, new { @class = "navigationLink" })</li>
+                </ul>
+            }
+            <ul id="menu" style="float:right; margin:0;">
+                <li>@Html.ActionLink("Logout", "Logout", "Home", null, new { @class = "navigationLink" })</li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </main>
+    @RenderSection("Scripts", false/*required*/)
+    <footer>
+        <nav class="footernav"><a href="http://www.knowledgemarketing.com/privacy-policy">Privacy Policy</a> | <a href="http://www.knowledgemarketing.com/anti-spam-policy">Anti-Spam Policy</a> | <a href="http://www.knowledgemarketing.com/index.php/about-km/contact-us/">Contact Us</a></nav>
+        <span class="copyrights">Copyright© @DateTime.Now.Year.ToString() Knowledge Marketing, Inc., All Rights Reserved.</span>
+    </footer>
+    <div class="loaderbox" style="display: none; z-index: 100000">
+        <span class="icon-kmspin6 animate-spin"></span><span>Loading...</span>
+    </div>
+</body>
+
+</html>

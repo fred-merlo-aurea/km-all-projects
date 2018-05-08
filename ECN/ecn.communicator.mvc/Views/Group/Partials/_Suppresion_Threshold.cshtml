@@ -1,0 +1,137 @@
+﻿@using KMEnums
+@{
+    List<ECN_Framework_Entities.Communicator.ChannelNoThresholdList> channelNoThresholdList = new List<ECN_Framework_Entities.Communicator.ChannelNoThresholdList>();
+    //var CurrentUser = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser;
+
+    //channelNoThresholdList = ECN_Framework_BusinessLayer.Communicator.ChannelNoThresholdList.GetByBaseChannelID(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentBaseChannel.BaseChannelID, CurrentUser);
+    //channelNoThresholdList = channelNoThresholdList.OrderBy(o => o.EmailAddress).ToList();
+}
+<style>
+    #divEmailsAddedNoThresholdReport table tr td:nth-child(2) {
+        padding: 0px;
+        text-align: center;
+    }
+</style>
+<script>
+    @*function AddNoThresholdSuppresion() {
+        if ($('#AddEmailsNoThreshold').val() == "") {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Please enter a value for Emails'
+            });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddNoThresholdSuppression", "Group")",
+                data: { emailAddressToAdd: $('#AddEmailsNoThreshold').val() },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#divEmailsAddedNoThresholdReport").html('<h3>RESULTS:</h3>' + response[1]);
+                        $("#channelNoThresholdGridDiv").html(response[2]);
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        }
+    }*@
+    function DeleteNoThresholdSuppression(id) {
+        var win = $("#DeleteNoThresholdSuppression");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function SearchNoThresholdSuppresion() {
+        NoT_Search();
+    }
+    function ExportNoThresholdSuppresion() {
+
+        window.location = '@Url.Content("~/Group/ExportNoThresholdSuppresion")'
+                + "?SearchNoThreshold=" + $('#SearchNoThresholdTxt').val();
+
+    }
+
+    function ShowAddThresholdSuppression() {
+        var win = $("#AddThresholdSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add No Threshold Suppression');
+        $("#AddThresholdSuppressionDiv").load('@Url.Action("LoadAddThresholdSuppression")', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+</script>
+
+<table style="width:100%; margin-top:0px;">
+    <tr>
+        <td style="float:left; padding-right: 0px;">
+            @Html.Kendo().Button().Name("ExportEmails").Content("Download").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ExportNoThresholdSuppresion()" })
+        </td>
+        <td style="float:right; padding-right: 0px;">
+            @Html.Kendo().Button().Name("AddNoT").Content("Add Emails<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ShowAddThresholdSuppression()" })
+        </td>
+    </tr>
+</table>
+<div style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Search Email
+                @Html.TextBox("SearchNoThresholdTxt")
+                @Html.Kendo().Button().Name("SearchNoThresholdBtn").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "SearchNoThresholdSuppresion()" })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="channelNoThresholdGridDiv">
+    @Html.Partial("Partials/_Suppresion_Threshold_Grid", channelNoThresholdList)
+</div>
+
+
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DeleteNoThresholdSuppression")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="DeleteNoThresholdSuppressionDiv">
+                @Html.Partial("Partials/Modals/_DeleteNoThresholdSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("AddThresholdSuppression")
+        .Title("Add")
+        .Content(
+        @<text>
+            <div id="AddThresholdSuppressionDiv">
+
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

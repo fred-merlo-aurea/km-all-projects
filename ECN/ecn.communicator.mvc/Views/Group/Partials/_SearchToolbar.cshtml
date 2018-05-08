@@ -1,0 +1,93 @@
+﻿<script>
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var searchObj = {
+                searchType: $('#searchType').val(),
+                searchCriterion: $('#searchCriterion').val(),
+                profileName: $('#profileName').val(),
+                archiveFilter: $('#archiveFilter').val(),
+                allFolders: ($('#allFolders:checked').length > 0) ? true : false,
+                folderID: currentFolderID // defined in _FolderTree.cshtml
+            };
+            $.ajax({
+                url: '@Url.Action("Search")',
+                type: 'POST',
+                data: JSON.stringify(searchObj),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    $('#groupsGridPanel').html(response);
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    
+</style>
+
+<div id="panelDownload">
+    <table style="width:100%;">
+        <tr>
+            <td style="width:90%;">
+                <table>
+                    <tr>
+                        <td>
+                            Group Subscriber Count:
+
+                        </td>
+                        <td>
+                            @Html.DropDownList("fileType", new List<SelectListItem> {
+                                    new SelectListItem { Text = "Xml File", Value = "xml" }
+                                    })
+                        </td>
+                        <td>
+                            <form action="@Url.Action("Download")" method="get">
+                                <button type="submit" class="btn k-button" id="btnDownload">Download</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+
+            <td>
+                <button type="button" class="btn k-button" id="btnAddGroup" style="margin-right:15px;float:right;" >Add Group</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="panelSearch">
+    <table>
+        <tr>
+            <td>
+                @Html.DropDownList("searchType", new List<SelectListItem> {
+            new SelectListItem { Text = "Group", Value = "Group" },
+            new SelectListItem { Text = "Profile in Group", Value = "Profile" }
+            })
+            </td>
+            <td>
+                @Html.DropDownList("searchCriterion", new List<SelectListItem> {
+            new SelectListItem { Text = "contains", Value = "like" },
+            new SelectListItem { Text = "equals", Value = "equals" },
+            new SelectListItem { Text = "starts with", Value = "starts" },
+            new SelectListItem { Text = "ends with", Value = "ends" }
+            })
+            </td>
+            <td> @Html.TextBox("profileName") </td>
+            <td>
+                @Html.DropDownList("archiveFilter", new List<SelectListItem>{
+            new SelectListItem { Text = "Active", Value = "active" },
+            new SelectListItem { Text = "Archived", Value = "archived" },
+            new SelectListItem { Text = "All", Value = "all" }
+            })
+            </td>
+            <td><input id="allFolders" type="checkbox" /></td>
+            <td style="font-size: 75%;"> All folders </td>
+            <td> <button type="button" class="btn k-button" id="btnSearch">Search</button></td>
+        </tr>
+    </table>
+</div>
+

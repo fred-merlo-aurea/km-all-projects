@@ -1,0 +1,109 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerFieldsViewModel
+    @using KMEnums;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string eMessage = string.Empty;
+    if (Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            eMessage = Model.ErrorMessage;
+        }
+    }
+}
+@*<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>*@
+@*<script type="text/javascript">
+    var error = "@eMessage";
+    function validateForm() {
+        var errorString = '';
+        var domain = document.forms["addForm"]["Domain"].value;
+
+        if (domain == '') {
+            errorString = "The 'Domain' textbox needs a value.";
+        }
+        //if (/^www\.(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/.test(domain) == false) {
+        //    errorString = "This is not a recognizable domain.";
+        //}
+        //if (errorString.length > 0) {
+        //    alert(errorString);
+        //    return false;
+        //}
+    }
+
+</script>*@
+<script type="text/javascript">
+    function submitAddDomain()
+    {
+        showLoadingWindow();
+        var newDomain = $("#Domain").val();
+        var dt = { Domain: newDomain };
+        
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Add", "Main")',
+            data: JSON.stringify({ Model: dt }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if(response[0] == "200")
+                {
+                    window.location = response[1];
+                }
+                else if (response[0] == "500")
+                {
+                    closeLoadingWindow();
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: response[1],
+                        autoClose: false
+                    });
+                }
+
+            }
+        });
+    }
+
+
+
+</script>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Domain Tracking /","Index", "Main",null, new { onclick="showLoadingWindow()" })</li>
+    <li class="breadcrumb-item">Add Domain</li>
+</ol>
+
+<div style="float:right;text-align:right;">
+    @Html.ActionLink("Back to Domains", "Index", "Main", null, new { @class = "btn k-button" })
+</div><br /><br /><br />
+<table style="display:block;clear:both;">
+    <tr>
+        <td style="width:700px;font-size:10px;">
+            @using (Html.BeginForm("Add", "Main", FormMethod.Post, new { id = "formDomainTracking", name = "addForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                @Html.HiddenFor(model => model.DomainTracker.DomainTrackerID)
+
+                <div>
+                    @Html.LabelFor(model => model.Domain)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.TextBoxFor(model => model.Domain)
+                    @if(!string.IsNullOrEmpty(eMessage))
+                    { 
+                        @Html.ValidationMessage("DomainTrackerFieldsModel", eMessage);
+                    }
+                    @Html.ValidationMessageFor(model => model.Domain)
+                </div>
+                <p style="margin-left:100px;">
+                    <br />
+                    <input type="button" onclick="submitAddDomain()" class="btn k-button"  value="Save" />
+                </p>
+            }
+        </td>
+    </tr>
+</table>
+@*<script>
+    if (error != 'nothing') {
+        alert(error);
+    }
+</script>*@

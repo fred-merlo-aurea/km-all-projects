@@ -1,0 +1,953 @@
+﻿@model FrameworkUAS.Model.Rule
+            @* UAS.Web.Models.FileMapperWizard.RulesPostDQMViewModel *@
+<script type="text/javascript">
+    var groupCounter;
+    var isFormValid;
+    var vbDbField = '@ViewBag.myDbField';
+
+    var selDbField;
+    var vbRuleFieldId = parseInt('@ViewBag.myRuleFieldId');
+    var selRuleFieldId;
+    var vbUIControl = '@ViewBag.myUIControl';
+    var selUIControl;
+    var compValue;
+    var rowIndex;
+
+    @*
+        CAN ONLY BE STRINGS AND INTS
+
+        var ThematicId = parseInt('@ViewBag.thematicid');
+        var ThematicName =  '@ViewBag.Name';*@
+
+    $(function(){
+        $("#LoadRuleTemplate").click(function(){
+            if (!$("#frmPostDqmFMW").valid()){
+                return false;
+            }
+            else{
+                $(this).prop("disabled",true);//only allow one template to be loaded
+                $("#ruleNameErrorMsg").text("");
+                Open_LoadRuleTemplate();
+            }
+        });
+    });
+
+    $(function(){
+        $("#AddDqmRule").click(function(){
+            if (!$("#frmPostDqmFMW").valid()){
+                return false;
+            }
+            else{
+                $(this).prop("disabled",true);//$("#AddDqmRule").prop("disabled",true);
+                $("#ruleNameErrorMsg").text("");
+                ValidateCondtionGrid();
+            }
+        });
+    });
+
+    $(function(){
+        $("#AddDqmCondition").click(function(){
+            if (!$("#frmPostDqmFMW").valid()){
+                return false;
+            }
+            else{
+                $("#ruleNameErrorMsg").text("");
+                AddCondition();
+            }
+        });
+    });
+
+    $(function(){
+        $("#btnGroup").click(function(){
+            //group the rows that are checked - can only group consecutive rows - once grouped disable check box so can't be grouped again -
+            //give ui display that items are grouped - do exactly what is done in TFS, for UI, use Welters for loop to generate the where clause words
+
+
+        });
+    });
+
+    $(document).ready(function () {
+        groupCounter = 0;
+        isFormValid = true;
+        selDbField = "";
+        selRuleFieldId = 0;
+        selUIControl = "textbox";
+        compValue="";
+        rowIndex = 0;
+
+        var ddlRules = $("#ddlRules").data("kendoDropDownList");
+
+        if (ddlRules != null){
+            ddlRules.dataSource.options.transport.read["global"] = false;
+        }
+
+        var updateRule = $("#updateRuleUI");
+        if(updateRule != null){
+            updateRule.hide();
+        }
+        var _updateDataBaseField = $("#updateDataBaseField").data("kendoDropDownList");
+        if (_updateDataBaseField != null){
+            _updateDataBaseField.dataSource.options.transport.read["global"] = false;
+        }
+
+        sessionStorage.ruleSetId = @Html.Raw(Json.Encode(Model.ruleSetId));
+    });
+
+    function GetSelectedDataBaseField(){
+        return {
+            DbField: selDbField
+        }
+    }
+    function GetSelectedRuleFieldId(){
+        return {
+            RuleFieldId: selRuleFieldId
+        }
+    }
+    function GetSelectedUIControl(){
+        return {
+            UIControl: selUIControl
+        }
+    }
+    function GetSelectedRuleFieldValue(){
+        return {
+            RuleFieldId: selRuleFieldId
+        }
+    }
+    function getRuleSetId(){
+        return{
+            sourceFileId: @Html.Raw(Json.Encode(Model.sourceFileId)),
+            ruleSetId: sessionStorage.ruleSetId
+        }
+    }
+
+    function checkRuleName() {
+        if($("#NewRuleName").val() != ''){
+            var modelData = {
+                RuleName: $("#NewRuleName").val()
+            }
+
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/CheckRuleName",
+                type: "POST",
+                data: modelData,
+                traditional: true,
+                cache: false,
+                success: function (returnData) {
+                    $("#NewRuleName").val(returnData)
+                    $("#ruleErrorMsg").text("");
+                    return false;
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+        else{
+            //error message
+            $("#ruleErrorMsg").text("Please provide Rule Name");
+        }
+    }
+    function ValidateCondtionGrid()
+    {
+        //ClientTemplate("#=selectedConnector.Text#")     - here all must be something except first row
+        //ClientTemplate("#=selectedDataBaseField.Text#") - required
+        //ClientTemplate("#=selectedOperator.Text#")      - this defaults to equal so don't have to check required
+        //columns.Bound(c => c.compareValue).Title("Value"); -this can be blank
+
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var options = grid.getOptions();
+        //Model.Conditions
+        var conditions = options.dataSource.data;
+        var GridValue = {
+            RowCell: '0:0',
+            IsValid: true
+        }
+        var gridValues = [];
+
+        //for (var i = 0; i < conditions.length; i++) {
+        //    var c = conditions[i];
+        //    //could do my validations here    c.selectedDateaBaseField.Text  c.selectedOperator.Text  c.ruleFieldId, c.isGrouped, c.lineNumber, c.id
+        //    var cv = c.compareValue;
+        //    var sc = c.selectedConnector.Text;
+
+        //}
+        var table = document.getElementById('grid_Conditions').children[0];
+        var rowLength = table.rows.length -1;
+        for(var i=1; i<rowLength; i+=1){//row 0 is header rows
+
+            var row = table.rows[i];
+            //your code goes here, looping over every row.
+            //cells are accessed as easy
+            var cellLength = row.cells.length;
+            for(var y=0; y<cellLength; y+=1){
+                var cell = row.cells[y];
+
+                //do something with every cell here
+                if(y == 0){
+                    //0 columns.Bound(c => c.ruleId).Hidden(true);
+                }
+                else if(y == 1){
+                    //1 columns.Bound(c => c.lineNumber).Hidden(true);
+                }
+                else if(y == 2){
+                    //2 columns.Bound(c => c.ruleFieldId).Hidden(true);
+                }
+                else if(y == 3){
+                    //3 columns.Bound(c => c.uiControl).Hidden(true);
+                }
+                else if(y == 4){
+                    //4 columns.Bound(c => c.isGrouped)
+                }
+                else if(y == 5){
+                    // 5 columns.Bound(c => c.selectedConnector.Text) - here all must be something except first row
+                    if(i != 1)
+                    {
+                        if(cell.innerText== ''){
+                            var x = Object.create(GridValue);
+                            x.RowCell = i.toString() + ':' + y.toString();
+                            x.IsValid = false;
+                            gridValues.push(x);
+
+                            //can we set the cell border red?
+                            cell.style.border = "medium solid red";
+                            isFormValid = false;
+                        }
+                        else{
+                            cell.style.border = "";
+                            isFormValid = true;
+                        }
+                    }
+                }
+                else if(y == 6){
+                    //6 columns.Bound(c => c.selectedDataBaseField.Text) - required
+                    if(cell.innerText == ''){
+                        var x = Object.create(GridValue);
+                        x.RowCell = i.toString() + ':' + y.toString();
+                        x.IsValid = false;
+                        gridValues.push(x);
+
+                        //can we set the cell border red?
+                        cell.style.border = "medium solid red";
+                        isFormValid = false;
+                    }
+                    else{
+                        cell.style.border = "";
+                        isFormValid = true;
+                    }
+                }
+                else if(y == 7){
+                    //7 columns.Bound(c => c.selectedOperator.Text) - this defaults to equal so don't have to check required
+                    if(cell.innerText == ''){
+                        var x = Object.create(GridValue);
+                        x.RowCell = i.toString() + ':' + y.toString();
+                        x.IsValid = false;
+                        gridValues.push(x);
+
+                        //can we set the cell border red?
+                        cell.style.border = "medium solid red";
+                        isFormValid = false;
+                    }
+                    else{
+                        cell.style.border = "";
+                        isFormValid = true;
+                    }
+                }
+                else if(y == 8){
+                    //8 columns.Bound(c => c.compareValue).Title("Value");//this can be blank
+                }
+                else if(y == 9){
+                    // 9 columns.Template("btnDeleteCondition")
+                }
+            }
+        }
+
+        //if this is Update New rule then need to validate the _insertUpdateNew grid
+        var ruleAction = $("#selectedRuleAction").val();
+        if(ruleAction == "Update New")
+        {
+            //make sure each row of the grid has a selected value for column[0] and a value entered in col[1]
+            //0 columns.Bound(c => c.ruleFieldId).Hidden(true);//server bound columns can't be locked
+            //1 columns.Bound(c => c.uiControl).Hidden(true);
+            //2 columns.Bound(c => c.columnName).ClientTemplate("#=columnName#").Title("");
+            //3 columns.Bound(c => c.updateText).ClientTemplate("#=updateText#")
+
+            var table = document.getElementById('grid_UpdateNew').children[0];
+            var rowLength = table.rows.length -1;
+            for(var i=1; i<rowLength; i+=1){//row 0 is header rows
+
+                var row = table.rows[i];
+                //your code goes here, looping over every row.
+                //cells are accessed as easy
+                var cellLength = row.cells.length;
+                for(var y=0; y<cellLength; y+=1){
+                    var cell = row.cells[y];
+
+                    //do something with every cell here
+                    if(y == 0){
+                        //0 columns.Bound(c => c.ruleFieldId).Hidden(true);
+                    }
+                    else if(y == 1){
+                        //1 columns.Bound(c => c.uiControl).Hidden(true);
+                    }
+                    else if(y == 2){
+                        //2 columns.Bound(c => c.columnName).ClientTemplate("#=columnName#").Title("");
+                        if(cell.innerText == ''){
+                            var x = Object.create(GridValue);
+                            x.RowCell = i.toString() + ':' + y.toString();
+                            x.IsValid = false;
+                            gridValues.push(x);
+
+                            //can we set the cell border red?
+                            cell.style.border = "medium solid red";
+                            isFormValid = false;
+                        }
+                        else{
+                            cell.style.border = "";
+                            isFormValid = true;
+                        }
+                    }
+                    else if(y == 3){
+                        //3 columns.Bound(c => c.updateText).ClientTemplate("#=updateText#")
+                        if(cell.innerText == ''){
+                            var x = Object.create(GridValue);
+                            x.RowCell = i.toString() + ':' + y.toString();
+                            x.IsValid = false;
+                            gridValues.push(x);
+
+                            //can we set the cell border red?
+                            cell.style.border = "medium solid red";
+                            isFormValid = false;
+                        }
+                        else{
+                            cell.style.border = "";
+                            isFormValid = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(isFormValid == true)
+        {
+            $("#AddDqmRule").prop("disabled",true);
+            SavePostDQMRules();
+        }
+        else
+            $("#AddDqmRule").prop("disabled", false);
+
+    }
+    function SavePostDQMRules(){
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var datasource = grid.dataSource;
+        delete datasource.view()[0].ruleCondition;
+
+        delete datasource.view()[0].selectedIncomingField;
+        var clean = kendo.stringify( datasource.view() );
+        var isGlobal =  $("#IsGlobalRule")[0];
+        var isChecked = false;
+        if(isGlobal != null)
+            isChecked = isGlobal.checked;
+        var sfId =  @Html.Raw(Json.Encode(Model.sourceFileId));
+
+        var updateNew = "";
+        var ruleAction = $("#selectedRuleAction").val();
+        if(ruleAction == "Update New")
+        {
+            var gridUpNew = $("#grid_UpdateNew").data("kendoGrid");
+            var dsUpNew = gridUpNew.dataSource;
+            updateNew = kendo.stringify( dsUpNew.view() );
+        }
+
+
+        var modelData = {
+
+            Conditions: clean,
+            NewRuleType: @Html.Raw(Json.Encode(Model.ruleType)),
+            RuleAction: $("#selectedRuleAction").val(),
+            SourceFileId: sfId,
+            NewRuleName: $("#NewRuleName").val(),
+            RuleId:  @Html.Raw(Json.Encode(Model.ruleId)),
+            IsGlobalRule: isChecked,
+            RuleResult: updateNew
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/SavePostDQMRule",
+            type: "Post",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (response) {
+                var myWindow = $("#wndNewRule");
+                myWindow.data("kendoWindow").close();
+
+                if (response) {
+                    $("#" + "validationErrorDiv").hide();
+                    $("#" + "ResultsTable").html(response);
+                    $("#" + "ResultsTable").show();
+                }
+                else //error
+                {
+                    $("#" + "validationErrorDiv").text(response);
+                    $("#" + "ResultsTable").hide();
+                    $("#" + "validationErrorDiv").show();
+                }
+            },
+            error: function (response) {
+                $("#" + "validationErrorDiv").text(response);
+                $("#" + "ResultsTable").hide();
+                $("#" + "validationErrorDiv").show();
+            }
+        });
+    }
+    @*function SavePostDQMRules() {
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var datasource = grid.dataSource;
+        delete datasource.view()[0].ruleCondition;
+        delete datasource.view()[0].selectedIncomingField;
+        var clean = kendo.stringify( datasource.view() );
+        var isGlobal =  $("#IsGlobalRule")[0];
+        var isChecked = false;
+        if(isGlobal != null)
+            isChecked = isGlobal.checked;
+        var sfId =  @Html.Raw(Json.Encode(Model.SourceFileId));
+        var modelData = {
+
+            Conditions: clean,
+            NewRuleType: @Html.Raw(Json.Encode(Model.NewRuleType)),
+            RuleAction: $("#selectedRuleAction").val(),
+            SourceFileId: sfId,
+            NewRuleName: $("#NewRuleName").val(),
+            IsGlobalRule: isChecked
+        }
+        debugger;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',//this is data type of what you are returning
+            url: '/UAS.Web/FileMapperWizard/SavePostDQMRule',
+            data: modelData,
+            success: function (returnData) {
+                var grid = $("#customRuleGrid").data("kendoGrid")
+                grid.setDataSource(returnData);
+                $('#validationErrorDiv').hide();
+                $('#ResultsTable').show();
+
+                var myWindow = $("#wndNewRule");
+                myWindow.data("kendoWindow").close();
+               // debugger;
+                //grid.setOptions(options);//this will fire ReadData_CustomRuleGrid as defined on the grid customRuleGrid
+
+                //var tabs = $("#tabstrip").data("kendoTabStrip");//Index page
+                //if (tabs != null) {
+                //    var tabIndex = 4;
+                //    var prevIndex = tabIndex - 1;
+                //    if (prevIndex < 0) {
+                //        prevIndex = 0;
+                //    }
+
+                //    var myWindow = $("#wndNewRule");
+                //    myWindow.data("kendoWindow").close();
+
+                //    var item = tabs.contentElement(tabIndex);
+                //    $(item).html(returnData);
+
+                //    tabs.select(tabIndex);
+                //    tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 1
+                //    tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+                //}
+
+                return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }*@
+    function Open_LoadRuleTemplate(){
+        var myWindow = $("#wndLoadRuleFromTemplate");
+        myWindow.data("kendoWindow").open();
+    }
+    function Close_LoadRuleFromTemplate(){
+        var myWindow = $("#wndLoadRuleFromTemplate");
+        myWindow.data("kendoWindow").close();
+        return false;
+    }
+    function AddCondition(){
+        @*//just need to add an empty row to grid
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        //not being used var rowData = grid.dataSource.at(0);//this will get the first row
+        var datasource = grid.dataSource;
+
+        //var options = grid.getOptions();  options.dataSource.data.length;//
+        var total = datasource.data().length;
+        var myRuleId = @Html.Raw(Json.Encode(Model.ruleId));
+        datasource.insert(total, { ruleId:myRuleId, lineNumber: total, isGrouped:false, groupNumber: groupCounter, selectedConnector: { Text:'', Value:'' }, selectedDataBaseField:{ Text:'', Value:'' }, selectedOperator:{ Text:'equal', Value:'110' }, compareValue:''}); //here mention all the column names, otherwise will get an error
+        //options.dataSource.data.insert(total, { ruleId:myRuleId, lineNumber: total, isGrouped:false, groupNumber: groupCounter, selectedConnector: { Text:'', Value:'' }, selectedDataBaseField:{ Text:'', Value:'' }, selectedOperator:{ Text:'equal', Value:'110' }, compareValue:''}); //here mention all the column names, otherwise will get an error
+
+        grid.refresh();
+
+        //grid.addRow();  this will put new row at index 0 - we want new rows added to bottom so must use the insert method*@
+
+        var newLineNumber = parseInt($('#hidTotalConditions').val()) + 1;
+
+
+
+        var modelData = {
+            lineNumber: newLineNumber
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/AddEditInsertCondition",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                $("#divConditions").append($(returnData));
+                var conCtrl = $("#connectorCellRow1 > select" );
+                conCtrl.hide();
+
+                $('#hidTotalConditions').val(newLineNumber);
+                return false;
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    $(document).on('change', ".EditCondition", function () {
+        debugger;
+
+        var lineNumber = parseInt($('#hidTotalConditions').val());
+        var FieldSelected = "";
+        var OperatorSelected = "";
+        var DataType = "";
+        var divTR = $(this).parent().closest("div[class='row']");
+
+        var hidSortOrder = divTR.find("[name*='lineNumber']")
+        var DataType = divTR.find("[name*='fieldDataType']")
+        var drpField = divTR.find("[name*='mafField'] option:selected")
+        var drpOperator = divTR.find("[name*='Operator']")
+
+        //lineNumber = parseInt(hidSortOrder.val());
+        if (drpField != undefined) {
+            FieldSelected = drpField.text();// drpField.val() = 12 which is the id;
+            //alert(drpField.attr("id") + " / " + drpField.val());
+        }
+
+        if (drpOperator != undefined && this.id != drpField.attr("id")) {
+            OperatorSelected = drpOperator.val();
+            if (DataType.val() == "String")
+                return;
+            //alert(drpOperator.attr("id") + " / " + drpOperator.val());
+        }
+
+        var modelData = {
+            SortOrder: lineNumber,
+            MAFField: FieldSelected,
+            Operator: OperatorSelected
+        }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/AddEditInsertCondition",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                //alert(returnData);
+                debugger;
+                divTR.replaceWith($(returnData));
+
+                return false;
+
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    });
+
+
+    function DeleteCondition(ruleId, lineNumber){
+        debugger;
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var data = grid.dataSource.at(lineNumber);
+        grid.dataSource.remove(data);
+
+        //Reorder lineNumber to fix issue when user deletes conditions top down. Index becomes out of order.
+        for (var i = 0; i < grid.dataSource._data.length; i++) {
+            grid.dataSource._data[i].lineNumber = i;
+        }
+
+        grid.refresh();
+
+        var modelData = {
+            RuleId: ruleId,
+            LineNumber: lineNumber
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/DeleteCondition",
+            type: "POST",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (returnData) {
+                return false;
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+    function IsGroupedChecked(e)
+    {
+        var row = $(event.srcElement).closest("tr");
+        var grid = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+        dataItem = grid.dataItem(row);
+        if(e.children[0].checked)
+        {
+            groupCounter++;
+            if (dataItem != null) {
+                dataItem.isGrouped = true;
+            }
+        }
+        else
+        {
+            groupCounter--;
+            if (dataItem != null) {
+                dataItem.isGrouped = false;
+            }
+        }
+        return false;
+    }
+    function SelectLoadRuleFromTemplate(){
+        var rId = $("#ddlRules").val();
+        if(rId == "")
+            rId = 0;
+        if(rId > 0)
+        {
+            var modelData = {
+                ExistingRuleId: rId //selectedValue
+            }
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/SelectLoadRuleFromTemplate",
+                type: "GET",
+                data: modelData,
+                dataType: 'json',//this is data type of what you are returning
+                success: function (returnData) {
+                    var tabs = $("#tabstrip").data("kendoTabStrip");
+                    if (tabs != null) {
+                        var tabIndex = 4;
+                        var prevIndex = tabIndex - 1;
+                        if (prevIndex < 0) {
+                            prevIndex = 0;
+                        }
+
+                        var popRuleTemp = $("#wndLoadRuleFromTemplate");
+                        popRuleTemp.data("kendoWindow").close();
+
+                        var myWindow = $("#wndNewRule");
+                        myWindow.data("kendoWindow").close();
+
+
+                        var grid = $("#customRuleGrid").data("kendoGrid")
+                        var options = grid.getOptions();
+                        options.dataSource.data = returnData;
+
+
+
+
+
+                        //grid.setOptions(options);//this will fire ReadData_CustomRuleGrid as defined on the grid customRuleGrid
+
+                        //var item = tabs.contentElement(tabIndex);
+                        //$(item).html(returnData);
+
+                        //tabs.select(tabIndex);
+                        //tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 1
+                        //tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+                    }
+
+                    return false;
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    }
+
+
+
+    function onSelectDataBaseFields(e){
+        //var myDataTableField = e.dataItem.Value;
+        selDbField = e.dataItem.Text;
+        //var modelData = {
+        //    dataTableField: myDataTableField
+        //}
+        //$.ajax({
+        //    url: "/UAS.Web/FileMapperWizard/GetUiControlDataTableField",
+        //    type: "GET",
+        //    data: modelData,
+        //    dataType: 'html',//this is data type of what you are returning
+        //    success: function (returnData) {
+        //        var obj = JSON.parse(returnData);
+        //        var grid = $("#grid_Conditions").data("kendoGrid");
+        //        //var dataRows = grid.items();
+        //        var editRow = $(".k-edit-cell").closest(".k-grid").data("kendoGrid").dataItem($(".k-edit-cell").closest("tr"));
+        //        var datasource = grid.dataSource;
+        //        var data = grid.dataSource.at(editRow.lineNumber);
+        //        data.set("ruleFieldId", obj.RuleFieldId);
+        //        data.set("uiControl", obj.UIControl.toString());
+
+        //    },
+        //    error: function () {
+        //        alert("An error has occured!!!");
+        //    }
+        //});
+    }
+    function onSelect_UpdateDataBaseField(e){
+        selDbField = e.dataItem.Field;
+    }
+    function onChangeOperator(e){
+        var object = this.dataItem(this.select());
+        if(object != null){
+            var grid = $("#grid_Conditions").data("kendoGrid");
+            var editRow = $(".k-edit-cell").closest(".k-grid").data("kendoGrid").dataItem($(".k-edit-cell").closest("tr"));//this gets a cell - IS --> $(event.srcElement).closest("tr");
+            rowIndex = editRow.lineNumber;
+            var data = grid.dataSource.at(editRow.lineNumber);
+            data.set("ruleFieldId", object.RuleFieldId);
+            data.set("uiControl", object.UIControl);
+
+            selUIControl = object.UIControl;
+            selRuleFieldId = object.RuleFieldId;
+        }
+
+    }
+    function onChangeConditionalValue(e)
+    {
+        var object = this.dataItem(this.select());
+        var grid = $("#grid_Conditions").data("kendoGrid");
+        var dataRows = grid.items();
+        var editRow = $(".k-edit-cell").closest(".k-grid").data("kendoGrid").dataItem($(".k-edit-cell").closest("tr"));//this gets a cell - IS --> $(event.srcElement).closest("tr");
+        var myRow = dataRows[editRow.lineNumber];
+
+        //object should be object.Text
+        myRow.ruleFieldId = selRuleFieldId;
+        myRow.uiControl = selUIControl;
+        myRow.compareValue = object.Text;//if this is not a dropdownlist will likely break - neec to test with textbox
+        compValue = object.Text;
+
+        var options = grid.getOptions();
+        options.dataSource.data[rowIndex].ruleFieldId = selRuleFieldId;
+        options.dataSource.data[rowIndex].uiControl = selUIControl;
+        options.dataSource.data[rowIndex].compareValue = compValue;
+
+        //do not call setOptions
+        //grid.setOptions(options);
+        //When setOptions is called, the Grid widget will be destroyed and recreated. If the widget is bound to remote data, a new read request will be made.
+        //calling setOptions() in a Grid event handler is not possible.
+        //calling setOptions() in a function, which is related to the Grid's databinding mechanism may cause an endless loop.
+
+        //i think that if we are doing things directly on the data source we don't need refresh ???
+        //grid.refresh();
+    }
+    function onChangeRuleAction(e){
+        var row = $(event.srcElement).closest("tr");
+        var action = row.context.innerHTML;
+        if(action.toString() == "Update New"){
+            $("#updateRuleUI").show();
+        }
+        else{
+            $("#updateRuleUI").hide();
+        }
+    }
+    function grid_Conditions_Edit(e){
+        //debugger;
+        //var object = this.dataItem(this.select());
+        //var grid = $("#grid_Conditions").data("kendoGrid");
+        //var dataRows = grid.items();
+        //var editRow = $(".k-edit-cell").closest(".k-grid").data("kendoGrid").dataItem($(".k-edit-cell").closest("tr"));//this gets a cell - IS --> $(event.srcElement).closest("tr");
+        //var myRow = dataRows[editRow.lineNumber];
+
+        ////object should be object.Text
+        //myRow.ruleFieldId = selRuleFieldId;
+        //myRow.uiControl = selUIControl;
+        //myRow.compareValue = object.Text;//if this is not a dropdownlist will likely break - neec to test with textbox
+        //compValue = object.Text;
+    }
+    function onChange_UpdateDataBaseField(e){
+        var object = this.dataItem(this.select());
+
+        selDbField = object.Field;
+        if(object.Value != "")
+        {
+            var modelData = {
+                ruleFieldId: object.RuleFieldId
+            }
+            $.ajax({
+                url: "/UAS.Web/FileMapperWizard/GetInsertUpdateNewGrid",
+                type: "GET",
+                data: modelData,
+                dataType: 'html',//this is data type of what you are returning
+                success: function (returnData) {
+                    $("#divUpdateRuleGrid").html(returnData);
+
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+    }
+    function onClose_wndLoadRuleFromTemplate(e) {
+
+    }
+    function onOpen_wndLoadRuleFromTemplate(e) {
+        //sessionStorage.MyVarName = true;
+        var wnd = e.sender;
+        $('#wndLoadRuleFromTemplate').parent().css("top", "0px");
+        $('#wndLoadRuleFromTemplate').parent().css("left", "0px");
+    }
+</script>
+
+
+@using (Html.BeginForm("Index", "FileMapperWizard", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "frmPostDqmFMW", data_toggle = "validator" }))
+{
+<div style="width:800px;">
+    <div id="columnMapping" style="margin:10px;">
+        <div style="width: 250px; margin-left:20px; text-align:left;">
+            <h3>@Html.Raw(Model.ruleType) Rule</h3>
+        </div>
+    </div>
+
+    <table class="filedetails">
+        <tr class="filedetailsrow">
+            <td>
+                @Html.LabelFor(m => m.ruleName, "Rule Name", new { @class = "control-label" })
+                @(Html.TextBoxFor(m => m.ruleName, new
+                    {
+                        @onchange = "checkRuleName()",
+                        style = "width:300px",
+                        @class = "form-control",
+                        type = "text",
+                        required = "required",
+                        data_maxlength = "250",
+                        data_required_error = "Please provide Rule Set Name.",
+                        data_error = "Please provide Rule Set Name"
+                    }))
+                <div id="ruleNameErrorMsg" class="help-block with-errors"></div>
+            </td>
+            <td>
+                @Html.Kendo().Button().Name("LoadRuleTemplate").Content("Load From Template").HtmlAttributes(new { @class = "btn k-button btn-primary", type = "button" })  @*, onclick = "return Open_LoadRuleTemplate()"*@
+            </td>
+        </tr>
+        <tr class="filedetailsrow">
+            <td colspan="2">
+                @(Html.Kendo().CheckBoxFor(m => m.isTemplateRule).Checked(false).Label("Create as Template"))
+            </td>
+        </tr>
+        <tr class="filedetailsrow">
+            <td colspan="2">
+                @Html.LabelFor(m => m.ruleAction, "Rule Action", new { @class = "control-label" })
+                @(Html.Kendo().DropDownListFor(m => m.ruleAction)
+                                            .BindTo(Model.ruleActions).DataTextField("Text").DataValueField("Value")
+                                            .HtmlAttributes(new { style = "width:300px", @class = "form-control",
+                                                type = "text",
+                                                required = "required",
+                                                data_required_error = "Please select a rule action",
+                                                data_error = "Please select a rule action"
+                                            }).Events(e => e.Change("onChangeRuleAction")))
+                <div id="ruleActionErrorMsg" class="help-block with-errors"></div>
+            </td>
+        </tr>
+        
+    </table>
+    
+    <div class="lbtns" style="margin-bottom:15px;">
+        @(Html.Kendo().Button().Name("AddDqmCondition").Content("Add Condtion<i class='km-icon icon-kmplus-circled-1'></i>")
+            .HtmlAttributes(new { @class = "btn k-button", type = "button" })) @*, onclick = "AddCondition() return false;" }))*@
+    </div>
+
+   @* NEW UI using Razor for loops *@
+    <div id="divConditions">
+        <div id="divCondHeaderRow">
+            <br />
+            @Html.Hidden("hidTotalConditions", (Model.conditions == null ? 0 : Model.conditions.Count))
+
+            <div id="tblConditions" class="container">
+                <div class="row" style="width:100%;">
+                    <div class="col-xs-2" style="width:70px; text-align:center;"><b>Group</b>&nbsp;<img src="~/Images/GroupBy.png" id="btnGroup" alt="group conditions" /></div>
+                    <div class="col-xs-2" style="width:70px; text-align:center;"><b>Connector</b></div>
+                    <div class="col-xs-2" style="text-align:center;"><b>MAFField</b></div>
+                    <div class="col-xs-2" style="text-align:center;"><b>Operator</b></div>
+                    <div class="col-xs-2" style="text-align:center;"><b>Values</b></div>
+                    <div class="col-xs-2" style="text-align:center;"></div>
+                </div>
+                @if (Model.conditions != null)
+                {
+                    foreach (FrameworkUAS.Model.Condition c in Model.conditions)
+                    {
+                        @Html.EditorFor(x => c)
+                    }
+                }
+            </div>
+        </div>
+        <div id="divUpdates">
+            @if (Model.updates != null && Model.updates.Count > 0)
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="td"><b>MAFField</b></div>
+                        <div class="td"><b>Values</b></div>
+                    </div>
+                    @foreach (FrameworkUAS.Model.Update u in Model.updates)
+                    {
+                        <div class="tr">
+                            <div class="col-xs-6">@u.MAFField</div>
+                            <div class="col-xs-6">@u.Values</div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="rbtns" style="margin-top:25px;">
+        @Html.Kendo().Button().Name("AddDqmRule").Content("Save Insert Rule").HtmlAttributes(new { @class = "btn k-button", type = "button" })  @*, onclick = "return SavePostDQMRules()"*@
+    </div>
+</div>
+
+@(Html.Kendo().Window()
+            .Name("wndLoadRuleFromTemplate")
+            .Width(400)
+            .Height(200)
+            .Draggable()
+            .Resizable()
+            .Title("Load Rule From Template")
+            .Modal(true)
+            .Visible(false)
+            .Position(p => p.Top(0).Left(0))
+            .Events(ev => ev.Close("onClose_wndLoadRuleFromTemplate").Open("onOpen_wndLoadRuleFromTemplate"))
+            .Content(@<text>
+            <div>
+                @(Html.Kendo().DropDownList().Name("ddlRules")
+                .DataSource(d => d.Read(r => r.Action("GetExistingRules", "FileMapperWizard").Data("getRuleSetId()")))
+                    .DataTextField("Text").DataValueField("Value")
+                                        .OptionLabel("- Select -").HtmlAttributes(new { style = "width:350px;" }).Events(e => e.Change("SelectLoadRuleFromTemplate()")))
+                                    <table>
+                                        <tr>
+                                            @*<td>
+                                                @Html.Kendo().Button().Name("SelectLoadRuleFromTemplate").Content("Select").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "return SelectLoadRuleFromTemplate()" })
+                                            </td>*@
+                                            <td>
+                                                @Html.Kendo().Button().Name("CancelLoadRuleFromTemplate").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "return Close_LoadRuleFromTemplate()" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+        </text>)
+)
+
+}

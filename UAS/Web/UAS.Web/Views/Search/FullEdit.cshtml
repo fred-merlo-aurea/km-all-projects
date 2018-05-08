@@ -1,0 +1,942 @@
+﻿@model UAS.Web.Models.Circulations.ProductSubscriptionViewModel
+@{
+    ViewBag.Title = "Circulation Services";
+}
+<script src="~/Scripts/underscore-min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<style>
+    .header-items {
+        color: #105ea6;
+        margin: 0px;
+        font-size: large;
+        font-weight: 500;
+    }
+     .highlight{
+
+        border: 2px solid red;
+        width:250px;
+    }
+    #subscriberFullName, #clientname, #productname, #categorytype {
+        margin: 0 10px;
+    }
+
+    .k-button, .btn {
+        outline: none;
+        display: inline-block;
+        border-radius: 8px;
+        border-width: 1px;
+        box-shadow: none;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 10px;
+        cursor: pointer;
+        height: 27px;
+        line-height: 26px;
+        margin: 0 5px;
+        box-shadow: 0;
+        vertical-align: inherit;
+        font-family: "Source Sans Pro",sans-serif;
+        box-sizing: content-box;
+    }
+
+    td.quickEdit {
+        margin: 1%;
+        padding: 0.5%;
+        padding-left: 10px;
+    }
+
+    #quickEdit_centerButtonTable {
+        width: 30%;
+        margin-left: 40%;
+        margin-right: 40%;
+    }
+
+    .active {
+        background-color: green;
+    }
+
+    .reactivate {
+        background-color: orange;
+    }
+
+    .tableformatter {
+        width: 100%;
+        margin: 20px 0px;
+    }
+
+    span.separator {
+        border-top: 1px solid #e3e3e3;
+        width: 100%;
+        height: 1px;
+        display: block;
+        margin-top: 10px;
+    }
+</style>
+
+@*<h2>@ViewBag.Title</h2>*@
+<div id="notificationDiv"></div>
+
+<script id="usernotificationtemplate" type="text/x-kendo-template">
+    <div class="message-error" style="padding:10px 10px;width:300px;height:60px">
+        <p>#= message #</p>
+    </div>
+</script>
+<span id="notification" style="display:none;"></span>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="header-items">
+    <table>
+        <tr>
+            <td>
+                <span id="subscriberFullName">
+                    @if (Model.ProductSub.SubscriptionStatusID == 1)
+                    {  <img style="width:25px;height:25px;" src="~/Images/SubscriptionStatus/Prospect_72.png" /> }
+                    else if (Model.ProductSub.SubscriptionStatusID == 3 || Model.ProductSub.SubscriptionStatusID == 4)
+                    {
+                        <img style="width:25px;height:25px;" src="~/Images/SubscriptionStatus/Active_72.png" />
+                    }
+                    else if (Model.ProductSub.SubscriptionStatusID == 2 || Model.ProductSub.SubscriptionStatusID == 5 || Model.ProductSub.SubscriptionStatusID == 6)
+                    {
+                        <img style="width:25px;height:25px;" src="~/Images/SubscriptionStatus/InActive_72.png" />
+                    }
+                    @Model.ProductSub.FullName
+                </span>
+            </td>
+            <td><span id="clientname">@Model.ProductSub.ClientName</span></td>
+            <td><span id="productname">@Model.ProductSub.PubCode</span></td>
+            <td><span id="categorytype"></span></td>
+        </tr>
+    </table>
+</div>
+<span class="separator"></span>
+
+    @Html.HiddenFor(m => Model.product.AllowDataEntry)
+    @Html.HiddenFor(m => Model.StatusInfo.IsPaid)
+    @Html.HiddenFor(m => Model.StatusInfo.IsSubscribed)
+    @Html.HiddenFor(m => Model.StatusInfo.IsActive)
+    @Html.HiddenFor(m => Model.ProductSub.SubscriptionStatusID)
+    @Html.HiddenFor(m => Model.ProductSub.PubID)
+    @Html.HiddenFor(m => Model.ProductSub.PubSubscriptionID)
+    @Html.HiddenFor(m => Model.ProductSub.PubCode)
+    @Html.HiddenFor(m => Model.ProductSub.ClientName)
+    <div id="fullkEdit">
+        @Html.Partial("Partials/Common/_SearchQuickEdit", Model.ProductSub)
+    </div>
+
+    <div class="tableformatter">
+    @(Html.Kendo().TabStrip()
+              .Name("tabstrip")
+              .Items(tabstrip =>
+              {
+                  tabstrip.Add().Text("Status")
+                      .Selected(true)
+                      .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_StatusDetail", Model.StatusInfo).ToString()).HtmlAttributes(new { @class="tab"});
+
+                  tabstrip.Add().Text("Marketing")
+                      .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_MarketingDetail", Model.ProductSubInfo).ToString()).HtmlAttributes(new { @class = "tab" });
+
+                  tabstrip.Add().Text("Qualification")
+                      .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_QualificationDetail", Model.ProductSubQualInfo).ToString()).HtmlAttributes(new { @class = "tab" });
+
+                  tabstrip.Add().Text("Ad Hoc")
+                      .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_AdHocDetail", Model.AdHocFieldValues).ToString()).HtmlAttributes(new { @class = "tab" });
+
+                  tabstrip.Add().Text("Paid")
+                        .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_PaymentDetails", Model.ProductPaymentInfo).ToString()).HtmlAttributes(new { @class = "tab" });
+
+                  tabstrip.Add().Text("Bill To")
+                         .Content(Html.Partial("Partials/FullEdit/_SearchFullEdit_BillTo", Model.ProductBillToInfo).ToString()).HtmlAttributes(new { @class = "tab" });
+
+              })
+    )
+</div>
+}
+<script language="JavaScript" type="text/JavaScript">
+
+    var orgsubscriber = {};
+    var currentsubscriber = {};
+    var idmapper = {};
+    //$("#quickEdit_Phone").mask("999-999-9999");
+    //$("#quickEdit_Mobile").mask("999-999-9999");
+    //$("#quickEdit_Fax").mask("999-999-9999");
+    //$("#quickEdit_ZipCode").mask("99999-9999");
+
+  
+    //Status Tab - Start
+    var buttons = ["postOfficeBtn", "personalRequestBtn", "behalfBtn"];
+
+    var buttonsforpaidsubs = ["paidPostOfficeBtn", "paidExpieCancel", "paidCreditCancel"];
+
+    function getUnsubscribeReasonType() {
+        for (var i = 0; i < buttons.length; i++) {
+            var buttonId = buttons[i];
+            if (!$('#' + buttonId).hasClass('reactivate')) {
+                return $('#' + buttonId).html();
+            }
+        }
+    }
+
+    var ActivateButton = GroupLock(buttons, "reactivate")
+
+    // Only let one element in the array have the class with className
+    // When the function is called, the id chosen will be given the class
+    // and the rest of the elements in idArray will have it removed.
+
+    function GroupLock(idArray, className) {
+        return function (chosen) {
+            // could assert chosen in idArray
+            for (var i = 0; i < idArray.length; i++) {
+                $('#' + idArray[i]).removeClass(className);
+            }
+            $('#' + chosen).addClass(className);
+        }
+    }
+
+    function YesNoToBool(yesNo) {
+        if (String(yesNo).toLowerCase() == "yes" || String(yesNo).toLowerCase() == "true") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    $(document).ready(function () {
+        //Intial Setup - Start
+        var w = window.innerWidth / 2;
+        var h = window.innerHeight / 2;
+        var TransactionCode = $("#TransactionCodeID").val();
+        var allowdataentry = $("#product_AllowDataEntry").val();
+        var IsPaid = $("#StatusInfo_IsPaid").val().toString();
+        var IsSubscribed = $("#StatusInfo_IsSubscribed").val();
+        var IsActive = $("#StatusInfo_IsActive").val();
+        var SubscriptionStatusId = $("#ProductSub_SubscriptionStatusID").val();
+
+        var TriggerQualDate = false;
+        var reactivealreadyclicked = false;
+        var AddAntiForgeryToken = function (data) {
+            data.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]').val();
+            
+            return data;
+        };
+
+        var getcodelist = function (listtype, value, truefalse) {
+
+
+            if (listtype == "TransCodeList") {
+                $.ajax({
+                    url: '/UAS.Web/Search/GetEntityListObjects?listtype=' + listtype,
+                    type: 'GET',
+                    data: listtype,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (codelist) {
+                        setsubscribervalues(_.first(_.where(codelist, { TransactionCodeValue: value, IsKill: truefalse })));
+                    },
+                    error: function () {
+                        alert("Failed to retrieve data.");
+                    }
+                });
+            }
+
+
+
+        }
+
+        var setsubscribervalues = function (data) {
+
+            currentsubscriber.TransactionCode = data.TransactionCodeID;
+            console.log(currentsubscriber.TransactionCode);
+            $("#transactionname").html(data.TransactionCodeName);
+
+        }
+        
+        //Load States Using Ajax call
+        var LoadStates = function (action) {
+
+            var CountryID = $("#quickEdit_CountryID").val();
+            
+
+            var request = $.ajax({
+                type: "GET",
+                url: "/UAS.Web/Search/GetRegions?CountryID=" + CountryID,
+                traditional: true,
+                cache: false,
+                data: CountryID,
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $("#quickEdit_RegionID").append('<option value="' + state.Value + '">' +
+                        state.Text + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Failed to retrieve states.' + message);
+                }
+            });
+        }
+
+        var AlwaysDisabledControls = function () {
+            $("#quickEdit_SequenceID").attr("disabled", true);
+            $("#quickEdit_SubscriptionID").attr("disabled", true);
+            $("#AccountNumber").attr("disabled", true);
+            $("#OriginalSubscriberSourceCode").attr("disabled", true);
+            $("#CreatedDate").attr("disabled", true);
+            $("#LastUpdated").attr("disabled", true);
+            $("#quickEdit_PhoneCode").attr("disabled", true);
+
+            if ($("#IsCopiesEnabled").val() == "True") {
+                $("#IsCopiesEnabled").attr("disabled", false);
+            }
+            else {
+                $("#IsCopiesEnabled").attr("disabled", true);
+            }
+        }
+
+        var notification = $("#notification").kendoNotification({
+            position: {
+                pinned: true,
+                top: h - 60,
+                left: w - 100
+            },
+            autoHideAfter: 0,
+            stacking: "up",
+            templates: [{
+                type: "error",
+                template: $("#usernotificationtemplate").html()
+            }, {
+                type: "success",
+                template: $("#usernotificationtemplate").html()
+            }]
+        }).data("kendoNotification");
+
+        var UpdateCategoryType = function (prevcat, currcat) {
+
+            currentsubscriber.CategoryTypeID = currcat.CategoryCodeTypeID;
+            if (prevcat != null || currcat != null) {
+                //Free to Paid
+                if ((prevcat.IsFree) && (!currcat.IsFree)) {
+                    currentsubscriber.IsPaid = true;
+
+                }
+                    //Paid to Free 
+                else if ((!prevcat.IsFree) && (currcat.IsFree)) {
+                    currentsubscriber.IsPaid = false;
+                }
+            }
+
+        }
+        
+        //If Dataentry is allowed check for subscription status
+        var ValidateStatus = function () {
+
+            $("#quickEdit_SaveButton").attr("disabled", true);
+            $("#categorytype").text($("#CategoryCodeID option:selected").text());
+            $($("#tabstrip").data("kendoTabStrip").items()[4]).attr("style", "display:none");
+            $($("#tabstrip").data("kendoTabStrip").items()[5]).attr("style", "display:none");
+
+
+            if (currentsubscriber.IsPaid != "False") {
+                $(".creditcardmember").css('visibility', 'hidden');
+                $(".checkmeber").css('visibility', 'hidden');
+                $(".commonmember").css('visibility', 'hidden');
+                $($("#tabstrip").data("kendoTabStrip").items()[4]).attr("style", "display:visible");
+                $($("#tabstrip").data("kendoTabStrip").items()[5]).attr("style", "display:visible");
+                for (var i = 0 ; i < buttons.length; i++) {
+                    $('#' + buttons[i]).attr('disabled', true);
+                    $('#' + buttons[i]).attr('display', "none");
+                    $('#' + buttons[i]).addClass('reactivate');
+                }
+                for (var i = 0 ; i < buttonsforpaidsubs.length; i++) {
+                    $('#' + buttonsforpaidsubs[i]).attr('disabled', false);
+                    $('#' + buttonsforpaidsubs[i]).attr('display', "visible");
+                    $('#' + buttonsforpaidsubs[i]).addClass('reactivate');
+                }
+
+            }
+            else {
+
+                for (var i = 0 ; i < buttonsforpaidsubs.length; i++) {
+                    $('#' + buttonsforpaidsubs[i]).attr('disabled', false);
+                    $('#' + buttonsforpaidsubs[i]).attr('display', "none");
+                }
+                for (var i = 0 ; i < buttons.length; i++) {
+                    $('#' + buttons[i]).attr('disabled', false);
+                    $('#' + buttons[i]).attr('display', "visible");
+                }
+
+            }
+
+
+            if (allowdataentry != "False") {
+
+                if (SubscriptionStatusId == 5 || SubscriptionStatusId == 6) {
+                    $("#fullkEdit :input").attr("disabled", true);
+                    $("#tabstrip :input").attr("disabled", true);
+                    $("#reactivateBtn").attr("disabled", false);
+                    $("#quickEdit_CancelButton").attr("disabled", false);
+
+                }
+                else {
+                    $("#fullkEdit :input").attr("disabled", false);
+                    $("#quickEdit_CancelButton").attr("disabled", false);
+                    $("#quickEdit_SaveButton").attr("disabled", true);
+                    $("#quickEdit_CountryID").attr("disabled", true);
+                    $("#tabstrip :input").attr("disabled", false);
+                    $("#tabstrip-1 :input").attr("disabled", true);
+                    $("#reactivateBtn").attr("disabled", false);
+
+                    AlwaysDisabledControls();
+
+
+                }
+            }
+                //Disable all inputs on page if dataentry is not allowed
+            else {
+                notification.show({
+                    message: "Data Entry Currently locked for this publication. Edits cannot be made."
+                }, "error");
+                //disable all inputs in Edit and Tabstrip
+                $("#fullkEdit :input").attr("disabled", true);
+                $("#tabstrip :input").attr("disabled", true);
+                $("button").attr("disabled", true);
+                for (var i = 0 ; i < buttonsforpaidsubs.length; i++) {
+                    $('#' + buttonsforpaidsubs[i]).attr('disabled', true);
+
+                }
+                for (var i = 0 ; i < buttons.length; i++) {
+                    $('#' + buttons[i]).attr('disabled', true);
+
+                }
+                AlwaysDisabledControls();
+                $(document).one("kendo:pageUnload", function () { if (notification) { notification.hide(); } });
+            }
+
+        }
+
+        var getKeys = function (obj) {
+            var keys = [];
+            for (var key in obj) {
+                keys.push(key);
+            }
+            return keys;
+        }
+
+        var UpdateSubscriptionStatus = function () {
+
+            $.ajax({
+                url: '/UAS.Web/Search/ModifySubscriptionStatus',
+                type: 'GET',
+                data: { categoryID: currentsubscriber.CategoryCodeID, transactionID: currentsubscriber.TransactionCode },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var obj = $.parseJSON(data);
+                    console.log(obj);
+                    TriggerQualDate = true;
+                    $("td.rowmargin span.k-widget.k-datepicker.k-header").addClass("highlight");
+                    currentsubscriber.IsActive = obj["IsActive"];
+                    currentsubscriber.IsSubscribed = obj["IsSubscribed"];
+                    currentsubscriber.SubscriptionStatus = obj["SubscriptionStatus"];
+
+
+                },
+                error: function () {
+                    alert("Failed to retrieve data.");
+                }
+            });
+
+        }
+        
+        var Save = function (currentsubscriber) {
+            var req = validatereqfields();
+            if (req.length> 0) {
+               
+                alert("Please update or provide answers/selections for the following fields:" + req);
+            }
+            else {
+
+                //quickeditmodel = AddAntiForgeryToken(currentsubscriber);
+                quickeditmodel = JSON.stringify({ 'quickeditmodel': currentsubscriber });
+                console.log(quickeditmodel);
+                var request = $.ajax({
+                    type: "POST",
+                    url: "/UAS.Web/Search/FullSave",
+                    traditional: true,
+                    cache: false,
+                    data: quickeditmodel,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json'
+                });
+                request.done(function (message) {
+                    $('#notificationDiv').html('<br />' + message);
+                });
+            }
+
+        }
+
+        idmapper = {
+            FirstName: $('#quickEdit_FirstName').attr("id"),
+            LastName: $('#quickEdit_LastName').attr("id"),
+            Title: $('#quickEdit_Title').attr("id"),
+            Company: $('#quickEdit_Company').attr("id"),
+            AddressTypeCodeId: $('#quickEdit_AddressTypeCodeId').attr("id"),
+            Address1: $('#quickEdit_Address1').attr("id"),
+            Address2: $('#quickEdit_Address2').attr("id"),
+            Address3: $('#quickEdit_Address3').attr("id"),
+            City: $('#quickEdit_City').attr("id"),
+            CountryID: $('#quickEdit_CountryID').attr("id"),
+            RegionId: "#quickEdit_RegionID",
+            Zip: $('#quickEdit_ZipCode').attr("id"),
+            County: $('#quickEdit_County').attr("id"),
+            Phone: $('#quickEdit_Phone').attr("id"),
+            PhoneCode: $('#quickEdit_PhoneCode').attr("id"),
+            PhoneExt: $('#quickEdit_PhoneExt').attr("id"),
+            Mobile: $('#quickEdit_Mobile').attr("id"),
+            Fax: $('#quickEdit_Fax').attr("id"),
+            Email: $('#quickEdit_Email').attr("id"),
+            Website: $('#quickEdit_Website').attr("id"),
+            SequenceID: $('#quickEdit_SequenceID').attr("id"),
+            ClientName: $("#ProductSub_ClientName").attr("id"),
+            Account: $("#AccountNumber").attr("id"),
+            PubCode: $("#ProductSub_PubCode").attr("id"),
+            IsSubscribed: $("#StatusInfo_IsSubscribed").attr("id"),
+            IsPaid: $("#StatusInfo_IsPaid").attr("id"),
+            SubscriptionStatus: $('#ProductSub_SubscriptionStatusID').attr("id"),
+            PubID: $('#ProductSub_PubID').attr("id"),
+            PubSubscriptionID: $('#ProductSub_PubSubscriptionID').attr("id"),
+            OnBehalfOf: $("#OnBehalfOf").attr("id"),
+            CategoryCodeID: $("#CategoryCodeID").attr("id"),
+            CategoryTypeID: $("#catCodeTypeID").attr("id"),
+            TransactionCode: $("#TransactionCodeID").attr("id"),
+            QSourceID: $("#QSourceID").attr("id"),
+            Par3C: $("#Par3C").attr("id"),
+            Copies: $("#Copies").attr("id"),
+            AccountNumber: $("#AccountNumber").attr("id"),
+            MemberGroup: $("#MemberGroup").attr("id"),
+            OriginalSubscriberSourceCode: $("#OriginalSubscriberSourceCode").attr("id"),
+            SubscriberSourceCode: $("#SubscriberSourceCode").attr("id"),
+            SubSrcID: $("#SubSrcID").attr("id"),
+            Deliverability: $("#Deliverability").attr("id"),
+            Verify: $("#Verify").attr("id"),
+            QDate: $("#QualificationDate").attr("id"),
+            MailPermission: $("#MailPermission").attr("id"),
+            FaxPermission: $("#FaxPermission").attr("id"),
+            PhonePermission: $("#PhonePermission").attr("id"),
+            OtherProductsPermission: $("#OtherProductsPermission").attr("id"),
+            EmailRenewPermission: $("#EmailRenewPermission").attr("id"),
+            ThirdPartyPermission: $("#ThirdPartyPermission").attr("id"),
+            TextPermission: $("#TextPermission").attr("id")
+
+        };
+
+        orgsubscriber = {
+
+            FirstName: $('#quickEdit_FirstName').val(),
+            LastName: $('#quickEdit_LastName').val(),
+            Title: $('#quickEdit_Title').val(),
+            Company: $('#quickEdit_Company').val(),
+            AddressTypeCodeId: $('#quickEdit_AddressTypeCodeId').val(),
+            Address1: $('#quickEdit_Address1').val(),
+            Address2: $('#quickEdit_Address2').val(),
+            Address3: $('#quickEdit_Address3').val(),
+            City: $('#quickEdit_City').val(),
+            CountryID: $('#quickEdit_CountryID').val(),
+            RegionID: $('#quickEdit_RegionID').val(),
+            Zip: $('#quickEdit_ZipCode').val(),
+            County: $('#quickEdit_County').val(),
+            Phone: $('#quickEdit_Phone').val(),
+            PhoneCode: $('#quickEdit_PhoneCode').val(),
+            PhoneExt: $('#quickEdit_PhoneExt').val(),
+            Mobile: $('#quickEdit_Mobile').val(),
+            Fax: $('#quickEdit_Fax').val(),
+            Email: $('#quickEdit_Email').val(),
+            Website: $('#quickEdit_Website').val(),
+            SequenceID: $('#quickEdit_SequenceID').val(),
+            PubID: $('#ProductSub_PubID').val(),
+            PubSubscriptionID: $('#ProductSub_PubSubscriptionID').val(),
+            ClientName: $("#ProductSub_ClientName").val(),
+            Account: $("#AccountNumber").val(),
+            PubCode: $("#ProductSub_PubCode").val(),
+            InfoChanged: false,
+            IsActive: $("#StatusInfo_IsActive").val(),
+            IsSubscribed: $("#StatusInfo_IsSubscribed").val(),
+            IsPaid: $("#StatusInfo_IsPaid").val(),
+            SubscriptionStatus: $('#ProductSub_SubscriptionStatusID').val(),
+            OnBehalfOf: $("#OnBehalfOf").val(),
+            CategoryCodeID: $("#CategoryCodeID").val(),
+            CategoryTypeID: $("#catCodeTypeID").val(),
+            TransactionCode: $("#TransactionCodeID").val(),
+            QSourceID: $("#QSourceID").val(),
+            Par3C: $("#Par3C").val(),
+            Copies: $("#Copies").val(),
+            AccountNumber: $("#AccountNumber").val(),
+            MemberGroup: $("#MemberGroup").val(),
+            OriginalSubscriberSourceCode: $("#OriginalSubscriberSourceCode").val(),
+            SubscriberSourceCode: $("#SubscriberSourceCode").val(),
+            SubSrcID: $("#SubSrcID").val(),
+            Deliverability: $("#Deliverability").val(),
+            Verify: $("#Verify").val(),
+            QDate: $("#QualificationDate").val(),
+            MailPermission: $("#MailPermission").val(),
+            FaxPermission: $("#FaxPermission").val(),
+            PhonePermission: $("#PhonePermission").val(),
+            OtherProductsPermission: $("#OtherProductsPermission").val(),
+            EmailRenewPermission: $("#EmailRenewPermission").val(),
+            ThirdPartyPermission: $("#ThirdPartyPermission").val(),
+            TextPermission: $("#TextPermission").val(),
+
+
+        };
+        var requiredfieldlist = [];
+        requiredfieldlist.push(
+            { id: "catCodeTypeID", value: "CATEGORY PAID OR FREE" },
+            { id: "CategoryCodeID", value: "CATEGORY TYPE" });
+
+        var validatereqfields = function () {
+
+            var req = "";
+            if (TriggerQualDate) {
+                req = req + " Qualification Date, ";
+            }
+            for (var i = 0; i < requiredfieldlist.length; i++) {
+                if (!$("#" + requiredfieldlist[i].id).val()) {
+                    req = req + requiredfieldlist[i].value + ", ";
+                }
+
+            }
+
+            return req;
+        }
+
+        var adhoclist = [];
+        var adhocsvalues = $("#tabstrip-4 :input");
+
+        
+        for (var i = 0 ; i < adhocsvalues.length; i++) {
+
+            adhoclist.push({ AdHocField: adhocsvalues[i].id, Value: adhocsvalues[i].value });
+        }
+        //orgsubscriber.QuestionList = [];
+
+        //$.ajax({
+        //    url: '/UAS.Web/Search/GetResponseList?id=' + orgsubscriber.PubSubscriptionID,
+        //    type: 'GET',
+        //    data: currentsubscriber.PubSubscriptionID,
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function (data) {
+
+        //        orgsubscriber.QuestionList = data;
+        //        for (var i = 0; i < orgsubscriber.QuestionList.length; i++) {
+                   
+        //            if (orgsubscriber.QuestionList[i].IsRequired) {
+        //                console.log(orgsubscriber.QuestionList[i]);
+        //                requiredfieldlist.push({ id: orgsubscriber.QuestionList[i].DisplayName.replace(" ","_"), value: orgsubscriber.QuestionList[i].DisplayName });
+
+        //            }
+        //        }
+               
+        //    },
+        //    error: function () {
+        //        alert("Failed to retrieve data.");
+        //    }
+        //});
+
+        orgsubscriber.adhoclist = [];
+
+        orgsubscriber.adhoclist = adhoclist;
+
+        currentsubscriber = orgsubscriber;
+
+       
+        
+
+        ValidateStatus();
+        //Input Change Events
+        $("#fullkEdit :input").change(function () {
+            //console.log($(this));
+           
+            var id = $(this).attr("id");
+            
+            var keys = getKeys(idmapper);
+            for (var i = 0 ; i < keys.length; i++) {
+                if (id == idmapper[keys[i].toString()]) {
+                    console.log(currentsubscriber[keys[i].toString()]);
+                    if (currentsubscriber[keys[i].toString()] != $("#" + id).val())
+                    {
+                        currentsubscriber[keys[i].toString()] = $("#" + id).val();
+                    }
+                    else {
+                        currentsubscriber[keys[i].toString()] = orgsubscriber[keys[i].toString()];
+                    }
+                    console.log(currentsubscriber[keys[i].toString()]);
+                    break;
+                }
+            }
+          
+            $("#QualificationDate").focus();
+            $("#quickEdit_SaveButton").attr("disabled", false);
+        });
+
+        $("#tabstrip :input").change(function () {
+
+            //alert($(this).val())
+            var id = $(this).attr("id");
+            var keys = getKeys(idmapper);
+            for (var i = 0 ; i < keys.length; i++) {
+                if (id == idmapper[keys[i].toString()]) {
+                    console.log(currentsubscriber[keys[i].toString()]);
+                    if (currentsubscriber[keys[i].toString()] != $("#" + id).val()) {
+                        currentsubscriber[keys[i].toString()] = $("#" + id).val();
+                    }
+                    else {
+                        currentsubscriber[keys[i].toString()] = orgsubscriber[keys[i].toString()];
+                    }
+                    console.log(currentsubscriber[keys[i].toString()]);
+                    break;
+                }
+            }
+
+            $("#QualificationDate").focus();
+            $("#quickEdit_SaveButton").attr("disabled", false);
+        });
+
+        $(".tab").click(function () {
+           
+           
+            var tabname = $(this)[0]["innerText"];
+
+            if (tabname == "Qualification") {
+                
+            }
+            
+        });
+
+        //*********Status tabs event start************//
+        $("#catCodeTypeID").change(function () {
+
+            $("#CategoryCodeID").empty();
+            var currentCategoryCodeTypeID = $(this).val();
+            var previousCategoryCodeTypeID = orgsubscriber.CategoryTypeID;
+            
+           
+            var previousCatType = {};
+            var currentCatType = {};
+            var listtype = "CategoryTypeList";
+            var list ;
+
+            var request0 = $.ajax({
+                url: '/UAS.Web/Search/GetEntityListObjects?listtype=' + listtype + '&ccId=' + currentCategoryCodeTypeID,
+                type: 'GET',
+                data: listtype,
+                contentType: 'application/json; charset=utf-8',
+                success: function (codelist) {
+                    currentCatType = _.first(_.where(codelist, { CategoryCodeTypeID: parseInt(currentCategoryCodeTypeID) }));
+                    previousCatType = _.first(_.where(codelist, { CategoryCodeTypeID: parseInt(previousCategoryCodeTypeID) }));
+
+                    UpdateCategoryType(previousCatType,currentCatType);
+                    
+                },
+                error: function () {
+                    alert("Failed to retrieve data.");
+                }
+            });
+
+           var request1 = $.ajax({
+                type: "GET",
+                url: "/UAS.Web/Search/GetCategoryCodes?CategoryCodeTypeId=" + currentCategoryCodeTypeID,
+                traditional: true,
+                cache: false,
+                data: currentCategoryCodeTypeID,
+                //on success
+                success: function (catogories) {
+                    $.each(catogories, function (i, cat) {
+                        $("#CategoryCodeID").append('<option value="' + cat.Value + '">' +
+                            cat.Text + '</option>');
+                    });
+                },
+                //on Failure
+                error: function () {
+                    alert('Failed to retrieve data.' + message);
+                }
+            });
+        });
+
+        $("#CategoryCodeID").change(function () {
+
+            currentsubscriber.CategoryCodeID = $("#CategoryCodeID option:selected").val();
+            $("#categorytype").text($("#CategoryCodeID option:selected").text());
+        });
+
+        $('#postOfficeBtn').click(function () {
+            ActivateButton($(this).attr('id'));
+            $('#catCodeTypeID').attr('disabled', true);
+            $('#CategoryCodeID').attr('disabled', true);
+            $("#reactivateBtn").addClass("reactivate");
+            requiredfieldlist.remove()
+            var lsittype = "TransCodeList";
+            var transcodeval = 31;
+            var iskill = true;
+            getcodelist(lsittype, transcodeval, iskill);
+
+        });
+
+        $('#personalRequestBtn').click(function () {
+            ActivateButton($(this).attr('id'));
+            $('#catCodeTypeID').attr('disabled', true);
+            $('#CategoryCodeID').attr('disabled', true);
+            $("#reactivateBtn").addClass("reactivate");
+            var lsittype = "TransCodeList";
+            var transcodeval = 32;
+            var iskill = true;
+
+            getcodelist(lsittype, transcodeval, iskill);
+        });
+
+        $('#behalfBtn').click(function () {
+            if ($('#OnBehalfOf').val()) {
+                ActivateButton($(this).attr('id'));
+                $('#catCodeTypeID').attr('disabled', true);
+                $('#CategoryCodeID').attr('disabled', true);
+                $("#reactivateBtn").addClass("reactivate");
+
+                requiredfieldlist.push({ id: "OnBehalfOf", value: "OnBehalfOf" });
+                var lsittype = "TransCodeList";
+                var transcodeval = 32;
+                var iskill = true;
+                getcodelist(lsittype, transcodeval, iskill);
+            }
+            else {
+                alert("Please enter the On Behalf Request name before saving.");
+            }
+
+        });
+
+        $('#paidPostOfficeBtn').click(function () {
+            ActivateButton($(this).attr('id'));
+            $('#catCodeTypeID').attr('disabled', true);
+            $('#CategoryCodeID').attr('disabled', true);
+            $("#reactivateBtn").addClass("reactivate");
+            var lsittype = "TransCodeList";
+            var transcodeval = 61;
+            var iskill = false;
+            getcodelist(lsittype, transcodeval, iskill);
+
+        });
+
+        $('#paidExpieCancel').click(function () {
+
+            ActivateButton($(this).attr('id'));
+            $('#catCodeTypeID').attr('disabled', true);
+            $('#CategoryCodeID').attr('disabled', true);
+            $("#reactivateBtn").addClass("reactivate");
+            var lsittype = "TransCodeList";
+            var transcodeval = 64;
+            var iskill = false;
+            getcodelist(lsittype, transcodeval, iskill);
+
+        });
+
+        $('#paidCreditCancel').click(function () {
+
+            ActivateButton($(this).attr('id'));
+            $('#catCodeTypeID').attr('disabled', true);
+            $('#CategoryCodeID').attr('disabled', true);
+            $("#reactivateBtn").addClass("reactivate");
+            var lsittype = "TransCodeList";
+            var transcodeval = 65;
+            var iskill = true;
+            getcodelist(lsittype, transcodeval, iskill);
+
+
+        });
+
+        $("#quickEdit_CountryID").change(function () {
+            $("#quickEdit_RegionID").empty();
+            var action = "edit";
+            LoadStates(action);
+        });
+
+        $('#reactivateBtn').click(function () {
+
+            if (reactivealreadyclicked) {
+            }
+            else {
+
+                reactivealreadyclicked = true;
+                $("#QualificationDate").focus();
+                $("#fullkEdit :input").attr("disabled", false);
+                $("#quickEdit_CancelButton").attr("disabled", false);
+                $("#quickEdit_SaveButton").attr("disabled", false);
+                $("#tabstrip :input").attr("disabled", false);
+                $("#reactivateBtn").removeClass("reactivate");
+                $('#OnBehalfOf').attr('disabled', false);
+                $("#subscriberFullName img").attr("src", "../../Images/SubscriptionStatus/Active_72.png");
+                $("#CategoryCodeID").attr('disabled', false);
+                $("#catCodeTypeID").attr('disabled', false);
+
+                for (var i = 0 ; i < buttons.length; i++) {
+                    $('#' + buttons[i]).attr('disabled', false);
+                    $('#' + buttons[i]).addClass('reactivate');
+                }
+                for (var i = 0 ; i < buttonsforpaidsubs.length; i++) {
+                    $('#' + buttonsforpaidsubs[i]).attr('disabled', false);
+                    $('#' + buttonsforpaidsubs[i]).addClass('reactivate');
+                }
+
+                UpdateSubscriptionStatus()
+
+                AlwaysDisabledControls();
+            }
+           
+
+        });
+        //*********Status tabs event Ends************//
+
+        //*********Qualification Tab Events Start************// 
+        $("#QualificationDate").click(function () {
+
+            TriggerQualDate = false;
+            $("td.rowmargin span.k-widget.k-datepicker.k-header").removeClass("highlight");
+        });
+        //*********Qualification Tab Events End************//
+
+        //*********Paid Tab Events Start************//
+        $("#PaymentTypeID").change(function () {
+
+            var paymenttype = $("#PaymentTypeID option:selected").text();
+            if (paymenttype == "Check") {
+
+                $(".commonmember").css('visibility', 'visible');
+                $(".checkmeber").css('visibility', 'visible');
+                $(".creditcardmember").css('visibility', 'hidden');
+
+            }
+            else if (paymenttype == "Credit Card") {
+                $(".commonmember").css('visibility', 'visible');
+                $(".creditcardmember").css('visibility', 'visible');
+                $(".checkmeber").css('visibility', 'hidden');
+
+            }
+            else {
+                $(".creditcardmember").css('visibility', 'hidden');
+                $(".checkmeber").css('visibility', 'hidden');
+                $(".commonmember").css('visibility', 'hidden');
+            }
+        });
+        //*********Paid Tab Events Ends************//
+       
+       $("#quickEdit_SaveButton").click(function () {
+           
+            Save(currentsubscriber);
+        });
+
+       $("#quickEdit_CancelButton").click(function () {
+            window.open("/UAS.Web/Search", "_self");
+        })
+
+    });
+
+
+</script>

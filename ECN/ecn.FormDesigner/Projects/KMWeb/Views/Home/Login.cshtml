@@ -1,0 +1,56 @@
+﻿@using KMWeb.Models.Home
+
+@model LoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Page</title>
+        <link href="@Url.Content("~/Content/kendo/2015.1.429/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/kendo/2015.1.429/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/fonts/frontello/css/kmform.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/kendo/2015.1.429/kendo.km.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="wrapper modal modallogin">
+            <fieldset title="Platform Login">
+                <legend>Platform Login</legend>
+                @using (Html.BeginForm())
+                {
+                    <ul class="formlist">
+                        <li>
+                            <div class="logo">
+                                <img src="@Url.Content("~/Images/top-logo.png")" width="172" height="70" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="formitem formitemlabeltop">
+                                <label>User Name</label>
+                                @Html.TextBoxFor(x => x.Username)
+                            </div>
+                        </li>
+                        <li>
+                            <div class="formitem formitemlabeltop">
+                                <label>Password</label>
+                                @Html.PasswordFor(x => x.Password)
+                            </div>
+                        </li>
+                        <li>
+                            @Html.ValidationSummary()
+                        </li>
+                        <li>
+                            <div class="buttonsgroup">
+                                <button class="btn btn-blue2 ">Sign In</button>
+                            </div>
+                        </li>
+                    </ul>
+                }
+            </fieldset>
+        </div>
+    </body>
+</html>

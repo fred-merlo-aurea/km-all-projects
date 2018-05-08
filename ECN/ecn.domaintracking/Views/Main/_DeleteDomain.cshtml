@@ -1,0 +1,39 @@
+﻿@using KMEnums
+<script type="text/javascript">
+    function deleteDomainTrackerConfirm()
+    {
+        showLoadingWindow();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteDomainTracker", "Main")',
+            data: JSON.stringify({ id: $("#Id").val() }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                
+                    showMessage({
+                        type: '@MessageType.Success',
+                        text: "Success",
+                        autoClose: true
+                    });
+                
+                window.location = "/ecn.domaintracking/";
+            }
+        });
+    }
+</script>
+
+<div class="wrapper km-modal modalnotify">
+    <fieldset title="Delete">
+        <div class="picon" style="margin: 0 auto; width: 100px;">            
+            <img src="/ecn.domaintracking/Content/Images/modal-icon-warning.png" border="0" />            
+        </div>
+        @Html.Hidden("Id", null, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+        <div class="text" style="margin: 0 auto; width: 400px; text-align: left; padding-left: 2em; padding-top: 2em;">
+            <span>Are you sure you want to delete this item?</span>
+        </div>
+        <div class="buttons" style="margin: 0 auto; width: 300px; text-align: center;">
+            @Html.Kendo().Button().Name("Delete").Content("Delete").HtmlAttributes(new { @class = "btn", type="button", onclick="deleteDomainTrackerConfirm()" })
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('DeleteWindow')" })
+        </div>
+</fieldset>
+</div>

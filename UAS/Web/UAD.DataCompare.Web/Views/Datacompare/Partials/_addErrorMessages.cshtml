@@ -1,0 +1,31 @@
+﻿@model UAD.DataCompare.Web.Models.Datacompare
+
+@if (Model.errorMessagesDict != null)
+{
+    <div style="margin:10px 10px 10px 10px;">
+        <ul>
+            @foreach (var keys in Model.errorMessagesDict.Keys)
+            {
+                if (keys.ToString() != "InitSuccess")
+                {
+                    <li @if (keys.ToString().Contains("Success")) { <text> style="color:white;font-weight:bold;" </text>    } else { <text> style="color:red;font-weight:bold;" </text>    }>
+                        @Model.errorMessagesDict[keys.ToString()]
+                    </li>
+                }
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <li style="color:white;font-weight:bold;">@TempData["SuccessMessage"] </li>
+            }
+            @if (TempData["MoreThanOneFTPSetting"] != null)
+            {
+                <li style="color:red;font-weight:bold;">@TempData["MoreThanOneFTPSetting"] </li>
+            }
+            @if (TempData["demoOrDuplicateFieldMap"] != null)
+            {
+                <li style="color:red;font-weight:bold;">@TempData["demoOrDuplicateFieldMap"] </li>
+            }
+        </ul>
+
+    </div>
+}

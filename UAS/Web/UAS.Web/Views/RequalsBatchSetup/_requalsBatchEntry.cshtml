@@ -1,0 +1,499 @@
+﻿@model UAS.Web.Models.Circulations.RequalBatchDetailsViewModel
+<style>
+    .panel-heading{
+        text-transform:uppercase;
+    }
+    labe
+</style>
+
+<form id="reqbatchentryfrm">
+    @Html.HiddenFor(x => x.Par3CID)
+    @Html.HiddenFor(x => x.SubSrc)
+    @Html.HiddenFor(x => x.QSourceID)
+    @Html.HiddenFor(x => x.ProductID)
+    <table style="width:100%;">
+        <tr>
+            <td align="left" width="35%">
+                <label>Sequence#: </label>@Html.Kendo().TextBox().Name("SequenceNumber").HtmlAttributes(new { autofocus= "autofocus" })
+            </td>
+            <td align="left" width="15%">
+                <button type="button" class="btn-blue2" id="btnBESearch">Search</button>
+                <button type="button" class="btn-blue2" id="btnBEReset">Reset</button>
+            </td>
+            <td align="left" width="25%">
+                <label for="QDate">Qualification Date: </label>
+            </td>
+            <td align="left" width="25%">
+                <input class="inputsdate"  id="BE_QDate_MM" placeholder="mm" type="number" min="1" max="12" maxlength="2" style="width:40px;" />/
+                <input class="inputsdate" id="BE_QDate_DD" placeholder="dd"  type="number"  min="1" max="31"  maxlength="2" style="width:40px;" />/
+                <input class="inputsdate" id="BE_QDate_YYYY" placeholder="yyyy"  type="number" min="2000" max="3000" maxlength="4" style="width:60px;" />
+                @*<input type="text"  id="BE_QDate"/>*@
+            </td>
+
+        </tr>
+        <tr>
+            
+            <td align="left" colspan="4">
+                <input type="hidden" id="PubSubscriptionID" />
+                <input type="hidden" id="SubscriptionID" />
+                <label id="lblDetails" style="line-height:16px;"></label>
+            </td>
+            @*<td align="left" width="20%">
+                
+            </td>
+            <td align="left" width="25%">
+                
+            </td>
+            <td align="left" width="25%">
+                
+            </td>*@
+        </tr>
+        @foreach (var s in Model.ResponseGroupList)
+        {
+            var required = 0;
+            <tr class="QualificationBody" style="display:none;">
+                <td colspan="4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            @if (s.IsRequired)
+                            {
+                                <b style="color:red;">*</b>
+                                required = 1;
+                            }
+                            <b style="color:cornflowerblue;">@s.Text </b>&nbsp;&nbsp;
+                            <input type="text" id="DemoDatePicker_@s.Value" />
+                            @*@Html.Kendo().DatePicker().Name("DemoDatePicker_" + @s.Value).Format("MM/dd/yyyy")*@
+                            &nbsp;&nbsp;@Html.Kendo().CheckBox().Name("chkDemoDates_" + @s.Value)
+                            <label style="color:cornflowerblue;">If checked the qualification date will be applied for Demographic Date.</label>
+                        </div>
+                        <div class="panel-body" id="panelBD_@s.Value">
+                            <div id="dvCodeSheetEntry_@s.Value">
+                                <input type="text"  class="CodeSheetEntry k-textbox" data-isrequired="@required" id="txtCodeSheet_@s.Value" />&nbsp;&nbsp;
+                                <label class="error" id="lblCodeSheetError_@s.Value" style="display:none;"></label>
+                            </div>
+                            <div id="dvCodeSheetEntryMatched_@s.Value">
+
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr class="QualificationBodyBtns" style="display:none;">
+            <td align="center"  colspan="4" width="25%">
+                <button type="button" class="btn-blue2" id="btnBESave" >Save</button>
+                <button type="button" class="btn-blue2" id="btnBENewForm">New Form</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+   
+    $(document).ready(function () {
+        currentindex = 0;
+        totalresponses = $('.CodeSheetEntry');
+
+        
+        $("#SequenceNumber").focus();
+        function leapYear(year) {
+            return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+        }
+        
+        function ValidateDate() {
+            var yyyy = s = $("#BE_QDate_YYYY").val();
+            var dd = $("#BE_QDate_DD").val().replace(/^0+/, '');
+            var mm = $("#BE_QDate_MM").val().replace(/^0+/, '');
+            if (isNaN(mm) || isNaN(dd) || isNaN(yyyy))
+                return false;
+
+            if (mm > 12 || mm < 1 || $.trim(mm) === '')
+                return false;
+            if (dd > 31 || dd < 1 || $.trim(dd) === '')
+                return false;
+            if (yyyy < 2000 || yyyy > 3000 || $.trim(yyyy) === '')
+                return false;
+
+            switch(mm){
+                case '1':
+                case '3':
+                case '5':
+                case '7':
+                case '8':
+                case '10':
+                case '12':
+                    return dd <= 31;
+                case '4':
+                case '6':
+                case '9':
+                case '11':
+                    return dd <= 30;
+                case '2':
+                    // Task 48024: MVC - Web Version - Quick Requal Entry screen - you can't enter a Qualification date of 02/01/2018 or higher.
+                    return leapYear(yyyy)
+                        ? dd <= 29
+                        : dd <= 28;
+            }
+        }
+
+        $.each(totalresponses, function (i, obj) {
+            var rgid = obj.id.split('_')[1];
+            $("#DemoDatePicker_" + rgid).val(Date.now);
+            $("#DemoDatePicker_" + rgid).datepicker();
+        });
+        $("#BE_QDate_MM").keypress(function (e) {
+            if (e.keyCode == 13) {
+                $("#BE_QDate_DD").select();
+            }
+        });
+        $("#BE_QDate_DD").keypress(function (e) {
+            if (e.keyCode == 13) {
+                $("#BE_QDate_YYYY").select();
+            }
+        });
+
+        $("#BE_QDate_YYYY").keypress(function (e) {
+            
+            if (e.keyCode == 13) {
+                clearValidationErrorMessages();
+                if (ValidateDate()) {
+                    var year = s = $("#BE_QDate_YYYY").val();
+                    var day = $("#BE_QDate_DD").val().replace(/^0+/, '');
+                    var month = $("#BE_QDate_MM").val().replace(/^0+/, '');
+                    var dateval = month + "/" + day + "/" + year;
+                    $.each(totalresponses, function (i, obj) {
+                        var rgid = obj.id.split('_')[1];
+                        $("#DemoDatePicker_" + rgid).val(dateval);
+                    });
+                    $("#" + totalresponses[0].id).focus();
+                }
+                else {
+                    $("#BE_QDate_YYYY").focus();
+                    setValidationClient([{ name: "BE_QDate_MM", message: "", label: "", isKendo: false }]);
+                    setValidationClient([{ name: "BE_QDate_DD", message: "", label: "", isKendo: false }]);
+                    setValidationClient([{ name: "BE_QDate_YYYY", message: "Please enter valid date.", label: "BE_QDate_YYYYLabel", isKendo: false }]);
+                    $(".validationMessage").css("display", "inline");
+                   
+                }
+               
+            }
+        });
+        function OpenNewForm() {
+            window.location = "/uas.web/RequalsBatchSetup?PubID=" + $("#SelectedProductID").val();
+        }
+        function ValidateSequNumberValidtion(seqnum) {
+            clearValidationErrorMessages();
+            if (isNaN(seqnum) || $.trim(seqnum) === "") {
+                setValidationClient([{ name: "SequenceNumber", message: "Please enter valid Sequence #.", label: "SequenceNumberLabel", isKendo: false }]);
+                return false;
+            } else {
+              return true;
+            }
+        }
+        function clearform() {
+            currentindex = 0;
+            clearValidationErrorMessages();
+            $('#SequenceNumber').val('');
+            $('#SequenceNumber').focus();
+            $('#PubSubscriptionID').val('');
+            $('#lblDetails').text('');
+            var dateObj = new Date();
+            var month = dateObj.getUTCMonth() + 1; //months from 1-12
+            var day = dateObj.getUTCDate();
+            var year = dateObj.getUTCFullYear();
+            $("#BE_QDate_MM").val(month);
+            $("#BE_QDate_DD").val(day);
+            $("#BE_QDate_YYYY").val(year);
+            $('.QualificationBody').hide();
+            $.each(totalresponses, function (i, obj) {
+                var rgid = obj.id.split('_')[1];
+                $(this).val('');
+                $("#DemoDatePicker_" + rgid).val(Date.now);
+                $("#chkDemoDates_" + rgid).prop('checked',false);
+                $("#dvCodeSheetEntryMatched_" + rgid).html('');
+                $('#lblCodeSheetError_' + rgid).text('');
+                $('#txtCodeSheet_' + rgid).removeClass('input-validation-error');
+            });
+        }
+        function SearchSubscriberBySequence() {
+            var seqnum = $('#SequenceNumber').val();
+            var validSeqNum = ValidateSequNumberValidtion(seqnum);
+            if (seqnum && validSeqNum) {
+                $.ajax({
+                    url: '/uas.web/RequalsBatchSetup/GetSubscriberRecord?PubID=' + $("#ProductID").val() + "&SeqNumber=" + seqnum,
+                    contentType: "application/html; charset=utf-8",
+                    type: 'GET',
+                    cache: false,
+                    datatype: 'application/json',
+                    success: function (response) {
+                        if (!response.error) {
+                            $('#lblDetails').html(response.Details);
+                            $('#PubSubscriptionID').val(response.PubSubscriptionID);
+                            $('#SubscriptionID').val(response.SubscriptionID);
+                            $("#BE_QDate_MM").val(response.MM);
+                            $("#BE_QDate_DD").val(response.DD);
+                            $("#BE_QDate_YYYY").val(response.YYYY);
+                            $("#BE_QDate_MM").select();
+                          
+                            //$("#BE_QDate").val(response.QualDate);
+                            //$("#BE_QDate").focus();
+
+                            $.each(totalresponses, function (i, obj) {
+                                var rgid = obj.id.split('_')[1];
+                                $("#DemoDatePicker_" + rgid).val(response.QualDate);
+                            });
+                            $('.QualificationBody').show();
+                            $('.QualificationBodyBtns').show();
+                         } else {
+                            setValidationClient([{ name: "SequenceNumber", message: response.errormessage, label: "SequenceNumberLabel", isKendo: false }]);
+                           // $("#BE_QDate").val('');
+                            $('.QualificationBody').hide();
+                            $('.QualificationBodyBtns').hide();
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            }
+        }
+        function ValidateResponses(pubsubdetlst, rgid) {
+            var found = false;
+            var errorlist = []
+            for (var i = 0; i < pubsubdetlst.length; i++) {
+                if (pubsubdetlst[i].ResponseGroupID == rgid) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                $(obj).addClass('input-validation-error');
+                $('#lblCodeSheetError_' + rgid).text('Please provide required response.');
+                $('#lblCodeSheetError_' + rgid).show();
+                errorlist.push('Please provide required response.');
+            } else {
+                $(obj).removeClass('input-validation-error');
+                $('#lblCodeSheetError_' + rgid).text('');
+                $('#lblCodeSheetError_' + rgid).hide();
+            }
+            return errorlist;
+        }
+        $('#SequenceNumber').keypress(function (e) {
+            if (e.keyCode == 13) {
+                SearchSubscriberBySequence();
+            }
+        });
+       
+        $('#btnBESearch').click(function () {
+            SearchSubscriberBySequence();
+        });
+        $('#btnBEReset').click(function () {
+            clearform();
+        });
+        $('.CodeSheetEntry').on("focus", function (e) {
+            var currentrgid = e.target.id.split('_')[1];
+            $.each(totalresponses, function (i, obj) {
+                var rgid = obj.id.split('_')[1];
+                if (rgid == currentrgid) {
+                    currentindex = i;
+                    return;
+                }
+            });
+
+        });
+       
+
+        $('.CodeSheetEntry').keypress(function (e) {
+            //var regex = /^\d+(,\d+)*$/;  //Regular expression for comma seperated values
+            if (e.keyCode == 13) {
+                var rgid = e.target.id.split('_')[1];
+                $("#dvCodeSheetEntryMatched_" + rgid).html('');
+                //if ($(this).val() && regex.test($(this).val())) {
+                if ($(this).val()) {
+                    $('#lblCodeSheetError_' + rgid).text('');
+                    $('#lblCodeSheetError_' + rgid).hide();
+                    $(this).removeClass('input-validation-error');
+                    var CodeSheetIds = $(this).val().split(',');
+                    var isother = false;
+                    var isotherid = "";
+                    $.ajax({
+                        type: 'POST',
+                        url: '/UAS.web/RequalsBatchSetup/GetResponseGroupCodeSheetAjax',
+                        data: JSON.stringify({ 'rgId': rgid, 'codeSheetIDs': CodeSheetIds }),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            var lis = "";
+                            var csvCodeSheetIds="";
+                            if (response) {
+                                $("#chkDemoDates_" + rgid).prop("checked", true);
+                                $.each(response, function (i, obj) {
+                                    if (obj.IsOther) {//.toLowerCase() == "other (please specify)") {
+                                        isother = obj.IsOther;
+                                        isotherid ='txtOtherCodeSheet_' + obj.Value;
+                                        lis = lis + "<li style='list-style:none;padding-left:20px;'><input type='checkbox' data-isother='1'  disabled id='chkCodeSheet_" + obj.Value + "' checked/><label id='lblResponseText_" + obj.Value + "'>" + obj.Text + "</label> &nbsp;&nbsp;  <input type='textbox'  class='k-textbox' onkeypress='EnterPressed(event)'  id='txtOtherCodeSheet_" + obj.Value + "' /></li>";
+                                    }else{
+                                        lis = lis + "<li style='list-style:none;padding-left:20px;'><input type='checkbox' data-isother='0'  disabled id='chkCodeSheet_" + obj.Value + "' checked/><labelid='lblResponseText_" + obj.Value + "'>" + obj.Text + "</label></li>";
+                                    }
+                                    if (csvCodeSheetIds.length > 0) {
+                                        csvCodeSheetIds = csvCodeSheetIds + "," + obj.Value
+                                    } else {
+                                        csvCodeSheetIds = obj.Value;
+                                    }
+                                });
+                                
+                                currentindex = currentindex + 1;
+                                if (currentindex < totalresponses.length) {
+                                    $("#" + totalresponses[currentindex].id).focus();
+                                } else if (currentindex == totalresponses.length) {
+                                    $("#btnBESave").focus();
+                                    currentindex = 0;
+                                }
+                                
+                             } else {
+                                if (currentindex < totalresponses.length) {
+                                    $("#" + totalresponses[currentindex].id).focus();
+                                } else if (currentindex == totalresponses.length) {
+                                    $("#btnBESave").focus();
+                                    currentindex = 0;
+                                }
+                                lis = "<li style='color:red;list-style:none;padding-left:20px;'>Invalid values. Please enter valid values.</li> "
+                            }
+                            $("#dvCodeSheetEntryMatched_" + rgid).append(lis);
+                            $("#txtCodeSheet_" + rgid).data("CodeSheetIds", csvCodeSheetIds);
+                            if (isother) {
+                                $("#" + isotherid).focus();
+                                if (currentindex > 0)
+                                    currentindex = currentindex - 1;
+                                else
+                                    currentindex = 0;
+                            } 
+
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        }
+                    });
+                } else {
+                    //$('#lblCodeSheetError_' + rgid).text('Please enter valid Codesheet Ids in comma seperated format.');
+                    //$('#lblCodeSheetError_' + rgid).show();
+                    //$(this).addClass('input-validation-error')
+                    currentindex = currentindex + 1;
+                    if (currentindex < totalresponses.length) {
+                        $("#" + totalresponses[currentindex].id).focus();
+                    } else if (currentindex == totalresponses.length) {
+                        $("#btnBESave").focus();
+                        currentindex = 0;
+                    }
+                }
+
+
+
+            }
+        });
+        $("#btnBESave").click(function (e) {
+            var pubsubdetailslst = [];
+            var errors = []
+            var year = s = $("#BE_QDate_YYYY").val();
+            var day = $("#BE_QDate_DD").val().replace(/^0+/, '');
+            var month = $("#BE_QDate_MM").val().replace(/^0+/, '');
+            var dateval = month + "/" + day + "/" + year;
+            $.each(totalresponses, function (i, obj) {
+                var rgid = obj.id.split('_')[1];
+                var CodesheetIDs = [];
+                if ($(obj).data("CodeSheetIds")) {
+                    CodesheetIDs = $(obj).data("CodeSheetIds").split(',');
+                }
+                var datarequired = $(obj).data("isrequired");
+                $.each(CodesheetIDs, function (i, id) {
+                    var isother = $('#chkCodeSheet_' + id).data('isother');
+                    var resother = '';
+                    if (isother=='1') {
+                          resother = $('#txtOtherCodeSheet_' + id).val();
+                    } else {
+                            resother ='';
+                    }
+                    var validdemo = $('#chkCodeSheet_' + id).val();
+                    if (validdemo) {
+                        var datecreated = Date.now;
+                        var flag_dmchecked = false;
+                        if ($('#chkDemoDates_' + rgid).is(':checked')) {
+                            //datecreated = $('#BE_QDate').val();
+                            datecreated = dateval;
+                            flag_dmchecked = true;
+                        } else {
+                            datecreated = $('#DemoDatePicker_' + rgid).val();
+                            flag_dmchecked = false;
+                        }
+                        pubsubdetailslst.push({
+                            PubSubscriptionID: $('#PubSubscriptionID').val(),
+                            SubscriptionID: $('#SubscriptionID').val(),
+                            CodeSheetID: id,
+                            ResponseOther: resother,
+                            DateCreated: datecreated,
+                            ResponseGroupID: rgid,
+                            DemoChecked: flag_dmchecked
+                        });
+                    }
+
+                });
+               
+
+            });
+           
+            clearValidationErrorMessages();
+            //if ($.trim($('#BE_QDate').val()) === "") {
+            //    errors.push({ name: "BE_QDate", message: "Please enter a value for Qualification Date.", label: "BE_QDateLabel", isKendo: false });
+            //    setValidationClient(errors);
+            //    $('#BE_QDate').focus();
+            //}
+            if (!ValidateDate()) {
+                $("#BE_QDate_YYYY").focus();
+                setValidationClient([{ name: "BE_QDate_MM", message: "", label: "", isKendo: false }]);
+                setValidationClient([{ name: "BE_QDate_DD", message: "", label: "", isKendo: false }]);
+                setValidationClient([{ name: "BE_QDate_YYYY", message: "Please enter valid date.", label: "BE_QDate_YYYYLabel", isKendo: false }]);
+                $(".validationMessage").css("display", "inline");
+            }
+            else {
+                var model = {
+                    PubSubscriptionID: $('#PubSubscriptionID').val(),
+                    Par3CID: $('#Par3CID').val(),
+                    QSourceID: $('#QSourceID').val(),
+                    SubSrc: $('#SubSrc').val(),
+                    QDate: dateval,
+                    PubSubDetails: pubsubdetailslst
+                }
+                if (pubsubdetailslst.length > 0) { //&& errors.length == 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/UAS.web/RequalsBatchSetup/SaveResponses',
+                        data: JSON.stringify({ 'RqBatchVM': model }),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            clearform();
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                text: "Responses has been saved successfully.",
+                                autoClose: true,
+                                IsOpen: false
+                            });
+                            $('#SequenceNumber').focus();
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        }
+                    });
+                }
+            }
+        });
+        $("#btnBENewForm").click(function (e) {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                text: "Are you sure you want to setup a new batch for quick entry?",
+                autoClose: false,
+                IsOpen: false,
+                action: OpenNewForm
+            });
+        });
+
+    });
+
+</script>

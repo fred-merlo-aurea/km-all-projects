@@ -1,0 +1,73 @@
+﻿@model UAS.Web.Models.Circulations.BillTo
+<table style="width:100%;margin:10px auto;">
+    <tbody>
+        <tr>
+            <td colspan="3"><h3>Bill To:</h3></td>
+            <td colspan="3" align="right">
+                 @Html.Kendo().CheckBox().Name("CopyProfile").Label("Same As Profile")
+            </td>
+        </tr>
+        <tr>
+            <td><label>First Name:</label></td>
+            <td>@Html.TextBoxFor(m => Model.FirstName, new {style ="width:250px"})</td>
+            <td><label>Address 2:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Address2, new { style = "width:250px" })</td>
+            <td><label>Phone:</label></td>
+            <td>
+                @Html.TextBoxFor(m => Model.PhonePrefix, new { style = "width:40px;margin-right:10x;", disabled = true })
+                @Html.TextBoxFor(m => Model.Phone, new { style = "width:150px" })
+                @Html.TextBoxFor(m => Model.PhoneExt, new { style = "width:40px;margin-left:10x;", disabled = true })
+            </td>
+        </tr>
+        <tr>
+            <td><label>Last Name:</label></td>
+            <td>@Html.TextBoxFor(m => Model.LastName, new { style = "width:250px" })</td>
+            <td><label>Address 3:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Address3, new { style = "width:250px" })</td>
+            <td><label>Mobile:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Mobile, new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td><label>Title:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Title, new { style = "width:250px" })</td>
+            <td><label>City:</label></td>
+            <td>@Html.TextBoxFor(m => Model.City, new { style = "width:250px" })</td>
+            <td><label>Fax:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Fax, new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td><label>Company:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Company, new { style = "width:250px" })</td>
+            <td><label>Country:</label></td>
+            <td>@Html.DropDownListFor(x => x.CountryID, Model.CountrySelectList, "", new { style = "width:250px" })</td>
+            <td><label>Email:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Email, new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td><label>Address Type:</label></td>
+            <td>@Html.DropDownListFor(x => x.AddressTypeCodeId, Model.AddressTypeSelectList, "", new { style = "width:250px" })</td>
+            <td><label>State:</label></td>
+            <td>@Html.DropDownListFor(x => x.RegionID,Model.RegionSelectList, "", new { style = "width:250px" })</td>
+            <td><label>Website:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Website, new { style = "width:250px" })</td>
+        </tr>
+        <tr>
+            <td><label>Address 1:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Address, new { style = "width:250px" })</td>
+            <td><label>Zip:</label></td>
+            <td>@Html.TextBoxFor(m => Model.Zip, new { style = "width:250px" })</td>
+            <td><label>County:</label></td>
+            <td>@Html.TextBoxFor(m => Model.County, new { style = "width:250px" })</td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        var BillTo = {};
+        $("#CopyProfile").click(function () {
+            if ($(this).is(":checked")) {
+                alert("Bill To - Checked");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,215 @@
+﻿@model UAD.DataCompare.Web.Models.SourceFile
+@{
+    ViewBag.Title = "Edit File";
+}
+@section Scripts {
+
+    <script>
+        var tabs, currentIndex = 0;
+        $(document).ready(function () {
+
+
+            $('.previewdetails').hide();
+
+            $("#Delimiter").attr("selected", true).val($("#hdDelimeter").val());
+            if ($("#hdIsTextQualifier").val()==="True")
+            {
+                alert($("#hdIsTextQualifier").val())
+                $("#Quotation").attr("selected", true).val("Yes");
+            }
+            else {
+                $("#Quotation").attr("selected", true).val("No");
+            }
+           
+            $("#Quotation").on("change", function (e) {
+
+                var quote = $("#Quotation").val();
+                if (quote ==="No")
+                    $("#hdIsTextQualifier").val(false);
+                else
+                    $("#hdIsTextQualifier").val(true);
+
+            });
+
+
+
+            tabs = $("#tabstrip").data("kendoTabStrip");
+
+            $("#tbColumnMapper").on('click', '.btnDelete', function () {
+                if (confirm("Do you want to delete this row?")) {
+                    var closestRow = $(this).closest('tr');
+                    closestRow.add(closestRow.next()).remove();
+                    }
+                else {
+                    return false;
+                }
+            });
+
+            $("#togglepreview").on("click", function () {
+                var checked = $(this).val();
+                if (checked == "View Details") {
+                    $('.previewdetails').show();
+                    $(this).attr('Value', 'Minimize Details');
+                }
+                else {
+                    $('.previewdetails').hide();
+                    $(this).attr('Value', 'View Details');
+                }
+            });
+
+            
+
+
+        })
+
+        function onSelect(e) {
+
+            var selectedIndex = tabIndexOfElement(e.item);
+            currentIndex = selectedIndex;
+            tabs.enable(getTabAtIndex(currentIndex), true);
+
+        }
+
+        function onPreviousClick(e) {
+            e.preventDefault();
+            tabs.select(tabs.select().prev());
+        }
+
+        function onNextClick(e) {
+            e.preventDefault();
+            tabs.select(getTabAtIndex(currentIndex + 1));
+        }
+
+        function getTabAtIndex(index) {
+            return tabs.tabGroup.children().eq(index);
+        }
+
+        function tabIndexOfElement(element) {
+            return tabs.element.find(element).index();
+        }
+    </script>
+}
+<style>
+    .form-lable {
+        font-family: font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-weight: 600;
+        font-size: medium;
+    }
+
+    .form-table {
+        margin-top: 0 10%;
+    }
+
+        .form-table > tbody > tr > td {
+            height: 30px;
+        }
+
+    .center-div {
+        margin: 10px 10% 0 10%;
+    }
+
+    .center-div-2 {
+        margin: 0 15%;
+        overflow-y: auto;
+        height: 460px;
+        border: 1px solid gray;
+        padding-left: 5%;
+    }
+
+
+    .footer-div {
+        background-color: #e3e3e3;
+        margin: 0 auto;
+        height: 50px;
+        width: 100%;
+        float: right;
+    }
+
+    .header-div {
+        background-color: #115fa9;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+        .header-div > h2 {
+            color: white;
+            vertical-align: top;
+            margin-left: 40%;
+        }
+
+    .k-info-colored {
+        padding-left: 20px;
+    }
+
+    .previewdetails {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    #notificationDiv {
+        height: auto;
+        background-color: lightgreen;
+        border-radius: 10px;
+        margin: 10px auto;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    
+    #please-wait
+    {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #please-wait .modal
+    {
+        z-index: 99;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background-color: black;
+        margin-left: 0;
+    }
+
+     
+
+</style>
+
+<div class="container">
+    <h2>@ViewBag.Title.</h2>
+    <div id="notificationDiv">
+        @Html.Partial("Partials/Edit/_editErrorMessages", Model)
+    </div>
+
+   
+        @(Html.Kendo().TabStrip()
+                       .Name("tabstrip")
+                       .Items(tabstrip =>
+                       {
+                           tabstrip.Add().Text("File Details")
+                              .Selected(true)
+                              .Content(m => Html.Partial("Partials/Edit/_EditFileStep1", m));
+
+                           tabstrip.Add().Text("Map Columns")
+                               .Enabled(true)
+                               .Content(m => Html.Partial("Partials/Edit/_EditFileStep2", m));
+
+                       })
+                       .Events(ev =>
+                       {
+                           ev.Select("onSelect");
+
+                       })
+        )
+
+    
+</div>
+<div id="please-wait" style="display: none;">
+    <div class="modal"></div>
+</div>

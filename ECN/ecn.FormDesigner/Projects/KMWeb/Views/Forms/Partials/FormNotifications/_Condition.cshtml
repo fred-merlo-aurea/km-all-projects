@@ -1,0 +1,109 @@
+﻿@using System.Linq
+@using System.Collections.Generic
+
+@using KMEnums
+@using KMModels
+
+@model ConditionModel
+
+@{
+    var conditionId = ViewData.TemplateInfo.HtmlFieldPrefix;
+
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+    
+    var selected = controls.Single(x => x.Id == Model.ControlId);
+}
+
+@helper GetValueControl(string name, ControlModel control)
+{
+    var dataType = control.DataType;
+    
+    if(dataType == DataType.Selection)
+    {
+        Html.Kendo().DropDownList().Name(name)
+            .BindTo(control.SelectableItems)
+            .DataTextField("Label")
+            .DataValueField("Id")
+            .Value(Model.Value)
+            .Render();
+    }
+    if(dataType == DataType.Text)
+    {
+        Html.Kendo().TextBox().Name(name).Value(Model.Value).Render();
+    }
+    if(dataType == DataType.Date)
+    {
+        Html.Kendo().DateTimePicker().Name(name)
+            .Value(Model.Value).Render();
+    }
+    if(dataType == DataType.Number)
+    {
+        Html.Kendo().NumericTextBox().Name(name).Decimals(0).Format("#")
+            .Value(!string.IsNullOrEmpty(Model.Value) ? (double?)double.Parse(Model.Value) : null).Render();
+    }
+    if (dataType == DataType.Decimal)
+    {
+        Html.Kendo().NumericTextBox().Name(name)
+            .Value(!string.IsNullOrEmpty(Model.Value) ? (double?)double.Parse(Model.Value) : null).Render();
+    }
+    if(dataType == DataType.Newsletter)
+    {
+        Html.Kendo().DropDownList().Name(name)
+            .Items(items => {
+                items.Add().Value("Subscribe").Text("Subscribe");
+            })
+            .Value(Model.Value)
+            .Render();
+    }
+}
+
+<ul class="inline">
+    <li class="cond conditionTypeItem">@Html.DisplayFor(x => x.Type)</li>
+    <li class="fld">
+        @(Html.Kendo()
+            .DropDownListFor(x => x.ControlId)
+            .BindTo(controls)
+            .DataTextField("FieldLabel")
+            .DataValueField("Id")
+            .Events(e => e.Change(@<text>function(){ changeControl('@conditionId', this); }</text>))
+        )
+    </li>
+    <li class="comp">
+        @{ 
+            Array typeValue = GetComparisonTypeValues(selected.DataType);
+            int selectedIndex = 0;
+            foreach(ComparisonType type in GetComparisonTypeValues(selected.DataType))
+            {
+                if (type == Model.ComparisonType)
+                {
+                    break;
+                }
+
+                selectedIndex++;
+            }
+        }
+        @(Html.Kendo()
+                .DropDownListFor(x => x.ComparisonType)
+                .Items(items =>
+                {
+                    foreach (ComparisonType type in GetComparisonTypeValues(selected.DataType))
+                    {
+                        items.Add().Text(type.ToString()).Value(type.ToString());
+                    }
+                })
+                .SelectedIndex(selectedIndex)
+        )
+    </li>    
+    <li class="value">
+        @GetValueControl(conditionId + ".Value", selected)
+    </li>
+    <li class="acts">
+        @(
+            Html.Kendo()
+                .Button()
+                .Name(string.Format("{0}_DeleteCondition", conditionId))
+                .Content("Delete<i class='km-icon icon-kmcustom-delete'></i>")
+                .HtmlAttributes(new { onclick = string.Format("deleteCondition('{0}')", conditionId), type = "button", @class = "btn btn-blue3" })
+        )
+    </li>
+</ul>

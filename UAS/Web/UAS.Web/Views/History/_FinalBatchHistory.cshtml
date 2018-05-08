@@ -1,0 +1,114 @@
+﻿@model UAS.Web.Models.Circulations.History
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        $("#searchBtn").click(function () {
+            LoadSearchResults();
+        });
+        $("#resetBtn").click(function () {
+            Reset();
+        });
+    });
+
+    function Reset() {
+        $("#BatchNumber").val('');
+        $("#ddlUserName").val("");
+        var exists = false;
+        $('#ddlUserName option').each(function () {
+            if (this.value == '-- Select --') {
+                exists = true;
+                return false;
+            }
+        });
+        if (exists == true) {
+            $("#ddlUserName").val("-- Select --");
+        }
+        var result = new Date();
+        result.setDate(result.getDate() - 14);
+        var start = kendo.toString(kendo.parseDate(result), 'MM/dd/yyyy');
+        $("#StartDate").data("kendoDatePicker").value(start);
+        var end = kendo.toString(kendo.parseDate(new Date()), 'MM/dd/yyyy');
+        $("#EndDate").data("kendoDatePicker").value(end);
+        $("#ddlProduct").val("");
+        $("#finalBatches").html("");
+        console.log('reset');
+    }
+
+    function LoadSearchResults() {
+        var historyModel = {
+            UserId: $('#ddlUserName').val(),//val should be the userId   $("#ddlUserName option:selected").text();
+            StartDate: $('#StartDate').val(),
+            EndDate: $('#EndDate').val(),
+            ProductCode: $("#ddlProduct option:selected").text(),
+            BatchNumber: $('#BatchNumber').val()
+        }
+
+        $.ajax({
+            url: "/UAS.Web/History/FinalBatchHistory",
+            type: "POST",
+            data: historyModel,
+            traditional: true,
+            cache: false,
+            success: function (returnData) {
+                $("#finalBatches").html(returnData.ViewString);
+                var fileTypes;
+                fileTypes = returnData.Users;
+                
+                //Grab current value to repopulate selected value after repopulating dropdownlist values
+                var currentUser = $('#ddlUserName').val()
+                $("#ddlUserName").html("");
+                $("#ddlUserName").append($('<option></option>').val("-- Select --").html("-- Select --"));
+                $.each(fileTypes, function () {
+                    $("#ddlUserName").append($('<option></option>').val(this.Key).html(this.Value));
+                });
+                //repopulate selected value
+                if (currentUser == "")
+                    currentUser = "-- Select --";
+
+                $("#ddlUserName").val(currentUser);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+<table style="width:75%;">
+    <tr>
+        <td> User Name: </td>
+        <td>
+            @Html.DropDownList("ddlUserName", Model.Users.Select(item => new SelectListItem
+            {
+                Value = item.Key.ToString(),
+                Text = item.Value,
+                Selected = "select" == Model.User.Key.ToString()
+            }), "-- Select --")
+        </td>
+        <td>Start Date:</td>
+        <td>@Html.Kendo().DatePickerFor(x => x.StartDate).HtmlAttributes(new { @type = "" })</td>
+        <td> <button type="button" id="searchBtn" class="btn-blue2" style="width: 75px;"> Search </button></td>
+    </tr>
+    <tr>
+        <td> Batch #: </td>
+        <td>@Html.TextBoxFor(x => x.BatchNumber)</td>     
+        <td> End Date: </td>
+        <td>@Html.Kendo().DatePickerFor(x => x.EndDate).HtmlAttributes(new { @type = "" })</td>
+        <td> <button type="button" id="resetBtn" class="btn-blue2" style="width: 75px;"> Reset</button></td>
+    </tr>
+    <tr>
+        <td> Product: </td>
+        <td>
+            @Html.DropDownList("ddlProduct", Model.Products.Select(item => new SelectListItem
+            {
+                Value = item.Key.ToString(),
+                Text = item.Value,
+                Selected = "select" == Model.User.Key.ToString()
+            }), "-- Select --")
+        </td>
+        <td colspan="3"></td>
+    </tr>
+</table>
+<br />
+<div id="finalBatches">
+    @Html.Partial("_FinalBatchResults", Model.ResultsFinalized)
+</div>

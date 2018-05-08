@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+</head>
+<body>
+    @if (ViewBag.URL != null && !string.IsNullOrEmpty(ViewBag.URL) && ViewBag.MailTo == false)
+    {
+        <script type="text/javascript">
+            var url = '@ViewBag.URL';
+            url = url.replace(/&amp;/g, '&');
+            window.location.href = url;
+
+
+        </script>
+    }
+    else if (ViewBag.URL != null && !string.IsNullOrEmpty(ViewBag.URL) && ViewBag.MailTo == true)
+    {
+        <script type="text/javascript">
+            var safariBrowser = false;
+            var url = '@ViewBag.URL';
+            url = url.replace(/&amp;/g, '&');
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.indexOf('safari') != -1) {
+                if (ua.indexOf('chrome') > -1) {
+
+                } else {
+                    safariBrowser = true;
+                }
+            }
+            if (safariBrowser) {
+                window.location.href = url;
+                setTimeout(function () {
+                    window.close();
+                }, 2000);
+            }
+            else {
+                window.location.href = url;
+
+                var isChrome = !!window.chrome && !!window.chrome.webstore;
+                if (isChrome == false)
+                    window.close();
+            }
+</script>
+    }
+
+    <div>
+        
+    </div>
+</body>
+</html>

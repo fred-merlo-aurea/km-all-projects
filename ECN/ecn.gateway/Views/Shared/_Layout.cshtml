@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Knowledge Marketing Gateway</title>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/Site.css" rel="stylesheet" />
+
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+        @if (Session["StyleSheet"] != null)
+        {
+            <link href="@Session["StyleSheet"].ToString()" rel="stylesheet" />
+        }
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">
+                        @*@Html.ActionLink((@Session["PageTitle"] != null && !string.IsNullOrEmpty(@Session["PageTitle"].ToString())) ? @Session["PageTitle"].ToString() : "Knowledge Marketing Gateway", "Login", new {pubcode = (Session["PubCode"] != null && !string.IsNullOrEmpty(Session["PubCode"].ToString())) ? Session["PubCode"].ToString() : "", typecode = (Session["TypeCode"] != null && !string.IsNullOrEmpty(Session["TypeCode"].ToString())) ? Session["TypeCode"].ToString() : ""})*@
+                        @if (@Session["PageTitle"] != null && !string.IsNullOrWhiteSpace(@Session["PageTitle"].ToString()))
+                        {
+                            @Html.Raw(Session["PageTitle"].ToString())
+                        }
+                    </p>
+                    <br />
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer class="footer-custom">
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">
+                        @if (@Session["Footer"] != null && !string.IsNullOrWhiteSpace(@Session["Footer"].ToString()))
+                        {
+                            @Html.Raw(Session["Footer"].ToString())
+                        }
+                    <p>&copy; @DateTime.Now.Year - KM Marketing Application</p>
+                </div>
+            </div>
+        </footer>
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

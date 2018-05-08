@@ -1,0 +1,82 @@
+﻿@model List<KMPlatform.Entity.Menu>
+@{
+    ViewBag.Title = "Home Page";
+    int filesId = 106;
+    int subscriptionsId = 109;
+    if (Model != null)
+    {
+       filesId = Model.FirstOrDefault(x => x.MenuName == "Files").MenuID;
+       subscriptionsId = Model.FirstOrDefault(x => x.MenuName == "Subscriptions").MenuID;
+    }
+}
+<table width="100%" style="margin-bottom:150px;">
+    <tbody>
+        <tr>
+            <td align="left">
+                <span  class="AmsHomePageTitle">Audience Management System</span>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="vertical-align:top;">
+                <table align="center">
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <br> <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  class="noMarginPadding" align="right">
+                                <a href="/uas.web/home/RedirectToMenu?MenuID=@subscriptionsId">
+                                    <img src="~/Images/AmsHome/Home_Page_Subscriptions.png" class="AmsHomePageImageIcon"/>
+                                </a>
+                            </td>
+                            <td  class="noMarginPadding" align="left" width="40%">
+                                <table align="left" >
+                                    <tbody>
+                                        <tr>
+                                            <td  class="noMarginPadding" align="left">
+                                                <a href="/uas.web/home/RedirectToMenu?MenuID=@subscriptionsId">
+                                                    <span  class="AmsHomeSectionHeader">Subscriptions</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td  class="noMarginPadding" align="left">
+                                                <span  class="AmsHomePageDetails">Add and manage subscriptions. Review and finalize batch data entry.</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td class="noMarginPadding" align="right">
+                                <a href="/uas.web/home/RedirectToMenu?MenuID=@filesId">
+                                    <img src="~/Images/AmsHome/Home_Page_Files.png" class="AmsHomePageImageIcon" />
+                                </a>
+                            </td>
+                            <td  class="noMarginPadding"  align="left" width="40%">
+                                <table align="left">
+                                    <tbody>
+                                        <tr>
+                                            <td  class="noMarginPadding" align="left">
+                                                <a href="/uas.web/home/RedirectToMenu?MenuID=@filesId">
+                                                    <span class="AmsHomeSectionHeader">Files</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td  class="noMarginPadding" align="left">
+                                                <span class="AmsHomePageDetails">Review an imported file status and results. File management, map new files and file validations.</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

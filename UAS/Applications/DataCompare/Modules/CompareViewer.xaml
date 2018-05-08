@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="DataCompare.Modules.CompareViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="900">
+    <telerik:RadBusyIndicator Name="RadBusy" IsIndeterminate="False">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Select a Client: " Foreground="#4B87BC" FontSize="16" Margin="8" />
+                <telerik:RadComboBox x:Name="rcbClients" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" Height="20" Margin="8" SelectionChanged="rcbClients_SelectionChanged" />
+            </StackPanel>
+
+            <telerik:RadGridView Grid.Row="1" Name="gridQues" AutoGenerateColumns="False" ItemsSource="{Binding Path=dcResultQueList}" 
+                         CanUserDeleteRows="False" CanUserInsertRows="False" CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserResizeRows="True"
+                         CanUserSortColumns="True" CanUserSortGroups="True" ShowGroupPanel="True" SelectionMode="Single" IsFilteringAllowed="True" Margin="5"
+                         >
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewToggleRowDetailsColumn/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding FileName}" Header="File" IsFilterable="True"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Target}" Header="Target" />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Scope}" Header="Scope"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailAddress}" Header="Notify"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding MatchClause}" Header="Match Criteria" TextWrapping="WrapWithOverflow"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding LikeClause}" Header="Like Criteria" TextWrapping="NoWrap"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding DateQued}" Header="Qued Date" DataFormatString="{}{0:MM/dd/yy HH:mm}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding IsResultComplete}" Header="Complete"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding ResultCompleteDate}" Header="Complete Date" DataFormatString="{}{0:MM/dd/yy HH:mm}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="Date Created" DataFormatString="{}{0:MM/dd/yy HH:mm}"/>
+                </telerik:RadGridView.Columns>
+
+                <telerik:RadGridView.RowDetailsTemplate>
+                    <DataTemplate>
+                        <ItemsControl DataContextChanged="ItemsControl_DataContextChanged" ItemsSource="{Binding DataContext.DcResult, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}}">
+                            <Grid Name="gridDCResults">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Files" TextDecorations="Underline" Foreground="#4B87BC" FontSize="16" Margin="8" ToolTip="Click link to download file." />
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Record Count" TextDecorations="Underline" Foreground="#4B87BC" FontSize="16" Margin="8" />
+                                <TextBlock Grid.Row="0" Grid.Column="3" Text="Attribute Count" TextDecorations="Underline" Foreground="#4B87BC" FontSize="16" Margin="8" />
+                                <TextBlock Grid.Row="0" Grid.Column="4" Text="Purchase Cost" TextDecorations="Underline" Foreground="#4B87BC" FontSize="16" Margin="8" />
+                                <TextBlock Grid.Row="0" Grid.Column="5" Text="Purchased" TextDecorations="Underline" Foreground="#4B87BC" FontSize="16" Margin="8" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Text="Summary:" Foreground="#4B87BC" FontSize="12" Margin="8" />
+                                <TextBlock Name="tbSummary" Grid.Row="1" Grid.Column="1" Margin="8" />
+
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Text="Non Matches:" Foreground="#4B87BC" FontSize="12" Margin="8" />
+                                <TextBlock Name="tbNoData" Grid.Row="2" Grid.Column="1" Margin="8" />
+                                <Label Name="lbNoDataCount" Grid.Row="2" Grid.Column="2" ContentStringFormat="0,0."></Label>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Text="Matched But Excluded:" Foreground="#4B87BC" FontSize="12" Margin="8" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="Dupe or Filtered records" Foreground="#4B87BC" FontSize="12" Margin="8"></TextBlock>
+                                <Label Name="lbFilteredCount" Grid.Row="3" Grid.Column="2" ContentStringFormat="0,0."></Label>
+                                
+                                <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Text="Match Profiles:" Foreground="#4B87BC" FontSize="12" Margin="8" ToolTip="Check box to purchase then click link to download file." />
+                                <TextBlock Name="tbMatchProfile"  Grid.Row="4" Grid.Column="1" Margin="8"></TextBlock>
+                                <Label Name="lbMatchProfileRecordCount" Grid.Row="4" Grid.Column="2" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbMatchProfileAttributeCount" Grid.Row="4" Grid.Column="3" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbMatchingProfileCost" Grid.Row="4" Grid.Column="4" ContentStringFormat="C2"></Label>
+                                <CheckBox Name="cbMatchingProfilePurchased" Grid.Row="4" Grid.Column="5" Tag="MatchingProfilePurchased" Checked="ProfilePurchased_Checked"></CheckBox>
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" Text="Match Demos:" Foreground="#4B87BC" FontSize="12" Margin="8" ToolTip="Check box to purchase then click link to download file." />
+                                <TextBlock Name="tbMatchDemo" Grid.Row="5" Grid.Column="1" Margin="8"></TextBlock>
+                                <Label Name="lbMatchDemoRecordCount" Grid.Row="5" Grid.Column="2"  ContentStringFormat="0,0."></Label>
+                                <Label Name="lbMatchDemoAttributeCount" Grid.Row="5" Grid.Column="3"  ContentStringFormat="0,0."></Label>
+                                <Label Name="lbMatchingDemoCost" Grid.Row="5" Grid.Column="4" ContentStringFormat="C2"></Label>
+                                <CheckBox Name="cbMatchingDemoPurchased" Grid.Row="5" Grid.Column="5" Tag="MatchingDemoPurchased" Checked="ProfilePurchased_Checked"></CheckBox>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right" Text="Like Profiles:" Foreground="#4B87BC" FontSize="12" Margin="8" ToolTip="Check box to purchase then click link to download file." />
+                                <TextBlock Name="tbLikeProfile"  Grid.Row="6" Grid.Column="1" Margin="8"></TextBlock>
+                                <Label Name="lbLikeProfileRecordCount" Grid.Row="6" Grid.Column="2" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbLikeProfileAttributeCount" Grid.Row="6" Grid.Column="3" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbLikeProfileCost" Grid.Row="6" Grid.Column="4" ContentStringFormat="C2"></Label>
+                                <CheckBox Name="cbLikeProfilePurchased" Grid.Row="6" Grid.Column="5" Tag="LikeProfilePurchased" Checked="ProfilePurchased_Checked"></CheckBox>
+
+                                <TextBlock Grid.Row="7" Grid.Column="0" HorizontalAlignment="Right" Text="Like Demos:" Foreground="#4B87BC" FontSize="12" Margin="8" ToolTip="Check box to purchase then click link to download file." />
+                                <TextBlock Name="tbLikeDemo" Grid.Row="7" Grid.Column="1" Margin="8"></TextBlock>
+                                <Label Name="lbLikeDemoRecordCount" Grid.Row="7" Grid.Column="2" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbLikeDemoAttributeCount" Grid.Row="7" Grid.Column="3" ContentStringFormat="0,0."></Label>
+                                <Label Name="lbLikeDemoCost" Grid.Row="7" Grid.Column="4" ContentStringFormat="C2"></Label>
+                                <CheckBox Name="cbLikeDemoPurchased" Grid.Row="7" Grid.Column="5" Tag="LikeDemoPurchased" Checked="ProfilePurchased_Checked"></CheckBox>
+
+                                <TextBlock Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Text="Purchase All Files Cost:" Foreground="#4B87BC" FontSize="12" Margin="8" />
+                                <Label Name="lbTotalDataCompareCost" Grid.Row="8" Grid.Column="3" Content="{Binding DcResult.TotalDataCompareCost}" ContentStringFormat="C2"></Label>
+                            </Grid>
+                        </ItemsControl>
+                    </DataTemplate>
+                </telerik:RadGridView.RowDetailsTemplate>
+            </telerik:RadGridView>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

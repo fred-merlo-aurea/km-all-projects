@@ -1,0 +1,75 @@
+﻿<Window x:Class="Circulation.Windows.SuggestMatch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="SuggestMatch" Height="250" Width="750" WindowStyle="None" Topmost="True">
+    <Window.Resources>
+        <Style x:Key="MyFocusVisualStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="-2" StrokeThickness="1" Stroke="#045DA4" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <StackPanel Orientation="Vertical" Margin="0,0,0,10" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Height="23" Margin="0,4" Width="740">
+            <TextBlock HorizontalAlignment="Left" Margin="15,5,1,1" Text="Potential match(es) found.  Please select edit icon for editing or save to create new Subscriber." VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+        </StackPanel>
+        <Grid HorizontalAlignment="Center" Width="750">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="750" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
+        </Grid>
+
+        <Grid x:Name="spSuggestMatch" Visibility="Visible" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="160">
+            <telerik:RadGridView x:Name="GridAmaze" HorizontalAlignment="Center" VerticalAlignment="Top" EditTriggers="None" SelectionUnit="FullRow"
+        		RowIndicatorVisibility="Collapsed" IsSynchronizedWithCurrentItem="True" TabIndex="35"
+        		RowDetailsVisibilityMode="Collapsed" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+        		AutoGenerateColumns="False" ItemsSource="{Binding Subscriber}" Width="750" Height="151" CanUserSortGroups="False" ShowGroupPanel="False" GridLinesVisibility="Both" MaxColumnWidth="512" ShowColumnHeaders="True" MinColumnWidth="10" Margin="0,-1,0,0" IsFilteringAllowed="False">
+                <telerik:StyleManager.Theme>
+                    <telerik:Expression_DarkTheme/>
+                </telerik:StyleManager.Theme>
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn IsReadOnly="True" TabStopMode="Stop">
+                        <telerik:GridViewDataColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button HorizontalAlignment="Right" FontSize="12" Width="25" Margin="2" x:Name="btnOpenWindow" Click="btnCopyProfile_Click" ToolTipService.ToolTip="Copy">
+                                        <Image Height="16" Source="/ImageLibrary;component/Images/16/edit_user-16white.png" Stretch="Fill" Width="16"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerik:GridViewDataColumn.CellTemplate>
+                    </telerik:GridViewDataColumn>
+                    <telerik:GridViewDataColumn IsReadOnly="True" TabStopMode="Skip">
+                        <telerik:GridViewDataColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Margin="2" Text="{Binding MatchType}" FontSize="8" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerik:GridViewDataColumn.CellTemplate>
+                    </telerik:GridViewDataColumn>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Name" UniqueName="Name" TabStopMode="Skip"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding TITLE}" Header="Title" UniqueName="TITLE" TabStopMode="Skip" />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding COMPANY}" Header="Company" UniqueName="COMPANY" TabStopMode="Skip" />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding ADDRESS}" Header="Address" UniqueName="ADDRESS" TabStopMode="Skip" />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding PHONE}" Header="Phone" UniqueName="PHONE" MaxWidth="100" TabStopMode="Skip" />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding EMAIL}" Header="Email" UniqueName="EMAIL" TabStopMode="Skip" />
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Height="23" Margin="0,4">
+            <telerik:RadButton x:Name="btnSave" TabIndex="36" Content="Save" Margin="2" VerticalAlignment="Bottom" Width="75" IsDefault="True" Click="btnSave_Click"
+                               FocusVisualStyle="{DynamicResource MyFocusVisualStyle}"/>
+            <telerik:RadButton x:Name="btnCancel" TabIndex="36" Content="Cancel" Margin="2" VerticalAlignment="Bottom" Width="75" IsCancel="True" Click="btnCancel_Click"
+                               FocusVisualStyle="{DynamicResource MyFocusVisualStyle}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

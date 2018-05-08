@@ -1,0 +1,74 @@
+﻿
+<script type="text/x-kendo-template" id="Rules_ConditionalValue">
+    # if(selUIControl == 'textbox') {#
+    @(Html.Kendo().TextBox().Name("ruleFieldTextBox"))
+    #} else if(selUIControl == 'numeric'){#
+    @(Html.Kendo().NumericTextBox().Name("ruleFieldNumeric").Min(0).Value(1))
+    #} else if(selUIControl == 'dropdownlist'{#
+    @(Html.Kendo().DropDownList().Name("compareValue").OptionLabel(" - Select Value -").DataSource(d => d.Read(r => r.Action("GetRuleFieldValue", "FileMapperWizard").Data("GetSelectedRuleFieldValue")))
+                                         .DataTextField("Text").DataValueField("Value").HtmlAttributes(new { @style = "width:200px;" }).Text("")
+                                         .Events(e => { e.Change("onChangeConditionalValue"); }))
+    #}else if (selUIControl == 'calendar') {#
+    @(Html.Kendo().Calendar().Name("ruleFieldCalendar").Value(DateTime.Now))
+    #}#
+</script >
+
+ @*
+     does not work - 
+
+      # if(selUIControl == 'textbox') {#
+    <input type="text" id="ruleFieldTextBox" contenteditable="true"></input>
+    #} else if(selUIControl == 'numeric'){#
+    <input type="text" id="ruleFieldNumeric" inputmode="numeric" contenteditable="true"></input>
+    #} else if(selUIControl == 'dropdownlist'{#
+    <ul contenteditable="true">
+        <li>ONe</li>
+        <li>Two</li>
+        <li>three</li>
+    </ul>
+    #}else if (selUIControl == 'calendar') {#
+    <input type="date" id="ruleFieldCalendar" contenteditable="true"></input>
+    #}#
+
+*@
+
+
+@*#if(uiControl == 'textbox'){#
+    @(Html.Kendo().TextBox().Name("ruleFieldTextBox"))
+    #}else if(uiControl == 'numeric'){#
+    @(Html.Kendo().NumericTextBox().Name("ruleFieldNumeric").Min(0).Value(1))
+    #} else if(uiControl == "dropdownlist"){#
+    @(Html.Kendo().DropDownList()
+                  .Name("compareValue")
+                  .OptionLabel("- Select Value -")
+                  .DataSource(d => d.Read(r => r.Action("GetRuleFieldValue", "FileMapperWizard").Data("GetSelectedRuleFieldValue")))
+                  .DataTextField("Text")
+                  .DataValueField("Value")
+                  .HtmlAttributes(new { @style = "width:200px;" })
+                  .Text("")
+                    .Events(e =>
+                    {
+                        e.Change("onChangeConditionalValue");
+                    })
+    )
+    #}else if (uiControl == "calendar") {#
+    @(Html.Kendo().Calendar().Name("ruleFieldCalendar").Value(DateTime.Now))
+#}#*@
+
+
+
+
+ @*#} else if(uiControl == "dropdownlist"){#
+@(Html.Kendo().DropDownList()
+                  .Name("compareValue")
+                  .OptionLabel("- Select Value -")
+                  .DataSource(d => d.Read(r => r.Action("GetRuleFieldValue", "FileMapperWizard").Data("GetSelectedRuleFieldValue")))
+                  .DataTextField("Text")
+                  .DataValueField("Value")
+                  .HtmlAttributes(new { @style = "width:200px;" })
+                  .Text("")
+                    .Events(e =>
+                    {
+                        e.Change("onChangeConditionalValue");
+                    })
+)*@

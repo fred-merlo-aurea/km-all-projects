@@ -1,0 +1,548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Circulation_DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{935e8ce2-ba6b-4ca5-b18d-a90f5b42da6f}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Circulation_DB</RootNamespace>
+    <AssemblyName>Circulation_DB</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlCodeAnalysisRules>-Microsoft.Rules.Data.SR0001</SqlCodeAnalysisRules>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\User Defined Types\" />
+    <Folder Include="Assemblies\" />
+    <Folder Include="Update Scripts" />
+    <Folder Include="Update Scripts\2015_Q1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Prospect.sql" />
+    <Build Include="dbo\Tables\PaidBillTo.sql" />
+    <Build Include="dbo\Tables\Publication.sql" />
+    <Build Include="dbo\Tables\Publisher.sql" />
+    <Build Include="dbo\Tables\HistoryToUserLog.sql" />
+    <Build Include="dbo\Tables\QualificationSource.sql" />
+    <Build Include="dbo\Tables\SubscriptionResponseMap.sql" />
+    <Build Include="dbo\Tables\Response.sql" />
+    <Build Include="dbo\Tables\SubscriptionPaid.sql" />
+    <Build Include="dbo\Tables\ResponseTemp.sql" />
+    <Build Include="dbo\Tables\PriceCode.sql" />
+    <Build Include="dbo\Tables\SubscriberSourceCode.sql" />
+    <Build Include="dbo\Tables\SubscriptionStatusMatrix.sql" />
+    <Build Include="dbo\Tables\SubscriptionStatus.sql" />
+    <Build Include="dbo\Tables\TransactionCode.sql" />
+    <Build Include="dbo\Tables\ResponseType.sql" />
+    <Build Include="dbo\Tables\TransactionCodeType.sql" />
+    <Build Include="dbo\Tables\UserLog.sql" />
+    <Build Include="dbo\Tables\Action.sql" />
+    <Build Include="dbo\Tables\History.sql" />
+    <Build Include="dbo\Tables\Reports.sql" />
+    <Build Include="dbo\Tables\Par3c.sql" />
+    <Build Include="dbo\Tables\DeliverSubscriptionPaid.sql" />
+    <Build Include="dbo\Tables\Batch.sql" />
+    <Build Include="dbo\Tables\Subscription.sql" />
+    <Build Include="dbo\Tables\Subscriber.sql" />
+    <Build Include="dbo\Tables\CategoryCode.sql" />
+    <Build Include="dbo\Tables\CategoryCodeType.sql" />
+    <Build Include="dbo\Tables\PublicationSequence.sql" />
+    <Build Include="dbo\Tables\MarketingMap.sql" />
+    <Build Include="dbo\Tables\Deliverability.sql" />
+    <Build Include="dbo\Tables\HistoryPaidBillTo.sql" />
+    <Build Include="dbo\Tables\DeliverabilityMap.sql" />
+    <Build Include="dbo\Tables\HistorySubscription.sql" />
+    <Build Include="dbo\Tables\HistoryResponseMap.sql" />
+    <Build Include="dbo\Tables\HistoryPaid.sql" />
+    <Build Include="dbo\Tables\Marketing.sql" />
+    <Build Include="dbo\Tables\HistoryMarketingMap.sql" />
+    <Build Include="dbo\Tables\DataImportExport.sql" />
+    <Build Include="dbo\Tables\ActionMap.sql" />
+    <Build Include="dbo\Tables\HistoryToHistoryMarketingMap.sql" />
+    <Build Include="dbo\Tables\HistoryToHistoryResponse.sql" />
+    <Build Include="Storage\Subscriber Catalog.sql" />
+    <Build Include="FullTextIndexes.sql" />
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\SubscriptionManager.sql" />
+    <Build Include="Security\justin.wagner.sql" />
+    <Build Include="Security\Jason.Meier.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\jaime.mohs.sql" />
+    <Build Include="Security\nick.nelson.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\fn_Response_Other.sql" />
+    <Build Include="dbo\Functions\fn_GetLastBatchID.sql" />
+    <Build Include="dbo\Functions\fn_ResponseIDsBySubscriptionID.sql" />
+    <Build Include="dbo\Functions\fn_ResponseIDs_SubscriptionID_Response_Active.sql" />
+    <Build Include="dbo\Functions\CamelCase.sql" />
+    <Build Include="dbo\Functions\fn_Levenshtein.sql" />
+    <Build Include="dbo\Functions\fn_SplitColumn.sql" />
+    <Build Include="dbo\Functions\fn_Split.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Update_QDate.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_SuggestMatch.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryResonse_HistoryID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryMarketingMap_HistoryID.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryResponse_Save.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Propspect_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryMarketingMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Prospect_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryMarketingMap_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryMarketingMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryPaid_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_SubscriberID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_SubscriptionPaid_Save.sql" />
+    <Build Include="dbo\Stored Procedures\o_ExportData_Select.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryPaid_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryResponseMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DataImportExport_Select.sql" />
+    <Build Include="dbo\Stored Procedures\o_ExportData_Select_Publisher_Publication.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Delete_SubscriberByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_History_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_PaidBillTo_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_History_Select_BatchID.sql" />
+    <Build Include="dbo\Stored Procedures\e_PaidBillTo_Select_SubscriptionPaidID.sql" />
+    <Build Include="dbo\Stored Procedures\e_History_Select_DateCreated.sql" />
+    <Build Include="dbo\Stored Procedures\e_PaidBillTo_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryToUserLog_HistoryID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryToUserLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Select_UserLogID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ActionMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ActionMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_PriceCode_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ActionMap_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionResponseMap_BulkUpdate.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistorySubscription_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_History_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Prospect_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select_SubscriptionStatusID_CatID_TranID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberSourceCode_Select_SubscriberSourceCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\job_GetBrand.sql" />
+    <Build Include="dbo\Stored Procedures\o_ExportData_UpdateResponseOther.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_UserLog_BulkSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionResponseMap_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select_CatCodeID_TranCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionResponseMap_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistorySubscription_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select_CatCodeID_TranCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionResponseMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\job_GetWebsiteSubscriberRequest.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_PriceCode_Select_PriceCode_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select_SubscriptionStatusID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_Subscriber.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Update.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberSourceCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ResponseType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ResponseType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select_CatID_TranID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Response_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Response_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_QualificationSource_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_QualificationSource_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryPaidBillTo_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publisher_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryPaidBillTo_Select_SubscriptionPaidID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Reports_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_HistoryPaidBillTo_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Reports_Save.sql" />
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_PriceCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\o_ExportData_RunImportSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_FinalizeBatch_SelectAll.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_BatchID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_PriceCode_Save.sql" />
+    <Build Include="dbo\Stored Procedures\o_FinalizeBatch_SelectAll_NoUser.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Batch_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Par3c_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Par3c_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Batch_Create.sql" />
+    <Build Include="dbo\Stored Procedures\e_History_Select_Active_User_BatchID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MarketingMap_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MarketingMap_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\o_FinalizeBatch_Select.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_MarketingMap_Select_MarketingID_SubscriberID_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\job_RebuildIndexes.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryResponseMap_BulkSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_MarketingMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_SequenceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Marketing_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DeliverabilityMap_Select_DeliverabilityID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DeliverabilityMap_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_DeliverabilityMap_Select_DeliverabilityID_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TempSubscription_Select_IndividualID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryResponse_BulkSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_DeliverabilityMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Deliverability_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Deliverability_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Batch_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_DeliverSubscriptionPaid_Save.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_DeliverSubscriptionPaid_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Search.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_BatchID_Name_Sequence.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_BatchID_Name_Sequence_DateRange.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_ExportData_UpdateResponse.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Select.sql" />
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_UserID_IsActive.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_UserLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Batch_Select_UserID_IsActive.sql" />
+    <Build Include="dbo\Stored Procedures\e_SearchResult_Select_IndividualID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Marketing_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberSourceCode_Select_TypeID_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ResponseType_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Response_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Individual_Search.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_SubscriptionSearchResult_Select_SubscriberID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_SubscriptionPaid_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_zzzzzTask_Select.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_zzzzzTask_Save.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Publisher_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Select_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Select_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_SelectPublication.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Active_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\o_BatchHistoryDetail_Select_SubscriptionID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Active_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_SubscriptionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_SubscriberID_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_PublisherID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Search_Params.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationSequence_Select_PublisherID.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationSequence_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_PublicationSequence_Select_NextSeqID_PublicationID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\o_SubscriberMarketingMap_Select_SubscriberID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Action_Select_ActionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_Prospect_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_PublicationID_IsProspect.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_PublicationID_IsSubscribed.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_PublicationID_IsSubscribed_IsProspect.sql" />
+    <Build Include="dbo\User Defined Types\DEImportTable.sql" />
+    <Build Include="dbo\Functions\fn_Table_Date.sql" />
+    <Build Include="dbo\Tables\SubscriberAddKillDetail.sql" />
+    <Build Include="dbo\Tables\SubscriberAddKill.sql" />
+    <Build Include="dbo\Tables\ReportGroups.sql" />
+    <Build Include="dbo\Tables\PublicationReports.sql" />
+    <Build Include="dbo\Tables\Frequency.sql" />
+    <Build Include="dbo\Tables\ECNCustomertoPublisherMapping.sql" />
+    <Build Include="Security\db_executor.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="dbo\Functions\fn_getResponseValues.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptViewResponseTotals.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptQualificationBreakdown.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptPAR3C.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptCrossTabwithQualBreakdown.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptCategorySummary.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rpt_SubsrcReport.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rpt_Qualified_Breakdown_domestic.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rpt_Qualified_Breakdown_Canada.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rpt_Qualified_Breakdown_ByCountry_ByState.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rpt_Qualified_Breakdown_by_country.sql" />
+    <Build Include="dbo\Stored Procedures\sp_getSubscribers_using_XMLFilters.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\sp_GetSubscribers.sql" />
+    <Build Include="dbo\Stored Procedures\sp_getFilterValues.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\sp_getDimensionFilterValues.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\sp_GetColumnLegend.sql" />
+    <Build Include="dbo\Stored Procedures\sp_crosstab.sql" />
+    <Build Include="dbo\Stored Procedures\o_ReportFilter_Select_PublicationID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_PublisherID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Delete_SubscriberID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_rptSubFields.sql" />
+    <Build Include="dbo\Stored Procedures\o_FinalizeBatch_SelectAll_UserName.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_PublicationReport_Select_PublicationID.sql" />
+    <Build Include="dbo\Tables\Issue.sql" />
+    <Build Include="dbo\Tables\IssueArchiveSubscriber.sql" />
+    <Build Include="dbo\Tables\IssueArchiveSubscription.sql" />
+    <Build Include="dbo\Tables\IssueArchiveSubscriptonResponseMap.sql" />
+    <Build Include="dbo\Tables\IssueComp.sql" />
+    <Build Include="dbo\Tables\IssueCompDetail.sql" />
+    <Build Include="dbo\Tables\IssueSplit.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscriber_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Issue_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscription_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscriptonResponseMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueComp_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueCompDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueSplit_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Issue_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Frequency_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Response_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_ResponseType_Delete_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ReportGroups_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ReportGroups_Save.sql" />
+    <Build Include="dbo\Tables\AcsShippingDetail.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsShippingDetail_Save.sql" />
+    <Build Include="dbo\Tables\AcsFileHeader.sql" />
+    <Build Include="dbo\Tables\AcsFileDetail.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsFileHeader_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsFileDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_GetSubscriptionIDs_From_Filter.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_SubscriberAddKill_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberAddKill_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriberAddKill_UpdateSubscription.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\sp_rpt_GetSubscriberDetails.sql" />
+    <Build Include="dbo\Stored Procedures\e_Issue_Select_PublisherID.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_Issue_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsFileDetail_Select_ProcessCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsFileDetail_Update_Xml.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\job_ACS_UpdateSubscriberAddress.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\job_ACS_KillSubscriber.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\o_SubscriptionSearchResult_Select_SubscriberID_Multiple.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_MarketingMap_BulkUpdate.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryToHistoryMarketingMap_BulkSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistoryMarketingMap_BulkSave.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Security\Robert.Rawleigh.sql" />
+    <Build Include="Security\meghan.salim.sql" />
+    <Build Include="Security\kay.molencamp.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Stored Procedures\rpt_AcsImportCount.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\job_NCOA_AddressUpdate.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistorySubscription_Select_IsUadUpdated.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueSplit_Select_IssueID.sql" />
+    <Build Include="dbo\Tables\WaveMailing.sql" />
+    <Build Include="dbo\Tables\WaveMailingDetail.sql" />
+    <Build Include="dbo\Stored Procedures\e_WaveMailing_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_WaveMailing_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_WaveMailingDetail_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionResponseMap_Select_ProductID.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscriber_Select_IssueID.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscription_Select_IssueID.sql" />
+    <Build Include="dbo\Stored Procedures\e_WaveMailingDetail_Select_IssueID.sql" />
+    <Build Include="dbo\Stored Procedures\e_WaveMailingDetail_UpdateOriginal.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_ClearWaveMailingInfo.sql" />
+    <Build Include="dbo\Stored Procedures\job_Subscriber_CleanUp.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_BulkUpdate_ActionIDs.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Tables\AcsMailerInfo.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsMailerInfo_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsMailerInfo_Select_ID.sql" />
+    <Build Include="dbo\Stored Procedures\e_AcsMailerInfo_Select.sql" />
+    <Build Include="dbo\Tables\IssueCompError.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueCompError_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueCompError_Select_ProcessCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_BulkUpdate_WaveMailing.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_HistorySubscription_BulkUpdate_IsUadUpdated.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Tables\ClientProductMap.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueCompDetail_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueComp_Select_Issue.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueCompDetail_GetFromFilter.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="dbo\Stored Procedures\e_IssueCompDetail_Clear.sql" />
+    <Build Include="dbo\Tables\ActionBackUp.sql" />
+    <Build Include="dbo\Stored Procedures\e_ActionBackUp_Bulk_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\e_ActionBackUp_Restore.sql" />
+    <Build Include="dbo\Stored Procedures\o_CircProduct_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_Client.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_ProductID_Paging.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscription_Select_ProductID_Count.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_ProductID_Paging.sql" />
+    <Build Include="dbo\Stored Procedures\e_Subscriber_Select_ProductID_Count.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscriber_Select_Paging.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscription_Select_Paging.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscription_Select_Count.sql" />
+    <Build Include="dbo\Stored Procedures\e_IssueArchiveSubscriber_Select_Count.sql" />
+    <None Include="Update Scripts\2015_Q1\04292015_UpdateCirc.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assemblies\UserFunctions.dll" />
+    <None Include="SqlSchemaCompare1.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UserFunctions">
+      <HintPath>Assemblies\UserFunctions.dll</HintPath>
+      <SqlAssemblyName>UserFunctions</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>SAFE</SqlPermissionSet>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Circulation_DB.refactorlog" />
+  </ItemGroup>
+</Project>

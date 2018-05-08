@@ -1,0 +1,130 @@
+﻿@using KMEnums
+@{
+    ViewBag.Title = "Email Verifier";
+    var customerId = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.CustomerID;
+}
+<style>
+    .errormsg {
+        color: red;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#customerId").val(@customerId);
+
+        $('input[type=radio][name=List]').change(function () {
+
+            if (this.value == "M") {
+
+                $("#OGE").data('kendoButton').enable(false);
+            }
+            else if (this.value == "G") {
+
+                $("#OGE").data('kendoButton').enable(true);
+            }
+
+        });
+    });
+    function btnSelectGroup_Click() {
+        var customerID = $("#customerId").val();
+        groupExplorer(groupSelected, customerID, false);
+    }
+    function groupSelected(e) {
+        var group = e.group;
+        $("#groupName").html(group.GroupName);
+        $("#groupId").val(group.GroupID);
+        $("#customerId").val(group.CustomerID);
+        e.sender.close();
+    }
+    function cleanEmails() {
+        clearValidationErrorMessages();
+        if ($('input[name=List]:checked').val() == "G" && $('#groupId').val() == "") {
+            var lastControlsError = [];
+            lastControlsError.push({ name: "groupName", message: "Please select a Group", label: "groupNameLabel", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CleanEmails", "Group")",
+                data: {
+                    GL: $('input[name=List]:checked').val(),
+                    groupId: $('#groupId').val() == "" ? 0 : $('#groupId').val(),
+                    VT: $('#ValidationType').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#divEmailsCleaned").html(response[1]);
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+    function resetGroupsSelected() {
+        clearValidationErrorMessages();
+        $("#groupName").html(" -No Group Selected-");
+        $("#groupId").val("");
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="#">Clean Emails</a></li>
+</ol>
+<div class="wrapper modal modaladdnewform" style="padding-left:50px;margin-top:10px;">
+    <div class="formbox">
+        <div class="subtitle" id="groupNameLabel">Group</div>
+        <div class="formitem formiteminline">
+            <input id="customerId" name="customerId" type="hidden" value="" />
+            <input id="groupId" name="groupId" type="hidden" value="" />
+            <input checked="checked"
+                   id="Group"
+                   name="List"
+                   type="radio"
+                   value="G"  /><label id="groupName"  style="font-family: arial;"> -No Group Selected-</label> 
+            <br />
+            <input id="Master"
+                   name="List"
+                   type="radio"
+                   value="M" 
+                   onclick="resetGroupsSelected()" /><label  style="font-family: arial;">Master Suppression Group</label> 
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().Button().Name("OGE").Content("Select Group").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btnSelectGroup_Click()" })
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Validation Type</div>
+        <div class="formitem formiteminline">
+            @Html.DropDownList("ValidationType", new List<SelectListItem> {
+                new SelectListItem { Text = "Check Syntax", Value = "syntax" },
+                new SelectListItem { Text = "Delete Bad Records", Value = "delete" }
+            })
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle">Results</div>
+        <div class="formitem formiteminline" id="divEmailsCleaned">
+        </div>
+    </div>
+
+    <div class="buttonsgroup" style="margin-bottom:10px;">
+        @Html.Kendo().Button().Name("CheckFormat").Content("Check Format").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "cleanEmails()" })
+    </div>
+</div>
+
+@Html.Partial("Partials/Modals/_GroupExplorer")

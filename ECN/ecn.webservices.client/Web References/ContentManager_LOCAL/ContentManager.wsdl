@@ -1,0 +1,2040 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webservices.ecn5.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://webservices.ecn5.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your Content and Messages in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.ecn5.com/">
+      <s:element name="SearchForContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSearch" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchForContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchForContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchForMessages">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSearch" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchForMessagesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchForMessagesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ContentID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="layoutID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PreviewMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PreviewMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PreviewMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PreviewContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ContentID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PreviewContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PreviewContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFolders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFoldersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFoldersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTemplates">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTemplatesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTemplatesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerDepts">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerDeptsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomerDeptsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentHTML" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentText" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddContentToFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentHTML" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentText" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddContentToFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddContentToFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LayoutName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TableBorder" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TemplateID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content0" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content1" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content2" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content3" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content4" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content5" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content6" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content7" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content8" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessageToFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LayoutName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="TableBorder" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TemplateID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content0" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content1" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content2" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content3" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content4" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content5" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content6" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content7" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content8" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessageToFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddMessageToFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessageToFolderWithMessageType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LayoutName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageTypeID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="TableBorder" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TemplateID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content0" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content1" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content2" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content3" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content4" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content5" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content6" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content7" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content8" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddMessageToFolderWithMessageTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddMessageToFolderWithMessageTypeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderDescription" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderToParent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="folderDescription" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentFolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddFolderToParentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddFolderToParentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FolderID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteFolderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ContentID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentHTML" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContentText" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ContentID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LayoutName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TableBorder" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TemplateID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content0" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content1" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content2" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content3" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content4" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content5" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content6" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content7" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Content8" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SearchForContentSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchForContent" />
+  </wsdl:message>
+  <wsdl:message name="SearchForContentSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchForContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchForMessages" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchForMessagesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetContentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetContent" />
+  </wsdl:message>
+  <wsdl:message name="GetContentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMessage" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:PreviewMessage" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:PreviewMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentSoapIn">
+    <wsdl:part name="parameters" element="tns:PreviewContent" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentSoapOut">
+    <wsdl:part name="parameters" element="tns:PreviewContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFolders" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFoldersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTemplates" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTemplatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomerDepts" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomerDeptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddContentSoapIn">
+    <wsdl:part name="parameters" element="tns:AddContent" />
+  </wsdl:message>
+  <wsdl:message name="AddContentSoapOut">
+    <wsdl:part name="parameters" element="tns:AddContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddContentToFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddContentToFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:AddMessage" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:AddMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddMessageToFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddMessageToFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:AddMessageToFolderWithMessageType" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:AddMessageToFolderWithMessageTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolder" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentSoapIn">
+    <wsdl:part name="parameters" element="tns:AddFolderToParent" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentSoapOut">
+    <wsdl:part name="parameters" element="tns:AddFolderToParentResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteFolder" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteContent" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteMessage" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateContent" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateMessage" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchForContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="layoutID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="MessageTypeID" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+    <wsdl:part name="parentFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForMessagesHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="layoutID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PreviewContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFoldersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTemplatesHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerDeptsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddContentToFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="MessageTypeID" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageToFolderWithMessageTypeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="folderName" type="s:string" />
+    <wsdl:part name="folderDescription" type="s:string" />
+    <wsdl:part name="parentFolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddFolderToParentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="FolderID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="ContentHTML" type="s:string" />
+    <wsdl:part name="ContentText" type="s:string" />
+    <wsdl:part name="ContentID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="LayoutName" type="s:string" />
+    <wsdl:part name="TableBorder" type="s:string" />
+    <wsdl:part name="TemplateID" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="Content0" type="s:string" />
+    <wsdl:part name="Content1" type="s:string" />
+    <wsdl:part name="Content2" type="s:string" />
+    <wsdl:part name="Content3" type="s:string" />
+    <wsdl:part name="Content4" type="s:string" />
+    <wsdl:part name="Content5" type="s:string" />
+    <wsdl:part name="Content6" type="s:string" />
+    <wsdl:part name="Content7" type="s:string" />
+    <wsdl:part name="Content8" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="ContentManagerSoap">
+    <wsdl:operation name="SearchForContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForContentSoapIn" />
+      <wsdl:output message="tns:SearchForContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Messages in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForMessagesSoapIn" />
+      <wsdl:output message="tns:SearchForMessagesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetContentSoapIn" />
+      <wsdl:output message="tns:GetContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetMessageSoapIn" />
+      <wsdl:output message="tns:GetMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewMessageSoapIn" />
+      <wsdl:output message="tns:PreviewMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewContentSoapIn" />
+      <wsdl:output message="tns:PreviewContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">GetContent Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersSoapIn" />
+      <wsdl:output message="tns:GetFoldersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Templates from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetTemplatesSoapIn" />
+      <wsdl:output message="tns:GetTemplatesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Customer Departments from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerDeptsSoapIn" />
+      <wsdl:output message="tns:GetCustomerDeptsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddContentSoapIn" />
+      <wsdl:output message="tns:AddContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddContentToFolder" message="tns:AddContentToFolderSoapIn" />
+      <wsdl:output name="AddContentToFolder" message="tns:AddContentToFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddMessageSoapIn" />
+      <wsdl:output message="tns:AddMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolder" message="tns:AddMessageToFolderSoapIn" />
+      <wsdl:output name="AddMessageToFolder" message="tns:AddMessageToFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder with Message Type in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeSoapIn" />
+      <wsdl:output name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderSoapIn" />
+      <wsdl:output message="tns:AddFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentSoapIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Content Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderSoapIn" />
+      <wsdl:output message="tns:DeleteFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteContentSoapIn" />
+      <wsdl:output message="tns:DeleteContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteMessageSoapIn" />
+      <wsdl:output message="tns:DeleteMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateContentSoapIn" />
+      <wsdl:output message="tns:UpdateContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Message in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateMessageSoapIn" />
+      <wsdl:output message="tns:UpdateMessageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ContentManagerHttpGet">
+    <wsdl:operation name="SearchForContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForContentHttpGetIn" />
+      <wsdl:output message="tns:SearchForContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Messages in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForMessagesHttpGetIn" />
+      <wsdl:output message="tns:SearchForMessagesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetContentHttpGetIn" />
+      <wsdl:output message="tns:GetContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetMessageHttpGetIn" />
+      <wsdl:output message="tns:GetMessageHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewMessageHttpGetIn" />
+      <wsdl:output message="tns:PreviewMessageHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewContentHttpGetIn" />
+      <wsdl:output message="tns:PreviewContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">GetContent Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersHttpGetIn" />
+      <wsdl:output message="tns:GetFoldersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Templates from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetTemplatesHttpGetIn" />
+      <wsdl:output message="tns:GetTemplatesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Customer Departments from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerDeptsHttpGetIn" />
+      <wsdl:output message="tns:GetCustomerDeptsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddContentHttpGetIn" />
+      <wsdl:output message="tns:AddContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddContentToFolder" message="tns:AddContentToFolderHttpGetIn" />
+      <wsdl:output name="AddContentToFolder" message="tns:AddContentToFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddMessageHttpGetIn" />
+      <wsdl:output message="tns:AddMessageHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolder" message="tns:AddMessageToFolderHttpGetIn" />
+      <wsdl:output name="AddMessageToFolder" message="tns:AddMessageToFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder with Message Type in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeHttpGetIn" />
+      <wsdl:output name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderHttpGetIn" />
+      <wsdl:output message="tns:AddFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentHttpGetIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Content Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderHttpGetIn" />
+      <wsdl:output message="tns:DeleteFolderHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteContentHttpGetIn" />
+      <wsdl:output message="tns:DeleteContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteMessageHttpGetIn" />
+      <wsdl:output message="tns:DeleteMessageHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateContentHttpGetIn" />
+      <wsdl:output message="tns:UpdateContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Message in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateMessageHttpGetIn" />
+      <wsdl:output message="tns:UpdateMessageHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ContentManagerHttpPost">
+    <wsdl:operation name="SearchForContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForContentHttpPostIn" />
+      <wsdl:output message="tns:SearchForContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Messages in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForMessagesHttpPostIn" />
+      <wsdl:output message="tns:SearchForMessagesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetContentHttpPostIn" />
+      <wsdl:output message="tns:GetContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetMessageHttpPostIn" />
+      <wsdl:output message="tns:GetMessageHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewMessageHttpPostIn" />
+      <wsdl:output message="tns:PreviewMessageHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get HTML Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:PreviewContentHttpPostIn" />
+      <wsdl:output message="tns:PreviewContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">GetContent Folders from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetFoldersHttpPostIn" />
+      <wsdl:output message="tns:GetFoldersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Templates from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetTemplatesHttpPostIn" />
+      <wsdl:output message="tns:GetTemplatesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Customer Departments from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerDeptsHttpPostIn" />
+      <wsdl:output message="tns:GetCustomerDeptsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddContentHttpPostIn" />
+      <wsdl:output message="tns:AddContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Content to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddContentToFolder" message="tns:AddContentToFolderHttpPostIn" />
+      <wsdl:output name="AddContentToFolder" message="tns:AddContentToFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddMessageHttpPostIn" />
+      <wsdl:output message="tns:AddMessageHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolder" message="tns:AddMessageToFolderHttpPostIn" />
+      <wsdl:output name="AddMessageToFolder" message="tns:AddMessageToFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add new Message to a Folder with Message Type in ECN. </wsdl:documentation>
+      <wsdl:input name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeHttpPostIn" />
+      <wsdl:output name="AddMessageToFolderWithMessageType" message="tns:AddMessageToFolderWithMessageTypeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddFolderHttpPostIn" />
+      <wsdl:output message="tns:AddFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a new Folder to a Parent Folder in ECN. </wsdl:documentation>
+      <wsdl:input name="AddFolderToParent" message="tns:AddFolderToParentHttpPostIn" />
+      <wsdl:output name="AddFolderToParent" message="tns:AddFolderToParentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete a Content Folder from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteFolderHttpPostIn" />
+      <wsdl:output message="tns:DeleteFolderHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Content from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteContentHttpPostIn" />
+      <wsdl:output message="tns:DeleteContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Message from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteMessageHttpPostIn" />
+      <wsdl:output message="tns:DeleteMessageHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Content in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateContentHttpPostIn" />
+      <wsdl:output message="tns:UpdateContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update existing Message in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateMessageHttpPostIn" />
+      <wsdl:output message="tns:UpdateMessageHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContentManagerSoap" type="tns:ContentManagerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SearchForContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/SearchForContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <soap:operation soapAction="http://webservices.ecn5.com/SearchForMessages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/PreviewMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/PreviewContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetCustomerDepts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddContentToFolder" style="document" />
+      <wsdl:input name="AddContentToFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddContentToFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddMessageToFolder" style="document" />
+      <wsdl:input name="AddMessageToFolder">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolder">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddMessageToFolderWithMessageType" style="document" />
+      <wsdl:input name="AddMessageToFolderWithMessageType">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolderWithMessageType">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/AddFolderToParent" style="document" />
+      <wsdl:input name="AddFolderToParent">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/DeleteMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <soap:operation soapAction="http://webservices.ecn5.com/UpdateContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <soap:operation soapAction="http://webservices.ecn5.com/UpdateMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ContentManagerSoap12" type="tns:ContentManagerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SearchForContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/SearchForContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <soap12:operation soapAction="http://webservices.ecn5.com/SearchForMessages" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/PreviewMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/PreviewContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetFolders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetTemplates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetCustomerDepts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddContentToFolder" style="document" />
+      <wsdl:input name="AddContentToFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddContentToFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddMessageToFolder" style="document" />
+      <wsdl:input name="AddMessageToFolder">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolder">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddMessageToFolderWithMessageType" style="document" />
+      <wsdl:input name="AddMessageToFolderWithMessageType">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolderWithMessageType">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/AddFolderToParent" style="document" />
+      <wsdl:input name="AddFolderToParent">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/DeleteMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UpdateContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <soap12:operation soapAction="http://webservices.ecn5.com/UpdateMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ContentManagerHttpGet" type="tns:ContentManagerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="SearchForContent">
+      <http:operation location="/SearchForContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <http:operation location="/SearchForMessages" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <http:operation location="/GetContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <http:operation location="/GetMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <http:operation location="/PreviewMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <http:operation location="/PreviewContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <http:operation location="/GetFolders" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <http:operation location="/GetTemplates" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <http:operation location="/GetCustomerDepts" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <http:operation location="/AddContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <http:operation location="/AddContentToFolder" />
+      <wsdl:input name="AddContentToFolder">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddContentToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessageToFolder" />
+      <wsdl:input name="AddMessageToFolder">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessageToFolderWithMessageType" />
+      <wsdl:input name="AddMessageToFolderWithMessageType">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolderWithMessageType">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolder" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolderToParent" />
+      <wsdl:input name="AddFolderToParent">
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <http:operation location="/DeleteFolder" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <http:operation location="/DeleteContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <http:operation location="/DeleteMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <http:operation location="/UpdateContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <http:operation location="/UpdateMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ContentManagerHttpPost" type="tns:ContentManagerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="SearchForContent">
+      <http:operation location="/SearchForContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForMessages">
+      <http:operation location="/SearchForMessages" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetContent">
+      <http:operation location="/GetContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessage">
+      <http:operation location="/GetMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewMessage">
+      <http:operation location="/PreviewMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PreviewContent">
+      <http:operation location="/PreviewContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFolders">
+      <http:operation location="/GetFolders" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTemplates">
+      <http:operation location="/GetTemplates" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerDepts">
+      <http:operation location="/GetCustomerDepts" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <http:operation location="/AddContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddContent">
+      <http:operation location="/AddContentToFolder" />
+      <wsdl:input name="AddContentToFolder">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddContentToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessageToFolder" />
+      <wsdl:input name="AddMessageToFolder">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolder">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMessage">
+      <http:operation location="/AddMessageToFolderWithMessageType" />
+      <wsdl:input name="AddMessageToFolderWithMessageType">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddMessageToFolderWithMessageType">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolder" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddFolder">
+      <http:operation location="/AddFolderToParent" />
+      <wsdl:input name="AddFolderToParent">
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output name="AddFolderToParent">
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <http:operation location="/DeleteFolder" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteContent">
+      <http:operation location="/DeleteContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMessage">
+      <http:operation location="/DeleteMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateContent">
+      <http:operation location="/UpdateContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMessage">
+      <http:operation location="/UpdateMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContentManager">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your Content and Messages in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+    <wsdl:port name="ContentManagerSoap" binding="tns:ContentManagerSoap">
+      <soap:address location="http://localhost/ecn.webservice/ContentManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ContentManagerSoap12" binding="tns:ContentManagerSoap12">
+      <soap12:address location="http://localhost/ecn.webservice/ContentManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ContentManagerHttpGet" binding="tns:ContentManagerHttpGet">
+      <http:address location="http://localhost/ecn.webservice/ContentManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ContentManagerHttpPost" binding="tns:ContentManagerHttpPost">
+      <http:address location="http://localhost/ecn.webservice/ContentManager.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

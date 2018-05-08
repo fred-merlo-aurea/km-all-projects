@@ -1,0 +1,105 @@
+﻿<Window x:Class="ControlCenter.Windows.CodeSheetEditResponses"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+        Title="CodeSheetEditResponses" Height="400" MaxHeight="800" Width="600" Style="{StaticResource WindowStyling}" AllowsTransparency="True" WindowStyle="None" BorderBrush="Black" BorderThickness="1" Closing="Window_Closing" 
+        Topmost="True" ResizeMode="NoResize" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+    <Window.Resources>
+        <Style x:Key="Link" TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock TextDecorations="Underline" 
+                    Text="{TemplateBinding Content}"
+                    Background="{TemplateBinding Background}"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RadListBoxStyle1" TargetType="{x:Type telerik:RadListBox}">
+            <Setter Property="telerik:ScrollingSettingsBehavior.IsEnabled" Value="True"/>
+            <Setter Property="telerik:ScrollingSettingsBehavior.ScrollAreaPadding" Value="30"/>
+            <Setter Property="telerik:ScrollingSettingsBehavior.ScrollStep" Value="24"/>
+            <Setter Property="telerik:ScrollingSettingsBehavior.ScrollStepTime" Value="0:0:0.05"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="Once"/>
+            <Setter Property="BorderBrush" Value="#FF848484"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadListBox}">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsTabStop="False" Margin="0" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                                <telerik:StyleManager.Theme>
+                                    <telerik:Office_BlackTheme/>
+                                </telerik:StyleManager.Theme>
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                            <ContentPresenter x:Name="PART_DropVisualPlaceholder" HorizontalAlignment="Stretch" Visibility="Collapsed" VerticalAlignment="Stretch"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DraggableListBoxItem" TargetType="telerik:RadListBoxItem">
+            <Setter Property="telerik:DragDropManager.AllowCapturedDrag" Value="True" />
+        </Style>
+    </Window.Resources>
+    <!--ScrollViewer-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontSize="20" HorizontalAlignment="Center">
+                <TextBlock TextDecorations="Underline"><Run Text="Responses"/></TextBlock>
+            </Label>
+            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" FontSize="15" Content="Question:" />
+            <Label x:Name="lbQuestion" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" FontSize="15" FontStyle="Italic" />
+            <Button x:Name="btnDisplayOrder" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Content="Change display order" Style="{StaticResource Link}" Click="Change_Display_Order"/>
+            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" FontSize="15" Content="Responses:" />
+            <telerik:RadButton x:Name="rbAdd" Grid.Row="3" Grid.Column="0" Content="+" Margin="5" Height="25" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="Add_Response"/>
+            <telerik:RadListBox x:Name="lbResponses" Grid.Row="3" Grid.Column="1" SelectionChanged="lbResponses_SelectionChanged" Style="{DynamicResource RadListBoxStyle1}">
+                <telerik:RadListBox.DragDropBehavior>
+                    <telerik:ListBoxDragDropBehavior />
+                </telerik:RadListBox.DragDropBehavior>
+                </telerik:RadListBox>
+            <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Image x:Name="rbUp" Margin="5,0,0,5" Height="16" Width="16" Source="/ImageLibrary;Component/Images/24/up-24.png" Visibility="Collapsed" MouseUp="Response_Up" MouseEnter="rbUp_MouseEnter" />
+                <Image x:Name="rbDown" Margin="5,5,0,0" Height="16" Width="16" Source="/ImageLibrary;Component/Images/24/down-24.png" Visibility="Collapsed" MouseUp="Response_Down" MouseEnter="rbDown_MouseEnter"/>
+            </StackPanel>
+            <telerik:RadButton Grid.Row="4" Grid.Column="1" x:Name="rbCancel" Width="90" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" HorizontalAlignment="Right" Content="Cancel" Click="rbCancel_Click" />
+        </Grid>
+    <!--/ScrollViewer-->
+</Window>

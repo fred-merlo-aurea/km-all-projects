@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[ApplicationUsers] (
+    [UserID]                     UNIQUEIDENTIFIER NOT NULL,
+    [UserName]                   VARCHAR (100)    NULL,
+    [Password]                   VARCHAR (50)     NULL,
+    [Email]                      VARCHAR (100)    NULL,
+    [IsApproved]                 BIT              NULL,
+    [IsLockedOut]                BIT              NULL,
+    [CreatedDate]                DATETIME         NULL,
+    [UpdatedDate]                DATETIME         NULL,
+    [LastLoginDate]              DATETIME         NULL,
+    [LastPasswordChangedDate]    DATETIME         NULL,
+    [LastLockOutDate]            DATETIME         NULL,
+    [FailedPasswordAttemptCount] INT              NULL,
+    [AgreementDate]              DATETIME         NULL,
+    [FullName]                   VARCHAR (200)    NULL,
+    [CompanyName]                VARCHAR (100)    NULL,
+    [SalesForceID]               VARCHAR (50)     NULL,
+    [FreeContactDownload]        INT              NULL,
+    [FreeOpportunityDownload]    INT              NULL,
+    [SalesRepID]                 UNIQUEIDENTIFIER NULL,
+    [TrialExpireDate]            DATETIME         NULL,
+    [PackageLevel]               VARCHAR (50)     NULL,
+    [BrandID]                    INT              NULL,
+    [RoleID]                     INT              NOT NULL,
+    CONSTRAINT [PK_ApplicationUsers] PRIMARY KEY CLUSTERED ([UserID] ASC),
+    CONSTRAINT [FK_ApplicationUsers_Roles] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Roles] ([RoleID])
+);
+

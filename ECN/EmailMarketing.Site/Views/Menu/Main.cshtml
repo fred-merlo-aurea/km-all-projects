@@ -1,0 +1,32 @@
+﻿@model List<EmailMarketing.Site.Models.MenuItemViewModel>
+
+<nav class="MenuClass" id="Menu" style="float: left">
+    <ul id="mainmenu" role="menubar" class="level1 static" style="position: relative; width: auto; float: left;">
+        @foreach (var menuItem in Model)
+        {
+            bool hasPopup = menuItem.SubMenu != null && menuItem.SubMenu.Count > 0;
+            string elementId = menuItem.Label.ToLower().Replace(" ", "-");
+            string childId = hasPopup ? System.String.Format("'{0}-submenu'", elementId) : "false";
+            <li class="static" role="menuitem" style="position: relative; float: left;" aria-haspopup="@hasPopup.ToString()">
+                <a id="@(elementId)-menu" href="@menuItem.Href" class="level1 static"onmouseover="MyOpen(this,@childId)" onmouseout="MyClose(this)">@menuItem.Label</a>
+                @if (hasPopup)
+                {
+                    <ul id="@(elementId)-submenu"
+                        onmouseover="mcancelclosetime()" onmouseout="mclosetime()"
+                        @*onmouseover="MyOver(this, '@(elementId)-menu')" onmouseout="MyOut(this, '@(elementId)-menu' )"*@
+                        class="level2"
+                        style="visibility: hidden; position: absolute; top: 100%; left: 0px;">
+                        @foreach (var subMenuItem in menuItem.SubMenu)
+                        {
+                            <li role="menuitem" style="position: relative; float: left;">
+                                <a class="dynamic level2" href="@subMenuItem.Href" onmouseover="MyOver(this, '@(elementId)-menu')" onmouseout="MyOut(this, '@(elementId)-menu' )">
+                                    @subMenuItem.Label
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+</nav>

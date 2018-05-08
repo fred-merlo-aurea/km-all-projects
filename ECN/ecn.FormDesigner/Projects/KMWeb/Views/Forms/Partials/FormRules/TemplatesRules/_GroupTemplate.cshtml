@@ -1,0 +1,44 @@
+﻿@using KMEnums
+@using KMModels    
+@using KMModels.PostModels     
+@{
+    var controls = ViewContext.Controller.ViewBag.Controls;
+}
+<script id="group-template" type="text/x-kendo-template">
+
+    <div id="Rules_#=RuleNum#__ConditionGroup_#=GroupId#__ConditionGroupRowBox" class = "Rules_#=RuleNum#__ConditionGroupRowBox">   
+    <div class="ruleitem">     
+       <div class="conditionsbox" style="width: 925px">
+         <input type="hidden" value = "#=GroupId#" name = "Rules[#=RuleNum#].ConditionGroup.Index"/>
+         <span class="groupID">Group Condition ID <span class="GroupNumber">#=displayGroupId#</span></span>
+         @(Html.Kendo().Button().Content( "Add Condition  <i class=\"km-icon icon-kmplus-circled-1\"></i>" ).Name("Rules_#=RuleNum#__ConditionGroup_#=GroupId#__AddCondition").HtmlAttributes(new { type = "button", id="Rules_#=RuleNum#__ConditionGroup_#=GroupId#__AddCondition", @class = "AddCondition btn  btn-blue2  float-left" }).ToClientTemplate())     
+         <div class="formitem formiteminline">
+               <label>Condition Connector</label>
+                
+                @(Html.Kendo().DropDownList().Name(GetName<ConditionGroupModel>("Rules[#=RuleNum#].ConditionGroup[#=GroupId#]", x => x.LogicGroup))
+                .Items(items =>
+                {                    
+                    foreach (ConditionType type in Enum.GetValues(typeof(KMEnums.ConditionType)))
+                    {
+                        items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == ConditionType.Or);
+                    }
+                })                
+                .Events(e => e.Select(@<text>function(e){ changeCondition('Rules[#=RuleNum#].ConditionGroup[#=GroupId#]', this, e); }</text>))
+                .HtmlAttributes(new {id="Rules_#=RuleNum#__ConditionGroup_#=GroupId#__LogicGroup" , @class ="middropd Rules_#=RuleNum#__ConditionGroup_#=GroupId#__LogicGroup"} ).ToClientTemplate()) 
+          </div>
+          <div class="conditionslist">
+             <ul class="inline title">
+                <li class="cond">Condition</li>
+                <li class="fld">Field</li>
+                <li class="comp">Comparator</li>
+                <li class="value">Value</li>
+                <li class="acts">Actions</li>
+             </ul>    
+            <div id="Rules_#=RuleNum#__ConditionGroup_#=GroupId#__ListOfConditions">
+            </div>
+            @(Html.Kendo().Button().Content( "Add Group Condition <i class=\"km-icon icon-kmplus-circled-1\"></i>" ).Name("Rules_#=RuleNum#__AddGroup").HtmlAttributes(new { type = "button", id="Rules_#=RuleNum#__AddGroup_#=uid#", @class="AddGroup   btn  btn-blue2 "  }).ToClientTemplate())
+           </div>
+         </div>
+      </div>
+    </div>    
+    </script>

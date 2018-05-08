@@ -1,0 +1,41 @@
+﻿@model UAS.Web.Models.Circulations.SubscriptionMarketingInfo
+<style>
+    .rowmargin{
+        padding:10px 0;
+    }
+</style>
+<table style="width:100%;">
+    <tr>
+        <td class="rowmargin"> Old Acct #: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.AccountNumber, new { id = "AccountNumber", disabled=true }) </td>
+        <td class="rowmargin"> Member Group: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.MemberGroup, new { id = "MemberGroup" }) </td>
+    </tr>
+    <tr>
+        <td class="rowmargin"> Org Subsrc: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.OriginalSubscriberSourceCode, new { id = "OriginalSubscriberSourceCode", disabled = true }) </td>
+        <td class="rowmargin"> Subsrc: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.SubscriberSourceCode, new { id = "SubscriberSourceCode" }) </td>
+    </tr>
+    <tr>
+        <td class="rowmargin"> Subsrc Type: </td>
+        <td class="rowmargin">
+            @Html.DropDownListFor(e => Model.SubSrcID, Model.SubSourceList,"")
+        </td>
+        <td class="rowmargin"> Media Type:<span style="color:red">*</span> </td>
+        <td class="rowmargin">
+            @Html.DropDownListFor(e =>  Model.Deliverability, Model.DeliveryMethods, new { required=true })
+        </td>
+
+    </tr>
+    <tr>
+        <td class="rowmargin">Verify:</td>
+        <td class="rowmargin">@Html.TextBoxFor(e => Model.Verify, new { id = "Verify" })</td> 
+        <td class="rowmargin">Created Date: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.CreatedDate, new { id = "CreatedDate", disabled = true })</td>
+    </tr>
+    <tr>
+        <td class="rowmargin"> Last Updated: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(e => Model.UpdatedDate, new { id = "LastUpdated", disabled = true })</td>
+    </tr>
+</table>

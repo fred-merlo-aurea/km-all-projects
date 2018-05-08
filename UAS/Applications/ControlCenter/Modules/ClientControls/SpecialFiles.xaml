@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ControlCenter.Modules.ClientControls.SpecialFiles"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <telerik:RadGridView Name="grdSpecialFiles" Width="850" Height="500" Margin="5,10,0,0" VerticalAlignment="Center" ActionOnLostFocus="None"
+                                 telerik:StyleManager.Theme="Expression_Dark" EditTriggers="CellClick" IsReadOnly="False" CellEditEnded="grdSpecialFiles_CellEditEnded"
+                                 RowDetailsVisibilityMode="VisibleWhenSelected" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 AutoGenerateColumns="False" SelectionChanged="grdSpecialFiles_SelectionChanged" RowEditEnded="CheckForChanges" ItemsSource="{Binding ClientSpecialFile}">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="Active" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CreatesDataTable}" Header="Creates Data Table" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding FileName}" Header="File Name" />
+                <telerik:GridViewComboBoxColumn Name="grdcbExtensions" DataMemberBinding="{Binding FileExtension}" Header="FileExtension" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StoredProcedure}" Header="Stored Procedure" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Method}" Header="Method" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <telerik:RadButton Width="100" HorizontalAlignment="Left" Margin="28,5,0,6" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Name="rbNewRow" Content="Add New Record" Click="rbNewRow_Click"/>
+            <telerik:RadButton Width="100" HorizontalAlignment="Left" Margin="28,5,0,6" Background="#FF0000" Foreground="#FFF1EFEF" IsEnabled="False" Name="rbSave" Content="Save" Click="rbSave_Click"/>
+            <telerik:RadButton Width="100" HorizontalAlignment="Left" Margin="28,5,0,6" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Name="rbCancel" Content="Cancel" Click="rbCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

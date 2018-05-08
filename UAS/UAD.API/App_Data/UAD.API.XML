@@ -1,0 +1,3549 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UAD.API</name>
+    </assembly>
+    <members>
+        <member name="M:UAD.API.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HeaderDocumentation.GetLibrary">
+            <summary>
+            Provides access to the (singleton) repository of
+            documentation and globally applicable HTTP Headers.
+            </summary>
+            <returns>a dictionary of header information organized by Name</returns>
+        </member>
+        <member name="F:UAD.API.Areas.HelpPage.HeaderDocumentation.library">
+            <summary>
+            stores global HTTP Header documentation
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,UAD.API.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:UAD.API.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:UAD.API.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.RequestExample">
+            <summary>
+            Gets or sets the example that describes an HTTP request including headers, etc.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ResponseExample">
+            <summary>
+            Gets or sets the example that describes an HTTP response including headers, etc.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.RequestHeaderDocumentation">
+            <summary>
+            Gets or sets the collection of request header documentation
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ResponseHeaderDocumentation">
+            <summary>
+            Gets or sets the collection of request header documentation
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:UAD.API.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:UAD.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:UAD.API.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:UAD.API.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,UAD.API.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,UAD.API.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(UAD.API.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:UAD.API.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},UAD.API.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:UAD.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:UAD.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleKey.#ctor(UAD.API.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:UAD.API.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,UAD.API.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:UAD.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:UAD.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:UAD.API.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:UAD.API.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="P:UAD.API.Attributes.AuthenticationRequiredAttribute.AuthenticationSettings">
+            <summary>
+            get/set the authentication configuration
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.AuthenticationRequiredAttribute.#ctor(System.Int32,UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType,System.Boolean)">
+            <summary>
+            require authentication prior to executing an action (or any action, when applied to an API controller)
+            </summary>
+            <param name="order">the order in which this attribute should be applied, with zero being first. (default: 0).</param>
+            <param name="AccessKey">what level of access key is required (default User)</param>
+            <param name="customerIdRequired">whether a customer id is required (default: true)</param>
+        </member>
+        <member name="M:UAD.API.Attributes.AuthenticationRequiredAttribute.OnActionExecuting(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Perform authentication checks before executing the requested action
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="T:UAD.API.Attributes.CustomerIdRequiredAttribute">
+            <summary>
+            Implements custom authentication by extracting a "API Access Key" from the HTTP header.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.CustomerIdRequiredAttribute.OnActionExecuting(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Extracts the Customer ID from HTTP header value or, if this cannot be done (for example, 
+            because the header is not valid or not provided) short-circuits the request returning a 
+            <code>401 Unauthorized</code> Error to the client.
+            </summary>
+            <param name="actionContext">the action context associated with the current request.</param>
+        </member>
+        <member name="T:UAD.API.Attributes.ExceptionsLoggedAttribute">
+            <summary>
+            Implements enterprise exception logging  by intercepting uncaught exceptions, recording
+            these to the enterprise exceptions repository, and associating them with the active API
+            request log entry.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.ExceptionsLoggedAttribute.OnException(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            Overrides the base behavior of an <see cref="T:System.Web.Http.Filters.ExceptionFilterAttribute"/>
+            to provide custom application wide logic for processing of exceptions, recording them in the
+            Enterprise "Common" exceptions repository and creating an association from the record to the
+            API request log entry related to the active request.
+            </summary>
+            <param name="actionExecutedContext"></param>
+        </member>
+        <member name="T:UAD.API.Attributes.FriendlyExceptionsAttribute">
+            <summary>
+            Wraps Exceptions raised with additional content (such as "Friendly" Message, Error Code and Error Reference) for consumption by clients.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.FriendlyExceptionsAttribute.#ctor">
+            <summary>
+            Establish default exception handlers
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.FriendlyExceptionsAttribute.FormatErrorStatus(System.Net.HttpStatusCode)">
+            <summary>
+            Transforms a <see cref="T:System.Net.HttpStatusCode"/> into a string containing
+            both the numeric and textual portions.
+            </summary>
+            <param name="statusCode">an HTTP status code</param>
+            <returns>a string containing a concatenation of the numeric and textual representations of the 
+            given HTTP status code.</returns>
+        </member>
+        <member name="P:UAD.API.Attributes.FriendlyExceptionsAttribute.ExceptionHandlers">
+            <summary>
+            List of enriched exception details, mapped to raised exceptions at runtime via Type and (optionally) handler.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Attributes.FriendlyExceptionsAttribute.CatchUnfilteredExceptions">
+            <summary>
+            If true, all exceptions will be wrapped with additional content.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.FriendlyExceptionsAttribute.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Constructor accepting two optional parameters controlling the invocation order
+            and whether to wrap all exceptions or only those cataloged in the
+            <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfigurationLibrary"/>
+            </summary>
+            <param name="order">identifies the precedence of the instance with respect to other filters
+            irrespective of Filter type.  Lower values indicate higher precedence and more immediate 
+            invocation.</param>
+            <param name="catchUnfilteredExceptions">If true, all exceptions will be wrapped irrespective
+            of whether they are mapped explicitly to additional content (e.g. message, status, and reference 
+            detail) with the global <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfigurationLibrary"/>
+            </param>
+        </member>
+        <member name="M:UAD.API.Attributes.FriendlyExceptionsAttribute.OnException(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            Implements global exception handling to provide consistent output from exceptions raised
+            such as human readable Message text describing the problem and an HTTP Status Code presented 
+            as text mirroring the servers response code.
+            </summary>
+            <param name="actionExecutedContext">the HTTP Action Context of the request having generated the exception.</param>
+        </member>
+        <member name="M:UAD.API.Attributes.FriendlyExceptionsAttribute.LookupException(System.Exception,UAD.API.Exceptions.ExceptionConfiguration@)">
+            <summary>
+            Interrogates the configured <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfigurationLibrary"/>,
+            returning the first <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfiguration"/> entry associated 
+            to <code>exception</code> based on type and which does not defined a Handler or which does not decline to handle
+            the <code>exception</code>.
+            </summary>
+            <param name="exception">the exception to be handled</param>
+            <param name="exceptionMatch">Output paramater; the first
+            <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfiguration"/> matching <code>exception</code>, or <code>NULL</code>
+            if none could be found.</param>
+            <returns>true if an <see cref="!:EmailMarketing.API.Exceptions.ExceptionConfiguration"/> was found and 
+            <code>exceptionMatch</code> was set to a non-null value; otherwise false.</returns>
+        </member>
+        <member name="T:UAD.API.Attributes.LoggedAttribute">
+            <summary>
+            Implements API logging as pre and post execution actions.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Attributes.OrderedFilterInfo">
+            <summary>
+            Custom HTTP Filter Info supporting explicit action/exception/authorization filter handler 
+            invocation. <seealso cref="T:System.Web.Http.Filters.FilterInfo"/>
+            </summary>
+        </member>
+        <member name="P:UAD.API.Attributes.OrderedFilterInfo.Instance">
+            <summary>
+            Instance of an object implementing the IFilter interface.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Attributes.OrderedFilterInfo.Scope">
+            <summary>
+            FilterScope object instance
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.OrderedFilterInfo.CompareTo(System.Object)">
+            <summary>
+            Implements the IComparable interface to provide ordering of filter handler
+            invocation based on the <code>Order</code> property
+            </summary>
+            <param name="obj">instance of an object implementing the IOrderAttribute interface</param>
+            <returns>-1 of the given object comes before the context object per Order, 1 if after or zero 
+            if the objects have the same value for <code>Order</code>.</returns>
+        </member>
+        <member name="M:UAD.API.Attributes.OrderedFilterInfo.ConvertToFilterInfo">
+            <summary>
+            Allows ingestion of our customized FilterInfo implementation back into the general
+            Web API pipeline by converting the object back into the framework provided base-class.
+            This is neeeded because the Framework provided base-class 
+            (<see cref="T:System.Web.Http.Filters.FilterInfo"/>) is sealed and cannot simply be 
+            sub-classed.
+            </summary>
+            <returns>a new instance of <see cref="T:System.Web.Http.Filters.FilterInfo"/> having the same
+            <see cref="P:UAD.API.Attributes.OrderedFilterInfo.Instance"/> and <see cref="P:UAD.API.Attributes.OrderedFilterInfo.Scope"/> as the instance of <code>OrderFilterInfo</code>.
+            </returns>
+        </member>
+        <member name="T:UAD.API.Attributes.OrderedFilterProvider">
+            <summary>
+            Custom implementation of <see cref="T:System.Web.Http.Filters.IFilterProvider"/>
+            honoring the <code>Order</code> attribute exposed by Attributes implementing the
+            <see cref="!:EmailMarketing.API.Attributes.IOrderAttributes"/> interface.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Attributes.OrderedFilterProvider.GetFilters(System.Web.Http.HttpConfiguration,System.Web.Http.Controllers.HttpActionDescriptor)">
+            <summary>
+            Creates an explicitly order enumeration of <see cref="T:System.Web.Http.Filters.FilterInfo"/>
+            by delegating to the IComparable implementation within 
+            <see cref="!:EmailMarketing.API.Attributes.OrderedFilterInfo"/>
+            </summary>
+            <param name="configuration">HTTP (server) configuration instance</param>
+            <param name="actionDescriptor">descriptor for the HTTP action to be dispatched</param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Attributes.UserAuthTokenRequiredAttribute">
+            <summary>
+            Implements custom authentication by extracting a "API Access Key" from the HTTP header.
+            </summary>
+        </member>
+        <member name="F:UAD.API.Attributes.UserAuthTokenRequiredAttribute.AuthenticationSettings">
+            <summary>
+            configures the Authentication Provider to require a User level Access Key
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.ControllerName">
+            <summary>
+            When implemented in a derived class, returns the name of the executing controller
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.FrameworkEntity">
+            <summary>
+            When overridden in a derived class, get the framework entity for ECNError. <see cref="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseInvalidMessageException(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseInvalidMessageException(System.String)">
+            <summary>
+            throws a 400 including the given message
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseInvalidMessageException(System.String,System.Object[])">
+            <summary>
+            throws a 400 error including a message composed by String.Format 
+            replacing <code>args</code> in <code>format</code>
+            </summary>
+            <param name="format">message with <code>{n}</code> placeholders</param>
+            <param name="args">objects to replace into format, calling ToString() on each if necessary</param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseInternalServerError(System.String)">
+            <summary>
+            Causes a general 500 error to be returned, given message is passed to the log as "logNote"
+            </summary>
+            <param name="logMessage"></param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseInternalServerError(System.String,System.Object[])">
+            <summary>
+            Format arguments using String.Format to construct the logMessage
+            </summary>
+            <param name="format"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseNotFoundException(System.Int32,System.String)">
+            <summary>
+            Causes a standard <code>404 Not Found</code> error to be returned including the given resource type (e.g. "blast")
+            and the ID of a resource of that type that does not exist.
+            </summary>
+            <param name="resourceID">ID of missing resource</param>
+            <param name="resourceTypeName">defaults to the value returned by <see cref="P:UAD.API.Controllers.AuthenticatedUserControllerBase.ControllerName"/></param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.RaiseNotFoundExceptionViaDirectThrow(System.Int32,System.String)">
+            <summary>
+            Causes a standard <code>404 Not Found</code> error to be returned including the given resource type (e.g. "blast")
+            and the ID of a resource of that type that does not exist.  NOTE: this version should be used only
+            if RaseNotFoundException() results in a 500 (rather than 404 expected.)
+            </summary>
+            <param name="resourceID">ID of missing resource</param>
+            <param name="resourceTypeName">defaults to the value returned by <see cref="P:UAD.API.Controllers.AuthenticatedUserControllerBase.ControllerName"/></param>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.APIAccessKey">
+            <summary>
+            Get the APIAccessKey extracted from HTTP Headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.CustomerID">
+            <summary>
+            Get the ID of the customer extracted from HTTP Headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.APIBaseChannel">
+            <summary>
+            Get the APIAccessKey extracted from HTTP Headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.APIUser">
+            <summary>
+            Get the current Framework user object inferred from HTTP Headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.APICustomer">
+            <summary>
+            Get the current Framework customer object inferred from HTTP headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.APIClient">
+            <summary>
+            Get the current Framework client object inferred from HTTP headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.CommonErrorLogID">
+            <summary>
+            Get/Set the ErrorLogID written during this request, if any.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.MethodName">
+            <summary>
+            The name of the invoked method
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.RouteDataControllerName">
+            <summary>
+            Returns the name of the controller responding to the current request from routing data.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.SubjectID">
+            <summary>
+            Returns the ID value for the subject of the current request from routing data
+            </summary>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.GetRouteDataStringValueOrEmpty(System.String)">
+            <summary>
+            Retrieve the value of a particular key from the route data of the current request
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="F:UAD.API.Controllers.AuthenticatedUserControllerBase.Logger">
+            <summary>
+            Exposes the logging instance for this controller
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.RequestSignatureXML">
+            <summary>
+            (TODO)  extracts interesting datapoints from the request/environment and returns an XML string for logging
+            </summary>
+            <returns>XML as string</returns>
+        </member>
+        <member name="P:UAD.API.Controllers.AuthenticatedUserControllerBase.RequestSignatureString">
+            <summary>
+            Translates selected request properties into an API "method signature" for logging
+            </summary>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.LogError(System.Int32,System.Exception,System.String)">
+            <summary>
+            Emits a log message out to the database and DOES update the master log record for this request.
+            </summary>
+            <param name="severity">error is deemed critical if 1 (one) is passed</param>
+            <param name="Ex">An exception object</param>
+            <param name="httpErrorReason">The "ReasonPhrase" associated with the HTTP status code returned for this request.</param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.UpdateLog">
+            <summary>
+            Updates the application log entry, appending <see cref="P:UAD.API.Controllers.AuthenticatedUserControllerBase.CommonErrorLogID"/> if
+            an error was recorded in the common ErrorLog during this request.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.UpdateLog(System.Nullable{System.Int32})">
+            <summary>
+            Used to update the application log entry for the current request.
+            </summary>
+            <param name="ErrorLogID">Log ID for the error record associated with the current request, or NULL if no error occured.</param>
+        </member>
+        <member name="M:UAD.API.Controllers.AuthenticatedUserControllerBase.CreateResponseWithLocation``1(System.Net.HttpStatusCode,``0,System.Int32,System.String)">
+            <summary>
+            Convenience method, creates an HttpResponseMessage from a
+            </summary>
+            <param name="statusCode"></param>
+            <param name="model"></param>
+            <param name="routeName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Controllers.CustomFieldController">
+            <summary>
+            API methods exposing custom fields for subscription management
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.CustomFieldController.FrameworkEntity">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Controllers.CustomFieldController.GetCustomFields(System.String)">
+             <summary>
+             Retrieves the product demographics and product adhocs identified by <pre>productCode</pre> or all demographics and product adhocs if product wasn't provided.
+             </summary>
+             <param name="productCode">productCode</param>
+             <returns>A list of product demographics and product adhocs for <pre>productCode</pre> or a list of demographics and product level adhocs if product wasn't provided.</returns>
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/customfield/methods/GetCustomFields HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+              
+              "product"
+              
+              OR pass no parameters to get all
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "PubCode",
+                         "Name": "Test",
+                         "DisplayName": "Test",
+                         "DisplayOrder": 0,
+                         "IsMultipleValue": true,
+                         "IsRequired": false,
+                         "IsActive": true,
+                         "IsAdHoc": false
+                     },
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "PubCode",
+                         "Name": "Test",
+                         "DisplayName": "Test",
+                         "DisplayOrder": 0,
+                         "IsMultipleValue": true,
+                         "IsRequired": false,
+                         "IsActive": true,
+                         "IsAdHoc": false
+                     }
+                 ]
+             
+             ]]></example>    
+        </member>
+        <member name="M:UAD.API.Controllers.CustomFieldController.GetConsensusCustomFields">
+             <summary>
+             Retrieves the Consensus adhocs and master groups
+             </summary>
+             <returns>A list of Consensus adhocs and master groups</returns>
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/customfield/methods/GetConsensusCustomFields HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422                
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "PubCode",
+                         "Name": "Test",
+                         "DisplayName": "Test",
+                         "DisplayOrder": 1,
+                         "IsMultipleValue": false,
+                         "IsRequired": false,
+                         "IsActive": true,
+                         "IsAdHoc": false
+                     },
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "PubCode",
+                         "Name": "Test",
+                         "DisplayName": "Test",
+                         "DisplayOrder": 2,
+                         "IsMultipleValue": false,
+                         "IsRequired": false,
+                         "IsActive": true,
+                         "IsAdHoc": false
+                     }
+                 ]
+             
+             ]]></example>    
+        </member>
+        <member name="M:UAD.API.Controllers.CustomFieldController.GetCustomFieldValues(UAD.API.Models.ApiParameterProductCustField)">
+             <summary>
+             Retrieves the valid demographic values identified by a combination of <pre>productCode</pre> and/or <pre>customFieldName</pre>. If no values passed it will return all valid demographic values.
+             </summary>
+             <param name="productCode">emailAddress</param>
+             <param name="customFieldName">productCode</param>        
+             <returns>A list of valid demographic values identified by a combination of <pre>productCode</pre> and/or <pre>customFieldName</pre></returns>. If no parameters are passed it will return all demographic values.
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/customfield/methods/GetCustomFieldValues HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+              
+              {
+                 "productCode": "product",
+                 "customFieldName": "field"
+              }
+              
+              OR
+              
+              {
+                 "productCode": "product"
+              }
+              
+              OR
+             
+              {
+                 "customFieldName": "field"
+              }
+              
+              OR blank to retrieve all
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "Test",
+                         "Name": "Test",
+                         "Value": "Test",
+                         "Description": "Test",
+                         "DisplayOrder": 0,
+                         "IsOther": false,
+                         "IsConsensus": false
+                     },
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "Test",
+                         "Name": "Test",
+                         "Value": "Test",
+                         "Description": "Test",
+                         "DisplayOrder": 0,
+                         "IsOther": false,
+                         "IsConsensus": false
+                     }
+                 ]       
+             
+             ]]></example>    
+        </member>
+        <member name="M:UAD.API.Controllers.CustomFieldController.GetConsensusCustomFieldValues(System.String)">
+             <summary>
+             Retrieves the master code sheet values identified by <pre>customFieldName</pre>. If <pre>customFieldName</pre> is not passed then it returns all master code sheet values.
+             </summary>        
+             <param name="customFieldName">productCode</param>        
+             <returns>A list of master code sheet values identified by <pre>customFieldName</pre>. If <pre>customFieldName</pre></returns> is not passed then it returns all master code sheet values.
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/customfield/methods/GetConsensusCustomFieldValues HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+                     
+              "customFieldName"
+              
+              OR blank to retrieve all
+              
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "",
+                         "Name": "Test",
+                         "Value": "Test",
+                         "Description": "Yes",
+                         "DisplayOrder": 0,
+                         "IsOther": false,
+                         "IsConsensus": false
+                     },
+                     {
+                         "ProductId": 0,
+                         "ProductCode": "",
+                         "Name": "Test",
+                         "Value": "Test",
+                         "Description": "No",
+                         "DisplayOrder": 0,
+                         "IsOther": false,
+                         "IsConsensus": false
+                     }
+                 ]       
+             
+             ]]></example>    
+        </member>
+        <member name="P:UAD.API.Controllers.SearchableApiControllerBase`2.ExposedProperties">
+            <summary>
+            Lists the API Model properties exposed by the controller, generally a subset of those provided by the corresponding Framework model.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Controllers.SearchableApiControllerBase`2.GetID(`0)">
+            <summary>
+            When implemented in a derived class, gets the unique ID value for the given object
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UAD.API.Controllers.SearchableApiControllerBase`2.GetID(`1)">
+            <summary>
+            When implemented in a derived class, gets the unique ID value for the given object
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Controllers.SubscriptionController">
+            <summary>
+            API methods exposing subscription management
+            </summary>
+        </member>
+        <member name="P:UAD.API.Controllers.SubscriptionController.FrameworkEntity">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Controllers.SubscriptionController.SaveSubscriber(System.Collections.Generic.List{UAD.API.Models.SaveSubscriber})">
+             <summary>
+             Ability to add one or multiple subscription, demographics, product adhocs, and consensus adhocs.
+             </summary>
+             <param name="subscription">Subscription</param>
+             <returns>A list of subscriptions added for <code>Subscription</code></returns>
+            
+             <example for="request"><![CDATA[
+              POST http://api.kmpsgroup.com/api/subscription/methods/SaveSubscriber HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 4000   
+              
+                 [
+                     {
+                         "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                         "SequenceID": 0,
+                         "AccountNumber": "0",
+                         "PubCode": "PUBCODE",
+                         "QualificationDate": "2017-10-25",
+                         "CategoryID": 10,
+                         "TransactionID": 10,
+                         "QSourceID": 1874,
+                         "Demo7": "A",
+                         "Copies": 1,
+                         "GraceIssues": 1,
+                         "SubscriberSourceCode": "SS20",
+                         "Verify": "Yes",
+                         "Email": "test@test.com",
+                         "EmailStatus": "Active",
+                         "FirstName": "Test",
+                         "LastName": "Test",
+                         "Company": "Test Inc.",
+                         "Title": "Owner",
+                         "Occupation": "Owner",
+                         "Address1": "123 Main Street",
+                         "Address2": "Apt 101",
+                         "Address3": "",
+                         "City": "Test",
+                         "State": "Test",
+                         "ZipCode": "55555",
+                         "Plus4": "5555",
+                         "Country": "United States",
+                         "County": "New Test",
+                         "Phone": "1234567890",
+                         "PhoneExt": "12",
+                         "Fax": "2345678901",
+                         "Website": "www.test.com",
+                         "Mobile": "3456789012",
+                         "Gender": "male",
+                         "Age": 44,
+                         "Birthdate": "1980-10-25",
+                         "Income": "90000",
+                         "EmailRenewPermission": true,
+                         "FaxPermission": false,
+                         "MailPermission": true,
+                         "OtherProductsPermission": true,
+                         "PhonePermission": true,
+                         "TextPermission": false,
+                         "ThirdPartyPermission": true,
+                         "SubscriberProductDemographics": [
+                             {
+                                 "Name": "SPD1",
+                                 "Value": "16"
+                             },
+                             {
+                                 "Name": "SPD2",
+                                 "Value": "06"
+                             }
+                         ],
+                         "SubscriberProductCustomFields": [
+                             {
+                                 "Name": "SPCF1",
+                                 "Value": "X45ED"
+                             },
+                             {
+                                 "Name": "SPCF2",
+                                 "Value": "Active"
+                             }
+                         ],
+                         "SubscriberConsensusCustomFields": [
+                             {
+                                 "Name": "SCCF1",
+                                 "Value": "Commercial"
+                             },
+                             {
+                                 "Name": "SCCF2",
+                                 "Value": "ENG101"
+                             }
+                         ]
+                     },
+                     {
+                         "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                         "SequenceID": 0,
+                         "AccountNumber": "0",
+                         "PubCode": "PUBCODE",
+                         "QualificationDate": "2017-10-25",
+                         "CategoryID": 10,
+                         "TransactionID": 10,
+                         "QSourceID": 1874,
+                         "Demo7": "A",
+                         "Copies": 1,
+                         "GraceIssues": 1,
+                         "SubscriberSourceCode": "SS20",
+                         "Verify": "Yes",
+                         "Email": "test@test.com",
+                         "EmailStatus": "Active",
+                         "FirstName": "Test",
+                         "LastName": "Test",
+                         "Company": "Test Inc.",
+                         "Title": "Owner",
+                         "Occupation": "Owner",
+                         "Address1": "123 Main Street",
+                         "Address2": "Apt 101",
+                         "Address3": "",
+                         "City": "Test",
+                         "State": "Test",
+                         "ZipCode": "55555",
+                         "Plus4": "5555",
+                         "Country": "United States",
+                         "County": "New Test",
+                         "Phone": "1234567890",
+                         "PhoneExt": "12",
+                         "Fax": "2345678901",
+                         "Website": "www.test.com",
+                         "Mobile": "3456789012",
+                         "Gender": "male",
+                         "Age": 44,
+                         "Birthdate": "1980-10-25",
+                         "Income": "90000",
+                         "EmailRenewPermission": true,
+                         "FaxPermission": false,
+                         "MailPermission": true,
+                         "OtherProductsPermission": true,
+                         "PhonePermission": true,
+                         "TextPermission": false,
+                         "ThirdPartyPermission": true,
+                         "SubscriberProductDemographics": [
+                             {
+                                 "Name": "SPD1",
+                                 "Value": "16"
+                             },
+                             {
+                                 "Name": "SPD2",
+                                 "Value": "06"
+                             }
+                         ],
+                         "SubscriberProductCustomFields": [
+                             {
+                                 "Name": "SPCF1",
+                                 "Value": "X45ED"
+                             },
+                             {
+                                 "Name": "SPCF2",
+                                 "Value": "Active"
+                             }
+                         ],
+                         "SubscriberConsensusCustomFields": [
+                             {
+                                 "Name": "SCCF1",
+                                 "Value": "Commercial"
+                             },
+                             {
+                                 "Name": "SCCF2",
+                                 "Value": "ENG101"
+                             }
+                         ]
+                     }
+                 ]
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 201 CREATED
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 450
+             
+                 [
+                     {
+                         "ProcessCode": "10yO8Y9Aca19_11102017_10:25:08",
+                         "PubID": 0,
+                         "StatusCode": "201",
+                         "StatusMessage": "Saved Subscriber: 00000000-0000-0000-0000-000000000000 for Product: PUBCODE All PubCodes are valid. All Response Groups and Values are valid."
+                     },
+                     {
+                         "ProcessCode": "9IX3ub2G33o7_11102017_10:25:12",
+                         "PubID": 0,
+                         "StatusCode": "201",
+                         "StatusMessage": "Saved Subscriber: 00000000-0000-0000-0000-000000000000 for Product: PUBCODE All PubCodes are valid. All Response Groups and Values are valid."
+                     }
+                 ]
+             ]]></example>  
+        </member>
+        <member name="M:UAD.API.Controllers.SubscriptionController.GetSubscriber(System.String)">
+             <summary>
+             Retrieves the Subscription resource identified by <pre>emailAddress</pre>
+             </summary>
+             <param name="emailAddress">Email Address</param>
+             <returns>A list of subscriptions for <code>emailAddress</code></returns>
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/subscription/methods/GetSubscriber HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+              
+              "someone@somewhere.com"
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ExternalKeyID": -1,
+                         "FirstName": "Test",
+                         "LastName": "Test",
+                         "Title": "Test",
+                         "Company": "",
+                         "Address": "",
+                         "Address2": "",
+                         "City": "",
+                         "State": "Test",
+                         "Zip": "",
+                         "Plus4": "",
+                         "ForZip": "",
+                         "County": "",
+                         "Country": "Test",
+                         "Phone": "",
+                         "Fax": "",
+                         "Income": null,
+                         "Gender": "",
+                         "Address3": "",
+                         "Mobile": "",
+                         "Score": 1,
+                         "Latitude": -1,
+                         "Longitude": -1,
+                         "Demo7": "A",
+                         "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                         "TransactionDate": "2016-05-10 07:02:00",
+                         "QDate": "2016-05-09 00:00:00",
+                         "Email": "test@test.com",
+                         "SubscriptionID": 0,
+                         "IsMailable": false,
+                         "Age": 0,
+                         "Birthdate": null,
+                         "Occupation": null,
+                         "PhoneExt": null,
+                         "Website": null,
+                         "FullAddress": null,
+                         "AccountNumber": null,
+                         "ExternalKeyId": 0,
+                         "EmailID": 0,
+                         "MailPermission": null,
+                         "FaxPermission": null,
+                         "PhonePermission": null,
+                         "OtherProductsPermission": null,
+                         "ThirdPartyPermission": null,
+                         "EmailRenewPermission": null,
+                         "TextPermission": null,
+                         "demo": [
+                             {
+                                 "Name": "demo1",
+                                 "DisplayName": "",
+                                 "Value": ""
+                             },
+                             {
+                                 "Name": "demo2",
+                                 "DisplayName": "",
+                                 "Value": ""
+                             }
+                         ],
+                         "ProductList": [
+                             {
+                                 "PubID": 0,
+                                 "PubSubscriptionID": 0,
+                                 "SubscriptionStatusID": 3,
+                                 "Demo7": "A",
+                                 "QDate": "2016-05-09 00:00:00",
+                                 "QSourceID": -1,
+                                 "CategoryID": 101,
+                                 "TransactionID": 101,
+                                 "Email": "test@test.com",
+                                 "StatusUpdatedDate": "2017-11-10 10:47:01.5848079-06:00",
+                                 "StatusUpdatedReason": "Subscribed",
+                                 "DateCreated": "2016-05-06 15:25:31.223",
+                                 "DateUpdated": "2016-05-09 11:46:03.167",
+                                 "EmailStatus": "Active",
+                                 "Copies": 1,
+                                 "GraceIssues": 0,
+                                 "OnBehalfOf": "",
+                                 "SubscriberSourceCode": "Test",
+                                 "OrigsSrc": "Test",
+                                 "SequenceID": 0,
+                                 "AccountNumber": "",
+                                 "Verify": "",
+                                 "ExternalKeyID": 0,
+                                 "FirstName": "Test",
+                                 "LastName": "Test",
+                                 "Company": "",
+                                 "Title": "Test",
+                                 "Occupation": "Test",
+                                 "Address1": "",
+                                 "Address2": "",
+                                 "Address3": "",
+                                 "City": "",
+                                 "State": "Test",
+                                 "ZipCode": "",
+                                 "Plus4": "",
+                                 "CarrierRoute": "",
+                                 "County": "",
+                                 "Country": "Test",
+                                 "Latitude": -1,
+                                 "Longitude": -1,
+                                 "Phone": "",
+                                 "Fax": "",
+                                 "Mobile": "",
+                                 "Website": "",
+                                 "Birthdate": "1900-01-01 00:00:00",
+                                 "Age": 0,
+                                 "Income": "",
+                                 "Gender": "",
+                                 "PhoneExt": "",
+                                 "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                                 "ReqFlag": 0,
+                                 "PubCode": "PUBCODE",
+                                 "Name": "PUBCODE - PUBNAME",
+                                 "PubType": "Test",
+                                 "ClientName": "Test",
+                                 "FullName": "Test Test",
+                                 "FullAddress": ", , , Test, , Test",
+                                 "EmailID": 0,
+                                 "MailPermission": null,
+                                 "FaxPermission": null,
+                                 "PhonePermission": null,
+                                 "OtherProductsPermission": null,
+                                 "ThirdPartyPermission": null,
+                                 "EmailRenewPermission": null,
+                                 "TextPermission": null,
+                                 "SubscriberProductDemographics": [
+                                     {
+                                         "Name": "SPD1",
+                                         "Value": ""
+                                     },
+                                     {
+                                         "Name": "SPD2",
+                                         "Value": ""
+                                     }
+                                 ]
+                             }
+                         ]
+                     }
+                 ]
+             ]]></example>    
+        </member>
+        <member name="M:UAD.API.Controllers.SubscriptionController.GetDemographics(UAD.API.Models.ApiParameterDemo)">
+             <summary>
+             Retrieves the Subscription(s) by <pre>emailAddress</pre> and associated consensus adhocs and master groups specified by name in <pre>dimensions</pre>. If dimensions is not passed then it returns all associated consensus adhocs and master groups.
+             </summary>
+             <param name="emailAddress">emailAddress</param>
+             <param name="dimensions">dimensions</param>
+             <returns>A list of subscriptions for <code>emailAddress</code> with associated consensus adhocs and master groups data specified by name in <code>dimensions</code>. If dimensions is not passed then it returns all associated consensus adhocs and master groups.</returns>
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/subscription/methods/GetDemographics HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+              
+              {
+                 "emailAddress": "someone@somewhere.com",
+                 "dimensions": [
+                    {
+                        "Name": "Name 1",
+                        "DisplayName": "DisplayName 1",
+                        "Value": "Value 1"
+                    },
+                    {
+                        "Name": "Name 2",
+                        "DisplayName": "DisplayName 2",
+                        "Value": "Value 2"
+                    }
+                 ]
+              }
+              
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ExternalKeyID": -1,
+                         "FirstName": "Test",
+                         "LastName": "Test",
+                         "Title": "",
+                         "Company": "Test",
+                         "Address": "",
+                         "Address2": "",
+                         "City": "",
+                         "State": "Test",
+                         "Zip": "",
+                         "Plus4": "",
+                         "ForZip": "",
+                         "County": "",
+                         "Country": "Test",
+                         "Phone": "1234567890",
+                         "Fax": "",
+                         "MailPermission": null,
+                         "FaxPermission": null,
+                         "PhonePermission": null,
+                         "OtherProductsPermission": null,
+                         "ThirdPartyPermission": null,
+                         "EmailRenewPermission": null,
+                         "Gender": "",
+                         "Address3": "",
+                         "Home_Work_Address": "",
+                         "Mobile": "",
+                         "Score": 0,
+                         "Latitude": -1,
+                         "Longitude": -1,
+                         "Demo7": "A",
+                         "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                         "Par3C": "-1",
+                         "TransactionDate": "1900-01-01 00:00:00",
+                         "QDate": "2017-07-06 00:00:00",
+                         "Email": "test@test.com",
+                         "SubscriptionID": 0,
+                         "IsActive": true,
+                         "Demographics": [
+                             {
+                                 "Name": "Test",
+                                 "DisplayName": "Test",
+                                 "Value": ""
+                             }
+                         ]
+                     }
+                 ]
+             
+             ]]></example>    
+        </member>
+        <member name="M:UAD.API.Controllers.SubscriptionController.GetProductDemographics(UAD.API.Models.ApiParameterProductDemo)">
+             <summary>
+             Retrieves the Subscription(s) by <pre>emailAddress</pre> and <pre>productCode</pre> and associated product demographics specified by name in <pre>dimensions</pre>. If dimensions is not passed then it returns all product demographics.
+             </summary>
+             <param name="emailAddress">emailAddress</param>
+             <param name="productCode">productCode</param>
+             <param name="dimensions">dimensions</param>
+             <returns>A list of subscriptions for <code>emailAddress</code> and <code>productCode</code> with associated product demographic specified by name in <code>dimensions</code>. If dimensions is not passed then it returns all product demographics.</returns>
+            
+             <example for="request"><![CDATA[
+              GET http://api.kmpsgroup.com/api/subscription/methods/GetProductDemographics HTTP/1.1
+              Content-Type: application/json
+              Accept: application/json
+              APIAccessKey: <YOUR-API-ACCESS-KEY-HERE>
+              X-Customer-ID: 99999
+              Host: api.kmpsgroup.com
+              Content-Length: 422   
+              
+              {
+                 "emailAddress": "someone@somewhere.com",
+                 "productCode": "product",
+                 "dimensions": [
+                    {
+                        "Name": "Name 1",        
+                        "Value": "Value 1"
+                    },
+                    {
+                        "Name": "Name 2",        
+                        "Value": "Value 2"
+                    }
+                 ]
+              }
+              
+             
+             ]]></example>
+             
+             <example for="response"><![CDATA[
+             HTTP/1.1 200 OK
+             Cache-Control: no-cache
+             Pragma: no-cache
+             Content-Type: application/json; charset=utf-8
+             Expires: -1
+             Server: Microsoft-IIS/7.5
+             X-AspNet-Version: 4.0.30319
+             X-Powered-By: ASP.NET
+             Date: Fri, 10 Apr 2015 19:27:41 GMT
+             Content-Length: 259
+             
+                 [
+                     {
+                         "ExternalKeyID": 0,
+                         "FirstName": "",
+                         "LastName": "",
+                         "Title": "",
+                         "Company": "",
+                         "Address": "",
+                         "Address2": "",
+                         "City": "",
+                         "State": "Test",
+                         "Zip": "",
+                         "Plus4": "",
+                         "ForZip": "",
+                         "County": "",
+                         "Country": "Test",
+                         "Phone": "",
+                         "Fax": "",
+                         "MailPermission": false,
+                         "FaxPermission": false,
+                         "PhonePermission": false,
+                         "OtherProductsPermission": false,
+                         "ThirdPartyPermission": false,
+                         "EmailRenewPermission": false,
+                         "Gender": "",
+                         "Address3": "",
+                         "Home_Work_Address": "",
+                         "Mobile": "",
+                         "Score": 0,
+                         "Latitude": -1,
+                         "Longitude": -1,
+                         "Demo7": "A",
+                         "IGrp_No": "00000000-0000-0000-0000-000000000000",
+                         "Par3C": "",
+                         "TransactionDate": "1900-01-01 00:00:00",
+                         "QDate": "2016-04-13 00:00:00",
+                         "Email": "test@test.com",
+                         "SubscriptionID": 0,
+                         "IsActive": true,
+                         "Demographics": [
+                             {
+                                 "Name": "BUSINESS",
+                                 "Value": ""
+                             }
+                         ]
+                     }
+                 ]        
+             
+             ]]></example>    
+        </member>
+        <member name="T:UAD.API.Exceptions.APIResourceNotFoundException">
+            <summary>
+            Wrapper around HttpResponseException(HttpStatusCode.NotFound) to simplify
+            customization of error responses.  <see cref="T:UAD.API.Exceptions.ExceptionConfiguration"/>
+            and <see cref="T:UAD.API.Exceptions.ExceptionConfigurationLibrary"/> 
+            and <see cref="T:UAD.API.Attributes.FriendlyExceptionsAttribute"/>
+            </summary>
+        </member>
+        <member name="M:UAD.API.Exceptions.APIResourceNotFoundException.Factory(System.String,System.Nullable{System.Int32})">
+            <summary>
+             Raises a 404/Not Found such that we'll reach the Exception Filter pipeline
+            </summary>
+            <param name="resource">names the type of resource we didn't fine (e.g. ControllerName)</param>
+            <param name="id">ID value for the unmatched resource</param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Exceptions.ExceptionConfiguration`1">
+            <summary>
+            Generics version of the <see cref="T:UAD.API.Exceptions.ExceptionConfiguration"/>
+            </summary>
+            <typeparam name="T">Exception Type</typeparam>
+        </member>
+        <member name="T:UAD.API.Exceptions.ExceptionConfiguration">
+            <summary>
+            Maps internal errors to outward profiles by adding a friendly name and (optionally) an error code and reference link.
+            </summary>
+        </member>
+        <member name="M:UAD.API.ExtentionMethods.HttpRequestBaseExtensions.ToRaw(System.Web.HttpRequest)">
+            <summary>
+            Dump the raw HTTP request to a string. 
+            </summary>
+            <param name="request">The <see cref="T:System.Web.HttpRequest"/> that should be dumped.       </param>
+            <returns>The raw HTTP request.</returns>
+        </member>
+        <member name="M:UAD.API.ExtentionMethods.ObjectExtensionMethods.ToXml2(System.Object)">
+            <summary>
+            Converts an anonymous type to an XElement.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>Returns the object as it's XML representation in an XElement.</returns>
+        </member>
+        <member name="M:UAD.API.ExtentionMethods.ObjectExtensionMethods.ToXml2(System.Object,System.String)">
+            <summary>
+            Converts an anonymous type to an XElement.
+            </summary>
+            <param name="input">The input.</param>
+            <param name="element">The element name.</param>
+            <returns>Returns the object as it's XML representation in an XElement.</returns>
+        </member>
+        <member name="T:UAD.API.ExtentionMethods.StringExtentionMethods">
+            <summary>
+            Extension methods providing additional capabilities for <see cref="T:System.String"/>
+            </summary>
+        </member>
+        <member name="M:UAD.API.ExtentionMethods.StringExtentionMethods.ToUpperFirst(System.String)">
+            <summary>
+            Returns the <code>context</code> string with the first letter converted to upper-case.
+            </summary>
+            <param name="context">a <code>System.String</code></param>
+            <returns>the content of <code>context</code> with the first letter converted to upper-case.</returns>
+        </member>
+        <member name="T:UAD.API.ExtentionMethods.TypeExtentionMethods">
+            <summary>
+            Extension methods providing additional capabilities for <see cref="T:System.Type"/>
+            </summary>
+        </member>
+        <member name="M:UAD.API.ExtentionMethods.TypeExtentionMethods.IsInstanceOrSubclassOf(System.Type,System.Type)">
+            <summary>
+            Determines if Type <code>subject</code> is the same or class or a subclass of type <code>context</code>.
+            </summary>
+            <param name="context">a System.Type</param>
+            <param name="subject">another System.Type</param>
+            <returns>true of Type <code>subject</code> is the same or a class inheriting from Type <code>context</code></returns>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.AccessKeyRequestHeaderParserBase`1">
+            <summary>
+            Implements the general pattern for derived classes to parse specific types of API Access Keys (e.g. User Access Key, etc.)
+            </summary>
+            <typeparam name="FrameworkObjectT"></typeparam>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.AccessKeyRequestHeaderParserBase`1.HttpHeader">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.AccessKeyRequestHeaderParserBase`1.HeaderValueFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.AccessKeyRequestHeaderParserBase`1.TryParseHeaderValue(System.Web.Http.Controllers.HttpActionContext,System.String,System.Guid@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.AuthenticationProvider">
+            <summary>
+            Provides the high-level logic for authentication.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings">
+            <summary>Provides authentication configuration settings</summary>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType">
+            <summary>
+            Specifies what level of AccessKey will be required, if any.
+            </summary>
+        </member>
+        <member name="F:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType.None">
+            <summary>
+            no AccessKey is required
+            </summary>
+        </member>
+        <member name="F:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType.User">
+            <summary>
+            a User level AccessKey is required
+            </summary>
+        </member>
+        <member name="F:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType.Customer">
+            <summary>
+            a Customer level AccessKey is required
+            </summary>
+        </member>
+        <member name="F:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType.BaseChannel">
+            <summary>
+            a BaseChannel level AccessKey is required
+            </summary>
+        </member>
+        <member name="F:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyType.Any">
+            <summary>
+            a valid AccessKey of any level will be accepted
+            </summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.CustomerIDRequired">
+            <summary>
+            If true, a CustomerID must be provided.
+            </summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings.AccessKeyRequired">
+            <summary>
+            Indicates the level of AccessKey will be required, if any.
+            </summary>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.AuthenticationProvider.Authenticate(UAD.API.Infrastructure.Authentication.AuthenticationProvider.Settings,System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Ensured that the current action context is authenticated base on the given settings
+            </summary>
+            <param name="actionContext">the context for the current request</param>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.BaseChannelAccessKeyRequestHeaderParser.FrameworkObjectFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.BaseChannelAccessKeyRequestHeaderParser.FrameworkObjectStashKey">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.BaseChannelAccessKeyRequestHeaderParser.TryGetFrameworkObject(System.Web.Http.Controllers.HttpActionContext,System.Guid,ECN_Framework_Entities.Accounts.BaseChannel@)">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.ClientRequestHeaderParser.FrameworkObjectFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.ClientRequestHeaderParser.FrameworkObjectStashKey">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.ClientRequestHeaderParser.TryGetFrameworkObject(System.Web.Http.Controllers.HttpActionContext,System.Guid,KMPlatform.Entity.Client@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser">
+            <summary>
+            provides methods to parse the Customer ID header and create a Customer object
+            </summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.HttpHeader">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.HeaderValueFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.FrameworkObjectFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.FrameworkObjectStashKey">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.TryParseHeaderValue(System.Web.Http.Controllers.HttpActionContext,System.String,System.Int32@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.CustomerIdRequestHeaderParser.TryGetFrameworkObject(System.Web.Http.Controllers.HttpActionContext,System.Int32,ECN_Framework_Entities.Accounts.Customer@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2">
+            <summary>
+            Base class for authenticating HTTP requests by parsing an HTTP header to create a Framework Object
+            </summary>
+            <typeparam name="HeaderValueT">Type for the HTTPHeader value, once it has been parsed</typeparam>
+            <typeparam name="FrameworkObjectT">Type for the Framework Object</typeparam>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.HttpHeader">
+            <summary>The HTTPHeader to be parsed, as a string</summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.HeaderValueFriendlyName">
+            <summary>A friendly name for the HTTPHeader (e.g. "authentication token")</summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.FrameworkObjectFriendlyName">
+            <summary>A friendly name for the Framework Object (e.g. "User")</summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.FrameworkObjectStashKey">
+            <summary>The Request.Properties key in which to store the Framework Object created</summary>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.TryParseHeaderValue(System.Web.Http.Controllers.HttpActionContext,System.String,`0@)">
+            <summary>When overridden in a derived class, attempts to create a strongly typed value from the string value 
+            of the HTTP header</summary>
+            <param name="headerValue">HTTP header value, as a string</param>
+            <param name="parsedHeaderValue">strongly type HTTP header value</param>
+            <returns>True if the string value of the HTTP header was successfully parsed into a strongly typed value, otherwise false.</returns>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.TryGetFrameworkObject(System.Web.Http.Controllers.HttpActionContext,`0,`1@)">
+            <summary>When overridden in a derived class, attempts to create a Framework object from the parsed header value</summary>
+            <param name="parsedHeaderValue">The strongly typed value from the HTTP header</param>
+            <param name="frameworkObject">An object into which the created framework object will be stored.</param>
+            <returns>True if a framework object was successfully created, otherwise false.</returns>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.ValidateRequestHeader(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            Provides a uniform method for extracting an HTTP header value as a string, parsing that into a strongly typed value
+            and using the strongly typed value to create a Framework object and storing this for use by API Controllers.
+            If this cannot be done (for example, because the header is not valid or not provided), uniform error handling is 
+            provided to ensure API users understand the specific error conditions causing authentication failure (e.g. returning
+            a message describing the specific problem in addition to a <code>401 Unauthorized</code> Error to the client.)
+            </summary>
+            <param name="actionContext">the action context associated with the current request.</param>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.StoreProperties(System.Web.Http.Controllers.HttpActionContext,`0,`1)">
+            <summary>
+            Responsible for stashing away the parsed header value and framework object for later use
+            </summary>
+            <param name="actionContext"></param>
+            <param name="parsedHeaderValue"></param>
+            <param name="frameworkObject"></param>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.RaiseException(System.String[])">
+            <summary>
+            Responsible for raising authentication exceptions
+            </summary>
+            <param name="messages"></param>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.RequestHeaderParserBase`2.TryValidateRequestHeader(System.Web.Http.Controllers.HttpActionContext,System.String@,System.String@,`0@,`1@)">
+            <summary>
+            Responsible for validating and parsing the header and creating the framework object or, in
+            failure cases, generating the failure message.
+            </summary>
+            <param name="actionContext">action context for the current request</param>
+            <param name="failureMessage">if unsuccessful, this will describe the reason for failure, otherwise null</param>
+            <param name="headerValue">set to the string value of the HTTP header, if present, otherwise null.</param>
+            <param name="parsedHeaderValue">set to the strongly typed value of the HTTP header if the header can be parsed, otherwise set to the default value of HeaderValueT</param>
+            <param name="frameworkObject">set to the framework object created/retrieved if successful, otherwise null.</param>
+            <returns>true if the header is present, and be parsed, and yields a framework object; otherwise and failureMessage is set to a non-null value.</returns>
+        </member>
+        <member name="T:UAD.API.Infrastructure.Authentication.UserAccessKeyRequestHeaderParser">
+            <summary>
+            Provides methods to validate a User level API Access Key from request headers
+            </summary>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.UserAccessKeyRequestHeaderParser.FrameworkObjectFriendlyName">
+            <inheritdoc/>
+        </member>
+        <member name="P:UAD.API.Infrastructure.Authentication.UserAccessKeyRequestHeaderParser.FrameworkObjectStashKey">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Authentication.UserAccessKeyRequestHeaderParser.TryGetFrameworkObject(System.Web.Http.Controllers.HttpActionContext,System.Guid,KMPlatform.Entity.User@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:UAD.API.Infrastructure.Framework.ImageUtil.SearchImages(System.Int32,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Placeholder for Business Layer implementation of search of customer images by imageName, folderName, both, or neither.
+            </summary>
+            <param name="customerID">id of the customer which images are to be searched</param>
+            <param name="imageName">(optional) constrain the search to images with a particular name</param>
+            <param name="folderName">(optional) constrain the search to images within a particular folder.  folder name 
+            should be relative to the base-path for images for the customer</param>
+            <returns>an enumeration of framework image objects</returns>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterDemo.emailAddress">
+            <summary>
+            Email Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterDemo.dimensions">
+            <summary>
+            Dimensions
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterProductCustField.productCode">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterProductCustField.customFieldName">
+            <summary>
+            Custom Field Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterProductDemo.emailAddress">
+            <summary>
+            Email Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterProductDemo.productCode">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ApiParameterProductDemo.dimensions">
+            <summary>
+            Dimensions
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.ProductId">
+            <summary>
+            Product Id
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.ProductCode">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.DisplayName">
+            <summary>
+            Display Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.DisplayOrder">
+            <summary>
+            Display Order
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.IsMultipleValue">
+            <summary>
+            Is Multiple Value
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.IsRequired">
+            <summary>
+            Is Required
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.IsActive">
+            <summary>
+            Is Active
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomField.IsAdHoc">
+            <summary>
+            Is AdHoc
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.ProductId">
+            <summary>
+            Product ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.ProductCode">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.Description">
+            <summary>
+            Description
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.DisplayOrder">
+            <summary>
+            Display Order
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.IsOther">
+            <summary>
+            Is Other
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.CustomFieldValue.IsConsensus">
+            <summary>
+            Is Consensus
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubID">
+            <summary>
+            Pub ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubSubscriptionID">
+            <summary>
+            Pub Subscription ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.SubscriptionStatusID">
+            <summary>
+            Subscription Status ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Demo7">
+            <summary>
+            Demo 7
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.QualificationDate">
+            <summary>
+            Q Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubQSourceID">
+            <summary>
+            Q Source ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubCategoryID">
+            <summary>
+            Category ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubTransactionID">
+            <summary>
+            Transaction ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.StatusUpdatedDate">
+            <summary>
+            Status Updated Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.StatusUpdatedReason">
+            <summary>
+            Status Updated Reason
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.DateCreated">
+            <summary>
+            Date Created
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.DateUpdated">
+            <summary>
+            Date Updated
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Status">
+            <summary>
+            Email Status
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Copies">
+            <summary>
+            Copies
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.GraceIssues">
+            <summary>
+            Grace Issues
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.OnBehalfOf">
+            <summary>
+            On Behalf Of
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.SubscriberSourceCode">
+            <summary>
+            Subscriber Source Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.OrigsSrc">
+            <summary>
+            Origs Src
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.SequenceID">
+            <summary>
+            Sequence ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.AccountNumber">
+            <summary>
+            Account Number
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Verify">
+            <summary>
+            Verify
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.ExternalKeyID">
+            <summary>
+            External Key ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.FirstName">
+            <summary>
+            First Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.LastName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Company">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Occupation">
+            <summary>
+            Occupation
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Address1">
+            <summary>
+            Address 1
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Address2">
+            <summary>
+            Address 2
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Address3">
+            <summary>
+            Address 3
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.City">
+            <summary>
+            City
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.RegionCode">
+            <summary>
+            State
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.ZipCode">
+            <summary>
+            Zip Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Plus4">
+            <summary>
+            Plus 4
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.CarrierRoute">
+            <summary>
+            Carrier Route
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.County">
+            <summary>
+            County
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Country">
+            <summary>
+            Country
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Latitude">
+            <summary>
+            Latitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Longitude">
+            <summary>
+            Longitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Phone">
+            <summary>
+            Phone
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Mobile">
+            <summary>
+            Mobile
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Website">
+            <summary>
+            Website
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Birthdate">
+            <summary>
+            Birth date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Age">
+            <summary>
+            Age
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Income">
+            <summary>
+            Income
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.Gender">
+            <summary>
+            Gender
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PhoneExt">
+            <summary>
+            Phone Extension
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.IGrp_No">
+            <summary>
+            IGrp No
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.ReqFlag">
+            <summary>
+            Req Flag
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubCode">
+            <summary>
+            Product
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubName">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PubTypeDisplayName">
+            <summary>
+            Pub Type
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.ClientName">
+            <summary>
+            Client Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.FullName">
+            <summary>
+            Full Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.FullAddress">
+            <summary>
+            Full Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.EmailID">
+            <summary>
+            Email ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.MailPermission">
+            <summary>
+            Mail Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.FaxPermission">
+            <summary>
+            Fax Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.PhonePermission">
+            <summary>
+            Phone Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.OtherProductsPermission">
+            <summary>
+            Other Products Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.ThirdPartyPermission">
+            <summary>
+            Third Party Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.EmailRenewPermission">
+            <summary>
+            Email Renew Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.TextPermission">
+            <summary>
+            Text Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.ProductSubscription.SubscriberProductDemographics">
+            <summary>
+            Subscriber Product Demographics
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SavedSubscriber.ProcessCode">
+            <summary>
+            Process Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SavedSubscriber.PubID">
+            <summary>
+            Pub ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SavedSubscriber.StatusCode">
+            <summary>
+            StatusCode
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SavedSubscriber.StatusMessage">
+            <summary>
+            StatusMessage
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.IGrp_No">
+            <summary>
+            IGrp No
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SequenceID">
+            <summary>
+            Sequence ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.AccountNumber">
+            <summary>
+            Account Number
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.PubCode">
+            <summary>
+            Pub Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.QualificationDate">
+            <summary>
+            Qualification Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.CategoryID">
+            <summary>
+            Category ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.TransactionID">
+            <summary>
+            Transaction ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.QSourceID">
+            <summary>
+            Q Source ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Demo7">
+            <summary>
+            Media Type (Print = A(default), Digital = B, Both = C)
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Copies">
+            <summary>
+            Copies
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.GraceIssues">
+            <summary>
+            Grace Issues
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriberSourceCode">
+            <summary>
+            Subscriber Source Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Verify">
+            <summary>
+            Verify
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.EmailStatus">
+            <summary>
+            Email Status
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.FirstName">
+            <summary>
+            First Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.LastName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Company">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Occupation">
+            <summary>
+            Occupation
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Address1">
+            <summary>
+            Address 1
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Address2">
+            <summary>
+            Address 2
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Address3">
+            <summary>
+            Address 3
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.City">
+            <summary>
+            City
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.State">
+            <summary>
+            State
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.ZipCode">
+            <summary>
+            Zip Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Plus4">
+            <summary>
+            Plus 4
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Country">
+            <summary>
+            Country
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.County">
+            <summary>
+            County
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Phone">
+            <summary>
+            Phone
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.PhoneExt">
+            <summary>
+            Phone Ext
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Website">
+            <summary>
+            Website
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Mobile">
+            <summary>
+            Mobile
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Gender">
+            <summary>
+            Gender
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Age">
+            <summary>
+            Age
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Birthdate">
+            <summary>
+            Birth date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.Income">
+            <summary>
+            Income
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.EmailRenewPermission">
+            <summary>
+            Email Renew Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.FaxPermission">
+            <summary>
+            Fax Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.MailPermission">
+            <summary>
+            Mail Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.OtherProductsPermission">
+            <summary>
+            Other Products Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.PhonePermission">
+            <summary>
+            Phone Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.TextPermission">
+            <summary>
+            Text Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.ThirdPartyPermission">
+            <summary>
+            Third Party Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriberProductDemographics">
+            <summary>
+            Subscriber Product Demographics
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriberProductCustomFields">
+            <summary>
+            Subscriber Product Custom Fields
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriberConsensusCustomFields">
+            <summary>
+            Subscriber Consensus Custom Fields
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriptionID">
+            <summary>
+            Subscription ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.ProcessCode">
+            <summary>
+            Process Code
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.PubID">
+            <summary>
+            Pub ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.IsPubCodeValid">
+            <summary>
+            Is Pub Code Valid
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.IsCodeSheetValid">
+            <summary>
+            Is Code Sheet Valid
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.IsProductSubscriberCreated">
+            <summary>
+            Is Product Subscriber Created
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.LogMessage">
+            <summary>
+            Log Message
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.PubCodeMessage">
+            <summary>
+            Pub Code Message
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.CodeSheetMessage">
+            <summary>
+            Code Sheet Message
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SaveSubscriber.SubscriberProductMessage">
+            <summary>
+            Subscriber Produc tMessage
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Sequence">
+            <summary>
+            External Key ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.FName">
+            <summary>
+            First Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.LName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Company">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.MailStop">
+            <summary>
+            Address 2
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.City">
+            <summary>
+            City
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.State">
+            <summary>
+            State
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Zip">
+            <summary>
+            Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Plus4">
+            <summary>
+            Plus 4
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.ForZip">
+            <summary>
+            Foreign Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.County">
+            <summary>
+            County
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Country">
+            <summary>
+            Country
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Phone">
+            <summary>
+            Phone
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.MailPermission">
+            <summary>
+            Mail Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.FaxPermission">
+            <summary>
+            Fax Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.PhonePermission">
+            <summary>
+            Phone Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.OtherProductsPermission">
+            <summary>
+            Other Products Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.ThirdPartyPermission">
+            <summary>
+            Third Party Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.EmailRenewPermission">
+            <summary>
+            Email Renew Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Gender">
+            <summary>
+            Gender
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Address3">
+            <summary>
+            Address 3
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Home_Work_Address">
+            <summary>
+            Home Work Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Mobile">
+            <summary>
+            Mobile
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Latitude">
+            <summary>
+            Latitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Longitude">
+            <summary>
+            Longitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Demo7">
+            <summary>
+            Demo 7
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.IGrp_No">
+            <summary>
+            IGrp No
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Par3C">
+            <summary>
+            Par3C
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.TransactionDate">
+            <summary>
+            Transaction Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.QDate">
+            <summary>
+            Q Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.SubscriptionID">
+            <summary>
+            Subscription ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.IsActive">
+            <summary>
+            Is Active
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensus.Demographics">
+            <summary>
+            Demographics
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensusDemographic.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensusDemographic.DisplayName">
+            <summary>
+            DisplayName
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberConsensusDemographic.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Sequence">
+            <summary>
+            External Key ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.FName">
+            <summary>
+            First Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.LName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Company">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.MailStop">
+            <summary>
+            Address 2
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.City">
+            <summary>
+            City
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.State">
+            <summary>
+            State
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Zip">
+            <summary>
+            Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Plus4">
+            <summary>
+            Plus 4
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.ForZip">
+            <summary>
+            Foreign Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.County">
+            <summary>
+            County
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Country">
+            <summary>
+            Country
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Phone">
+            <summary>
+            Phone
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.MailPermission">
+            <summary>
+            MailPermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.FaxPermission">
+            <summary>
+            FaxPermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.PhonePermission">
+            <summary>
+            PhonePermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.OtherProductsPermission">
+            <summary>
+            OtherProductsPermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.ThirdPartyPermission">
+            <summary>
+            ThirdPartyPermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.EmailRenewPermission">
+            <summary>
+            EmailRenewPermission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Gender">
+            <summary>
+            Gender
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Address3">
+            <summary>
+            Address 3
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Home_Work_Address">
+            <summary>
+            Home Work Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Mobile">
+            <summary>
+            Mobile
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Latitude">
+            <summary>
+            Latitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Longitude">
+            <summary>
+            Longitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Demo7">
+            <summary>
+            Demo7
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.IGrp_No">
+            <summary>
+            IGrp No
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Par3C">
+            <summary>
+            Par3C
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.TransactionDate">
+            <summary>
+            Transaction Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.QDate">
+            <summary>
+            QDate
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.SubscriptionID">
+            <summary>
+            SubscriptionID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.IsActive">
+            <summary>
+            IsActive
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProduct.Demographics">
+            <summary>
+            Demographics
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProductDemographic.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProductDemographic.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.SubscriberProductDemographic.DemoUpdateAction">
+            <summary>
+            Demo Update Action
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Sequence">
+            <summary>
+            External Key ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.FName">
+            <summary>
+            First Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.LName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Title">
+            <summary>
+            Title
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Company">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.MailStop">
+            <summary>
+            Address 2
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.City">
+            <summary>
+            City
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.State">
+            <summary>
+            State
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Zip">
+            <summary>
+            Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Plus4">
+            <summary>
+            Plus 4
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.ForZip">
+            <summary>
+            Foreign Zip
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.County">
+            <summary>
+            County
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Country">
+            <summary>
+            Country
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Phone">
+            <summary>
+            Phone
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Income">
+            <summary>
+            Income
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Gender">
+            <summary>
+            Gender
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Address3">
+            <summary>
+            Address 3
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Mobile">
+            <summary>
+            Mobile
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Score">
+            <summary>
+            Score
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Latitude">
+            <summary>
+            Latitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Longitude">
+            <summary>
+            Longitude
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Demo7">
+            <summary>
+            Demo 7
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.IGrp_No">
+            <summary>
+            IGrp No
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.TransactionDate">
+            <summary>
+            Transaction Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.QDate">
+            <summary>
+            Q Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.SubscriptionID">
+            <summary>
+            Subscription ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.IsMailable">
+            <summary>
+            Is Mailable
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Age">
+            <summary>
+            Age
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Birthdate">
+            <summary>
+            Birth Date
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Occupation">
+            <summary>
+            Occupation
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.PhoneExt">
+            <summary>
+            Phone Extension
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.Website">
+            <summary>
+            Website
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.FullAddress">
+            <summary>
+            Full Address
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.AccountNumber">
+            <summary>
+            Account Number
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.ExternalKeyId">
+            <summary>
+            External Key Id
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.EmailID">
+            <summary>
+            Email ID
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.MailPermission">
+            <summary>
+            Mail Permission
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.FaxPermission">
+            <summary>
+            Fax Permission
+            </summary> //Demo31
+        </member>
+        <member name="P:UAD.API.Models.Subscription.PhonePermission">
+            <summary>
+            Phone Permission
+            </summary> //Demo32
+        </member>
+        <member name="P:UAD.API.Models.Subscription.OtherProductsPermission">
+            <summary>
+            Other Products Permission
+            </summary> //Demo33
+        </member>
+        <member name="P:UAD.API.Models.Subscription.ThirdPartyPermission">
+            <summary>
+            Third Party Permission
+            </summary> //Demo34
+        </member>
+        <member name="P:UAD.API.Models.Subscription.EmailRenewPermission">
+            <summary>
+            Email Renew Permission
+            </summary> //Demo35
+        </member>
+        <member name="P:UAD.API.Models.Subscription.TextPermission">
+            <summary>
+            Text Permission
+            </summary> //Demo36
+        </member>
+        <member name="P:UAD.API.Models.Subscription.SubscriptionConsensusDemographics">
+            <summary>
+            Subscriber Consensus Demographics
+            </summary>
+        </member>
+        <member name="P:UAD.API.Models.Subscription.ProductList">
+            <summary>
+            Product List
+            </summary>
+        </member>
+        <member name="T:UAD.API.Models.Utility.Transformer`2">
+            <summary>
+            Utility class providing transformation from a type <code>SourceT</code> to another type <code>DestinationT</code>
+            by performing name based copying of properties from a given SourceT object to a TargetT object.
+            </summary>
+            <typeparam name="SourceT">A <see cref="T:System.Type"/> implementing a parameterless constructor.</typeparam>
+            <typeparam name="DestinationT">A <see cref="T:System.Type"/> implementing a parameterless constructor.</typeparam>
+        </member>
+        <member name="M:UAD.API.Models.Utility.Transformer`2.Transform(`0,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Transforms a object of type SourceT into a <b>new</b> object of type DestinationT
+            </summary>
+            <param name="source">instance object of type SourceT</param>
+            <param name="propertyNames">property names to copy as an enumerable of strings</param>
+            <returns>new instance of DestinationT</returns>
+        </member>
+        <member name="M:UAD.API.Models.Utility.Transformer`2.Transform(`0,`1,System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Transforms a object of type SourceT into a given object of type DestinationT by copying property values
+            </summary>
+            <param name="source"></param>
+            <param name="destination"></param>
+            <param name="propertyNames"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UAD.API.Models.Utility.Transformer`2.GetPropertiesByName(System.Collections.Generic.IEnumerable{System.String},System.Type)">
+            <summary>
+            Extract <code>Type</code>'s property info for all existent properties named
+            </summary>
+            <param name="propertyNames">properties to be extracted as an enumeration of strings</param>
+            <param name="type">Type from which to extract PropertyInfo</param>
+            <returns>Array of PropertyInfo</returns>
+        </member>
+        <member name="T:UAD.API.Strings">
+            <summary>
+            Statically defined strings, such as for naming Request Properties (e.g. "Stash" buckets).
+            </summary>
+        </member>
+        <member name="M:UAD.API.Strings.Format(System.String,System.Object[])">
+            <summary>
+            Formats errors and other messages using <see cref="M:System.String.Format(System.String,System.Object)"/>
+            </summary>
+            <param name="message">Message for to be formatted.</param>
+            <param name="args">positional replacement token values</param>
+            <returns></returns>
+        </member>
+        <member name="T:UAD.API.Strings.Routing">
+            <summary>
+            String constants related to HTTP request routing.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.Headers">
+            <summary>
+            String constants related to HTTP headers and header processing.
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Headers.APIAccessKeyHeader">
+            <summary>
+            HTTP header used to pass in the APIAccessKey
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Headers.CustomerIdHeader">
+            <summary>
+            HTTP header used to pass in the CustomerID
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.Properties">
+            <summary>
+            Strings used as Keys in the request scoped Properties "stash"
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Properties.APIUserStashKey">
+            <summary>
+            Stash property used to store Business User object once derived from APIAccessKey
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Properties.APIBaseChannelStashKey">
+            <summary>
+            Stash property used to store BaseChannel object once derived from APIAccessKey
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Properties.APICustomerStashKey">
+            <summary>
+            Stash property used to store Business Customer object once derived from CustomerIdHeader
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Properties.APIClientStashKey">
+            <summary>
+            Stash property used to store Business Client object once derived from APIAccessKey
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.BusinessDefaultValues">
+            <summary>
+            Business facing string constants
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.BusinessDefaultValues.ContentTitle">
+            <summary>
+            Default title for new content when we receive a POST request with no (or empty) ContentTitle
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.BusinessDefaultValues.ProcessName">
+            <summary>
+            Default process name, used for internal tracking of which high-level process initiated an activity.
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.BusinessDefaultValues.EmailFromAddress">
+            <summary>
+            Default FROM address when sending (or enqueuing send of) email from API methods
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.BusinessDefaultValues.EmailFromName">
+            <summary>
+            Default FROM Name when sending (or enqueuing send of) email from API methods
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.BusinessDefaultValues.FormsUserName">
+            <summary>
+            The UserName for the forms user
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.Errors">
+            <summary>
+            String constants related to error, such as exception messages and internal error data storage.
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Errors.ErrorCodeKey">
+            <summary>
+            Exception Message attribute key for Error Code
+            </summary>
+        </member>
+        <member name="F:UAD.API.Strings.Errors.ErrorReferenceKey">
+            <summary>
+            Exception Message attribute key for Error Reference
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.Errors.FriendlyMessages">
+            <summary>
+            String constants exposed to API users in the event errors occur.
+            </summary>
+        </member>
+        <member name="T:UAD.API.Strings.Errors.FriendlyMessages.Authentication">
+            <summary>
+            String constants related to errors during authentication.
+            </summary>
+        </member>
+    </members>
+</doc>

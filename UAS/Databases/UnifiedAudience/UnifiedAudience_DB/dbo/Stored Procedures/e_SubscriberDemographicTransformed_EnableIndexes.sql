@@ -1,0 +1,14 @@
+﻿CREATE PROCEDURE [dbo].[e_SubscriberDemographicTransformed_EnableIndexes]
+WITH EXECUTE AS OWNER
+AS
+BEGIN
+
+	SET NOCOUNT ON
+
+	--	ALTER INDEX IDX_SubscriberDemographicTransformed_MAFField ON SubscriberDemographicTransformed REBUILD
+	--	ALTER INDEX IDX_SubscriberDemographicTransformed_MAFField_PubID_SubscriberDemographicTransformedID_STRecordIdentifier ON SubscriberDemographicTransformed REBUILD
+	--	ALTER INDEX IDX_SubscriberDemographicTransformed_SORecordIdentifier ON SubscriberDemographicTransformed REBUILD
+	--	ALTER INDEX IDX_SubscriberDemographicTransformed_STRecordIdentifier ON SubscriberDemographicTransformed REBUILD
+
+END
+go

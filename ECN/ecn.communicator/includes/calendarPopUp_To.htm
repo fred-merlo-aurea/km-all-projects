@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title></title>
+    <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1" />
+    <meta name="ProgId" content="VisualStudio.HTML" />
+    <meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
+    <style type="text/css"> 
+		<!-- 
+		@import url("/ecn.accounts/assets/channelID_1/images/ecnstyle.css"); 
+		@import url("/ecn.accounts/assets/channelID_1/stylesheet.css"); 
+		-->
+		</style>
+
+    <script language="JavaScript">
+			function getSelectedEndDate(selected){
+				End_date_Val.value = selected;
+			}
+			function ok()	{
+				var END_DT		= End_date_Val.value;	
+				var end_validated = "false";
+				
+				if(END_DT.length == 0){
+					END_DT = 'Today';
+				}
+
+				if(End_date_Val.value == 'other'){
+					END_DT = EndDt_MM.value+'/'+EndDt_DD.value+'/'+EndDt_YYYY.value;
+					if(END_DT.length < 10){
+						end_validated = "false";	
+						alert('Choose a To date');
+					}else{
+						end_validated = "true";	
+					}
+				}else if(End_date_Val.value == 'TodayPlusMinus'){
+					var pl_mn	= EndDt_Today_plusminus.value;
+					var days		= EndDt_Today_plusminus_Days.value;
+					if(pl_mn.length <= 0){
+						end_validated = "false";
+						alert('Choose a [+ / -] from selection');					
+					}else if(days.length <= 0){
+						end_validated = "false";
+						alert('Enter number of Days');						
+					}else{
+						END_DT = 'Today ['+pl_mn+days+']';
+						end_validated = "true";
+					}
+				}else{
+					end_validated = "true";
+				}
+				//window.opener.document.FiltersForm.DtTime_Value2.value = END_DT;		            
+				//window.close();				
+				if(end_validated == 'true'){
+					//var YN = confirm('Please Confirm the Date you have chosen'+'\n'+'\n'+'To Date: '+END_DT);
+					//if(YN){
+				        window.opener.document.forms[0].ctl00_ContentPlaceHolder1_DtTime_Value2.value = END_DT;		            
+						window.close();
+					//}
+				}
+			}
+    </script>
+
+</head>
+<body bottommargin="5" leftmargin="5" topmargin="5" rightmargin="5">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" height="1" id="Table1">
+        <tr>
+            <td width="100%" align="center" height="19" class="formfield errormsg">
+                <b>To Date</b></td>
+        </tr>
+        <tr>
+            <td width="100%" height="1">
+                <table border="0" width="100%" class="formfield" id="Table3">
+                    <tr>
+                        <td>
+                            <input type="hidden" name="End_date_Val">
+                            <input type="radio" value="Today" name="EndDt" size="20" checked onclick="getSelectedEndDate('Today')">Today<br>
+                            <!--<input type="radio" value="Yesterday" name="EndDt" size="20" onclick=getSelectedEndDate('Yesterday') ID="Radio7">Yesterday<br>
+								<input type="radio" value="3-Days Ago" name="EndDt" size="20" onclick=getSelectedEndDate('3-Days-ago') ID="Radio8">3-Days Ago<br>
+								<input type="radio" value="1-Week Ago" name="EndDt" size="20" onclick=getSelectedEndDate('1-Week-ago') ID="Radio9">1 Week ago<br>-->
+                            <input type="radio" value="TodayPlusMinus" name="EndDt" size="20" onclick="getSelectedEndDate('TodayPlusMinus')">Today&nbsp;
+                            <select name="EndDt_Today_plusminus" class="formfield">
+                                <option selected></option>
+                                <option value="+">plus</option>
+                                <option value="-">minus</option>
+                            </select>
+                            &nbsp;Days
+                            <input type="text" name="EndDt_Today_plusminus_Days" size="3" maxlength="3" class="formfield">
+                            <input type="radio" value="Other" name="EndDt" size="20" onclick="getSelectedEndDate('other')"
+                                id="Radio10">Other&nbsp;[choose To date below]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="EndDt_MM" class="formfield">
+                                <option selected>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                            </select>
+                            /
+                            <select name="EndDt_DD" class="formfield">
+                                <option selected>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                            </select>
+                            /
+                            <select name="EndDt_YYYY" class="formfield">
+                                <option selected></option>
+                                <option value="2000">2000</option>
+                                <option value="2001">2001</option>
+                                <option value="2002">2002</option>
+                                <option value="2003">2003</option>
+                                <option value="2004">2004</option>
+                                <option value="2005">2005</option>
+                                <option value="2006">2006</option>
+                                <option value="2007">2007</option>
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>                                
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <!--<TR>
+				<TD width="50%" height="35" colspan="2" align="left" class="bodyText" valign=top>
+											<font color="FF0000"><b>NOTE:</b><br>* Choose "FROM" and "TO" dates only if you are comparing 2 dates.<br>* If you have only one date to Compare. Choose only "From Date"</font></TD>
+			</TR>-->
+        <tr>
+            <td width="100%" height="40" colspan="2" align="center">
+                <input name="OK" type="button" onclick="ok()" value="Set END Date" class="formfield"
+                    id="Button1"></td>
+        </tr>
+    </table>
+</body>
+</html>

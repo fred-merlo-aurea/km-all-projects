@@ -1,0 +1,135 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+@using KMEnums
+@{
+    ViewBag.Title = "Suppression";
+}
+<style>
+    .k-tabstrip > .k-tabstrip-items > .k-item {
+    width: 200px;
+}
+</style>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Suppression</a></li>
+</ol>
+<script>
+    function SuppressionTab_Select(e)
+    {
+        clearValidationSummary();
+        var selectedTabName = $(e.item).text();
+        if(selectedTabName == 'Channel Master Suppression')
+        {
+            showLoadingWindow();
+            var obj = {
+                ProfileName: '',
+                PageNumber: 1,
+                PageSize: 10
+            };
+            var ChannelGrid = $("#channelSuppressionGrid").data('kendoGrid');
+            var options = ChannelGrid.getOptions();
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: CS_targetUrl,
+                        dataType: "json",
+                        data: obj
+                    }
+                }
+            });
+            options.dataSource.data = dataSource.data;
+            options.dataSource.pageSize = obj.PageSize;
+            ChannelGrid.setOptions(options);
+            CS_firstGridLoad = true;
+            setTimeout(function () { CS_SetPagerWidget(1); }, 50);
+            
+            closeLoadingWindow();
+        }
+        else if(selectedTabName == 'No Threshold')
+        {
+            showLoadingWindow();
+            var obj = {
+                ProfileName: '',
+                PageNumber: 1,
+                PageSize: 10
+            };
+
+            var NoThresholdGrid = $("#channelNoThresholdGrid").data('kendoGrid');
+            var options = NoThresholdGrid.getOptions();
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: NoT_targetUrl,
+                        dataType: "json",
+                        data: obj
+                    }
+                }
+            });
+            options.dataSource.data = dataSource.data;
+            options.dataSource.pageSize = obj.PageSize;
+            NoThresholdGrid.setOptions(options);
+            NoT_firstGridLoad = true;
+            setTimeout(function () { NoT_SetPagerWidget(1); }, 50);
+
+            closeLoadingWindow();
+        }
+        else if (selectedTabName == 'Global Suppression')
+        {
+            showLoadingWindow();
+            var obj = {
+                searchTermValue: '',
+                PageNumber: 1,
+                PageSize: 10
+            };
+
+            var GlobalGrid = $("#globalSuppresionGrid").data('kendoGrid');
+            var options = GlobalGrid.getOptions();
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: GS_targetUrl,
+                        dataType: "json",
+                        data: obj
+                    }
+                }
+            });
+            options.dataSource.data = dataSource.data;
+            options.dataSource.pageSize = obj.PageSize;
+            GlobalGrid.setOptions(options);
+            GS_firstGridLoad = true;
+            setTimeout(function () { GS_SetPagerWidget(1); closeLoadingWindow(); }, 50);
+
+            
+        }
+    }
+</script>
+
+@(Html.Kendo().TabStrip()
+    .Name("tabstrip")
+    .Items(tabstrip =>
+    {
+        tabstrip.Add().Text("Master Suppression Group")
+            .Selected(true)
+            .Content(Html.Partial("Partials/_Suppresion_Master", Model).ToString());
+
+        tabstrip.Add().Text("Domain Suppression")
+            .Content(Html.Partial("Partials/_Suppresion_Domain").ToString());
+
+        if (KMPlatform.BusinessLogic.User.IsChannelAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser))
+        {
+            tabstrip.Add().Text("Channel Master Suppression")
+                .Content(Html.Partial("Partials/_Suppresion_Channel").ToString());
+
+            tabstrip.Add().Text("No Threshold")
+                .Content(Html.Partial("Partials/_Suppresion_Threshold").ToString());
+
+            if (KMPlatform.BusinessLogic.User.IsSystemAdministrator(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser))
+            {
+                tabstrip.Add().Text("Global Suppression")
+                .Content(Html.Partial("Partials/_Suppresion_Global").ToString());
+            }
+        }
+    })
+    .Events(x => x.Select("SuppressionTab_Select"))
+)

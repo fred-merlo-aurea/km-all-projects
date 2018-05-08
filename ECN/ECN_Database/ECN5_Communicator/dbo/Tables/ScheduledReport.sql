@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[ScheduledReport] (
+    [ScheduledReportID]  INT           IDENTITY (1, 1) NOT NULL,
+    [ReportName]         VARCHAR (255) NULL,
+    [ReportTypeID]       INT           NULL,
+    [StatusCode]         VARCHAR (25)  NULL,
+    [RunDate]            DATETIME      NULL,
+    [ExpireDate]         DATETIME      NULL,
+    [RangeStartDate]     DATETIME      NULL,
+    [RangeEndDate]       DATETIME      NULL,
+    [RunType]            VARCHAR (25)  NULL,
+    [RangeType]          VARCHAR (25)  NULL,
+    [CreatedUserID]      INT           NULL,
+    [CreatedDate]        DATETIME      NULL,
+    [UpdatedUserID]      INT           NULL,
+    [UpdatedDate]        DATETIME      NULL,
+    [IsDeleted]          BIT           NULL,
+    [BaseChannelID]      INT           NULL,
+    [FTPHost]            VARCHAR (255) NULL,
+    [FTPPort]            VARCHAR (10)  NULL,
+    [FTPUser]            VARCHAR (25)  NULL,
+    [FTPPassword]        VARCHAR (25)  NULL,
+    [FTPRemoteDirectory] VARCHAR (255) NULL,
+    CONSTRAINT [PK_ScheduledReport] PRIMARY KEY CLUSTERED ([ScheduledReportID] ASC) WITH (FILLFACTOR = 80)
+);
+

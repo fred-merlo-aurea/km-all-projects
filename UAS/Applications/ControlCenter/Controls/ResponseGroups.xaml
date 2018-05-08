@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="ControlCenter.Controls.ResponseGroups"
+xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:Chromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             xmlns:Navigation="clr-namespace:Telerik.Windows.Controls.Navigation;assembly=Telerik.Windows.Controls.Navigation" 
+             xmlns:CoreUtils="clr-namespace:Core_AMS.Utilities;assembly=Core_AMS.Utilities"
+	         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" 
+             d:DesignHeight="738" d:DesignWidth="1024">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <Label Content="Product:" VerticalAlignment="Center"></Label>
+                <telerik:RadComboBox Name="cbProduct" Margin="3" SelectionChanged="cbProduct_SelectionChanged" />
+            </DockPanel>
+            <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <telerik:RadGridView Name="gridGroups" ShowGroupPanel="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" DockPanel.Dock="Top">
+                    <i:Interaction.Behaviors>
+                        <CoreUtils:RadGridEmptyDataTemplate>
+                            <CoreUtils:RadGridEmptyDataTemplate.EmptyDataTemplate>
+                                <DataTemplate>
+                                    <Image Source="/ImageLibrary;component/Images/NoResults/NoResults512.png" Stretch="Fill" Width="512" Height="156" />
+                                </DataTemplate>
+                            </CoreUtils:RadGridEmptyDataTemplate.EmptyDataTemplate>
+                        </CoreUtils:RadGridEmptyDataTemplate>
+                    </i:Interaction.Behaviors>
+                    <telerik:RadGridView.Columns>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding ResponseGroupName}" Header="Group" UniqueName="Group" Width="250" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding DisplayName}" Header="Display Name" UniqueName="DisplayName" Width="250" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding DisplayOrder}" Header="Display Order" UniqueName="DisplayOrder" Width="100" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMultipleValue}" Header="Is MultipleValue" UniqueName="IsMultipleValue" Width="100" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding IsRequired}" Header="Is Required" UniqueName="IsRequired" Width="100" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="Is Active" UniqueName="IsActive" Width="100" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding KMProduct}" Header="KM Product" UniqueName="KMProduct" Width="100" />
+                        <telerik:GridViewDataColumn UniqueName="Edit" IsReadOnly="True" Width="50">
+                            <telerik:GridViewDataColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Tag="{Binding Name}" ToolTipService.ToolTip="Edit" Width="25" Margin="2" Name="btnEdit" Click="btnEdit_Click">
+                                            <Image Height="16" Source="/ImageLibrary;component/Images/16/edit_user-16white.png" Stretch="Fill" Width="16"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerik:GridViewDataColumn.CellTemplate>
+                        </telerik:GridViewDataColumn>
+                        <telerik:GridViewDataColumn UniqueName="Delete" IsReadOnly="True" Width="50">
+                            <telerik:GridViewDataColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Tag="{Binding Name}" ToolTipService.ToolTip="Delete" Width="25" Margin="2" Name="btnDelete" Click="btnDelete_Click">
+                                            <Image Height="16" Source="/ImageLibrary;component/Images/16/CloseWhiteX16.png" Stretch="Fill" Width="16"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerik:GridViewDataColumn.CellTemplate>
+                        </telerik:GridViewDataColumn>
+                        <telerik:GridViewDataColumn UniqueName="Responses" IsReadOnly="True" Width="120">
+                            <telerik:GridViewDataColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Tag="{Binding Name}" ToolTipService.ToolTip="Responses" Width="80" Margin="2" Name="btnResponses" Content="Responses" Click="btnResponses_Click" />                                        
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerik:GridViewDataColumn.CellTemplate>
+                        </telerik:GridViewDataColumn>
+                    </telerik:RadGridView.Columns>
+                </telerik:RadGridView>
+                <telerik:RadDataPager Name="radDataPager" Source="{Binding Items, ElementName=gridGroups}"
+                                 PageSize="25" DockPanel.Dock="Bottom" VerticalAlignment="Top"
+                                 IsTotalItemCountFixed="True"
+                                 DisplayMode="All"/>
+            </DockPanel>
+            <GridSplitter Grid.Row="2" Grid.ColumnSpan="4" Height="5" HorizontalAlignment="Stretch" />
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Background="{StaticResource KMLightBlueGradient}" VerticalAlignment="Center">
+                    <Label Content="Add Response Group" Foreground="White" FontWeight="Bold"></Label>
+                </StackPanel>            
+                <Label Content="Group:" Grid.Row="1" VerticalAlignment="Center"></Label>
+                <TextBox Name="tbxGroup" Grid.Row="1" Grid.Column="1" Margin="3"></TextBox>
+
+                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+                    <Label Content="KM Product:" VerticalAlignment="Center"></Label>
+                    <telerik:RadComboBox Name="rcbKMProduct" Width="150" Margin="3"/>
+                </StackPanel>
+
+                <Label Content="Display Name:" Grid.Row="2" VerticalAlignment="Center"></Label>
+                <TextBox Name="tbxName" Grid.Row="2" Grid.Column="1" Margin="3"></TextBox>
+
+                <Label Content="Display Order:" Grid.Row="3" VerticalAlignment="Center"></Label>
+                <TextBox Name="tbxDisplay" Grid.Row="3" Grid.Column="1" Margin="3" Width="50" HorizontalAlignment="Left"></TextBox>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="2">
+                    <Label Content="Is Multiple Value:" VerticalAlignment="Center"></Label>
+                    <CheckBox Name="cbxMulti" Margin="8"></CheckBox>
+                    <Label Content="Is Required:" VerticalAlignment="Center"></Label>
+                    <CheckBox Name="cbxReq" Margin="3"></CheckBox>
+                </StackPanel>
+                
+                <Label Content="Is Active:" Grid.Row="5" VerticalAlignment="Center"></Label>
+                <CheckBox Name="cbxIsActive" Width="14" Grid.Row="5" Grid.Column="1"  HorizontalAlignment="Left" Margin="2"></CheckBox>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="6" Margin="5,2,2,2">
+                    <telerik:RadButton Name="btnSave" Content="Save" Width="50" Click="btnSave_Click"></telerik:RadButton>
+                    <telerik:RadButton Name="btnCancel" Content="Cancel" Width="50" Click="btnCancel_Click"></telerik:RadButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

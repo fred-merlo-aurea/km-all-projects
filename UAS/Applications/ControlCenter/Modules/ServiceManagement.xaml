@@ -1,0 +1,193 @@
+﻿<UserControl x:Class="ControlCenter.Modules.ServiceManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1080">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="MyTemplate">
+                <Grid x:Name="MyGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Service Name:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding ServiceName, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Service Code:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding ServiceCode, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label HorizontalAlignment="Left">Display Order:</Label>
+                        <telerik:DataFormDataField Margin="5,0,0,0" DataMemberBinding="{Binding DisplayOrder, Mode=TwoWay}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Is Enabled:</Label>
+                        <telerik:DataFormCheckBoxField  DataMemberBinding="{Binding IsEnabled, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Is Additonal Cost:</Label>
+                        <telerik:DataFormCheckBoxField DataMemberBinding="{Binding IsAdditionalCost, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Has Features:</Label>
+                        <telerik:DataFormCheckBoxField DataMemberBinding="{Binding HasFeatures, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Default Rate:</Label>
+                        <telerik:DataFormDataField DataMemberBinding="{Binding DefaultRate, Mode=TwoWay}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Label>Default Duration In Months:</Label>
+                        <telerik:DataFormDataField DataMemberBinding="{Binding DefaultDurationInMonths, Mode=TwoWay}" Margin="5,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <telerik:DataFormDataField Name="dfApplicationID" DataMemberBinding="{Binding DefaultApplicationID, Mode=TwoWay}" Visibility="Hidden" />
+                        <Label>Default Application:</Label>
+                        <telerik:DataFormComboBoxField Name="cbEditApplications" DataMemberBinding="{Binding DefaultApplicationID, Mode=TwoWay}"
+                                                       ItemsSource="{Binding Path=applications}"
+                                                       DisplayMemberPath="ApplicationName" SelectedValuePath="ApplicationID"></telerik:DataFormComboBoxField>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal">
+                        <telerik:RadButton HorizontalAlignment="Left" Margin="19,5,0,5" Content="Service Features" Width="110" Name="rbServiceFeatures" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="rbServiceFeatures_Click" />
+                        <telerik:RadButton Name="rbCancel" HorizontalAlignment="Left" Margin="19,5,0,5" Content="Cancel" Width="80" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Click="rbCancel_Click" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ListBox Name="lstEnabled" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  SelectionChanged="lstEnabled_SelectionChanged" Style="{StaticResource HorizontalRadioButtonList}">
+            <ListBoxItem IsSelected="True">All</ListBoxItem>
+            <ListBoxItem>Enabled</ListBoxItem>
+            <ListBoxItem>Not Enabled</ListBoxItem>
+        </ListBox>
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <telerik:RadButton Name="rbNewService" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="New Service" Click="rbNewService_Click"/>
+        </StackPanel>
+        <telerik:RadGridView Name="grdService" Grid.Row="3" Grid.ColumnSpan="4" Width="1000" Height="500" Margin="5,10,0,0" VerticalAlignment="Center"
+                                 telerik:StyleManager.Theme="Expression_Dark" EditTriggers="CellClick" IsReadOnly="True"
+                                 RowDetailsVisibilityMode="VisibleWhenSelected" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                 AutoGenerateColumns="False" ItemsSource="{Binding Service}" EnableColumnVirtualization="False" 
+
+                             RowLoaded="grdService_RowLoaded" 
+                             AddingNewDataItem="grdService_AddingNewDataItem" 
+                             SelectionChanged="grdService_SelectionChanged">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ServiceID}" Header="ID" IsVisible="False" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ServiceName}" Header="Name" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ServiceCode}" Header="Code" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DisplayOrder}" Header="Order" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding IsEnabled}" Header="Enabled" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding IsAdditionalCost}" Header="Extra Cost" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding HasFeatures}" Header="Has Features" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DefaultRate}" Header="Rate" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DefaultDurationInMonths}" Header="Duration" />
+
+                <telerik:GridViewComboBoxColumn DataMemberBinding="{Binding DefaultApplicationID}" UniqueName="App" ItemsSource="{Binding Path=applications}" SelectedValueMemberPath="ApplicationID" DisplayMemberPath="ApplicationName" />
+
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="Created" />
+                <telerik:GridViewDataColumn Header="Created By" UniqueName="CreatedByName">
+                    <telerik:GridViewDataColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="tbCreatedByName" VerticalAlignment="Center" Text="" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerik:GridViewDataColumn.CellTemplate>
+                </telerik:GridViewDataColumn>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="Updated" />
+                <telerik:GridViewDataColumn Header="Updated By" UniqueName="UpdatedByName">
+                    <telerik:GridViewDataColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="tbUpdatedByName" VerticalAlignment="Center" Text="" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerik:GridViewDataColumn.CellTemplate>
+                </telerik:GridViewDataColumn>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CreatedByUserID}" IsVisible="False" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding UpdatedByUserID}" IsVisible="False" />
+            </telerik:RadGridView.Columns>
+            <telerik:RadGridView.SortDescriptors>
+                <telerik:SortDescriptor Member="ServiceName" SortDirection="Ascending" />
+            </telerik:RadGridView.SortDescriptors>
+            <telerik:RadGridView.RowDetailsTemplate>
+                <DataTemplate>
+                    <telerik:RadDataForm Name="rdForm" CurrentItem="{Binding}" Header="Edit Service:" HorizontalAlignment="Left" AutoGenerateFields="False"
+                           ReadOnlyTemplate="{StaticResource MyTemplate}" EditTemplate="{StaticResource MyTemplate}" EditEnded="rdForm_EditEnded" Loaded="rdForm_Loaded"/>
+                </DataTemplate>
+            </telerik:RadGridView.RowDetailsTemplate>
+        </telerik:RadGridView>
+
+
+        <Canvas Name="rwNew" Visibility="Collapsed" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="350" Height="270" Background="White">
+            <Border   BorderBrush="#045DA4" BorderThickness="5,5,5,5" CornerRadius="8,8,8,8" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Name:</telerik:Label>
+                        <TextBox Name="tbServiceName" Width="250"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Description:</telerik:Label>
+                        <TextBox Name="tbDescription" Width="250"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Code:</telerik:Label>
+                        <TextBox Name="tbCode" Width="250"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Order:</telerik:Label>
+                        <telerik:RadNumericUpDown Name="nudOrder" IsInteger="True" ValueFormat="Numeric" Value="1"></telerik:RadNumericUpDown>
+                        <telerik:Label Margin="17,0,0,0">Enabled:</telerik:Label>
+                        <CheckBox Name="cbIsEnabled" VerticalAlignment="Center"></CheckBox>
+                        <telerik:Label Margin="17,0,0,0">Added Cost:</telerik:Label>
+                        <CheckBox Name="cbIsAdditionalCost" VerticalAlignment="Center" Checked="cbIsAdditionalCost_Checked" Unchecked="cbIsAdditionalCost_UnChecked"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Name="spRateDuration" Orientation="Horizontal" Visibility="Collapsed" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Rate:</telerik:Label>
+                        <telerik:RadNumericUpDown Name="nudDefaultRate" IsInteger="False" ValueFormat="Currency" NumberDecimalDigits="2" NullValue="0" Value="0"></telerik:RadNumericUpDown>
+                        <telerik:Label Margin="15,0,0,0">Months:</telerik:Label>
+                        <telerik:RadNumericUpDown Name="nudDefaultDurationInMonths" IsInteger="True" ValueFormat="Numeric" Value="0"></telerik:RadNumericUpDown>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:Label>Application:</telerik:Label>
+                        <telerik:RadComboBox Name="cbDefaultApplicationID" Width="250" ItemsSource="{Binding Path=applications}" DisplayMemberPath="ApplicationName" SelectedValuePath="ApplicationID"></telerik:RadComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Right">
+                        <telerik:RadButton Name="btnNewSave" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Save" Click="btnNewSave_Click"/>
+                        <telerik:RadButton Name="btnNewCancel" Width="110" Margin="5" Background="#FFF47E1F" BorderBrush="#FFF47E1F" Foreground="#FFF1EFEF" Content="Cancel" Click="btnNewCancel_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Canvas>
+        
+    </Grid>
+</UserControl>

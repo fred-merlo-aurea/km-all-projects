@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="FileMapperWizard.Controls.Rules"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:tileView="clr-namespace:Telerik.Windows.Controls.TileView;assembly=Telerik.Windows.Controls.Navigation"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" 
+             xmlns:telerikChromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="500">
+    <Grid Background="White" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>            
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />           
+        </Grid.RowDefinitions>
+
+        <Label Content="Available" VerticalAlignment="Bottom" Margin="5"></Label>
+        <ListBox Name="lbxAvailable" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" SelectionMode="Multiple"></ListBox>
+
+        <telerik:RadButton Name="btnAdd" Content="&gt;&gt;" Style="{DynamicResource RadButtonRound}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="75" Height="25" Margin="3" Click="btnAdd_Click"></telerik:RadButton>
+        <telerik:RadButton Name="btnRemove" Content="&lt;&lt;" Style="{DynamicResource RadButtonRound}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Height="25" Margin="3" Click="btnRemove_Click"></telerik:RadButton>
+
+        <Label Content="Selected" VerticalAlignment="Bottom" Margin="5" Grid.Column="3"></Label>
+        <ListBox Name="lbxSelected" Grid.Row="1" Grid.RowSpan="2" Grid.Column="3" Grid.ColumnSpan="2" Margin="3" SelectionMode="Multiple"></ListBox>
+
+        <telerik:RadButton Name="btnUp" Content="Move Up" Style="{DynamicResource RadButtonRound}" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Height="25" Margin="3" Click="btnUp_Click"></telerik:RadButton>
+        <telerik:RadButton Name="btnDown" Content="Move Down" Style="{DynamicResource RadButtonRound}" Grid.Row="2" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="25" Margin="3" Click="btnDown_Click"></telerik:RadButton>
+
+        <telerik:RadButton x:Name="btnStep5Prev" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="22"
+                                           Margin="3" Style="{DynamicResource RadButtonRound}" Click="btnStep5Prev_Click" Width="75">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/ImageLibrary;Component/Images/TileList/Prev.png" Height="16" Width="16"/>
+                <TextBlock Text="Prev" Margin="5,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </telerik:RadButton>
+
+        <telerik:RadButton Name="btnFinish" Content="Finish" Style="{DynamicResource RadButtonRound}" Grid.Row="3" Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Height="25" Margin="3" Click="btnFinish_Click"></telerik:RadButton>
+
+    </Grid>
+</UserControl>

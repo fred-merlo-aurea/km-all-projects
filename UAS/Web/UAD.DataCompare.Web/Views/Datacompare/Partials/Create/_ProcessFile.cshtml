@@ -1,0 +1,67 @@
+﻿
+@model UAD.DataCompare.Web.Models.FileViewModel
+
+<fieldset>
+    <legend>Add File Details</legend>
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="form-group  row">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FileName)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.FileName, new { @class = "form-control" })
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.NotificationEmail)
+        </div>
+        <div class="col-md-4">
+            @Html.TextAreaFor(m => m.NotificationEmail, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Quotation)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(m => m.Quotation, new[]{
+                                new SelectListItem(){ Text = "Yes",Value = "Yes"},
+                                new SelectListItem() {Text = "No",Value = "No" }}, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Delimiter)
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownListFor(m => m.Delimiter, new[]{
+                                new SelectListItem(){ Text = "comma",Value = "comma"},
+                                new SelectListItem(){ Text = "tab", Value = "tab" },
+                                new SelectListItem(){ Text = "semicolan",Value = "semicolan"},
+                                new SelectListItem(){ Text = "colon", Value = "colon" },
+                                new SelectListItem(){ Text = "tild", Value = "tild" }}, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.DataFile)
+        </div>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.DataFile, new { @type = "file", @class = "form-control-file" })
+        </div>
+
+    </div>
+</fieldset>
+<div class="form-group row">
+    <div class="col-md-12">
+        <input type="submit" class="k-button" value="Next" />
+    </div>
+</div>

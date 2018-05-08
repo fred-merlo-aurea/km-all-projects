@@ -1,0 +1,571 @@
+﻿@using ecn.communicator.mvc.Infrastructure;
+
+@{ 
+
+}
+
+<script>
+     function bindFolders(customerID) {
+
+        @*var GroupFolders = {
+            schema: {
+                model: {
+                    id: "FolderID",
+                    FolderID: "FolderID",
+                    CustomerID: "CustomerID",
+                    FolderName: "FolderName"
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetFolders", "Group")?customerID=' + customerID,
+                    async: false,
+                    data: function (data) {
+                        data.CustomerID = customerID;
+                        data.Type = "GRP";
+                    }
+                }
+            }
+        };
+
+        var GroupCustomers = new kendo.data.HierarchicalDataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSingleCustomer", "Group")?customerID=' + customerID,
+                    async: false
+                }
+            },
+            schema: {
+                model: {
+                    id: 0,
+                    FolderID: 0,
+                    children: GroupFolders,
+                    hasChildren: true
+                }
+            }
+        });*@
+
+        //kendo.destroy("#Folders");
+        //var treeview = $("#Folders").kendoTreeView({
+        //    dataSource: GroupCustomers,
+        //    dataTextField: ["CustomerName", "FolderName"],
+        //    loadOnDemand: true,
+        //    autoBind: false,
+        //    expand: function (e) {
+        //        expandedItem = this.dataItem(e.node);
+        //    },
+        //    select: function (e) {
+        //        GE_Search();
+        //        //var tag = '';
+        //        //var grid = $("#Groups").data("kendoGrid");
+        //        //var tree = $('#Folders').data('kendoTreeView');
+        //        //var searchString = $("#singleGroup_searchInput").val();
+        //        //var dataItem = tree.dataItem(e.node);
+        //        //grid.dataSource.read({
+        //        //    customerId: dataItem.CustomerID,
+        //        //    folderId: dataItem.FolderID,
+        //        //    search: searchString,
+        //        //    allFolders: false
+        //        //}).then(function () {
+        //        //    var dataSource = grid.dataSource;
+        //        //    var data = dataSource.data();
+        //        //    if (data.length > 0) {
+        //        //        dataSource.page(1);
+        //        //    }
+        //        //});
+
+        //    }
+        //}).data("kendoTreeView");
+
+        //var searchString = $("#singleGroup_searchInput").val();
+        //var selectedFolder = treeview.dataItem(treeview.select());
+        //if (selectedFolder === 'undefined')
+        //    selectedFolder = '0';
+        //kendo.destroy("#Groups");
+        //var allFolders = $("#singleGroup_allFoldersCB").is(':checked');
+        @*$("#Groups").kendoGrid({
+            columns: [
+                {field: "FolderName", title:"Folder", hidden:true},
+                { field: "GroupName", title: "Group Name" },
+                { template: "<i class='km-icon icon-kmplus-circled-1'></i>", width: 30 }
+            ],
+            selectable: "row",
+            dataBound:groupsGridDataBound,
+            change: addGroup,
+            dataSource: {
+                transport: {
+                    read: {
+                        url: '@Url.Action("GetGroups", "Group")',
+                        data: {
+                            customerId: explorer.customerID,
+                            folderId: selectedFolder,
+                            search: searchString,
+                            allFolders: allFolders
+                        }
+                    }
+                },
+                schema: {
+                    model: { id: "GroupID" }
+                },
+                pageSize: 15
+            },
+            pageable: {
+                pageSizes: [5, 10, 15, 20],
+                buttonCount: 5
+            },
+            sortable: true
+        });*@
+
+        //$("#GroupExplorer").on("GroupSelected", function (e) {
+        //    explorer.select(e);
+        //});
+
+        //return $("#Folders").data('kendoTreeView');
+    }
+    
+    function groupExplorer(select, customerID, showArchive) {
+        explorer = new GroupExplorer({
+            select: select,
+            CustomerID: customerID,
+            showArchiveDD: showArchive
+        });
+        explorer.open();
+    }
+    function GroupExplorer(options) {
+        this.select = options.select;
+        this.customerID = options.CustomerID;
+        
+        this.showArchiveDD = options.showArchiveDD;
+        if (this.showArchiveDD == null || this.showArchiveDD == 'undefined' || this.showArchiveDD == undefined)
+        {
+            this.showArchiveDD = true;
+        }
+        this.open = function () {
+            var window = $("#GroupExplorer").data("kendoWindow");
+            window.center().open();
+         };
+        this.close = function () {
+            var window = $("#GroupExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }
+   
+    function onGroupExplorerOpen() {
+        //var tree = $("#Folders").data("kendoTreeView");
+        $("#singleGroup_searchInput").val('');
+        $("#ActiveFilter").data('kendoDropDownList').value('active');
+        $("#singleGroup_allFoldersCB").prop('checked', false);
+        if (explorer.showArchiveDD)
+        {
+            $("#ActiveFilter").closest('.k-widget').show();
+        }
+        else {
+            $("#ActiveFilter").closest('.k-widget').hide();
+        }
+        //var tree = bindFolders(explorer.customerID);
+        //var grid = $("#Groups").data("kendoGrid");
+       // tree.dataSource.read();
+        //grid.dataSource.data([]);
+        GE_Search();
+        //setTimeout(function () {
+        //    var root = tree.findByText("Root");
+        //    tree.expand(root);
+        //    tree.select(root);
+
+        //    GE_Search();
+        //}, 50);
+        $("#GroupExplorer").on("GroupSelected", function (e) {
+            explorer.select(e);
+        });
+
+    }
+    function onGroupExplorerClose() {
+        $(".k-overlay").remove();
+    }
+
+
+    var targetUrl = '@Url.Action("GE_ReadToGrid", "Group")';
+    var GE_firstGridLoad = true;
+    function GE_DataBound() {
+        var grid = this;
+
+        if (GE_firstGridLoad) {
+            //grid.dataSource.read();
+            GE_firstGridLoad = false;
+            GE_SetPagerWidget("GE_firstpage");
+
+        }
+
+        if ($("#singleGroup_allFoldersCB").is(':checked')) {
+            this.showColumn(1);
+        }
+        else {
+            this.hideColumn(1);
+        }
+    }
+    var currentFolderID = 0;
+    $(document).ready(function () {
+        $("#GE_ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 15,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+        $('li.k-item').hover(function () {
+            var id = $(this).attr('data-id');
+            $(this).children('div').children('span.k-in').attr('data-id', id);
+        });
+        $('li.k-item div span.k-in').click(function () {
+            var id = parseInt($(this).attr('data-id'));
+            if (id !== currentFolderID) {
+                @*var req = $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GroupGrid")' + '?folderID=' + id
+                });
+                req.done(function (resp) {
+                    $("#groupsGridDiv").html(resp);
+                });
+                currentFolderID = id;*@
+                currentFolderID = id;
+                GE_Search();
+
+            }
+        });
+
+    });
+
+    function GE_GroupSelected(e)
+    {
+        grid = e.sender;
+        var currentDataItem = grid.dataItem(this.select());
+        var event = $.Event("GroupSelected");
+        event.sender = explorer;
+        event.group = currentDataItem;
+        $("#GroupExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+
+    }
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GE_GoToPage(e) {
+
+        GE_SetPagerWidget(e.target.id);
+        var data = GE_GridParams();
+        GE_ReBindGrid(data)
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function GE_Search() {
+        GE_SetPagerWidget("GE_firstpage");
+        GE_firstGridLoad = true;
+        var data = GE_GridParams();
+        GE_ReBindGrid(data);
+    }
+
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function GE_GridParams() {
+        //var treeview = $("#Folders").data('kendoTreeView');
+        var searchString = $("#singleGroup_searchInput").val();
+        var selectedFolder = 0;
+        try{
+            if (currentFolderID != undefined && currentFolderID != 'undefined')
+            {
+                selectedFolder = currentFolderID;
+            }
+        }catch(e)
+        {
+
+        }
+       // if (selectedFolder === 'undefined')
+        //    selectedFolder = '0';
+        
+        var allFolders = $("#singleGroup_allFoldersCB").is(':checked');
+
+
+        return {
+            GroupName: $('#singleGroup_searchInput').val(),
+            PageNumber: $("#GE_pagerInputPageNumber").val(),
+            PageSize: $("#GE_ddPageSize").val(),
+            allFolders: allFolders,
+            folderID: selectedFolder,
+            searchType: $("#filterType").data('kendoDropDownList').value(),
+            archiveFilter: $("#ActiveFilter").data('kendoDropDownList').value(),
+            groupOrProfile: $("#GroupOrProfile").data('kendoDropDownList').value()
+        };
+
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function GE_ReBindGrid(obj) {
+        var grid = $("#groupExplorerGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function GE_RebindOnPageOrSizeChange() {
+
+        if (parseInt($("#GE_pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#GE_pagerInputPageNumber").val())) && $("#GE_pagerInputPageNumber").val() <= parseInt($("#GE_pagerTotalItems").text())) {
+            GE_SetPagerWidget($("#GE_pagerInputPageNumber").val());
+            var data = GE_GridParams();
+            GE_ReBindGrid(data);
+        }
+        else {
+            showMessage({
+                type: 'Error',
+                text: 'Please enter valid page number.',
+                autoClose: false
+            });
+
+        }
+
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function GE_SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#groupExplorerGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalCount);
+        }
+        var pagesize = parseInt($("#GE_ddPageSize").val());
+        var currentpage = parseInt($("#GE_pagerInputPageNumber").val());
+        var lastpage = 0;
+        if (totalrecordCount % pagesize > 0) {
+            lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+        else {
+            lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        var firstpage = 1;
+
+        if (id == "GE_firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "GE_prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "GE_nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "GE_lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#GE_currentpage").text(currentpage);
+        $("#GE_pagerDisplay").text(displaymessage);
+        $("#GE_pagerTotalItems").text(lastpage);
+        $("#GE_pagerInputPageNumber").val(currentpage);
+
+    }
+
+    function GE_checkChange(e) {
+        GE_RebindOnPageOrSizeChange()
+    }
+
+</script>
+
+
+
+@{Html.Kendo()
+        .Window()
+        .Title("Group Explorer")
+        .Name("GroupExplorer")
+        .Modal(true)
+        .Animation(false)
+        .Content(Content().ToString())
+        .Events(e => e
+                    .Open("onGroupExplorerOpen")
+                    .Close("onGroupExplorerClose"))
+        .Visible(false).Height(600).Render();
+}
+
+
+
+
+@helper Content()
+{
+
+List<ecn.communicator.mvc.Models.Group> groupList = new List<ecn.communicator.mvc.Models.Group>();
+
+KMPlatform.Entity.User currentUser = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser;
+List<ECN_Framework_Entities.Communicator.Folder> folderList =
+            ECN_Framework_BusinessLayer.Communicator.Folder.GetByType(currentUser.CustomerID, ECN_Framework_Common.Objects.Communicator.Enums.FolderTypes.GRP.ToString(), currentUser);
+
+var sortedFolderList = (from src in folderList
+                        orderby src.FolderName
+                        select src).ToList();
+IEnumerable<Kendo.Mvc.UI.TreeViewItemModel> folderTree = sortedFolderList.ToKendoTree();
+ecn.communicator.mvc.Models.FolderExplorer fe = new ecn.communicator.mvc.Models.FolderExplorer(folderTree);
+
+    <div class="wrapper modal modalgroupexplorer" style="width:auto;height:auto;">
+
+            <div>
+                @Html.Kendo().DropDownList().Name("GroupOrProfile").BindTo(new List<SelectListItem> { new SelectListItem { Text = "Group", Selected = true, Value="group"},
+                                                                                                      new SelectListItem {Text = "Profile in Group", Value="profile" }})
+                @Html.Kendo().DropDownList().Name("filterType").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "Contains", Value = "like" },
+                new SelectListItem { Text = "Equals", Value = "equals" },
+                new SelectListItem { Text = "Starts with", Value = "starts" },
+                new SelectListItem { Text = "Ends with", Value = "ends" }
+            }).DataTextField("Text").DataValueField("Value")
+
+                <input type="text" id="singleGroup_searchInput" />
+                <input type="checkbox" id="singleGroup_allFoldersCB" /> All Folders
+                @Html.Kendo().DropDownList().Name("ActiveFilter").BindTo(new List<SelectListItem> { new SelectListItem { Text = "Active", Value="active", Selected = true},
+                                                                                                    new SelectListItem { Text = "Archived", Value="archived" },
+                                                                                                    new SelectListItem { Text = "All", Value="all" }})
+                @Html.Kendo().Button().Name("Search").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "GE_Search()" })
+                @Html.Kendo().Button().Name("ClearSearch").Content("Clear Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "clearSearch()" })
+            </div>
+            <div class="customerlist">
+                @*<fieldset title="Customer/Folder ">
+                    <legend>Folders</legend>
+                    <div id="Folders"></div>
+                </fieldset>*@
+                
+                @Html.Partial("Partials/_FolderTree", fe.FolderTree)
+            </div>
+            <div class="grouplist" style="overflow-y: scroll;overflow-x:scroll;width:650px;display:inline-block;">
+               
+                    @(Html.Kendo().Grid<ecn.communicator.mvc.Models.Group>().Name("groupExplorerGrid")
+                    .Events(x => x.DataBound("GE_DataBound").Change("GE_GroupSelected"))//.Selectable(x => x.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(15)
+                        .Read(read => read
+                        .Action("GE_ReadToGrid", "Group")
+                        .Data("GE_GridParams")
+
+                    )
+
+                    .Model(m =>
+                    {
+                        m.Id(y => y.GroupID);
+                    })
+
+                    ).Columns(columns =>
+                    {
+                    columns.Bound(e => e.TotalCount).Hidden(true);
+                    columns.Bound(e => e.FolderName).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Folder").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: left;" }).Hidden(true);
+                    columns.Bound(e => e.GroupName).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Group Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align:left; " });
+                    columns.Bound(e => e).Template(@<text></text>).ClientTemplate("<i class='km-icon icon-kmplus-circled-1'></i>").Filterable(false).Sortable(false).Width("20px");
+                        columns.Bound(e => e.GroupID).Hidden(true);
+                    }
+                    )
+                    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))//Sort Based on Single column at a time, you can cnfigure allow for unsorting
+                    .Pageable(page => page.Enabled(false))
+                    .Selectable(x => x.Enabled(true))
+                    .Filterable(filter => filter.Enabled(false))
+                    .HtmlAttributes(new { @style = "padding:0px;border:none;" }))
+
+
+
+
+
+                        <div id="GE_pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+                            <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+                                <span onclick="GE_GoToPage(event)" id="GE_firstpage" class="k-icon k-i-seek-w">seek-w</span>
+                            </a>
+                            <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+                                <span onclick="GE_GoToPage(event)" id="GE_prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+                            </a>
+
+                            <ul class="k-pager-numbers k-reset">
+                                <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+                                <li><span class="k-state-selected" id="GE_currentpage">1</span></li>
+
+                            </ul>
+                            <span class="k-pager-input k-label">Page<input class="k-textbox" id="GE_pagerInputPageNumber" onchange="GE_checkChange()">of <span id="GE_pagerTotalItems"></span></span>
+                            <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+                                <span onclick="GE_GoToPage(event)" id="GE_nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+                            </a>
+                            <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+                                <span onclick="GE_GoToPage(event)" id="GE_lastpage" class="k-icon k-i-seek-e">seek-e</span>
+                            </a>
+
+                            <span class="k-pager-sizes k-label">
+                                <span title="" class="k-widget k-dropdown k-header">
+                                    <input id="GE_ddPageSize" onchange="GE_checkChange()" />
+                                </span>items per page
+                            </span>
+                            <span class="float-right" style="margin-right:10px;">
+                                <lable id="GE_pagerDisplay"></lable>
+                            </span>
+                        </div>
+
+
+            </div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        function addGroup(e) {
+            var item = this.select();
+            if (item.length == 0) {
+                return;
+            }
+            var group = this.dataItem(item);
+            e.sender.clearSelection();
+            var event = $.Event("GroupSelected");
+            event.sender = explorer;
+            event.group = group;
+            $("#GroupExplorer").trigger(event);
+            if (!event.isDefaultPrevented()) {
+                explorer.close();
+            }
+        };
+
+       
+        function clearSearch() {
+            $("#singleGroup_searchInput").val('');
+            $("#singleGroup_allFoldersCB").prop('checked', false);
+            GE_firstGridLoad = true;
+            GE_Search();
+        };
+    </script>
+
+}

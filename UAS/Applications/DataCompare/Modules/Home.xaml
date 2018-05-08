@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="DataCompare.Modules.Home"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="900" Width="900" Height="600">
+    <telerik:RadBusyIndicator Name="RadBusy" IsIndeterminate="False">
+        <Grid>
+            <Grid x:Name="grdCustomTiles" Visibility="Visible">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Tag="newMappingTile" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Margin="10" Click="Tile_Open"  MaxHeight="250">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="newMappingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="newMappingTile" Height="175" Width="250" Fill="#C7CACC" Margin="5"/>
+                                        <TextBlock Text="New Compare File Mapping" FontSize="18" Foreground="White" VerticalAlignment="Bottom" Margin="10" />
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/MapIcon.png" Height="64" Width="64"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Tag="editExistingTile" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Margin="10" Click="Tile_Open" MaxHeight="250">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="editExistingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="editExistingTile" Height="175" Width="250" Fill="#F47E1F" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/EditExitingIcon.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="64"/>
+                                        <TextBlock Text="Edit Existing Compare File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Tag="uploadTile" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Margin="10" Click="Tile_Open" MaxHeight="250">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="uploadTile"  MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="uploadTile" Height="175" Width="250" Fill="#9DA2A7" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/FileStatus.png" Height="64" Width="64"/>
+                                        <TextBlock Text="Upload Compare File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <!--<Border Tag="newMappingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave" MouseUp="Border_MouseUp">
+                            <Grid>
+                                <Rectangle x:Name="newMappingTile" Height="175" Width="250" Fill="#C7CACC" Margin="5"/>
+                                <TextBlock Text="New Compare File Mapping" FontSize="18" Foreground="White" VerticalAlignment="Bottom" Margin="10" />
+                                <Image Source="/ImageLibrary;Component/Images/TileList/MapIcon.png" Height="64" Width="64"/>
+                            </Grid>
+                        </Border>
+                        <Border Tag="editExistingTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave" MouseUp="Border_MouseUp">
+                            <Grid>
+                                <Rectangle x:Name="editExistingTile" Height="175" Width="250" Fill="#F47E1F" Margin="5"/>
+                                <Image Source="/ImageLibrary;Component/Images/TileList/EditExitingIcon.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="64"/>
+                                <TextBlock Text="Edit Existing Compare File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                            </Grid>
+                        </Border>
+                        <Border Tag="uploadTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave" MouseUp="Border_MouseUp">
+                            <Grid>
+                                <Rectangle x:Name="uploadTile" Height="175" Width="250" Fill="#9DA2A7" Margin="5"/>
+                                <Image Source="/ImageLibrary;Component/Images/TileList/FileStatus.png" Height="64" Width="64"/>
+                                <TextBlock Text="Upload Compare File" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                            </Grid>
+                        </Border>-->
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Tag="viewTile" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Margin="10" Click="Tile_Open" MaxHeight="250">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="viewTile"  MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="viewTile" Height="175" Width="250" Fill="#559EDB" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/ViewFile.png" Height="64" Width="64"/>
+                                        <TextBlock Text="View Compare Results" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <Button Tag="fileAnalysis" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Margin="10" Click="Tile_Open" MaxHeight="250">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Content>
+                                <Border Tag="fileAnalysis" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave">
+                                    <Grid>
+                                        <Rectangle x:Name="fileAnalysis" Height="175" Width="250" Fill="#045DA4" Margin="5"/>
+                                        <Image Source="/ImageLibrary;Component/Images/TileList/EditExistingTransformation.png" Height="64" Width="64"/>
+                                        <TextBlock Text="File Analysis" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <!--<Border Tag="viewTile" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave" MouseUp="Border_MouseUp">
+                            <Grid>
+                                <Rectangle x:Name="viewTile" Height="175" Width="250" Fill="#559EDB" Margin="5"/>
+                                <Image Source="/ImageLibrary;Component/Images/TileList/ViewFile.png" Height="64" Width="64"/>
+                                <TextBlock Text="View Compare Results" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                            </Grid>
+                        </Border>
+                        <Border Tag="fileAnalysis" MouseEnter="tile_MouseEnter" MouseLeave="tile_MouseLeave" MouseUp="Border_MouseUp">
+                            <Grid>
+                                <Rectangle x:Name="fileAnalysis" Height="175" Width="250" Fill="#045DA4" Margin="5"/>
+                                <Image Source="/ImageLibrary;Component/Images/TileList/EditExistingTransformation.png" Height="64" Width="64"/>
+                                <TextBlock Text="File Analysis" Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="10"/>
+                            </Grid>
+                        </Border>-->
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

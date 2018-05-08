@@ -1,0 +1,151 @@
+﻿@using KMEnums
+@model List<ECN_Framework_Entities.Communicator.GroupConfig>
+@{
+    ViewBag.Title = "Group Configuration";
+}
+<script>
+    function showAddGroupConfig()
+    {
+        var win = $("#AddGroupConfigWindow");
+        $("#ShortName").val('');
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+        clearValidationErrorMessages();
+    }
+    function addGroupConfigModal() {
+        clearValidationErrorMessages();
+        lastControlsError = [];
+        if ($('#ShortName').val() == "") {
+            lastControlsError.push({ name: "ShortName", message: "Please enter a value for Short Name", label: "ShortNameLabel", isKendo: false });
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddGroupConfig", "Group")",
+                data: {
+                    ShortName: $('#ShortName').val(),
+                    IsPublic: $('#IsPublic').is(":checked") ? "Y" : "N",
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#divGroupConfig").html(response[1]);
+                        $('#IsPublic').prop('checked', false);
+                        $('#ShortName').val("");                        
+                        closeWindow('AddGroupConfigWindow');
+                    }
+                    else {
+                        closeWindow('AddGroupConfigWindow');
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+    function deleteGroupModal(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Group Configuration</a></li>
+</ol>
+
+<div class="wrapper modal modaladdnewform">
+    <div class="formbox" style="float:right;padding:5px;">
+    @if (KM.Platform.User.HasAccess(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser, KMPlatform.Enums.Services.EMAILMARKETING, KMPlatform.Enums.ServiceFeatures.GroupUDFs, KMPlatform.Enums.Access.Edit))
+    {
+        @Html.Kendo().Button().Name("Add").Content("Add<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "showAddGroupConfig()" })
+    }        
+    </div>
+    <div class="formbox">
+        <div class="formitem formiteminline" id="divGroupConfig" style="width:100%; margin-bottom:0px;">
+            @Html.Partial("Partials/_GroupConfigGrid", Model)
+        </div>
+    </div>
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteWindow")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteGroupConfig")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("AddGroupConfigWindow")
+        .Actions(x => x.Clear())
+        .Title("Add")
+        .Content(
+        @<text>
+            <div class="wrapper modal modaladdnewform" style="width:400px;margin-top:10px;">
+                <fieldset class="no-border">
+                    <legend>Add User Defined Field</legend>
+
+
+                    <div id="AGC_Validation" style="margin:10px;padding-left:15px;">
+
+                    </div>
+                    <div style="display: inline-block; float: left; margin-right: 10px; margin-top: 5px;" id="ShortNameLabel">Short Name</div>
+                    <div class="formitem">
+                        @Html.TextBox("ShortName", "", new { @style = " width:290px; " })
+
+                    </div>
+
+                    <div class="formitem" style="margin-top:10px;margin-left:80px;">
+                        <input id="IsPublic" name="List" type="checkbox" /><span>Is Public</span>
+                    </div>
+
+                    <div class="formitem" style="text-align:center;margin-top:10px;">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:30%;text-align:center;padding-left:100px;">
+                                    @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addGroupConfigModal()" })
+                                </td>
+                                <td style="width:30%;text-align:center;padding-right:100px;">
+                                    @Html.Kendo().Button().Name("CancelAddGroupConfig").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('AddGroupConfigWindow')" })
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </fieldset>
+            </div>
+
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

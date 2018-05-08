@@ -1,0 +1,124 @@
+﻿
+<div id="DecisionProp">
+    <h4 style="text-align:center">Decision</h4>
+    <section class="propertyItem">
+        <span>Decision Type:</span><br>
+        <section id="yesnoRB" style="display:none;">
+            <input type="radio" name="decision_type" value="0"> Open
+            <input type="radio" name="decision_type" value="1"> Click
+        </section>
+        <section id="subsRB" style="display:none;">
+            <input type="radio" name="decision_type" value="2"> Subscribe
+        </section>
+    </section>
+    <section class="propertyItem">
+        <span>Branches:</span><br>        
+        <section id="openClickSelected" style="display:none;">
+            <input type="checkbox" id="des01" /> Yes Branch <br>
+            <section id="yesChecked" style="display:none; margin-left:20px">
+                <input type="radio" name="decision_yes" value="0"> Any Link <br>
+                <input type="radio" name="decision_yes" value="1"> Specific Link <br>
+                <section id="slChecked" style="display:none; margin-left:20px">
+                    @Html.Kendo().Button().Name("SelectLinkAlias").Content("Select Link Alias").HtmlAttributes(new { @class = "btn", type = "button", onclick = "popupWindow('Select Link Alias','SelectLinkAlias')" })<br>
+                    <strong style="margin-left:10px;">Link Alias:</strong>
+                    <span id="des05"></span><br>
+                </section>
+            </section>
+            <input type="checkbox" id="des02" /> No Branch <br>
+            <section id="noChecked" style="display:none; margin-left:20px">
+                <input type="radio" name="decision_no" value="0"> Any Link
+            </section>
+        </section>
+        <section id="subscribeSelected" style="display:none;">
+            <input type="checkbox" id="des03" /> Subscribe Branch <br>
+            <input type="checkbox" id="des04" /> Unsubscribe Branch <br>
+        </section>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("input[name$='decision_type']").click(function () {
+            if ($("#des01").prop('checked') && $('input:radio[name=decision_type]')[1].checked)
+                $("#yesChecked").show();
+            if ($("#des02").prop('checked') && $('input:radio[name=decision_type]')[1].checked)
+                $("#noChecked").show();
+            if ($("#des01").prop('checked') && $('input:radio[name=decision_type]')[0].checked)
+                $("#yesChecked").hide();
+            if ($("#des02").prop('checked') && $('input:radio[name=decision_type]')[0].checked)
+                $("#noChecked").hide();
+        });
+        $('#des01').click(function () {
+            if (this.checked && $('input:radio[name=decision_type]')[1].checked) {
+                $("#yesChecked").show();
+            } else {
+                $("#yesChecked").hide();
+            }
+        });
+        $('#des02').click(function () {
+            if (this.checked && $('input:radio[name=decision_type]')[1].checked) {
+                $("#noChecked").show();
+            } else {
+                $("#noChecked").hide();
+            }
+        });
+        $("input[name$='decision_yes']").click(function () {
+            if ($('input:radio[name=decision_yes]')[0].checked) {
+                $("#slChecked").hide();
+            }
+            else {
+                $("#slChecked").show();
+            }
+        });
+    });
+
+    function propsDecision(shape, comesFromGroup) {
+        $('input:radio[name=decision_type]')[shape.decision_type].checked = true;
+        $('input:radio[name=decision_yes]')[shape.decision_yes].checked = true;
+        $('input:radio[name=decision_no]')[shape.decision_no].checked = true;
+        $("#des01").prop('checked', shape.yes_branch);
+        $("#des02").prop('checked', shape.no_branch);
+        $("#des03").prop('checked', shape.subscribe_branch);
+        $("#des04").prop('checked', shape.unsubscribe_branch);
+        $("#des05").text(shape.link_alias);
+
+        if (comesFromGroup) {
+            shape.decision_type = 2;
+            $('input:radio[name=decision_type]')[shape.decision_type].checked = true;
+            $("#subsRB").show();
+            $("#yesnoRB").hide();
+        }
+        else {
+            $("#subsRB").hide();
+            $("#yesnoRB").show();
+        }
+
+        if ($('input:radio[name=decision_type]')[0].checked || $('input:radio[name=decision_type]')[1].checked) {
+            $("#openClickSelected").show();
+            $("#subscribeSelected").hide();
+        }
+        else {
+            $("#openClickSelected").hide();
+            $("#subscribeSelected").show();
+        }
+
+        if (shape.yes_branch && $('input:radio[name=decision_type]')[1].checked) {
+            $("#yesChecked").show();
+        } else {
+            $("#yesChecked").hide();
+        }
+
+        if (shape.no_branch && $('input:radio[name=decision_type]')[1].checked) {
+            $("#noChecked").show();
+        } else {
+            $("#noChecked").hide();
+        }
+
+        if ($('input:radio[name=decision_yes]')[0].checked) {
+            $("#slChecked").hide();
+        }
+        else {
+            $("#slChecked").show();
+        }
+    }
+</script>

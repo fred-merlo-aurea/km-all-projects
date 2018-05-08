@@ -1,0 +1,12 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+<script>
+    array[@((int)ControlType.DropDown)] = { 
+        name: '@ControlType.DropDown', 
+        object: @Html.Raw(Json.Encode(new DropDown(true))),
+        control: "<select class='input'>\
+                    <option ng-repeat='item in control.Items' ng-value='item.Value' ng-selected='item.Default'>{{item.Text}}</option>\
+                  </select>"
+    }
+</script>

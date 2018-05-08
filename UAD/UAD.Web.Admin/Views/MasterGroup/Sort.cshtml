@@ -1,0 +1,113 @@
+﻿@using UAD.Web.Admin.Infrastructure
+@using KMSite
+@{
+    ViewBag.Title = "Master Groups Sort";
+}
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function (e) {
+                saveMasterGroupSort();
+        });
+    });
+    var saveMasterGroupSort = function () {
+        var mgIDs = [];
+        var items = $("#lbMasterGroup").data("kendoListBox").items();
+        for (var i = 0; i < items.length; i++) {
+            mgIDs.push($("#lbMasterGroup").data("kendoListBox").dataItem(items[i]).Value);
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateSortOrder", "MasterGroup")',
+            data: JSON.stringify({ MasterGroupIDs: mgIDs }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var result =JSON.parse(response);
+                if (result.Success) {
+                    var data = {
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        text: result.Text,
+                        autoClose: false,
+                        action: RedirectPage,
+                        IsOpen: false
+                    }
+                    showMessage(data);
+                }
+                else
+                {
+                    $("#alertMsg").html(result.Text);
+                    $("#alertDiv").show();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        var RedirectPage = function () {
+            window.location.reload();
+        }
+    }
+
+    function Cancel() {
+        window.location.reload();
+    }
+</script>
+<style>
+    th, td {
+        padding: 5px;
+    }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<br /><br />
+<div align="center">
+    <table style="width:100%" cellpadding="10" cellspacing="10">
+        <tr>
+            <td colspan="2">
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="40%" align="right"><label for="lbMasterGroup" id="lblMasterGroup">Master Groups :&nbsp;&nbsp;</label></td>
+            <td width="60%"><span><img src='@Url.Content("~/Images/icon-Sort.png")' style="margin:0px;padding:0px;" /></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @(Html.Kendo().ListBox()
+                .Name("lbMasterGroup")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(source => source
+                .Read(read => read.Action("GetMasterGroupsBySortOrder", "CommonMethods")))
+                .Toolbar(toolbar =>
+                {
+                toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                toolbar.Tools(tools => tools
+                .MoveUp()
+                .MoveDown()
+                );
+                })
+                .HtmlAttributes(new { @style = "width:500px; height:500px; text-align:left" })
+                .Selectable(ListBoxSelectable.Multiple)
+                )
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="button" class="btn-blue2" id="btnSave">Save</button>
+                <button type="button" class="btn-blue2" id="btnCancel" onclick="return Cancel()">Cancel</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<br /><br />

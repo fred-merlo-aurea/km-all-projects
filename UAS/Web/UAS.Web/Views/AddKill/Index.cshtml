@@ -1,0 +1,1397 @@
+﻿@model UAS.Web.Models.Circulations.AddKillProductViewModel
+@{
+    ViewBag.Title = "Add Remove";
+}
+<style>
+    .highlightInput {
+        border: 1px solid red !important;
+    }
+
+    #mainview {
+        height: 600px;
+    }
+
+    #AddKillGridTable tr:nth-child(even) {
+        background: #F7F8F9;
+    }
+
+    #AddKillGridTable tr:nth-child(odd) {
+        background: #FFF;
+    }
+
+    #AddKillGridTable td {
+        padding: 2.5px 0px 2.5px 0px;
+        border: 0.5px solid #fff;
+    }
+
+    #AddKillGridTable th {
+        color: #f57f20;
+        font-size: 16px;
+        letter-spacing: 0.3pt;
+        font-weight: 500;
+        border: 0.5px solid #fff;
+        background-color: #E3E3E3;
+    }
+
+    #AddKillGridTable input[type="text"] {
+        width: 120px;
+        min-width: 60px;
+        max-width: 300px;
+    }
+
+    /*.k-tabstrip ul li.k-item, li.k-tabstrip-items{
+        width: 200px;
+    }*/
+    #reportViewer1 {
+        height: 700px;
+        overflow: scroll;
+    }
+
+    .k-tabstrip-top .k-content {
+        height: auto;
+    }
+</style>
+<input type="hidden" id="EditRowID" value="" />
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+
+
+<div class="panel panel-default" style="margin:0px 0px;">
+    <div class="panel-body" style="padding:0px;">
+        <div style="margin-top:5px;">
+            <table style="width:100%;margin:0px;">
+
+                <tr>
+                    <td width="100%">
+                        <div style="height:100%;margin:0px;padding-top:1px;">
+                            @(Html.Kendo().TabStrip()
+                                    .Name("tabsAddKill")
+                                    .Items(tabstrip =>
+                                    {
+                                    tabstrip.Add().Text("Details")
+                                    .Selected(true)
+                                    .Content(@<text><div id='mainview'>
+                                            <div id='lpane'></div>
+                                            <div id='rpane'>
+                                                <div>
+                                                    <table style='width:100%;'>
+                                                        <tr>
+                                                            <td style="padding-right:20px;width:40px;">
+                                                                <button id='toggleLeftPane' class='pull-left' style='border:0;color:orange;background-color:#dadada;'>
+                                                                    <span id='pinLeft' class='k-icon k-i-pin' style='font-size:25px;'></span>
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <div style="width:75px;float:left;">
+                                                                        @Html.Kendo().RadioButton().Name("optionAddKill").Label("Add").Value("Add").Checked(true).HtmlAttributes(new { @onclick = "RadioAddClick()" })
+                                                                    </div>
+                                                                    <div style="width:75px;float:left;">
+                                                                        @Html.Kendo().RadioButton().Name("optionAddKill").Label("Remove").Value("Remove").HtmlAttributes(new { @onclick = "RadioRemoveClick()" })
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td style="width: 15%;">
+                                                                @*<td align="right">*@
+                                                                    <button class="btn-blue2 k-button" style="width:120px;display: none;" id="btnUpdate" onclick="ConfirmAddKillUpdate()">Update Selected</button>
+                                                                @*</td>*@
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div id='AddKillGrid'>
+                                                </div>
+                                            </div>
+                                        </div></text>).HtmlAttributes(new { @class = "tab" });
+                                        tabstrip.Add().Text("Reports")
+                                            .Content(@<text>@Html.Partial("_addKillReporting", Model)</text>).HtmlAttributes(new { @class = "tab", onclick = "OnTabSelect()" });
+                                    })
+                            )
+
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div style="text-align:right;margin-top:10px;background-color:lightgray;">
+            <table width="100%">
+                <tr>
+                    <td><b>Current Free</b></td>
+                    <td><b>New Free</b></td>
+                    <td>Total Desired:<label id="lblTotalDesired">0</label></td>                    
+                    <td align="right"><button class="btn-blue2 k-button" style="width:120px;" id="btnDownloadDetail" onclick="ColumnSelectionConfirmation()">Download Details</button></td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <label>Records: </label>
+                        <label id="lblCurrentFreeRecords">@Model.RecordCounts.FreeRecords</label>
+                        <label>Copies: </label>
+                        <label id="lblCurrentFreeCopies">@Model.RecordCounts.FreeCopies</label>
+                    </td>
+                    <td>
+                        <label>Records: </label>
+                        <label id="lblNewFreeRecords">@Model.RecordCounts.FreeRecords</label>
+                        <label>Copies: </label>
+                        <label id="lblNewFreeCopies">@Model.RecordCounts.FreeCopies</label>
+                    </td>
+                    <td></td>                    
+                    <td align="right"><button class="btn-blue2 k-button" style="width:120px;" id="btnPreviewData" onclick="ProcessPreviewData()">Preview Data</button></td>
+
+                </tr>
+                <tr>
+                    <td><b>Current Paid</b></td>
+                    <td><b>New Paid</b></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <label>Records: </label>
+                        <label id="lblCurrentPaidRecords">@Model.RecordCounts.PaidRecords</label>
+                        <label>Copies: </label>
+                        <label id="lblCurrentPaidCopies">@Model.RecordCounts.PaidCopies</label>
+                    </td>
+                    <td>
+                        <label>Records: </label>
+                        <label id="lblNewPaidRecords">@Model.RecordCounts.PaidRecords</label>
+                        <label>Copies: </label>
+                        <label id="lblNewPaidCopies">@Model.RecordCounts.PaidCopies</label>
+                    </td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@{Html.Kendo()
+    .Window()
+    .Modal(true)
+    .Title("Filter Detail")
+    .Draggable() //Enable dragging of the window
+    .Width(500) //Set width of the window
+    .Height(400)
+    .Animation(false)
+    .Name("DownloadReportWindow")
+    .Content(@<text><div></div></text>)
+.Visible(false)
+.Render();
+}
+@{Html.Kendo()
+    .Window()
+    .Modal(true)
+    .Title("Filter Detail")
+    .Draggable() //Enable dragging of the window
+    .Width(500) //Set width of the window
+    .Height(400)
+    .Animation(false)
+    .Name("AddKillPopUpWindow")
+    .Content(@<text><div></div></text>)
+.Visible(false)
+.Render();
+}
+@{Html.Kendo()
+    .Window()
+    .Width(1000)
+    .Modal(true)
+    .Title(false)
+    .Animation(false)
+    .Name("AddKillDownLoadExportRecords")
+    .Content(@<text><div id="dvAddKillDownLoadExportRecords"></div></text>)
+.Visible(false)
+.Render();
+}
+@{Html.Kendo()
+    .Window()
+    .Width(800)
+    .Modal(true)
+    .Title(false)
+    .Animation(false)
+    .Name("AddKillCreateNewColumns")
+    .Content(@<text><div id="dvAddKillCreateNewColumns">@Html.Partial("_downLoadFieldsTransformation")</div></text>)
+.Visible(false)
+.Render();
+}
+
+
+@*@{Html.Kendo()
+    .Window()
+    .Modal(true)
+    .Title(false)
+    .Animation(false)
+    .Name("IssueFinalizePopUpWindow")
+    .Content(@<text><div id="dvIssueFinalizePopUpWindow"></div></text>)
+.Visible(false)
+.Render();
+}*@
+
+
+
+
+@{Html.Kendo()
+    .Window()
+    .Height(150)
+    .Width(525)
+    .Modal(true)
+    .Title(false)
+    .Animation(false)
+    .Name("PopUpDesiredCountWindow")
+.Visible(false)
+.Render();
+}
+<script type="text/javascript">
+    //#region Document Ready
+    var tabStrip = $("#tabsAddKill").kendoTabStrip().data("kendoTabStrip");
+    var GridCreated = false;
+    $(document).ready(function () {
+
+        $("#mainview").kendoSplitter({
+            orientation: "horizontal",
+            panes: [{ collapsible: true, size: "20%", collapsedSize: "0%" },
+                { collapsible: true, size: "80%", collapsedSize: "0%" }
+            ]
+        });
+        $("#toggleLeftPane").click(function (e) {
+            var splitterElement = $("#mainview");
+            var leftPane = $("#lpane");
+            var splitter = splitterElement.data("kendoSplitter");
+            console.log(leftPane.width())
+            if (leftPane.width() > 0) {
+                $("#pinLeft").removeClass('k-i-pin').addClass('k-i-unpin');
+            }
+            else {
+                $("#pinLeft").removeClass('k-i-unpin').addClass('k-i-pin');
+            }
+            splitter[leftPane.width() > 0 ? "collapse" : "expand"](leftPane);
+        });
+        BindDropDownList({
+            ControlID: "kddlReports",
+            URL: "/uas.web/addkill/GetReports?pubID=" + $("#SelectedProductID").val(),
+            TextField: "ReportName",
+            ValueField: "ReportID",
+            OptionLabel: "",
+            DataType: "json"
+        });
+        BindDropDownList({
+            ControlID: "kddlIssues",
+            URL: "/uas.web/Report/GetCircIssues?pubID=" + $("#SelectedProductID").val(),
+            TextField: "IssueName",
+            ValueField: "IssueId",
+            OptionLabel: "",
+            DataType: "json"
+        });
+        $("#tabstrip").on("click", ".k-button", function () {
+            tabStrip.select(1);   // Select by index
+        })
+        $('#kddlReports').change(function () {
+            GetReport();
+        });
+        var drpIssues = $("#kddlIssues").data("kendoDropDownList");
+        drpIssues.enable(false);
+
+        $.ajax({
+            url: '/uas.web/filter/GetFilterViewModel?brandId=0&IsCirc=true&vwType=ProductView&pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#lpane").html(response);
+                RadioAddClick();
+
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    });
+
+    function OpenReportTab() {
+        var url = '@Url.Action("Index", "Report")';
+        //window.open = (url);//, target="_blank");
+        var win = window.open(url, '_blank');
+        if (win) {
+            //Browser has allowed it to be opened
+            win.focus();
+        } else {
+            //Browser has blocked it
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                text: "Please allow popups for this website.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+    }
+    function CreateFilterGrid() {
+        $("#FilterSummaryDetails").kendoGrid({
+            dataSource: {
+                data: getGridData(),// { Name: '', Value: '', ElementID: '' },
+                schema: {
+                    model: {
+                        fields: {
+                            Name: { type: "string" },
+                            Text: { type: "string" },
+                            ElementID: { type: "string" }
+                        }
+                    }
+                }
+            },
+            scrollable: false,
+            sortable: false,
+            filterable: false,
+            pageable: false,
+            columns: [
+                { field: "ElementID", hidden: true },
+                { field: "Name", title: 'Field Name', width: "150px" },
+                { field: "Value", title: 'Value(s)', width: "800px" }
+            ]
+        });
+        GridCreated = true;
+    }
+    function GetDefaultFilter() {
+        var Defaultfilter = { "FilterNo": 0, "Count": 0, "PubID": "1", "BrandID": 0, "ViewType": 2, "FilterGroupID": 1, "FilterGroupName": "", "Executed": false, "Fields": [{ "Name": "Category Type", "Values": "1,3", "Text": "QUALIFIED FREE,QUALIFIED PAID", "SearchCondition": "", "FilterType": "Circulation", "Group": "CATEGORYTYPE", "ElementID": "lstCircCatCodeType" }, { "Name": "Category Code", "Values": "101,102,103,130,115,116,117,118,119,120,121,122", "Text": "10. CONTROLLED FREE SUBSCRIBER (QUAL FREE),11. CONTROLLED FREE BULK SUB (QUAL FREE),17. CONTROLLED FREE ASSOC SUB (QUAL FREE),18. CONTROLLED FREE ASSOC BULK SUB (QUAL FREE),20. INDIVIDUAL (QUAL PAID),21. BULK (QUAL PAID),22. GROUP (QUAL PAID),23. GIFT (QUAL PAID),24. SUBSCRIBING DONOR (QUAL PAID),25. SUBSCRIBING DONOR BULK,27. ASSOCIATION (QUAL PAID),28. ASSOCIATION BULK", "SearchCondition": "", "FilterType": "Circulation", "Group": "CATCODES", "ElementID": "lstCircCatCode" }, { "Name": "XACT", "Values": "1,3", "Text": "FREE ACTIVE,PAID ACTIVE", "SearchCondition": "", "FilterType": "Circulation", "Group": "TRANSACTION", "ElementID": "lstCircTransactionType" }, { "Name": "Transaction Code", "Values": "101,102,103,104,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,136,137,138,139,140,141,142,143,145,146", "Text": "10. FREE ADDITION (ACTIVE FREE),21. ADDRESS CHANGE ONLY (ACTIVE FREE),22. REQUAL ONLY (ACTIVE FREE),27. COMPLETE CHANGE REQUAL (ACTIVE FREE),13. PAID ADDITION (ACTIVE PAID),14. CREDIT ADDITION (ACTIVE PAID),16. CREDIT RENEWAL REACTIVATE (ACTIVE PAID),17. PAID RENEWAL REACTIVATE (ACTIVE PAID),18. CREDIT CONVERSION (ACTIVE PAID),19. PAID CONVERSION (ACTIVE PAID),21. ADDRESS CHANGE ONLY (ACTIVE PAID),40. RENEWAL PAYMENT (ACTIVE PAID),41. CREDIT PAYMENT (ACTIVE PAID),42. CREDIT RENEWAL (ACTIVE PAID),43. SUBSCRIPTION EXTENSION (ACTIVE PAID),46. PO REINSTATE CREDIT (ACTIVE PAID),47. SYSTEM PAID RENEWAL,48. CANCEL AT EXPIRE (ACTIVE PAID),49. PO REINSTATE PAID (ACTIVE PAID),27. COMPLETE CHANGE REQUAL (ACTIVE PAID),22. REQUAL ONLY (ACTIVE PAID),25. ADDRESS REQUAL,25. ADDRESS REQUAL,12. REACT CODE (ACTIVE FREE),12. REACT CODE (ACTIVE PAID),99. CONVERSION RECORD (ACTIVE FREE),99. CONVERSION RECORD (ACTIVE PAID),23. ACS ADDRESS CHANGE (ACTIVE FREE),23. ACS ADDRESS CHANGE (ACTIVE PAID)", "SearchCondition": "", "FilterType": "Circulation", "Group": "TRANSACTIONCODE", "ElementID": "lstCircTransaction" }] }
+        var drpProduct = $("#SelectedProductID").data("kendoDropDownList");
+        Defaultfilter.PubID = drpProduct.value();
+        Defaultfilter.Fields.push({ "Name": "Product", "Values": drpProduct.value(), "Text": drpProduct.text(), "SearchCondition": "", "FilterType": "Product", "Group": "Product", "ElementID": "lstPubType" });
+        return Defaultfilter;
+    }
+    function getGridData() {
+        var filter = GetDefaultFilter();//getFilter();
+        var gridData = [];
+        var serachcondition = "";
+        $.each(filter.Fields, function (i, obj) {
+            if (obj.SearchCondition) {
+                serachcondition = obj.SearchCondition + " - ";
+            } else {
+                serachcondition = ""
+            }
+            if (obj.Name == 'Adhoc') {
+                gridData.push({ Name: obj.Name, Value: obj.Text + " - " + serachcondition + obj.Values, ElementID: obj.ElementID })
+
+            } else if (obj.Name == 'Product') {
+                gridData.push({ Name: obj.Name, Value: obj.Text, ElementID: '' })
+            }
+            else {
+                gridData.push({ Name: obj.Name, Value: serachcondition + obj.Text, ElementID: obj.ElementID })
+            }
+
+        });
+        return gridData;
+    }
+    function ShowFilterDetails() {
+        var grid = $("#FilterSummaryDetails").data("kendoGrid");
+        var options = grid.getOptions();
+        options.dataSource.data = getGridData();
+        grid.setOptions(options);
+        grid.dataSource.read();
+        grid.refresh();
+    }
+    function OnTabSelect() {
+        var showfilterelement = document.getElementById("accShowFilter");
+        showfilterelement.classList.toggle("active");
+        /* Toggle between hiding and showing the active panel */
+        var panel = showfilterelement.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+            if ($("#reportFilterShowHide") && (showfilterelement.id == 'accShowFilter')) {
+                $("#reportFilterShowHide").text("(Show...)");
+            }
+
+        } else {
+            panel.style.display = "block";
+            if ($("#reportFilterShowHide")) {
+                $("#reportFilterShowHide").text("(Hide...)");
+            }
+
+        }
+    }
+
+    $(window).on('beforeunload', function () {
+        if (sessionStorage.getItem("addKillFilter") != null) {
+            sessionStorage.removeItem("addKillFilter");
+        }
+    });
+    function LoadSavedFilterPanelGrid(FilterId, callback) {
+        LoadFilterData(FilterId, callback);//in _filter.chtml
+    }
+    function OpneSavedFiltersPanel() {
+
+        var saveModel = {
+            viewType: "ProductView",
+            IsCirc: true,
+            PubID: $("#SelectedProductID").val(),
+            FilterIDs: "",
+            SourcePage: 'AddKill'
+        }
+        GetSavedFiltersPanel(saveModel); //in _filter.chtml
+    }
+
+    function LoadReportViewer() {
+
+        //var filter = getFilter();
+        var drpIssues = $("#kddlIssues").data("kendoDropDownList");
+        var drpReport = $("#kddlReports").data("kendoDropDownList");
+        var drpProduct = $("#SelectedProductID").data("kendoDropDownList");
+
+
+        $("#lblreportlabel").text(drpReport.text());
+
+        var rptmodel = {
+            ClientID: $("#SelectedClientID").val(),
+            reportname: drpReport.text(),
+            ReportID: drpReport.value(),
+            IssueID: drpIssues.value(),
+            IssueName: drpIssues.text(),
+            ProductName: drpProduct.text(),
+            PubID: $("#SelectedProductID").val(),
+            IsAddRemove: $("#chkIncludeAddRemove").is(":checked")
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/UAS.web/Report/RenderReport',
+            data: JSON.stringify({ 'filter': GetDefaultFilter(), 'reportmodel': rptmodel }),
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function () {
+                showloading = false;
+                showLoadingWindow();
+            },
+
+            success: function (data) {
+                $('#ReportViewerPanel').show();
+                /* data is the pure html returned from action method, load it to your page */
+                $('#divReportViewer').html(data);
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+    }
+
+    function onTelerikReportingBegin() {
+        showloading = false;
+        showLoadingWindow();
+    }
+    function validate(selectedID) {
+        clearValidationErrorMessages();
+        if (selectedID == "" || selectedID == "-1") {
+            setValidationClient([{ name: "kddlReports", message: "Please select report.", label: "lblreporterror", isKendo: true }]);
+            $(".validationMessage").css("display", "inline");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function GetReport() {
+        var drpReport = $("#kddlReports").data("kendoDropDownList");
+        var selectedReportID = drpReport.value();
+        if (validate(selectedReportID)) {
+            LoadReportViewer();
+        }
+    }
+    function onTelerikReportingEnd() {
+        showloading = true;
+        closeLoadingWindow();
+    }
+    function RadioAddClick() {
+        resetFilter(false);
+        $.ajax({
+            url: '/UAS.Web/AddKill/GetAddDefaultFilters',
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+
+                $("#lstCircCatCodeType option").prop("selected", false);
+                $("#lstCircCatCode option").prop("selected", false);
+                $("#lstCircTransactionType option").prop("selected", false);
+                $("#lstCircTransaction option").prop("selected", false);
+                $.each(data.cc, function (i, e) {
+                    $("#lstCircCatCode option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.ct, function (i, e) {
+                    $("#lstCircCatCodeType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xc, function (i, e) {
+                    $("#lstCircTransaction option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xt, function (i, e) {
+                    $("#lstCircTransactionType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                if (GridCreated)
+                    ShowFilterDetails();
+                else
+                    CreateFilterGrid();
+
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function RadioRemoveClick() {
+        resetFilter(false);
+        $.ajax({
+            url: '/UAS.Web/AddKill/GetRemoveDefaultFilters',
+            contentType: "application/json; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (data) {
+
+                $("#lstCircCatCodeType option").prop("selected", false);
+                $("#lstCircCatCode option").prop("selected", false);
+                $("#lstCircTransactionType option").prop("selected", false);
+                $("#lstCircTransaction option").prop("selected", false);
+                $.each(data.cc, function (i, e) {
+                    $("#lstCircCatCode option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.ct, function (i, e) {
+                    $("#lstCircCatCodeType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xc, function (i, e) {
+                    $("#lstCircTransaction option[value='" + e.Value + "'").prop("selected", true);
+                });
+                $.each(data.xt, function (i, e) {
+                    $("#lstCircTransactionType option[value='" + e.Value + "'").prop("selected", true);
+                });
+                if (GridCreated)
+                    ShowFilterDetails();
+                else
+                    CreateFilterGrid();
+
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    function LoadCircDefaultFilters() {
+        LoadDefaultFilters(ApplyFilter);
+
+    }
+    function ResetAllFilter() {
+        resetFilter(false);
+    }
+    function ApplyFilter() {
+        var rbAdd = ($("input[name='optionAddKill']:checked").val() == "Add" ? true : false);
+        var rbRemove = ($("input[name='optionAddKill']:checked").val() == "Remove" ? true : false);
+        var type = "";
+        if (rbAdd) {
+            type = "Add";
+        } else if (rbRemove) {
+            type = "Remove";
+        }
+
+        if (rbAdd || rbRemove) {
+            var model = {
+                ProductID: $("#SelectedProductID").val(),
+                AddRemove: type
+            }
+            var productID = model.ProductID;
+            var addRemove = model.AddRemove;
+            var filter = getFilter();
+            //var editFilterName = $("#menuApplyFilters").data("FilterName");
+            var editFilterName = document.getElementById("EditRowID").value;
+            if (editFilterName != "") {
+                filter.FilterName = editFilterName;
+            } else {
+                filter.FilterName = "";
+            }
+            filter.FilterDescription = "";
+
+            var filters = JSON.stringify({ 'filters': filter });
+            var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+            $.ajax({
+                url: '/UAS.Web/AddKill/CreateAddKillContainer',
+                type: "POST",
+                data: { 'filters': filters, 'ProductID': productID, 'AddRemove': addRemove, 'AddKillList': addKillList },
+                traditional: true,
+                cache: false,
+                success: function (returnData) {
+                    if (returnData.Complete) {
+                        var container = returnData.AddKillObject;
+
+                        var containerlist = [];
+                        //var filtername = $("#menuApplyFilters").data("FilterName");
+                        var filtername = document.getElementById("EditRowID").value;
+                        if (filtername && sessionStorage.getItem("addKillFilter") != null) {
+                            var finalFilters = [];
+                            var isEditRemoveOldCount = false;
+                            var key = -1;
+                            containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+                            for (var i = 0; i < containerlist.length; i++) {
+                                if (containerlist[i].ContainerId == filtername) {
+                                    isEditRemoveOldCount = true;
+                                    key = i;
+                                    continue;
+                                } else {
+                                    finalFilters.push(containerlist[i]);
+                                }
+                            }
+                            if (isEditRemoveOldCount) {
+                                if (key > -1) {
+                                    var oldCountToRemove = $('#txtDesiredRecords_addkill_' + filtername)[0].textContent;
+                                    var typeId = $("#spType_addkill_" + filtername)[0].textContent;
+                                    var addKillFilter = JSON.stringify({ 'Filter': containerlist[key] });
+                                    $.ajax({
+                                        url: '/UAS.Web/AddKill/GetUpdateTotals',
+                                        type: "POST",
+                                        data: { 'Filter': addKillFilter, 'AddRemove': typeId, 'DesireCount': oldCountToRemove, 'IsDelete': true },
+                                        traditional: true,
+                                        cache: false,
+                                        success: function (data) {
+                                            var recordsToAddRemove = data.AddRemoveRecords;
+                                            var copiesToAddRemove = data.AddRemoveCopies;
+                                            var containerType = data.ContainerType;
+                                            UpdateTotals(recordsToAddRemove, copiesToAddRemove, containerType)
+                                        },
+                                        error: function (response) {
+                                            console.log(response);
+                                        }
+                                    });
+                                }
+                            }
+                            containerlist = finalFilters;
+                            containerlist.push(container);
+                            sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+                            //$("#menuApplyFilters").data("FilterName", '');
+                            document.getElementById("EditRowID").value = '';
+                            $("#menuApplyFilters .k-link").text('Selected');
+                        }
+                        else {
+                            if (sessionStorage.getItem("addKillFilter") === null) {
+                                containerlist.push(container);
+                                sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+                            }
+                            else {
+                                containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+                                containerlist.push(container);
+                                sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+                            }
+                        }
+
+                        var recordsToAddRemove = returnData.AddRemoveRecords;
+                        var copiesToAddRemove = returnData.AddRemoveCopies;
+                        var containerType = container.Type;
+
+                        var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+                        $.ajax({
+                            url: '/UAS.Web/AddKill/CombineIntoGrid',
+                            type: "POST",
+                            data: { 'AddKillList': addKillList },
+                            traditional: true,
+                            cache: false,
+                            success: function (data) {
+                                $("#AddKillGrid").html(data);
+                                UpdateTotals(recordsToAddRemove, copiesToAddRemove, containerType);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    } else {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: "No records to display.",
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    }
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        } else {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                text: "Please select the Add or Remove option before proceeding.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+    }
+
+    function UpdateTotals(recordsToAddRemove, copiesToAddRemove, containerType) {
+        var valueForLabelCurrentFreeRecords = 0;
+        var valueForLabelCurrentFreeCopies = 0;
+        var valueForLabelNewFreeRecords = 0;
+        var valueForLabelNewFreeCopies = 0;
+        var valueForLabelCurrentPaidRecords = 0;
+        var valueForLabelCurrentPaidCopies = 0;
+        var valueForLabelNewPaidRecords = 0;
+        var valueForLabelNewPaidCopies = 0;
+
+        valueForLabelCurrentFreeRecords = $("#lblCurrentFreeRecords")[0].textContent;
+        valueForLabelCurrentFreeCopies = $("#lblCurrentFreeCopies")[0].textContent;
+        valueForLabelNewFreeRecords = $("#lblNewFreeRecords")[0].textContent;
+        valueForLabelNewFreeCopies = $("#lblNewFreeCopies")[0].textContent;
+        valueForLabelCurrentPaidRecords = $("#lblCurrentPaidRecords")[0].textContent;
+        valueForLabelCurrentPaidCopies = $("#lblCurrentPaidCopies")[0].textContent;
+        valueForLabelNewPaidRecords = $("#lblNewPaidRecords")[0].textContent;
+        valueForLabelNewPaidCopies = $("#lblNewPaidCopies")[0].textContent;
+
+        if (containerType == "Add") {
+
+            var newValueForNewFreeRecords = Number(valueForLabelNewFreeRecords) + recordsToAddRemove;
+            var newValueForNewFreeCopies = Number(valueForLabelNewFreeCopies) + copiesToAddRemove;
+
+            $("#lblNewFreeRecords")[0].textContent = newValueForNewFreeRecords;
+            $("#lblNewFreeCopies")[0].textContent = newValueForNewFreeCopies;
+
+        } else if (containerType == "Remove") {
+
+            var newValueForNewFreeRecords = Number(valueForLabelNewFreeRecords) - recordsToAddRemove;
+            var newValueForNewFreeCopies = Number(valueForLabelNewFreeCopies) - copiesToAddRemove;
+
+            $("#lblNewFreeRecords")[0].textContent = newValueForNewFreeRecords;
+            $("#lblNewFreeCopies")[0].textContent = newValueForNewFreeCopies;
+
+        }
+
+        var totaldesired = Number($("#lblNewFreeRecords")[0].textContent) - Number($("#lblCurrentFreeRecords")[0].textContent);
+        $("#lblTotalDesired")[0].textContent = totaldesired;
+    }
+
+
+
+    function ShowFilter(id, filter) {
+        debugger;
+        var html = "";
+        var tr = "";
+        var divName = "filterDisplay_" + id.replace("spFilterCriteria_", "");
+        var trName = "rowDisplay_" + id.replace("spFilterCriteria_", "");
+        var icon = "row_" + id.replace("spFilterCriteria_", "");
+        var div = document.getElementById(divName);
+
+        if ($('#' + divName).is(':empty')) {
+            //document.getElementById(icon).className = "k-icon k-i-arrow-chevron-down";
+            $("#" + id).html('Hide Filter<span class="k-icon k-i-arrow-chevron-down"></span>')
+
+            document.getElementById(trName).style.display = "table-row";
+            $("#" + divName).kendoGrid({
+                dataSource: {
+                    data: getRowGridData(id),// { Name: '', Value: '', ElementID: '' },
+                    schema: {
+                        model: {
+                            fields: {
+                                Name: { type: "string" },
+                                Text: { type: "string" },
+                                ElementID: { type: "string" }
+                            }
+                        }
+                    }
+                },
+                scrollable: false,
+                sortable: false,
+                filterable: false,
+                pageable: false,
+                columns: [
+                    { field: "ElementID", hidden: true },
+                    { field: "Name", title: 'Field Name', width: "150px" },
+                    { field: "Value", title: 'Value(s)', width: "800px" }
+                ]
+            });
+        } else {
+            document.getElementById(trName).style.display = "none";
+            $("#" + id).html('Show Filter<span class="k-icon k-i-arrow-chevron-right"></span>')
+            //document.getElementById(icon).className = "k-icon k-i-arrow-chevron-right";
+            document.getElementById(divName).innerHTML = "";
+            document.getElementById(divName).className = "";
+        }
+    }
+
+    function getRowGridData(id) {
+        var filter = $("#" + id).data("filterdetails");
+        var gridData = [];
+        var serachcondition = "";
+        $.each(filter.Fields, function (i, obj) {
+            if (obj.SearchCondition) {
+                serachcondition = obj.SearchCondition + " - ";
+            } else {
+                serachcondition = ""
+            }
+            if (obj.Name == 'Adhoc') {
+                gridData.push({ Name: obj.Name, Value: obj.Text + " - " + serachcondition + obj.Values, ElementID: obj.ElementID })
+
+            } else if (obj.Name == 'Product') {
+                gridData.push({ Name: obj.Name, Value: obj.Text, ElementID: '' })
+            }
+            else {
+                gridData.push({ Name: obj.Name, Value: serachcondition + obj.Text, ElementID: obj.ElementID })
+            }
+
+        });
+        return gridData;
+    }
+
+    function EditFilter(e) {
+        debugger;
+        resetFilter(false);
+        var id = "spFilterCriteria_" + e;//(e.target.id).replace("edit_", "");
+        var data = $("#" + id).data("filterdetails");
+        $("#menuApplyFilters .k-link").text('Updated');
+        //$("#menuApplyFilters").data("FilterName", data.FilterName);
+        document.getElementById("EditRowID").value = data.FilterName;
+
+        var type = "spType_" + e;//(e.target.id).replace("edit_", "");
+        var rowType = $("#" + type)[0].textContent;
+        if (rowType == "Add") {
+            $("#optionAddKill_Add").prop("checked", true);
+        } else if (rowType == "Remove") {
+            $("#optionAddKill_Remove").prop("checked", true);
+        }
+
+        LoadFilterDetails(data, false);
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Information',
+            text: "Edit Row Filter(s) Loaded.",
+            autoClose: false,
+            IsOpen: false
+        });
+    }
+
+    function ConfirmAddKillDelete(ee) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to delete these Adds/Removes?",
+            autoClose: false,
+            action: DeleteFilter,
+            data: { e: ee },
+            IsOpen: false
+        });
+    }
+
+    function DeleteFilter(e) {
+        var id = null;
+        id = e.e.replace("addkill_", "");
+
+        if (id != null) {
+            var finallist = [];
+            var containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+            var items = containerlist.length;
+
+            var key = -1;
+            for (var i = 0; i < containerlist.length; i++) {
+                if (containerlist[i].ContainerId == id) {
+                    key = i;
+                } else {
+                    finallist.push(containerlist[i]);
+                }
+            }
+            if (key != null) {
+                var typeId = $("#spType_addkill_" + id)[0].textContent;
+                var newDesiredCount = $("#txtDesiredRecords_addkill_" + id)[0].textContent;
+
+                var addKillFilter = JSON.stringify({ 'Filter': containerlist[key] });
+                $.ajax({
+                    url: '/UAS.Web/AddKill/GetUpdateTotals',
+                    type: "POST",
+                    data: { 'Filter': addKillFilter, 'AddRemove': typeId, 'DesireCount': newDesiredCount, 'IsDelete': true },
+                    traditional: true,
+                    cache: false,
+                    success: function (data) {
+                        var recordsToAddRemove = data.AddRemoveRecords;
+                        var copiesToAddRemove = data.AddRemoveCopies;
+                        var containerType = data.ContainerType;
+                        UpdateTotals(recordsToAddRemove, copiesToAddRemove, containerType)
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+
+                delete containerlist[key];
+
+                if (items == 1) {
+                    sessionStorage.removeItem("addKillFilter");
+                } else {
+                    sessionStorage.setItem("addKillFilter", JSON.stringify(finallist));
+                }
+
+                $('table#AddKillGridTable tr#row_addkill_' + id).remove();
+                $('table#AddKillGridTable tr#rowDisplay_addkill_' + id).remove();
+            }
+        }
+    }
+
+    function CheckBoxChange(obj) {
+        var objectId = obj.id.replace("chkNotUpdated_addkill_", "");
+        var isChecked = obj.checked;
+        var showUpdateButton = false;
+
+        if (sessionStorage.getItem("addKillFilter") != null) {
+            var finalFilters = [];
+            containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+            for (var i = 0; i < containerlist.length; i++) {
+                if (containerlist[i].ContainerId == objectId) {
+                    containerlist[i].Update = isChecked;
+                    if (containerlist[i].Update)
+                        showUpdateButton = true;
+
+                    finalFilters.push(containerlist[i]);
+                } else {
+                    if (containerlist[i].Update)
+                        showUpdateButton = true;
+
+                    finalFilters.push(containerlist[i]);
+                }
+            }
+            containerlist = finalFilters;
+            sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+
+            if (showUpdateButton) {
+                var x = document.getElementById('btnUpdate');
+                x.style.display = 'block';
+            } else {
+                var x = document.getElementById('btnUpdate');
+                x.style.display = 'none';
+            }
+        }
+    }
+
+    function PopUpDesireCountChange(id) {
+        id = id.replace("addkill_", "");
+        var window = $("#PopUpDesiredCountWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.content("Loading...");
+        var currentCount = $('#txtDesiredRecords_addkill_' + id)[0].textContent;
+        $.ajax({
+            url: '/UAS.Web/AddKill/DesiredCountPopup',
+            type: "POST",
+            data: { 'ContainerID': id, 'CurrentCount': currentCount },
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                kendoWindow.content(data);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    function DesireCountPopupOk(objectid) {
+        debugger;
+        //var oldCount = ??;
+        var newCount = $('#txtDesiredRecords')[0].value;
+        var obj = { id: objectid, value: newCount }
+        //UpdateDesiredCount(obj);
+        $('#txtDesiredRecords_addkill_' + objectid)[0].textContent = newCount;
+        UpdateDesiredCount(obj);
+
+        var window = $("#PopUpDesiredCountWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    function DesireCountPopupCancel() {
+        var window = $("#PopUpDesiredCountWindow");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    function UpdateDesiredCount(obj) {
+        var objectId = obj.id;//.replace("txtDesiredRecords_addkill_", "");
+        var newDesiredCount = obj.value;
+        var containerlist = [];
+        var hasError = false;
+
+        if (sessionStorage.getItem("addKillFilter") != null) {
+            var finalFilters = [];
+            containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+            for (var i = 0; i < containerlist.length; i++) {
+                if (containerlist[i].ContainerId == objectId) {
+                    var validMax = containerlist[i].ActualCount + 1;
+                    if (newDesiredCount > 0 && newDesiredCount < validMax) {
+                        var oldDesiredCount = containerlist[i].DesiredCount;
+                        containerlist[i].DesiredCount = newDesiredCount;
+
+                        var typeId = $("#spType_addkill_" + objectId)[0].textContent;
+
+                        if (Number(oldDesiredCount) != Number(newDesiredCount)) {
+                            var addKillFilter = JSON.stringify({ 'Filter': containerlist[i] });
+                            $.ajax({
+                                url: '/UAS.Web/AddKill/RecalculateTotals',
+                                type: "POST",
+                                data: { 'Filter': addKillFilter, 'AddRemove': typeId, 'NewDesireCount': newDesiredCount, 'OldDesireCount': oldDesiredCount },
+                                traditional: true,
+                                cache: false,
+                                success: function (data) {
+                                    var recordsToAddRemove = data.AddRemoveRecords;
+                                    var copiesToAddRemove = data.AddRemoveCopies;
+                                    var containerType = data.ContainerType;
+                                    UpdateTotals(recordsToAddRemove, copiesToAddRemove, containerType)
+                                },
+                                error: function (response) {
+                                    console.log(response);
+                                }
+                            });
+                        }
+
+                    } else {
+                        containerlist[i].DesiredCount = containerlist[i].DesiredCount;
+                        hasError = true;
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: "Invalid value. Value reset to previous value.",
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    }
+                    finalFilters.push(containerlist[i]);
+                } else {
+                    finalFilters.push(containerlist[i]);
+                }
+            }
+            containerlist = finalFilters;
+            sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+
+            if (hasError) {
+                var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+                $.ajax({
+                    url: '/UAS.Web/AddKill/CombineIntoGrid',
+                    type: "POST",
+                    data: { 'AddKillList': addKillList },
+                    traditional: true,
+                    cache: false,
+                    success: function (data) {
+                        $("#AddKillGrid").html(data);
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            }
+        }
+    }
+
+    function ConfirmAddKillUpdate() {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to apply these Adds/Removes?",
+            autoClose: false,
+            action: Update,
+            IsOpen: false
+        });
+    }
+
+    function Update() {
+        var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+        $.ajax({
+            url: '/UAS.Web/AddKill/UpdateAddKillSelection',
+            type: "POST",
+            data: { 'AddKillList': addKillList },
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                $("#AddKillGrid").html(data);
+
+                var ProductID = $("#SelectedProductID").val()
+                $.ajax({
+                    url: '/UAS.Web/AddKill/NewTotalsAfterUpdate',
+                    type: "GET",
+                    data: { 'ProductID': ProductID },
+                    traditional: true,
+                    cache: false,
+                    success: function (returnData) {
+                        $("#lblCurrentFreeRecords")[0].textContent = returnData.FreeRecords;
+                        $("#lblCurrentFreeCopies")[0].textContent = returnData.FreeCopies;
+                        $("#lblCurrentPaidRecords")[0].textContent = returnData.PaidRecords;
+                        $("#lblCurrentPaidCopies")[0].textContent = returnData.PaidCopies;
+
+                        debugger;
+                        var containerlist = [];
+                        var finalFilters = [];
+                        containerlist = $.parseJSON(sessionStorage.getItem("addKillFilter"));
+                        for (var i = 0; i < containerlist.length; i++) {
+                            if (containerlist[i].Update == true) {
+                                continue;
+                            } else {
+                                finalFilters.push(containerlist[i]);
+                            }
+                        }
+
+                        containerlist = finalFilters;
+                        sessionStorage.setItem("addKillFilter", JSON.stringify(containerlist));
+                        document.getElementById("EditRowID").value = '';
+                        $("#menuApplyFilters .k-link").text('Selected');
+
+                        var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+                        $.ajax({
+                            url: '/UAS.Web/AddKill/CombineIntoGrid',
+                            type: "POST",
+                            data: { 'AddKillList': addKillList },
+                            traditional: true,
+                            cache: false,
+                            success: function (data) {
+                                $("#AddKillGrid").html(data);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    function ProcessPreviewData() {
+        var akf = sessionStorage.getItem("addKillFilter");
+        if (akf != null) {
+            var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+            $.ajax({
+                url: '/UAS.Web/AddKill/SetupPreviewData',
+                type: "POST",
+                data: { 'AddKillList': addKillList },
+                traditional: true,
+                cache: false,
+                success: function (data) {
+                    if (data.Error) {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                            text: data.retMessage,
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    } else {
+                        showMessage({
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Information',
+                            text: data.retMessage,
+                            autoClose: false,
+                            IsOpen: false
+                        });
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        } else {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                text: "No Add(s) or Remove(s) were detected to preview.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+    }
+
+
+
+
+
+
+
+    function ColumnSelectionConfirmation() {
+        var akf = sessionStorage.getItem("addKillFilter");
+        if (akf != null) {
+            //OpenColumnSelectionPopup();
+            OpenDownLoadDetails();
+        } else {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                text: "No Add(s) or Remove(s) were detected to download details for. Please apply before downloading.",
+                autoClose: false,
+                IsOpen: false
+            });
+        }
+    }
+
+    //function OpenDownLoadDetails() {
+    //    var filter = getFilter();
+    //    var FrameworkUAD = {
+    //        BusinessLogic: {
+    //            Enums: {
+    //                ViewType: {
+    //                    None: 0,
+    //                    ConsensusView: 1,
+    //                    ProductView: 2,
+    //                    CrossProductView: 3,
+    //                    RecencyView: 4,
+    //                    RecordDetails: 5,
+    //                    AMSView: 6
+    //                }
+    //            }
+    //        }
+    //    }
+    //    var downloadmodel = {
+    //        ViewType: FrameworkUAD.BusinessLogic.Enums.ViewType.ProductView,
+    //        BrandID: filter.BrandID,
+    //        PubIDs: [filter.PubID],
+    //        IsCirc: true,
+    //        IssueID: $("#kddlIssues").val(),
+    //        CustomerClientGroupID: $("#SelectedClientGroupID").val(),
+    //        PermissionText: "",
+    //        CodeSheetIDText: "",
+    //        SelectedFilterNos: "",
+    //        SuppressedFilterNos: "",
+    //        SelectedFilterOperation: "Single",
+    //        SuppressedFilterOperation: "",
+    //        filtermvc: filter
+    //    }
+    //    ShowDownloadDetailsPopUp(downloadmodel)
+    //}
+    function OpenDownLoadDetails() {
+        debugger;
+        var filter = getFilter();
+        var flist = [];
+        flist.push(filter); //Create all filter list
+        var addKillList = JSON.stringify({ 'AddKillList': $.parseJSON(sessionStorage.getItem("addKillFilter")) });
+        $.ajax({
+            url: '/UAS.Web/AddKill/GetSubIdsForDownload',
+            type: "POST",
+            data: { 'AddKillList': addKillList },
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                if (data.Complete) {
+                    var downloadmodel = {
+                        PubID: filter.PubID, //Current Product ID
+                        IssueID: 0,//$("#kddlIssues").val(), //Current Issue ID
+                        CustomerClientGroupID: $("#SelectedClientGroupID").val(), //Client GroupID is required only for Report
+                        DownloadFor: "AddRemove",//Values:  IssueSplit, AddRemove, RecordUpdate
+                        FilterList: flist
+                    }
+                    GetDownloadDetailsPopUp(downloadmodel) //Get Download Details Popup in _Filter.chtml
+                } else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: 'An error occurred attempting to get subscription data for download.',
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });        
+    }
+
+    function OpenColumnSelectionPopup() {
+        var window = $("#AddKillDownLoadExportRecords");
+        var kendoWindow = window.data('kendoWindow');
+        $("#dvAddKillDownLoadExportRecords").html('');
+        $.ajax({
+            url: '/Uas.Web/AddKill/ExportColumnLists?includeSplitsColumns=false&pubID=' + $("#SelectedProductID").val(),
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#dvAddKillDownLoadExportRecords").html(response);
+                kendoWindow.center().open();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+    }
+
+    function ExportWithDefaultColumnSelection(data) {
+        data = [
+           { DisplayName: "Pubcode", DownloadName: "p.[Pubcode]", Type: "Default" },
+           { DisplayName: "SequenceID", DownloadName: "ps.[SequenceID]", Type: "Default" },
+           { DisplayName: "PubTransactionID", DownloadName: "ps.[PubTransactionID]", Type: "Default" },
+           { DisplayName: "TempACSCode", DownloadName: " '' as [TempACSCode] ", Type: "Default" },
+           { DisplayName: "tempkeyline", DownloadName: " '' as [tempkeyline]", Type: "Default" },
+           { DisplayName: "tempmailerid", DownloadName: " '' as [tempmailerid]", Type: "Default" },
+           { DisplayName: "IMBSeq", DownloadName: "ps.[IMBSeq]", Type: "Default" },
+           { DisplayName: "Copies", DownloadName: "ps.[Copies]", Type: "Default" },
+           { DisplayName: "FirstName", DownloadName: "ps.[FirstName]", Type: "Default" },
+           { DisplayName: "LastName", DownloadName: "ps.[LastName]", Type: "Default" },
+           { DisplayName: "Title", DownloadName: "ps.[Title]", Type: "Default" },
+           { DisplayName: "Company", DownloadName: "ps.[Company]", Type: "Default" },
+           { DisplayName: "Address1", DownloadName: "ps.[Address1]", Type: "Default" },
+           { DisplayName: "Address2", DownloadName: "ps.[Address2]", Type: "Default" },
+           { DisplayName: "Address3", DownloadName: "ps.[Address3]", Type: "Default" },
+           { DisplayName: "Address1", DownloadName: "ps.[Address1]", Type: "Default" },
+           { DisplayName: "RegionCode", DownloadName: "ps.[RegionCode]", Type: "Default" },
+           { DisplayName: "ZipCode", DownloadName: "ps.[ZipCode]", Type: "Default" },
+           { DisplayName: "Plus4", DownloadName: "ps.[Plus4]", Type: "Default" },
+           { DisplayName: "Country", DownloadName: "ps.[Country]", Type: "Default" },
+           { DisplayName: "reqflag", DownloadName: "ps.[reqflag]", Type: "Default" },
+           { DisplayName: "ExpireIssueDate", DownloadName: "sp.[ExpireIssueDate]", Type: "Default" },
+           { DisplayName: "Qualificationdate", DownloadName: "ps.[Qualificationdate]", Type: "Default" },
+           { DisplayName: "Exp_Qdate", DownloadName: "ps.[Exp_Qdate]", Type: "Default" },
+           { DisplayName: "tempkeycode", DownloadName: " '' as [tempkeycode]", Type: "Default" },
+           { DisplayName: "QSource", DownloadName: "ps.[QSource]", Type: "Default" },
+           { DisplayName: "tempsplit", DownloadName: " '' as [tempsplit]", Type: "Default" },
+           { DisplayName: "tempsplitdesc", DownloadName: " '' as [tempsplitdesc] ", Type: "Default" },
+           { DisplayName: "Phone", DownloadName: "ps.[Phone]", Type: "Default" },
+           { DisplayName: "Fax", DownloadName: "ps.[Fax]", Type: "Default" },
+           { DisplayName: "Email", DownloadName: "ps.[Email]", Type: "Default" }
+        ];
+        ColumnTransformationConfirmation(data);
+    }
+    function ColumnTransformationConfirmation(data) {
+        //CloseWindow('AddKillDownLoadExportRecords');
+        var window = $("#AddKillDownLoadExportRecords");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Would you like to combine columns to create new fields for export file?",
+            autoClose: false,
+            IsOpen: false,
+            action: OpenColumnTransformationPopup,
+            cancelaction: ExportWithDefaultTransformation,
+            data: data
+        });
+    }
+    function OpenColumnTransformationPopup(data) {
+        $("#dvNewColumn").html('');
+        var splitsFieldlistbox = $("#AvailableDefaultFieldOptions").data("kendoListBox");
+        //CloseWindow('AddKillDownLoadExportRecords');
+        var window = $("#AddKillDownLoadExportRecords");
+        var kendoWindow = window.data('kendoWindow');
+        kendoWindow.close();
+        if (data.length > 0) {
+            var dataSource = new kendo.data.DataSource({
+                data: data
+            });
+            splitsFieldlistbox.setDataSource(dataSource);
+            var window = $("#AddKillCreateNewColumns");
+            var kendoWindow = window.data('kendoWindow');
+            kendoWindow.center().open();
+        }
+    }
+    function ExportWithDefaultTransformation(data) {
+        console.log(data);
+        var model = {
+            IsDefault: false,
+            DownloadFields: data,
+            NewColumnsFields: []
+        };
+        //ExportSplits(model);
+
+    }
+
+
+</script>

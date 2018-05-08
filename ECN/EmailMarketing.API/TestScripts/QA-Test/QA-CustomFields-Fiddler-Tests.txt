@@ -1,0 +1,86 @@
+POST http://test.api.ecn5.com/api/customfield HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Content-type: application/json
+Host: test.api.ecn5.com
+Content-length: 233
+
+{  
+                     "GroupID": 13328,
+                     "ShortName":"POST_TEST_MVC_WebAPI_CustomField",
+                     "LongName":"This is my custom field description",
+                     "IsPublic":"Y"
+}
+
+
+
+
+HTTP/1.1 201 Created
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Location: http://test.api.ecn5.com/api/customfield/768556
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 18:57:59 GMT
+Content-Length: 155
+
+{"GroupDataFieldsID":768556,"GroupID":13328,"ShortName":"POST_TEST_MVC_WebAPI_CustomField","LongName":"This is my custom field description","IsPublic":"Y"}
+
+------------------------------------------------------------------
+
+GET http://test.api.ecn5.com/api/customfield/768556 HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Host: test.api.ecn5.com
+
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 18:59:04 GMT
+Content-Length: 155
+
+{"GroupDataFieldsID":768556,"GroupID":13328,"ShortName":"POST_TEST_MVC_WebAPI_CustomField","LongName":"This is my custom field description","IsPublic":"Y"}
+
+------------------------------------------------------------------
+
+GET http://test.api.ecn5.com/api/search/customfield HTTP/1.1
+Accept: application/json
+APIAccessKey: 8CAB09B9-BEC9-453F-A689-E85D5C9E4898
+X-Customer-ID: 1
+Content-type: application/json
+Content-length: 148
+Host: test.api.ecn5.com
+
+[
+         {  
+                 "name": "GroupID", 
+                 "comparator": "=", 
+                 "valueSet": [ 13328 ] 
+          }
+]
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Sat, 20 Jun 2015 19:01:02 GMT
+Content-Length: 232
+
+[{"ApiObject":{"GroupDataFieldsID":768556,"GroupID":13328,"ShortName":"POST_TEST_MVC_WebAPI_CustomField","LongName":"This is my custom field description","IsPublic":"Y"},"Location":"http://test.api.ecn5.com/api/customfield/768556"}]
+
+------------------------------------------------------------------
+

@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="ControlCenter.Controls.ResponseGroupCopy"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:Chromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             xmlns:Navigation="clr-namespace:Telerik.Windows.Controls.Navigation;assembly=Telerik.Windows.Controls.Navigation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="738" d:DesignWidth="1024">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Background="{StaticResource KMLightBlueGradient}" VerticalAlignment="Center">
+                    <Label Content="Response Group Copy" Foreground="White" FontWeight="Bold"></Label>
+                </StackPanel>
+
+                <Label Content="From" Grid.Row="1" VerticalAlignment="Center" FontWeight="Bold"></Label>
+                <Label Content="To" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"></Label>
+
+                <Label Content="Product:" Grid.Row="2" VerticalAlignment="Center"></Label>
+                <telerik:RadComboBox Name="cbProduct" Grid.Row="2" Grid.Column="1" Margin="3" SelectionChanged="cbProduct_SelectionChanged"></telerik:RadComboBox>
+
+                <Label Content="Response Group:" Grid.Row="3" VerticalAlignment="Center"></Label>
+                <telerik:RadComboBox Name="cbResponseGroup" Grid.Row="3" Grid.Column="1" Margin="3"></telerik:RadComboBox>
+
+                <Label Content="Product:" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0"></Label>
+                <ListBox Name="lbxAvailable" Grid.Row="2" Grid.RowSpan="5" Grid.Column="3" Margin="3" SelectionMode="Multiple" Width="425"></ListBox>
+
+                <telerik:RadButton Name="btnCopy" Content="Copy" Grid.Row="7" Grid.Column="3" Margin="0,2,422,2" Width="40" HorizontalAlignment="Right" Click="btnCopy_Click"></telerik:RadButton>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

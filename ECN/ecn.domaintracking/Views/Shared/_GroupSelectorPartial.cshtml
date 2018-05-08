@@ -1,0 +1,353 @@
+﻿@using ecn.domaintracking.HtmlHelpers
+@model ecn.domaintracking.Models.Shared.GroupSelectorModel
+
+@{
+
+    Layout = string.Empty;
+    List<KMPlatform.Entity.Client> customerList = new KMPlatform.BusinessLogic.Client().SelectbyUserIDclientgroupID(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.UserID, ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentBaseChannel.PlatformClientGroupID);
+    SelectList slCustomer = new SelectList(customerList, ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().ClientID);
+    
+
+}
+
+<script>
+    $(function() {
+        $("#NewGroup_Name").attr("maxlength","50");
+        $("#NewDescription").attr("maxlength","500");
+    });
+</script>
+
+<style type="text/css">
+    .labelWidth {width: 82px}
+    .lineSpace {padding-top: 8px}
+</style>
+
+<script type="text/javascript">
+    $(function() {
+        openGroupTypeDiv();
+
+        //$("#FolderId").change(function() {
+        //    LoadGroups();
+        //});
+
+        $("#ExportBtn").click(function() {
+            showLoadingWindow();
+            $("#ErrorImage").show();
+            $("#phError").hide();
+            var filterParams = filterGridParams();
+            if ($("input[value='cbxFile']:checked").length) {
+                window.location = '@Url.Content("~/Main/ExportUserActivity")'
+                    + "?num=-1&DomainTrackId=" + @Model.DomainTrackId
+                    + "&FilterEmail=" + filterParams.EmailAddress
+                    + "&StartDate=" + filterParams.StartDate
+                    + "&EndDate=" + filterParams.EndDate
+                    + "&ExportType=" + $("#NewType").data('kendoDropDownList').value()
+                    + "&pathname=" + window.location.pathname
+                    + "&toDate=" + filterParams.EndDate
+                    + "&fromDate=" + filterParams.StartDate
+                    + "&DomainTrackId=" + @Model.DomainTrackId
+                    + "&pageUrl=" + '@Model.pageUrl'
+                    + "&TypeFilter=" + filterParams.TypeFilter;
+
+                showMessage({
+                    type: '@KMEnums.MessageType.Success',
+                    autoClose: true
+                });
+                closeLoadingWindow();
+            } else {
+                HandleGrouping(filterParams);
+            }
+
+        });
+
+
+
+
+    });
+
+    @*function LoadGroups() {
+        var request = $.ajax({
+            url: '@Url.Content("~/Main/GetGroupListByFolderId")',
+            type: "POST",
+            traditional: true,
+            cache: false,
+            data: {
+                folderId: $("#FolderId").val()
+            }
+        });
+        request.done(function(message) {
+            $("#divGroups").html(message);
+        });
+    }*@
+
+    function HandleGrouping(params) {
+        if ($("input[value='cbxNewGroup']:checked").length) {
+            var newGroupName = $("#NewGroup_Name").val();
+            if(newGroupName.length > 0)
+            {
+                var request = $.ajax({
+                    url: '@Url.Content("~/Main/CreateGroup")',
+                    type: "POST",
+                    traditional: true,
+                    cache: false,
+                    async:false,
+                    data: {
+                        DomainTrackId: @Model.DomainTrackId,
+                        folderId: $("#ddlFolder").data('kendoDropDownList').value(),
+                        GroupName: $("#NewGroup_Name").val(),
+                        GroupDescription: $("#NewDescription").val(),
+                        FilterEmail: params.EmailAddress,
+                        toDate: params.EndDate,
+                        fromDate: params.StartDate,
+                        pathname: window.location.pathname,
+                        PageUrl: '@Model.pageUrl'
+                    }
+                });
+                request.done(function(message) {
+                    if (message.indexOf("has been created") > -1 || message.indexOf("was successful") > -1) {
+                        $("#ErrorImage").hide();
+                        showMessage({
+                            type: '@KMEnums.MessageType.Success',
+                            autoClose: true
+                        });
+                        clearSelections();
+                    }
+                    else{
+                        showMessage({
+                            type: '@KMEnums.MessageType.Error',
+                            autoClose: false,
+                            text: message
+                        });
+                    }
+
+                    //$("#divErrorTarget").html(message);
+                    //$("#phError").show();
+                    closeLoadingWindow();
+                });
+            }
+            else{
+                closeLoadingWindow();
+                showMessage({type: '@KMEnums.MessageType.Error',
+                    autoClose: false,
+                    text: 'Please enter a name for the group'
+                });
+            }
+        } else {
+            var selectedGroupID = $("#hfSelectedGroupID").val();
+            if(selectedGroupID != '' && parseInt(selectedGroupID) > 0)
+            {
+                var request = $.ajax({
+                    url: '@Url.Content("~/Main/AddToGroup")',
+                    type: "POST",
+                    traditional: true,
+                    cache: false,
+                    async:false,
+                    data: {
+                        DomainTrackId: @Model.DomainTrackId,
+                        folderId: $("#ddlFolder").val(),
+                        GroupId: selectedGroupID,
+                        GroupName: $("#NewGroup_Name").val(),
+                        GroupDescription: $("#NewDescription").val(),
+                        FilterEmail: params.EmailAddress,
+                        toDate: params.EndDate,
+                        fromDate: params.StartDate,
+                        pathname: window.location.pathname,
+                        PageUrl: '@Model.pageUrl'
+                    }
+                });
+                request.done(function(message) {
+                    if (message.indexOf("has been created") > -1 || message.indexOf("was successful") > -1) {
+                        $("#ErrorImage").hide();
+                        showMessage({
+                            type: '@KMEnums.MessageType.Success',
+                            autoClose: true
+                        });
+                        clearSelections();
+
+                    }
+                    else{
+                        showMessage({
+                            type: '@KMEnums.MessageType.Error',
+                            autoClose: false,
+                            text: message
+                        });
+                    }
+
+                    //$("#divErrorTarget").html(message);
+                    //$("#phError").show();
+                    closeLoadingWindow();
+                });
+            }
+            else{
+                closeLoadingWindow();
+                showMessage({type: '@KMEnums.MessageType.Error',
+                    autoClose: false,
+                    text: 'Please select a Group'
+                });
+            }
+        }
+
+    }
+
+    function clearSelections()
+    {
+        $("#NewGroup_Name").val("");
+        $("#NewDescription").val("");
+        $("#selectedGroupName").html("");
+        $("#hfSelectedGroupID").val("");
+        $('#ddlFolder').data('kendoDropDownList').value('0');
+    }
+
+    var openGroupTypeDiv = function() {
+        switch ($("input[name=radio1]:checked").val()) {
+        case "cbxNewGroup":
+            $("#divByFile").hide();
+            $("#divNewGroup").show();
+            $("#divExistingGroup").hide();
+            $("#ExportBtn").text("Export");
+            $("#divFolder").show();
+            break;
+        case "cbxExistingGroup":
+            $("#divByFile").hide();
+            $("#divNewGroup").hide();
+            $("#divExistingGroup").show();
+            $("#divFolder").show();
+            $("#ExportBtn").text("Export");
+            break;
+        default:
+            $("#divByFile").show();
+            $("#divNewGroup").hide();
+            $("#divExistingGroup").hide();
+            $("#divFolder").hide();
+            $("#ExportBtn").text("Download");
+        }
+    };
+
+    function btnSelectGroup_Click()
+    {
+        groupExplorer(groupSelected);
+    }
+
+    function groupSelected(e)
+    {
+        var group = e.group;
+        $("#selectedGroupName").text(group.GroupName);
+        $("#hfSelectedGroupID").val(group.GroupID);
+    }
+
+    function ddlCustomers_OnChange(e)
+    {
+        var clientID = this.value();
+        var ddlFolder = $("#ddlFolder").data('kendoDropDownList');
+        ddlFolder.dataSource.read({customerID:clientID});
+
+
+    }
+
+    function ddlCustomers_DataBound()
+    {
+        var currentCustomerID = '@ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString()';
+        this.value(currentCustomerID);
+
+        @*var dataSource = new kendo.data.DataSource({
+            transport:{
+                read:{
+                    url: '@Url.Action("GetAllFolders", "Web")',
+                    data:{
+                        customerID: currentCustomerID
+                    }
+                }
+            },
+            schema:{
+                model:{CustomerID:"CustomerID",
+                    FolderID:"FolderID",
+                }
+            }
+        });*@
+        var folderDropDown = $("#ddlFolder").data('kendoDropDownList');
+        folderDropDown.dataSource.read({customerID:currentCustomerID});
+
+    }
+
+</script>
+
+
+@Html.HiddenFor(m=>m.toDate)
+@Html.HiddenFor(m=>m.fromDate)
+@Html.HiddenFor(m => m.pageUrl)
+@Html.Partial("_GroupExplorer")
+<div>
+    <br/>
+    <div style="text-align: left">
+        Export This View
+    </div>
+    <div class="lineSpace">
+        @Html.RadioButton("radio1", "cbxFile", new {id = "cbxFile", @checked = "checked", @onclick = "openGroupTypeDiv()"}) <label for="cbxFile" >File</label>
+        @Html.RadioButton("radio1", "cbxNewGroup", new {id = "cbxNewGroup", @onclick = "openGroupTypeDiv()"}) <label for="cbxNewGroup" id="lblNewGroup">New Group</label>
+        @Html.RadioButton("radio1", "cbxExistingGroup", new {id = "cbxExistingGroup", @onclick = "openGroupTypeDiv()"}) <label for="cbxExistingGroup" id="lblExistingGroup">Existing Group</label>
+        @Html.Button("Download", new { id = "ExportBtn", style = "padding-left: 4px", @class = "btn k-button"})
+    </div>
+    <div id="divByFile" style="display: none" class="lineSpace">
+
+        @Html.Kendo().DropDownList().Name("NewType").BindTo(new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "XML", Value = "XML", Selected = true },
+                    new SelectListItem {Text = "CSV", Value = "CSV" },
+                    new SelectListItem {Text = "XLSX", Value = "XLSX" }
+                    }).DataTextField("Text").DataValueField("Value").HtmlAttributes(new { @class = "lineSpace" })
+    </div>
+    <div id="divNewGroup" style="display: none; width: 280px" class="lineSpace">
+        <label class="labelWidth" style="padding-bottom: 12px">Name</label> @Html.TextBox("NewGroup_Name")<label id="Limit_G" style="display: none"></label>
+        <label class="labelWidth">Description</label> @Html.TextArea("NewDescription")<label id="Limit_D" style="display: none"></label>
+        <label class="labelWidth">Customer</label>
+        
+         @Html.Kendo().DropDownList().Name("ddlCustomers").Events(x => x.Change("ddlCustomers_OnChange").DataBound("ddlCustomers_DataBound")).DataTextField("CustomerName").DataValueField("CustomerID").DataSource(source => source.Read(read => { read.Action("GetCustomers", "Web"); })).HtmlAttributes(new { style="width:177px;"})
+
+
+        <label class="labelWidth">Folder</label> 
+        @Html.Kendo().DropDownList().Name("ddlFolder").DataTextField("FolderName").DataValueField("FolderID").DataSource(source => { source.Read(read => { read.Action("GetAllFolders", "Web"); }); }).AutoBind(false).HtmlAttributes(new { style = "width:177px;" })
+    </div>    
+    <div id="divExistingGroup" style="display: none" class="lineSpace">
+        <div>
+            <div style="float: left">
+                <label class="labelWidth">Group</label>
+            </div>
+            <div style="float: left; padding-left: 4px">
+                <div id="divGroups">
+                    <span id="selectedGroupName"></span>
+                    <input id="hfSelectedGroupID" type="hidden" />
+                    @Html.Kendo().Button().Name("btnSelectGroup").Content("Select Group").Events(x => x.Click("btnSelectGroup_Click"))
+                    
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+</div>
+
+<div id="phError" style="float:right; display: none">
+    <table cellspacing="0" cellpadding="0" width="674" align="center">
+        <tr>
+            <td id="errorTop"></td>
+        </tr>
+        <tr>
+            <td id="errorMiddle">
+                <table height="67" width="80%">
+                    <tr>
+                        <td valign="top" align="center" width="20%">
+                            <img id="ErrorImage" style="padding: 0 0 0 15px;" src="/ecn.images/images/errorEx.jpg">
+                        </td>
+                        <td valign="middle" align="left" width="80%" height="100%">
+                            <asp:Label ID="divErrorTarget" runat="Server"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td id="errorBottom"></td>
+        </tr>
+    </table>
+</div>
+<div style="clear:both"></div>
+<br/>

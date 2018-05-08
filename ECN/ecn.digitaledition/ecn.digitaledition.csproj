@@ -1,0 +1,808 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C9430F94-135A-4CD0-BE2C-62CC482F912C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.digitaledition</RootNamespace>
+    <AssemblyName>ecn.digitaledition</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.51116.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AntiXSSLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\AntiXSSLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\HtmlSanitizationLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFNet, Version=4.0.7.0, Culture=neutral, PublicKeyToken=36167be3f67ac39c">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\PDFNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SanitizerProviders, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\SanitizerProviders.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DESubscribe.aspx.cs">
+      <DependentUpon>DESubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DESubscribe.aspx.designer.cs">
+      <DependentUpon>DESubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="F2F.aspx.designer.cs">
+      <DependentUpon>F2F.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\QueryStringHelper.cs" />
+    <Compile Include="Helpers\HttpRequestAdapter.cs" />
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Magazine.aspx.designer.cs">
+      <DependentUpon>Magazine.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="F2F.aspx.cs">
+      <DependentUpon>F2F.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Magazine.aspx.cs">
+      <DependentUpon>Magazine.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="print.aspx.cs">
+      <DependentUpon>print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="print.aspx.designer.cs">
+      <DependentUpon>print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="classes\UserSession.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="error.aspx" />
+    <Content Include="error.html" />
+    <Content Include="F2F.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="index.aspx" />
+    <Content Include="Magazine.aspx" />
+    <Content Include="print.aspx" />
+    <Content Include="scripts\browser.js" />
+    <Content Include="scripts\ed.js" />
+    <None Include="scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="scripts\jquery-1.7.1.js" />
+    <Content Include="scripts\jquery-1.7.1.min.js" />
+    <Content Include="scripts\jsTree.js" />
+    <Content Include="scripts\transparentpixel.gif" />
+    <Content Include="scripts\utils.js" />
+    <Content Include="scripts\xmldom.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="resources\pdfnet.res" />
+    <Content Include="DESubscribe.aspx" />
+    <Content Include="resources\PDFNet.dll" />
+    <Content Include="Themes\ace\backIssuesRoll.gif" />
+    <Content Include="Themes\ace\backIssues_off.gif" />
+    <Content Include="Themes\ace\backIssues_off_v1.gif" />
+    <Content Include="Themes\ace\backIssues_on.gif" />
+    <Content Include="Themes\ace\backIssues_on_V1.gif" />
+    <Content Include="Themes\ace\blank.gif" />
+    <Content Include="Themes\ace\blankicon.gif" />
+    <Content Include="Themes\ace\branch.png" />
+    <Content Include="Themes\ace\btnfit.gif" />
+    <Content Include="Themes\ace\buttons2_05.gif" />
+    <Content Include="Themes\ace\buttons2_08.gif" />
+    <Content Include="Themes\ace\buttons2_10.gif" />
+    <Content Include="Themes\ace\buttons3_10.gif" />
+    <Content Include="Themes\ace\buttons3_10_v1.gif" />
+    <Content Include="Themes\ace\buttons_05.gif" />
+    <Content Include="Themes\ace\buttons_08.gif" />
+    <Content Include="Themes\ace\buttons_10.gif" />
+    <Content Include="Themes\ace\buttons_print_f2f.gif" />
+    <Content Include="Themes\ace\close.gif" />
+    <Content Include="Themes\ace\closed.png" />
+    <Content Include="Themes\ace\divBottom_14.gif" />
+    <Content Include="Themes\ace\divTop_06.gif" />
+    <Content Include="Themes\ace\dj-cover.png" />
+    <Content Include="Themes\ace\ecn_logo.jpg" />
+    <Content Include="Themes\ace\email.gif" />
+    <Content Include="Themes\ace\emailInfo.gif" />
+    <Content Include="Themes\ace\expand.gif" />
+    <Content Include="Themes\ace\expanded.png" />
+    <Content Include="Themes\ace\f2f-art_01.gif" />
+    <Content Include="Themes\ace\f2f-art_02.gif" />
+    <Content Include="Themes\ace\f2f-art_03.gif" />
+    <Content Include="Themes\ace\f2f-art_04.gif" />
+    <Content Include="Themes\ace\f2f-art_06.gif" />
+    <Content Include="Themes\ace\f2f-art_07.gif" />
+    <Content Include="Themes\ace\f2f-art_08.gif" />
+    <Content Include="Themes\ace\f2f-art_09.gif" />
+    <Content Include="Themes\ace\f2f-icon.gif" />
+    <Content Include="Themes\ace\first.gif" />
+    <Content Include="Themes\ace\firstInfo.gif" />
+    <Content Include="Themes\ace\fitPageCss.gif" />
+    <Content Include="Themes\ace\fitPageInfo.gif" />
+    <Content Include="Themes\ace\folder.png" />
+    <Content Include="Themes\ace\folder_opened.png" />
+    <Content Include="Themes\ace\go.gif" />
+    <Content Include="Themes\ace\gry_hd_bg_img.gif" />
+    <Content Include="Themes\ace\gry_hd_left.gif" />
+    <Content Include="Themes\ace\gry_hd_right.gif" />
+    <Content Include="Themes\ace\hLine.png" />
+    <Content Include="Themes\ace\hLine2.png" />
+    <Content Include="Themes\ace\icFirst.gif" />
+    <Content Include="Themes\ace\icFirst_o.gif" />
+    <Content Include="Themes\ace\icLast.gif" />
+    <Content Include="Themes\ace\icLast_o.gif" />
+    <Content Include="Themes\ace\icNext.gif" />
+    <Content Include="Themes\ace\icNext_o.gif" />
+    <Content Include="Themes\ace\icon_download.gif" />
+    <Content Include="Themes\ace\icPrevious.gif" />
+    <Content Include="Themes\ace\icPrevious_o.gif" />
+    <Content Include="Themes\ace\infoBtn.gif" />
+    <Content Include="Themes\ace\information_off.gif" />
+    <Content Include="Themes\ace\information_off.jpg" />
+    <Content Include="Themes\ace\information_off_v1.gif" />
+    <Content Include="Themes\ace\information_on.gif" />
+    <Content Include="Themes\ace\information_on_V1.gif" />
+    <Content Include="Themes\ace\infoRoll.gif" />
+    <Content Include="Themes\ace\info_15.gif" />
+    <Content Include="Themes\ace\jsTree.css" />
+    <Content Include="Themes\ace\km-logo-plate.gif" />
+    <Content Include="Themes\ace\KMLogo.gif" />
+    <Content Include="Themes\ace\last.gif" />
+    <Content Include="Themes\ace\lastInfo.gif" />
+    <Content Include="Themes\ace\last_closed.png" />
+    <Content Include="Themes\ace\last_expanded.png" />
+    <Content Include="Themes\ace\last_leaf.png" />
+    <Content Include="Themes\ace\leaf.png" />
+    <Content Include="Themes\ace\linksRoll.gif" />
+    <Content Include="Themes\ace\links_off.gif" />
+    <Content Include="Themes\ace\links_off_v1.gif" />
+    <Content Include="Themes\ace\links_on.gif" />
+    <Content Include="Themes\ace\links_on_V1.gif" />
+    <Content Include="Themes\ace\login.gif" />
+    <Content Include="Themes\ace\login2.gif" />
+    <Content Include="Themes\ace\logo.png" />
+    <Content Include="Themes\ace\minimize_13.gif" />
+    <Content Include="Themes\ace\minusA.gif" />
+    <Content Include="Themes\ace\nav1pg.gif" />
+    <Content Include="Themes\ace\nav2pg.gif" />
+    <Content Include="Themes\ace\Navigation.gif" />
+    <Content Include="Themes\ace\Navigation_sm.gif" />
+    <Content Include="Themes\ace\Navigation_sm5_GO.gif" />
+    <Content Include="Themes\ace\navTN.gif" />
+    <Content Include="Themes\ace\Nav_ace.gif" />
+    <Content Include="Themes\ace\newtabs_01.gif" />
+    <Content Include="Themes\ace\newtabs_03.gif" />
+    <Content Include="Themes\ace\newtabs_05.gif" />
+    <Content Include="Themes\ace\newtabs_07.gif" />
+    <Content Include="Themes\ace\new_1_03.jpg" />
+    <Content Include="Themes\ace\new_1_05.jpg" />
+    <Content Include="Themes\ace\new_1_07.jpg" />
+    <Content Include="Themes\ace\new_1_09.jpg" />
+    <Content Include="Themes\ace\new_1_10.jpg" />
+    <Content Include="Themes\ace\new_1_12.jpg" />
+    <Content Include="Themes\ace\next.gif" />
+    <Content Include="Themes\ace\nextInfo.gif" />
+    <Content Include="Themes\ace\onePageCss.gif" />
+    <Content Include="Themes\ace\onePageInfo.gif" />
+    <Content Include="Themes\ace\Page.png" />
+    <Content Include="Themes\ace\pagehelp.gif" />
+    <Content Include="Themes\ace\pagesRoll.gif" />
+    <Content Include="Themes\ace\pages_off.gif" />
+    <Content Include="Themes\ace\pages_off_v1.gif" />
+    <Content Include="Themes\ace\pages_on.gif" />
+    <Content Include="Themes\ace\pages_on_V1.gif" />
+    <Content Include="Themes\ace\Page_v1.png" />
+    <Content Include="Themes\ace\plusA.gif" />
+    <Content Include="Themes\ace\powered-by-AMA-blue.jpg" />
+    <Content Include="Themes\ace\powered-by-AMA.jpg" />
+    <Content Include="Themes\ace\powered-by-KM.gif" />
+    <Content Include="Themes\ace\powered-by-KM.png" />
+    <Content Include="Themes\ace\prevInfo.gif" />
+    <Content Include="Themes\ace\previous.gif" />
+    <Content Include="Themes\ace\print.gif" />
+    <Content Include="Themes\ace\print.jpg" />
+    <Content Include="Themes\ace\printInfo.gif" />
+    <Content Include="Themes\ace\prog-bar.gif" />
+    <Content Include="Themes\ace\publisher_header.jpg" />
+    <Content Include="Themes\ace\reset-button.gif" />
+    <Content Include="Themes\ace\search-go.gif" />
+    <Content Include="Themes\ace\searchRoll.gif" />
+    <Content Include="Themes\ace\search_off.gif" />
+    <Content Include="Themes\ace\search_off_v1.gif" />
+    <Content Include="Themes\ace\search_on.gif" />
+    <Content Include="Themes\ace\search_on_V1.gif" />
+    <Content Include="Themes\ace\SI_Logo.jpg" />
+    <Content Include="Themes\ace\spacer.gif" />
+    <Content Include="Themes\ace\stylesheet.css" />
+    <Content Include="Themes\ace\stylesheet_woCustScroll.css" />
+    <Content Include="Themes\ace\submit-button.gif" />
+    <Content Include="Themes\ace\tableOfContents_off.gif" />
+    <Content Include="Themes\ace\tableOfContents_off_v1.gif" />
+    <Content Include="Themes\ace\tableOfContents_on.gif" />
+    <Content Include="Themes\ace\tableOfContents_on_V1.gif" />
+    <Content Include="Themes\ace\tableofcRoll.gif" />
+    <Content Include="Themes\ace\tabs_09.jpg" />
+    <Content Include="Themes\ace\tabs_10.jpg" />
+    <Content Include="Themes\ace\tabs_11.jpg" />
+    <Content Include="Themes\ace\thumbInfo.gif" />
+    <Content Include="Themes\ace\thumbs.gif" />
+    <Content Include="Themes\ace\tilerLeft.gif" />
+    <Content Include="Themes\ace\tiler_184.gif" />
+    <Content Include="Themes\ace\tiler_184_blue.gif" />
+    <Content Include="Themes\ace\tiler_184_v1.gif" />
+    <Content Include="Themes\ace\transparentpixel.gif" />
+    <Content Include="Themes\ace\twoPageCss.gif" />
+    <Content Include="Themes\ace\twoPageInfo.gif" />
+    <Content Include="Themes\ace\winLeft.gif" />
+    <Content Include="Themes\ace\winmiddle.gif" />
+    <Content Include="Themes\ace\winright.gif" />
+    <Content Include="Themes\ace\zoom0.gif" />
+    <Content Include="Themes\ace\zoom1.gif" />
+    <Content Include="Themes\ace\zoom2.gif" />
+    <Content Include="Themes\ace\zoom3.gif" />
+    <Content Include="Themes\ace\zoom4.gif" />
+    <Content Include="Themes\ace\zoom5.gif" />
+    <Content Include="Themes\ace\zoom6.gif" />
+    <Content Include="Themes\ace\zoomA0.gif" />
+    <Content Include="Themes\ace\zoomA1.gif" />
+    <Content Include="Themes\ace\zoomA2.gif" />
+    <Content Include="Themes\ace\zoomA2gif.gif" />
+    <Content Include="Themes\ace\zoomA3.gif" />
+    <Content Include="Themes\ace\zoomA4.gif" />
+    <Content Include="Themes\ace\zoomA5.gif" />
+    <Content Include="Themes\ace\zoomA6.gif" />
+    <Content Include="Themes\ace\zoomInfo.gif" />
+    <Content Include="Themes\ace\zoomMinus.gif" />
+    <Content Include="Themes\ace\zoomPlus.gif" />
+    <Content Include="Themes\ace\zoom_03.gif" />
+    <Content Include="Themes\ace\zoom_05.gif" />
+    <Content Include="Themes\ace\zoom_07.gif" />
+    <Content Include="Themes\ace\zoom_in.gif" />
+    <Content Include="Themes\ace\zoom_out.gif" />
+    <Content Include="Themes\Blue\AMA-background.jpg" />
+    <Content Include="Themes\Blue\backIssuesRoll.gif" />
+    <Content Include="Themes\Blue\backIssues_off.gif" />
+    <Content Include="Themes\Blue\backIssues_off_v1.gif" />
+    <Content Include="Themes\Blue\backIssues_on.gif" />
+    <Content Include="Themes\Blue\backIssues_on_V1.gif" />
+    <Content Include="Themes\Blue\blank.gif" />
+    <Content Include="Themes\Blue\blankicon.gif" />
+    <Content Include="Themes\Blue\branch.png" />
+    <Content Include="Themes\Blue\btnfit.gif" />
+    <Content Include="Themes\Blue\buttons2_05.gif" />
+    <Content Include="Themes\Blue\buttons2_08.gif" />
+    <Content Include="Themes\Blue\buttons2_10.gif" />
+    <Content Include="Themes\Blue\buttons3_10.gif" />
+    <Content Include="Themes\Blue\buttons3_10_v1.gif" />
+    <Content Include="Themes\Blue\buttons_05.gif" />
+    <Content Include="Themes\Blue\buttons_08.gif" />
+    <Content Include="Themes\Blue\buttons_10.gif" />
+    <Content Include="Themes\Blue\buttons_print_f2f.gif" />
+    <Content Include="Themes\Blue\close.gif" />
+    <Content Include="Themes\Blue\closed.png" />
+    <Content Include="Themes\Blue\divBottom_14.gif" />
+    <Content Include="Themes\Blue\divTop_06.gif" />
+    <Content Include="Themes\Blue\dj-cover.png" />
+    <Content Include="Themes\Blue\ecn_logo.jpg" />
+    <Content Include="Themes\Blue\email.gif" />
+    <Content Include="Themes\Blue\emailInfo.gif" />
+    <Content Include="Themes\Blue\expand.gif" />
+    <Content Include="Themes\Blue\expanded.png" />
+    <Content Include="Themes\Blue\f2f-art_01.gif" />
+    <Content Include="Themes\Blue\f2f-art_02.gif" />
+    <Content Include="Themes\Blue\f2f-art_03.gif" />
+    <Content Include="Themes\Blue\f2f-art_04.gif" />
+    <Content Include="Themes\Blue\f2f-art_06.gif" />
+    <Content Include="Themes\Blue\f2f-art_07.gif" />
+    <Content Include="Themes\Blue\f2f-art_08.gif" />
+    <Content Include="Themes\Blue\f2f-art_09.gif" />
+    <Content Include="Themes\Blue\f2f-icon.gif" />
+    <Content Include="Themes\Blue\first.gif" />
+    <Content Include="Themes\Blue\firstInfo.gif" />
+    <Content Include="Themes\Blue\fitPageCss.gif" />
+    <Content Include="Themes\Blue\fitPageInfo.gif" />
+    <Content Include="Themes\Blue\folder.png" />
+    <Content Include="Themes\Blue\folder_opened.png" />
+    <Content Include="Themes\Blue\go.gif" />
+    <Content Include="Themes\Blue\gry_hd_bg_img.gif" />
+    <Content Include="Themes\Blue\gry_hd_left.gif" />
+    <Content Include="Themes\Blue\gry_hd_right.gif" />
+    <Content Include="Themes\Blue\hLine.png" />
+    <Content Include="Themes\Blue\hLine2.png" />
+    <Content Include="Themes\Blue\icFirst.gif" />
+    <Content Include="Themes\Blue\icFirst_o.gif" />
+    <Content Include="Themes\Blue\icLast.gif" />
+    <Content Include="Themes\Blue\icLast_o.gif" />
+    <Content Include="Themes\Blue\icNext.gif" />
+    <Content Include="Themes\Blue\icNext_o.gif" />
+    <Content Include="Themes\Blue\icon_download.gif" />
+    <Content Include="Themes\Blue\icPrevious.gif" />
+    <Content Include="Themes\Blue\icPrevious_o.gif" />
+    <Content Include="Themes\Blue\infoBtn.gif" />
+    <Content Include="Themes\Blue\information_off.gif" />
+    <Content Include="Themes\Blue\information_off.jpg" />
+    <Content Include="Themes\Blue\information_off_v1.gif" />
+    <Content Include="Themes\Blue\information_on.gif" />
+    <Content Include="Themes\Blue\information_on_V1.gif" />
+    <Content Include="Themes\Blue\infoRoll.gif" />
+    <Content Include="Themes\Blue\info_15.gif" />
+    <Content Include="Themes\Blue\jsTree.css" />
+    <Content Include="Themes\Blue\km-logo-plate.gif" />
+    <Content Include="Themes\Blue\KMLogo.gif" />
+    <Content Include="Themes\Blue\last.gif" />
+    <Content Include="Themes\Blue\lastInfo.gif" />
+    <Content Include="Themes\Blue\last_closed.png" />
+    <Content Include="Themes\Blue\last_expanded.png" />
+    <Content Include="Themes\Blue\last_leaf.png" />
+    <Content Include="Themes\Blue\leaf.png" />
+    <Content Include="Themes\Blue\linksRoll.gif" />
+    <Content Include="Themes\Blue\links_off.gif" />
+    <Content Include="Themes\Blue\links_off_v1.gif" />
+    <Content Include="Themes\Blue\links_on.gif" />
+    <Content Include="Themes\Blue\links_on_V1.gif" />
+    <Content Include="Themes\Blue\login.gif" />
+    <Content Include="Themes\Blue\login2.gif" />
+    <Content Include="Themes\Blue\logo.png" />
+    <Content Include="Themes\Blue\minimize_13.gif" />
+    <Content Include="Themes\Blue\minusA.gif" />
+    <Content Include="Themes\Blue\nav1pg.gif" />
+    <Content Include="Themes\Blue\nav2pg.gif" />
+    <Content Include="Themes\Blue\Navigation.gif" />
+    <Content Include="Themes\Blue\Navigation_sm.gif" />
+    <Content Include="Themes\Blue\Navigation_sm5_GO.gif" />
+    <Content Include="Themes\Blue\navTN.gif" />
+    <Content Include="Themes\Blue\newtabs_01.gif" />
+    <Content Include="Themes\Blue\newtabs_03.gif" />
+    <Content Include="Themes\Blue\newtabs_05.gif" />
+    <Content Include="Themes\Blue\newtabs_07.gif" />
+    <Content Include="Themes\Blue\new_1_03.jpg" />
+    <Content Include="Themes\Blue\new_1_05.jpg" />
+    <Content Include="Themes\Blue\new_1_07.jpg" />
+    <Content Include="Themes\Blue\new_1_09.jpg" />
+    <Content Include="Themes\Blue\new_1_10.jpg" />
+    <Content Include="Themes\Blue\new_1_12.jpg" />
+    <Content Include="Themes\Blue\next.gif" />
+    <Content Include="Themes\Blue\nextInfo.gif" />
+    <Content Include="Themes\Blue\onePageCss.gif" />
+    <Content Include="Themes\Blue\onePageInfo.gif" />
+    <Content Include="Themes\Blue\Page.png" />
+    <Content Include="Themes\Blue\pagehelp.gif" />
+    <Content Include="Themes\Blue\pagesRoll.gif" />
+    <Content Include="Themes\Blue\pages_off.gif" />
+    <Content Include="Themes\Blue\pages_off_v1.gif" />
+    <Content Include="Themes\Blue\pages_on.gif" />
+    <Content Include="Themes\Blue\pages_on_V1.gif" />
+    <Content Include="Themes\Blue\Page_v1.png" />
+    <Content Include="Themes\Blue\plusA.gif" />
+    <Content Include="Themes\Blue\powered-by-AMA-blue.jpg" />
+    <Content Include="Themes\Blue\powered-by-AMA.jpg" />
+    <Content Include="Themes\Blue\powered-by-KM.gif" />
+    <Content Include="Themes\Blue\powered-by-KM.png" />
+    <Content Include="Themes\Blue\prevInfo.gif" />
+    <Content Include="Themes\Blue\previous.gif" />
+    <Content Include="Themes\Blue\print.gif" />
+    <Content Include="Themes\Blue\print.jpg" />
+    <Content Include="Themes\Blue\printInfo.gif" />
+    <Content Include="Themes\Blue\prog-bar.gif" />
+    <Content Include="Themes\Blue\publisher_header.jpg" />
+    <Content Include="Themes\Blue\reset-button.gif" />
+    <Content Include="Themes\Blue\search-go.gif" />
+    <Content Include="Themes\Blue\searchRoll.gif" />
+    <Content Include="Themes\Blue\search_off.gif" />
+    <Content Include="Themes\Blue\search_off_v1.gif" />
+    <Content Include="Themes\Blue\search_on.gif" />
+    <Content Include="Themes\Blue\search_on_V1.gif" />
+    <Content Include="Themes\Blue\SI_Logo.jpg" />
+    <Content Include="Themes\Blue\spacer.gif" />
+    <Content Include="Themes\Blue\stylesheet.css" />
+    <Content Include="Themes\Blue\stylesheet_woCustScroll.css" />
+    <Content Include="Themes\Blue\submit-button.gif" />
+    <Content Include="Themes\Blue\tableOfContents_off.gif" />
+    <Content Include="Themes\Blue\tableOfContents_off_v1.gif" />
+    <Content Include="Themes\Blue\tableOfContents_on.gif" />
+    <Content Include="Themes\Blue\tableOfContents_on_V1.gif" />
+    <Content Include="Themes\Blue\tableofcRoll.gif" />
+    <Content Include="Themes\Blue\tabs_09.jpg" />
+    <Content Include="Themes\Blue\tabs_10.jpg" />
+    <Content Include="Themes\Blue\tabs_11.jpg" />
+    <Content Include="Themes\Blue\thumbInfo.gif" />
+    <Content Include="Themes\Blue\thumbs.gif" />
+    <Content Include="Themes\Blue\tilerLeft.gif" />
+    <Content Include="Themes\Blue\tiler_184.gif" />
+    <Content Include="Themes\Blue\tiler_184_blue.gif" />
+    <Content Include="Themes\Blue\tiler_184_v1.gif" />
+    <Content Include="Themes\Blue\transparentpixel.gif" />
+    <Content Include="Themes\Blue\twoPageCss.gif" />
+    <Content Include="Themes\Blue\twoPageInfo.gif" />
+    <Content Include="Themes\Blue\winLeft.gif" />
+    <Content Include="Themes\Blue\winmiddle.gif" />
+    <Content Include="Themes\Blue\winright.gif" />
+    <Content Include="Themes\Blue\zoom0.gif" />
+    <Content Include="Themes\Blue\zoom1.gif" />
+    <Content Include="Themes\Blue\zoom2.gif" />
+    <Content Include="Themes\Blue\zoom3.gif" />
+    <Content Include="Themes\Blue\zoom4.gif" />
+    <Content Include="Themes\Blue\zoom5.gif" />
+    <Content Include="Themes\Blue\zoom6.gif" />
+    <Content Include="Themes\Blue\zoomA0.gif" />
+    <Content Include="Themes\Blue\zoomA1.gif" />
+    <Content Include="Themes\Blue\zoomA2.gif" />
+    <Content Include="Themes\Blue\zoomA2gif.gif" />
+    <Content Include="Themes\Blue\zoomA3.gif" />
+    <Content Include="Themes\Blue\zoomA4.gif" />
+    <Content Include="Themes\Blue\zoomA5.gif" />
+    <Content Include="Themes\Blue\zoomA6.gif" />
+    <Content Include="Themes\Blue\zoomInfo.gif" />
+    <Content Include="Themes\Blue\zoomMinus.gif" />
+    <Content Include="Themes\Blue\zoomPlus.gif" />
+    <Content Include="Themes\Blue\zoom_03.gif" />
+    <Content Include="Themes\Blue\zoom_05.gif" />
+    <Content Include="Themes\Blue\zoom_07.gif" />
+    <Content Include="Themes\Blue\zoom_in.gif" />
+    <Content Include="Themes\Blue\zoom_out.gif" />
+    <Content Include="Themes\Default\backIssuesRoll.gif" />
+    <Content Include="Themes\Default\backIssues_off.gif" />
+    <Content Include="Themes\Default\backIssues_off_v1.gif" />
+    <Content Include="Themes\Default\backIssues_on.gif" />
+    <Content Include="Themes\Default\backIssues_on_V1.gif" />
+    <Content Include="Themes\Default\blank.gif" />
+    <Content Include="Themes\Default\branch.png" />
+    <Content Include="Themes\Default\btnfit.gif" />
+    <Content Include="Themes\Default\buttons2_05.gif" />
+    <Content Include="Themes\Default\buttons2_08.gif" />
+    <Content Include="Themes\Default\buttons2_10.gif" />
+    <Content Include="Themes\Default\buttons3_10.gif" />
+    <Content Include="Themes\Default\buttons3_10_v1.gif" />
+    <Content Include="Themes\Default\buttons_05.gif" />
+    <Content Include="Themes\Default\buttons_08.gif" />
+    <Content Include="Themes\Default\buttons_10.gif" />
+    <Content Include="Themes\Default\buttons_print_f2f.gif" />
+    <Content Include="Themes\Default\close.gif" />
+    <Content Include="Themes\Default\closed.png" />
+    <Content Include="Themes\Default\divBottom_14.gif" />
+    <Content Include="Themes\Default\divTop_06.gif" />
+    <Content Include="Themes\Default\dj-cover.png" />
+    <Content Include="Themes\Default\ecn_logo.jpg" />
+    <Content Include="Themes\Default\email.gif" />
+    <Content Include="Themes\Default\emailInfo.gif" />
+    <Content Include="Themes\Default\expand.gif" />
+    <Content Include="Themes\Default\expanded.png" />
+    <Content Include="Themes\Default\f2f-art_01.gif" />
+    <Content Include="Themes\Default\f2f-art_02.gif" />
+    <Content Include="Themes\Default\f2f-art_03.gif" />
+    <Content Include="Themes\Default\f2f-art_04.gif" />
+    <Content Include="Themes\Default\f2f-art_06.gif" />
+    <Content Include="Themes\Default\f2f-art_07.gif" />
+    <Content Include="Themes\Default\f2f-art_08.gif" />
+    <Content Include="Themes\Default\f2f-art_09.gif" />
+    <Content Include="Themes\Default\f2f-icon.gif" />
+    <Content Include="Themes\Default\first.gif" />
+    <Content Include="Themes\Default\firstInfo.gif" />
+    <Content Include="Themes\Default\fitPageCss.gif" />
+    <Content Include="Themes\Default\fitPageInfo.gif" />
+    <Content Include="Themes\Default\folder.png" />
+    <Content Include="Themes\Default\folder_opened.png" />
+    <Content Include="Themes\Default\go.gif" />
+    <Content Include="Themes\Default\gry_hd_bg_img.gif" />
+    <Content Include="Themes\Default\gry_hd_left.gif" />
+    <Content Include="Themes\Default\gry_hd_right.gif" />
+    <Content Include="Themes\Default\hLine.png" />
+    <Content Include="Themes\Default\hLine2.png" />
+    <Content Include="Themes\Default\icFirst.gif" />
+    <Content Include="Themes\Default\icFirst_o.gif" />
+    <Content Include="Themes\Default\icLast.gif" />
+    <Content Include="Themes\Default\icLast_o.gif" />
+    <Content Include="Themes\Default\icNext.gif" />
+    <Content Include="Themes\Default\icNext_o.gif" />
+    <Content Include="Themes\Default\icPrevious.gif" />
+    <Content Include="Themes\Default\icPrevious_o.gif" />
+    <Content Include="Themes\Default\infoBtn.gif" />
+    <Content Include="Themes\Default\information_off.gif" />
+    <Content Include="Themes\Default\information_off_v1.gif" />
+    <Content Include="Themes\Default\information_on.gif" />
+    <Content Include="Themes\Default\information_on_V1.gif" />
+    <Content Include="Themes\Default\infoRoll.gif" />
+    <Content Include="Themes\Default\info_15.gif" />
+    <Content Include="Themes\Default\jsTree.css" />
+    <Content Include="Themes\Default\km-logo-plate.gif" />
+    <Content Include="Themes\Default\KMLogo.gif" />
+    <Content Include="Themes\Default\last.gif" />
+    <Content Include="Themes\Default\lastInfo.gif" />
+    <Content Include="Themes\Default\last_closed.png" />
+    <Content Include="Themes\Default\last_expanded.png" />
+    <Content Include="Themes\Default\last_leaf.png" />
+    <Content Include="Themes\Default\leaf.png" />
+    <Content Include="Themes\Default\linksRoll.gif" />
+    <Content Include="Themes\Default\links_off.gif" />
+    <Content Include="Themes\Default\links_off_v1.gif" />
+    <Content Include="Themes\Default\links_on.gif" />
+    <Content Include="Themes\Default\links_on_V1.gif" />
+    <Content Include="Themes\Default\login.gif" />
+    <Content Include="Themes\Default\login2.gif" />
+    <Content Include="Themes\Default\logo.png" />
+    <Content Include="Themes\Default\minimize_13.gif" />
+    <Content Include="Themes\Default\minusA.gif" />
+    <Content Include="Themes\Default\nav1pg.gif" />
+    <Content Include="Themes\Default\nav2pg.gif" />
+    <Content Include="Themes\Default\Navigation.gif" />
+    <Content Include="Themes\Default\Navigation_sm.gif" />
+    <Content Include="Themes\Default\Navigation_sm5_GO.gif" />
+    <Content Include="Themes\Default\navTN.gif" />
+    <Content Include="Themes\Default\newtabs_01.gif" />
+    <Content Include="Themes\Default\newtabs_03.gif" />
+    <Content Include="Themes\Default\newtabs_05.gif" />
+    <Content Include="Themes\Default\newtabs_07.gif" />
+    <Content Include="Themes\Default\new_1_03.jpg" />
+    <Content Include="Themes\Default\new_1_05.jpg" />
+    <Content Include="Themes\Default\new_1_07.jpg" />
+    <Content Include="Themes\Default\new_1_09.jpg" />
+    <Content Include="Themes\Default\new_1_10.jpg" />
+    <Content Include="Themes\Default\new_1_12.jpg" />
+    <Content Include="Themes\Default\next.gif" />
+    <Content Include="Themes\Default\nextInfo.gif" />
+    <Content Include="Themes\Default\onePageCss.gif" />
+    <Content Include="Themes\Default\onePageInfo.gif" />
+    <Content Include="Themes\Default\Page.png" />
+    <Content Include="Themes\Default\pagehelp.gif" />
+    <Content Include="Themes\Default\pagesRoll.gif" />
+    <Content Include="Themes\Default\pages_off.gif" />
+    <Content Include="Themes\Default\pages_off_v1.gif" />
+    <Content Include="Themes\Default\pages_on.gif" />
+    <Content Include="Themes\Default\pages_on_V1.gif" />
+    <Content Include="Themes\Default\Page_v1.png" />
+    <Content Include="Themes\Default\plusA.gif" />
+    <Content Include="Themes\Default\powered-by-KM.gif" />
+    <Content Include="Themes\Default\prevInfo.gif" />
+    <Content Include="Themes\Default\previous.gif" />
+    <Content Include="Themes\Default\print.gif" />
+    <Content Include="Themes\Default\print.jpg" />
+    <Content Include="Themes\Default\printInfo.gif" />
+    <Content Include="Themes\Default\prog-bar.gif" />
+    <Content Include="Themes\Default\publisher_header.jpg" />
+    <Content Include="Themes\Default\reset-button.gif" />
+    <Content Include="Themes\Default\search-go.gif" />
+    <Content Include="Themes\Default\searchRoll.gif" />
+    <Content Include="Themes\Default\search_off.gif" />
+    <Content Include="Themes\Default\search_off_v1.gif" />
+    <Content Include="Themes\Default\search_on.gif" />
+    <Content Include="Themes\Default\search_on_V1.gif" />
+    <Content Include="Themes\Default\SI_Logo.jpg" />
+    <Content Include="Themes\Default\spacer.gif" />
+    <Content Include="Themes\Default\stylesheet.css" />
+    <Content Include="Themes\Default\stylesheet_woCustScroll.css" />
+    <Content Include="Themes\Default\submit-button.gif" />
+    <Content Include="Themes\Default\tableOfContents_off.gif" />
+    <Content Include="Themes\Default\tableOfContents_off_v1.gif" />
+    <Content Include="Themes\Default\tableOfContents_on.gif" />
+    <Content Include="Themes\Default\tableOfContents_on_V1.gif" />
+    <Content Include="Themes\Default\tableofcRoll.gif" />
+    <Content Include="Themes\Default\tabs_09.jpg" />
+    <Content Include="Themes\Default\tabs_10.jpg" />
+    <Content Include="Themes\Default\tabs_11.jpg" />
+    <Content Include="Themes\Default\thumbInfo.gif" />
+    <Content Include="Themes\Default\thumbs.gif" />
+    <Content Include="Themes\Default\tilerLeft.gif" />
+    <Content Include="Themes\Default\tiler_184.gif" />
+    <Content Include="Themes\Default\tiler_184_v1.gif" />
+    <Content Include="Themes\Default\transparentpixel.gif" />
+    <Content Include="Themes\Default\twoPageCss.gif" />
+    <Content Include="Themes\Default\twoPageInfo.gif" />
+    <Content Include="Themes\Default\winLeft.gif" />
+    <Content Include="Themes\Default\winmiddle.gif" />
+    <Content Include="Themes\Default\winright.gif" />
+    <Content Include="Themes\Default\zoom0.gif" />
+    <Content Include="Themes\Default\zoom1.gif" />
+    <Content Include="Themes\Default\zoom2.gif" />
+    <Content Include="Themes\Default\zoom3.gif" />
+    <Content Include="Themes\Default\zoom4.gif" />
+    <Content Include="Themes\Default\zoom5.gif" />
+    <Content Include="Themes\Default\zoom6.gif" />
+    <Content Include="Themes\Default\zoomA0.gif" />
+    <Content Include="Themes\Default\zoomA1.gif" />
+    <Content Include="Themes\Default\zoomA2.gif" />
+    <Content Include="Themes\Default\zoomA2gif.gif" />
+    <Content Include="Themes\Default\zoomA3.gif" />
+    <Content Include="Themes\Default\zoomA4.gif" />
+    <Content Include="Themes\Default\zoomA5.gif" />
+    <Content Include="Themes\Default\zoomA6.gif" />
+    <Content Include="Themes\Default\zoomInfo.gif" />
+    <Content Include="Themes\Default\zoomMinus.gif" />
+    <Content Include="Themes\Default\zoomPlus.gif" />
+    <Content Include="Themes\Default\zoom_03.gif" />
+    <Content Include="Themes\Default\zoom_05.gif" />
+    <Content Include="Themes\Default\zoom_07.gif" />
+    <Content Include="Themes\Default\zoom_in.gif" />
+    <Content Include="Themes\Default\zoom_out.gif" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1BCE78E7-DD4D-48BC-85C3-D77FCE995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="temp\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58184/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!--<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>-->
+</Project>

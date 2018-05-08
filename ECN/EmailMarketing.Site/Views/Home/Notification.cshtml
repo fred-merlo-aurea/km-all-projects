@@ -1,0 +1,17 @@
+﻿@model ECN_Framework_Entities.Accounts.Notification
+
+@if(null != Model && Model.NotificationID > 0)
+{
+    string notificationText = Model.NotificationText.Replace(@"""","'");
+    
+    @section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#colorOne").text("@Model.BackGroundColor");
+            $("#colorTwo").text("@Model.CloseButtonColor");
+            toastrNotification("@Model.NotificationName", "@notificationText");
+        });
+    </script>
+    }
+}
+

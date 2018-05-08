@@ -1,0 +1,124 @@
+﻿<div id="MessageBox"></div>
+
+<script>
+
+        function MessageBox(options) {
+            this.messageType = options.type;
+            this.messageText = options.text;
+            this.action = options.action;
+            this.autoClose = options.autoClose;
+            this.data = options.data;
+            this.duration = options.duration ? options.duration : 2000;
+            this.isopen = options.IsOpen;
+            this.show = function () {
+                var messageTemplate = kendo.template($("#MessageTemplate").html());
+                var content = messageTemplate({
+                    MessageType: this.messageType,
+                    MessageText: this.messageText
+                });
+                var options = {
+                    title: false,
+                    modal: true,
+                    visible: false,
+                    animation: false
+                };
+                if (this.autoClose) {
+                    options.animation = {
+                        close: {
+                            duration: this.duration
+                        }
+                    }
+                }
+                var container = $("#MessageBox");
+                var widget = kendo.widgetInstance(container);
+                if (widget) {
+                    widget.destroy();
+                }
+                container.kendoWindow(options);
+                var window = container.data("kendoWindow");
+
+                window.content(content);
+                window.center().open();
+                if (this.autoClose) {
+                    window.close();
+                }
+            }
+            this.close = function () {
+                var wnd = $("#MessageBox").data('kendoWindow');
+                if(wnd){
+                    wnd.close();
+                }
+                //$(this).closest("[data-role=window]").data("kendoWindow").close();
+            }
+            this.performAction = function () {
+                this.close();
+                if (this.action) {
+                    this.action();
+                }
+            }
+        }
+        var messageBox;
+        function showMessage(options) {
+            messageBox = new MessageBox(options);
+            messageBox.show();
+        }
+        function actionVisible(messageType, action) {
+            var visible;
+            switch (messageType) {
+                case '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Information':
+                case '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Warning':
+                case '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error': {
+                    if (action == 'Ok') visible = false;
+                    if (action == 'Cancel') visible = false;
+                    if (action == 'Close') visible = true;
+                };
+                    break;
+                case '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success': {
+                    //if (action == 'Ok') visible = true;
+                    };
+                    break;
+                case '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm': {
+                    if (action == 'Ok') visible = true;
+                    if (action == 'Cancel') visible = true;
+                    if (action == 'Close') visible = false;
+                }; break;
+            }
+            return visible ? 'display:inline-block' : 'display:none';
+        }
+</script>
+
+<script type="text/ng-template" id="MessageTemplate">
+    # var modalClass = "modal-" + MessageType.toLowerCase(); #
+    <div class="wrapper km-modal modalnotify #= modalClass #">
+        <fieldset title="">
+            <legend></legend>
+            <div class="picon" style="margin: 0 auto; width: 100px;">
+                # if(MessageType == '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success') { #
+                <img alt="Success" src="/ecn.domaintracking/Content/Images/modal-icon-success.png" border="0" />
+                # }
+                else if(MessageType == '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error') { #
+                <img src="/ecn.domaintracking/Content/Images/modal-icon-error.png" border="0" />
+                # }
+                else if(MessageType == '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm' || MessageType == '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Warning') { #
+                <img src="/ecn.domaintracking/Content/Images/modal-icon-warning.png" border="0" />
+                # }
+                else { #
+                <img src="/ecn.domaintracking/Content/Images/modal-icon-info.png" border="0" />
+                # } #
+            </div>
+            <div class="text" style="margin: 0 auto; width: 400px; text-align: left; padding-left: 2em; padding-top: 2em;">
+                # if(MessageType == '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success') { #
+                Success
+                # } else { #
+                #= MessageText #
+                # } #
+            </div>
+            <div class="buttons" style="margin: 0 auto; width: 300px; text-align: center;">
+                <button class="btn-blue2" style="#= actionVisible(MessageType, 'Ok') #" onclick="messageBox.performAction()">Ok</button>
+                <button class="btn-blue2" style="#= actionVisible(MessageType, 'Cancel') #" onclick="messageBox.close()">Cancel</button>
+                <button class="btn-blue2" style="#= actionVisible(MessageType, 'Close') #" onclick="messageBox.close()">Close</button>
+            </div>
+        </fieldset>
+    </div>
+</script>
+

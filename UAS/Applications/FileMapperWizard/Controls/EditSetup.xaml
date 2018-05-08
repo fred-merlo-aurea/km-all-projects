@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="FileMapperWizard.Controls.EditSetup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:tileView="clr-namespace:Telerik.Windows.Controls.TileView;assembly=Telerik.Windows.Controls.Navigation"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="TextboxRoundation" TargetType="{x:Type TextBoxBase}">
+            <Border Background="White" 
+                x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="1" CornerRadius="10">
+                <ScrollViewer x:Name="PART_ContentHost"/>
+            </Border>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Grid Background="White" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Select a Client: " Foreground="#4B87BC" FontSize="16" Margin="10" />
+        <telerik:RadComboBox x:Name="rcbClients" Grid.Column="1" HorizontalAlignment="Stretch" Height="20" Margin="5" SelectionChanged="rcbClients_SelectionChanged" />
+        
+        <StackPanel x:Name="spFileInfo" Grid.Column="1" Grid.Row="1" Margin="2" Orientation="Vertical" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="Gray" FontWeight="SemiBold" Text="File Name: "/>
+                <TextBlock x:Name="txtFileName" Foreground="Gray" FontWeight="Light"  Margin="3,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="Gray" Text="Date Created: " FontWeight="SemiBold" />
+                <TextBlock x:Name="txtDateCreated" Foreground="Gray" FontWeight="Light" Margin="3,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <telerik:RadButton x:Name="btnSelectDifferentFile" Content="Select File" Width="90" Height="23" Grid.Row="1" Click="Select_Different_File" Visibility="Collapsed" Style="{DynamicResource RadButtonRound}"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock x:Name="txtSelectFile" Grid.Row="1" Text="Select a File: " Visibility="Visible" Foreground="#4B87BC" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <telerik:RadButton x:Name="btnRefresh" Width="75" Height="22" Content="Refresh" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Style="{DynamicResource RadButtonRound}" Click="btnRefresh_Click" />
+        </StackPanel>
+        <telerik:RadListBox x:Name="rlbFiles" Visibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="275" Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Grid.RowSpan="4" MouseDoubleClick="rlbFiles_MouseDoubleClick"/>
+        <telerik:RadButton x:Name="btnDeleteFile" Content="Delete File" Width="90" Height="23" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Click="btnDeleteFile_Click"  Visibility="Collapsed" Style="{DynamicResource RadButtonRound}"/>
+        <TextBlock x:Name="txtSelectProcess" Grid.Row="2" Text="Select a Process:" Visibility="Collapsed" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <telerik:RadComboBox x:Name="rcbFeatures" Grid.Row="2" Grid.Column="1" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
+        <TextBlock x:Name="txtSelectFileType" Grid.Row="3" Text="Select Circulation File Type:" Visibility="Collapsed" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <telerik:RadComboBox x:Name="rcbDatabaseFileType" Grid.Row="3" Grid.Column="1" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
+
+        <TextBlock x:Name="txtSelectFF" Grid.Row="4" Text="Select File Frequency:" Foreground="#4B87BC" Visibility="Collapsed" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <telerik:RadComboBox x:Name="rcbFrequency" Grid.Row="4" Grid.Column="1" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" Margin="5" />
+
+        <TextBlock x:Name="txtSelectQD" Grid.Row="5" Text="Select QDate Format:" Foreground="#4B87BC" Visibility="Collapsed" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <telerik:RadComboBox x:Name="rcbDateFormat" Grid.Row="5" Grid.Column="1" Visibility="Collapsed" Height="20" HorizontalAlignment="Stretch" Margin="5" />
+
+        <TextBlock Name="txtBatchSize" Grid.Row="6" Text="File Batch Size:" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center" Visibility="Collapsed"/>
+        <telerik:RadNumericUpDown Name="rnudBatchSize" Grid.Row="6" Grid.Column="1" Height="20" HorizontalAlignment="Left" Margin="5" Value="2500" NumberDecimalDigits="0" Width="75" Visibility="Collapsed"></telerik:RadNumericUpDown>
+
+        <TextBlock x:Name="lblSaveName" Visibility="Collapsed" Grid.Row="7" Text="Save Filename As:" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <!--<Border x:Name="borderSaveName" CornerRadius="8" BorderBrush="#FFC7CACC" BorderThickness="1" Visibility="Collapsed" Height="23" Margin="5" Grid.Row="6" Grid.Column="1">-->
+        <TextBox x:Name="txtSaveName" Template="{DynamicResource TextboxRoundation}" Visibility="Collapsed" Margin="3" Height="23" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"/>
+        <!--</Border>-->
+
+        <TextBlock x:Name="lblDelimiters" Visibility="Collapsed" Grid.Row="8" Text="File Delimiter:" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+        <telerik:RadComboBox x:Name="rcbDelimiters" Visibility="Collapsed" Grid.Row="8" Grid.Column="1" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
+
+        <TextBlock x:Name="lblQuotations" Visibility="Collapsed" Grid.Row="9" Grid.ColumnSpan="2" Text="Does file contain double quotation marks:" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="16" Margin="5"/>
+        <telerik:RadComboBox x:Name="rcbQuotations" Visibility="Collapsed" Grid.Row="9" Grid.Column="1" Width="80" HorizontalAlignment="Right" Height="20" Margin="5" />
+
+        <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock x:Name="lblExtension" Visibility="Collapsed" Grid.Row="10" Text="Extension:" Foreground="#4B87BC" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+            <telerik:RadComboBox x:Name="rcbExtension" Visibility="Collapsed" Grid.Row="10" Grid.Column="1" Height="20" Width="100" HorizontalAlignment="Stretch" Margin="5" SelectionChanged="rcbExtension_SelectionChanged"/>            
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <telerik:RadButton x:Name="btnDuplicate" Width="75" Height="22" Content="Duplicate" Visibility="Collapsed" HorizontalAlignment="Left" Margin="5" Style="{DynamicResource RadButtonRound}" Click="btnDuplicate_Click" />
+            <telerik:RadButton x:Name="btnStep1Next" Width="75" Height="22"  Visibility="Collapsed" HorizontalAlignment="Right" Margin="5" Style="{DynamicResource RadButtonRound}" Click="btnStep1Next_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Next" Margin="0,0,5,0" VerticalAlignment="Bottom"/>
+                    <Image Source="/ImageLibrary;Component/Images/TileList/Next.png" Height="16" Width="16" VerticalAlignment="Center"/>
+                </StackPanel>
+            </telerik:RadButton>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,66 @@
+﻿@model UAS.Web.Models.Circulations.History
+
+@{
+    ViewBag.Title = "History";
+}
+<script>
+    $(document).ready(function () {
+        var currentLocation = window.location;
+        var circIndex = String(currentLocation).lastIndexOf("grid_OPEN");
+        var uadIndex = String(currentLocation).lastIndexOf("grid_FINALIZED");
+
+        if (circIndex == -1 && uadIndex == -1) {
+            var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(0);   // Select by index
+        }
+        else if (uadIndex > circIndex) {
+            var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(1);   // Select by index
+        }
+        else {
+            var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+            tabStrip.select(0);   // Select by index
+        }
+
+
+    });
+</script>
+<style>
+    .k-button,
+    .btn {
+	    outline: none;
+	    display: inline-block;
+	    border-radius: 8px;
+	    border-width: 1px;
+	    box-shadow: none;
+	    text-decoration: none;	
+		font-size: 14px;
+	    font-weight: 500;
+	    padding:  0 10px;
+	    cursor: pointer;
+	    height: 27px;
+	    line-height: 26px;	 
+	    margin: 0 5px;
+	    box-shadow: 0;
+		vertical-align: inherit;
+		font-family: "Source Sans Pro",sans-serif;
+		box-sizing: content-box;
+	}
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div id="notificationDiv"></div>
+@(Html.Kendo().TabStrip()
+          .Name("tabstrip")
+          .Items(tabstrip =>
+          {
+          tabstrip.Add().Text("Open Batches")
+                  .Content(Html.Partial("_OpenBatchHistory", Model).ToString());
+
+        tabstrip.Add().Text("Finalized Batches")
+            .Content(Html.Partial("_FinalBatchHistory", Model).ToString());
+    })
+)

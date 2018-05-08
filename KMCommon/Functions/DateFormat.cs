@@ -1,0 +1,54 @@
+﻿using System.Runtime.Serialization;
+
+namespace KM.Common.Functions
+{
+    public enum DateFormat
+    {
+        [EnumMember]
+        MDDYYYY,
+        [EnumMember]
+        MMDYYYY,
+        [EnumMember]
+        MMDDYYYY,
+        [EnumMember]
+        DDMYYYY,
+        [EnumMember]
+        DMMYYYY,
+        [EnumMember]
+        DDMMYYYY,
+        [EnumMember]
+        YYYYMM,
+        [EnumMember]
+        YYYYMDD,
+        [EnumMember]
+        YYYYMMD,
+        [EnumMember]
+        YYYYMMDD,
+        [EnumMember]
+        MDDYY,
+        [EnumMember]
+        MMDYY,
+        [EnumMember]
+        MMDDYY,
+        [EnumMember]
+        DDMYY,
+        [EnumMember]
+        DMMYY,
+        [EnumMember]
+        DDMMYY,
+        [EnumMember]
+        YYMDD,
+        [EnumMember]
+        YYMMD,
+        [EnumMember]
+        YYMMDD,
+        [EnumMember]
+        YYMM,
+        [EnumMember]
+        YYM,
+        [EnumMember]
+        MYY,
+        [EnumMember]
+        MMYY
+    }
+}

@@ -1,0 +1,16 @@
+﻿CREATE PROCEDURE [dbo].[e_Filters_Exists_ByFilterName]
+	@FilterID int,
+	@FilterName varchar(50)
+AS     
+BEGIN
+
+	SET NOCOUNT ON
+  		
+	IF EXISTS  (
+				Select Top 1 FilterID 
+				from Filters WITH (NOLOCK)
+				where IsDeleted = 0 and 
+					FilterID <> @FilterID and Name = @FilterName
+				) SELECT 1 ELSE SELECT 0
+
+END

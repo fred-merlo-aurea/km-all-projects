@@ -1,0 +1,14 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownList()
+              .Name("selectedValue")
+              .OptionLabel("- Select Value -")
+              .DataSource(d => d.Read(r => r.Action("GetRuleFieldValue", "FileMapperWizard").Data("GetSelectedRuleFieldValue")))
+              .DataTextField("Text")
+              .DataValueField("Value")
+.Events(e =>
+{
+    //e.Change("onChangeOperator");
+    //e.Select("onSelectOperator");
+})
+)

@@ -1,0 +1,103 @@
+﻿@model UAS.Web.Models.Circulations.SubscriptionQualification
+<style>
+    .rowmargin {
+        margin: 10px auto;
+    }
+</style>
+
+@Html.HiddenFor(m => Model.IsCopiesEnabled)
+
+<table style="width:100%; padding:10px;">
+    <tr>
+        <td class="rowmargin"> Qualification Source: </td>
+        <td class="rowmargin">
+            @Html.DropDownListFor(m => Model.QSourceID, Model.QSourceList, "", new { style = "width:250px;" })
+        </td>
+        <td class="rowmargin"> Qualification Date: </td>
+        <td class="rowmargin"> @Html.Kendo().DatePickerFor(m => Model.QDate).HtmlAttributes(new { @type = "" }).HtmlAttributes(new { id = "QualificationDate" }) </td>
+    </tr>
+    <tr>
+        <td class="rowmargin"> Par3C: </td>
+        <td class="rowmargin">
+            @Html.DropDownListFor(m => Model.Par3C, Model.Par3List, "", new { style = "width:250px;" })
+        </td>
+
+        <td class="rowmargin"> Copies: </td>
+        <td class="rowmargin"> @Html.TextBoxFor(m => Model.Copies, new { style = "width:250px;", type = "number", disabled = Model.IsCopiesEnabled }) </td>
+    </tr>
+</table>
+<hr />
+<strong>
+    <h4> Permissions </h4>
+    <table style="width:100%;">
+        <tr>
+            <td> Mail </td>
+            <td> @Html.DropDownListFor(m => Model.MailPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Fax </td>
+            <td> @Html.DropDownListFor(m => Model.FaxPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Phone </td>
+            <td> @Html.DropDownListFor(m => Model.PhonePermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Other Products </td>
+            <td> @Html.DropDownListFor(m => Model.OtherProductsPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Email Renew </td>
+            <td> @Html.DropDownListFor(m => Model.EmailRenewPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Third Party </td>
+            <td> @Html.DropDownListFor(m => Model.ThirdPartyPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+            <td> Text </td>
+            <td> @Html.DropDownListFor(m => Model.TextPermission, Model.YesNo, "", new { style = "width:40px;" }) </td>
+        </tr>
+    </table>
+</strong>
+<hr />
+<div id="qual_responses">
+    @for (var i = 0; i < Model.questionCollection.Count; i++)
+    {
+        <div style="width:250px;margin:10px;padding:0 20px; display:inline-block;">
+            <p>
+                <strong style="color:#6babe5;">
+                    <label>
+                        @Model.questionCollection[i].DisplayName
+                    </label>
+
+                    @if (@Model.questionCollection[i].IsRequired)
+                    {
+                        <span style="color:red">*</span>
+                        
+                    }
+                </strong>
+            </p>
+            @if (@Model.questionCollection[i].IsMultiple)
+            {
+                @Html.DropDownList(@Model.questionCollection[i].DisplayName, Model.questionCollection[i].Answers.Select(item => new SelectListItem
+                 {
+                       Value = item.CodeSheetID.ToString(),
+                       Text = item.ResponseDesc,
+                       Selected = item.IsSelected
+                 }), new { style = "width:250px;", multiple = true, size = 5, @class = "responselist" })
+                <br />
+                if (@Model.questionCollection[i].ShowOther == true)
+                {
+                    @Html.TextBox("resp" + @Model.questionCollection[i].GroupID, @Model.questionCollection[i].OtherValue)
+                }
+            }
+            else
+            {
+                @Html.DropDownList(@Model.questionCollection[i].DisplayName, Model.questionCollection[i].Answers.Select(item => new SelectListItem
+                   {
+                       Value = item.CodeSheetID.ToString(),
+                       Text = item.ResponseDesc,
+                       Selected = item.IsSelected
+                   }), new { style = "width:250px;", multiple = false, @class = "responselist" })
+                <br />
+                if (@Model.questionCollection[i].ShowOther == true)
+                {
+                    @Html.TextBox("resp" + @Model.questionCollection[i].GroupID, @Model.questionCollection[i].OtherValue)
+                }
+            }
+
+
+        </div>
+
+
+    }
+</div>

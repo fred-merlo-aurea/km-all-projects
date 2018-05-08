@@ -1,0 +1,42 @@
+﻿<div style="margin-top:10px;">
+    <table style="width:100%;margin:0px;">
+       
+        <tr>
+            <td width="100%">
+                <div style="width:100%">
+                    <label class="labelsmall-black">Report:</label>
+                    <input id="kddlReports" name="Reports" style="width:300px;" /> &nbsp;
+                    @Html.Kendo().CheckBox().Name("chkIncludeAddRemove").Checked(true).Label("Include Add Remove")
+                    <input type="button" name="btnGenerateReport" onclick="GetReport()" value="Generate" class="btn-blue2 k-button" style="width:80px;">
+                    <span style="padding-left:20px">
+                        <label class="labelsmall-black">Issue:</label>
+                        <input id="kddlIssues" name="Issue" style="width:300px;" />
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button class="accordion" id="accShowFilter"><b>Report Filters</b><span id="reportFilterShowHide">(Show...)</span></button>
+                <div class="accordion-panel" style="border:1px solid #e8e8e8;  width:100%; margin: -5px 0px 0px 0px;">
+                    <div id="FilterSummaryDetails" style="margin: 0px 15px 0px 15px;">
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="panel panel-default" id="ReportViewerPanel" style="display:none;">
+                    <!-- Default panel contents ShowSelectedFilters -->
+                    <div class="panel-heading" style="height:30px;">
+                        <label id="lblreportlabel" class="PanelHeaderlbl-black float-left">Report</label>
+                    </div>
+                    <div class="panel-body" id="divReportViewer">
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

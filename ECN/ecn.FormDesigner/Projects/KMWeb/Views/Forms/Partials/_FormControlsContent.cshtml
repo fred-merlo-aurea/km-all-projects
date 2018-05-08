@@ -1,0 +1,3572 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using KMModels.Controls
+@using KMModels
+@using Newtonsoft.Json
+
+@model FormControlsPostModel
+@{
+    var rules = (IEnumerable<RuleModel>)ViewContext.Controller.ViewBag.Rules;
+    var snotification = (IEnumerable<SubscriberNotificationModel>)ViewContext.Controller.ViewBag.SNotifications;
+    var iunotifications = (IEnumerable<InternalUserNotificationModel>)ViewContext.Controller.ViewBag.IUNotifications;
+    bool viewOnly = false;
+    if (ViewBag.ViewOnly != null)
+    {
+        viewOnly = (bool)ViewBag.ViewOnly;
+    }
+    List<int> controlInRules = new List<int>();
+    foreach (var r in rules)
+    {
+        foreach (var cg in r.ConditionGroup)
+        {
+            foreach (var c in cg.Conditions)
+            {
+                int v = -1;
+                if (int.TryParse(c.Value, out v))
+                {
+                    controlInRules.Add(v);
+                }
+            }
+        }
+    }
+    foreach (var sn in snotification)
+    {
+        if (sn.Conditions != null)
+        {
+            foreach (var c in sn.Conditions)
+            {
+                int v = -1;
+                if (int.TryParse(c.Value, out v))
+                {
+                    controlInRules.Add(v);
+                }
+            }
+        }
+    }
+    foreach (var iun in iunotifications)
+    {
+        if (iun.Conditions != null)
+        {
+            foreach (var c in iun.Conditions)
+            {
+                int v = -1;
+                if (int.TryParse(c.Value, out v))
+                {
+                    controlInRules.Add(v);
+                }
+            }
+        }
+    }
+}
+
+<script>
+    angular = null;
+</script>
+
+<script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+<script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular-sanitize.min.js")"></script>
+<script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+@*<script src="@Url.Content("~/Scripts/jquery-ui.min.js")"></script>*@
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<style>
+    .inline {
+        display: inline-block;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .k-editor-inline {
+        border-width: 1px;
+        border-color: #6babe5;
+        min-height: 60px;
+    }
+
+        .k-editor-inline.k-state-active {
+            border-width: 1px;
+            border-color: #6babe5;
+        }
+    .k-grid tbody .k-button{
+        width:30px !important;
+        min-width:0px;
+    }
+
+    /*#splitter {
+        min-height: 600px;
+        height:100%;
+    }*/
+    .formedit-formControls .formcontrolprops .propbox table td.k-edit-cell input {
+        border-radius: 7px;
+        height: 18px;
+        width: 200px;
+        padding: 0;
+    }
+</style>
+
+<script>
+    $(function(){
+        //$(window).resize(adaptLeftPanel);
+        $(window).scroll(function() {
+            var headerHeight = $("#center").offset().top;
+            var panel = $("#left");
+            var navigation = $("#formControlsContent")
+                              .siblings(".bottomnavbox");
+            var navigationOffset = navigation.offset();
+            var top = $(document).scrollTop();
+            if (top < headerHeight) {
+                panel.css({ marginTop: 0 });
+            }
+            else {
+                var panelHeight = panel.height();
+                var bottom = panelHeight + top;
+                if(bottom < navigationOffset.top){
+                    var offset = top - headerHeight;
+                    panel.css({marginTop: offset });
+                }
+                else{
+                    var offset = navigationOffset.top - panelHeight - headerHeight;
+                    panel.css({marginTop: offset });
+                }
+            }
+        });
+    });
+    //function adaptLeftPanel(){
+    //    var panel = $("#left");
+    //    var content = $(".controlbox");
+    //    var win = $(window);
+    //    var winHeight = win.height();
+    //    var contentHeight = content.height();
+    //    if(contentHeight > winHeight) {
+    //        panel.css({ height: winHeight, overflowY: 'scroll' });
+    //    }
+    //    else{
+    //        panel.css({ height: contentHeight, overflowY: 'auto' });
+    //    }
+    //}
+</script>
+
+<script>
+    var array = new Array();
+    
+    function onControlsCustomToolClick (e) {
+        debugger;
+             var popupHtml = null;
+             if ('@viewOnly' == 'false' || '@viewOnly' == 'False')
+              {
+                  popupHtml = '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                '<div style="padding: 0 1em;">' +
+                  '<p> <h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea> </p>' +
+                '</div>' +
+                '<div class="k-edit-buttons k-state-default">' +
+                  '<button class="k-dialog-insert k-button k-primary">Update</button>' +
+                  '<button class="k-dialog-close k-button">Cancel</button>' +
+                '</div>' +
+              '</div>';
+
+             }
+            else
+             {
+                popupHtml = '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                        '<div style="padding: 0 1em;">' +
+                            '<p> <h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea> </p>' +
+                        '</div>' +
+                        '</div>';
+              }
+              // create a modal Window from a new DOM element
+              var popupWindow = $(popupHtml)
+              .appendTo(document.body)
+              .kendoWindow({
+              // modality is recommended in this scenario
+              modal: true,
+            width: 600,
+            resizable: false,
+            title: "Java Script",
+            // ensure opening animation
+            visible: false,
+            // remove the Window from the DOM after closing animation is finished
+            deactivate: function(e){ e.sender.destroy(); }
+              }).data("kendoWindow")
+              .center().open();
+              var headJS = $("#headerjs").val();
+              if(headJS.lastIndexOf("&gt;"!=-1)  && headJS.indexOf("&lt;"!=-1))
+              {
+                  var textArea = document.createElement('textarea');
+                  textArea.innerHTML = headJS;
+                  headJS = textArea.value;
+              }
+              popupWindow.element.find("textarea").val(headJS);
+
+              // insert the new content in the Editor when the Insert button is clicked
+              popupWindow.element.find(".k-dialog-insert").click(function(){
+                  var rawinput = null;
+                  rawinput = popupWindow.element.find("textarea").val();
+                  if(rawinput!=null)
+                  {
+                      var regx = new RegExp(/(<script[\S\s]*?>[\S\s]*?<\/script>)/gmi);
+                      var fullJS = "";
+                      var result;
+                      while(result = regx.exec(rawinput))
+                      {
+                          var matchJs =result[1];
+                          fullJS += matchJs;
+                      }
+                      $("#headerjs").val(fullJS);
+                  }
+                });
+
+              // close the Window when any button is clicked
+              popupWindow.element.find(".k-edit-buttons button").click(function(){
+                  // detach custom event handlers to prevent memory leaks
+                  popupWindow.element.find(".k-edit-buttons button").off();
+                  popupWindow.close();
+              });
+          }
+    function onCtlFootCustomToolClick (e) {
+        var popupHtml = null;
+        if ('@viewOnly' == 'false' || '@viewOnly' == 'False')
+        {
+            popupHtml = '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+          '<div style="padding: 0 1em;">' +
+            '<p> <h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea> </p>' +
+          '</div>' +
+          '<div class="k-edit-buttons k-state-default">' +
+            '<button class="k-dialog-insert k-button k-primary">Update</button>' +
+            '<button class="k-dialog-close k-button">Cancel</button>' +
+          '</div>' +
+        '</div>';
+
+        }
+        else
+        {
+            popupHtml = '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                    '<div style="padding: 0 1em;">' +
+                        '<p> <h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea> </p>' +
+                    '</div>' +
+                    '</div>';
+        }
+
+        // create a modal Window from a new DOM element
+        var popupWindow = $(popupHtml)
+        .appendTo(document.body)
+        .kendoWindow({
+            // modality is recommended in this scenario
+            modal: true,
+            width: 600,
+            resizable: false,
+            title: "Java Script",
+            // ensure opening animation
+            visible: false,
+            // remove the Window from the DOM after closing animation is finished
+            deactivate: function(e){ e.sender.destroy(); }
+        }).data("kendoWindow")
+        .center().open();
+        var footerJS = $("#footerjs").val();
+        if(footerJS.lastIndexOf("&gt;"!=-1)  && footerJS.indexOf("&lt;"!=-1))
+        { 
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = footerJS;
+            footerJS = textArea.value;
+            popupWindow.element.find("textarea").val(footerJS);
+        }
+        // insert the new content in the Editor when the Insert button is clicked
+        popupWindow.element.find(".k-dialog-insert").click(function(){
+            var rawinput = null;
+            rawinput = popupWindow.element.find("textarea").val();
+            if(rawinput!=null)
+            {
+                var regx = new RegExp(/(<script[\S\s]*?>[\S\s]*?<\/script>)/gmi);
+                var fullJS = "";
+                var result;
+                while(result = regx.exec(rawinput))
+                {
+                    var matchJs =result[1];
+                    fullJS += matchJs;
+                }
+                $("#footerjs").val(fullJS);
+            }
+        });
+
+        // close the Window when any button is clicked
+        popupWindow.element.find(".k-edit-buttons button").click(function(){
+            // detach custom event handlers to prevent memory leaks
+            popupWindow.element.find(".k-edit-buttons button").off();
+            popupWindow.close();
+        });
+    }
+</script>
+
+
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_FirstName")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_LastName")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Email")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Phone")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Fax")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Website")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Address1")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Address2")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_City")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_State")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Zip")
+@Html.Partial("Partials/FormControls/Editor/Standard/Common/_Country")
+
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Title")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_FullName")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Company")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Occupation")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Mobile")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Age")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Income")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Gender")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User1")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User2")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User3")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User4")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User5")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_User6")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Birthdate")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Notes")
+@Html.Partial("Partials/FormControls/Editor/Standard/Uncommon/_Password")
+
+@Html.Partial("Partials/FormControls/Editor/_TextBox")
+@Html.Partial("Partials/FormControls/Editor/_TextArea")
+@Html.Partial("Partials/FormControls/Editor/_DropDown")
+
+@Html.Partial("Partials/FormControls/Editor/_RadioButton")
+@Html.Partial("Partials/FormControls/Editor/_CheckBox")
+@Html.Partial("Partials/FormControls/Editor/_ListBox")
+@Html.Partial("Partials/FormControls/Editor/_Grid")
+@Html.Partial("Partials/FormControls/Editor/_Literal")
+@Html.Partial("Partials/FormControls/Editor/_NewsLetter")
+@Html.Partial("Partials/FormControls/Editor/_PageBreak")
+@Html.Partial("Partials/FormControls/Editor/_Hidden")
+@Html.Partial("Partials/FormControls/Editor/_Captcha")
+
+<script>
+    var ignore = ".input";
+    var editorTools = [
+            "formatting",
+            "bold",
+            "italic",
+            "underline",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "createLink",
+            "insertImage",
+            "createTable",
+            "viewHtml",
+            {
+                name: "maximize",
+                tooltip: "maximize",
+                exec: maximize
+            }
+    ];
+
+    var editorOptions = {
+        tools:[
+            "formatting",
+            "bold",
+            "italic",
+            "underline",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "createLink",
+            "insertImage",
+            "createTable",
+            "viewHtml",
+            {
+                name:"custom",
+                tooltip:"Insert Java Script",
+                exec: onControlsCustomToolClick
+            }
+            ,
+            {
+                name: "maximize",
+                tooltip: "maximize",
+                exec: maximize
+            }  // maximize should be last in custom button
+        ],
+        imageBrowser: {
+            transport: {
+                type: "imagebrowser-aspnetmvc",
+                read: "@Url.Action("Read","ImageBrowser")",
+                destroy:{url: "@Url.Action("Destroy","ImageBrowser")",
+                    type:"POST"},
+                uploadUrl: "@Url.Action("Upload","ImageBrowser")",
+                thumbnailUrl: "@Url.Action("Thumbnail","ImageBrowser")",
+                imageUrl: function(e){
+
+                    return "https://" + document.location.hostname + "/ecn.images/Customers/" + @Model.CustomerID.ToString() + "/images/" + e;
+                }
+            }
+        }
+    };
+
+    var editorFooterOptions = {
+        tools:[
+            "formatting",
+            "bold",
+            "italic",
+            "underline",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "createLink",
+            "insertImage",
+            "createTable",
+            "viewHtml",
+            {
+                name:"custom",
+                tooltip:"Insert Java Script",
+                exec: onCtlFootCustomToolClick
+            },
+            {
+                name: "maximize",
+                tooltip: "maximize",
+                exec: maximize
+            } // maximize should be last in custom button
+        ],
+        imageBrowser: {
+            transport: {
+                type: "imagebrowser-aspnetmvc",
+                read: "@Url.Action("Read","ImageBrowser")",
+                destroy:{url: "@Url.Action("Destroy","ImageBrowser")",
+                type:"POST"},
+                uploadUrl: "@Url.Action("Upload","ImageBrowser")",
+                thumbnailUrl: "@Url.Action("Thumbnail","ImageBrowser")",
+                imageUrl: function(e){
+
+                    return "https://" + document.location.hostname + "/ecn.images/Customers/" + @Model.CustomerID.ToString() + "/images/" + e;
+                }
+            }
+        }
+    };
+
+    var controlsWithLabelHTML = new Array();
+    controlsWithLabelHTML.push('@((int)ControlType.Address1)');
+    controlsWithLabelHTML.push('@((int)ControlType.Address2)');
+    controlsWithLabelHTML.push('@((int)ControlType.Age)');
+    controlsWithLabelHTML.push('@((int)ControlType.Birthdate)');
+    controlsWithLabelHTML.push('@((int)ControlType.CheckBox)');
+    controlsWithLabelHTML.push('@((int)ControlType.City)');
+    controlsWithLabelHTML.push('@((int)ControlType.Company)');
+    controlsWithLabelHTML.push('@((int)ControlType.Country)');
+    controlsWithLabelHTML.push('@((int)ControlType.DropDown)');
+    controlsWithLabelHTML.push('@((int)ControlType.Email)');
+    controlsWithLabelHTML.push('@((int)ControlType.Fax)');
+    controlsWithLabelHTML.push('@((int)ControlType.FirstName)');
+    controlsWithLabelHTML.push('@((int)ControlType.FullName)');
+    controlsWithLabelHTML.push('@((int)ControlType.Gender)');
+    controlsWithLabelHTML.push('@((int)ControlType.Grid)');
+    controlsWithLabelHTML.push('@((int)ControlType.Income)');
+    controlsWithLabelHTML.push('@((int)ControlType.LastName)');
+    controlsWithLabelHTML.push('@((int)ControlType.ListBox)');
+    controlsWithLabelHTML.push('@((int)ControlType.Mobile)');
+    controlsWithLabelHTML.push('@((int)ControlType.NewsLetter)');
+    controlsWithLabelHTML.push('@((int)ControlType.Notes)');
+    controlsWithLabelHTML.push('@((int)ControlType.Occupation)');
+    controlsWithLabelHTML.push('@((int)ControlType.Password)');
+    controlsWithLabelHTML.push('@((int)ControlType.Phone)');
+    controlsWithLabelHTML.push('@((int)ControlType.RadioButton)');
+    controlsWithLabelHTML.push('@((int)ControlType.State)');
+    controlsWithLabelHTML.push('@((int)ControlType.TextArea)');
+    controlsWithLabelHTML.push('@((int)ControlType.TextBox)');
+    controlsWithLabelHTML.push('@((int)ControlType.Title)');
+    controlsWithLabelHTML.push('@((int)ControlType.User1)');
+    controlsWithLabelHTML.push('@((int)ControlType.User2)');
+    controlsWithLabelHTML.push('@((int)ControlType.User3)');
+    controlsWithLabelHTML.push('@((int)ControlType.User4)');
+    controlsWithLabelHTML.push('@((int)ControlType.User5)');
+    controlsWithLabelHTML.push('@((int)ControlType.User6)');
+    controlsWithLabelHTML.push('@((int)ControlType.Website)');
+    controlsWithLabelHTML.push('@((int)ControlType.Zip)');
+
+    var editorOptionsNoImage = {
+        tools:[
+            "formatting",
+            "bold",
+            "italic",
+            "underline",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "createTable",
+            "viewHtml",
+            {
+                name: "maximize",
+                tooltip: "maximize",
+                exec: maximize
+            }
+        ]
+    };
+
+    function isEmpty(value) {
+        return angular.isUndefined(value) || value === '' || value === null;
+    }
+
+    var controlsApplication = angular.module("controlsApplication", [ "kendo.directives", "ngSanitize" ]);
+    controlsApplication.filter('unsafe', function($sce) {
+        return $sce.trustAsHtml;
+    });
+    controlsApplication.directive('ngForm', function() {
+        return {
+            restrict: 'AE',
+            require: 'form',
+            link: function(scope, element, attrs, form) {
+                scope.$parent.$parent.forms.push(form);
+                var control = scope.$parent.control;
+                control.invalid = function() {
+                    return form.submitted && form.$invalid;
+                }
+                form.control = control;
+                form.element = element;
+                scope.$on('submitted',function(event) {
+                    form.submitted = true;
+                });
+            }
+        };
+    });
+
+    @*controlsApplication.directive('elemReady', function(){
+        return {
+            restrict:"A",
+            priority: -1000,
+            link:function(scope, element, attrs, form){
+                var controlsForRef = scope.controlsForRef;
+                for(var i = 0;i < scope.controls.length; i++)
+                {
+                    var control = scope.controls[i];
+                    if(control.IsStandard == false && (control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.Hidden)' || control.Type == '@((int)ControlType.Grid)' || control.Type == '@((int)ControlType.DropDown)'
+                        || control.Type == '@((int)ControlType.ListBox)' || control.Type == '@((int)ControlType.RadioButton)' || control.Type == '@((int)ControlType.TextArea)' || control.Type == '@((int)ControlType.TextBox)'))
+                    {
+                        for(var j = 0; j < controlsForRef.length;j++)
+                        {
+                            var controlForRef = controlsForRef[j];
+                            if(controlForRef.Id == control.Id)
+                            {
+                                if(control.FieldId != controlForRef.FieldId && typeof control.FieldId === "undefined")
+                                {
+                                    scope.controls[i].FieldId = controlForRef.FieldId;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        };
+    });*@
+    controlsApplication.directive('maximum', function () {
+        return {
+            require:'ngModel',
+            link: function (scope, elem, attr, ctrl) {
+                var maxValidator = function (value) {
+                    var max = scope.$eval(attr.maximum);
+                    if (!isEmpty(value) && value > max) {
+                        ctrl.$setValidity('maximum', false);
+                    } else {
+                        ctrl.$setValidity('maximum', true);
+                    }
+                    return value;
+                };
+                attr.$observe('maximum', function(val) {
+                    maxValidator(ctrl.$viewValue);
+                });
+                ctrl.$parsers.unshift(maxValidator);
+                ctrl.$formatters.unshift(maxValidator);
+            }
+        };
+    });
+    controlsApplication.directive('uniquegroup', function () {
+        var isValid = function(controls, group) {
+            if(!group)
+                return true;
+            var letters = getControlsByType(controls, '@((int)ControlType.NewsLetter)');
+            var count = 0;
+            $.each(letters, function(i, letter){
+                if(letter.Group){
+                    if(letter.Group.GroupID == group.GroupID){
+                        count++;
+                    }
+                }
+            });
+            return count < 2;
+        };
+        var setValidity = function(controls){
+            var groupElements = $("[uniquegroup]");
+            $.each(groupElements, function(i, groupElement){
+                var element = angular.element(groupElement);
+                var scope = element.scope();
+                var groupField = scope.form.Group;
+                var group = scope.$parent.control.Group;
+                groupField.$setValidity('uniquegroup', isValid(controls, group));
+            });
+        };
+        return {
+            require:'ngModel',
+            link: function (scope, element, attrs, ctrl) {
+
+                var controls = scope.$parent.$parent.controls;
+                ctrl.$formatters.unshift(function (modelValue) {
+                    setValidity(controls);
+                    return modelValue;
+                });
+            }
+        };
+    });
+    controlsApplication.directive('control', function ($compile) {
+        var linker = function(scope, element, attrs) {
+            element.html(getControl(scope.control.Type)).show();
+            $compile(element.contents())(scope);
+        }
+        return {
+            restrict: "E",
+            link: linker,
+            replace: true,
+            scope: {
+                control:'='
+            },
+            controller: function($scope, $timeout) {
+                var control = $scope.control;
+                var controlType = control.Type;
+                var $root = $scope.$parent.$parent;
+
+                var controls = $root.controls;
+                var pageBreakType = '@((int)ControlType.PageBreak)';
+                if(controlType == pageBreakType) {
+                    $scope.HasPrevious = function() {
+                        var pageBreaks = getControlsByType(controls, pageBreakType);
+                        if(pageBreaks.length > 1) {
+                            var first = pageBreaks[0];
+                            if(control == first) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    $scope.HasNext = function(){
+                        var pageBreaks = getControlsByType(controls, pageBreakType);
+                        if(pageBreaks.length > 1) {
+                            var last = pageBreaks[pageBreaks.length - 1];
+                            if(control == last) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+        };
+    });
+    controlsApplication.directive('controlProperties', function ($compile) {
+        return {
+            restrict: 'E',
+            template: '<ng-include src="getTemplateUrl()"/>',
+            controller: function($scope, $timeout) {
+                var control = $scope.control;
+                if(control.Id == 0)
+                    control.Grid = Math.floor((Math.random() * 100000000) + 1);
+                else
+                    control.Grid = control.Id;
+
+                var controlType = control.Type;
+
+                $scope.getTemplateUrl = function() {
+                    var typeName;
+
+                    if(control.IsStandard){
+
+                        if(controlType == '@((int)ControlType.Gender)' || controlType == '@((int)ControlType.Country)' || controlType == '@((int)ControlType.State)')
+                        {
+
+                            typeName = '@ControlType.DropDown';
+                        }
+                        else
+                        {
+
+                            typeName = '@ControlType.TextBox';
+                        }
+                    }
+                    else{
+                        typeName = getTypeName(controlType);
+                    }
+
+
+                    return String.format("{0}{1}", typeName, "Properties");
+                };
+
+                $scope.typeName = getTypeName(controlType);
+                $scope.maximumAllowed = function(){
+                    switch($scope.typeName){
+                        case '@ControlType.FirstName': return 50;
+                        case '@ControlType.LastName': return 50;
+                        case '@ControlType.Email': return 255;
+                        case '@ControlType.Phone': return 50;
+                        case '@ControlType.Fax': return 50;
+                        case '@ControlType.Website': return 50;
+                        case '@ControlType.Address1': return 255;
+                        case '@ControlType.Address2': return 255;
+                        case '@ControlType.City': return 50;
+                        case '@ControlType.Zip': return 50;
+                        case '@ControlType.Title': return 50;
+                        case '@ControlType.FullName': return 50;
+                        case '@ControlType.Company': return 100;
+                        case '@ControlType.Occupation': return 50;
+                        case '@ControlType.Mobile': return 50;
+                        case '@ControlType.Income': return 50;
+                        case '@ControlType.User1': return 255;
+                        case '@ControlType.User2': return 255;
+                        case '@ControlType.User3': return 255;
+                        case '@ControlType.User4': return 255;
+                        case '@ControlType.User5': return 255;
+                        case '@ControlType.User6': return 255;
+                        case '@ControlType.Birthdate': return 10;
+                        case '@ControlType.Notes': return 500;
+                        case '@ControlType.Password': return 25;
+                        case '@ControlType.Age': return 50;
+                    }
+                    return 500;
+                };
+                $scope.groupExplorer = groupExplorer;
+                $scope.groupSelected = function(e){
+                    if(@ViewBag.Group.GroupID == e.group.GroupID) {
+                        showMessage({
+                            type: '@MessageType.Warning',
+                            text: "Newsletter Group cannot be the same as the Form Group."
+                        });
+                    }
+                    else
+                    {
+                        var letters = getControlsByType(controls, '@((int)ControlType.NewsLetter)');
+                        var repeatedGroup = false;
+                        $.each(letters, function(i, letter){
+                            $.each(letter.Groups, function(i, g){
+                                if(g){
+                                    if(g.GroupID == e.group.GroupID){
+                                        repeatedGroup = true;
+                                    }
+                                }
+                            });
+                        });
+                        if (repeatedGroup) {
+                            showMessage({
+                                type: '@MessageType.Warning',
+                                text: 'Group already exists in Newsletter Control.'
+                            });
+                            return;
+                        }
+                        var category = {CategoryID : 0, CategoryName : " -- Select -- "};
+                        e.group.Category = category;
+                        e.group.LabelHTML = e.group.GroupName;
+
+                        var grid = $('#grid-'+ control.Grid).data('kendoGrid'),
+                            dataSource = grid.dataSource,
+                            data = dataSource.data(),
+                            gridSourceView = dataSource.view();
+                        data.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        data.push(e.group);
+                        // Initialize the control.Groups Order field
+                        for(var j=0; j < data.length; j++){
+                            data[j].Order = j;
+                        }
+                        var allItems = control.Groups.length;
+                        for(var j=0; j < allItems; j++){
+                            control.Groups.remove(0);
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            control.Groups.push(data[i]);
+                        }
+                        control.Groups.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        for(var j=0; j < control.Groups.length; j++){
+                            control.Groups[j].Order = j;
+                        }
+
+                        grid.dataSource.sync();
+                        grid.refresh();
+
+                        for(var i = 0; i < gridSourceView.length;i++){
+                            if(gridSourceView[i].Default){
+                                grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                .find(".checkbox")
+                                .attr("checked","checked");
+                            }
+                        }
+                        // Set Group Name in HTML Editor
+                        $("#groupSelected-" + control.Grid).val(e.group.GroupID);
+                        var editor = $("#GroupLabelHtml-" + control.Grid).data("kendoEditor");
+                        editor.value(e.group.LabelHTML);
+                        // Set UDFs Drag n Drops
+                        var formGroupFields = $scope.fieldsDataSource.data();
+                        var controlsFieldIds = [];
+
+                        $.each($scope.$parent.$parent.controls, function(index, control) {
+                            if (control.Type == '@((int)ControlType.TextBox)' || control.Type == '@((int)ControlType.TextArea)' || control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.Grid)' ||
+                                control.Type == '@((int)ControlType.DropDown)' || control.Type == '@((int)ControlType.ListBox)' || control.Type == '@((int)ControlType.RadioButton)' || control.Type == '@((int)ControlType.Hidden)') {
+                                for (var i = 0; i < formGroupFields.length; i++) {
+                                    if (formGroupFields[i].GroupDataFieldsID == control.FieldId) {
+                                        var f = {GroupDataFieldsID: formGroupFields[i].GroupDataFieldsID, ShortName: formGroupFields[i].ShortName};
+                                        controlsFieldIds.push(f);
+                                        return;
+                                    }
+                                }
+                            }
+                        });
+                        var tag = '';
+                        $(lstBox1).empty();
+                        $.each(controlsFieldIds, function (i, inputItem) {
+                            tag += "<li value=" + inputItem.GroupDataFieldsID + ">" + inputItem.ShortName + "</li>";
+                        });
+                        $(lstBox1).append(tag);
+                        $(lstBox2).empty();
+                        $("#FieldLabelGroupName-" + control.Grid).text(e.group.GroupName);
+                        $("#SelectUDFsGroupName-" + control.Grid).text(e.group.GroupName);
+                    }
+                }
+                $scope.addNewValue = function(e){
+                    var obj = getListItemObj()
+                    obj.Text = "";
+                    obj.Value = ""
+                    obj.Id = 0;
+                    obj.CategoryID = 0;
+                    obj.CategoryName = " -- Select -- ";
+                    var grid = $('#grid-'+ control.Grid).data('kendoGrid'),
+                        dataSource = grid.dataSource,
+                        data = dataSource.data(),
+                        gridSourceView = dataSource.view();
+
+                    obj.Order = data.length;
+                    dataSource.add(obj);
+                    data.sort(function (a, b) {
+                        return a.Order - b.Order;
+                    });
+
+                    // Update control.Items
+                    for(var j=0; j < data.length; j++){
+                        data[j].Order = j;
+                    }
+                    var allItems = control.Items.length;
+                    for(var j=0; j < allItems; j++){
+                        control.Items.remove(0);
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        control.Items.push(data[i]);
+                    }
+                    control.Items.sort(function (a, b) {
+                        return a.Order - b.Order;
+                    });
+                    for(var j=0; j < control.Items.length; j++){
+                        control.Items[j].Order = j;
+                    }
+
+                    grid.refresh();
+
+                    for(var i = 0; i < gridSourceView.length;i++){
+                        if(gridSourceView[i].Default){
+                            grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                            .find(".checkbox")
+                            .attr("checked","checked");
+                        }
+                    }
+                    grid.editRow($('#grid-'+ control.Grid + ' tr:last'));
+                }
+                var $root = $scope.$parent.$parent;
+                $scope.fieldsDataSource = $root.fieldsDataSource;
+                $scope.openAddFieldWindow = function() {
+                    var list = this.fieldList;
+
+                    var options = {
+                        CustomerId: @ViewBag.Group.CustomerID,
+                        GroupId: @ViewBag.Group.GroupID,
+                        fieldAdded: function (field) {
+                            list.dataSource.add(field);
+                            list.value(field.GroupDataFieldsID);
+                            control.FieldId = field.GroupDataFieldsID;
+                            $scope.$apply();
+                        }
+                    }
+                    openAddField(options);
+                };
+                $scope.onEditorSelect = function(e) {
+                    control.LabelHTML = e.sender.value();
+                }
+                if(control.FieldId == 0) {
+
+                    control.FieldId = String.empty;
+                }
+                if(controlType == '@((int)ControlType.TextBox)') {
+                    $scope.selectDataType = function(e) {
+                        var oldValue = e.sender.value();
+                        var newValue = e.sender.dataItem(e.item).value;
+                        if(oldValue != newValue) {
+                            if(control.Usages) {
+                                var usages = angular.copy(control.Usages);
+                                var index = $.inArray("Notification Templates", usages);
+                                if(index >= 0) {
+                                    usages.remove(index);
+                                }
+                                if(usages.length) {
+                                    e.preventDefault();
+
+                                    var message = String.format("You can not change data type of the element which is being used in conditions.\
+                                    Please remove {0} element from: <br /><br />{1}", control.Label, usages.join("<br />"));
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: message
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var controls = $root.controls;
+                var pageBreakType = '@((int)ControlType.PageBreak)';
+                if(controlType == pageBreakType) {
+                    $scope.HasPrevious = function() {
+                        var pageBreaks = getControlsByType(controls, pageBreakType);
+                        if(pageBreaks.length > 1) {
+                            var first = pageBreaks[0];
+                            if(control == first) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    $scope.HasNext = function(){
+                        var pageBreaks = getControlsByType(controls, pageBreakType);
+                        if(pageBreaks.length > 1) {
+                            var last = pageBreaks[pageBreaks.length - 1];
+                            if(control == last) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+                if(controlType == '@((int)ControlType.DropDown)' ||
+                    controlType == '@((int)ControlType.RadioButton)' ||
+                    controlType == '@((int)ControlType.CheckBox)' ||
+                    controlType == '@((int)ControlType.ListBox)')
+                {
+                    if(control.Columns == 0){
+                        control.Columns = 1;
+                    }
+                    var catGridID = "#catgrid-" + control.Grid;
+                    var gridID = "#grid-" + control.Grid;
+                    var selectedGridID = "#selectedItemsGrid-" + control.Grid;
+                    var controlItemsBackup = [];
+
+                    $scope.edit = function(e){
+
+                        var input = e.container.find("input");
+                        input.select();
+                    };
+                    $scope.changeCategories = function(e){
+                        if(e.action) {
+                            if(e.action == 'remove'){
+                                var dataItem = e.items[0];
+                                var valid = true;
+                                var view = this.view();
+                                $.each(control.Items, function(itemIndex, item){
+                                    if(item.CategoryID == dataItem.CategoryID){
+                                        valid = false;
+                                    }
+                                });
+                                if(!valid) {
+                                    $(catGridID).data('kendoGrid').dataSource.read();
+                                    $(catGridID).data('kendoGrid').refresh();
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Category being used. Cannot delete.'
+                                    });
+                                    return false;
+                                }
+                                control.Categories.remove(e.index);
+                            }
+                            if(e.action == 'add'){
+                                var obj = { CategoryName : "Category1", CategoryID : Math.floor((Math.random() * 100000000) + 1) * (-1)}
+                                var valid = true;
+                                var defN = 1;
+                                while(valid){
+                                    obj.CategoryName = 'Category' + defN;
+                                    var out = true;
+                                    $.each(control.Categories, function(itemIndex, item){
+                                        if(item.CategoryName == obj.CategoryName){
+                                            defN ++;
+                                            out = false;
+                                        }
+                                    });
+                                    if(out) valid = false;
+                                }
+                                var view = this.view();
+                                view[e.index].CategoryID = obj.CategoryID;
+                                view[e.index].CategoryName = obj.CategoryName;
+                                this.sync();
+                                control.Categories.insert(e.index, obj);
+                            }
+                            if(e.action == 'itemchange'){
+
+                                var dataItem = e.items[0];
+                                var index = e.sender.indexOf(dataItem);
+                                var view = this.view();
+
+                                if (dataItem.CategoryName.length > 100) {
+                                    view[index].CategoryID = this.options.data[index].CategoryID;
+                                    view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Category name too big. 100 characters max.'
+                                    });
+                                }
+
+                                var valid = true;
+                                var whosDuplicated = "Category";
+                                $.each(control.Categories, function(itemIndex, item){
+                                    if((item.CategoryName.toLowerCase() == dataItem.CategoryName.toLowerCase()) && itemIndex != index){
+                                        valid = false;
+                                    }
+                                });
+
+                                if(valid) {
+                                    if(dataItem.CategoryName != ""){
+                                        control.Categories[index].CategoryID = dataItem.CategoryID;    // The only entry for updating control.Items
+                                        control.Categories[index].CategoryName = dataItem.CategoryName;
+
+                                        view[index].CategoryID = control.Categories[index].CategoryID;
+                                        view[index].CategoryName = control.Categories[index].CategoryName;
+                                    } else{
+                                        view[index].CategoryID = this.options.data[index].CategoryID;
+                                        view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                        showMessage({
+                                            type: '@MessageType.Warning',
+                                            text: 'Item cannot have empty value. Please choose a different value for ' + whosDuplicated + '.'
+                                        });
+                                    }
+                                } else {
+                                    view[index].CategoryID = this.options.data[index].CategoryID;
+                                    view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Item already exist. Please choose a different value for ' + whosDuplicated + '.'
+                                    });
+                                }
+
+                                this.sync();
+                                // Update Manage Values grid with any new Category name change
+                                $.each(control.Items, function(itemIndex, item){
+                                    if(item.CategoryID == dataItem.CategoryID){
+                                        item.CategoryName = dataItem.CategoryName;
+                                    }
+                                });
+                                if ($(gridID).data('kendoGrid')) {
+                                    $(gridID).data('kendoGrid').dataSource.read();
+                                    $(gridID).data('kendoGrid').refresh();
+                                }
+                                $(selectedGridID).data('kendoGrid').dataSource.read();
+                                $(selectedGridID).data('kendoGrid').refresh();
+                            }
+                        }
+                    };
+                    // Manage Values
+                    $scope.openManage = function() {
+                        control.manage = true;
+                        controlItemsBackup = [];
+                        for(var j=0; j < control.Items.length; j++){
+                            controlItemsBackup.push({ 
+                                $$hashKey: control.Items[j].$$hashKey, 
+                                CategoryID: control.Items[j].CategoryID, 
+                                CategoryName: control.Items[j].CategoryName,
+                                Default: control.Items[j].Default,
+                                Id: control.Items[j].Id,
+                                Order: control.Items[j].Order,
+                                Text: control.Items[j].Text,
+                                Value: control.Items[j].Value
+                            });
+                        }
+
+                        // Initialize the control.Groups Order field
+                        control.Items.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        for(var j=0; j < control.Items.length; j++){
+                            control.Items[j].Order = j;
+                        }
+
+                        var readonlyEditor = function (container, options) {
+                            grid.closeCell();
+                        };
+
+                        var categoryDropDownEditor = function (container, options) {
+                            if (control.Categories.length > 0) {
+                                $('<input required class="k-input k-dropdown" data-bind="value:' + options.field + '" data-value-update="input" />')
+                                 .appendTo(container)
+                                 .kendoDropDownList({
+                                     autoBind: false,
+                                     dataTextField: "CategoryName",
+                                     dataValueField: "CategoryID",
+                                     dataSource: {
+                                         data: control.Categories,
+                                     }
+                                 });
+                            }
+                        };
+
+                        var textEditor = function (container, options) {
+                            $('<input data-value-update="input" data-bind="value:' + options.field + '"/>')
+                              .appendTo(container);
+                        };
+
+                        var setDefault = function(container, options) {
+                            var checked = this.checked,
+                            row = $(this).closest("tr"),
+                            grid = $(gridID).data('kendoGrid'),
+                            dataItem = grid.dataItem(row),
+                            source = grid.dataSource,
+                            index = source.indexOf(dataItem);
+                            dataItem.Default = checked;
+                            $.each(control.Items, function(itemIndex, item){
+                                var currentDataItem = source.at(itemIndex);
+                                if(index == itemIndex){
+                                    item.Default = dataItem.Default;
+                                    currentDataItem.Default = dataItem.Default;
+                                }
+                                else {
+                                    if(control.Type != '@((int)ControlType.CheckBox)' && control.Type != '@((int)ControlType.ListBox)') {
+                                        item.Default = false;
+                                        currentDataItem.Default = false;
+                                    }
+                                }
+                            });
+
+                            var gridSourceView = grid.dataSource.view();
+                            for(var i = 0; i < gridSourceView.length;i++){
+                                if(gridSourceView[i].Default){
+                                    grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                    .find(".checkbox")
+                                    .attr("checked","checked");
+                                }
+                                else
+                                {
+                                    grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                   .find(".checkbox")
+                                   .removeAttr('checked');
+                                }
+                            }
+                        };
+
+                        var changeItems = function(e) {
+                            if(e.action) {
+                                if(e.action == 'remove'){
+                                    control.Items.remove(e.index);
+                                }
+                                if(e.action == 'itemchange'){
+                                    var dataItem = e.items[0];
+                                    var index = e.sender.indexOf(dataItem);
+                                    var grid = $(gridID).data('kendoGrid'),
+                                        dataSource = grid.dataSource,
+                                        data = dataSource.data();
+
+                                    if(dataItem.Category != undefined) {
+                                        for(var j=0; j < data.length; j++){
+                                            if (data[j].uid == dataItem.uid) {
+                                                data[j].CategoryID = dataItem.Category.CategoryID;
+                                                data[j].CategoryName = dataItem.Category.CategoryName;
+                                            }
+                                        }
+                                    }
+                                    data.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    // Update control.Items
+                                    for(var j=0; j < data.length; j++){
+                                        data[j].Order = j;
+                                    }
+                                    var allItems = control.Items.length;
+                                    for(var j=0; j < allItems; j++){
+                                        control.Items.remove(0);
+                                    }
+                                    for (var i = 0; i < data.length; i++) {
+                                        control.Items.push(data[i]);
+                                    }
+                                    control.Items.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    for(var j=0; j < control.Items.length; j++){
+                                        control.Items[j].Order = j;
+                                    }
+
+                                    //this.ItemsGrid.dataSource.data(control.Items);
+                                    //if(dataItem.Category != undefined) {
+                                    //    //grid.dataSource.sync();
+                                    //    //$(gridID).data('kendoGrid').dataSource.read();
+                                    //    grid.refresh();
+                                    //}
+
+                                    // Update selectedGridID Defaults
+                                    //var grid = $(gridID).data('kendoGrid');
+                                    var gridSourceView = grid.dataSource.view();
+                                    for(var i = 0; i < gridSourceView.length;i++){
+                                        if(gridSourceView[i].Default){
+                                            grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                            .find(".checkbox")
+                                            .attr("checked","checked");
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                       var grid = $(gridID).data('kendoGrid');
+                        if (grid == undefined) {
+                            grid = $(gridID).kendoGrid({
+                                dataSource: {
+                                    data: control.Items,
+                                    schema: {
+                                        model: {
+                                            id: "Id",
+                                            fields: {
+                                                Value: { type: "string" },
+                                                Text: { type: "string" },
+                                                Category: { defaultValue: {CategoryID : 0, CategoryName : " -- Select -- "} },
+                                                Default: { type: "boolean" }
+                                            }
+                                        }
+                                    },
+                                    sort: { field: "Order", dir: "asc" },
+                                    change: changeItems
+                                },
+                                navigatable: true,
+                                scrollable: false,
+                                pageable: false,
+                                editable: true,
+                                edit: function (e) {
+
+                                    var input = e.container.find("input");
+                                    input.select();
+                                    var ddl = e.container.find('[data-role=dropdownlist]').data('kendoDropDownList');
+                                    if(ddl){
+                                        ddl.open();
+                                    }
+                                },
+                                columns: [
+                                  { field: "Value", title: "Value", width: "210px", editor: textEditor},
+                                  { field: "Text", title: "Text", width: "210px", editor: textEditor},
+                                  { field: "Category", title: "Category", width: "190px", editor: categoryDropDownEditor, template: "#=CategoryName# <span style='float:right;margin-right:5px;' class='k-icon k-i-arrowhead-s'></span>" },
+                                  { template: "<input type='checkbox' ng-model='dataItem.Default' class='checkbox' />", title: "Default", width: "60px" },
+                                  { command: [{ name:"Delete", text: "X",
+                                      click: function(e){
+                                          e.preventDefault(); //prevent page scroll reset
+
+                                          var grid = $(gridID).data('kendoGrid');
+                                          var tr = $(e.target).closest("tr");
+                                          var data = grid.dataItem(tr);
+                                          var rules = @Html.Raw(JsonConvert.SerializeObject(controlInRules));
+                                          if (rules.indexOf(data.Id) >= 0) {
+                                              //if(control.Usages && control.Usages.length) {
+                                              var message = String.format("You can not remove the element which is being used in notification templates or conditions.\
+                                        Please remove element from: <br /><br />{0}", control.Usages.join("<br />"));
+
+                                              showMessage({
+                                                  type: '@MessageType.Warning',
+                                                  text: message
+                                              });
+                                              return;
+                                          }
+                                          //}
+
+                                          var DeleteRuleAction =  function()
+                                          {
+                                              grid.dataSource.remove(data)  //prepare a "destroy" request
+                                              //grid.dataSource.sync()  //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+                                              var gridSourceView = grid.dataSource.view();
+                                              for(var i = 0; i < gridSourceView.length;i++){
+                                                  if(gridSourceView[i].Default){
+                                                      grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                                      .find(".checkbox")
+                                                      .attr("checked","checked");
+                                                  }
+                                              }
+                                          }
+                                          showMessage({
+                                              type: '@MessageType.Confirm',
+                                              text: 'Are you sure you want to delete this item?',
+                                              action: DeleteRuleAction
+                                          });
+                                      }
+                                  }], title: " ", width: "80px" }
+                                ]
+                            }).data('kendoGrid');
+                        }
+
+                        grid.table.on("click", ".checkbox" , setDefault);
+
+                        // Set the initial values for Default checkbox when Manage Values first opens.
+                        var gridSourceView = grid.dataSource.view();
+                        for(var i = 0; i < gridSourceView.length;i++){
+                            if(gridSourceView[i].Default){
+                                grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                .find(".checkbox")
+                                .attr("checked","checked");
+                            }
+                        }
+
+                        grid.table.kendoSortable({
+                            hint: function (element) { //customize the hint
+                                var table = $('<table style="width: 600px;" class="k-grid k-widget"></table>'),
+                                    hint;
+
+                                table.append(element.clone()); //append the dragged element
+                                table.css("opacity", 0.7);
+
+                                return table; //return the hint element
+                            },
+                            cursor: "move",
+                            placeholder: function(element) {
+                                return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+                            },
+                            container: gridID + " tbody",
+                            filter: ">tbody >tr",
+                            change: function(e) {
+                                var grid = $(e.sender.element).closest('.k-grid').getKendoGrid(),
+                                   oldIndex = e.oldIndex , // The old position
+                                   newIndex = e.newIndex , // The new position
+                                   view = grid.dataSource.view(),
+                                   data = grid.dataSource.data(),
+                                   dataItem = grid.dataSource.getByUid(e.item.data("uid")); // Retrieve the moved dataItem
+
+
+                                dataItem.Order = newIndex; // Update the order
+                                dataItem.dirty = true;
+
+                                // Shift the order of the records
+                                if (oldIndex < newIndex) {
+                                    for (var i = oldIndex + 1; i <= newIndex; i++) {
+                                        view[i].Order--;
+                                        view[i].dirty = true;
+                                    }
+                                } else {
+                                    for (var i = oldIndex - 1; i >= newIndex; i--) {
+                                        view[i].Order++;
+                                        view[i].dirty = true;
+                                    }
+                                }
+
+                                data.sort(function (a, b) {
+                                    return a.Order - b.Order;
+                                });
+                                // Update control.Items
+                                for(var j=0; j < data.length; j++){
+                                    data[j].Order = j;
+                                }
+                                var allItems = control.Items.length;
+                                for(var j=0; j < allItems; j++){
+                                    control.Items.remove(0);
+                                }
+                                for (var i = 0; i < data.length; i++) {
+                                    control.Items.push(data[i]);
+                                }
+                                control.Items.sort(function (a, b) {
+                                    return a.Order - b.Order;
+                                });
+                                for(var j=0; j < control.Items.length; j++){
+                                    control.Items[j].Order = j;
+                                }
+                                //grid.dataSource.sync();
+
+                                // Update selectedGridID Defaults
+                                var gridSourceView = grid.dataSource.view();
+                                for(var i = 0; i < gridSourceView.length;i++){
+                                    if(gridSourceView[i].Default){
+                                        grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                        .find(".checkbox")
+                                        .attr("checked","checked");
+                                    }
+                                }
+                            }
+                        });
+                    };
+                    $scope.applyManage = function() {
+                        // Validation for empty Text or Value fields
+                        var failValidation = false;
+                        var ctrlValueOrTextEmpty = '';
+                        for (var i = 0; i < control.Items.length; i++) {
+                            if (control.Items[i].Value == "" || control.Items[i].Text == "" ||
+                                control.Items[i].Value == null || control.Items[i].Text == null) {
+                                failValidation = true;
+                                ctrlValueOrTextEmpty = control.Items[i].Value == "" || control.Items[i].Value == null ? "Value" : "Text";
+                            }
+                        }
+                        if (failValidation) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'Value or Text cannot have empty ' + ctrlValueOrTextEmpty + '.'
+                            });
+                            return;
+                        }
+
+                        // Validation for Repeated Text or Value fields
+                        failValidation = false;
+                        var previousValue = '',
+                            previousText = '',
+                            itemValues = [],
+                            itemTexts = [],
+                            ValueOrTextRepeated = '';
+                        for (var i = 0; i < control.Items.length; i++) {
+                            if (previousValue != control.Items[i].Value) { // Values
+                                if (itemValues.indexOf(control.Items[i].Value) >= 0) {
+                                    failValidation = true;
+                                    ValueOrTextRepeated = 'Value';
+                                }
+                            } else {
+                                failValidation = true;
+                                ValueOrTextRepeated = 'Value';
+                            }
+                            previousValue = control.Items[i].Value;
+                            itemValues.push(control.Items[i].Value);
+
+                            if (previousText != control.Items[i].Text) { // Texts
+                                if (itemTexts.indexOf(control.Items[i].Text) >= 0) {
+                                    failValidation = true;
+                                    ValueOrTextRepeated = 'Text';
+                                }
+                            } else {
+                                failValidation = true;
+                                ValueOrTextRepeated = 'Text';
+                            }
+                            previousText = control.Items[i].Text;
+                            itemTexts.push(control.Items[i].Text);
+                        }
+                        if (failValidation) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'Value or Text cannot be repeated. Please rename ' + ValueOrTextRepeated
+                            });
+                            return;
+                        }
+
+                        // Validation for Category usage if any
+                        var failValidation = false;
+                        if (control.Categories.length > 0) {
+                            for (var i = 0; i < control.Items.length; i++) {
+                                if (control.Items[i].CategoryID == 0) {
+                                    failValidation = true;
+                                }
+                            }
+                        }
+                        if (failValidation) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'A Category must be selected.'
+                            });
+                            return;
+                        }
+
+                        // Validation for Control Control-Category order
+                        var badOrder = false,
+                            cats = [],
+                            lastCat = -1,
+                            controlItems = control.Items;
+                        controlItems.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        $.each(controlItems, function(index, item) {
+                            if (item.CategoryID != lastCat) {
+                                if (cats.indexOf(item.CategoryID) >=0) {
+                                    badOrder = true;
+                                    return;
+                                }
+                                lastCat = item.CategoryID;
+                                cats.push(item.CategoryID);
+                            }
+                        });
+                        if (badOrder) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'Invalid Category / Value sort order. Values must be sorted by Category. Please reorder Values.'
+                            });
+                            return;
+                        }
+
+                        // Validation complete
+                        controlItemsBackup = $.extend(true, [], control.Items);
+                        $(selectedGridID).data('kendoGrid').dataSource.data(controlItemsBackup);
+
+                        // Update selectedGridID Defaults
+                        var grid = $(selectedGridID).data('kendoGrid');
+                        var gridSourceView = grid.dataSource.view();
+                        for(var i = 0; i < gridSourceView.length;i++){
+                            if(gridSourceView[i].Default){
+                                grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                .find(".checkbox")
+                                .attr("checked","checked");
+                            }
+                        }
+
+                        $(gridID).data('kendoGrid').destroy();
+                        $(gridID).empty();
+                        control.manage = false;
+                    };
+                    $scope.closeManage = function() {
+                        var allItems = control.Items.length;
+                        for(var j=0; j < allItems; j++){
+                            control.Items.remove(0);
+                        }
+                        for(var i = 0; i < controlItemsBackup.length; i++) {
+                            control.Items.push(controlItemsBackup[i]);
+                        }
+                        for(var j=0; j < control.Items.length; j++){
+                            control.Items[j].Order = j;
+                        }
+                        $(selectedGridID).data('kendoGrid').dataSource.data(controlItemsBackup);
+
+                        $(gridID).data('kendoGrid').destroy();
+                        $(gridID).empty();
+                        control.manage = false;
+                    };
+                    $scope.openMode = function() {
+                        control.ItemsString = null;
+                        control.mode = true;
+                    };
+                    $scope.applyMode = function() {
+                        var items = [];
+                        var valid = true;
+                        var whosDuplicated = "";
+                        if(control.ItemsString) {
+                            var inputItems = control.ItemsString.split('\n');
+                            $.each(inputItems, function(i, inputItem){
+                                var params = inputItem.split(/[\t\|]/g);
+                                items.push({
+                                    Id:0,
+                                    Value: params[0],
+                                    Text: params[1],
+                                    Default: false,
+                                    CategoryID: 0,
+                                    CategoryName: " -- Select -- "
+                                });
+                            });
+
+                            // Free Form Entry Validation if value/text duplicated
+                            var values = [];
+                            for (i in items) {
+                                if(items[i].Value != undefined)
+                                    values.push(items[i].Value);
+                            }
+                            var texts = [];
+                            for (i in items) {
+                                if(items[i].Text != undefined)
+                                    texts.push(items[i].Text);
+                            }
+
+                            var out = eliminateDuplicates(values);
+                            if(values.length != out.length){
+                                valid = false;
+                                whosDuplicated = "Value";
+                            }
+                            var out = eliminateDuplicates(texts);
+                            if(texts.length != out.length){
+                                valid = false;
+                                whosDuplicated = "Text";
+                            }
+                        }
+                        if (valid) {
+                            var allItems = control.Items.length;
+                            for(var j=0; j < allItems; j++){
+                                control.Items.remove(0);
+                            }
+                            for (var i = 0; i < items.length; i++) {
+                                control.Items.push(items[i]);
+                            }
+                            for(var j=0; j < control.Items.length; j++){
+                                control.Items[j].Order = j;
+                            }
+                            $(gridID).data('kendoGrid').dataSource.read();
+                            $(gridID).data('kendoGrid').refresh();
+                            control.mode = false;
+                        } else {
+                            showMessage({
+                                type: '@MessageType.Warning',
+                                text: 'Duplicated entry value. Please choose a different value for ' + whosDuplicated + '.'
+                            });
+                        }
+                    };
+                    $scope.closeMode = function() {
+                        control.mode = false;
+                    };
+                    function eliminateDuplicates(arr) {
+                        var i,
+                            len=arr.length,
+                            out=[],
+                            obj={};
+
+                        for (i=0;i<len;i++) {
+                            obj[arr[i].toLowerCase()]=0;
+                        }
+                        for (i in obj) {
+                            out.push(i);
+                        }
+                        return out;
+                    }
+                }
+                if(controlType == '@((int)ControlType.Gender)' ||
+                    controlType == '@((int)ControlType.Country)' ||
+                    controlType == '@((int)ControlType.State)'){
+                    //console.log(controlType);
+                    if(control.Columns == 0){
+                        control.Columns = 1;
+                    }
+                    $scope.edit = function(e){
+                        var input = e.container.find("input");
+
+                        input.select();
+                    };
+                    $scope.changeItems = function(e){
+                        if(e.action) {
+                            if(e.action == 'remove'){
+                                control.Items.remove(e.index);
+                            }
+                            if(e.action == 'add'){
+                                var obj = getListItemObj()
+                                obj.Id = 0;
+                                var valid = true;
+                                var defN = 1;
+                                while(valid){
+                                    obj.Value = 'Default' + defN;
+                                    obj.Text = 'Default' + defN;
+                                    var out = true;
+                                    $.each(control.Items, function(itemIndex, item){
+                                        if(item.Value == obj.Value || item.Text == obj.Text){
+                                            defN ++;
+                                            out = false;
+                                        }
+                                    });
+                                    if(out) valid = false;
+                                }
+                                var view = this.view();
+                                view[e.index].Id = obj.Id;
+                                view[e.index].Value = obj.Value;
+                                view[e.index].Text = obj.Text;
+                                view[e.index].Default = obj.Default;
+                                control.Items.insert(e.index, obj);
+                            }
+                            if(e.action == 'itemchange'){
+                                var dataItem = e.items[0];
+                                var index = e.sender.indexOf(dataItem);
+                                //control.Items[index][e.field] = item[e.field];
+
+                                var valid = true;
+                                var whosDuplicated = "";
+                                $.each(control.Items, function(itemIndex, item){
+                                    if((item.Value.toLowerCase() == dataItem.Value.toLowerCase() || item.Text.toLowerCase() == dataItem.Text.toLowerCase()) && itemIndex != index){
+                                        valid = false;
+                                        whosDuplicated = item.Value.toLowerCase() == dataItem.Value.toLowerCase() ? "Value" : "Text";
+                                    }
+                                });
+
+                                var view = this.view();
+                                if(valid) {
+                                    if(dataItem.Value != "" && dataItem.Text != ""){
+                                        if(control.Items[index].Value.toLowerCase() != dataItem.Value.toLowerCase())
+                                            dataItem.Text = dataItem.Value;
+
+                                        control.Items[index].Id = dataItem.Id;    // The only entry for updating control.Items
+                                        control.Items[index].Value = dataItem.Value;
+                                        control.Items[index].Text = dataItem.Text;
+                                        control.Items[index].Default = dataItem.Default;
+
+                                        view[index].Id = control.Items[index].Id;
+                                        view[index].Value = control.Items[index].Value;
+                                        view[index].Text = control.Items[index].Text;
+                                        view[index].Default = control.Items[index].Default;
+                                    } else{
+                                        whosDuplicated = dataItem.Value == "" ? "Value" : "Text";
+                                        view[index].Id = this.options.data[index].Id;
+                                        view[index].Value = this.options.data[index].Value;
+                                        view[index].Text = this.options.data[index].Text;
+                                        view[index].Default = this.options.data[index].Default;
+
+                                        showMessage({
+                                            type: '@MessageType.Warning',
+                                            text: 'Item cannot have empty value. Please choose a different value for ' + whosDuplicated + '.'
+                                        });
+                                    }
+                                } else {
+                                    view[index].Id = this.options.data[index].Id;
+                                    view[index].Value = this.options.data[index].Value;
+                                    view[index].Text = this.options.data[index].Text;
+                                    view[index].Default = this.options.data[index].Default;
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Item already exist. Please choose a different value for ' + whosDuplicated + '.'
+                                    });
+                                }
+                                //this.ItemsGrid.dataSource.data(control.Items);
+                            }
+                        }
+                    };
+                    $scope.setDefault = function(multiple) {
+                        var dataItem = this.dataItem;
+                        var source = this.ItemsGrid.dataSource;
+                        var index = source.indexOf(dataItem);
+                        $.each(control.Items, function(itemIndex, item){
+                            var currentDataItem = source.at(itemIndex);
+                            if(index == itemIndex){
+                                item.Default = dataItem.Default;
+                            }
+                            else {
+                                if(!multiple) {
+                                    item.Default = false;
+                                    currentDataItem.Default = false;
+                                }
+                            }
+                        });
+                        if ($("#defCountry").length != 0) {
+                            var defCountry = "";
+                            $.each(control.Items, function(itemIndex, item){
+                                if(item.Default){
+                                    defCountry = item.Text;
+                                }
+                            });
+                            $("#defCountry").text(defCountry);
+                        }
+                    };
+                    $scope.openMode = function() {
+                        control.ItemsString = null;
+                        control.mode = true;
+                    };
+                    $scope.applyMode = function() {
+                        var items = [];
+                        var valid = true;
+                        var whosDuplicated = "";
+                        if(control.ItemsString) {
+                            var inputItems = control.ItemsString.split('\n');
+                            $.each(inputItems, function(i, inputItem){
+                                var params = inputItem.split(/[\t\|]/g);
+                                items.push({
+                                    Value: params[0],
+                                    Text: params[1]
+                                });
+                            });
+
+                            // Free Form Entry Validation if value/text duplicated
+                            var values = [];
+                            for (i in items) {
+                                if(items[i].Value != undefined)
+                                    values.push(items[i].Value);
+                            }
+                            var texts = [];
+                            for (i in items) {
+                                if(items[i].Text != undefined)
+                                    texts.push(items[i].Text);
+                            }
+
+                            var out = eliminateDuplicates(values);
+                            if(values.length != out.length){
+                                valid = false;
+                                whosDuplicated = "Value";
+                            }
+                            var out = eliminateDuplicates(texts);
+                            if(texts.length != out.length){
+                                valid = false;
+                                whosDuplicated = "Text";
+                            }
+                        }
+                        if (valid) {
+                            this.ItemsGrid.dataSource.data(items);
+                            control.Items = items;
+                            control.mode = false;
+                        } else {
+                            showMessage({
+                                type: '@MessageType.Warning',
+                                text: 'Duplicated entry value. Please choose a different value for ' + whosDuplicated + '.'
+                            });
+                        }
+                    };
+                    $scope.closeMode = function() {
+                        control.mode = false;
+                    };
+                    function eliminateDuplicates(arr) {
+                        var i,
+                            len=arr.length,
+                            out=[],
+                            obj={};
+
+                        for (i=0;i<len;i++) {
+                            obj[arr[i].toLowerCase()]=0;
+                        }
+                        for (i in obj) {
+                            out.push(i);
+                        }
+                        return out;
+                    }
+                    // Countries
+                    $scope.openCountrySelectorBox = function() {
+                        var tag = '';
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("GetCountriesFromDB")',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                $("#lstBox1").empty();
+                                $.each(response, function (i, inputItem) {
+                                    var item = inputItem.split('|');
+                                    var addToList = true;
+                                    $.each(control.Items, function(i, inputItem2){
+                                        if (item[0] == inputItem2.Value) {
+                                            addToList = false;
+                                            return false;
+                                        }
+                                    });
+                                    if(addToList)
+                                        tag += "<li value=" + item[0] + ">" + item[1] + "</li>";
+                                });
+                                $("#lstBox1").append(tag);
+                            }
+                        });
+                        var app = document.querySelector('#controlsApplication');
+                        var $scope = angular.element(app).scope();
+                        var defCountry = "";
+                        $.each(control.Items, function (itemIndex, item) {
+                            if (item.Default) {
+                                defCountry = item.Text;
+                            }
+                        });
+                        $("#defCountry").text(defCountry);
+
+                        var prev = -1;
+                        $(".droptrue").on('click', 'li', function (e) {
+                            var curr = $(this).index();
+                            if (e.ctrlKey || e.metaKey) {
+                                $(this).toggleClass("selected");
+                            } else if(e.shiftKey && prev > -1) {
+                                if($(this).parent().attr("id") == "lstBox1")
+                                    $("ul#lstBox1.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                                if($(this).parent().attr("id") == "lstBox2")
+                                    $("ul#lstBox2.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                            } else {
+                                prev = curr;
+                                $(this).addClass("selected").siblings().removeClass("selected");
+                            }
+                            defCountry = "";
+                            $.each(control.Items, function (itemIndex, item) {
+                                if (item.Default) {
+                                    defCountry = item.Text;
+                                }
+                            });
+                            $("#lstBox2 > li.selected").each(function () {
+                                if ($(this).prop('innerText') == defCountry) {
+                                    $(this).toggleClass("selected");
+                                }
+                            });
+                            if ($(this).prop('innerText') == defCountry) {
+                                showMessage({
+                                    type: '@MessageType.Warning',
+                                    text: 'The country '+ defCountry +' is a default country. Please change the default value before editing this item.'
+                                });
+                            }
+                        }).sortable({
+                            connectWith: "ul.droptrue",
+                            delay: 150, //Needed to prevent accidental drag when trying to select
+                            revert: 0,
+                            helper: function (e, item) {
+
+                                if (!item.hasClass('selected')) { //If you grab an unhighlighted item to drag, it will deselect (unhighlight) everything else
+                                    item.addClass('selected').siblings().removeClass('selected');
+                                }
+                                if (item.prop('innerText') == defCountry) {
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'The country '+ defCountry +' is a default country. Please change the default value before editing this item.'
+                                    });
+                                    item.toggleClass("selected");
+                                    return false;
+                                }
+                                //Clone the selected items into an array
+                                var elements = item.parent().children('.selected').clone();
+                                item.data('multidrag', elements).siblings('.selected').remove();
+                                var helper = $('<li/>');
+                                return helper.append(elements);
+                            },
+                            stop: function (e, ui) {
+                                var elements = ui.item.data('multidrag');
+                                ui.item.after(elements).remove();
+                            }
+
+                        });
+
+                        @*
+                                // Sorting
+                                var selectList = $('#lstBox2 option');
+                                selectList.sort(function (a, b) {
+                                    if (a.text < b.text) return -1;
+                                    if (a.text > b.text) return 1;
+                                    return 0;
+                                });
+                                $('#lstBox2').html(selectList);
+                        *@
+
+                        $("#lstBox2 li").each(function () {
+                            $(this).remove();
+                        });
+                        var tag2 ='';
+                        $.each(control.Items, function(i, inputItem){
+                            tag2 += "<li value="+ inputItem.Value +">"+inputItem.Text+"</li>";
+                        });
+                        $("#lstBox2").append(tag2);
+                        $("#selectorBox0").css("display", "block");
+                        $("#selectorBox1").css("display", "block");
+                    };
+                    $scope.saveCountrySelectorBox = function() {
+                        var defCountry = "";
+                        $.each(control.Items, function (itemIndex, item) {
+                            if (item.Default) {
+                                defCountry = item.Text;
+                            }
+                        });
+                        var items = [];
+                        $("#lstBox2 li").each(function () {
+                            //toTextBox += $(this).attr("value") + '\t' + $(this).text() + '\n';
+                            var def = false
+                            if (defCountry == $(this).text()) {
+                                def = true;
+                            }
+                            items.push({
+                                Default: def,
+                                Value: $(this).attr("value"),
+                                Text: $(this).text()
+                            });
+                        });
+                        var source = this.ItemsGrid.dataSource;
+                        source.data(items);
+                        control.Items = items;
+
+                        $("#defCountry").text(defCountry); // Set Default Country Text
+                        $("#selectorBox0").css("display", "none");
+                        $("#selectorBox1").css("display", "none");
+                    };
+                }
+                if(controlType == '@((int)ControlType.Grid)') {
+                    $scope.changeRows = function(){
+                        if(control.rowData){
+                            control.Rows = control.rowData.split("\n");
+                        }else{
+                            control.Rows = [];
+                        }
+                    };
+                    $scope.changeColumns = function(){
+                        if(control.columnData){
+                            control.Columns = control.columnData.split("\n");
+                        }
+                        else{
+                            control.Columns = [];
+                        }
+                    };
+                    control.rowData = control.Rows.join("\n");
+                    control.columnData = control.Columns.join("\n");
+                }
+                if(controlType == '@((int)ControlType.Literal)') {
+                    $scope.literal = {};
+                    $scope.updateEditor = function() {
+                        $scope.literal.Editor._blur();
+                    };
+                    control.onmove = function() {
+                        $scope.literal.Editor.refresh();
+                    };
+                    $("#zone").bind('ControlMoved', control.onmove);
+                }
+
+                //alert(controlsWithLabelHTML.length);
+                //for(var i = 0; i < controlsWithLabelHTML.length; i++)
+                //{
+                //    try{
+                //        if(controlType == controlsWithLabelHTML[i] )
+                //        {
+                //            $scope.control = {};
+                //            control.onmove = function(){
+                //                //have to use control.LabelHTML for the editor
+                //                $scope.LabelHTML.refresh();
+                //            }
+                //            $("#zone").bind('ControlMoved', control.onmove);
+                //        }
+                //    }
+                //    catch(error)
+                //    {
+                //        alert(error);
+                //    }
+                //}
+
+                if(controlType == '@((int)ControlType.NewsLetter)') {
+                    if(control.Columns == 0){
+                        control.Columns = 1;
+                    }
+                    var catGridID = "#catgrid-" + control.Grid;
+                    var gridID = "#grid-" + control.Grid;
+                    var selectedGridID = "#selectedGroupsGrid-" + control.Grid;
+                    var groupSelected = "#groupSelected-" + control.Grid;
+                    var GroupLabelHtml = "#GroupLabelHtml-" + control.Grid;
+                    var lstBox1 = "#lstBox1-" + control.Grid;
+                    var lstBox2 = "#lstBox2-" + control.Grid;
+                    var controlGroupsBackup = [];
+
+                    $scope.edit = function(e){
+                        var input = e.container.find("input");
+
+                        input.select();
+                    };
+                    $scope.changeCategories = function(e){
+                        if(e.action) {
+                            if(e.action == 'remove'){
+                                var dataItem = e.items[0];
+                                var valid = true;
+                                var view = this.view();
+                                $.each(control.Groups, function(itemIndex, item){
+                                    if(item.Category.CategoryID == dataItem.CategoryID){
+                                        valid = false;
+                                    }
+                                });
+                                if(!valid) {
+                                    $(catGridID).data('kendoGrid').dataSource.read();
+                                    $(catGridID).data('kendoGrid').refresh();
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Category being used. Cannot delete.'
+                                    });
+                                    return false;
+                                }
+                                control.Categories.remove(e.index);
+                            }
+                            if(e.action == 'add'){
+                                var obj = { CategoryName : "Category1", CategoryID : Math.floor((Math.random() * 100000000) + 1) * (-1)}
+                                var valid = true;
+                                var defN = 1;
+                                while(valid){
+                                    obj.CategoryName = 'Category' + defN;
+                                    var out = true;
+                                    $.each(control.Categories, function(itemIndex, item){
+                                        if(item.CategoryName == obj.CategoryName){
+                                            defN ++;
+                                            out = false;
+                                        }
+                                    });
+                                    if(out) valid = false;
+                                }
+                                var view = this.view();
+                                view[e.index].CategoryID = obj.CategoryID;
+                                view[e.index].CategoryName = obj.CategoryName;
+                                this.sync();
+                                control.Categories.insert(e.index, obj);
+                            }
+                            if(e.action == 'itemchange'){
+                                var dataItem = e.items[0];
+                                var index = e.sender.indexOf(dataItem);
+                                var view = this.view();
+
+                                if (dataItem.CategoryName.length > 100) {
+                                    view[index].CategoryID = this.options.data[index].CategoryID;
+                                    view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Category name too big. 100 characters max.'
+                                    });
+                                }
+
+                                var valid = true;
+                                var whosDuplicated = "Category";
+                                $.each(control.Categories, function(itemIndex, item){
+                                    if((item.CategoryName.toLowerCase() == dataItem.CategoryName.toLowerCase()) && itemIndex != index){
+                                        valid = false;
+                                    }
+                                });
+
+                                if(valid) {
+                                    if(dataItem.CategoryName != ""){
+                                        control.Categories[index].CategoryID = dataItem.CategoryID;    // The only entry for updating control.Items
+                                        control.Categories[index].CategoryName = dataItem.CategoryName;
+
+                                        view[index].CategoryID = control.Categories[index].CategoryID;
+                                        view[index].CategoryName = control.Categories[index].CategoryName;
+                                    } else{
+                                        view[index].CategoryID = this.options.data[index].CategoryID;
+                                        view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                        showMessage({
+                                            type: '@MessageType.Warning',
+                                            text: 'Item cannot have empty value. Please choose a different value for ' + whosDuplicated + '.'
+                                        });
+                                    }
+                                } else {
+                                    view[index].CategoryID = this.options.data[index].CategoryID;
+                                    view[index].CategoryName = this.options.data[index].CategoryName;
+
+                                    showMessage({
+                                        type: '@MessageType.Warning',
+                                        text: 'Item already exist. Please choose a different value for ' + whosDuplicated + '.'
+                                    });
+                                }
+                                this.sync();
+                                // Update Manage Values grid with any new Category name change
+                                $.each(control.Groups, function(itemIndex, item){
+                                    if(item.Category.CategoryID == dataItem.CategoryID){
+                                        item.Category.CategoryName = dataItem.CategoryName;
+                                    }
+                                });
+                                if ($(gridID).data('kendoGrid')) {
+                                    $(gridID).data('kendoGrid').dataSource.read();
+                                    $(gridID).data('kendoGrid').refresh();
+                                }
+                                $(selectedGridID).data('kendoGrid').dataSource.read();
+                                $(selectedGridID).data('kendoGrid').refresh();
+                            }
+                        }
+                    };
+                    $scope.setDefaultGroup = function(multiple) {
+
+                        var dataItem = this.dataItem;
+                        var source = this.ItemsGrid.dataSource;
+                        var index = source.indexOf(dataItem);
+                        $.each(control.Groups, function(itemIndex, item){
+                            var currentDataItem = source.at(itemIndex);
+                            if(index == itemIndex){
+                                item.Default = dataItem.Default;
+                            }
+                            else {
+                                if(!multiple) {
+                                    item.Default = false;
+                                    currentDataItem.Default = false;
+                                }
+                            }
+                        });
+                    };
+                    // Manage Newsletters
+                    $scope.openManage = function() {
+                        control.mode = true;
+                        controlGroupsBackup = [];
+                        for(var j=0; j < control.Groups.length; j++){
+                            controlGroupsBackup.push({ 
+                                $$hashKey: control.Groups[j].$$hashKey, 
+                                Category: {
+                                    CategoryID: control.Groups[j].Category.CategoryID, 
+                                    CategoryName: control.Groups[j].Category.CategoryName
+                                },
+                                CustomerID: control.Groups[j].CustomerID,
+                                Default: control.Groups[j].Default == undefined ? false : control.Groups[j].Default,
+                                GroupID: control.Groups[j].GroupID,
+                                GroupName: control.Groups[j].GroupName,
+                                LabelHTML: control.Groups[j].LabelHTML,
+                                Order: control.Groups[j].Order,
+                                UDFs: control.Groups[j].UDFs == undefined ? [] : control.Groups[j].UDFs,
+                            });
+                        }
+                        // Initialize the control.Groups Order field
+                        control.Groups.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        for(var j=0; j < control.Groups.length; j++){
+                            control.Groups[j].Order = j;
+                        }
+
+                        var readonlyEditor = function (container, options) {
+                            grid.closeCell();
+                        };
+
+                        var categoryDropDownEditor = function (container, options) {
+                            if (control.Categories.length > 0) {
+                                $('<input required class="k-input k-dropdown" data-bind="value:' + options.field + '" data-value-update="input" />')
+                                 .appendTo(container)
+                                 .kendoDropDownList({
+                                     autoBind: false,
+                                     dataTextField: "CategoryName",
+                                     dataValueField: "CategoryID",
+                                     dataSource: {
+                                         data: control.Categories,
+                                     }
+                                 });
+                            }
+                        };
+
+                        var setDefault = function(container, options) {
+                            var checked = this.checked,
+                            row = $(this).closest("tr"),
+                            grid = $(gridID).data('kendoGrid'),
+                            dataItem = grid.dataItem(row),
+                            source = grid.dataSource,
+                            index = source.indexOf(dataItem);
+                            dataItem.Default = checked;
+                            $.each(control.Groups, function(itemIndex, item){
+                                var currentDataItem = source.at(itemIndex);
+                                if(index == itemIndex){
+                                    item.Default = dataItem.Default;
+                                    currentDataItem.Default = dataItem.Default;
+                                }
+                                //else {
+                                //    item.Default = false;
+                                //    currentDataItem.Default = false;
+                                //}
+                            });
+
+                            var gridSourceView = grid.dataSource.view();
+                            for(var i = 0; i < gridSourceView.length;i++){
+                                if(gridSourceView[i].Default){
+                                    grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                    .find(".checkbox")
+                                    .attr("checked","checked");
+                                }
+                                else
+                                {
+                                    grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                   .find(".checkbox")
+                                   .removeAttr('checked');
+                                }
+                            }
+                        };
+
+                        var changeGroups = function(e) {
+                            if(e.action) {
+                                if(e.action == 'remove'){
+                                    control.Groups.remove(e.index);
+                                    var editor = $(GroupLabelHtml).data("kendoEditor");
+                                    editor.value('');
+                                    $(lstBox1).empty();
+                                    $(lstBox2).empty();
+                                }
+                                if(e.action == 'itemchange'){
+                                    var dataItem = e.items[0],
+                                        index = e.sender.indexOf(dataItem),
+                                        grid = $(gridID).data('kendoGrid'),
+                                        dataSource = grid.dataSource,
+                                        data = dataSource.data();
+
+
+                                    if($.isNumeric(dataItem.Category))
+                                    {
+                                        for(var j=0; j< control.Categories.length;j++)
+                                        {
+                                            if(dataItem.Category == control.Categories[j].CategoryID)
+                                            {
+                                                dataItem.Category = control.Categories[j];
+                                                break;
+                                            }
+                                        }
+                                    }
+
+
+                                    for(var j=0; j < data.length; j++){
+                                        if (data[j].uid == dataItem.uid) {
+                                            var category = {CategoryID : dataItem.Category.CategoryID, CategoryName : dataItem.Category.CategoryName};
+                                            data[j].Category = category;
+                                        }
+                                    }
+
+                                    data.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    // Update control.Groups
+                                    for(var j=0; j < data.length; j++){
+                                        data[j].Order = j;
+                                    }
+                                    var allItems = control.Groups.length;
+                                    for(var j=0; j < allItems; j++){
+                                        control.Groups.remove(0);
+                                    }
+                                    for (var i = 0; i < data.length; i++) {
+                                        control.Groups.push(data[i]);
+                                    }
+                                    control.Groups.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    for(var j=0; j < control.Groups.length; j++){
+                                        control.Groups[j].Order = j;
+                                    }
+                                    grid.dataSource.sync();
+                                    grid.refresh();
+
+                                    // Update selectedGridID Defaults
+                                    //var grid = $(gridID).data('kendoGrid');
+                                    var gridSourceView = grid.dataSource.view();
+                                    for(var i = 0; i < gridSourceView.length;i++){
+                                        if(gridSourceView[i].Default){
+                                            grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                            .find(".checkbox")
+                                            .attr("checked","checked");
+                                        }
+                                    }
+                                }
+                            }
+                        };
+
+                        var grid = $(gridID).kendoGrid({
+                            dataSource: {
+                                data: control.Groups,
+                                schema: {
+                                    model: {
+                                        id: "GroupID",
+                                        fields: {
+                                            GroupName: { type: "string" },
+                                            Category: { defaultValue: {CategoryID : 0, CategoryName : " -- Select -- "}},
+                                            Default: { type: "boolean" }
+                                        }
+                                    }
+                                },
+                                sort: { field: "Order", dir: "asc" },
+                                change: changeGroups
+                            },
+                            scrollable: true,
+                            pageable: false,
+                            editable: {
+                                mode: "incell",
+                                destroy: true
+                            },
+                            edit: function(e) {
+                                // When selecting a row..
+
+                                // Save previous HTML Content
+                                if($(groupSelected).val() != "") {
+                                    var groupSelectedId = $(groupSelected).val();
+                                    var editor = $(GroupLabelHtml).data("kendoEditor");
+                                    var gridItems = $(gridID).data("kendoGrid").dataSource.options.data;
+                                    $.each(gridItems, function(itemIndex, group){
+                                        if(groupSelectedId == group.GroupID){
+                                            var htmlEditorValue = editor.value();
+                                            if(htmlEditorValue != undefined && htmlEditorValue != null && htmlEditorValue != "")
+                                                group.LabelHTML = htmlEditorValue;
+                                        }
+                                    });
+                                }
+
+                                // Set HTML Editor, Category & Group Selected
+                                var model = e.model;
+                                var gridItems = this.dataSource.options.data;
+                                $.each(gridItems, function(itemIndex, group){
+                                    if(model.GroupID == group.GroupID){
+                                        group.Category = model.Category; // Setting selected Category
+                                        if (group.LabelHTML == undefined || group.LabelHTML == "")
+                                            group.LabelHTML = group.GroupName;
+                                        var editor = $(GroupLabelHtml).data("kendoEditor");
+                                        editor.value(group.LabelHTML);
+                                        model.UDFs = group.UDFs;
+                                        $(groupSelected).val(group.GroupID);
+                                    }
+                                });
+
+                                // Set UDFs Drag n Drops
+                                var formGroupFields = $scope.fieldsDataSource.data();
+                                var controlsFieldIds = [];
+                                $.each($scope.$parent.$parent.controls, function(index, control) {
+                                    if (control.Type == '@((int)ControlType.TextBox)' || control.Type == '@((int)ControlType.TextArea)' || control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.Grid)' ||
+                                        control.Type == '@((int)ControlType.DropDown)' || control.Type == '@((int)ControlType.ListBox)' || control.Type == '@((int)ControlType.RadioButton)' || control.Type == '@((int)ControlType.Hidden)') {
+                                        for (var i = 0; i < formGroupFields.length; i++) {
+                                            if (formGroupFields[i].GroupDataFieldsID == control.FieldId) {
+                                                var f = {GroupDataFieldsID: formGroupFields[i].GroupDataFieldsID, ShortName: formGroupFields[i].ShortName};
+                                                controlsFieldIds.push(f);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                });
+
+                                var tag = '';
+                                $(lstBox1).empty();
+                                $.each(controlsFieldIds, function (i, inputItem) {
+                                    var addToList = true;
+                                    if(model.UDFs != undefined && model.UDFs.length > 0) {
+                                        $.each(model.UDFs, function(i, inputItem2){
+                                            if (inputItem.GroupDataFieldsID == inputItem2.GroupDataFieldsID) {
+                                                addToList = false;
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                    if(addToList)
+                                        tag += "<li value=" + inputItem.GroupDataFieldsID + ">" + inputItem.ShortName + "</li>";
+                                });
+                                $(lstBox1).append(tag);
+
+                                $(lstBox2 + " li").each(function () {
+                                    $(this).remove();
+                                });
+                                var tag2 ='';
+                                if(model != undefined && model.UDFs != undefined && model.UDFs.length > 0) {
+                                    $.each(model.UDFs, function(i, inputItem){
+                                        tag2 += "<li value=" + inputItem.GroupDataFieldsID + ">" + inputItem.ShortName + "</li>";
+                                    });
+                                }
+                                $(lstBox2).append(tag2);
+
+                                $("#FieldLabelGroupName-" + control.Grid).text(model.GroupName);
+                                $("#SelectUDFsGroupName-" + control.Grid).text(model.GroupName);
+                            },
+                            columns: [
+                              { field: "GroupName", title: "Group Name",width:"175px", editor: readonlyEditor },
+                              { field: "Category", title: "Category", width: "150px", editor: categoryDropDownEditor, template: "#=Category.CategoryName# <span style='float:right;margin-right:5px;' class='k-icon k-i-arrowhead-s'></span>" },
+                              { template: "<input ng-model='dataItem.Default' type='checkbox' class='checkbox' />", title: "Default", width: "40px" },
+                              { command: [{ name:"Delete", text: "X",
+                                  click: function(e){
+                                      e.preventDefault(); //prevent page scroll reset
+
+                                      var grid = $(gridID).data('kendoGrid');
+                                      var tr = $(e.target).closest("tr");
+                                      var data = grid.dataItem(tr);
+                                      var rules = @Html.Raw(JsonConvert.SerializeObject(controlInRules));
+
+                                      if (rules.indexOf(data.GroupID) >= 0) {
+                                          //if(control.Usages && control.Usages.length) {
+                                          var message = String.format("You can not remove the element which is being used in notification templates or conditions.\
+                                        Please remove element from: <br /><br />{0}", control.Usages.join("<br />"));
+
+                                          showMessage({
+                                              type: '@MessageType.Warning',
+                                              text: message
+                                          });
+                                          return;
+                                      }
+                                      //}
+
+                                      var DeleteRuleAction =  function()
+                                      {
+                                          grid.dataSource.remove(data)  //prepare a "destroy" request
+                                          grid.dataSource.sync()  //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+                                      }
+                                      showMessage({
+                                          type: '@MessageType.Confirm',
+                                          text: 'Are you sure you want to delete this item?',
+                                          action: DeleteRuleAction
+                                      });
+                                  }
+                              }], title: " ", width: "30px" }
+                            ]
+                        }).data("kendoGrid");
+
+                        grid.table.on("click", ".checkbox" , setDefault);
+
+                        // Set the initial values for Default checkbox when Manage Values first opens.
+                        var gridSourceView = grid.dataSource.view();
+                        for(var i = 0; i < gridSourceView.length;i++){
+                            if(gridSourceView[i].Default){
+                                grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                .find(".checkbox")
+                                .attr("checked","checked");
+                            }
+                        }
+
+                        grid.table.kendoSortable({
+                            hint: function (element) { //customize the hint
+                                var table = $('<table style="width: 600px;" class="k-grid k-widget"></table>'),
+                                    hint;
+
+                                table.append(element.clone()); //append the dragged element
+                                table.css("opacity", 0.7);
+
+                                return table; //return the hint element
+                            },
+                            cursor: "move",
+                            placeholder: function(element) {
+                                return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+                            },
+                            container: gridID + " tbody",
+                            filter: ">tbody >tr",
+                            change: function(e) {
+                                var grid = $(e.sender.element).closest('.k-grid').getKendoGrid(),
+                                    dataSource = grid.dataSource,
+                                    data = dataSource.data(),
+                                    skip = dataSource.skip(),
+                                    oldIndex = e.oldIndex + (skip || 0),
+                                    newIndex = e.newIndex + (skip || 0),
+                                    target = $.grep(data, function (element, index) {
+                                        return element.Order === oldIndex;
+                                    })[0],
+    		                        dest = $.grep(data, function (element, index) {
+    		                            return element.Order === newIndex;
+    		                        })[0];
+
+                                //not on same item
+                                if (target.get("uid") !== dest.get("uid")) {
+                                    //reorder the items
+                                    var newPosition = dest.Order;
+
+                                    $.each(data, function (index, item) {
+
+                                        var itemPosition = item.Order;
+
+                                        //up
+                                        if (newIndex < oldIndex && itemPosition >= newIndex && itemPosition < oldIndex) {
+                                            item.Order++;
+                                            item.dirty = true;
+                                        }
+                                            //down
+                                        else if (newIndex > oldIndex && itemPosition <= newIndex && itemPosition > oldIndex) {
+                                            item.Order--;
+                                            item.dirty = true;
+                                        }
+                                    });
+
+                                    target.set("Order", newPosition);
+                                    target.dirty = true;
+                                    //dataSource.sort({ field: "position", dir: "asc" });
+                                    data.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    // Update control.Groups
+                                    for(var j=0; j < data.length; j++){
+                                        data[j].Order = j;
+                                    }
+                                    var allItems = control.Groups.length;
+                                    for(var j=0; j < allItems; j++){
+                                        control.Groups.remove(0);
+                                    }
+                                    for (var i = 0; i < data.length; i++) {
+                                        control.Groups.push(data[i]);
+                                    }
+                                    control.Groups.sort(function (a, b) {
+                                        return a.Order - b.Order;
+                                    });
+                                    for(var j=0; j < control.Groups.length; j++){
+                                        control.Groups[j].Order = j;
+                                    }
+                                    grid.dataSource.sync();
+                                    grid.refresh();
+                                }
+                                // Update selectedGridID Defaults
+                                var gridSourceView = grid.dataSource.view();
+                                for(var i = 0; i < gridSourceView.length;i++){
+                                    if(gridSourceView[i].Default){
+                                        grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                        .find(".checkbox")
+                                        .attr("checked","checked");
+                                    }
+                                }
+                            }
+                        });
+
+                        // Drag n Drop UDFs
+                        var prev = -1;
+                        $(".droptrue").on('click', 'li', function (e) {
+                            var curr = $(this).index();
+                            if (e.ctrlKey || e.metaKey) {
+                                $(this).toggleClass("selected");
+                            } else if(e.shiftKey && prev > -1) {
+                                if($(this).parent().attr("id") == "lstBox1-" + control.Grid)
+                                    $("ul"+lstBox1+".droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                                if($(this).parent().attr("id") == "lstBox2-" + control.Grid)
+                                    $("ul"+lstBox2+".droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                            } else {
+                                prev = curr;
+                                $(this).addClass("selected").siblings().removeClass("selected");
+                            }
+                        }).sortable({
+                            connectWith: "ul.droptrue",
+                            delay: 150, //Needed to prevent accidental drag when trying to select
+                            revert: 0,
+                            helper: function (e, item) {
+
+                                if (!item.hasClass('selected')) { //If you grab an unhighlighted item to drag, it will deselect (unhighlight) everything else
+                                    item.addClass('selected').siblings().removeClass('selected');
+                                }
+                                //Clone the selected items into an array
+                                var elements = item.parent().children('.selected').clone();
+                                item.data('multidrag', elements).siblings('.selected').remove();
+                                var helper = $('<li/>');
+                                return helper.append(elements);
+                            },
+                            stop: function (e, ui) {
+                                var elements = ui.item.data('multidrag');
+                                ui.item.after(elements).remove();
+
+                                var udfs = [];
+                                $(lstBox2 + " li").each(function () {
+                                    udfs.push({
+                                        GroupDataFieldsID: $(this).attr("value"),
+                                        ShortName: $(this).text()
+                                    });
+                                });
+                                var gridItems = $(gridID).data("kendoGrid").dataSource.options.data;
+                                var groupSelectedId = $(groupSelected).val();
+                                $.each(gridItems, function(itemIndex, group){
+                                    if(groupSelectedId == group.GroupID){
+                                        group.UDFs = udfs;
+                                    }
+                                });
+                            }
+                        });
+                    };
+                    $scope.applyMode = function() {
+                        // Validation for empty Newsletter controls
+                        var noValue = false;
+                        var ctrlName = '';
+                        if (control.Groups.length == 0) {
+                            noValue = true;
+                            ctrlName = getTypeName(control.Type);
+                        }
+                        if (noValue) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'Control ' + ctrlName + ' cannot have empty Newsletter Groups.'
+                            });
+                            return;
+                        }
+
+                        // Validation for Category usage if any
+                        var failValidation = false;
+                        if (control.Categories.length > 0) {
+                            for (var i = 0; i < control.Groups.length; i++) {
+                                if (control.Groups[i].Category.CategoryID == null || control.Groups[i].Category.CategoryID == 0) {
+                                    failValidation = true;
+                                }
+                            }
+                        }
+                        if (failValidation) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'A Category must be selected.'
+                            });
+                            return;
+                        }
+
+                        // Validation for Control Control-Category order
+                        var badOrder = false,
+                            cats = [],
+                            lastCat = -1,
+                            controlItems = control.Groups;
+                        controlItems.sort(function (a, b) {
+                            return a.Order - b.Order;
+                        });
+                        $.each(controlItems, function(index, item) {
+                            if (item.Category.CategoryID != lastCat) {
+                                if (cats.indexOf(item.Category.CategoryID) >= 0) {
+                                    badOrder = true;
+                                    return;
+                                }
+                                lastCat = item.Category.CategoryID;
+                                cats.push(item.Category.CategoryID);
+                            }
+                        });
+                        if (badOrder) {
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: 'Invalid Category / Groups sort order. Newsletter Groups must be sorted by Category. Please reorder Newsletter Groups.'
+                            });
+                            return;
+                        }
+
+                        // Validation complete
+                        controlGroupsBackup = jQuery.extend(true, [], control.Groups);
+                        $(selectedGridID).data('kendoGrid').dataSource.read();
+                        $(selectedGridID).data('kendoGrid').refresh();
+                        var editor = $(GroupLabelHtml).data("kendoEditor");
+                        editor.value('');
+                        $(lstBox1).empty();
+                        $(lstBox2).empty();
+
+                        // Update selectedGridID Defaults
+                        var grid = $(selectedGridID).data('kendoGrid');
+                        var gridSourceView = grid.dataSource.view();
+                        for(var i = 0; i < gridSourceView.length;i++){
+                            if(gridSourceView[i].Default){
+                                grid.tbody.find("tr[data-uid='" + gridSourceView[i].uid + "']")
+                                .find(".checkbox")
+                                .attr("checked","checked");
+                            }
+                        }
+                        control.mode = false;
+                    };
+                    $scope.closeMode = function() {
+                        var allItems = control.Groups.length;
+                        for(var j=0; j < allItems; j++){
+                            control.Groups.remove(0);
+                        }
+                        for(var i = 0; i < controlGroupsBackup.length; i++) {
+                            control.Groups.push(controlGroupsBackup[i]);
+                        }
+                        for(var j=0; j < control.Groups.length; j++){
+                            control.Groups[j].Order = j;
+                        }
+                        $(selectedGridID).data('kendoGrid').dataSource.data(controlGroupsBackup);
+                        var editor = $(GroupLabelHtml).data("kendoEditor");
+                        editor.value('');
+                        $(lstBox1).empty();
+                        $(lstBox2).empty();
+                        $(gridID).data('kendoGrid').dataSource.read();
+                        $(gridID).data('kendoGrid').refresh();
+                        control.mode = false;
+                    };
+                    $scope.groupLabelHtmlChange = function() {
+                        var groupSelectedId = $(groupSelected).val();
+                        var editor = $(GroupLabelHtml).data("kendoEditor");
+                        var gridItems = $(gridID).data("kendoGrid").dataSource.options.data;
+                        $.each(gridItems, function(itemIndex, group){
+                            if(groupSelectedId == group.GroupID){
+                                group.LabelHTML = editor.value();
+                            }
+                        });
+                    };
+                }
+            },
+            scope: {
+                control: '='
+            }
+        };
+    });
+    controlsApplication.directive('elcontrol', function(){
+        return {
+            restrict: 'C',
+            link: function(scope, elememt, attribute) {
+                $(elememt).kendoDraggable({ hint: hint, dragstart: dragstartControl, ignore: ignore });
+            }
+        };
+    });
+    controlsApplication.controller('controller', function($scope, $timeout) {
+        $scope.forms = [];
+        //$scope.editorTools = editorTools;
+        $scope.editorOptions = editorOptions;
+        $scope.editorFooterOptions = editorFooterOptions;
+        $scope.editorOptionsNoImage = editorOptionsNoImage;
+        //$timeout(adaptLeftPanel);
+        var controls = @Html.Raw(JsonConvert.SerializeObject(Model.GetAllControls()));
+        var controlsForRef = @Html.Raw(JsonConvert.SerializeObject(Model.GetAllControls()));
+        controls.sort(function(x, y){
+            return x.Order - y.Order;
+        });
+        $scope.controls = controls;
+        $scope.controlsForRef = controlsForRef;
+        $scope.headerjs  = '@Model.HeaderJs';
+        $scope.footerjs  = '@Model.FooterJs';
+        $scope.header = '@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Header))';
+        $scope.footer = '@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Footer))';
+        $scope.propetryControlSelected = function(){
+            return $scope.controls.some(function(item){
+                @*if(item.Type == '@((int)ControlType.Captcha)') { //we want to display captcha for now.
+                    return false;
+                }*@
+                item.FormType = @((int)Model.FormType); // Defines FormType for Control Properties use
+                return item.Selected;
+            });
+        }
+        function select(control){
+            $.each(controls, function(index, item){
+                item.Selected = false;
+            });
+
+            control.Selected = true;
+            setTimeout(function(){
+                for(var i = 0;i < controls.length; i++)
+                {
+                    var control = controls[i];
+                    if(control.IsStandard == false && (control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.Hidden)' || control.Type == '@((int)ControlType.Grid)' || control.Type == '@((int)ControlType.DropDown)'
+                        || control.Type == '@((int)ControlType.ListBox)' || control.Type == '@((int)ControlType.RadioButton)' || control.Type == '@((int)ControlType.TextArea)' || control.Type == '@((int)ControlType.TextBox)'))
+                    {
+                        for(var j = 0; j < controlsForRef.length; j++)
+                        {
+                            var controlForRef = controlsForRef[j];
+                            if(controlForRef.Id == control.Id)
+                            {
+                                if(control.FieldId != controlForRef.FieldId && typeof control.FieldId === "undefined")
+                                {
+                                    controls[i].FieldId = controlForRef.FieldId;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }, 1);
+            var event = $.Event("ControlSelected");
+
+            event.control = control;
+
+            $("#zone").trigger(event);
+        }
+        function getLastOrder(){
+            var orders = $.map(controls, function(control) {
+                return control.Order;
+            });
+            if(orders.length == 0) return 0;
+            var max = Math.max.apply(null, orders);
+            return max;
+        }
+        function resetOrders(){
+            $.each(controls, function(index, item){
+                item.Order = index;
+            });
+        }
+        $scope.select = select;
+        $scope.delete = function(index){
+            var control = controls[index];
+            if(control.Usages && control.Usages.length) {
+                var message = String.format("You can not remove the element which is being used in notification templates or conditions.\
+                    Please remove {0} element from: <br /><br />{1}", control.Label, control.Usages.join("<br />"));
+
+                showMessage({
+                    type: '@MessageType.Warning',
+                    text: message
+                });
+            }
+            else{
+                $.each($scope.forms, function(index, form){
+                    if(form.control == control){
+                        $scope.forms.remove(index);
+                        return false;
+                    }
+                });
+                controls.remove(index);
+                resetOrders();
+                //$scope.$apply();
+                var event = $.Event("ControlRemoved");
+                event.control = control;
+                $("#zone").trigger(event);
+                if(control.Type == '@((int)ControlType.Literal)') {
+                    $("#zone").unbind('ControlMoved', control.onmove);
+                }
+            }
+        }
+        $scope.hasLabel = function(control){
+            return ('Label' in control);
+        }
+        $scope.getControlClass = function(control){
+
+            return String.format('km{0}', getTypeName(control.Type));
+        }
+        $scope.fields = @Html.Raw(Json.Encode(ViewBag.Fields));
+        $scope.fieldsDataSource = new kendo.data.DataSource({
+            data: $scope.fields
+        });
+        if(controls.length != 0){
+
+            select(controls[0]);
+        }
+        angular.element(document).ready(function() {
+            $(".item").kendoDraggable({ hint: hint, dragstart: dragstartItem });
+            $("#zone").bind('ControlAdded', function(e){
+                if(e.control.IsStandard){
+
+                    $(String.format(".item[data-type={0}]", e.control.Type)).addClass('disabled');
+                }
+            });
+            $("#zone").bind('ControlRemoved', function(e){
+                if(e.control.IsStandard){
+                    $(String.format(".item[data-type={0}]", e.control.Type)).removeClass('disabled');
+                }
+            });
+            $("#zone").bind('ControlSelected', function(e){
+
+                $timeout(function(){
+
+                    var item = $(".elcontrol").eq(e.control.Order);
+                    var itemPosition = item.position();
+                    var container = $("#controls");
+                    var containerPosition = container.position();
+                    var offset = itemPosition.top - containerPosition.top;
+                    $("#right").css({ marginTop: offset });
+                });
+            });
+            $("#zone").kendoDropTarget({
+                drop: function (e) {
+                    var element = $(".clone");
+                    if (element.hasClass('item')) {
+                        var control = getObj(parseInt(element.data('type')));
+                        control.Order = getLastOrder() + 1;
+                        controls.push(control);
+                        resetOrders();
+
+                        select(control);
+                        $scope.$apply();
+                        console.log('control added');
+                        var event = $.Event("ControlAdded");
+                        event.control = control;
+                        $("#zone").trigger(event);
+                    }
+                    if (element.hasClass('elcontrol')) {
+                        var source = e.draggable.currentTarget;
+                        var scope = angular.element(source).scope();
+                        var control = scope.control;
+                        var lastOrder = getLastOrder();
+                        controls.move(control.Order, lastOrder);
+                        resetOrders();
+                        $scope.$apply();
+
+                        var event = $.Event("ControlMoved");
+                        $("#zone").trigger(event);
+                    }
+                    element.remove();
+                }
+            });
+            $("#zone").kendoDropTargetArea({
+                filter: '.elcontrol',
+                drop: function (e) {
+                    var element = $(".clone");
+                    var target = e.dropTarget;
+                    var targetScope = angular.element(target).scope();
+                    if(targetScope.control.Default && targetScope.control.Type == '@((int)ControlType.PageBreak)'){
+                        e.preventDefault();
+                        return false;
+                    }
+                    if (element.hasClass('item')) {
+                        var control = getObj(parseInt(element.data('type')));
+                        var pageBreakPresent = false;
+                        $.each(controls, function(index, item){
+                            if (item.Type == '@((int)ControlType.PageBreak)')
+                                pageBreakPresent = true;
+                        });
+                        if (pageBreakPresent) {
+                            controls.insert(targetScope.control.Order + 1, control);
+                        }
+                        else
+                        {
+                            if (control.Type == '@((int)ControlType.PageBreak)') {
+                                control.Default = true;
+                                controls.insert(controls.length, control);
+                            }
+                            else
+                                controls.insert(targetScope.control.Order, control);
+                        }
+                        resetOrders();
+
+                        select(control);
+                        $scope.$apply();
+
+                        var event = $.Event("ControlAdded");
+                        event.control = control;
+                        $("#zone").trigger(event);
+                    }
+                    if (element.hasClass('elcontrol')) {
+                        var source = e.draggable.currentTarget;
+                        var sourceScope = angular.element(source).scope();
+                        var sourceIndex = sourceScope.control.Order;
+                        var targetIndex = targetScope.control.Order;
+                        controls.move(sourceIndex, targetIndex);
+                        resetOrders();
+                        $scope.$apply();
+
+                        var event = $.Event("ControlMoved");
+                        $("#zone").trigger(event);
+                    }
+
+                    $('.editorForRefresh').each(function(index, obj){
+                        try{
+                            //alert(obj);
+                            var editorRefresh = $(obj).data("kendoEditor");
+                            editorRefresh.refresh();
+                        }
+                        catch(Error)
+                        {
+                            //alert(Error);
+                        }
+                    });
+
+                    element.remove();
+                }
+            });
+        });
+    });
+    function hint(element) {
+        return element.clone().addClass("clone");
+    }
+    function dragstartItem(e){
+        if($(e.target).hasClass('disabled')){
+            e.preventDefault();
+            return false;
+        }
+    }
+    function dragstartControl(e){
+        var element = angular.element(e.target);
+        var scope = element.scope();
+        var control = scope.control;
+        if(control.Default && control.Type == '@((int)ControlType.PageBreak)'){
+            e.preventDefault();
+            return false;
+        }
+    }
+    function getTypeName(type){
+        return array[type].name;
+    }
+    function getObj(type){
+        var obj = array[type].object;
+        return $.extend(true, {}, obj);
+    }
+    function getControl(type){
+        return array[type].control;
+    }
+    function getListItemObj(){
+        var obj = @Html.Raw(Json.Encode(new ListItem(true)));
+        return $.extend(true, {}, obj);
+    }
+    function getControlsByType(controls, type) {
+        var typedControls = [];
+        $.each(controls, function(i, control){
+            if(control.Type == type){
+                typedControls.push(control);
+            }
+        });
+        return typedControls;
+    }
+    //$("#splitter").kendoSplitter({
+    //    panes: [
+    //        { collapsible: true, size: "15%" },
+    //        { collapsible: false },
+    //        { collapsible: true, size: "30%" }
+    //    ]
+    //});
+    function saveControls(onSave){
+
+        var app = document.querySelector('#controlsApplication');
+        var $scope = angular.element(app).scope();
+
+
+
+        $scope.$broadcast('submitted');
+        if ($scope.propertiesForm.$invalid) {
+            var errors = [];
+            for(var i = 0; i < $scope.forms.length; i++){
+                var form = $scope.forms[i];
+                if(form.$invalid){
+                    var formElement = form.element;
+                    var control = form.control;
+                    for(var errorType in form.$error) {
+                        var fields = form.$error[errorType];
+                        $.each(fields, function(i, field){
+                            var fieldElement = formElement.find("[name=" + field.$name + "]");
+                            var message = fieldElement.data("message-" + errorType);
+                            errors.push(String.format("{0} {1}", control.Label, message));
+                        });
+                    }
+                }
+            }
+            var template = kendo.template($("#errors-template").html());
+            var html = template({ errors: errors });
+            showMessage({
+                type: '@MessageType.Error',
+                text: html
+            });
+            $scope.$apply();
+            return;
+        }
+        var model = @Html.Raw(Json.Encode(new FormControlsPostModel()));
+        model.Id = @Model.Id;
+        model.Header = $scope.header;
+        model.Footer = $scope.footer;
+        var headJS = $("#headerjs").val();
+        if(headJS != null && headJS.lastIndexOf("&gt;"!=-1)  && headJS.indexOf("&lt;"!=-1))
+        {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = headJS;
+            headJS = textArea.value;
+        }
+        model.HeaderJs = headJS;
+        var footJS = $("#footerjs").val();
+        if(footJS != null && footJS.lastIndexOf("&gt;"!=-1)  && footJS.indexOf("&lt;"!=-1))
+        {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = footJS;
+            footJS = textArea.value;
+        }
+        model.FooterJs = footJS;
+
+        $.each($scope.controls, function(index, control) {
+            var name = getTypeName(control.Type);
+            if(control.IsStandard) {
+                model[name] = control;
+            } else {
+                model[name].push(control);
+            }
+        });
+
+        // Validation for Country items
+        if (model.Country != null) {
+            if(model.Country.Items.length == 0) {
+                showMessage({
+                    type: '@MessageType.Error',
+                    text: 'Country Selection is Empty. Please Select Countries.'
+                });
+                return;
+            }
+        }
+
+        // Validation for empty Text or Value fields
+        var noValue = false;
+        var ctrlName = '';
+        var ctrlValueOrTextEmpty = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.Gender)' || control.Type == '@((int)ControlType.DropDown)'
+                || control.Type == '@((int)ControlType.ListBox)' || control.Type == '@((int)ControlType.RadioButton)') {
+                for (var i = 0; i < control.Items.length; i++) {
+                    if (control.Items[i].Value == "" || control.Items[i].Text == "" ||
+                        control.Items[i].Value == null || control.Items[i].Text == null) {
+                        noValue = true;
+                        ctrlName = getTypeName(control.Type);
+                        ctrlValueOrTextEmpty = control.Items[i].Value == "" || control.Items[i].Value == null ? "Value" : "Text";
+                        return;
+                    }
+                }
+            }
+        });
+        if (noValue) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Control ' + ctrlName + ' cannot have empty ' + ctrlValueOrTextEmpty + '.'
+            });
+            return;
+        }
+
+        // Validation for empty Newsletter controls
+        var noValue = false;
+        var ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Type == '@((int)ControlType.NewsLetter)') {
+                if (control.Groups.length == 0) {
+                    noValue = true;
+                    ctrlName = getTypeName(control.Type);
+                    return;
+                }
+            }
+        });
+        if (noValue) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Control ' + ctrlName + ' cannot have empty Newsletter Groups.'
+            });
+            return;
+        }
+
+        // Validation for querystring with special characters
+        var badQS = false;
+        ctrlName = '';
+        var regexQS = /^[a-zA-Z0-9_]+$/i;
+        $.each($scope.controls, function(index, control) {
+            if (control.PopulationType == '@((int)PopulationType.Querystring)') {
+                if (!regexQS.test(control.Parameter) || control.Parameter == null) {
+                    badQS = true;
+                    ctrlName = control.Label;
+                    return;
+                }
+            }
+        });
+        if (badQS) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Invalid QueryString name. Only allowed a-z, A-Z, 0-9 and _ characters. Cannot be empty. Please rename QueryString for control ' + ctrlName + '.'
+            });
+            return;
+        }
+
+        // Validation for Empty Control Field Name
+        var badLabel = false;
+        ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Label == '') {
+                badLabel = true;
+                ctrlName = getTypeName(control.Type);
+                return;
+            }
+        });
+        if (badLabel) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Control Field Name cannot be empty. Please rename control ' + ctrlName
+            });
+            return;
+        }
+
+        // Validation for Control Label with special characters
+        badLabel = false;
+        ctrlName = '';
+        var regexLabel = /^[a-zA-Z0-9_]+$/i;
+        $.each($scope.controls, function(index, control) {
+            if (!regexLabel.test(control.Label)) {
+                badLabel = true;
+                ctrlName = control.Label;
+                return;
+            }
+        });
+        if (badLabel) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'We’re sorry, but due to technical reasons, special characters currently are not supported in Field Name. Only allowed a-z, A-Z, 0-9 and _ characters. Please rename control ' + ctrlName
+            });
+            return;
+        }
+
+        // Validation for Repeated Controls Field Name
+        badLabel = false;
+        var previousCtrlLabels = '';
+        var ctrlLabels = [];
+        ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Type != '@((int)ControlType.PageBreak)' && control.Type != '@((int)ControlType.Captcha)') {
+                if (previousCtrlLabels != control.Label) {
+                    if (ctrlLabels.indexOf(control.Label) >= 0) {
+                        badLabel = true;
+                        ctrlName = getTypeName(control.Type);
+                        return;
+                    }
+                } else {
+                    badLabel = true;
+                    ctrlName = getTypeName(control.Type);
+                    return;
+                }
+                previousCtrlLabels = control.Label;
+                ctrlLabels.push(control.Label);
+            }
+        });
+        if (badLabel) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Control Field Name cannot be repeated. Please rename control ' + ctrlName
+            });
+            return;
+        }
+
+        // Validation for Empty Control Field Label
+        badLabel = false;
+        ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Type != '@((int)ControlType.PageBreak)' && control.Type != '@((int)ControlType.Literal)' && control.Type != '@((int)ControlType.Hidden)' && control.Type != '@((int)ControlType.Captcha)') {
+                if (control.LabelHTML == null || control.LabelHTML == '') {
+                    badLabel = true;
+                    ctrlName = getTypeName(control.Type);
+                    return;
+                }
+            }
+        });
+        if (badLabel) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Control Field Label cannot be empty. Please add Field Label for control ' + ctrlName
+            });
+            return;
+        }
+
+        // Validation for Category usage if any
+        var failValidation = false;
+        ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if (control.Type == '@((int)ControlType.NewsLetter)' && control.Categories.length > 0) {
+                for (var i = 0; i < control.Groups.length; i++) {
+                    if (control.Groups[i].Category.CategoryID == null || control.Groups[i].Category.CategoryID == 0) {
+                        failValidation = true;
+                        ctrlName = getTypeName(control.Type);
+                        return;
+                    }
+                }
+            }
+        });
+        if (failValidation) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'User added Categories on the Newsletter Control Properties, then a Category is required for all Newsletters Groups for control '+ctrlName+'.'
+            });
+            return;
+        }
+
+        // Validation for Control Control-Category order
+        var badOrder = false;
+        ctrlName = '';
+        $.each($scope.controls, function(index, control) {
+            if(control.Type == '@((int)ControlType.DropDown)' || control.Type == '@((int)ControlType.RadioButton)' || control.Type == '@((int)ControlType.CheckBox)' || control.Type == '@((int)ControlType.ListBox)')
+            {
+                var cats = [];
+                var lastCat = -1;
+                var controlItems = control.Items;
+                controlItems.sort(function (a, b) {
+                    return a.Order - b.Order;
+                });
+                $.each(controlItems, function(index, item) {
+                    if (item.CategoryID != lastCat) {
+                        if (cats.indexOf(item.CategoryID) >= 0) {
+                            badOrder = true;
+                            ctrlName = control.Label;
+                            return;
+                        }
+                        lastCat = item.CategoryID;
+                        cats.push(item.CategoryID);
+                    }
+                });
+            }
+            if(control.Type == '@((int)ControlType.NewsLetter)')
+            {
+                var cats = [];
+                var lastCat = -1;
+                var controlItems = control.Groups;
+                controlItems.sort(function (a, b) {
+                    return a.Order - b.Order;
+                });
+                $.each(controlItems, function(index, item) {
+                    if (item.Category.CategoryID != lastCat) {
+                        if (cats.indexOf(item.Category.CategoryID) >= 0) {
+                            badOrder = true;
+                            ctrlName = control.Label;
+                            return;
+                        }
+                        lastCat = item.Category.CategoryID;
+                        cats.push(item.Category.CategoryID);
+                    }
+                });
+            }
+        });
+        if (badOrder) {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Invalid Category / Value sort order. Values must be sorted by Category. Please reorder Values for control ' + ctrlName
+            });
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveControls")',
+            data: JSON.stringify(model),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                if(response[0] == '200') {
+                    if(response[1]) {
+                        model.OldGrids = response
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("UpdateRules")',
+                            data: JSON.stringify(model),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function(response) {
+                            }
+                        });
+                    }
+
+                    if(onSave) {
+                        onSave();
+                    } else {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                    }
+                } else if(response[0] == '505') {
+                    var errorText = 'Unable to save controls. ';
+                    if (response[1]) errorText += response[1] + ' ';
+                    if (response[2]) errorText += response[2];
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: errorText + ' Please add required Control.'
+                    });
+                } else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: 'Unable to save controls'
+                    });
+                }
+            }
+        });
+    }
+    angular.bootstrap(document.getElementById("controlsApplication"), ["controlsApplication"]);
+</script>
+
+<div id="controlsApplication" data-ng-controller="controller" class="form-wrapper formedit-formControls">
+
+    @Html.Partial("Partials/FormControls/Properties/_TextBox")
+    @Html.Partial("Partials/FormControls/Properties/_DropDown")
+    @Html.Partial("Partials/FormControls/Properties/_TextArea")
+    @Html.Partial("Partials/FormControls/Properties/_RadioButton")
+    @Html.Partial("Partials/FormControls/Properties/_CheckBox")
+    @Html.Partial("Partials/FormControls/Properties/_ListBox")
+    @Html.Partial("Partials/FormControls/Properties/_Grid")
+    @Html.Partial("Partials/FormControls/Properties/_Literal")
+    @Html.Partial("Partials/FormControls/Properties/_NewsLetter")
+    @Html.Partial("Partials/FormControls/Properties/_PageBreak")
+    @Html.Partial("Partials/FormControls/Properties/_Hidden")
+    @Html.Partial("Partials/FormControls/Properties/_Captcha")
+    @*<div id="splitter" class="form-wrapper formedit-formControls">*@
+    <div id="left" class="formeditorcolumn formcontrols" style="width: 15%">
+        <div class="controlbox">
+
+            @(Html.Kendo()
+                  .PanelBar()
+                  .Name("Controls")
+                  .Animation(false)
+                  .ExpandMode(PanelBarExpandMode.Single)
+                  .Items(items =>
+                  {
+                      items.Add()
+                           .Text("Common")
+                           .HtmlAttributes(new { @class = "sbox cstandart" })
+                           .LinkHtmlAttributes(new { @class = "sboxtitle" })
+                           .Content(GetCommonControls().ToString())
+                           .Expanded(true);
+
+                      items.Add()
+                           .Text("Uncommon")
+                           .HtmlAttributes(new { @class = "sbox cstandart" })
+                           .LinkHtmlAttributes(new { @class = "sboxtitle" })
+                           .Content(GetUncommonControls().ToString());
+
+                      items.Add()
+                           .Text("Custom")
+                           .HtmlAttributes(new { @class = "sbox cstandart" })
+                           .LinkHtmlAttributes(new { @class = "sboxtitle" })
+                           .Content(GetCustomControls().ToString());
+
+                      items.Add()
+                           .Text("Other")
+                           .HtmlAttributes(new { @class = "sbox cstandart" })
+                           .LinkHtmlAttributes(new { @class = "sboxtitle" })
+                           .Content(GetOtherControls().ToString());
+                  })
+            )
+
+        </div>
+    </div>
+    <div id="center" class="formeditorcolumn formedit" style="width: 63%">
+        <div class="sbox">
+            @if (Model.FormType != FormType.AutoSubmit)
+            {
+                <div class="custom-header">
+                    <span class="stll">Header HTML</span>
+                    <div kendo-editor ng-model="header" k-options="editorOptions"></div>
+                    <input type="hidden" value="{{headerjs}}" id="headerjs" name="headerjs" />
+                </div>
+            }
+            <div id="zone" elem-ready="">                        <ul id="controls">
+                        <li class='elcontrol' data-ng-repeat="control in controls" data-ng-click="select(control)"
+                            data-ng-class="{selected: control.Selected, notvalid: (control.invalid && control.invalid()), hiddenelement: control.Type == @((int)ControlType.Hidden) }">
+                            <div data-ng-class="getControlClass(control)">
+                                <label data-ng-if="hasLabel(control)" style="display:block">{{control.Label}}</label>
+                                <control control="control"></control>
+                            </div>
+                            <span class='tips'>Click to Edit, Drag to Reorder</span>
+                            <div class='delelement' data-ng-if="!control.Default">
+                                <i class='km-icon icon-kmcustom-delete' data-ng-click='delete($index)'></i>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+
+            @if (Model.FormType != FormType.AutoSubmit)
+            {
+                <div class="custom-footer">
+                    <span class="stll">Footer HTML</span>
+                    <div kendo-editor ng-model="footer" k-options="editorFooterOptions"></div>
+                    <input type="hidden" value="{{footerjs}}" id="footerjs" name="footerjs" />
+                </div>
+            }
+        </div>
+    </div>
+    <div id="right" class="formeditorcolumn formcontrolprops" style="width: 21%;">
+        <div class="propbox" data-ng-show="propetryControlSelected()">
+            <form name="propertiesForm" novalidate>
+                <div class="prop" data-ng-repeat="control in controls" data-ng-show="control.Selected">
+                    <control-properties control="control"></control-properties>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</script>
+<script type="text/x-kendo-template" id="errors-template">
+    <div class="validation-summary-errors">
+        <ul>
+            #for(var i=0; i < errors.length; i++) {#
+            <li>#= errors[i] #</li>
+            #}#
+        </ul>
+    </div>
+</script>
+
+@helper GetCommonControls()
+{
+var controls = Model.GetCommonControls();
+
+    <ul>
+        @foreach (CommonControlType item in Enum.GetValues(typeof(CommonControlType)))
+        {
+            var presence = controls.Any(x => x.Type == (ControlType)item);
+
+            <li class="item @(presence ? "disabled" : string.Empty)" data-type="@((int)item)">@item.ToString()</li>
+        }
+    </ul>
+}
+
+@helper GetUncommonControls()
+{
+var controls = Model.GetUncommonControls();
+
+    <ul>
+        @foreach (UncommonControlType item in Enum.GetValues(typeof(UncommonControlType)))
+        {
+            if (item == UncommonControlType.Notes)
+            {
+                continue;
+            }
+
+            var presence = controls.Any(x => x.Type == (ControlType)item);
+
+            <li class="item @(presence ? "disabled" : string.Empty)" data-type="@((int)item)">@item.ToString()</li>
+        }
+    </ul>
+}
+
+@helper GetCustomControls()
+{
+    <ul>
+        @foreach (CustomControlType item in Enum.GetValues(typeof(CustomControlType)))
+        {
+            if ((Model.FormType == FormType.Simple || Model.FormType == FormType.AutoSubmit) && item == CustomControlType.NewsLetter)
+            {
+                continue;
+            }
+            if (Model.FormType == FormType.AutoSubmit && (item == CustomControlType.TextArea || item == CustomControlType.Grid || item == CustomControlType.Literal))
+            {
+                continue;
+            }
+
+            <li class="item" data-type="@((int)item)">@item.ToString()</li>
+        }
+    </ul>
+}
+
+@helper GetOtherControls()
+{
+    <ul>
+        @foreach (OtherControlType item in Enum.GetValues(typeof(OtherControlType)))
+        {
+            if (Model.FormType == FormType.AutoSubmit && (item == OtherControlType.PageBreak || item == OtherControlType.Captcha))
+            {
+                continue;
+            }
+
+            <li class="item" data-type="@((int)item)">@item.ToString()</li>
+        }
+    </ul>
+}
+

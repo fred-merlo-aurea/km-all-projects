@@ -1,0 +1,217 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>%title%</title>
+<link type="text/css" href="%urlToContent%jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<style type="text/css">
+.loaderbox
+{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1010;
+    opacity: 0.9;
+}
+.loading {
+    background: url('%urlToContent%loading_spinner.gif') no-repeat center center;
+    height:100px;
+    width:100px;margin:300px auto 0;
+}
+@media only screen and (max-width: 800px) {
+    table, img {
+        width: 99% !important;
+        height: auto !important;
+    }
+}
+@media only screen and (max-width: 650px) {
+    .kmForm .km_item {
+        width: auto !important;
+        float: none !important;
+    }
+    #loginModalPopupWindow {
+        width: 90% !important;
+        margin-left: -45% !important;
+    }
+    #EmailAddress, #EmailAddress2, #EmailAddress3, #Password2, #Password3, #cont1, #cont2, #cont3 {
+        width: 99% !important;
+    }
+    #cont2 {
+        margin:15px 8px !important;
+    }
+}
+@media only screen and (max-width: 360px) {
+    .g-recaptcha {
+        transform:scale(0.85);
+        -webkit-transform:scale(0.85);
+        transform-origin:0 0;
+        -webkit-transform-origin:0 0;
+    }
+}
+</style>
+<script type="text/javascript" src="%urlToContent%jquery-1.11.1.min.js" language="javascript"></script>
+<script type="text/javascript" src="%urlToContent%jquery.validate.min.js"></script>
+<script type="text/javascript" src="%urlToContent%additional-methods.min.js"></script>
+<script type="text/javascript" src="%urlToContent%KM_script.js" language="javascript"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit%recaptcha_lang_code%" async defer></script>
+<!-- Add fancyBox main JS and CSS files -->
+<script type="text/javascript" src="%urlToContent%jquery.fancybox.pack.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="%urlToContent%jquery.fancybox.css?v=2.1.5" media="screen" />
+<script type="text/javascript">
+    prepopulateJson = %prepopulate%;
+    fieldRulesJson = %fieldRules%;
+    pageRulesJson = %pageRules%;
+    formRulesJson = %formRules%;
+    buttonNamesJson = %buttonNames%;
+    url_def = '%url%';
+    message_def = '%message%';
+    //var GetFormHandlerUrl = '%GetFormHandlerUrl%';
+    var comparisonTypes = %comparisonTypes%;
+    gsitekey = '%gsitekey%';
+    emailRex = '%emailRex%';
+    emailControlID = '%emailControlID%';
+    allowChanges = '%allowChanges%';
+    countryControlID = '%countryControlID%';
+    stateControlID = '%stateControlID%';
+    passwordControlID = '%passwordControlID%';
+    prepopulate_url = '%PrepopulateUrl%';
+    prepopulate_timeout = %PrepopulateDelay%;
+    messageDelay = %messageDelay%;
+    inIframe = %inIframe%;
+    subLoginJson = %subLoginJson%;
+
+    function PrepareValidationRules()
+    {
+        $('form').each(function(i, el){
+            $(el).validate();
+            $(el).data("validator").settings.ignore = ":not(:visible) :not(.dontIgnore)";
+        });
+
+%validation%
+
+        //$('form').each(function(i, el){
+        //    $(el).valid();
+        //});
+}
+
+    
+</script>
+<link href="%css%" rel="stylesheet">
+</head>
+<body>
+    <div class="loaderbox"><div class="loading"></div></div>
+    <div class="formprewcontetnbox clearfix">
+        <div class="langtranslbox">
+            <!--<a href="javascript:Original();">Switch to English</a>-->
+            %translate_block%
+        </div>
+        <div class="kmForm">
+            <div class="kmHeader">%html_header%</div>
+	        %begin_form%
+	        <div %formName% class="kmcontainer">
+                <form action="%submit_url%" method="post">
+                    <ul class="kmFormList">
+	                    %begin_control%
+                        <li class="liElement">
+		                    %control%
+                        </li>
+	                    %end_control%
+	                    %hiddenPart%
+                    </ul>
+                </form>
+	        </div>
+	        %end_form%
+            %navigatePart%
+            <div class="kmFooter">%html_footer%</div>
+        </div>
+    </div>
+
+    <!--Login Modal-->
+    <div id="loginModalDisplay" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#fff; z-index:1000;"></div>
+    <div id="loginModalPopupWindow" style="font-family: Arial; border: 1px solid #999; border-radius:8px; position:absolute; top: 15%; left: 50%; margin-left:-325px; width:650px; background:#f9f9f9; z-index:1001; font-size:14px; display:none;">
+        <p style="color: #000; background-color: #eee; margin: 0; padding: 10px; border-radius: 8px 8px 0px 0px;">Login</p>
+        <p id="LoginModalHTML" class="cleanLabel" style="padding: 10px;"></p>
+        
+        <input type="radio" id="new" name="subscription" value="new" style="margin-left:30px;"><label for="new"></label> <br>
+        <input type="radio" id="existing" name="subscription" value="existing" style="margin-left:30px;"><label for="existing"></label> <br>
+        <br>
+
+        <div id="newSubscription" style="margin:0 10px;">
+            <div>
+                <label>Email Address</label>
+                <input type="text" id="EmailAddress" style="width:474px;">
+            </div>
+            <div style="display:block; margin: 10px 7px 25px 0; text-align: right;">
+                <button type="button" id="signupBtn" onclick="signup()"></button>
+            </div>
+        </div>
+        <div id="existingSubscription" style="margin:0 10px;">  
+            <div id="cont1" style="float:left;">
+                <label style="margin-right:5px;">Email Address</label>
+                <input type="text" id="EmailAddress2">
+                <div id="existingPasswordRow1" style="margin-top:5px;">
+                    <label style="margin-right:34px;">Password</label>
+                    <input type="password" id="Password2">
+                </div>
+            </div>
+
+            <div id="cont2" style="float:left; width:25px; margin:1px 8px;">
+                <label>&nbsp;<strong>Or</strong>&nbsp;</label>
+            </div>
+
+            <div id="cont3" style="float:left;">
+                <div style="width: 112px;margin-right: 23px;display: inline-block;">
+                    <label id="SubIdLabel">Subscriber ID</label>
+                </div>
+                <input type="text" id="EmailAddress3">
+                <div id="existingPasswordRow2" style="margin-top:5px;">
+                    <label style="margin-right:73px;">Password</label>
+                    <input type="password" id="Password3">
+                </div>
+            </div>
+                  
+            <div style="margin: 10px 7px 25px 0; text-align: right; float:left; width:100%;">
+                <button type="button" id="forgotpasswordBtn" onclick="forgotpassword()"></button>
+                <button type="button" id="loginBtn" onclick="login()" style="margin-left:30px;"></button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Change Email Modal-->
+    <div id="changeEmailModalDisplay" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#fff; z-index:1002;"></div>
+    <div id="changeEmailPopupWindow" style="height: 315px; font-family: Arial; border: 1px solid #999; border-radius:8px; position:absolute; top: 15%; left: 50%; margin-left:-325px; width:650px; background:#f9f9f9; z-index:1003; font-size:14px; display:none;">
+        <p style="color: #000; background-color: #eee; margin: 0; padding: 10px; border-radius: 8px 8px 0px 0px;">Change Email Address</p>
+
+        <div style="margin-left: 12px;" >
+            <div class="kmTextbox">
+                <label class="cleanLabel">Old Email Address<span class="km_asterisk">*</span></label><br />
+                <input type="text" id="EmailAddressOld" readonly="readonly" /><br />
+            </div><br />
+            <div class="kmTextbox">
+                <label class="cleanLabel">New Email Address<span class="km_asterisk">*</span></label><br />
+                <input type="text" id="EmailAddressNew" /><br />
+            </div><br />
+            <div class="kmTextbox">
+                <label class="cleanLabel">Confirm New Email Address<span class="km_asterisk">*</span></label><br />
+                <input type="text" id="EmailAddressNewConfirm" /><br />
+            </div><br />
+                  <div id="changeEmailSupressOptions" style="display:none;">
+                      <input type="checkbox" class="ChangeEmailSuppress" id="ChangeEmailSuppress_1" value="1" style="margin-left:30px;"><label>I only want to receive this mailing</label> <br>
+                      <input type="checkbox" class="ChangeEmailSuppress" id="ChangeEmailSuppress_2" value="2" style="margin-left:30px;"><label>I would like to receive other emails from this publisher (newsletters, marketing, events, etc.)</label> <br>
+                      <input type="checkbox" class="ChangeEmailSuppress" id="ChangeEmailSuppress_3" value="3" style="margin-left:30px;"><label>Keep me suppressed from all of this publisher&#39;s emails</label> <br>
+                  </div><br />
+            <div class="kmButton">
+                <button type="button" style="padding:2px 16px 2px 16px;" onclick="ChangeEmailSubmit()">Save</button>
+                <button type="button" style="padding:2px 16px 2px 16px;" onclick="ChangeEmailShow(false)">Cancel</button>
+            </div><br />
+        </div>
+
+    </div>
+
+	</body>
+</html>

@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="UAD_Explorer.Modules.Product"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1280">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.ColumnSpan="2">
+                <Rectangle Height="28" Fill="#045DA4" Width="{Binding ElementName=spSelection, Path=ActualWidth}" HorizontalAlignment="Right" Margin="0,10,0,0"/>
+                <StackPanel Name="spSelection" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,0,0">
+                    <TextBlock Text="Circulation Explorer" Margin="15,2,2,2" Foreground="White" FontWeight="SemiBold" />
+                    <TextBlock Text="|" Margin="15,2,2,2" Foreground="White" FontWeight="SemiBold" />
+                    <TextBlock Grid.Row="1" Text="Record View" Margin="15,2,2,2" FontWeight="SemiBold">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property= "Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="TextBlock.Foreground" Value="#C7CACC" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock x:Name="txtTools" Text="Tools" Margin="15,2,2,2" FontWeight="SemiBold">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property= "Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="TextBlock.Foreground" Value="#C7CACC" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <!--TextBlock Text="Report: " Margin="15,2,2,2" Foreground="White" FontWeight="SemiBold" />
+                <ComboBox x:Name="cbxReport" Width="100" Height="18" Background="White" /-->
+                    <TextBlock Text="Filters " Margin="15,2,2,2" Foreground="White" FontWeight="SemiBold" />
+                    <Image x:Name="imgFilters" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Right" Source="/ImageLibrary;Component/Images/32/settings-48.png" Height="20" Width="20" Margin="20,0,10,0" 
+                       MouseUp="Open_FilterMenu" IsEnabled="False">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" Value="0.5" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="True">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <DockPanel Name="spLeftSide" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="8" Width="300"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <DockPanel Name="spTop" Grid.ColumnSpan="2" Margin="8" />
+                <DockPanel Name="spBottom" Grid.Row="1" Grid.Column="0" Margin="8" MaxHeight="400" VerticalAlignment="Top"/>
+                <DockPanel Name="spBottomRight" Grid.Row="1" Grid.Column="1" Margin="8" MaxHeight="400" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

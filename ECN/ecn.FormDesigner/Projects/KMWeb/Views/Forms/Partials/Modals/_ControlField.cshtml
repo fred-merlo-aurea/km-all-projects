@@ -1,0 +1,46 @@
+﻿@using KMModels
+
+@model ControlFieldModel
+
+@{
+    var fields = (List<FieldModel>)ViewContext.Controller.ViewBag.Fields;
+    
+    var field = fields.Single(x => x.Name == Model.FieldName);
+
+    var index = fields.IndexOf(field);
+}
+
+<li>
+    @Html.HiddenFor(x => x.ControlId)
+    <div class="subtitle">
+        @Html.DisplayFor(x => x.ControlLabel)
+    </div>
+    <div class="formitem formiteminline">
+        @{ 
+            var list = Html.Kendo()
+                  .DropDownListFor(x => x.FieldId)
+                  .DataTextField("Name")
+                  .DataValueField("Id")
+                  .BindTo(fields)
+                  .Events(e => 
+                      e.Change("fieldChanged")
+                  )
+                  .SelectedIndex(index);
+                  
+            if(field.Id == null) 
+            {
+                list.HtmlAttributes(new { @class = "k-state-highlight-red" });
+            }
+            
+            list.Render();
+        }
+
+        @Html.HiddenFor(x => x.FieldName)
+
+        @if(field.Id == null) 
+        {
+            <button type="button" onclick="openAddFieldWindow(this)" class="k-button">Add New</button>
+        }
+    </div>
+</li>
+

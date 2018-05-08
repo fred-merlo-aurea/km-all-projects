@@ -1,0 +1,40 @@
+﻿@model UAS.Web.Models.Circulations.FileHistory
+
+<style>
+    .FHDimensionErrorSpanLeftLarge {
+        color: #2a6ebb;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 0.5pt;
+        margin-left: 10px;
+        float: left;
+    }
+    .FHDimensionErrorSpanLeftSmall {
+        color: #2a6ebb;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        margin-left: 10px;
+        margin-right: 15px;
+        padding: 1px;
+        float: left;
+    }
+    .FHDimensionErrorSpanRight {
+        color: #2a6ebb;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 0.5pt;
+        margin-right: 15px;
+        float: right;
+    }
+</style>
+
+<div>
+    <span class="FHDimensionErrorSpanLeftLarge">Dimension Errors Summary Report:</span><span class="FHDimensionErrorSpanRight"><a href="~/Dashboard/ResultsDownload?processcode=@Model.ProcessCode&type=dimensionsummary&clientid=@Model.ClientID">@Model.DimensionRecordCount</a></span>
+    <br />
+    <span class="FHDimensionErrorSpanLeftLarge">Dimension Errors:</span><span class="FHDimensionErrorSpanRight"><a href="~/Dashboard/ResultsDownload?processcode=@Model.ProcessCode&type=dimensionsubscriber&clientid=@Model.ClientID">@Model.DimensionProfileCount</a></span>
+    <br />
+    <span class="FHDimensionErrorSpanLeftSmall">Download of subscriber records that have a dimension error. Make needed changes and resubmit the file.</span>
+</div>

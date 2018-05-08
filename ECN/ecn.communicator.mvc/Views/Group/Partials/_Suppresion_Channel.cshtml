@@ -1,0 +1,104 @@
+﻿@using KMEnums
+@{
+    List<ECN_Framework_Entities.Communicator.ChannelMasterSuppressionList> channelSuppressionList = new List<ECN_Framework_Entities.Communicator.ChannelMasterSuppressionList>();
+    var CurrentUser = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser;
+
+    //channelSuppressionList = ECN_Framework_BusinessLayer.Communicator.ChannelMasterSuppressionList.GetByBaseChannelID(ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentBaseChannel.BaseChannelID, CurrentUser);
+    //channelSuppressionList = channelSuppressionList.OrderBy(o => o.EmailAddress).ToList();
+}
+<style>
+    #divEmailsAddedReport table tr td:nth-child(2) {
+        padding: 0px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    function DeleteChannelMasterSuppression(id) {
+        var win = $("#DeleteChannelSuppression");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function SearchChannelSuppresion() {
+        CS_Search();
+    }
+    function ExportChannelSuppresion() {
+        window.location = '@Url.Content("~/Group/ExportChannelSuppresion")'
+                + "?SearchChannel=" + $('#CS_SearchChannelTxt').val();
+
+    }
+
+    function ShowAddChannelSuppression() {
+        var win = $("#AddChannelSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.title('Add Channel Suppression');
+        $("#AddChannelSuppressionDiv").load('@Url.Action("LoadAddChannelSuppression")', null, function () {
+            kendoWindow.center().open();
+        });
+    }
+</script>
+
+<table style="width:100%; margin-top:0px;">
+    <tr>
+        <td style="float:left; padding-right: 0px;">
+            @Html.Kendo().Button().Name("ExportEmails").Content("Download").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ExportChannelSuppresion()" })
+        </td>
+        <td style="float:right; padding-right: 0px;">
+            @Html.Kendo().Button().Name("ShowAddChannelSuppression").Content("Add Emails<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { onclick = "ShowAddChannelSuppression()" })
+        </td>
+    </tr>
+</table>
+<div style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Search Email
+                @Html.TextBox("CS_SearchChannelTxt")
+                @Html.Kendo().Button().Name("SearchChannelBtn").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "SearchChannelSuppresion()" })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="channelSuppressionGridDiv">
+    @Html.Partial("Partials/_Suppresion_Channel_Grid", channelSuppressionList)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteChannelSuppression")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="DeleteChannelSuppressionDiv">
+                @Html.Partial("Partials/Modals/_DeleteChannelSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("AddChannelSuppression")
+        .Actions(x => x.Clear())
+        .Title("Add")
+        .Content(
+        @<text>
+            <div id="AddChannelSuppressionDiv">
+                @Html.Partial("Partials/Modals/_AddChannelSuppression")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

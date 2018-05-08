@@ -1,0 +1,249 @@
+﻿@model ecn.communicator.mvc.Models.Email
+@using ecn.communicator.mvc.Infrastructure
+<script>
+    $(document).ready(function () {
+        $("#ddLogPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+    });
+    function logSearchParams() {
+        debugger;
+        var currentPage = $("#logpagerInputPageNumber").val();
+        if (firstGridLoad)
+            currentPage = '1';
+        return {
+            emailID: '@Model.EmailID',
+            groupID: '@Model.CurrentGroupID',
+            pageNumber: parseInt(currentPage),
+            pageSize: parseInt($("#ddLogPageSize").val())
+        }
+    }
+
+    var targetUrl = '@Url.Action("SubLogReadToGrid", "Subscriber")';
+    var firstGridLoad = true;
+    function dataBound() {
+        debugger;
+        var grid = this;
+
+        if (firstGridLoad) {
+
+            firstGridLoad = false;
+            SetPagerWidget("logfirstpage");
+
+        }
+
+
+    }
+
+
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+
+        SetPagerWidget(e.target.id);
+        var data = logSearchParams();
+        ReBindGrid(data)
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        SetPagerWidget("logfirstpage");
+        firstGridLoad = true;
+        var data = logSearchParams();
+        ReBindGrid(data);
+    }
+
+
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#SubLoggrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+
+        SetPagerWidget("logfirstpage");
+        firstGridLoad = true;
+        var data = logSearchParams();
+        ReBindGrid(data);
+
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#SubLoggrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalRowsCount);
+        }
+        var pagesize = parseInt($("#ddLogPageSize").val());
+        var currentpage = parseInt($("#logpagerInputPageNumber").val());
+        var lastpage = parseInt(totalrecordCount / pagesize) + 1;
+
+        var firstpage = 1;
+
+        if (id == "logfirstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "logprevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "lognextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "loglastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#logcurrentpage").text(currentpage);
+        $("#logpagerDisplay").text(displaymessage);
+        $("#logpagerTotalItems").text(lastpage);
+        $("#logpagerInputPageNumber").val(currentpage);
+
+    }
+
+    function checkChange(e) {
+        RebindOnPageOrSizeChange()
+    }
+
+    function InputPageNumber_KeyDown() {
+
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            if (parseInt($("#logpagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#logpagerInputPageNumber").val())) && $("#logpagerInputPageNumber").val() <= parseInt($("#logpagerTotalItems").text())) {
+                if (typeof e != 'undefined') {
+                    SetPagerWidget(e.target.id);
+                }
+                else {
+                    var spage = $("#logpagerInputPageNumber").val();
+                    SetPagerWidget(spage);
+                }
+                var data = logSearchParams();
+                ReBindGrid(data);
+            }
+            else {
+                showMessage({
+                    type: 'Error',
+                    text: 'Please enter valid page number.',
+                    autoClose: false,
+                    action: function()
+                    {
+                        SetPagerWidget("logfirstpage");
+                        firstGridLoad = true;
+                        var data = logSearchParams();
+                        ReBindGrid(data);
+                    }
+                });
+
+            }
+
+        }
+    }
+</script>
+<style>
+    .k-grid td {
+        padding: 11px;
+    }
+</style>
+
+@(Html.Kendo()
+        .Grid<ECN_Framework_Entities.Activity.View.ActivitylogSearch>()
+        .Events(x => x.DataBound("dataBound"))
+        .Name("SubLoggrid")
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.TotalRowsCount).Hidden(true);
+            columns.Bound(e => e.ActionDate).Format("{0:G}").Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Time").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+            columns.Bound(e => e.EmailSubject).Title("Blast").Filterable(x => x.Cell(c => c.ShowOperators(false))).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle;" }).ClientTemplate("<a style='text-decoration:none;' href='/ecn.communicator/main/blasts/reports.aspx?blastid=#=BlastID#'>#=EmailSubject#</a>");
+            columns.Bound(e => e.BlastID).Title("BlastID").Filterable(x => x.Cell(c => c.ShowOperators(false))).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+            columns.Bound(e => e.ActionTypeCode).Title("Type").Filterable(x => x.Cell(c => c.ShowOperators(false))).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+            columns.Bound(e => e.ActionValue).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Value").Width(350).HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+         })
+        .Pageable(p => p.Enabled(false))
+        .Sortable(s => s.SortMode(GridSortMode.SingleColumn))
+        .HtmlAttributes(new { style = "min-height:300px;min-width:510px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+
+            .Read(read => read
+                .Action("SubLogReadToGrid", "Subscriber")
+                .Data("logSearchParams")
+            
+            )
+        )
+)
+<div id="pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+    <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+        <span onclick="GoToPage(event)" id="logfirstpage" class="k-icon k-i-seek-w">seek-w</span>
+    </a>
+    <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+        <span onclick="GoToPage(event)" id="logprevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+    </a>
+
+    <ul class="k-pager-numbers k-reset">
+        <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+        <li><span class="k-state-selected" id="logcurrentpage">1</span></li>
+
+    </ul>
+    <span class="k-pager-input k-label">Page<input class="k-textbox" id="logpagerInputPageNumber" onkeydown="InputPageNumber_KeyDown()">of <span id="logpagerTotalItems"></span></span>
+    <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+        <span onclick="GoToPage(event)" id="lognextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+    </a>
+    <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+        <span onclick="GoToPage(event)" id="loglastpage" class="k-icon k-i-seek-e">seek-e</span>
+    </a>
+
+    <span class="k-pager-sizes k-label">
+        <span title="" class="k-widget k-dropdown k-header">
+            <input id="ddLogPageSize" onchange="checkChange()" />
+        </span>items per page
+    </span>
+    <span class="float-right" style="margin-right:10px;">
+        <lable id="logpagerDisplay"></lable>
+    </span>
+</div>

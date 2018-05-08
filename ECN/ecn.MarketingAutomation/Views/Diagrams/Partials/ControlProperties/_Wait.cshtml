@@ -1,0 +1,262 @@
+﻿
+<div id="WaitProp">
+    <section class="propertyTitle">Wait</section>
+    <section class="propertyItem" id="waitcontrol_download" style="text-align:center;">
+        @Html.Kendo().Button().Name("btn_WaitControlDownload").Content("Download").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btn_WaitControlDownload_Click()" })
+        <input id="waitcontrol_ECNID" type="hidden" />
+        <input id="waitcontrol_ControlType" type="hidden" />
+        <table>
+            <tr>
+                <td>
+                    <span>Parent Control Name:</span>
+                </td>
+                <td>
+                    <label id="lblParentName"></label>
+                </td>
+            </tr>
+            <tr>
+            <td>
+                <span>Child Control Name:</span>
+            </td>
+            <td>
+                <label id="lblChildName"></label>
+            </td>
+            </tr>
+        </table>
+</section>
+    <section class="propertyItem" id="waitcontrol_Controlproperties">
+        <span>Control Name:</span>
+        <input type="text" id="wai00" />
+    </section>
+    <section class="propertyItem" id="waitcontrol_properties">
+        <table>
+            <tr>
+                <td>
+                    <span>Wait Time:</span>
+                </td>
+                <td>
+                    <span class="timeChanged" style="font-weight:bold;">Original:</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Days: <br><input type="text" id="wai01" />
+                </td>
+                <td style="text-align:center;padding-top:20px;">
+                    <span class="timeChanged" id="orig_days" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Hours: <br><input type="text" id="wai02" />
+                </td>
+                <td style="text-align:center;padding-top:20px;">
+                    <span class="timeChanged" id="orig_hours" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Minutes: <br><input type="text" id="wai03" />
+                </td>
+                <td style="text-align:center;padding-top:20px;">
+                    <span class="timeChanged" id="orig_minutes" style="font-weight:bold;"></span>
+                </td>
+            </tr>
+        </table>
+        
+        
+        
+    </section>
+</div>
+
+<script>
+    //Button Events
+
+    function btn_WaitControlDownload_Click() {
+        window.location = "/ecn.MarketingAutomation/Diagrams/DownloadEmails?ECNID=" + $("#waitcontrol_ECNID").val() + "&controlType=" + $("#waitcontrol_ControlType").val()+"&isWait=true" + "&maID=-1";
+
+    }
+    function propsWait(shape, isHeatMap, canEdit, parentShape, childShape,isConnwait) {
+        $('section.propertyTitle').html('Wait');
+        if (!isConnwait)
+        {
+            $("#waitcontrol_properties").show();
+            $("#waitcontrol_Controlproperties").show();
+            $("#wai00").val(shape.control_text);
+            $("#wai01").val(shape.days);
+            $("#wai02").val(shape.hours);
+            $("#wai03").val(shape.minutes);
+
+            if (shape.time_changed)
+            {
+                $(".timeChanged").show();
+                $("#orig_days").text(shape.original_days);
+                $("#orig_hours").text(shape.original_hours);
+                $("#orig_minutes").text(shape.original_minutes);
+
+            }
+            else
+            {
+                $(".timeChanged").hide();
+                $("#orig_days").text('');
+                $("#orig_hours").text('');
+                $("#orig_minutes").text('');
+            }
+        }
+        else
+        {
+            $("#waitcontrol_properties").hide();
+            $("#waitcontrol_Controlproperties").hide();
+        }
+        if(!canEdit)
+        {
+            $("#WaitProp :input").attr("disabled",true);
+        }
+        else {
+            $("#WaitProp :input").attr("disabled", false);
+        }
+        if (isHeatMap) {
+            if ((shape.HeatMapStats >0) || (isConnwait == true))
+            {
+                $("#waitcontrol_ECNID").val(parentShape.ECNID);
+                $("#waitcontrol_ControlType").val(childShape.category);
+                switch (parentShape.category) {
+                    case "Wait":
+                        $('#lblParentName').text('Wait');
+                        break;
+                    case "Group":
+                        $('#lblParentName').text('Group');
+                        break;
+                    case "Unsubscribe":
+                        $('#lblParentName').text('Direct Email Unsubscribe');
+                         break;
+                    case "Subscribe":
+                        $('#lblParentName').text('Direct Email Subscribe');
+                         break;
+                    case "Direct_Open":
+                        $('#lblParentName').text('Direct Email Open');
+                        break;
+                    case "Direct_NoOpen":
+                        $('#lblParentName').text('Direct Email No Open');
+                    
+                        break;
+                    case "Direct_Click":
+                        $('#lblParentName').text('Direct Email Click');
+                         break;
+                    case "NoClick":
+                        $('#lblParentName').text('Group Email No Click');
+                         break;
+                    case "NoOpen":
+                        $('#lblParentName').text('Group Email No Open');
+                        break;
+                    case "Open_NoClick":
+                        $('#lblParentName').text('Group Email Open - No Click');
+                        break;
+                    case "Sent":
+                        $('#lblParentName').text('Group Email Sent');
+                        break;
+                    case "NotSent":
+                        $('#lblParentName').text('Group Email Not Sent');
+                        break;
+                    case "Suppressed":
+                        $('#lblParentName').text('Group Email Suppressed');
+                        break;
+                    case "Click":
+                        $('#lblParentName').text('Group Email Click');
+                        break;
+                    case "Open":
+                        $('#lblParentName').text('Group Email Open');
+                        break;
+                    case "CampaignItem":
+                        $('#lblParentName').text('Campaign Item');
+                        break;
+                    case "FormAbandon":
+                        $('#lblParentName').text('Form Abandon');
+                        break;
+                    case "FormSubmit":
+                        $('#lblParentName').text('Form Submit');
+                        break;
+                    case "Form":
+                        $('#lblParentName').text('Form');
+                        break;
+                }
+                switch (childShape.category) {
+                    case "Unsubscribe":
+                        $('#lblChildName').text('Direct Email Unsubscribe');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "Subscribe":
+                        $('#lblChildName').text('Direct Email Subscribe');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "Direct_Open":
+                        $('#lblChildName').text('Direct Email Open');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "Direct_NoOpen":
+                        $('#lblChildName').text('Direct Email No Open');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "Direct_Click":
+                        $('#lblChildName').text('Direct Email Click');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "FormSubmit":
+                        $('#lblChildName').text('Form Submit');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "FormAbandon":
+                        $('#lblChildName').text('Form Abandon');
+                        $("#waitcontrol_ECNID").val(childShape.ECNID);
+                        break;
+                    case "NoClick":
+                        $('#lblChildName').text('Group Email No Click');
+                        break;
+                    case "NoOpen":
+                        $('#lblChildName').text('Group Email No Open');
+                        break;
+                    case "Open_NoClick":
+                        $('#lblChildName').text('Group Email Open - No Click');
+                        break;
+                    case "Sent":
+                        $('#lblChildName').text('Group Email Sent');
+                        break;
+                    case "NotSent":
+                        $('#lblChildName').text('Group Email Not Sent');
+                        break;
+                    case "Suppressed":
+                        $('#lblChildName').text('Group Email Suppressed');
+                        break;
+                    case "Click":
+                        $('#lblChildName').text('Group Email Click');
+                        break;
+                    case "Open":
+                        $('#lblChildName').text('Group Email Open');
+                        break;
+                    case "CampaignItem":
+                        $('#lblChildName').text('Campaign Item');
+                        break;
+                }
+                $("#waitcontrol_download").show();
+                $("#btn_WaitControlDownload").attr("disabled", false);
+            }
+            else {
+                $("#waitcontrol_download").hide();
+                $("#btn_WaitControlDownload").attr("disabled", true);
+            }
+        }
+        else {
+            $("#waitcontrol_download").hide();
+            $("#btn_WaitControlDownload").attr("disabled", true);
+        }
+    }
+    function disbleWaitControls()
+    {
+        $("#WaitProp :input").attr("disabled", true);
+        $("#wai00").attr("disabled", true);
+    }
+    function disablewaitforBlastSent() {
+        $("#WaitProp :input").attr("disabled", true);
+        $("#wai00").attr("disabled", false);
+    }
+</script>

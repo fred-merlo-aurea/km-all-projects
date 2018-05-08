@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.textpower.com/services/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.textpower.com/services/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.textpower.com/services/">
+      <s:element name="SendPassCode">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Carrier" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServiceName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendPassCodeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendPassCodeResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MessageValidationInfo" type="tns:MessageValidationInfo" />
+      <s:complexType name="MessageValidationInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PWD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Campaign" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Keyword" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="ManageOptIn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Action" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Carrier" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageOptInResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageOptInResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetOptInTimeout">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Minutes" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetOptInTimeoutResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetOptInTimeoutResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetAutoWelcome">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MOLimit" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Clear" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetAutoWelcomeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetAutoWelcomeResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendAutoWelcome">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendAutoWelcomeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendAutoWelcomeResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageSubscription">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Action" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CellNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Carrier" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="NoBill" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="QuitReason" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageSubscriptionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageSubscriptionResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SendPassCodeSoapIn">
+    <wsdl:part name="parameters" element="tns:SendPassCode" />
+  </wsdl:message>
+  <wsdl:message name="SendPassCodeSoapOut">
+    <wsdl:part name="parameters" element="tns:SendPassCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendPassCodeMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="ManageOptInSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageOptIn" />
+  </wsdl:message>
+  <wsdl:message name="ManageOptInSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageOptInResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageOptInMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="SetOptInTimeoutSoapIn">
+    <wsdl:part name="parameters" element="tns:SetOptInTimeout" />
+  </wsdl:message>
+  <wsdl:message name="SetOptInTimeoutSoapOut">
+    <wsdl:part name="parameters" element="tns:SetOptInTimeoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetOptInTimeoutMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="SetAutoWelcomeSoapIn">
+    <wsdl:part name="parameters" element="tns:SetAutoWelcome" />
+  </wsdl:message>
+  <wsdl:message name="SetAutoWelcomeSoapOut">
+    <wsdl:part name="parameters" element="tns:SetAutoWelcomeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetAutoWelcomeMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="SendAutoWelcomeSoapIn">
+    <wsdl:part name="parameters" element="tns:SendAutoWelcome" />
+  </wsdl:message>
+  <wsdl:message name="SendAutoWelcomeSoapOut">
+    <wsdl:part name="parameters" element="tns:SendAutoWelcomeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendAutoWelcomeMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:message name="ManageSubscriptionSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageSubscription" />
+  </wsdl:message>
+  <wsdl:message name="ManageSubscriptionSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageSubscriptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageSubscriptionMessageValidationInfo">
+    <wsdl:part name="MessageValidationInfo" element="tns:MessageValidationInfo" />
+  </wsdl:message>
+  <wsdl:portType name="WebManagementServicesV2Soap">
+    <wsdl:operation name="SendPassCode">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send a Pass Code to a phone</wsdl:documentation>
+      <wsdl:input message="tns:SendPassCodeSoapIn" />
+      <wsdl:output message="tns:SendPassCodeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageOptIn">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Set, Reset or query OptIn status</wsdl:documentation>
+      <wsdl:input message="tns:ManageOptInSoapIn" />
+      <wsdl:output message="tns:ManageOptInSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetOptInTimeout">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Set automatic time out for an Optin</wsdl:documentation>
+      <wsdl:input message="tns:SetOptInTimeoutSoapIn" />
+      <wsdl:output message="tns:SetOptInTimeoutSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetAutoWelcome">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Set the Auto Welcome message for a single OptIn campaign.</wsdl:documentation>
+      <wsdl:input message="tns:SetAutoWelcomeSoapIn" />
+      <wsdl:output message="tns:SetAutoWelcomeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendAutoWelcome">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Send the Auto Welcome message for a single OptIn campaign.</wsdl:documentation>
+      <wsdl:input message="tns:SendAutoWelcomeSoapIn" />
+      <wsdl:output message="tns:SendAutoWelcomeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageSubscription">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add, delete, increment or query Subscription status</wsdl:documentation>
+      <wsdl:input message="tns:ManageSubscriptionSoapIn" />
+      <wsdl:output message="tns:ManageSubscriptionSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebManagementServicesV2Soap" type="tns:WebManagementServicesV2Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendPassCode">
+      <soap:operation soapAction="http://www.textpower.com/services/SendPassCode" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SendPassCodeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageOptIn">
+      <soap:operation soapAction="http://www.textpower.com/services/ManageOptIn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ManageOptInMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetOptInTimeout">
+      <soap:operation soapAction="http://www.textpower.com/services/SetOptInTimeout" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SetOptInTimeoutMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetAutoWelcome">
+      <soap:operation soapAction="http://www.textpower.com/services/SetAutoWelcome" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SetAutoWelcomeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendAutoWelcome">
+      <soap:operation soapAction="http://www.textpower.com/services/SendAutoWelcome" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SendAutoWelcomeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageSubscription">
+      <soap:operation soapAction="http://www.textpower.com/services/ManageSubscription" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ManageSubscriptionMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebManagementServicesV2Soap12" type="tns:WebManagementServicesV2Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendPassCode">
+      <soap12:operation soapAction="http://www.textpower.com/services/SendPassCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SendPassCodeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageOptIn">
+      <soap12:operation soapAction="http://www.textpower.com/services/ManageOptIn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ManageOptInMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetOptInTimeout">
+      <soap12:operation soapAction="http://www.textpower.com/services/SetOptInTimeout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SetOptInTimeoutMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetAutoWelcome">
+      <soap12:operation soapAction="http://www.textpower.com/services/SetAutoWelcome" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SetAutoWelcomeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendAutoWelcome">
+      <soap12:operation soapAction="http://www.textpower.com/services/SendAutoWelcome" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SendAutoWelcomeMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageSubscription">
+      <soap12:operation soapAction="http://www.textpower.com/services/ManageSubscription" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ManageSubscriptionMessageValidationInfo" part="MessageValidationInfo" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebManagementServicesV2">
+    <wsdl:port name="WebManagementServicesV2Soap" binding="tns:WebManagementServicesV2Soap">
+      <soap:address location="http://www.textpower.com/TPIServices/WebManagementServicesV2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebManagementServicesV2Soap12" binding="tns:WebManagementServicesV2Soap12">
+      <soap12:address location="http://www.textpower.com/TPIServices/WebManagementServicesV2.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

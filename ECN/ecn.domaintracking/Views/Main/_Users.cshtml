@@ -1,0 +1,38 @@
+﻿@model  List<ECN_Framework_Entities.DomainTracker.DomainTrackerUserProfile>
+
+<table id="userActivityList" style="border-collapse: collapse; border-spacing: 0px; width: 100%;">
+    
+        @if (Model.Count > 0)
+        {
+            <tr style="background: #BFC0C2 url(http://images.ecn5.com/images/bgGradient.jpg) 0 -1px repeat-x; border-collapse: collapse; font-family: Arial, Helvetica, Tahoma, sans-serif; font-size: 11px; font-weight: bolder; height: 20px; text-decoration: none; vertical-align: middle;">
+                <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: left; width: 90%;">Email Address</th>
+                <th style="border: 1px solid gray; border-spacing: 0px; margin: 0px; padding: 0px; text-align: center;"></th>
+            </tr>
+
+            for (var i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td style="background-color: @((i%2) == 0 ? "white" : "#DDDDDD"); border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding-left: 3px; text-align: left; vertical-align: middle; width: 30%;">
+                        @Model[i].EmailAddress
+                    </td>
+                    <td style="background-color: @((i % 2) == 0 ? "white" : "#DDDDDD") ; border: 1px solid gray; border-collapse: collapse; border-spacing: 0px; font-size: 11px; margin: 0px; padding: 3px 3px 3px 5px; padding: 0px; text-align: center; vertical-align: middle; width: 30%;">
+                        @*<a href="javascript:void(0);" onclick="loadactivity(@TempData["DomainTrackerID"], @string.Format("{0}", Model[i].ProfileID))" style="color: black; text-decoration: underline;">+Details</a>*@
+                        <a id=@string.Format("hrActivity_{0}", Model[i].ProfileID) href="javascript:void(0);" onclick="loadactivity(@TempData["DomainTrackerID"], @string.Format("{0}", Model[i].ProfileID))" style="color: black; text-decoration: underline;">+Details</a>
+                    </td>
+                </tr>
+                <tr id=@string.Format("trActivity_{0}", Model[i].ProfileID) style="display: none;">
+                    <td colspan="2"><div id=@string.Format("divActivity_{0}", Model[i].ProfileID)></div></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td style="text-align: center;">
+                    No data to show.
+                </td>
+            </tr>
+        }
+
+</table>
+

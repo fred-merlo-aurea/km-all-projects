@@ -1,0 +1,29 @@
+﻿@model List<UAD.DataCompare.Web.Models.FilterDetailsModel>
+<style>
+    .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
+        color: #787878;
+        font-weight: bold;
+        background-color: #eeeeee;
+    }
+    .k-grid
+    {
+        display: inline-table;
+        width:100%;
+    }
+</style>
+<div>
+    @(
+            Html.Kendo()
+               .Grid(Model)
+               .Name("FilterDetails")
+               .Columns(columns =>
+               {
+                   columns.Bound(e => e.FilterNo).Title("Filter No");
+                   columns.Bound(e => e.Field).Title("Field");
+                   columns.Bound(e => e.Values).Title("Values");
+               })
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .ServerOperation(false)
+                    ))
+</div>

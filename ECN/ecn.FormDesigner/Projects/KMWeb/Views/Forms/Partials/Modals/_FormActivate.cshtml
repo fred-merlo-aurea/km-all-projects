@@ -1,0 +1,79 @@
+﻿@using KMEnums
+@using KMWeb.Models.Forms
+
+@model ActivateFormModel
+
+
+
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="Activation">
+        <legend>Activation</legend>
+        @Html.HiddenFor(x => x.Id, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+        
+        <div class="subtitle">Activation</div>
+        <div class="formbox">
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.State).Label("Active").Value((int)FormActive.Active).Checked((int)FormActive.Active == (int)Model.State).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Active" }, { "onchange", "initActivationControlsPage(this)" } })
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.State).Label("Inactive").Value((int)FormActive.Inactive).Checked((int)FormActive.Inactive == (int)Model.State).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Active" }, { "onchange", "initActivationControlsPage(this)" } })
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().RadioButtonFor(x => x.State).Label("Use Activation Dates").Value((int)FormActive.UseActivationDates).Checked((int)FormActive.UseActivationDates == (int)Model.State).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "checked:Active" }, { "onchange", "initActivationControlsPage(this)" } })
+            </div>
+        </div>
+        <div class="subtitle">Activation Dates/Times</div>
+        <div class="formitem formiteminline">
+            @Html.Label("From", "From")
+            @Html.Kendo().DateTimePickerFor(x => x.From).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:ActivationFrom" } })
+        </div>
+        <div class="formitem formiteminline">
+            @Html.Label("To", "To")
+            @Html.Kendo().DateTimePickerFor(x => x.To).HtmlAttributes(new Dictionary<string, object> { { "data-bind", "value:ActivationTo" } })
+        </div>
+        @Html.ValidationSummary()
+        <div class="buttonsgroup">
+            @Html.Kendo().Button().Name("ActivationSave").Content("Save").HtmlAttributes(new { @class = "btn" })
+            @Html.Kendo().Button().Name("ActivationCancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('ActivationWindow')" })
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    function initActivationControls() {
+        
+        var val = $("input[name='State']:checked").val();
+        var from = $("#From").data('kendoDateTimePicker');
+        var to = $("#To").data('kendoDateTimePicker');
+        if (val == '@((int)FormActive.UseActivationDates)') {
+            from.enable(true);
+            to.enable(true);
+        }
+        else {
+            from.enable(false);
+            to.enable(false);
+            from.value(String.empty);
+            to.value(String.empty);
+        }
+    }
+
+    function initActivationControlsPage(rb) {
+        $(".validation-summary-errors")
+        .removeClass("validation-summary-errors")
+        .addClass("validation-summary-valid");
+        var val = $("input[name='State']:checked").val();
+        var from = $("#From").data('kendoDateTimePicker');
+        var to = $("#To").data('kendoDateTimePicker');
+        if (val == '@((int)FormActive.UseActivationDates)') {
+            from.enable(true);
+            to.enable(true);
+        }
+        else {
+            from.enable(false);
+            to.enable(false);
+            from.value(String.empty);
+            to.value(String.empty);
+        }
+    }
+</script>

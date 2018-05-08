@@ -1,0 +1,627 @@
+﻿@using ecn.MarketingAutomation.Models
+
+@model TemplateViewModel
+
+@{
+    ViewBag.Title = "View Template";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset title="">
+        <legend>@Model.Name Preview</legend>
+        <button id="zoomIn" style="border:none;padding:0;background-color:#E0E0E0;background-color: Transparent;"><img src="~/Images/Zoom_In.png" style="width:80%;height:80%;" alt="Zoom In" /></button>
+        <button id="zoomOut" style="border:none;padding:0;background-color:#E0E0E0;background-color: Transparent;"><img src="~/Images/Zoom_Out.png" style="width:80%;height:80%;" alt="Zoom Out" /></button>
+        <div id="diagram" style="border: none;min-height: 600px;overflow-y: auto;"></div>
+    </fieldset>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#diagram").kendoDiagram();
+        var diagram = $("#diagram").data("kendoDiagram");
+        var diagramNS = kendo.dataviz.diagram;
+        var shape1 = diagram.addShape(new diagramNS.Point(100, 100));
+        $("#zoomIn").on("click", function () {
+            var zoom = $("#diagram").data("kendoDiagram").zoom();
+            $("#diagram").data("kendoDiagram").zoom(zoom + 0.1,
+                    { point: new diagramNS.Point(100, 100) });
+        });
+        $("#zoomOut").on("click", function () {
+            var zoom = $("#diagram").data("kendoDiagram").zoom();
+            $("#diagram").data("kendoDiagram").zoom(zoom - 0.1,
+                    { point: new diagramNS.Point(100, 100) });
+        });
+    });
+    $(function () {
+        var diagram = $("#diagram").kendoDiagram({
+            zoomStart:function(){this.preventDefault();},
+            shapeDefaults: {
+                fill: "#0093f5"
+            },
+            connectionDefaults: {
+                stroke: {
+                    color: "#586477",
+                    width: 2
+                }
+            },
+            layout: {
+                type: "tree",
+                subtype: "down"
+            },
+            selectable: false,
+            editable: false
+        }).getKendoDiagram();
+        // To disable the diagram Zoom Feature
+        $("#diagram").unbind("mousewheel");
+        $("#diagram").unbind("DOMMouseScroll");
+        // Load initial diagram from Controller
+        loadDiagram(JSON.parse(@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Model.Diagram, true))));
+
+        function loadDiagram(diag) {
+            diagram.load(diag);
+            var itemsToLoop = diagram.shapes.length;
+            for (var i = 0; i < itemsToLoop; i++) {
+                var item = diagram.shapes[i].options;
+                var shapeItem = new kendo.dataviz.diagram.Shape(item);
+                switch (item.category) {
+                    case "CampaignItem":
+                        var connIn = diagram.shapes[i].connections("in");
+                        for (var j = 0; j < diagram.shapes.length; j++) {
+                            var currentShape = diagram.shapes[j].options;
+                            if (currentShape.id == connIn.from && currentShape.category != "Start") {
+                                diagram.shapes[i].options.subcategory = "Group";
+                            }
+                        }
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/OrangeBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Campaign_Orange.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbCampaignItem = new kendo.dataviz.diagram.TextBlock({
+                            text: "Campaign Item",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbCampaignItem);
+                        break;
+                    case "Group":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/OrangeBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Group_Orange.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbGroup = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbGroup);
+                        break;
+                    case "Open_NoClick":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbOpen_NoClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Open - No Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbOpen_NoClick);
+                        break;
+                    case "Suppressed":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbSuppressed = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Suppressed",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbSuppressed);
+                        break;
+                    case "Click":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbClick);
+                        break;
+                    case "Open":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbOpen);
+                        break;
+                    case "NoOpen":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbNoOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email No Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbNoOpen);
+                        break;
+                    case "NoClick":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbNoClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email No Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbNoClick);
+                        break;
+                    case "Sent":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbSent = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Sent",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbSent);
+                        break;
+                    case "NotSent":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreyBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/SmartSegment_1.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbNotSent = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group Email Not Sent",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbNotSent);
+                        break;
+                    case "Subscribe":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Subscribe_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbSubsribe = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Subscribe",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbSubsribe);
+                        break;
+                    case "Unsubscribe":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Unsubscribe_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbUnsub = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Unsubscribe",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbUnsub);
+                        break;
+                    case "Wait":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/YellowBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 140,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Yellow_Wait.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbWait = new kendo.dataviz.diagram.TextBlock({
+                            text: "Wait",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbWait);
+                        break;
+                    case "Form":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/OrangeBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Form_Orange.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbform = new kendo.dataviz.diagram.TextBlock({
+                            text: "Group",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbform);
+                        break;
+                    case "Direct_Click":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/DirectClick_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbDClick = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Click",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbDClick);
+                        break;
+                    case "FormSubmit":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/FormSubmission_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbformSub = new kendo.dataviz.diagram.TextBlock({
+                            text: "Form Submit",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbformSub);
+                        break;
+                    case "FormAbandon":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/FormAbandon_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbformAband = new kendo.dataviz.diagram.TextBlock({
+                            text: "Form Abandon",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbformAband);
+                        break;
+                    case "Direct_Open":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/DirectOpen_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbDOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbDOpen);
+                        break;
+                    case "Direct_NoOpen":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/BlueBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 200,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/DirectNoOpen_Blue.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbDNoOpen = new kendo.dataviz.diagram.TextBlock({
+                            text: "Direct Email No Open",
+                            x: 15,
+                            y: 5,
+                            color: "#000000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbDNoOpen);
+                        break;
+                    case "Start":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/GreenBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 140,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Green_Start.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbStart = new kendo.dataviz.diagram.TextBlock({
+                            text: "Start",
+                            x: 15,
+                            y: 5,
+                            color: "#000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbStart);
+                        break;
+                    case "End":
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/RedBox.png",
+                            x: 0,
+                            y: 0,
+                            width: 140,
+                            height: 40
+                        }));
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/Red_End.png",
+                            x: -15,
+                            y: 5,
+                            width: 30,
+                            height: 30
+                        }));
+                        var tbEnd = new kendo.dataviz.diagram.TextBlock({
+                            text: "End",
+                            x: 15,
+                            y: 5,
+                            color: "#000",
+                            fontSize: 12,
+                            fontWeight: 600
+                        });
+                        diagram.shapes[i].visual.append(tbEnd);
+                        break;
+                    default:
+                        diagram.shapes[i].visual.append(new kendo.dataviz.diagram.Image({
+                            source: "/ecn.MarketingAutomation/Images/shapeBck.png",
+                            x: 0,
+                            y: 0,
+                            width: 150,
+                            height: 40
+                        }));
+                        break;
+                }
+
+
+                tb = new kendo.dataviz.diagram.TextBlock({
+                    text: diagram.shapes[i].options.control_text,
+                    x: 15,
+                    y: 20,
+                    color: "#000000",
+                    fontSize: 12
+                });
+                diagram.shapes[i].visual.append(tb);
+                //diagram.shapes[i] = shapeItem;
+            }
+            diagram.save();
+        }
+    });
+</script>

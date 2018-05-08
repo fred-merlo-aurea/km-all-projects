@@ -1,0 +1,153 @@
+﻿@using KMEnums
+@using KMModels
+
+@model InternalUserNotificationModel
+
+@{
+    var notificationId = ViewData.TemplateInfo.HtmlFieldPrefix;
+
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+}
+
+@Html.HiddenFor(x => x.Id)
+
+<div class="rulesactionsbox float-right">
+    @Html.Kendo().Button().Name(string.Format("{0}_Delete", notificationId)).Content("Delete<i class='km-icon icon-kmcustom-delete'></i>").HtmlAttributes(new { @class = "btn btn-blue3", type = "button", onclick = string.Format("deleteNotification('{0}')", notificationId) })
+    @Html.Kendo().Button().Name(string.Format("{0}_Copy", notificationId)).Content("Copy<i class='km-icon icon-kmcustom-edit'></i>").HtmlAttributes(new { @class = "btn btn-blue4", type = "button", onclick = string.Format("copyNotification('{0}')", notificationId) })
+</div>
+<div class="notifinfo">
+    <div class="subscrbinfo">
+        <div class="subtitle">(Internal) User Notification</div>
+        <div class="formbox">
+            @*<div class="formitem">
+                @Html.LabelFor(x => x.Type, "Send")
+                @(Html.Kendo()
+                        .DropDownListFor(x => x.Type)
+                        .Items(items =>
+                        {
+                            foreach (EmailType type in Enum.GetValues(typeof(EmailType)))
+                            {
+                                items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == Model.Type);
+                            }
+                        })
+                )
+            </div>*@
+            @*<div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.FromEmail, "From Email")
+                @Html.Kendo().TextBoxFor(x => x.FromEmail).HtmlAttributes(new { @class = "longinput" })
+            </div>*@
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.FromName, "From Name")
+                @Html.Kendo().TextBoxFor(x => x.FromName).HtmlAttributes(new { @class = "longinput" })
+            </div>
+            @*<div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.ReplyEmail, "Reply to Email")
+                @Html.Kendo().TextBoxFor(x => x.ReplyEmail).HtmlAttributes(new { @class = "longinput" })
+            </div>*@
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.SubjectLine, "Subject Line")
+                @Html.Kendo().TextBoxFor(x => x.SubjectLine).HtmlAttributes(new { @class = "longinput" })
+            </div>
+        </div>
+    </div>
+    <div class="formbox msgbox">
+        <div class="formitem formiteminline">
+            <div class="float-left">
+             @Html.LabelFor(x => x.ToEmail, "Email to")
+             <img style="width:30px; height: 30px; max-width:100%;max-height: 100%;" src="../../images/modal-icon-info.png">
+            </div>
+            <div class="float-left" style="margin:10px; font-style:italic; margin-left: 5px;">
+                Multiple email addresses should be separated by a comma.
+            </div>
+            @Html.Kendo().TextBoxFor(x => x.ToEmail).HtmlAttributes(new { @class = "longinput", @style = "width: 620px;" })
+        </div>
+        <div class="formitem formitemlabeltop">
+            @Html.LabelFor(x => x.Message, "Message")
+            
+            @(
+                Html.Kendo()
+                    .EditorFor(x => x.Message)
+                    .Messages(m => m.InsertHtml("Insert Snippet"))
+                    .Tools(t => t.ViewHtml()
+                                 .Snippets(s => {
+                                     foreach (var control in controls) 
+                                     {
+                                         s.Add(control.FieldLabel, GetControlSnippet(control));
+                                     }
+                                 })
+                                 .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                    )
+                    .ImageBrowser(imageBrowser => imageBrowser
+                    .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                        .Read("Read", "ImageBrowser")
+                        .Destroy("Destroy", "ImageBrowser")
+                        .Upload("Upload", "ImageBrowser")
+                        .Thumbnail("Thumbnail", "ImageBrowser")
+                    )
+                    .Encode(false)
+)
+        </div>
+    </div>
+    <div class="conditionsbox">
+        @(Html.Kendo()
+                .Button()
+                .Name(string.Format("{0}_AddCondition", notificationId))
+                .Content("Add Condition<i class=\"km-icon icon-kmplus-circled-1\"></i>")
+                .HtmlAttributes(new { onclick = string.Format("addCondition('{0}')", notificationId), type = "button", @class = "btn  btn-blue2 float-left add-new-condition" })
+        )
+        <div class="formitem formiteminline">
+            <label>Condition Connector</label>
+            @{
+                int dDindex = 0;
+                int typesIndex = 0;
+            }
+            @{
+                var conditionTypes = Html.Kendo()
+                    .DropDownListFor(x => x.ConditionType)
+                    .Events(e => e.Select(@<text>function(e){ changeCondition('@notificationId', this, e); }</text>))
+                    .Items(items =>
+                    {
+                        foreach (ConditionType type in Enum.GetValues(typeof(ConditionType)))
+                        {
+                            items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == Model.ConditionType);
+                            if (type == Model.ConditionType)
+                            {
+                                dDindex = typesIndex;
+                            }
+                            typesIndex++;
+                        }
+                    }).SelectedIndex(dDindex);
+
+                conditionTypes.Render();
+            }
+        </div>
+        <div class="conditionslist">
+            <ul class="inline title">
+                <li class="cond">Condition</li>
+                <li class="fld">Field</li>
+                <li class="comp">Comparator</li>
+                <li class="value">Value</li>
+                <li class="acts">Actions</li>
+            </ul>
+            @if (Model.Conditions != null) 
+            { 
+                foreach (var conditionItem in Model.Conditions.Select((Condition, Index) => new { Condition, Index }))
+                {
+                    var conditionId = string.Format("{0}.Conditions[{1}]", notificationId, conditionItem.Index);
+
+                    <div id="@conditionId">
+                        <input type="hidden" value="@conditionItem.Index" name="@string.Format("{0}.Conditions.Index", notificationId)">
+                        @Html.Partial("Partials/FormNotifications/_Condition", conditionItem.Condition,
+                            new ViewDataDictionary
+                            {
+                                TemplateInfo = new TemplateInfo
+                                {
+                                    HtmlFieldPrefix = conditionId
+                                }
+                            })
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

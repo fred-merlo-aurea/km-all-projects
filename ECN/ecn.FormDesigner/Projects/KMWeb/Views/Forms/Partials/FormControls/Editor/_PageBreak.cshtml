@@ -1,0 +1,31 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+<script>
+    array[@((int)ControlType.PageBreak)] = {
+        name: '@ControlType.PageBreak',
+        object: @Html.Raw(Json.Encode(new PageBreak(true))),
+        control: "<div class='pagebreak'>\
+                    <div class='pb-row'>\
+                        <div class='pb-btn'>\
+                            <button ng-if='control.hasPrevious = HasPrevious()' type='button' class='btn'>{{control.Previous}}</button>\
+                        </div>\
+                        <div class='pb-pname'>\
+                            <span>Page Break <i>{{control.PageName}}</i></span>\
+                        </div>\
+                        <div class='pb-btn rright'>\
+                            <button ng-if='control.hasNext = HasNext()' type='button' class='btn'>{{control.Next}}</button>\
+                        </div>\
+                    </div>\
+                </div>"
+    }
+</script>
+
+
+
+
+
+
+
+
+

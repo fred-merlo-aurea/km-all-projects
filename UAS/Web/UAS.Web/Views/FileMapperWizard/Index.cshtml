@@ -1,0 +1,104 @@
+﻿@model UAS.Web.Models.FileMapperWizard.FileMapperWizardViewModel
+@{
+    if (Model.setupViewModel != null && Model.setupViewModel.SourceFileId > 0)
+    {
+        ViewBag.Title = "Edit File Mapping";
+    }
+    else
+    {
+        ViewBag.Title = "New File Mapping";
+    }
+}
+
+@section Scripts {
+    <script>
+        //Mapping Wizard Control
+        var tabs,
+            currentIndex = 0;
+        var vbCurrentStep = parseInt('@ViewBag.CurrentStep');
+
+        $(document).ready(function () {
+            tabs = $("#tabstrip").data("kendoTabStrip");
+
+            //Column Mapper
+            var SetupSuccess=  @Html.Raw(Json.Encode(ViewBag.SetupSuccess));
+            var MappingSuccess=  @Html.Raw(Json.Encode(ViewBag.MappingSuccess));
+            var RulesSuccess=  @Html.Raw(Json.Encode(ViewBag.RulesSuccess));
+            var ReviewSuccess=  @Html.Raw(Json.Encode(ViewBag.ReviewSuccess));
+        })
+
+        //Index Tab
+        function onSelect(e) {
+              var selectedIndex = tabIndexOfElement(e.item),
+            isMovingBack = selectedIndex < currentIndex;
+            currentIndex = selectedIndex;
+            tabs.enable(getTabAtIndex(currentIndex), true);
+        }
+        function tabIndexOfElement(element) {
+            return tabs.element.find(element).index();
+        }
+        function getTabAtIndex(index) {
+            return tabs.tabGroup.children().eq(index);
+        }
+        function onShow(e) {
+        }
+        function onContentLoad(e) {
+            debugger;
+            
+        }
+        function onPreviousClick(e) {
+            e.preventDefault();
+            tabs.select(tabs.select().prev());
+        }
+        function onNextClick(e) {
+            e.preventDefault();
+            tabs.select(getTabAtIndex(currentIndex + 1));
+        }
+    </script>
+
+}
+
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+
+<div id="divWizardForm" style="height:800px;">
+        <div class="text-danger">
+            @Html.ValidationSummary()
+        </div>
+
+        @(Html.Kendo().TabStrip()
+           .Name("tabstrip")
+           .Items(tabstrip =>
+           {
+               tabstrip.Add().Text("Set up")
+                  .Selected(true)
+                  .Content(m => Html.Partial("Partials/_setup", Model.setupViewModel))
+                  .HtmlAttributes(new { id = "tabstrip-1" });
+
+               tabstrip.Add().Text("Map Columns")
+                   .Enabled(false)
+               .Content("tab2")
+               .HtmlAttributes(new { id = "tabstrip-2" });
+
+               tabstrip.Add().Text("Rules")
+                   .Enabled(false)
+               .Content("tab3")
+               .HtmlAttributes(new { id = "tabstrip-3" });
+
+               //tabstrip.Add().Text("Review")
+               //    .Enabled(false)
+               //    .Content("tab4")
+               //    .HtmlAttributes(new { id = "tabstrip-4" });
+           })
+           .Events(ev =>
+           {
+               ev.Select("onSelect");
+               ev.Show("onShow");
+               ev.ContentLoad("onContentLoad");
+           })
+
+        )
+</div>

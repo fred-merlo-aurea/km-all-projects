@@ -1,0 +1,41 @@
+﻿@model UAD.DataCompare.Web.Models.ColumnMapper
+
+@Html.HiddenFor(modelItem => Model.myFieldMappingID)
+@Html.HiddenFor(modelItem => Model.myPreviewData)
+@Html.HiddenFor(modelItem => Model.mySourceColumn)
+@Html.HiddenFor(modelItem => Model.myUadColumn)
+<div class="row" style="border:1px solid gray; margin:5px 10px;">
+    <div class="col-md-3 col-md-offset-2" style="padding:5px 0px;">
+        @Html.TextBoxFor(modelItem => Model.mySourceColumn)
+    </div>
+    <div class="col-md-3" style="padding:5px 0px;">
+        @*@Html.DropDownList("myUadColumn"+ @i, Model.ColumnMapping[i].fileColumnMapping, )*@
+        @{
+            int counter = 1;
+        }
+        <select name='dropDownMapper_@counter' required>
+            @foreach (UAD.DataCompare.Web.Models.CustomDropDown cd in Model._dropDownMapper)
+            {
+                if (cd.SelectedItem != "Ignore")
+                {
+                    <option selected>@cd.Item</option>
+                }
+                else
+                {
+                    <option>@cd.Item</option>
+                }
+                counter++;
+            }
+        </select>
+
+    </div>
+
+    <div class="col-md-2 col-md-offset-2" style="padding:5px 0px;">
+        <button value="Delete" class="btnDelete icon-kmcustom-delete" id="@Model.myFieldMappingID"></button>
+    </div>
+
+    <div class="col-md-8 col-md-offset-2" style="padding:5px 0px;">
+        @Html.TextAreaFor(modelItem => Model.myPreviewData, new { @style = "width:88%;background-color:#dadada;", @readonly = true })
+    </div>
+</div>
+

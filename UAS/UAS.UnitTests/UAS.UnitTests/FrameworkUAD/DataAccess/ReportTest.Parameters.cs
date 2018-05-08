@@ -1,0 +1,73 @@
+namespace UAS.UnitTests.FrameworkUAD.DataAccess
+{
+    public partial class ReportTest
+    {
+        private const string ParamPubId = "@PubID";
+        private const string ParamProductId = "@ProductID";
+        private const string ParamRegions = "@Regions";
+        private const string ParamPrintColumn = "@PrintColumns";
+        private const string ParamDownload = "@Download";
+        private const string ParamYears = "@Years";
+        private const string ParamRow = "@Row";
+        private const string ParamIncludeAddRemove = "@IncludeAddRemove";
+        private const string ParamQueries = "@Queries";
+        private const string ParamIssueId = "@IssueID";
+        private const string ParamIncludeReportGroup = "@IncludeReportGroup";
+        private const string ParamIncludeCustomRegion = "@IncludeCustomRegion";
+        private const string ParamCol = "@Col";
+        private const string ParamFilters = "@Filters";
+        private const string ParamAdhocFilters = "@AdHocFilters";
+        private const string ParamCountryId = "@CountryID";
+        private const string ParamSelectGeoBreakDownDomesticMvc = "SelectGeoBreakdown_DomesticMVC";
+        private const string ParameterDemo = "@Demo";
+        private const string ParamIncludeAllStates = "@IncludeAllStates";
+        private const string ParamWaveMail = "@WaveMail";
+        private const string ParamReportId = "@ReportID";
+        private const string ParameterRowId = "@RowID";
+        private const string ParamFilterString = "@FilterString";
+        private const string ParameterAdHocXml = "@AdHocXml";
+        private const string ParamUserArchive = "@UseArchive";
+        private const string ParamPublicationId = "@PublicationID";
+        private const string ParamPubIds = "@PubIDs";
+        private const string ParamDemo31 = "@Demo31";
+        private const string ParamDemo32 = "@Demo32";
+        private const string ParamDemo33 = "@Demo33";
+        private const string ParamDemo34 = "@Demo34";
+        private const string ParamDemo35 = "@Demo35";
+        private const string ParamDemo36 = "@Demo36";
+        private const string ParamUadResponseIds = "@UadResponseIDs";
+        private const string ParamIsMailable = "@IsMailable";
+        private const string ParamEmailStatusId = "@EmailStatusIDs";
+        private const string ParamOpenSearchType = "@OpenSearchType";
+        private const string ParamOpenCount = "@OpenCount";
+        private const string ParamOpenDateFrom = "@OpenDateFrom";
+        private const string ParamOpenDateTo = "@OpenDateTo";
+        private const string ParamOpenBlastId = "@OpenBlastID";
+        private const string ParamOpenEmailSubject = "@OpenEmailSubject";
+        private const string ParamOpenEmailFromDate = "@OpenEmailFromDate";
+        private const string ParamOpenEmailToDate = "@OpenEmailToDate";
+        private const string ParamClickSearchType = "@ClickSearchType";
+        private const string ParamClickCount = "@ClickCount";
+        private const string ParamClickUrl = "@ClickURL";
+        private const string ParamClickDateFrom = "@ClickDateFrom";
+        private const string ParamClickDateTo = "@ClickDateTo";
+        private const string ParamClickBlastId = "@ClickBlastID";
+        private const string ParamClickEmailSubject = "@ClickEmailSubject";
+        private const string ParamClickEmailFromDate = "@ClickEmailFromDate";
+        private const string ParamClickEmailToDate = "@ClickEmailToDate";
+        private const string ParamDomain = "@Domain";
+        private const string ParamVisitUrl = "@VisitsURL";
+        private const string ParamVisitsDateFrom = "@VisitsDateFrom";
+        private const string ParamVisitsDateTo = "@VisitsDateTo";
+        private const string ParamBrandId = "@BrandID";
+        private const string ParamSearchType = "@SearchType";
+        private const string RangeMaxLatMin = "@RangeMaxLatMin";
+        private const string RangeMaxLatMax = "@RangeMaxLatMax";
+        private const string RangeMaxLonMin = "@RangeMaxLonMin";
+        private const string RangeMaxLonMax = "@RangeMaxLonMax";
+        private const string RangeMinLatMin = "@RangeMinLatMin";
+        private const string RangeMinLatMax = "@RangeMinLatMax";
+        private const string RangeMinLonMin = "@RangeMinLonMin";
+        private const string RangeMinLonMax = "@RangeMinLonMax";
+    }
+}

@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ECN_Framework_Entities.Accounts.Customer>
+
+<span class="current_user">
+    <ul id="sddm">
+        <li>
+            <a href="~/Login/User" id="lnkUserLoginDropDown" onmouseover="mopen('m1')" onmouseout="mclosetime()">
+                <img src="~/Content/img/downarrow.png" border="0" />
+            </a>
+            <span id="m1" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">                
+                @foreach (ECN_Framework_Entities.Accounts.Customer customer in @Model) { 
+                    <a href="~/Login/Customer/@customer.CustomerID">@customer.CustomerName</a>
+                }
+            </span>
+        </li>
+    </ul>
+</span>

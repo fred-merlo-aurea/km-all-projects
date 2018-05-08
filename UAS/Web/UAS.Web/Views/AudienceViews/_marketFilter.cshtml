@@ -1,0 +1,24 @@
+﻿@model UAS.Web.Models.UAD.Filter.DynamicFilter
+
+@if (Model.MarketFilterList!=null && Model.MarketFilterList.Count>0)
+{
+    <table class="pubTypeRepeater">
+       
+        <tr>
+            <td valign="middle" align="center">
+                @Html.ListBox("lstPubType_Market", Model.MarketFilterList.ConvertAll(a =>
+           {
+               return new SelectListItem()
+               {
+                   Text = a.MarketName.ToString(),
+                   Value = a.MarketID.ToString(),
+                   Selected = false
+               };
+           }), new { style = "width:200px;" })
+            </td>
+        </tr>
+    </table>
+    <div id="lstPubType_Market" style="display:none;">
+
+    </div>
+}

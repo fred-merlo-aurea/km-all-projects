@@ -1,0 +1,491 @@
+﻿@using System.Web.Mvc;
+@using Kendo.Mvc;
+@model ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.PostMenu
+
+@section Styles {
+
+}
+@*<link href="~/Menu/Content/Site.css" type="text/css" rel="stylesheet" />*@
+<style>
+    .KM-MenuPopup,
+    #SelectedClientGroupID_listbox,
+    #SelectedClientGroupID_listbox *,
+    #SelectedClientID_listbox,
+    #SelectedClientID_listbox *,
+    #UserDropDown_listbox,
+    #UserDropDown_listbox *
+    {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .KM-MenuPopup,
+    #UserDropDown_listbox,
+    #UserDropDown_listbox *
+    {
+        width: 220px !important;
+    }
+
+    .KM-Wider,
+    #SelectedClientGroupID_listbox,
+    #SelectedClientID_listbox,
+    #SelectedClientGroupID_listbox *,
+    #SelectedClientID_listbox *
+    {
+        width: 350px !important;
+    }
+    
+    .KM-MenuPopup > .k-dropdown-wrap > .k-input
+    {
+        text-align: left;
+    }
+
+    span[aria-owns="SelectedClientGroupID_listbox"] .k-i-arrow-60-down,
+    span[aria-owns="SelectedClientID_listbox"] .k-i-arrow-60-down,
+    span[aria-owns="UserDropDown_listbox"] .k-i-arrow-60-down,
+    span[aria-owns="#SelectedClientGroupID_listbox"] .k-popup,
+    span[aria-owns="#SelectedClientID_listbox"] .k-popup,
+    span[aria-owns="UserDropDown_listbox"] .k-popup {
+        color: #f57f20 !important;
+    }
+
+</style>
+<script type="text/javascript">
+    function editProfile()
+    {
+        var dropDown = $("#UserDropDown").data('kendoDropDownList');
+        var refurl = window.location.pathname;
+        var userID = parseInt(dropDown.value());
+        var url = ""
+        if (userID == -1)
+        {
+            url = "http://" + window.location.host + "/ecn.accounts/main/Users/EditUserProfile.aspx?redirecturl=" + encodeURI(refurl);
+        }
+        else if (userID == -2)
+        {
+            url = "http://" + window.location.host + "/EmailMarketing.Site/Login/Logout";
+        }
+        document.location.href = url;
+    }
+
+    function changeDropDown() {
+       
+        var afterAjaxSuccessUrl = @Html.Raw(Json.Encode(Model.AccountChange))
+        var model = @Html.Raw(Json.Encode(Model.cdd)) ;
+        var ddlProduct = $("#SelectedProductID").data('kendoDropDownList');
+        var selectedProductID = 0;
+        if(ddlProduct)
+        {
+            selectedProductID = parseInt(ddlProduct.value());
+        }
+        var ddmodel= {
+            AccountChange:afterAjaxSuccessUrl,
+            CurrentClientGroupID :model.CurrentClientGroupID,
+            CurrentClientID :model.CurrentClientID,
+            CurrentProductID :model.CurrentProductID,
+            SelectedClientGroupID:$("#SelectedClientGroupID").data('kendoDropDownList').value(),
+            SelectedClientID : $("#SelectedClientID").data('kendoDropDownList').value(),
+            SelectedProductID :selectedProductID
+        }
+
+        var virtualDir = window.location.pathname.split('/')[1];
+
+        $.ajax({
+            url: "/" + virtualDir + "/Menu/Index/ClientChange", //For Performence improvement, implemented ClientChange in local Control
+            type: "POST",
+            contentType:"application/json; charset=utf-8",
+            data:JSON.stringify({'ddmodel':ddmodel}),
+            error: function (x, a, e) {
+                console.log(x);
+                console.log(a);
+                console.log(e);
+            },
+            success:function(response)
+            {
+                var url = response;
+                document.location.href = url;
+            }
+
+        });
+    }
+
+    $(window).load(function() {
+        var labels = $(".KM-MenuPopup > .k-dropdown-wrap > .k-input");
+        $.each(labels, function( index, value ) {
+            $(value).attr("title", $(value).text());
+        });
+    });
+</script>
+@helper MenuItem(ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.MenuModel models, int depth, bool isRoot)
+{
+try
+{
+    string display = "display:none;";
+    if (depth == 1)
+    {
+        display = "display:block;float:left;";
+    }
+    if (!isRoot)
+    {
+        display = "display:block;float:left;";
+    }
+
+    string depthIndex = "level" + depth.ToString();
+    if (models.IsSelected)
+    {
+        depthIndex += " selected";
+    }
+    if (models.Children.Count > 0)
+    {
+        string depthIndex2 = "level" + (depth + 1).ToString();
+        string href = "";
+        if (!string.IsNullOrEmpty(models.URL))
+        {
+            href = models.URL;
+        }
+        string orientations = "top:100%;left:0px;";
+
+            <li class="dynamic" style="position:relative;@display">
+                @if (!string.IsNullOrEmpty(href))
+                {
+                    <a class="@depthIndex static" style="display:block;" href="@href">@models.MenuName</a>
+                }
+                else
+                {
+                    <a class="@depthIndex static" style="display:block;">@models.MenuName</a>
+                }
+
+                <ul class="@depthIndex2 dynamic" style="position:absolute;list-style-type:none; @orientations">
+                    @foreach (ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.MenuModel mm in models.Children)
+                    {
+                        string depth2Plus = depthIndex2;
+                        string childhref = "";
+                        ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+
+                        if (mm.MenuName.ToUpper() == "UNIFIED AUDIENCE DATABASE")
+                        {
+                            if (KMPlatform.BusinessLogic.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.UAD))
+                            {
+                                KMPlatform.Entity.ClientGroup cg = (new KMPlatform.BusinessLogic.ClientGroup()).Select(UserSession.CurrentUser.CurrentClientGroup.ClientGroupID);
+
+                                if (!String.IsNullOrEmpty(cg.UADUrl))
+                                {
+                                    KM.Common.Entity.Encryption ec = KM.Common.Entity.Encryption.GetCurrentByApplicationID(int.Parse(System.Configuration.ConfigurationManager.AppSettings["KMCommon_Application"]));
+                                    string postbackUrl = cg.UADUrl;
+                                    string queryString = string.Format("{0}|&|{1}|&|{2}|&|{3}|&|{4}|&|{5}|&|{6}|&|{7}", KM.Common.ECNParameterTypes.UserName, UserSession.CurrentUser.UserName, KM.Common.ECNParameterTypes.Password, UserSession.CurrentUser.Password, "ClientGroupID", UserSession.ClientGroupID, "ClientID", UserSession.CurrentUser.CurrentClient.ClientID);
+                                    string queryStringHash = System.Web.HttpUtility.UrlEncode(KM.Common.Encryption.Base64Encrypt(queryString, ec));
+                                    childhref = string.Concat(postbackUrl, "?", queryStringHash);
+                                }
+                            }
+
+                        }
+                        else if (mm.MenuName.ToUpper() == "PRODUCT REPORTING")
+                        {
+                            if (KMPlatform.BusinessLogic.User.HasService(UserSession.CurrentUser, KMPlatform.Enums.Services.PRT))
+                            {
+                                KM.Common.Entity.Encryption ecWqt = KM.Common.Entity.Encryption.GetCurrentByApplicationID(int.Parse(System.Configuration.ConfigurationManager.AppSettings["KMCommon_Application"]));
+                                string postbackUrlWqt = mm.URL;
+                                string queryStringWqt = string.Format("{0}|&|{1}|&|{2}|&|{3}|&|{4}|&|{5}|&|{6}|&|{7}", KM.Common.ECNParameterTypes.UserName, UserSession.CurrentUser.UserName, KM.Common.ECNParameterTypes.Password, UserSession.CurrentUser.Password, "ClientGroupID", UserSession.ClientGroupID, "ClientID", UserSession.CurrentUser.CurrentClient.ClientID);
+                                string queryStringHashWqt = System.Web.HttpUtility.UrlEncode(KM.Common.Encryption.Base64Encrypt(queryStringWqt, ecWqt));
+                                childhref = postbackUrlWqt + queryStringHashWqt;
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(mm.URL))
+                        {
+                            childhref = mm.URL;
+                        }
+                        if (mm.IsSelected)
+                        {
+                            depth2Plus += " selected";
+                        }
+                        if (mm.Children.Count > 0)
+                        {
+                            string depthIndex3 = "level" + (depth + 2).ToString();
+
+                            <li class="dynamic" style="position:relative;" id="KM_@mm.MenuName.Replace(" ", "_")">
+                                @if (!string.IsNullOrEmpty(childhref))
+                                {
+                                    <a class="@depth2Plus dynamic "  style="display:block;" href="@childhref">@mm.MenuName</a>
+                                }
+                                else
+                                {
+                                    <a class="@depth2Plus dynamic " style="display:block;">@mm.MenuName</a>
+                                }
+                                @if (depth + 2 > 2)
+{
+    orientations = "top:0;left:100%;";
+}
+                                <ul class="@depthIndex3 dynamic" style="position:absolute;float:left;list-style-type:none; @orientations">
+                                    @SubMenu(mm.Children, depth + 1)
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="dynamic" style="position:relative;" id="KM_@mm.MenuName.Replace(" ", "_")">
+                                @if (!string.IsNullOrEmpty(childhref))
+                                {
+                                    <a class="@depth2Plus dynamic" onclick="checkNavigation(event,'KM_@mm.MenuName.Replace(" ", "_")','@childhref')" style="display:block;" href="@childhref">@mm.MenuName</a>
+                                }
+                                else
+                                {
+                                    <a class="@depth2Plus dynamic" style="display:block;">@mm.MenuName</a>
+                                }
+
+
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+    }
+    else
+    {
+            <li class="static" style="position:relative;" id="KM_@models.MenuName.Replace(" ", "_")">
+                <a class="@depthIndex static" style="display:block;" href="@models.URL">@models.MenuName</a>
+            </li>
+    }
+}
+catch (Exception ex)
+{
+
+}
+}
+
+@helper SubMenu(List<ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.MenuModel> listmm, int depth)
+{
+string depthIndex = "level" + depth.ToString();
+string depthIndex2 = "level" + (depth + 1).ToString();
+string orientations = "top:100%;left:0px;";
+
+foreach (ECN_Framework_BusinessLayer.MVCModels.PostModels.Menu.MenuModel mm in listmm)
+{
+    if (mm.IsSelected)
+    {
+        depthIndex2 += " selected";
+    }
+    string childhref = "";
+    if (!string.IsNullOrEmpty(mm.URL))
+    {
+        childhref = mm.URL;
+    }
+    if (mm.Children.Count > 0)
+    {
+        string depthIndex3 = "level" + (depth + 2).ToString();
+
+
+            <li class="dynamic" style="position:relative;" id="KM_@mm.MenuName.Replace(" ", "_")">
+                @if (!string.IsNullOrEmpty(childhref))
+                {
+                    <a class="@depthIndex2 dynamic " style="display:block;" href="@childhref">@mm.MenuName</a>
+    }
+                else
+                {
+                    <a class="@depthIndex2 dynamic " style="display:block;">@mm.MenuName</a>
+}
+                @if (depth + 2 > 2)
+{
+    orientations = "top:0;left:100%;";
+}
+                <ul class="@depthIndex3 dynamic" style="position:absolute;float:left;list-style-type:none; @orientations">
+                    @MenuItem(mm, depth + 1, false)
+                </ul>
+            </li>
+    }
+    else
+    {
+            <li class="dynamic" style="position:relative;" id="KM_@mm.MenuName.Replace(" ", "_")">
+                @if (!string.IsNullOrEmpty(childhref))
+                {
+                    <a class="@depthIndex2 dynamic" style="display:block;" href="@childhref">@mm.MenuName</a>
+                }
+                else
+                {
+                    <a class="@depthIndex2 dynamic" style="display:block;">@mm.MenuName</a>
+                }
+
+
+            </li>
+    }
+}
+}
+
+
+<header>
+    <div class="headerbox">
+        <div class="toplogo" style="width:100%;">
+            <ul class="ECN-AppLinks" style="text-align:left;float:left;list-style:none;">
+                <li>
+                    <table cellpadding="0" cellspacing="0">
+                        <tr valign="top">
+                            <td>
+                                @{
+                                    var us = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+                                    var logo = "";
+                                    if (us == null)
+                                    {
+                                        logo = "http://test.ecn5.com/ecn.domaintracking/Content/Images/kmlogo.jpg";
+                                    }
+                                    else
+                                    {
+                                        var bc = ECN_Framework_BusinessLayer.Accounts.BaseChannel.GetByBaseChannelID(us.CurrentBaseChannel.BaseChannelID);
+                                        if (bc.IsBranding == false)
+                                        {
+                                            bc = ECN_Framework_BusinessLayer.Accounts.BaseChannel.GetByBaseChannelID(12);
+                                        }
+                                        logo = System.Configuration.ConfigurationManager.AppSettings["Images_VirtualPath"] + "/Channels/" + bc.BaseChannelID + "/" + bc.BrandLogo;
+                                    }
+                                    <img style="height:80px;" src="@logo" />
+                                }
+                            </td>
+                        </tr>
+                    </table>
+
+                </li>
+            </ul>
+            <div class="toprigthbanner">
+                <a href="http://www.kmlearningcenter.com/" class="tbanner" tabindex="KM Learning center"></a>
+            </div>
+            <div style="width:40%;float:right;margin-right:15%;" id="dvOpenCloseWidget">
+            </div>
+        </div>
+        <section class="userinfobanner">
+
+            <div class="uinfo">
+
+                <table style="text-align:right;width:100%;">
+                    <tr>
+                        <td style="text-align:right;">
+
+                            <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                                Channel:
+                            </span>
+                            
+                            @Html.HiddenFor(model => model.cdd.CurrentClientGroupID)
+                            
+                            @if (Model.Application == "AMSCircMVC")
+                            {
+                                // Html.DropDownListFor(model => model.cdd.SelectedClientGroupID, Model.cdd.ClientGroupsSelectList, new { id = "SelectedClientGroupID" })
+                                @(
+                                    Html.Kendo()
+                                    .DropDownListFor(model => model.cdd.SelectedClientGroupID)
+                                    .BindTo(Model.cdd.ClientGroupsSelectList)
+                                    .HtmlAttributes(new { @class = "KM-MenuPopup KM-Wider", id = "SelectedClientGroupID" })
+                                    .Template("<span title=\"#=Text#\">#=Text#</span>")
+                                )
+                            }
+                            else
+                            {
+                                // Html.DropDownListFor(model => model.cdd.SelectedClientGroupID, Model.cdd.ClientGroupsSelectList, new { onchange = "changeDropDown();", id = "SelectedClientGroupID" })
+                                @(
+                                    Html.Kendo()
+                                    .DropDownListFor(model => model.cdd.SelectedClientGroupID)
+                                    .BindTo(Model.cdd.ClientGroupsSelectList)
+                                    .HtmlAttributes(new { @class = "KM-MenuPopup KM-Wider", id = "SelectedClientGroupID" })
+                                    .Template("<span title=\"#=Text#\">#=Text#</span>")
+                                    .Events(x => x.Change("changeDropDown"))
+                                )
+                            }
+                            
+                            @Html.HiddenFor(model => model.AccountChange)
+                            @Html.HiddenFor(model => model.cdd.AccountChange)
+
+                        </td>
+                        <td style="text-align:right;">
+
+                            <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                                &nbsp;
+                                Customer:
+                            </span>
+                            @Html.HiddenFor(model => model.cdd.CurrentClientID)
+                            
+                            @*@Html.DropDownListFor(model => model.cdd.SelectedClientID, Model.cdd.ClientsSelectList, new { onchange = "changeDropDown();", id = "SelectedClientID" })*@
+                            @(
+                                Html.Kendo()
+                                .DropDownListFor(model => model.cdd.SelectedClientID)
+                                .BindTo(Model.cdd.ClientsSelectList)
+                                .HtmlAttributes(new { @class = "KM-MenuPopup KM-Wider", id = "SelectedClientID" })
+                                .Template("<span title=\"#=Text#\">#=Text#</span>")
+                                .Events(x => x.Change("changeDropDown"))
+                            )
+                        </td>
+                        @if (Model.Application == "AMSCircMVC")
+                        {
+                            <td style="text-align:right;">
+                                <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                                    &nbsp;
+                                    Product:
+                                </span>
+                                @Html.HiddenFor(model => model.cdd.CurrentProductID)
+                                
+                                @*@Html.DropDownListFor(model => model.cdd.SelectedProductID, Model.cdd.ProductsSelectList, new { onchange = "changeDropDown();", id = "SelectedProductID" })*@
+                                @(
+                                    Html.Kendo()
+                                    .DropDownListFor(model => model.cdd.SelectedProductID)
+                                    .BindTo(Model.cdd.ProductsSelectList)
+                                    .HtmlAttributes(new { @class = "KM-MenuPopup KM-Wider", id = "SelectedProductID" })
+                                    .Template("<span title=\"#=Text#\">#=Text#</span>")
+                                    .Events(x => x.Change("changeDropDown"))
+                                )
+                            </td>
+                        }
+                        <td style="text-align:right;">
+                            <span class="ECNText10" style="font-weight: bold; color: black;">&nbsp;User:</span>
+                            @*@Html.DropDownListFor(model => model.cdd.CurrentUserID, new SelectList(Model.cdd.UserDropDown, "UserID", "UserName"), new { onchange = "editProfile(this)", name = "UserDropDown" })*@
+                            @(
+                                Html.Kendo()
+                                .DropDownListFor(model => model.cdd.CurrentUserID)
+                                .Name("UserDropDown")
+                                .BindTo(new SelectList(Model.cdd.UserDropDown, "UserID", "UserName"))
+                                .HtmlAttributes(new { @class = "KM-MenuPopup", id = "UserDropDown" })
+                                .Template("<span title=\"#=Text#\">#=Text#</span>")
+                                .Events(x => x.Change("editProfile"))
+                            )
+
+                    </tr>
+                </table>
+
+
+            </div>
+        </section>
+    </div>
+</header>
+<table id="maincontent" style="width:100%;" align="center">
+    <tr></tr>
+    <tr>
+        <td class="mainmenu emailmarketingmainmenu">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:93%;">
+                        <div class="MenuClass" style="float:left;">
+                            <ul class="level1 static" style="position:relative;float:left;width:auto;list-style-type:none;vertical-align:middle;">
+                                @{
+                                    int childrenCount = Model.Menu.Children.Count;
+                                }
+                                @for (int i = 0; i < childrenCount; i++)
+                                {
+                                    @MenuItem(Model.Menu.Children[i], 1, true);
+                                    if (i + 1 >= childrenCount)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="width:7%;text-align:left;vertical-align:top;">
+
+                        <div style="position:absolute;vertical-align:middle;">
+
+
+                            <a class="logoff" style="text-decoration:none;" href="@Model.LogOffLink.ToString()"><span class="EcnWhiteLink">Log Off</span></a>
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

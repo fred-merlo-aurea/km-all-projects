@@ -1,0 +1,187 @@
+﻿@model List<UAS.Web.Models.Circulations.IssueSplitContainer>
+
+@using System.Web.Script.Serialization;
+<input type="hidden" id="hdn_maximb" value="" />
+<table width="95%" id="IssueSplitGridTable" align="center">
+    <thead>
+        <tr>
+            @*<th align="center" style="text-align:center;"></th>*@
+            <th align="center" style="text-align:center;">Filter</th>
+            <th align="center" style="text-align:center;">Split Name</th>
+            <th align="center" style="text-align:center;">Split Description</th>
+            <th align="center" style="text-align:center;">Records</th>
+            <th align="center" style="text-align:center;">Copies</th>
+            <th align="center" style="text-align:center;">Desired Records</th>
+            <th align="center" style="text-align:center;">Key Code</th>
+            <th align="center" style="text-align:center;">Export</th>
+            <th align="center" style="text-align:center;"></th>
+            @*<th align="center" style="text-align:center;">Delete</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+            {
+                var id = "split" + i;
+                var filterdetails = new JavaScriptSerializer().Serialize(Model[i].Filter);
+            <tr id="trMainSplit_@id">
+                <input type="hidden" id="hdnSplitID_@id"  value="@Model[i].IssueSplit.IssueSplitId"/>
+                @*<td align="center" valign="top" style="width:4%;"><span style='text-align:center;color:orange;' id="spShowChildGrid_@id" class="k-icon k-i-plus-circle"></span></td>*@
+                <td align="center" valign="top" style="width:4%;">
+                    <span id="spFilterCriteria_@id" style='text-align:center;color:orange;' class='k-icon k-i-paste-plain-text' data-toggle="tooltip" data-filterdetails="@filterdetails"></span>
+                </td>
+                <td align="center" valign="top" style="width:22%;">
+                    <input type="text" id="txtIssueSplitName_@id" value="@Model[i].IssueSplitName" class="k-textbox" style="width:300px;">
+                </td>
+                <td align="center" valign="top" style="width:14%;">
+                    <input type="text" id="txtIssueSplitDescription_@id" value="@Model[i].IssueSplitDescription" class="k-textbox" style="width:100px;" />
+                </td>
+                <td align="center" valign="top" style="width:8%;">
+                    <span id="spRecordCount_@id">@Model[i].RecordCount</span>
+                </td>
+                <td align="center" valign="top" style="width:8%;">
+                    <span id="spIssueSplitCount_@id">@Model[i].IssueSplitCount</span>
+                </td>
+                <td align="center" valign="top" style="width:12%;">
+                    <input type="number" id="txtDesiredRecords_@id" value="@Model[i].DesiredCount" class="k-textbox" style="width:90px;" @if (!Model[i].Save) { <text> disabled</text> } />
+                    <span class="k-icon k-i-hyperlink-open-sm desiredcount" id="moveDesiredCount_@id" style="color:orange;" @if (!Model[i].Save) { <text> disabled </text>  } else { <text> onclick="OpenDesiredCountPopUp(this)" </text> }></span>
+                </td>
+                <td align="center" valign="top" style="width:10%;">
+                    <input type="text" id="txtKeyCode_@id" value="@Model[i].KeyCode" class="k-textbox" style="width:60px;" @if (!Model[i].Save) { <text> disabled</text> } />
+                </td>
+                <td align="center" valign="top" style="width:8%;">
+                    <input type='checkbox' style="@if (!Model[i].NotExported) { <text>display:none;</text> }"    class="export" id="chkNotExported_@id" @if (!Model[i].Save) { <text> disabled </text>  } else { <text> onchange="ExportChecked(this.id)" </text> } />
+                    <span data-exported="false" style="@if (Model[i].NotExported) { <text>display:none;</text> } else { <text>color:green;</text> } " class='k-icon k-i-check-circle k-i-checkmark-circle exported' onclick="ChangeExportStatus(this.id)"  id="spExported_@id"></span>
+                </td>
+                @if (!Model[i].Save)
+                {
+                    <td align="center" valign="top" style="width:7%;height:75px;">
+                        @(Html.Kendo()
+                                        .Menu()
+                                        .Name("GridActions_" + @id)
+                                        .Direction(MenuDirection.Left)
+                                        .Orientation(MenuOrientation.Vertical)
+                                        .Animation(false)
+                                        .HtmlAttributes(new { width = "90px;", id = "GridActions_" + @id, style = "text-align:center;" })
+                                        .Items(
+                                            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                                innerItems =>
+                                                {
+                                                    innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" }); ;
+                                                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "EditFilter('edit_" + @id + "')" });
+                                                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "DeleteFilter('edit_" + @id + "')" });
+
+                                                }
+                                            )
+                                        ))
+                    </td>
+                }
+            </tr>
+                            <tr id="trChildSplit_@id" style="display:none;">
+                                <td colspan="10" id="tdChildSplit_@id">
+                                 </td>
+                            </tr>
+
+        }
+    </tbody>
+</table>
+@{
+    Html.Kendo()
+        .Window()
+        .Width(1000)
+        .Modal(true)
+        .Title(false)
+        .Animation(false)
+        .Name("FilterCriteriaPopUpWindow")
+        .Content(@<text>
+                    <div>
+                        <table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+                            <tbody>
+                                <tr style="background-color: #5783BD;">
+                                    <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                                        <span id="SplitFilterName"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="filtergrid" class="filterpopups">
+                    </div>
+                    <div>
+                        <table width="100%">
+                            <tr>
+                                <td style="width:100%;height:40px;" align="center">
+                                    <input type="button" name="btnResetLoadSelected" onclick="CloseWindow('FilterCriteriaPopUpWindow')" value="Close" class="filterButton">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+<script>
+    $(document).ready(function () {
+
+        var remianingcount = '@Html.Raw(Json.Encode(ViewBag.RemainingCount))';
+        var lmdate = '@Html.Raw(@ViewBag.LastModifiedDate)';
+       
+        $("#lblRemainingCount").text(remianingcount);
+        $("#lastModifiedDate").text(lmdate);
+       
+        function getGridData(id) {
+            var filter = $("#" + id).data("filterdetails");
+            console.log(filter);
+            var gridData = [];
+            var serachcondition = "";
+            $.each(filter.Fields, function (i, obj) {
+                if (obj.SearchCondition) {
+                    serachcondition = obj.SearchCondition + " - ";
+                } else {
+                    serachcondition = ""
+                }
+                if (obj.Name == 'Adhoc') {
+                    gridData.push({ Name: obj.Name, Value: obj.Text + " - " + serachcondition + obj.Values })
+
+                } else if (obj.Name == 'Product') {
+                    gridData.push({ Name: obj.Name, Value: obj.Text })
+                }
+                else {
+                    gridData.push({ Name: obj.Name, Value: serachcondition + obj.Text })
+                }
+
+            });
+            return gridData;
+        }
+        $('[data-toggle="tooltip"]').click(function () {
+            $("#SplitFilterName").text($("#txtIssueSplitName_" + this.id.split('_')[1]).val());
+            var window = $("#FilterCriteriaPopUpWindow");
+            var kendoWindow = window.data('kendoWindow');
+            $("#filtergrid").html('');
+            $("#filtergrid").kendoGrid({
+                dataSource: {
+                    data: getGridData(this.id),
+                    schema: {
+                        model: {
+                            fields: {
+                                Name: { type: "string" },
+                                Value: { type: "string" }
+                            }
+                        }
+                    }
+                },
+                scrollable: false,
+                sortable: false,
+                filterable: false,
+                pageable: false,
+                columns: [
+                    { field: "Name", title: 'Field Name', width: "150px" },
+                    { field: "Value", title: 'Value(s)', width: "800px" },
+
+                ]
+            });
+            kendoWindow.center().open();
+        })
+    });
+
+</script>

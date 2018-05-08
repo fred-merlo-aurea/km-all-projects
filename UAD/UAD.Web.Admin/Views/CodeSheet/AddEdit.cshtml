@@ -1,0 +1,485 @@
+﻿@model UAD.Web.Admin.Models.CodeSheets 
+@using UAD.Web.Admin.Infrastructure
+@using KMSite
+
+<script>
+    var targetUrl = '@Html.Raw(Url.Action("Index", "CodeSheet", new { pubID = "temp", responseGroupID = "rgtemp" }))';
+
+    $(document).ready(function () {
+        //window.addEventListener('beforeunload', recordeCloseTime);
+        //Prevent user from submitting form using Enter
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetProducts", "CommonMethods")',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#ddlProduct").empty();
+                $.each(data, function (index, item) {
+                    $('#ddlProduct').append($('<option></option>').val(item.Value).html(item.Text));
+                });
+
+                if (@Model.PubID == 0)
+                    $('#ddlProduct').val("");
+                else-0
+                $('#ddlProduct').val(@Model.PubID).change();
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        $("#ddlProduct").on("change", function (e) {
+
+            if($("#ddlProduct").val() != "" || $("#ddlProduct").val() >0)
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetResponseGroups", "CommonMethods")',
+                    data: {pubID : $("#ddlProduct").val() },
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#ddlResponseGroup").empty();
+                        $.each(data, function (index, item) {
+                            $('#ddlResponseGroup').append($('<option></option>').val(item.Value).html(item.Text));
+                        });
+
+                        if (@Model.ResponseGroupID == 0)
+                            $('#ddlResponseGroup').val("");
+                        else
+                            $('#ddlResponseGroup').val(@Model.ResponseGroupID).change();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("An error has occured!!!");
+                    }
+                });
+            }
+        });
+
+        $("#ddlResponseGroup").on("change", function (e) {
+
+            if($("#ddlResponseGroup").val() != "" || $("#ddlResponseGroup").val() >0)
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetReportGroups", "CommonMethods")',
+                    data: {responseGroupID : $("#ddlResponseGroup").val() },
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#ddlReportGroup").empty();
+                        $.each(data, function (index, item) {
+                            $('#ddlReportGroup').append($('<option></option>').val(item.Value).html(item.Text));
+                        });
+
+                        if (@Model.ReportGroupID == 0)
+                            $('#ddlReportGroup').val("");
+                        else
+                            $('#ddlReportGroup').val(@Model.PubID).change();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("An error has occured!!!");
+                    }
+                });
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetMasterGroups", "CommonMethods")',
+            data: {responseGroupID : $("#ddlMasterGroup").val() },
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#ddlMasterGroup").empty();
+                $.each(data, function (index, item) {
+                    $('#ddlMasterGroup').append($('<option></option>').val(item.Value).html(item.Text));
+                });
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        $("#ddlMasterGroup").on("change", function (e) {
+            if($("#ddlMasterGroup").val() != "" || $("#ddlMasterGroup").val() >0)
+            {
+                var dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: '@Url.Action("GetMasterCodeSheetAvailableData", "CodeSheet")',
+                            data: { masterGroupID: $("#ddlMasterGroup").val(), MasterData: JSON.stringify( $("#grdMasterCodeSheet").data("kendoGrid").dataSource.data())},
+                            contentType: "application/json; charset=utf-8"
+                        }
+                    }
+                })
+
+                var lbAvailable = $("#lbAvailable").data("kendoListBox");
+                lbAvailable.setDataSource(dataSource);
+
+                var seldataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: '@Url.Action("GetMasterCodeSheetSelectedData", "CodeSheet")',
+                            data: { masterGroupID: $("#ddlMasterGroup").val(), MasterData: JSON.stringify( $("#grdMasterCodeSheet").data("kendoGrid").dataSource.data())},
+                            contentType: "application/json; charset=utf-8"
+                        }
+                    }
+                })
+
+                var lbSelected = $("#lbSelected").data("kendoListBox");
+                lbSelected.setDataSource(seldataSource);
+            }
+        });
+
+        $("#btnSave").click(function () {
+            if ($("#frmCodeSheet").valid()) {
+                event.preventDefault();
+                saveCodeSheet();
+            }
+        });
+
+        var saveCodeSheet=function() {
+            var modelData = {
+                CodeSheetID: @Html.Raw(Json.Encode(Model.CodeSheetID)),
+                PubID: $("#ddlProduct").val(),
+                ResponseGroupID: $("#ddlResponseGroup").val(),
+                ResponseValue: $("#txtResponseValue").val(),
+                ResponseDesc: $("#txtResponseDesc").val(),
+                IsActive: $("#ddlIsActive").val(),
+                IsOther: $("#ddlIsOther").val(),
+                DateCreated: @Html.Raw(Json.Encode(Model.DateCreated)),
+                CreatedByUserID: @Html.Raw(Json.Encode(Model.CreatedByUserID)),
+                DateUpdated: @Html.Raw(Json.Encode(Model.DateUpdated)),
+                UpdatedByUserID: @Html.Raw(Json.Encode(Model.UpdatedByUserID)),
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddEdit", "CodeSheet")',
+                data: JSON.stringify({MasterData : $("#grdMasterCodeSheet").data("kendoGrid").dataSource.data(), model: modelData}),
+                contentType: "application/json; charset=utf-8",
+                processdata:false,
+                success: function (response) {
+                    var result =JSON.parse(response);
+                    if (result.Success)
+                    {
+                        var data = {
+                            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                            text: result.Text,
+                            autoClose: false,
+                            action: closeCodeSheet,
+                            IsOpen: false
+                        }
+                        showMessage(data);
+                    }
+                    else
+                    {
+                        $("#alertMsg").html(result.Text);
+                        $("#alertDiv").show();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("An error has occured!!!");
+                }
+            });
+        }
+        });
+
+        function closeCodeSheet() {
+            window.location = targetUrl.replace("rgtemp", $("#ddlResponseGroup").val()).replace("temp", $("#ddlProduct").val());
+        }
+
+        function showAlert() {
+            showMessage({
+                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                text: "Any unsaved data will be lost by leaving this page. Do you wish to continue?",
+                autoClose: false,
+                IsOpen: false,
+                action: closeCodeSheet,
+            });
+            return false;
+        }
+
+    function onAdd(e) {
+        var selectedText = $("#ddlMasterGroup :selected").text()
+
+        $("#lbAvailable").data("kendoListBox").select().each(function(i, selected){
+            var selValue = $("#lbAvailable" + " option").filter(function() { return this.text == $(selected).text() }).val();
+            $("#grdMasterCodeSheet").data("kendoGrid").dataSource.add( { DisplayName: selectedText, Title: $(selected).text(), MasterID: selValue, MasterGroupID: $("#ddlMasterGroup").val()});
+        });
+    }
+
+    function onRemove(e) {
+        $("#lbSelected").data("kendoListBox").select().each(function(i, selected){
+            var dataItem = $("#grdMasterCodeSheet").data("kendoGrid").dataSource.get($(selected).text());
+            var row = $("#grdMasterCodeSheet").data("kendoGrid").tbody.find("tr[data-uid='" + dataItem.uid + "']");
+            $("#grdMasterCodeSheet").data("kendoGrid").removeRow(row);
+        });
+    }
+
+    function gridParams() {
+        return {codeSheetID: @Html.Raw(Json.Encode(Model.CodeSheetID))}
+    }
+
+    function deleteRow(element) {
+        var selectedVal = $("#ddlMasterGroup").val();
+        var grdMasterCodeSheet = $("#grdMasterCodeSheet").data("kendoGrid");
+        var grddata = grdMasterCodeSheet.dataItem($(element).closest("tr"));
+
+        if(selectedVal == grddata.MasterGroupID )
+        {
+            var lbSelected = $("#lbSelected").data("kendoListBox");
+            var lbAvailable = $("#lbAvailable").data("kendoListBox");
+
+            var text = grddata.Title.toLowerCase();
+            var items = lbSelected.items();
+            for (var i = 0; i < items.length; i++) {
+                var dataItem = lbSelected.dataItem(items[i]);
+                if (dataItem.Text.toLowerCase().indexOf(text) >= 0) {
+                    lbSelected.remove(items[i]);
+                    lbAvailable.add(dataItem);
+                }
+            }
+        }
+        grdMasterCodeSheet.removeRow($(element).closest("tr"));
+    }
+
+</script>
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    .help-block ul {
+        list-style-type: none;
+    }
+
+    .has-error .help-block,
+    .has-error .control-label,
+    .has-error .form-control-feedback {
+        color: #e80c4d;
+    }
+
+    .has-error .form-control:focus,
+    .has-error .form-control {
+        border-color: #e80c4d;
+        box-shadow: #e80c4d;
+    }
+</style>
+<div class="gridttl" id="topDiv">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+@using (Html.BeginForm("AddEdit", "CodeSheet", FormMethod.Post, new { role = "form", id = "frmCodeSheet", data_toggle = "validator" }))
+{
+    @Html.HiddenFor(e => e.CodeSheetID)
+    @Html.HiddenFor(e => e.DateCreated)
+    @Html.HiddenFor(e => e.CreatedByUserID)
+    @Html.HiddenFor(e => e.WQT_ResponseID)
+    @Html.HiddenFor(e => e.DisplayOrder)
+    <table>
+        <tr>
+            <td colspan="2">
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span style="float:left;"><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"><span style="color:red">*</span>@Html.LabelFor(e => e.PubID, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left;">
+                        @Html.DropDownListFor(e => e.PubID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlProduct", required = "required", @class = "form-control", style = "height:70%; width:250px;", data_required_error = "Please select Product" })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"><span style="color:red">*</span>@Html.LabelFor(e => e.ResponseGroupID, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left;">
+                        @Html.DropDownListFor(e => e.ResponseGroupID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlResponseGroup", required = "required", @class = "form-control", style = "height:70%; width:250px;", data_required_error = "Please select Response Group" })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle" width="40%"><span style="color:red;font-weight:bold;">*</span>@Html.LabelFor(e => e.ResponseValue, new { @class = "control-label" })</td>
+            <td width="60%">
+                <div class="form-group">
+                    <div style="float:left">
+                        @Html.TextBoxFor(e => e.ResponseValue, new
+                   {
+                       id = "txtResponseValue",
+                       @class = "form-control",
+                       type = "text",
+                       required = "required",
+                       data_required_error = "Please provide Value.",
+                       @maxlength = "255",
+                       style = "height:70%; width:270px; Color:Black;",
+                   })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            <td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"><span style="color:red;font-weight:bold;">*</span>@Html.LabelFor(e => e.ResponseDesc, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left">
+                        @Html.TextBoxFor(e => e.ResponseDesc, new
+                   {
+                       id = "txtResponseDesc",
+                       @class = "form-control",
+                       type = "text",
+                       required = "required",
+                       data_required_error = "Please provide Description.",
+                       @maxlength = "255",
+                       style = "height:70%; width:270px; Color:Black;",
+                   })
+                    </div>
+                    <div style="float:left;  padding-left:10px;">
+                        <div class="help-block with-errors" style="height:10px; font-weight:bold;"></div>
+                    </div>
+                </div>
+            <td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.ReportGroupID, new { @class = "control-label" })</td>
+            <td>
+                <div class="form-group">
+                    <div style="float:left;">
+                        @Html.DropDownListFor(e => e.ReportGroupID, new SelectList(string.Empty, "Value", "Text"), new { id = "ddlReportGroup", @class = "form-control", style = "height:70%; width:250px;", data_required_error = "Please select Report Group" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.IsActive, new { @class = "control-label" })</td>
+            <td>
+                @Html.DropDownListFor(e => e.IsActive,
+                new List<SelectListItem>
+                    {
+                       new SelectListItem { Value = "True" , Text = "Yes" },
+                       new SelectListItem { Value = "False" , Text = "No" },
+                    },
+                     new { style = "height:70%; width:270px;", id = "ddlIsActive" })
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.LabelFor(e => e.IsOther, new { @class = "control-label" })</td>
+            <td>
+                @Html.DropDownListFor(e => e.IsOther,
+                new List<SelectListItem>
+                    {
+                       new SelectListItem { Value = "True" , Text = "Yes" },
+                       new SelectListItem { Value = "False" , Text = "No" },
+                    },
+                     new { style = "height:70%; width:270px;", id = "ddlIsOther" })
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"></td>
+            <td>
+                <div style="float:left;">
+                    @Html.Label("Types :  ", new { @class = "control-label" }) &nbsp;
+                </div>
+                <div style="float:left;">
+                    @Html.DropDownList("MasterGroups", new SelectList(string.Empty, "Value", "Text"), new { id = "ddlMasterGroup", @class = "form-control", style = "height:70%; width:250px;", data_required_error = "Please select Master Group" })
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle">@Html.Label("Master Code Sheet Ref :", new { @class = "control-label" })</td>
+            <td>
+                @(Html.Kendo().ListBox()
+                .Name("lbAvailable")
+                .HtmlAttributes(new { @style = "width:400px; height:200px; " , title="Available"})
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .ConnectWith("lbSelected")
+                .Toolbar(toolbar =>
+                {
+                    toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                    toolbar.Tools(tools => tools
+                        .TransferTo()
+                        .TransferFrom()
+                        .TransferAllTo()
+                        .TransferAllFrom()
+                    );
+                })
+                 .Selectable(ListBoxSelectable.Multiple)
+                )
+
+                @(Html.Kendo().ListBox()
+                .Name("lbSelected")
+                .HtmlAttributes(new { @style = "width:400px; height:200px; text-align:left", title = "Selected" })
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(new List<SelectListItem>())
+                .Events(events => events.Add("onAdd").Remove("onRemove"))
+                .Selectable(ListBoxSelectable.Multiple)
+                )
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="middle"></td>
+            <td>
+                <div id="grid" style="width:72%">
+                    @(Html.Kendo().Grid<UAD.Web.Admin.Models.CodeSheetMaster>()
+                    .Name("grdMasterCodeSheet")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(c => c.MasterGroupID).Hidden(true);
+                        columns.Bound(c => c.MasterID).Hidden(true);
+                        columns.Bound(c => c.DisplayName).Title("Types/Master Group");
+                        columns.Bound(c => c.Title).Title("Entries");
+                        columns.Template(x => { }).ClientTemplate("<button type='button' class='btn-blue2'  onclick='deleteRow(this)'>Delete</button>");
+                    })
+                    .Pageable(page => page.Enabled(false))
+                    .Filterable(filter => filter.Enabled(false))
+                    .DataSource(dataSource => dataSource 
+                    .Ajax() 
+                    .Model(m =>
+                    {
+                        m.Id(y => y.Title);
+                    })
+                    .Read(read => read.Data("gridParams").Action("GetMasterData", "CodeSheet"))
+                    .ServerOperation(true) 
+                    )
+                    )
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button type="submit" class="btn-blue2" id="btnSave">Save</button>
+                <button type="button" class="btn-blue2" id="btnCancel" onclick="return showAlert()">Cancel</button>
+            </td>
+        </tr>
+    </table>
+}

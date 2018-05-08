@@ -1,0 +1,23 @@
+﻿@using KMWeb.Models.Forms
+
+@model AddFieldModel
+
+@Html.HiddenFor(x => x.CustomerId, new Dictionary<string, object> { {"data-bind", "value:CustomerId" } })
+@Html.HiddenFor(x => x.GroupId, new Dictionary<string, object> { {"data-bind", "value:GroupId" } })
+
+<div class="wrapper modal modaladdgroup">
+    <fieldset title="Add Custom Field (UDF)">
+        <legend>Add Custom Field (UDF)</legend>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Field Name</label>
+                @Html.TextBoxFor(x => x.FieldName)
+            </div>
+            @Html.ValidationSummary()
+            <div class="buttonsgroup">
+                <button type="submit" class="k-button btn gridbtn">Save</button>
+                <button type="button" class="k-button btn gridbtn" onclick="addField.close()">Cancel</button>
+            </div>
+        </div>
+    </fieldset>
+</div>

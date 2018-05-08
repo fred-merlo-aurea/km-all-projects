@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="FileMapperWizard.Controls.DataMapTransformation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="211" d:DesignWidth="559">
+    <Grid x:Name="grdDataMap">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="75" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Transformation: Change Value" Margin="5,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="12"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Right">
+            <TextBlock Text="Transformation Name:" VerticalAlignment="Center"/>
+            <TextBox x:Name="tbxDName" Width="200" Height="22" Margin="5,0,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Right">
+            <TextBlock Text="Transformation Description:" VerticalAlignment="Center"/>
+            <TextBox x:Name="tbxDDesc" Width="200" Height="22" Margin="5,0,0,0"/>
+        </StackPanel>
+        <xctk:CheckComboBox x:Name="rcbAssignPubcodes" HorizontalAlignment="Center" Grid.Row="2" Height="22" Width="155" VerticalAlignment="Center"
+                                             DisplayMemberPath="Color" ValueMemberPath="Level" />
+        <!--<telerik:RadListBox x:Name="lstDataPubcodes" HorizontalAlignment="Center" Grid.Row="2" Height="22" Width="155" VerticalAlignment="Center"
+                                             DisplayMemberPath="Color" SelectedValuePath="Level"></telerik:RadListBox>-->
+        <!--<telerik:RadComboBox x:Name="rcbDataPubcodes" Grid.Row="2" Margin="5,0,2,0" Height="22" VerticalAlignment="Center" Tag="pub"
+                                                     SelectionChanged="dataComboBoxes_SelectionChanged" ItemTemplate="{StaticResource RadComboCheckBoxes}" />-->
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <telerik:RadButton x:Name="btnAddDataMap" Content="Add Product(s) to Change Value" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btnAddDataMap_Click" />
+            <CheckBox Name="cbxMapsPub" Content="Maps Pubcode?" Grid.Column="3" Grid.Row="8" Margin="25,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <CheckBox Name="cbxLastStep" Content="Is Last Step?" Margin="5,0,0,0" Grid.Column="3" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3">
+            <StackPanel Orientation="Horizontal" Height="17">
+                <Label x:Name="LabelPub" Content="Product" Margin="5,0,0,0" VerticalAlignment="Center" Style="{DynamicResource Label12}"/>
+                <Label x:Name="LabelMatch" Content="Match Type" Margin="45,0,0,0" VerticalAlignment="Center" Style="{DynamicResource Label12}"/>
+                <Label x:Name="LabelSource" Content="Source Data" Margin="43,0,0,0" VerticalAlignment="Center" Style="{DynamicResource Label12}"/>
+                <Label x:Name="LabelDesire" Content="Desired Data" Margin="37,0,0,0" VerticalAlignment="Center" Style="{DynamicResource Label12}"/>
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="80">
+                <StackPanel Name="spSingleDataMap" Orientation="Vertical" HorizontalAlignment="Left" Width="450">
+
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+        <telerik:RadButton x:Name="btnDApply" Content="Apply" Grid.Row="5" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Click="btnDMApply_Click" />
+    </Grid>
+</UserControl>

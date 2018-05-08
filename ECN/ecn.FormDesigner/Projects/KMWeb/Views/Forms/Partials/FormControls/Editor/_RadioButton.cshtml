@@ -1,0 +1,14 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+@using RadioButton = KMModels.Controls.RadioButton
+
+<script>
+    array[@((int)ControlType.RadioButton)] = {
+        name: '@ControlType.RadioButton',
+        object: @Html.Raw(Json.Encode(new RadioButton(true))),
+        control: "<div ng-repeat='item in control.Items' ng-style='{width: (100/control.Columns) + \"%\" }' class='inline' >\
+                    <input type='radio' ng-value='item.Value' ng-checked='item.Default' name='{{control.Order}}@ControlType.RadioButton' />{{item.Text}}\
+                 </div>"
+    }
+</script>

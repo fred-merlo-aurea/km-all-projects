@@ -1,0 +1,162 @@
+﻿@model FrameworkUAS.Model.RuleSet
+    
+@*UAS.Web.Models.FileMapperWizard.RuleOrderGridViewModel*@
+
+
+@{
+    int rsid = 0;
+    if (Model.rules != null && Model.rules.Count > 0)
+    {
+        rsid = Model.rules.First().ruleSetId;
+    }
+    
+    List<FrameworkUAS.Model.Rule> rules = Model.rules;
+}
+
+<script>
+    var noHint = $.noop;
+
+    $(document).ready(function () {
+        sessionStorage.ruleSetId = @rsid;
+    });
+
+    function placeholder(element) {
+        return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+    }
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+
+
+    function ruleContainer_onChange(e) {
+        debugger;
+        var grid = $("#ruleContainer").data("kendoGrid"),
+            skip = grid.dataSource.skip(),
+            oldIndex = e.oldIndex + skip,
+            newIndex = e.newIndex + skip,
+            data = grid.dataSource.data(),
+            dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+        grid.dataSource.remove(dataItem);
+        grid.dataSource.insert(newIndex, dataItem);
+
+        if (skip == null)
+            skip = 1;
+        var ruleSetId = dataItem["RuleSetId"];
+        var ruleId = dataItem["RuleId"];
+        var sortOrder = e.newIndex + skip;
+        var modelData = {
+            RuleSetId: ruleSetId,
+            RuleId: ruleId,
+            SortOrder: sortOrder
+        }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/UpdateRuleExecutionOrder",
+            type: "Post",
+            data: modelData,
+            dataType: 'html',//this is data type of what you are returning
+            success: function (response) {
+                debugger;
+                if (response) {
+                    $("#" + "validationErrorDiv").hide();
+                    $("#" + "ResultsTable").html(response);
+                    $("#" + "ResultsTable").show();
+                }
+                else //error
+                {
+                    $("#" + "validationErrorDiv").text(response);
+                    $("#" + "ResultsTable").hide();
+                    $("#" + "validationErrorDiv").show();
+                }
+            },
+            error: function (response) {
+                $("#" + "validationErrorDiv").text(response);
+                $("#" + "ResultsTable").hide();
+                $("#" + "validationErrorDiv").show();
+            }
+        });
+    }
+</script>
+
+
+<div id="ruleContainer">
+@foreach (FrameworkUAS.Model.Rule r in rules.OrderBy(x => x.sortOrder))
+{
+    <div id="rowRuleId-@(r.ruleId.ToString())" order="@r.sortOrder" ruleId="@r.ruleId" ruleSetId="@r.ruleSetId">
+        <table>
+            <tr>
+                <th style="width:150px; text-align:center;">Name</th>
+                <th style="width:150px; text-align:center;">Action</th>
+                <th style="width:300px; text-align:center;">Script</th>
+                <th style="width:55px; text-align:center;">Order</th>
+                <th style="width:100px; text-align:center;"></th>
+            </tr>
+            <tr>
+                
+                <td style="text-align:left;">@Html.Raw(@r.ruleName)</td>
+                <td style="text-align:left;">@Html.Raw(@r.ruleType) - @Html.Raw(@r.ruleAction)</td>
+                <td style="text-align:left;">@Html.Raw(@r.ruleScript)</td>
+                <td style="text-align:center;">@Html.Raw(@r.sortOrder)</td>
+                <td style="text-align:right;">@(Html.Kendo()
+                    .Menu()
+                    .Name("btnDeleteRule_RuleId_" + @r.ruleId.ToString())
+                    .Direction(MenuDirection.Left)
+                    .Orientation(MenuOrientation.Vertical)
+                    .Animation(false)
+                    .Items(
+                        items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                            innerItems =>
+                            {
+                                innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "return EditRule(" + @r.ruleId + "," + @r.ruleSetId + ")" });
+                                innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "return DeleteRule(" + @r.ruleId + "," + @r.ruleSetId + ")" });
+                            }
+                        )
+                    ))
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+</div>
+
+@(Html.Kendo().Sortable()
+                .For("#ruleContainer")
+                .Filter("div") //.Filter("table > tbody > tr")
+                .Cursor("move")
+                //.Ignore("TD, input")
+                .HintHandler("noHint")
+                .PlaceholderHandler("placeholder")
+                .ContainerSelector("#ruleContainer div")
+                .Events(events => events.Change("customRuleHtml_onChange"))
+)
+
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("btnDeleteRule_RuleId_#=RuleId#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "return EditRule(#=RuleId#,#=RuleSetId#)" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "return DeleteRule(#=RuleId#,#=RuleSetId#)" });
+                }
+            )
+        ).ToClientTemplate())
+}

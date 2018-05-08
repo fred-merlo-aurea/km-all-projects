@@ -1,0 +1,83 @@
+﻿namespace ecn.activityengines.Tests.Engines
+{
+    public partial class SO_multigroup_subscribeTest
+    {
+        private const string BlastId = "3";
+        private const string SubscriptionGroupIDs = "1,2";
+        private const string SmartFormId = "12";
+        private const string CreateEmailRecord = "CreateEmailRecord";
+        private const string CreateNote = "CreateNote";
+        private const string EmailAddress = "test@test.com";
+        private const int CustomerID = 10;
+        private const string Title = "Title";
+        private const string FirstName = "FirstName";
+        private const string LastName = "LastName";
+        private const string FullName = "FullName";
+        private const string CustomerId = "5";
+        private const string StreetAddress = "StreetAddress";
+        private const string StreetAddress2 = "StreetAddress2";
+        private const string CompanyName = "CompanyName";
+        private const string City = "City";
+        private const string State = "State";
+        private const string Country = "Country";
+        private const string ZipCode = "ZipCode";
+        private const string Phone = "Phone";
+        private const string MobilePhone = "MobilePhone";
+        private const string Fax = "Fax";
+        private const string Website = "test.com";
+        private const string Age = "20";
+        private const string Income = "1000";
+        private const string Gender = "Male";
+        private const string Occupation = "Software Engineer";
+        private const string DateOfBirth = "21-03-2018 00:00:00";
+        private const string User1 = "User1";
+        private const string User2 = "User2";
+        private const string User3 = "User3";
+        private const string User4 = "User4";
+        private const string User5 = "User5";
+        private const string User6 = "User6";
+        private const string UserEvent1 = "UserEvent1";
+        private const string UserEventDateTime = "20-03-2018 00:00:00";
+        private const string UserEvent2 = "UserEvent2";
+        private const string UserEventDateTime2 = "19-03-2018 00:00:00";
+        private const string ConnectonString = "test_connection_string";
+        private const int EmailId = 10;
+        private const string Filename = "test";
+        private const string Url = "http://km.com";
+        private const string DefaultCulture = "en-US";
+
+        private const string EmailAddressParam = "@emailAddress";
+        private const string CustomerIDParam = "@customer_id";
+        private const string TitleParam = "@title";
+        private const string FirstNameParam = "@first_name";
+        private const string LastNameParam = "@last_name";
+        private const string FullNameParam = "@full_name";
+        private const string CompanyParam = "@company";
+        private const string OccupationParam = "@occupation";
+        private const string AddressParam = "@address";
+        private const string Address2Param = "@address2";
+        private const string CityParam = "@city";
+        private const string StateParam = "@state";
+        private const string ZipParam = "@zip";
+        private const string CountryParam = "@country";
+        private const string VoiceParam = "@voice";
+        private const string MobileParam = "@mobile";
+        private const string FaxParam = "@fax";
+        private const string WebsiteParam = "@website";
+        private const string AgeParam = "@age";
+        private const string IncomeParam = "@income";
+        private const string GenderParam = "@gender";
+        private const string User1Param = "@user1";
+        private const string User2Param = "@user2";
+        private const string User3Param = "@user3";
+        private const string User4Param = "@user4";
+        private const string User5Param = "@user5";
+        private const string User6Param = "@user6";
+        private const string BirthDateParam = "@birthdate";
+        private const string UserEvent1Param = "@user_event1";
+        private const string UserEvent1DateParam = "@user_event1_date";
+        private const string UserEvent2Param = "@user_event2";
+        private const string UserEvent2DateParam = "@user_event2_date";
+        private const string Null = "Null";
+    }
+}

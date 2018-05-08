@@ -1,0 +1,31 @@
+﻿@using KMWeb.Models.Forms
+
+@model AddGroupModel
+
+@Html.HiddenFor(x => x.CustomerId, new Dictionary<string, object> { {"data-bind", "value:CustomerId" } })
+@Html.HiddenFor(x => x.FolderId, new Dictionary<string, object> { {"data-bind", "value:FolderId" } })
+
+<style>
+    .validation-summary-errors {
+    color: red;
+    font-weight: normal;
+    font-size: 12px;
+    clear: both;
+}
+</style>
+<div class="wrapper modal modaladdgroup">
+    <fieldset title="Add New Group">
+        <legend>Add New Group</legend>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                <label>Group Name</label>
+                @Html.TextBoxFor(x => x.GroupName)
+            </div>
+            @Html.ValidationSummary()
+            <div class="buttonsgroup">
+                <button type="submit" class="k-button btn gridbtn">Save</button>
+                <button type="button" class="k-button btn gridbtn" onclick="addGroup.close()">Cancel</button>
+            </div>
+        </div>
+    </fieldset>
+</div>

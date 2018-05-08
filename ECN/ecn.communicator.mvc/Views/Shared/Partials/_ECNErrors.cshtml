@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ECN_Framework_Common.Objects.ECNError>
+@using KMEnums
+@if (Model.Count() > 0)
+{
+    string err = string.Empty;
+    foreach (ECN_Framework_Common.Objects.ECNError ecnError in Model)
+    {
+        err += ecnError.ErrorMessage + "<br/>";
+    }
+
+    <script>
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@Html.Raw(err)'
+        });
+    </script>
+}
+

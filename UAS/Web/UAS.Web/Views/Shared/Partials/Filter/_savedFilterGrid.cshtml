@@ -1,0 +1,30 @@
+﻿@model IEnumerable<FrameworkUAD.Object.UADFilter>
+@(Html.Kendo().Grid(Model)
+        .Name("SavedFilterGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.FilterId).Hidden(true);
+            columns.Bound(o => o.Name);
+            columns.Bound(p => p).Title("Notes").ClientTemplate("<span style='text-align:center;' class='k-icon k-i-paste-plain-text' data-toggle='tooltip' title='#=Notes#'  ></span>");
+            columns.Bound(p => p.FilterCategoryName);
+            columns.Bound(p => p.CreatedUserName);
+            columns.Bound(p => p.CreatedDate).Format("{0:MM/dd/yyyy}");
+        })
+      .Resizable(x=>x.Columns(true))
+    .Pageable(pages => pages.PageSizes(true).ButtonCount(1).Input(true).PageSizes(new int[] { 5, 10, 15, 20 }))
+    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+    .Selectable(selectable => selectable
+            .Mode(GridSelectionMode.Single))
+
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+     )
+
+)
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({ placement: "right" });
+});
+</script>

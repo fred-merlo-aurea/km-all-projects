@@ -1,0 +1,137 @@
+﻿@using System.Linq
+@using System.Collections.Generic
+
+@using KMEnums
+@using KMModels
+
+@model ConditionModel
+
+@{
+    var conditionId = ViewData.TemplateInfo.HtmlFieldPrefix;
+
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+    var selected = controls.Single(x => x.Id == Model.ControlId);
+}
+@functions{
+    bool IsFirstConditionInGroup(string id)
+    {
+        try{
+            
+            var patten = "Conditions_";
+            int indx0 = id.IndexOf(patten) + patten.Length;
+            int indx1 = id.IndexOf("_", indx0);
+            string val = id.Substring(indx0, indx1-indx0);
+            if(val == "0" )
+                return true;                    
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}
+
+
+@helper GetValueControl(string name, ControlModel control)
+{
+    var dataType = control.DataType;
+    
+    if(dataType == DataType.Selection)
+    {
+        Html.Kendo().DropDownList().Name(name)
+            .BindTo(control.SelectableItems)
+            .DataTextField("Label")
+            .DataValueField("Id")
+            .Value(Model.Value)
+            .Render();
+    }
+    if(dataType == DataType.Text)
+    {
+        Html.Kendo().TextBox().Name(name).Value(Model.Value).Render();
+    }
+    if(dataType == DataType.Date)
+    {
+        Html.Kendo().DateTimePicker().Name(name)
+            .Value(Model.Value).Render();
+    }
+    if(dataType == DataType.Number)
+    {
+        Html.Kendo().NumericTextBox().Name(name).Decimals(0).Format("#")
+            .Value(!string.IsNullOrEmpty(Model.Value) ? (double?)double.Parse(Model.Value) : null).Render();
+    }
+    if (dataType == DataType.Decimal)
+    {
+        Html.Kendo().NumericTextBox().Name(name)
+            .Value(!string.IsNullOrEmpty(Model.Value) ? (double?)double.Parse(Model.Value) : null).Render();
+    }
+    if (dataType == DataType.Newsletter)
+    {
+        Html.Kendo().DropDownList().Name(name)
+            .Items(items =>
+            {
+                items.Add().Value("Subscribe").Text("Subscribe");
+            })
+            .Value(Model.Value)
+            .Render();
+    }
+}
+
+
+@Html.HiddenFor(x => x.Type, new { @class = "conditionTypeHidden" })
+<ul class="inline">
+    <li class="cond conditionTypeItem">
+        @if (IsFirstConditionInGroup(FormatID(conditionId))) {
+            @String.Format("If")
+        }
+        else {
+        @Html.DisplayFor(x => x.Type)
+        }
+    </li>
+    <li class="fld">
+        @(Html.Kendo()
+        .DropDownListFor(x => x.ControlId)
+        .BindTo(controls)
+        .DataTextField("FieldLabel")
+        .DataValueField("Id")
+        .Events(e => e.Change(@<text>function(){ changeControl('@FormatID(conditionId)', this); }</text>))
+        )
+    </li>
+    <li class="comp">
+        @{ 
+            int dDindex = 0;
+            int typesIndex = 0; 
+        }
+        @(Html.Kendo()
+                .DropDownListFor(x => x.ComparisonType)
+                .Items(items =>
+                {
+                    foreach (ComparisonType type in GetComparisonTypeValues(selected.DataType))
+                    {
+                        items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == Model.ComparisonType);
+                        if (type == Model.ComparisonType)
+                        {
+                            dDindex = typesIndex;
+                        }
+                        typesIndex++;
+                    }
+                })
+                .SelectedIndex(dDindex)
+        )
+    </li>
+    <li class="value">        
+@*            @Html.Kendo().TextBoxFor(x => x.Value)*@
+        @GetValueControl(conditionId + ".Value", selected)          
+    </li>
+    <li class="acts">
+    
+    
+        @(
+            Html.Kendo()
+                .Button()
+                .Name(string.Format("{0}_DeleteCondition", conditionId))
+                .Content("Delete <i class='km-icon icon-kmcustom-delete'></i>")
+                .HtmlAttributes(new { type = "button", @class = "btn btn-blue3 DeleteCondition", id=@FormatID(conditionId)+"_DeleteCondition" })
+        )
+    </li>
+</ul>

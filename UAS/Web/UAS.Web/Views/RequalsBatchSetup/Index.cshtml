@@ -1,0 +1,58 @@
+﻿@model UAS.Web.Models.Circulations.RequalBatchDetailsViewModel
+@{
+    ViewBag.Title = "Quick Requal Entry";
+}
+<style>
+   .tabsContent{
+       margin:10px auto;
+       padding:10px;
+       border:1px solid gray !important;
+       border-radius:8px;
+   }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div id="ErrorNotificationDiv">
+</div>
+<div id="dvRequalBatchSetup" class="row" style="margin:0 auto;">
+        @(Html.Kendo().TabStrip()
+                  .Name("tabsRequalBatchSetup")
+                  .Items(tabstrip =>
+                  {
+                  tabstrip.Add().Text("Batch Details")
+                      .Selected(true)
+                      .Content(@<text><div id="dvBatchDetails" style="width:90%;" class="tabsContent" >
+                            @Html.Partial("_requalsBatchDetailsSetup", Model) </div></text>).HtmlAttributes(new { @class = "tab" });
+                    tabstrip.Add().Text("Qualification")
+                  .Enabled(false)
+                  .Content(@<text><div id="dvBatchEntry" style="width:90%;"  class="tabsContent"></div></text>).HtmlAttributes(new { @class = "tab" });
+                  })
+        )
+</div>
+<script>
+    var currentindex = 0;
+    let totalresponses = $('.CodeSheetEntry');
+    function getCommaSeperatedListBoxValues(id) {
+        var values = $("#" + id + " option:selected").map(function () {
+            return $(this).val();
+        }).get().join(',');
+        return values;
+    }
+    function getCommaSeperatedListBoxText(id) {
+        var textselected = $("#" + id + " option:selected").map(function () {
+            return $(this).text();
+        }).get().join(',');
+        return textselected;
+    }
+    
+    function EnterPressed(e) {
+        if (e.keyCode == 13) {
+            currentindex = currentindex + 1;
+            $("#" + totalresponses[currentindex].id).focus();
+        }
+    }
+
+</script>

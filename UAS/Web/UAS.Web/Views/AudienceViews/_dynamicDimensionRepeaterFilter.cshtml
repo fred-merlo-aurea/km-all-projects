@@ -1,0 +1,21 @@
+﻿@model UAS.Web.Models.UAD.Filter.DynamicFilter
+
+@for (int i = 0; i < Model.DimensionFilterList.Count; i++)
+{
+    if (Model.DimensionFilterList[i] != null && Model.DimensionFilterList.Count > 0)
+    {
+        <table class="pubTypeRepeater">
+            <tr>
+                <td valign="middle" align="center">
+                    <a data-pubtype="@Model.DimensionFilterList[i].DimensionID" id="lnkDimension_@Model.DimensionFilterList[i].DimensionID" onmouseover="showDimensionList(event)" onclick="openDimensionPopup(event)">
+                        @Model.DimensionFilterList[i].DimensionName
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <div id="lstDimension_@Model.DimensionFilterList[i].DimensionID" style="display:none;">
+
+        </div>
+    }
+
+}

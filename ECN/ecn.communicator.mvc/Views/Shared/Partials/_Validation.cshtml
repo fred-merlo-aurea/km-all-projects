@@ -1,0 +1,59 @@
+﻿<script type="text/javascript">
+    function setValidationSummary(messageArray, controlsToHighlight) {
+        
+        //var div = $("#validationSummary");
+        var blockDiv = $("<div/>").css({ "display": "block", "margin-left": "auto", "margin-right": "auto", "width": "600px" });
+        blockDiv.insertAfter($('.breadcrumb'));
+        var divToInsert = $("<div/>").addClass('validation-summary').attr('id', 'validationSummary');
+        divToInsert.appendTo(blockDiv);
+        var imageDiv = $("<div/>").addClass('picon validation-image');
+        imageDiv.appendTo(divToInsert);
+        var image = $("<img/>").attr('src', '/ecn.communicator.mvc/Images/modal-icon-error.png').css({ "border": "none" });
+        image.appendTo(imageDiv);
+        var ulToInsert = $("<ul/>").attr('id', 'validationUL');
+        ulToInsert.appendTo(divToInsert);
+
+        //var ul = $("validationUL");
+        $.each(messageArray, function (i) {
+            var li = $("<li/>").appendTo(ulToInsert);
+            var span = $("<span/>").html(messageArray[i]).appendTo(li);
+            li.find('br').remove();
+        });
+        //div.html(message);
+        //div.css({ "color": "#e80c4d" })
+        //div.show();
+
+
+        for (var i = 0; i < controlsToHighlight.length; i++) {
+            var control = $("#" + controlsToHighlight[i]);
+            control.addClass("validationError");
+        }
+    }
+
+    function clearValidationSummary() {
+        try{
+            var div = $("#validationSummary");
+            div.remove()
+        }
+        catch(e){}
+        //var ul = $("validationUL");        
+        //ul.empty();
+        //div.hide();
+        $('.validationError').each(function (i) { $(this).removeClass("validationError"); });
+        //for (var i = 0; i < controlsToClear.length; i++) {
+        //    var control = $("#" + controlsToClear[i]);
+        //    control.removeClass("validationError");
+        //}
+    }
+</script>
+
+@*<div id="validationSummary" class="validation-summary" style="display:none;">
+    <div class="picon" style="margin: 0 auto; width: 100px;float:left;">
+
+        <img src="/ecn.communicator.mvc/Images/modal-icon-error.png" border="0" />
+
+    </div>
+    <div>
+        <ul id="validationUL"></ul>
+    </div>
+</div>*@

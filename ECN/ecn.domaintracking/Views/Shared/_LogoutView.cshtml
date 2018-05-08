@@ -1,0 +1,32 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using KM.Platform
+<nav>
+    <ul class="nav">
+        <li>
+        <img src='http://images.ecn5.com/images/downarrow.png' border='0' />
+            <ul>
+                @{
+                    ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+                    if (KM.Platform.KM.Platform.User.IsChannelAdministrator(user)istrator(UserSession.CurrentUser))
+                    {
+                        List<KMPlatform.Entity.User> users = KMPlatform.BusinessLogic.User.GetUsersByChannelID(UserSession.CurrentCustomer.BaseChannelID.Value);
+                        List<ECN_Framework_Entities.Accounts.Customer> customers = ECN_Framework_BusinessLayer.Accounts.Customer.GetCustomersByChannelID(UserSession.CurrentCustomer.BaseChannelID.Value);
+
+                        var cuList = (from us in users
+                                      join cu in customers on
+                                      us.CustomerID equals cu.CustomerID
+                                      where cu.ActiveFlag.ToUpper() == "Y" && us.ActiveFlag.ToUpper() == "Y"
+                                      select cu).Distinct().ToList().OrderBy(x => x.CustomerName);
+
+                        foreach (var cu in cuList)
+                        {
+                            <li><a href='ecn.communicator/main/customers/customerlogin.aspx?CustomerID="@cu.CustomerID"'>@cu.CustomerName</a></li>
+                        }
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+</nav>
+

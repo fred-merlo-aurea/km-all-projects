@@ -1,0 +1,3379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14338EB0-BC00-4FEB-A10A-48B0478999F1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.communicator</RootNamespace>
+    <AssemblyName>ecn.communicator</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>false</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ecn.communicator.ruleset</CodeAnalysisRuleSet>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ecn.communicator.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AddressValidator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AddressValidator.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxControlToolkit, Version=4.1.51116.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AntiXSSLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\AntiXSSLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="aspNetEmail, Version=2.0.0.514, Culture=neutral, PublicKeyToken=bc571e8da1c1f543">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\aspNetEmail.dll</HintPath>
+    </Reference>
+    <Reference Include="aspNetMX, Version=2.0.2.0, Culture=neutral, PublicKeyToken=bc571e8da1c1f543">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\aspNetMX.DLL</HintPath>
+    </Reference>
+    <Reference Include="aspsnippets.facebookapi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\aspsnippets.facebookapi.dll</HintPath>
+    </Reference>
+    <Reference Include="BWare.UI.Web.WebControls.DataPanel, Version=1.0.2831.28806, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\BWare.UI.Web.WebControls.DataPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="CKEditor.NET, Version=3.6.2.0, Culture=neutral, PublicKeyToken=e379cdf2f8354999, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\CKEditor.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Donavon.Web.UI.WebControls.ProgressBar, Version=1.0.1.39615, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Donavon.Web.UI.WebControls.ProgressBar.dll</HintPath>
+    </Reference>
+    <Reference Include="dotnetCHARTING, Version=3.4.2222.22289, Culture=neutral, PublicKeyToken=af2cd47db69d93bd">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\dotnetCHARTING.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\HtmlSanitizationLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="MetaBuilders.WebControls.DefaultButtons, Version=1.1.5000.0, Culture=neutral, PublicKeyToken=8f1b87f9edb00944">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\MetaBuilders.WebControls.DefaultButtons.dll</HintPath>
+    </Reference>
+    <Reference Include="MetaBuilders.WebControls.ScrollingPanel, Version=2.0.5000.0, Culture=neutral, PublicKeyToken=8f1b87f9edb00944">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\MetaBuilders.WebControls.ScrollingPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewer.Common.10.1.0.0\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MicrosoftReportViewerWebForms_v10.1.0.0\lib\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RKLib.ExportData, Version=1.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\RKLib.ExportData.dll</HintPath>
+    </Reference>
+    <Reference Include="SanitizerProviders, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.4.1.51116\lib\40\SanitizerProviders\SanitizerProviders.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.Spreadsheet, Version=2017.1.503.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Flow, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="WebChart, Version=1.1.0.4, Culture=neutral, PublicKeyToken=eac822d9c4196ba1">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\WebChart.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="admin\deliverability\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\deliverability\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\deliverability\DeliverabilityQueryResults.cs" />
+    <Compile Include="admin\mergeprofiles.aspx.cs">
+      <DependentUpon>mergeprofiles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\mergeprofiles.aspx.designer.cs">
+      <DependentUpon>mergeprofiles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="classes\blasteditor_HobbyTownPrice.cs" />
+    <Compile Include="classes\ECN_Blasts.cs" />
+    <Compile Include="classes\ECN_Contact.cs" />
+    <Compile Include="classes\ECN_EmailActivityLog.cs" />
+    <Compile Include="classes\ECN_Group.cs" />
+    <Compile Include="classes\IECNWizard.cs" />
+    <Compile Include="classes\IWizardSMS.cs" />
+    <Compile Include="classes\SF_Account.cs" />
+    <Compile Include="classes\SF_Campaign.cs" />
+    <Compile Include="classes\SF_CampaignMember.cs" />
+    <Compile Include="classes\SF_CampaignMemberStatus.cs" />
+    <Compile Include="classes\SF_Contact.cs" />
+    <Compile Include="classes\SF_Lead.cs" />
+    <Compile Include="CommonControls\DateValidator.cs" />
+    <Compile Include="CommonControls\ErrorViewer.ascx.cs">
+      <DependentUpon>ErrorViewer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CommonControls\ErrorViewer.ascx.designer.cs">
+      <DependentUpon>ErrorViewer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CommonControls\StartEndDates.ascx.cs">
+      <DependentUpon>StartEndDates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CommonControls\StartEndDates.ascx.designer.cs">
+      <DependentUpon>StartEndDates.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Constants\QueryStringKeys.cs" />
+    <Compile Include="Customers\MTAEditor.aspx.cs">
+      <DependentUpon>MTAEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customers\MTAEditor.aspx.designer.cs">
+      <DependentUpon>MTAEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customers\ZipCodeLocator.aspx.cs">
+      <DependentUpon>ZipCodeLocator.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customers\ZipCodeLocator.aspx.designer.cs">
+      <DependentUpon>ZipCodeLocator.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ecn_activityDataSet.cs">
+      <DependentUpon>ecn_activityDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ecn_activityDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ecn_activityDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="engines\conversion.aspx.cs">
+      <DependentUpon>conversion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\conversion.aspx.designer.cs">
+      <DependentUpon>conversion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\editProfileOnly.aspx.cs">
+      <DependentUpon>editProfileOnly.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\editProfileOnly.aspx.designer.cs">
+      <DependentUpon>editProfileOnly.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\emailProfileManager.aspx.cs">
+      <DependentUpon>emailProfileManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\emailProfileManager.aspx.designer.cs">
+      <DependentUpon>emailProfileManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\emailtofriend.aspx.cs">
+      <DependentUpon>emailtofriend.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\emailtofriend.aspx.designer.cs">
+      <DependentUpon>emailtofriend.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\linkfrom.aspx.cs">
+      <DependentUpon>linkfrom.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\linkfrom.aspx.designer.cs">
+      <DependentUpon>linkfrom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\ManageSubscriptions.aspx.cs">
+      <DependentUpon>ManageSubscriptions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\ManageSubscriptions.aspx.designer.cs">
+      <DependentUpon>ManageSubscriptions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\open.aspx.cs">
+      <DependentUpon>open.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\open.aspx.designer.cs">
+      <DependentUpon>open.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\PrePopForms.aspx.cs">
+      <DependentUpon>PrePopForms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\PrePopForms.aspx.designer.cs">
+      <DependentUpon>PrePopForms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\publicPreview.aspx.cs">
+      <DependentUpon>publicPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\publicPreview.aspx.designer.cs">
+      <DependentUpon>publicPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\pubSubscriptions_SO_subscribe.aspx.cs">
+      <DependentUpon>pubSubscriptions_SO_subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\pubSubscriptions_SO_subscribe.aspx.designer.cs">
+      <DependentUpon>pubSubscriptions_SO_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\read.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>read.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\read.aspx.designer.cs">
+      <DependentUpon>read.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\reportSpam.aspx.cs">
+      <DependentUpon>reportSpam.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\reportSpam.aspx.designer.cs">
+      <DependentUpon>reportSpam.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\SO_subscribe.aspx.cs">
+      <DependentUpon>SO_subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\SO_subscribe.aspx.designer.cs">
+      <DependentUpon>SO_subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\subscribe.aspx.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\subscribe.aspx.designer.cs">
+      <DependentUpon>subscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\unsubscribeDirect.aspx.cs">
+      <DependentUpon>unsubscribeDirect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\unsubscribeDirect.aspx.designer.cs">
+      <DependentUpon>unsubscribeDirect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\websubscribe.aspx.cs">
+      <DependentUpon>websubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\websubscribe.aspx.designer.cs">
+      <DependentUpon>websubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="engines\whitelistEmailAddress.aspx.cs">
+      <DependentUpon>whitelistEmailAddress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="engines\whitelistEmailAddress.aspx.designer.cs">
+      <DependentUpon>whitelistEmailAddress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\features.aspx.cs">
+      <DependentUpon>features.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\features.aspx.designer.cs">
+      <DependentUpon>features.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\howitworks.aspx.cs">
+      <DependentUpon>howitworks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\howitworks.aspx.designer.cs">
+      <DependentUpon>howitworks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\levelchannel.aspx.cs">
+      <DependentUpon>levelchannel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\levelchannel.aspx.designer.cs">
+      <DependentUpon>levelchannel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\levelenterprise.aspx.cs">
+      <DependentUpon>levelenterprise.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\levelenterprise.aspx.designer.cs">
+      <DependentUpon>levelenterprise.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\levelsmallbiz.aspx.cs">
+      <DependentUpon>levelsmallbiz.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\levelsmallbiz.aspx.designer.cs">
+      <DependentUpon>levelsmallbiz.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\logoff.aspx.cs">
+      <DependentUpon>logoff.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\logoff.aspx.designer.cs">
+      <DependentUpon>logoff.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\privacy.aspx.cs">
+      <DependentUpon>privacy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\privacy.aspx.designer.cs">
+      <DependentUpon>privacy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\services.aspx.cs">
+      <DependentUpon>services.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\services.aspx.designer.cs">
+      <DependentUpon>services.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\signup.aspx.cs">
+      <DependentUpon>signup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\signup.aspx.designer.cs">
+      <DependentUpon>signup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\spam.aspx.cs">
+      <DependentUpon>spam.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\spam.aspx.designer.cs">
+      <DependentUpon>spam.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\terms.aspx.cs">
+      <DependentUpon>terms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\terms.aspx.designer.cs">
+      <DependentUpon>terms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="font\usage.aspx.cs">
+      <DependentUpon>usage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="font\usage.aspx.designer.cs">
+      <DependentUpon>usage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="includes\activitychart.ascx.cs">
+      <DependentUpon>activitychart.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\activitychart.ascx.designer.cs">
+      <DependentUpon>activitychart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\EditUserProfile.ascx.cs">
+      <DependentUpon>EditUserProfile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\EditUserProfile.ascx.designer.cs">
+      <DependentUpon>EditUserProfile.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_Base.ascx.cs">
+      <DependentUpon>emailProfile_Base.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_Base.ascx.designer.cs">
+      <DependentUpon>emailProfile_Base.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_EmailActivity.ascx.cs">
+      <DependentUpon>emailProfile_EmailActivity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_EmailActivity.ascx.designer.cs">
+      <DependentUpon>emailProfile_EmailActivity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_Survey.ascx.cs">
+      <DependentUpon>emailProfile_Survey.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_Survey.ascx.designer.cs">
+      <DependentUpon>emailProfile_Survey.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDF.ascx.cs">
+      <DependentUpon>emailProfile_UDF.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDF.ascx.designer.cs">
+      <DependentUpon>emailProfile_UDF.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDFHistory.ascx.cs">
+      <DependentUpon>emailProfile_UDFHistory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\emailProfile_UDFHistory.ascx.designer.cs">
+      <DependentUpon>emailProfile_UDFHistory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\EventTimerEditor.ascx.cs">
+      <DependentUpon>EventTimerEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\EventTimerEditor.ascx.designer.cs">
+      <DependentUpon>EventTimerEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\folderSystem.ascx.cs">
+      <DependentUpon>folderSystem.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\folderSystem.ascx.designer.cs">
+      <DependentUpon>folderSystem.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\footer.ascx.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\footer.ascx.designer.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\gallery.ascx.cs">
+      <DependentUpon>gallery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\gallery.ascx.designer.cs">
+      <DependentUpon>gallery.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.designer.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\imageGallery.ascx.cs">
+      <DependentUpon>imageGallery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\imageGallery.ascx.designer.cs">
+      <DependentUpon>imageGallery.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\popup.aspx.cs">
+      <DependentUpon>popup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\popup.aspx.designer.cs">
+      <DependentUpon>popup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\templates.ascx.cs">
+      <DependentUpon>templates.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\templates.ascx.designer.cs">
+      <DependentUpon>templates.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\thumbnail.aspx.cs">
+      <DependentUpon>thumbnail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\thumbnail.aspx.designer.cs">
+      <DependentUpon>thumbnail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\uploader.ascx.cs">
+      <DependentUpon>uploader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\uploader.ascx.designer.cs">
+      <DependentUpon>uploader.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="classes\IWizard.cs" />
+    <Compile Include="main\admin\Helpers\BaseChannelForwardToFriendOperationsHandler.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\Helpers\BaseChannelAbuseOperationsHandler.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\Helpers\ApplicationLogAdapter.cs" />
+    <Compile Include="main\admin\Helpers\LandingPageOptionAdapter.cs" />
+    <Compile Include="main\admin\Helpers\LandingPageAssignContentAdapter.cs" />
+    <Compile Include="main\admin\Helpers\LandingPageAssignAdapter.cs" />
+    <Compile Include="main\admin\Helpers\BaseChannelOperationsHandler.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\Interfaces\IApplicationLog.cs" />
+    <Compile Include="main\admin\Interfaces\ILandingPageOption.cs" />
+    <Compile Include="main\admin\Interfaces\ILandingPageAssignContent.cs" />
+    <Compile Include="main\admin\Interfaces\ILandingPageAssign.cs" />
+    <Compile Include="main\admin\QuickTestBlastConfiguration\CustomerSetup.aspx.cs">
+      <DependentUpon>CustomerSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\QuickTestBlastConfiguration\CustomerSetup.aspx.designer.cs">
+      <DependentUpon>CustomerSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\QuickTestBlastConfiguration\BaseChannelSetup.aspx.cs">
+      <DependentUpon>BaseChannelSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\QuickTestBlastConfiguration\BaseChannelSetup.aspx.designer.cs">
+      <DependentUpon>BaseChannelSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\Gateway\GatewayList.aspx.cs">
+      <DependentUpon>GatewayList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\Gateway\GatewayList.aspx.designer.cs">
+      <DependentUpon>GatewayList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\Gateway\GatewaySetup.aspx.cs">
+      <DependentUpon>GatewaySetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\Gateway\GatewaySetup.aspx.designer.cs">
+      <DependentUpon>GatewaySetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelAbuse.aspx.cs">
+      <DependentUpon>BaseChannelAbuse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelAbuse.aspx.designer.cs">
+      <DependentUpon>BaseChannelAbuse.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelForwardToFriend.aspx.cs">
+      <DependentUpon>BaseChannelForwardToFriend.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelForwardToFriend.aspx.designer.cs">
+      <DependentUpon>BaseChannelForwardToFriend.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelMain.aspx.cs">
+      <DependentUpon>BaseChannelMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelMain.aspx.designer.cs">
+      <DependentUpon>BaseChannelMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelUnsubscribe.aspx.cs">
+      <DependentUpon>BaseChannelUnsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelUnsubscribe.aspx.designer.cs">
+      <DependentUpon>BaseChannelUnsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelUpdateEmail.aspx.cs">
+      <DependentUpon>BaseChannelUpdateEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\BaseChannelUpdateEmail.aspx.designer.cs">
+      <DependentUpon>BaseChannelUpdateEmail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerAbuse.aspx.cs">
+      <DependentUpon>CustomerAbuse.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerAbuse.aspx.designer.cs">
+      <DependentUpon>CustomerAbuse.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerForwardToFriend.aspx.cs">
+      <DependentUpon>CustomerForwardToFriend.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerForwardToFriend.aspx.designer.cs">
+      <DependentUpon>CustomerForwardToFriend.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerMain.aspx.cs">
+      <DependentUpon>CustomerMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerMain.aspx.designer.cs">
+      <DependentUpon>CustomerMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerUnsubscribe.aspx.cs">
+      <DependentUpon>CustomerUnsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\LandingPages\CustomerUnsubscribe.aspx.designer.cs">
+      <DependentUpon>CustomerUnsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\SubscriptionManagement\SubscriptionManagementEdit.aspx.cs">
+      <DependentUpon>SubscriptionManagementEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\SubscriptionManagement\SubscriptionManagementEdit.aspx.designer.cs">
+      <DependentUpon>SubscriptionManagementEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\admin\SubscriptionManagement\SubscriptionManagementList.aspx.cs">
+      <DependentUpon>SubscriptionManagementList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\admin\SubscriptionManagement\SubscriptionManagementList.aspx.designer.cs">
+      <DependentUpon>SubscriptionManagementList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\active.aspx.cs">
+      <DependentUpon>active.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\active.aspx.designer.cs">
+      <DependentUpon>active.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\BlastCalendarView.aspx.cs">
+      <DependentUpon>BlastCalendarView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\BlastCalendarView.aspx.designer.cs">
+      <DependentUpon>BlastCalendarView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\BlastEmailPreview.aspx.cs">
+      <DependentUpon>BlastEmailPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\BlastEmailPreview.aspx.designer.cs">
+      <DependentUpon>BlastEmailPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\BlastEnvelopes.aspx.cs">
+      <DependentUpon>BlastEnvelopes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\BlastEnvelopes.aspx.designer.cs">
+      <DependentUpon>BlastEnvelopes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\blastoverview.aspx.cs">
+      <DependentUpon>blastoverview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\blastoverview.aspx.designer.cs">
+      <DependentUpon>blastoverview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\BlastScheduler.ascx.cs">
+      <DependentUpon>BlastScheduler.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\BlastScheduler.ascx.designer.cs">
+      <DependentUpon>BlastScheduler.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\bounces.aspx.cs">
+      <DependentUpon>bounces.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\bounces.aspx.designer.cs">
+      <DependentUpon>bounces.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\CheckValidaters.cs" />
+    <Compile Include="main\blasts\CheckTextBoxValidationPair.cs" />
+    <Compile Include="main\blasts\CH_28_CustomReports.aspx.cs">
+      <DependentUpon>CH_28_CustomReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\CH_28_CustomReports.aspx.designer.cs">
+      <DependentUpon>CH_28_CustomReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\clicks.aspx.cs">
+      <DependentUpon>clicks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\clicks.aspx.designer.cs">
+      <DependentUpon>clicks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\clickslinks.aspx.cs">
+      <DependentUpon>clickslinks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\clickslinks.aspx.designer.cs">
+      <DependentUpon>clickslinks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\ClickThrough.aspx.cs">
+      <DependentUpon>ClickThrough.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\ClickThrough.aspx.designer.cs">
+      <DependentUpon>ClickThrough.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\conversionTracker.aspx.cs">
+      <DependentUpon>conversionTracker.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\conversionTracker.aspx.designer.cs">
+      <DependentUpon>conversionTracker.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\DataSets\BlastComparision.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlastComparision.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\DataSets\BlastBounces.Designer.cs">
+      <DependentUpon>BlastBounces.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="main\blasts\DCReports.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>DCReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\DCReports.aspx.designer.cs">
+      <DependentUpon>DCReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Helpers\ReportViewerAdapter.cs" />
+    <Compile Include="main\blasts\Helpers\PlatformsAdapter.cs" />
+    <Compile Include="main\blasts\Helpers\BlastReportAdapter.cs" />
+    <Compile Include="main\blasts\Helpers\EmailClientsAdapter.cs" />
+    <Compile Include="main\blasts\Interfaces\IReportViewer.cs" />
+    <Compile Include="main\blasts\Interfaces\IBlastReport.cs" />
+    <Compile Include="main\blasts\Interfaces\IPlatforms.cs" />
+    <Compile Include="main\blasts\Interfaces\IEmailClients.cs" />
+    <Compile Include="main\blasts\ManageCampaignItems.aspx.cs">
+      <DependentUpon>ManageCampaignItems.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\ManageCampaignItems.aspx.designer.cs">
+      <DependentUpon>ManageCampaignItems.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\ManageCampaigns.aspx.cs">
+      <DependentUpon>ManageCampaigns.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\ManageCampaigns.aspx.designer.cs">
+      <DependentUpon>ManageCampaigns.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\ABSummaryReport.aspx.cs">
+      <DependentUpon>ABSummaryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\ABSummaryReport.aspx.designer.cs">
+      <DependentUpon>ABSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\CampaignStatisticsReport.aspx.cs">
+      <DependentUpon>CampaignStatisticsReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\CampaignStatisticsReport.aspx.designer.cs">
+      <DependentUpon>CampaignStatisticsReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\ChampionAuditReport.aspx.cs">
+      <DependentUpon>ChampionAuditReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\ChampionAuditReport.aspx.designer.cs">
+      <DependentUpon>ChampionAuditReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailFatigueReport.aspx.cs">
+      <DependentUpon>EmailFatigueReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailFatigueReport.aspx.designer.cs">
+      <DependentUpon>EmailFatigueReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailPerformanceByDomainReport.aspx.cs">
+      <DependentUpon>EmailPerformanceByDomainReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailPerformanceByDomainReport.aspx.designer.cs">
+      <DependentUpon>EmailPerformanceByDomainReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailsDeliveredByPercentage.aspx.cs">
+      <DependentUpon>EmailsDeliveredByPercentage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\EmailsDeliveredByPercentage.aspx.designer.cs">
+      <DependentUpon>EmailsDeliveredByPercentage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\forwards.aspx.cs">
+      <DependentUpon>forwards.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\forwards.aspx.designer.cs">
+      <DependentUpon>forwards.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\ISPReports.aspx.cs">
+      <DependentUpon>ISPReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\ISPReports.aspx.designer.cs">
+      <DependentUpon>ISPReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\logs.aspx.cs">
+      <DependentUpon>logs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\logs.aspx.designer.cs">
+      <DependentUpon>logs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\NoClicks.aspx.cs">
+      <DependentUpon>NoClicks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\NoClicks.aspx.designer.cs">
+      <DependentUpon>NoClicks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\NoOpens.aspx.cs">
+      <DependentUpon>NoOpens.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\NoOpens.aspx.designer.cs">
+      <DependentUpon>NoOpens.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\opens.aspx.cs">
+      <DependentUpon>opens.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\opens.aspx.designer.cs">
+      <DependentUpon>opens.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\preview.aspx.cs">
+      <DependentUpon>preview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\preview.aspx.designer.cs">
+      <DependentUpon>preview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\reports.aspx.cs">
+      <DependentUpon>reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\reports.aspx.designer.cs">
+      <DependentUpon>reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\reportsGraphical.aspx.cs">
+      <DependentUpon>reportsGraphical.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\reportsGraphical.aspx.designer.cs">
+      <DependentUpon>reportsGraphical.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\reportsummary.aspx.cs">
+      <DependentUpon>reportsummary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\reportsummary.aspx.designer.cs">
+      <DependentUpon>reportsummary.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\BlastComparisonReport.aspx.cs">
+      <DependentUpon>BlastComparisonReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\BlastComparisonReport.aspx.designer.cs">
+      <DependentUpon>BlastComparisonReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\BlastDeliveryReport.aspx.cs">
+      <DependentUpon>BlastDeliveryReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\BlastDeliveryReport.aspx.designer.cs">
+      <DependentUpon>BlastDeliveryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\LinkReport.aspx.cs">
+      <DependentUpon>LinkReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\LinkReport.aspx.designer.cs">
+      <DependentUpon>LinkReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\MasterSuppressionSourceReport.aspx.cs">
+      <DependentUpon>MasterSuppressionSourceReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\MasterSuppressionSourceReport.aspx.designer.cs">
+      <DependentUpon>MasterSuppressionSourceReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\PerformanceByDayAndTimeReport.aspx.cs">
+      <DependentUpon>PerformanceByDayAndTimeReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\PerformanceByDayAndTimeReport.aspx.designer.cs">
+      <DependentUpon>PerformanceByDayAndTimeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\TopEvangelistsReport.aspx.cs">
+      <DependentUpon>TopEvangelistsReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\TopEvangelistsReport.aspx.designer.cs">
+      <DependentUpon>TopEvangelistsReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\UndeliverableReport.aspx.cs">
+      <DependentUpon>UndeliverableReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\UndeliverableReport.aspx.designer.cs">
+      <DependentUpon>UndeliverableReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Report\UnsubscribeReasonReport.aspx.cs">
+      <DependentUpon>UnsubscribeReasonReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Report\UnsubscribeReasonReport.aspx.designer.cs">
+      <DependentUpon>UnsubscribeReasonReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\resends.aspx.cs">
+      <DependentUpon>resends.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\resends.aspx.designer.cs">
+      <DependentUpon>resends.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\rpt_BlastDelivery.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_BlastDelivery.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\blasts\rpt_BlastGroupPDFReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_BlastGroupPDFReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\blasts\rpt_BlastPDFReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_BlastPDFReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\blasts\rpt_BlastReport.aspx.cs">
+      <DependentUpon>rpt_BlastReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\rpt_BlastReport.aspx.designer.cs">
+      <DependentUpon>rpt_BlastReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\rpt_LinkReportDetails.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_LinkReportDetails.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\blasts\rpt_LinkReportList.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_LinkReportList.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Sends.aspx.cs">
+      <DependentUpon>Sends.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Sends.aspx.designer.cs">
+      <DependentUpon>Sends.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\SetMessageThreshold.aspx.cs">
+      <DependentUpon>SetMessageThreshold.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\SetMessageThreshold.aspx.designer.cs">
+      <DependentUpon>SetMessageThreshold.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Simple.aspx.cs">
+      <DependentUpon>Simple.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Simple.aspx.designer.cs">
+      <DependentUpon>Simple.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\Social.aspx.cs">
+      <DependentUpon>Social.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\Social.aspx.designer.cs">
+      <DependentUpon>Social.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\status.aspx.cs">
+      <DependentUpon>status.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\status.aspx.designer.cs">
+      <DependentUpon>status.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\subscribes.aspx.cs">
+      <DependentUpon>subscribes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\subscribes.aspx.designer.cs">
+      <DependentUpon>subscribes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\suppressed.aspx.cs">
+      <DependentUpon>suppressed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\suppressed.aspx.designer.cs">
+      <DependentUpon>suppressed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\ViewBlastLinks.aspx.cs">
+      <DependentUpon>ViewBlastLinks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\ViewBlastLinks.aspx.designer.cs">
+      <DependentUpon>ViewBlastLinks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ClearCache.aspx.cs">
+      <DependentUpon>ClearCache.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ClearCache.aspx.designer.cs">
+      <DependentUpon>ClearCache.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\contenteditor.aspx.cs">
+      <DependentUpon>contenteditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\contenteditor.aspx.designer.cs">
+      <DependentUpon>contenteditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\contentfilters.aspx.cs">
+      <DependentUpon>contentfilters.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\contentfilters.aspx.designer.cs">
+      <DependentUpon>contentfilters.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\contentPreview.aspx.cs">
+      <DependentUpon>contentPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\contentPreview.aspx.designer.cs">
+      <DependentUpon>contentPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\conversionTrackingLinks.aspx.cs">
+      <DependentUpon>conversionTrackingLinks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\conversionTrackingLinks.aspx.designer.cs">
+      <DependentUpon>conversionTrackingLinks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\blasts\EmailPreviewUsage.aspx.cs">
+      <DependentUpon>EmailPreviewUsage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\blasts\EmailPreviewUsage.aspx.designer.cs">
+      <DependentUpon>EmailPreviewUsage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\defaultMsg.aspx.cs">
+      <DependentUpon>DefaultMsg.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\defaultMsg.aspx.designer.cs">
+      <DependentUpon>DefaultMsg.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\dynamicTagEdit.aspx.cs">
+      <DependentUpon>dynamicTagEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\dynamicTagEdit.aspx.designer.cs">
+      <DependentUpon>dynamicTagEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\dynamicTagList.aspx.cs">
+      <DependentUpon>dynamicTagList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\dynamicTagList.aspx.designer.cs">
+      <DependentUpon>dynamicTagList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\filemanager.aspx.cs">
+      <DependentUpon>filemanager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\filemanager.aspx.designer.cs">
+      <DependentUpon>filemanager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\layoutCostEditor.aspx.cs">
+      <DependentUpon>layoutCostEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\layoutCostEditor.aspx.designer.cs">
+      <DependentUpon>layoutCostEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\layouteditor.aspx.cs">
+      <DependentUpon>layouteditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\layouteditor.aspx.designer.cs">
+      <DependentUpon>layouteditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\linkAlias.aspx.cs">
+      <DependentUpon>linkAlias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\linkAlias.aspx.designer.cs">
+      <DependentUpon>linkAlias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\LinkSource.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>LinkSource.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\LinkSource.aspx.designer.cs">
+      <DependentUpon>LinkSource.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\MessageTypeSetup.aspx.cs">
+      <DependentUpon>MessageTypeSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\MessageTypeSetup.aspx.designer.cs">
+      <DependentUpon>MessageTypeSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\MessageTypeSort.aspx.cs">
+      <DependentUpon>MessageTypeSort.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\MessageTypeSort.aspx.designer.cs">
+      <DependentUpon>MessageTypeSort.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\preview.aspx.cs">
+      <DependentUpon>preview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\preview.aspx.designer.cs">
+      <DependentUpon>preview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\rssEdit.aspx.cs">
+      <DependentUpon>rssEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\rssEdit.aspx.designer.cs">
+      <DependentUpon>rssEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\rssList.aspx.cs">
+      <DependentUpon>rssList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\rssList.aspx.designer.cs">
+      <DependentUpon>rssList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\ruleEdit.aspx.cs">
+      <DependentUpon>ruleEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\ruleEdit.aspx.designer.cs">
+      <DependentUpon>ruleEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\ruleList.aspx.cs">
+      <DependentUpon>ruleList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\ruleList.aspx.designer.cs">
+      <DependentUpon>ruleList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\content\SocialFileManager.aspx.cs">
+      <DependentUpon>SocialFileManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\content\SocialFileManager.aspx.designer.cs">
+      <DependentUpon>SocialFileManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\dripmarketing\blastDesigner.aspx.cs">
+      <DependentUpon>blastDesigner.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\dripmarketing\blastDesigner.aspx.designer.cs">
+      <DependentUpon>blastDesigner.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\dripmarketing\Controls\regBlast.ascx.cs">
+      <DependentUpon>regBlast.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\dripmarketing\Controls\regBlast.ascx.designer.cs">
+      <DependentUpon>regBlast.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\dripmarketing\dripCampaignEditor.aspx.cs">
+      <DependentUpon>dripCampaignEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\dripmarketing\dripCampaignEditor.aspx.designer.cs">
+      <DependentUpon>dripCampaignEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\dripmarketing\editDripCampaign.aspx.cs">
+      <DependentUpon>editDripCampaign.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\dripmarketing\editDripCampaign.aspx.designer.cs">
+      <DependentUpon>editDripCampaign.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\contentEditor.ascx.cs">
+      <DependentUpon>contentEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\contentEditor.ascx.designer.cs">
+      <DependentUpon>contentEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\contentExplorer.ascx.cs">
+      <DependentUpon>contentExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\contentExplorer.ascx.designer.cs">
+      <DependentUpon>contentExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutEditor.ascx.cs">
+      <DependentUpon>layoutEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutEditor.ascx.designer.cs">
+      <DependentUpon>layoutEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutEditorNew.ascx.cs">
+      <DependentUpon>layoutEditorNew.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutEditorNew.ascx.designer.cs">
+      <DependentUpon>layoutEditorNew.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutExplorer.ascx.cs">
+      <DependentUpon>layoutExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\layoutExplorer.ascx.designer.cs">
+      <DependentUpon>layoutExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\RadEditor\EditorDialogs\LinkManager.aspx.cs">
+      <DependentUpon>LinkManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\RadEditor\EditorDialogs\LinkManager.aspx.designer.cs">
+      <DependentUpon>LinkManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\RadEditor\RadEditor.ascx.cs">
+      <DependentUpon>RadEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Content\RadEditor\RadEditor.ascx.designer.cs">
+      <DependentUpon>RadEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\GroupObject.cs" />
+    <Compile Include="main\ECNWizard\Controls\WizardGroup.Save.ascx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContentBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_SF.ascx.cs">
+      <DependentUpon>WizardPreview_SF.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_SF.ascx.designer.cs">
+      <DependentUpon>WizardPreview_SF.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_AB.ascx.cs">
+      <DependentUpon>WizardContent_AB.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_AB.ascx.designer.cs">
+      <DependentUpon>WizardContent_AB.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_Champion.ascx.cs">
+      <DependentUpon>WizardContent_Champion.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_Champion.ascx.designer.cs">
+      <DependentUpon>WizardContent_Champion.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_SMS.ascx.cs">
+      <DependentUpon>WizardContent_SMS.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_SMS.ascx.designer.cs">
+      <DependentUpon>WizardContent_SMS.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_AB.ascx.cs">
+      <DependentUpon>WizardPreview_AB.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_AB.ascx.designer.cs">
+      <DependentUpon>WizardPreview_AB.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_SMS.ascx.cs">
+      <DependentUpon>WizardPreview_SMS.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_SMS.ascx.designer.cs">
+      <DependentUpon>WizardPreview_SMS.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSchedule.ABTest.ascx.cs">
+      <DependentUpon>WizardSchedule.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSchedule.ascx.cs">
+      <DependentUpon>WizardSchedule.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSchedule.ascx.designer.cs">
+      <DependentUpon>WizardSchedule.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardCampaign.ascx.cs">
+      <DependentUpon>WizardCampaign.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardCampaign.ascx.designer.cs">
+      <DependentUpon>WizardCampaign.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_Regular.ascx.cs">
+      <DependentUpon>WizardContent_Regular.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardContent_Regular.ascx.designer.cs">
+      <DependentUpon>WizardContent_Regular.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardGroup.ascx.cs">
+      <DependentUpon>WizardGroup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardGroup.ascx.designer.cs">
+      <DependentUpon>WizardGroup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_Regular.ascx.cs">
+      <DependentUpon>WizardPreview_Regular.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardPreview_Regular.ascx.designer.cs">
+      <DependentUpon>WizardPreview_Regular.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSchedule.ReportSchedule.ascx.cs">
+      <DependentUpon>WizardSchedule.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSentCampaigns.ascx.cs">
+      <DependentUpon>WizardSentCampaigns.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSentCampaigns.ascx.designer.cs">
+      <DependentUpon>WizardSentCampaigns.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSFCampaign.ascx.cs">
+      <DependentUpon>WizardSFCampaign.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\WizardSFCampaign.ascx.designer.cs">
+      <DependentUpon>WizardSFCampaign.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\filtergrid.ascx.cs">
+      <DependentUpon>filtergrid.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\filtergrid.ascx.designer.cs">
+      <DependentUpon>filtergrid.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupsLookup.ascx.cs">
+      <DependentUpon>groupsLookup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupsLookup.ascx.designer.cs">
+      <DependentUpon>groupsLookup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupsExplorer.ascx.cs">
+      <DependentUpon>groupsExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupsExplorer.ascx.designer.cs">
+      <DependentUpon>groupsExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\AddTemplate.ascx.cs">
+      <DependentUpon>AddTemplate.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\AddTemplate.ascx.designer.cs">
+      <DependentUpon>AddTemplate.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\EmailSubject.ascx.cs">
+      <DependentUpon>EmailSubject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\EmailSubject.ascx.designer.cs">
+      <DependentUpon>EmailSubject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\ImageSelector.ascx.cs">
+      <DependentUpon>ImageSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\ImageSelector.ascx.designer.cs">
+      <DependentUpon>ImageSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\ruleEditor.ascx.cs">
+      <DependentUpon>ruleEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\ruleEditor.ascx.designer.cs">
+      <DependentUpon>ruleEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\SocialShare.ascx.cs">
+      <DependentUpon>SocialShare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\SocialShare.Save.ascx.cs">
+      <DependentUpon>SocialShare.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Controls\SocialShare.ascx.designer.cs">
+      <DependentUpon>SocialShare.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\SocialConfig.ascx.cs">
+      <DependentUpon>SocialConfig.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\SocialConfig.ascx.designer.cs">
+      <DependentUpon>SocialConfig.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\quicktestblast.aspx.cs">
+      <DependentUpon>quicktestblast.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\quicktestblast.aspx.designer.cs">
+      <DependentUpon>quicktestblast.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\templateEdit.aspx.cs">
+      <DependentUpon>templateEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\templateEdit.aspx.designer.cs">
+      <DependentUpon>templateEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\templateList.aspx.cs">
+      <DependentUpon>templateList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\templateList.aspx.designer.cs">
+      <DependentUpon>templateList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\testGroupExplorer.ascx.cs">
+      <DependentUpon>testGroupExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\testGroupExplorer.ascx.designer.cs">
+      <DependentUpon>testGroupExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\filters.ascx.cs">
+      <DependentUpon>filters.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\filters.ascx.designer.cs">
+      <DependentUpon>filters.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\BlastFieldsConfig.ascx.cs">
+      <DependentUpon>BlastFieldsConfig.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\OtherControls\BlastFieldsConfig.ascx.designer.cs">
+      <DependentUpon>BlastFieldsConfig.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\wizardSetup.aspx.cs">
+      <DependentUpon>wizardSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\wizardSetup.aspx.designer.cs">
+      <DependentUpon>wizardSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\addSubscribers.ascx.cs">
+      <DependentUpon>addSubscribers.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\addSubscribers.ascx.designer.cs">
+      <DependentUpon>addSubscribers.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\addGroup.ascx.cs">
+      <DependentUpon>addGroup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\addGroup.ascx.designer.cs">
+      <DependentUpon>addGroup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupExplorer.ascx.cs">
+      <DependentUpon>groupExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\groupExplorer.ascx.designer.cs">
+      <DependentUpon>groupExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\importSubscribers.ascx.cs">
+      <DependentUpon>importSubscribers.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\Group\importSubscribers.ascx.designer.cs">
+      <DependentUpon>importSubscribers.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ECNWizard\wizardSetup_Numbers.aspx.cs">
+      <DependentUpon>wizardSetup_Numbers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ECNWizard\wizardSetup_Numbers.aspx.designer.cs">
+      <DependentUpon>wizardSetup_Numbers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\BlastPlanner.aspx.cs">
+      <DependentUpon>BlastPlanner.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\events\BlastPlanner.aspx.designer.cs">
+      <DependentUpon>BlastPlanner.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\MessageTriggers.aspx.cs">
+      <DependentUpon>MessageTriggers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\events\MessageTriggers.aspx.designer.cs">
+      <DependentUpon>MessageTriggers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\events\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\EventTimerEditor.aspx.cs">
+      <DependentUpon>EventTimerEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\events\EventTimerEditor.aspx.designer.cs">
+      <DependentUpon>EventTimerEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\GroupTriggers.aspx.cs">
+      <DependentUpon>GroupTriggers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\events\GroupTriggers.aspx.designer.cs">
+      <DependentUpon>GroupTriggers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\events\TriggerBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\folders\foldersAddHandler.aspx.cs">
+      <DependentUpon>foldersAddHandler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\folders\foldersAddHandler.aspx.designer.cs">
+      <DependentUpon>foldersAddHandler.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\folders\folderseditor.aspx.cs">
+      <DependentUpon>folderseditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\folders\folderseditor.aspx.designer.cs">
+      <DependentUpon>folderseditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Helpers\EmailBatch.cs" />
+    <Compile Include="main\Helpers\EmailBatchBuilder.cs" />
+    <Compile Include="main\Helpers\HttpResponseAdapter.cs" />
+    <Compile Include="main\Helpers\MasterCommunicatorAdapter.cs" />
+    <Compile Include="main\Helpers\OmnitureHelper.cs" />
+    <Compile Include="main\Helpers\OmnitureSettings.cs" />
+    <Compile Include="main\Helpers\ReportScheduleBuilder.cs" />
+    <Compile Include="main\Interfaces\IMasterCommunicator.cs" />
+    <Compile Include="main\Helpers\ServerAdapter.cs" />
+    <Compile Include="main\Interfaces\IServer.cs" />
+    <Compile Include="main\lists\addressloader.aspx.cs">
+      <DependentUpon>addressloader.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\addressloader.aspx.designer.cs">
+      <DependentUpon>addressloader.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\addressverifier.aspx.cs">
+      <DependentUpon>addressverifier.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\addressverifier.aspx.designer.cs">
+      <DependentUpon>addressverifier.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\bounceScore.aspx.cs">
+      <DependentUpon>bounceScore.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\bounceScore.aspx.designer.cs">
+      <DependentUpon>bounceScore.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\channelMasterSuppression.aspx.cs">
+      <DependentUpon>channelMasterSuppression.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\channelMasterSuppression.aspx.designer.cs">
+      <DependentUpon>channelMasterSuppression.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\channelNoThresholdList.aspx.cs">
+      <DependentUpon>channelNoThresholdList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\channelNoThresholdList.aspx.designer.cs">
+      <DependentUpon>channelNoThresholdList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\ATHBimportDatafromFile.aspx.cs">
+      <DependentUpon>ATHBimportDatafromFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\ATHBimportDatafromFile.aspx.designer.cs">
+      <DependentUpon>ATHBimportDatafromFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\DomainTrackerReport.aspx.cs">
+      <DependentUpon>DomainTrackerReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\DomainTrackerReport.aspx.designer.cs">
+      <DependentUpon>DomainTrackerReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\domainTrackerUsers.aspx.cs">
+      <DependentUpon>domainTrackerUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\domainTrackerUsers.aspx.designer.cs">
+      <DependentUpon>domainTrackerUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\EmailSearch.aspx.cs">
+      <DependentUpon>EmailSearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\EmailSearch.aspx.designer.cs">
+      <DependentUpon>EmailSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\Helpers\MasterCommunicatorAdapter.cs" />
+    <Compile Include="main\lists\Helpers\RequestAdapter.cs" />
+    <Compile Include="main\lists\Interfaces\IRequest.cs" />
+    <Compile Include="main\lists\Interfaces\IMasterCommunicator.cs" />
+    <Compile Include="main\lists\Interfaces\ISmartFormsHistory.cs" />
+    <Compile Include="main\lists\Helpers\SmartFormsHistoryAdapter.cs" />
+    <Compile Include="main\lists\Helpers\SqlDatabaseAdapter.cs" />
+    <Compile Include="main\lists\Interfaces\IDatabaseAdapter.cs" />
+    <Compile Include="main\lists\mergeProfiles.aspx.cs">
+      <DependentUpon>mergeProfiles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\mergeProfiles.aspx.designer.cs">
+      <DependentUpon>mergeProfiles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\groupconfig.aspx.cs">
+      <DependentUpon>groupconfig.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\groupconfig.aspx.designer.cs">
+      <DependentUpon>groupconfig.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\DomainTrackerEdit.aspx.cs">
+      <DependentUpon>DomainTrackerEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\DomainTrackerEdit.aspx.designer.cs">
+      <DependentUpon>DomainTrackerEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\domainTrackerList.aspx.cs">
+      <DependentUpon>domainTrackerList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\domainTrackerList.aspx.designer.cs">
+      <DependentUpon>domainTrackerList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\filtersplusedit.aspx.cs">
+      <DependentUpon>filtersplusedit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\filtersplusedit.aspx.designer.cs">
+      <DependentUpon>filtersplusedit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\customdefinedfieldeditor.aspx.cs">
+      <DependentUpon>customdefinedfieldeditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\customdefinedfieldeditor.aspx.designer.cs">
+      <DependentUpon>customdefinedfieldeditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\customerdefinedfields.aspx.cs">
+      <DependentUpon>customerdefinedfields.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\customerdefinedfields.aspx.designer.cs">
+      <DependentUpon>customerdefinedfields.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\download.aspx.cs">
+      <DependentUpon>download.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\download.aspx.designer.cs">
+      <DependentUpon>download.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\downloadxmlList.aspx.cs">
+      <DependentUpon>downloadxmlList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\downloadxmlList.aspx.designer.cs">
+      <DependentUpon>downloadxmlList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\emailAddressCheck.aspx.cs">
+      <DependentUpon>emailAddressCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\emailAddressCheck.aspx.designer.cs">
+      <DependentUpon>emailAddressCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\emaildataeditor.aspx.cs">
+      <DependentUpon>emaildataeditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\emaildataeditor.aspx.designer.cs">
+      <DependentUpon>emaildataeditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\emaileditor.aspx.cs">
+      <DependentUpon>emaileditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\emaileditor.aspx.designer.cs">
+      <DependentUpon>emaileditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\filterPreview.aspx.cs">
+      <DependentUpon>filterPreview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\filterPreview.aspx.designer.cs">
+      <DependentUpon>filterPreview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\filtersOld.aspx.cs">
+      <DependentUpon>filtersOld.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\filtersOld.aspx.designer.cs">
+      <DependentUpon>filtersOld.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\filters.aspx.cs">
+      <DependentUpon>filters.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\filters.aspx.designer.cs">
+      <DependentUpon>filters.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\groupeditor.aspx.cs">
+      <DependentUpon>groupeditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\groupeditor.aspx.designer.cs">
+      <DependentUpon>groupeditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribe.aspx.cs">
+      <DependentUpon>groupsubscribe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribe.aspx.designer.cs">
+      <DependentUpon>groupsubscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribePrePopScript.aspx.cs">
+      <DependentUpon>groupsubscribePrePopScript.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribePrePopScript.aspx.designer.cs">
+      <DependentUpon>groupsubscribePrePopScript.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribePrePopSF.aspx.cs">
+      <DependentUpon>groupsubscribePrePopSF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\groupsubscribePrePopSF.aspx.designer.cs">
+      <DependentUpon>groupsubscribePrePopSF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\importDatafromFile.aspx.cs">
+      <DependentUpon>importDatafromFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\importDatafromFile.aspx.designer.cs">
+      <DependentUpon>importDatafromFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\importmanager.aspx.cs">
+      <DependentUpon>importmanager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\importmanager.aspx.designer.cs">
+      <DependentUpon>importmanager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\ReferralProgram.aspx.cs">
+      <DependentUpon>ReferralProgram.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\ReferralProgram.aspx.designer.cs">
+      <DependentUpon>ReferralProgram.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\AdvertiserReport.aspx.cs">
+      <DependentUpon>AdvertiserReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\AdvertiserReport.aspx.designer.cs">
+      <DependentUpon>AdvertiserReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\AudienceEngagementReport.aspx.cs">
+      <DependentUpon>AudienceEngagementReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\AudienceEngagementReport.aspx.designer.cs">
+      <DependentUpon>AudienceEngagementReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\DataDumpReport.aspx.cs">
+      <DependentUpon>DataDumpReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\DataDumpReport.aspx.designer.cs">
+      <DependentUpon>DataDumpReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\FlashReport.aspx.cs">
+      <DependentUpon>FlashReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\FlashReport.aspx.designer.cs">
+      <DependentUpon>FlashReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\Controls\GroupExportUdfSetting.ascx.cs">
+      <DependentUpon>GroupExportUdfSetting.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\Controls\GroupExportUdfSetting.ascx.designer.cs">
+      <DependentUpon>GroupExportUdfSetting.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\groupStatisticsReport.aspx.cs">
+      <DependentUpon>groupStatisticsReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\groupStatisticsReport.aspx.designer.cs">
+      <DependentUpon>groupStatisticsReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\ListSizeOvertimeReport.aspx.cs">
+      <DependentUpon>ListSizeOvertimeReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\ListSizeOvertimeReport.aspx.designer.cs">
+      <DependentUpon>ListSizeOvertimeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\OnOffReport.aspx.cs">
+      <DependentUpon>OnOffReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\OnOffReport.aspx.designer.cs">
+      <DependentUpon>OnOffReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\reports\rpt_AdvertiserClickReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_AdvertiserClickReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\rpt_AudienceEngagementReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_AudienceEngagementReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\rpt_groupStatisticsReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_groupStatisticsReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\rpt_OnOffReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_OnOffReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\rpt_StatisticsbyField1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_StatisticsbyField.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\StatisticsbyField.aspx.cs">
+      <DependentUpon>StatisticsbyField.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\reports\StatisticsbyField.aspx.designer.cs">
+      <DependentUpon>StatisticsbyField.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\sfintegration.aspx.cs">
+      <DependentUpon>sfintegration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\sfintegration.aspx.designer.cs">
+      <DependentUpon>sfintegration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\Suppression.aspx.cs">
+      <DependentUpon>Suppression.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\Suppression.aspx.designer.cs">
+      <DependentUpon>Suppression.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\lists\UpdateEmailAddress.aspx.cs">
+      <DependentUpon>UpdateEmailAddress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\lists\UpdateEmailAddress.aspx.designer.cs">
+      <DependentUpon>UpdateEmailAddress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Omniture\OmniArgs.cs" />
+    <Compile Include="main\Omniture\OmnitureBaseChannelSetup.aspx.cs">
+      <DependentUpon>OmnitureBaseChannelSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Omniture\OmnitureBaseChannelSetup.aspx.designer.cs">
+      <DependentUpon>OmnitureBaseChannelSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Omniture\OmnitureCustomerSetup.aspx.cs">
+      <DependentUpon>OmnitureCustomerSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Omniture\OmnitureCustomerSetup.aspx.designer.cs">
+      <DependentUpon>OmnitureCustomerSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\PageWatch\PageWatchEditor.aspx.cs">
+      <DependentUpon>PageWatchEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\PageWatch\PageWatchEditor.aspx.designer.cs">
+      <DependentUpon>PageWatchEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\PageWatch\PageWatchTagsEditor.aspx.cs">
+      <DependentUpon>PageWatchTagsEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\PageWatch\PageWatchTagsEditor.aspx.designer.cs">
+      <DependentUpon>PageWatchTagsEditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\BlastReports.aspx.cs">
+      <DependentUpon>BlastReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\BlastReports.aspx.designer.cs">
+      <DependentUpon>BlastReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ListReports.aspx.cs">
+      <DependentUpon>ListReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ListReports.aspx.designer.cs">
+      <DependentUpon>ListReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\AudienceEngagementSettings.ascx.cs">
+      <DependentUpon>AudienceEngagementSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\AudienceEngagementSettings.ascx.designer.cs">
+      <DependentUpon>AudienceEngagementSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\AdvertiserClickSettings.ascx.cs">
+      <DependentUpon>AdvertiserClickSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\AdvertiserClickSettings.ascx.designer.cs">
+      <DependentUpon>AdvertiserClickSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\BlastDelivery.ascx.cs">
+      <DependentUpon>BlastDelivery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\BlastDelivery.ascx.designer.cs">
+      <DependentUpon>BlastDelivery.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\DataDumpReport.ascx.cs">
+      <DependentUpon>DataDumpReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\DataDumpReport.ascx.designer.cs">
+      <DependentUpon>DataDumpReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\EmailPerformanceByDomain.ascx.cs">
+      <DependentUpon>EmailPerformanceByDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\EmailPerformanceByDomain.ascx.designer.cs">
+      <DependentUpon>EmailPerformanceByDomain.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\EmailPreviewUsage.ascx.cs">
+      <DependentUpon>EmailPreviewUsage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\EmailPreviewUsage.ascx.designer.cs">
+      <DependentUpon>EmailPreviewUsage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\GroupExport.ascx.cs">
+      <DependentUpon>GroupExport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\GroupExport.ascx.designer.cs">
+      <DependentUpon>GroupExport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\GroupStatisticsSettings.ascx.cs">
+      <DependentUpon>GroupStatisticsSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\GroupStatisticsSettings.ascx.designer.cs">
+      <DependentUpon>GroupStatisticsSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\IReportSettingsControl.cs" />
+    <Compile Include="main\Reports\ReportSettingsControls\UnsubscribeReasonReport.ascx.cs">
+      <DependentUpon>UnsubscribeReasonReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\ReportSettingsControls\UnsubscribeReasonReport.ascx.designer.cs">
+      <DependentUpon>UnsubscribeReasonReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\scheduledReportList.aspx.cs">
+      <DependentUpon>scheduledReportList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\scheduledReportList.aspx.designer.cs">
+      <DependentUpon>scheduledReportList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\scheduledReportSetup.aspx.cs">
+      <DependentUpon>scheduledReportSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\scheduledReportSetup.aspx.designer.cs">
+      <DependentUpon>scheduledReportSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Reports\SentCampaignsReport.aspx.cs">
+      <DependentUpon>SentCampaignsReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Reports\SentCampaignsReport.aspx.designer.cs">
+      <DependentUpon>SentCampaignsReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\Constants\UserMessages.cs" />
+    <Compile Include="main\Salesforce\Converters\CampaignGroupActionConverter.cs" />
+    <Compile Include="main\Salesforce\ECN_SF_Integration.aspx.cs">
+      <DependentUpon>ECN_SF_Integration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\ECN_SF_Integration.aspx.designer.cs">
+      <DependentUpon>ECN_SF_Integration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\Controls\KM_Colors.cs" />
+    <Compile Include="main\Salesforce\Controls\Message.ascx.cs">
+      <DependentUpon>Message.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\Controls\Message.ascx.designer.cs">
+      <DependentUpon>Message.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\Controls\SF_Search.ascx.cs">
+      <DependentUpon>SF_Search.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\Controls\SF_Search.ascx.designer.cs">
+      <DependentUpon>SF_Search.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\customersetup.aspx.cs">
+      <DependentUpon>customersetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\customersetup.aspx.designer.cs">
+      <DependentUpon>customersetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\ECN_SF_Integration_old.aspx.cs">
+      <DependentUpon>ECN_SF_Integration_old.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\ECN_SF_Integration_old.aspx.designer.cs">
+      <DependentUpon>ECN_SF_Integration_old.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\Entity\ECN_Sort.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Account.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Authentication.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Campaign.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_CampaignMember.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_CampaignMemberStatus.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Contact.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Job.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Lead.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_LeadTag.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_TagDefinition.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Token.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_User.cs" />
+    <Compile Include="main\Salesforce\Entity\SF_Utilities.cs" />
+    <Compile Include="main\Salesforce\Extensions\AddressExtensions.cs" />
+    <Compile Include="main\Salesforce\Extensions\CheckBoxExtensions.cs" />
+    <Compile Include="main\Salesforce\Extensions\EmailExtensions.cs" />
+    <Compile Include="main\Salesforce\Extensions\GroupTypeExtensions.cs" />
+    <Compile Include="main\Salesforce\Extensions\LocationEntityExtensions.cs" />
+    <Compile Include="main\Salesforce\Extensions\SalesForceEntityExtensions.cs" />
+    <Compile Include="main\Salesforce\Converters\ActionConverter.cs" />
+    <Compile Include="main\Salesforce\Converters\ActionModel.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Converters\EcnSfAccountConverter.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Converters\EcnSfContactConverter.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Converters\EcnSfConverterBase.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Converters\EcnSfLeadConverter.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Enums\ColorName.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Models\AccountEcnSfViewModel.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Models\LocationEntity.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Models\EcnSfViewModel.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Enums\GroupType.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\Models\ItemViewModel.cs" />
+    <Compile Include="main\Salesforce\SF_Pages\SalesForceBasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SessionStoragePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Accounts.aspx.cs">
+      <DependentUpon>SF_Accounts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Accounts.aspx.designer.cs">
+      <DependentUpon>SF_Accounts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_CampaignActivity.aspx.cs">
+      <DependentUpon>SF_CampaignActivity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_CampaignActivity.aspx.designer.cs">
+      <DependentUpon>SF_CampaignActivity.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_CampaignGroup.aspx.cs">
+      <DependentUpon>SF_CampaignGroup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_CampaignGroup.aspx.designer.cs">
+      <DependentUpon>SF_CampaignGroup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Contacts.aspx.cs">
+      <DependentUpon>SF_Contacts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Contacts.aspx.designer.cs">
+      <DependentUpon>SF_Contacts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Leads.aspx.cs">
+      <DependentUpon>SF_Leads.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Leads.aspx.designer.cs">
+      <DependentUpon>SF_Leads.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_OptOut.aspx.cs">
+      <DependentUpon>SF_OptOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_OptOut.aspx.designer.cs">
+      <DependentUpon>SF_OptOut.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Suppression.aspx.cs">
+      <DependentUpon>SF_Suppression.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\SF_Suppression.aspx.designer.cs">
+      <DependentUpon>SF_Suppression.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Salesforce\SF_Pages\Constants\UserMessages.cs" />
+    <Compile Include="main\SMSWizard\Controls\BlastSchedule.ascx.cs">
+      <DependentUpon>BlastSchedule.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\BlastSchedule.ascx.designer.cs">
+      <DependentUpon>BlastSchedule.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\CampaignInfo.ascx.cs">
+      <DependentUpon>CampaignInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\CampaignInfo.ascx.designer.cs">
+      <DependentUpon>CampaignInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\ContentInfo.ascx.cs">
+      <DependentUpon>ContentInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\ContentInfo.ascx.designer.cs">
+      <DependentUpon>ContentInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\GroupInfo.ascx.cs">
+      <DependentUpon>GroupInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\GroupInfo.ascx.designer.cs">
+      <DependentUpon>GroupInfo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\Preview.ascx.cs">
+      <DependentUpon>Preview.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\Controls\Preview.ascx.designer.cs">
+      <DependentUpon>Preview.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\SMSWizard\SetupCampaign.aspx.cs">
+      <DependentUpon>SetupCampaign.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\SMSWizard\SetupCampaign.aspx.designer.cs">
+      <DependentUpon>SetupCampaign.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Communicator.Master.cs">
+      <DependentUpon>Communicator.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Communicator.Master.designer.cs">
+      <DependentUpon>Communicator.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\SalesForcePartner\ExtentedClasses\SforceService.cs" />
+    <Compile Include="Web References\SalesForcePartner\Interfaces\ISforceService.cs" />
+    <Compile Include="Web References\SalesForcePartner\Reference.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="admin\deliverability\default.aspx" />
+    <Content Include="admin\mergeprofiles.aspx" />
+    <Content Include="App_Themes\1\ECN.css" />
+    <Content Include="App_Themes\25\ECN.css" />
+    <Content Include="App_Themes\25\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\25\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\25\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\31\GD.css" />
+    <Content Include="App_Themes\51\ECN.css" />
+    <Content Include="App_Themes\51\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\51\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\shade_bottom_07.jpg" />
+    <Content Include="App_Themes\Default\RadCustomStyles.css" />
+    <Content Include="App_Themes\stylesheet.css" />
+    <Content Include="CommonControls\ErrorViewer.ascx" />
+    <Content Include="CommonControls\StartEndDates.ascx" />
+    <Content Include="content\toastr.css" />
+    <Content Include="content\toastr.min.css" />
+    <Content Include="font\SourceSansPro\KMPlatform.css" />
+    <Content Include="font\SourceSansPro\SIL Open Font License.txt" />
+    <Content Include="font\SourceSansPro\SourceSansPro.js" />
+    <Content Include="Global.asax" />
+    <Content Include="images\ecn-icon-home-automation.png" />
+    <Content Include="images\ecn-icon-home-datacompare.png" />
+    <Content Include="images\ecn-icon-home-domaintracking.jpg" />
+    <Content Include="images\ecn-icon-campaignitems.png" />
+    <Content Include="images\ecn-icon-content.png" />
+    <Content Include="images\ecn-icon-groups.png" />
+    <Content Include="images\ecn-icon-home-formsdesigner.png" />
+    <Content Include="images\ecn-icon-home-uas.png" />
+    <Content Include="images\ecn-icon-reports.png" />
+    <Content Include="images\Smiley.png" />
+    <Content Include="includes\EditUserProfile.ascx" />
+    <Content Include="main\admin\QuickTestBlastConfiguration\CustomerSetup.aspx" />
+    <Content Include="main\admin\QuickTestBlastConfiguration\BaseChannelSetup.aspx" />
+    <Content Include="main\admin\Gateway\GatewayList.aspx" />
+    <Content Include="main\admin\Gateway\GatewaySetup.aspx" />
+    <Content Include="main\admin\Gateway\Site.css" />
+    <Content Include="main\admin\LandingPages\BaseChannelAbuse.aspx" />
+    <Content Include="main\admin\LandingPages\BaseChannelForwardToFriend.aspx" />
+    <Content Include="main\admin\LandingPages\BaseChannelMain.aspx" />
+    <Content Include="main\admin\LandingPages\BaseChannelUnsubscribe.aspx" />
+    <Content Include="main\admin\LandingPages\BaseChannelUpdateEmail.aspx" />
+    <Content Include="main\admin\LandingPages\CustomerAbuse.aspx" />
+    <Content Include="main\admin\LandingPages\CustomerForwardToFriend.aspx" />
+    <Content Include="main\admin\LandingPages\CustomerMain.aspx" />
+    <Content Include="main\admin\LandingPages\CustomerUnsubscribe.aspx" />
+    <Content Include="main\admin\SubscriptionManagement\SubscriptionManagementEdit.aspx" />
+    <Content Include="main\admin\SubscriptionManagement\SubscriptionManagementList.aspx" />
+    <Content Include="main\blasts\ClickThrough.aspx" />
+    <Content Include="main\blasts\icon-pdf.gif" />
+    <Content Include="main\blasts\icon-reports.gif" />
+    <Content Include="main\blasts\icon-smartForm.gif" />
+    <Content Include="main\blasts\ManageCampaignItems.aspx" />
+    <Content Include="main\blasts\ManageCampaigns.aspx" />
+    <Content Include="main\blasts\Report\CampaignStatisticsReport.aspx" />
+    <Content Include="main\blasts\Report\ChampionAuditReport.aspx" />
+    <Content Include="main\blasts\Report\PerformanceByDayAndTimeReport.aspx" />
+    <Content Include="main\blasts\Report\TopEvangelistsReport.aspx" />
+    <Content Include="main\blasts\Report\UnsubscribeReasonReport.aspx" />
+    <Content Include="main\blasts\Simple.aspx" />
+    <Content Include="main\blasts\ViewBlastLinks.aspx" />
+    <Content Include="main\content\Default.js" />
+    <Content Include="main\content\DefaultMsg.aspx" />
+    <Content Include="main\content\DefaultStyleSheet.css" />
+    <Content Include="main\content\icoCalendar.gif" />
+    <Content Include="main\content\rssEdit.aspx" />
+    <Content Include="main\content\rssList.aspx" />
+    <Content Include="main\blasts\Report\rpt_EmailFatigueReport_InPage.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\content\SocialFileManager.aspx" />
+    <Content Include="main\default.aspx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\About.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\AccessibleTable.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\Border.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\CellProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\CSDialog.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\DocumentManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\FileBrowser.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\FindAndReplace.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\FindReplaceSettings.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\FlashManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\FormatCodeBlock.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\Help.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\hyperlinkmanager.png" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\ImageEditor.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\ImageManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\ImageMap.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertExternalVideo.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertImage.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertLink.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertSelectDialog.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertTable.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\InsertTableLight.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\LinkManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\LinkManager.aspx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MediaManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MobileImageManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MobileImageProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MobileLinkManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MobileTableProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MozillaPasteHtmlDialog.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\MozillaPasteTextDialog.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\PageProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\SetImageProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\SilverlightManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\SizeMargins.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\StyleBuilder.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\TableBorder.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\TableDesign.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\TableProperties.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\TableWizard.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\TemplateManager.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\EditorDialogs\XhtmlValidator.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\RadEditor.ascx" />
+    <Content Include="main\ECNWizard\Content\RadEditor\RadEditor.css" />
+    <Content Include="main\ECNWizard\Content\RadEditor\radeditor_Custom.js" />
+    <Content Include="main\ECNWizard\Content\RadEditor\Tools.xml" />
+    <Content Include="main\ECNWizard\Content\RadEditor\Tools_Simple.xml" />
+    <Content Include="main\ECNWizard\Controls\WizardPreview_SF.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardSFCampaign.ascx" />
+    <Content Include="main\ECNWizard\Controls\SocialShare.ascx" />
+    <Content Include="main\ECNWizard\Group\filtergrid.ascx" />
+    <Content Include="main\ECNWizard\Group\groupsLookup.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\EmailSubject.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\ImageSelector.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\SocialConfig.ascx" />
+    <Content Include="main\ECNWizard\quicktestblast.aspx" />
+    <Content Include="main\lists\EmailSearch.aspx" />
+    <Content Include="main\lists\reports\DataDumpReport.aspx" />
+    <Content Include="main\lists\UpdateEmailAddress.aspx" />
+    <Content Include="main\Reports\ReportSettingsControls\BlastDelivery.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\DataDumpReport.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\EmailPerformanceByDomain.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\EmailPreviewUsage.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\GroupExport.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\UnsubscribeReasonReport.ascx" />
+    <Content Include="main\Salesforce\ECN_SF_Integration.aspx" />
+    <Content Include="main\Salesforce\customersetup.aspx" />
+    <Content Include="scripts\chardinjs.css" />
+    <Content Include="scripts\chardinjs.js" />
+    <Content Include="scripts\chardinjs.min.js" />
+    <Content Include="content\toastr.less" />
+    <Content Include="ecn.communicator.ruleset" />
+    <None Include="scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="scripts\jquery-1.7.1.js" />
+    <Content Include="scripts\jquery-1.7.1.min.js" />
+    <Content Include="scripts\toastr.css" />
+    <Content Include="scripts\toastr.js" />
+    <Content Include="scripts\toastr.min.css" />
+    <Content Include="Customers\ZipCodeLocator.aspx" />
+    <Content Include="default.aspx" />
+    <Content Include="error.aspx" />
+    <Content Include="font\awaredemo.aspx" />
+    <Content Include="font\call.aspx" />
+    <Content Include="font\demo.aspx" />
+    <Content Include="font\features.aspx" />
+    <Content Include="font\howitworks.aspx" />
+    <Content Include="font\levelchannel.aspx" />
+    <Content Include="font\levelenterprise.aspx" />
+    <Content Include="font\levelsmallbiz.aspx" />
+    <Content Include="font\login.aspx" />
+    <Content Include="font\logoff.aspx" />
+    <Content Include="font\privacy.aspx" />
+    <Content Include="font\services.aspx" />
+    <Content Include="font\signup.aspx" />
+    <Content Include="font\spam.aspx" />
+    <Content Include="font\terms.aspx" />
+    <Content Include="font\usage.aspx" />
+    <Content Include="images\ArrowLeft_Blue.png" />
+    <Content Include="images\ArrowLeft_Orange.png" />
+    <Content Include="images\ArrowRight_Blue.png" />
+    <Content Include="images\ArrowRight_Orange.png" />
+    <Content Include="images\Button_Orange.gif" />
+    <Content Include="images\close.png" />
+    <Content Include="images\codesnippet.png" />
+    <Content Include="images\ecn-icon-folder-expand.png" />
+    <Content Include="images\ecn-icon-folder.png" />
+    <Content Include="images\ecn-icon-gear-small.png" />
+    <Content Include="images\ecn-icon-home-audience.png" />
+    <Content Include="images\ecn-icon-home-digitaleditions.png" />
+    <Content Include="images\ecn-icon-home-email.png" />
+    <Content Include="images\ecn-icon-home-forms.png" />
+    <Content Include="images\ecn-icon-home-surveys.png" />
+    <Content Include="images\ecn-icon-home-wqt.png" />
+    <Content Include="images\Email_Button_Blue.png" />
+    <Content Include="images\Gradient_DarkBlue.jpg" />
+    <Content Include="images\Gradient_Grey.jpg" />
+    <Content Include="images\Gradient_LightBlue.jpg" />
+    <Content Include="images\Gradient_Orange.jpg" />
+    <Content Include="images\ic-ABBlast.png" />
+    <Content Include="images\ic-ChampionBlast.png" />
+    <Content Include="images\ic-RegularBlast.png" />
+    <Content Include="images\icon-copy.png" />
+    <Content Include="images\icon-emailpreview.png" />
+    <Content Include="images\icon-users.png" />
+    <Content Include="images\imgAndroid.png" />
+    <Content Include="images\imgApple.png" />
+    <Content Include="images\imgChrome.png" />
+    <Content Include="images\imgFirefox.png" />
+    <Content Include="images\imgIE.png" />
+    <Content Include="images\imgLinux.png" />
+    <Content Include="images\imgOpera.png" />
+    <Content Include="images\imgOther.png" />
+    <Content Include="images\imgSafari.png" />
+    <Content Include="images\imgWindows.png" />
+    <Content Include="images\Info_24x24.png" />
+    <Content Include="images\script_code_red.png" />
+    <Content Include="images\SearchButton.jpg" />
+    <Content Include="images\spacer.gif" />
+    <Content Include="includes\activitychart.ascx" />
+    <Content Include="includes\calendarPopUp_From.htm" />
+    <Content Include="includes\calendarPopUp_To.htm" />
+    <Content Include="includes\emailProfile_Survey.ascx" />
+    <Content Include="includes\emailProfile_UDF.ascx" />
+    <Content Include="includes\emailProfile_UDFHistory.ascx" />
+    <Content Include="includes\EventTimerEditor.ascx" />
+    <Content Include="includes\folderSystem.ascx" />
+    <Content Include="includes\footer.ascx" />
+    <Content Include="includes\gallery.ascx" />
+    <Content Include="includes\header.ascx" />
+    <Content Include="includes\imageGallery.ascx" />
+    <Content Include="includes\login.aspx" />
+    <Content Include="includes\popup.aspx" />
+    <Content Include="includes\templates.ascx" />
+    <Content Include="includes\thumbnail.aspx" />
+    <Content Include="includes\uploader.ascx" />
+    <Content Include="main\blasts\active.aspx" />
+    <Content Include="main\blasts\BlastEmailPreview.aspx" />
+    <Content Include="main\blasts\BlastEnvelopes.aspx" />
+    <Content Include="main\blasts\blastoverview.aspx" />
+    <Content Include="main\blasts\BlastScheduler.ascx" />
+    <Content Include="main\blasts\bounces.aspx" />
+    <Content Include="main\blasts\charts\dnc-017av5p7.jpg" />
+    <Content Include="main\blasts\charts\dnc-p37oe5b1.jpg" />
+    <Content Include="main\blasts\CH_28_CustomReports.aspx" />
+    <Content Include="main\blasts\clicks.aspx" />
+    <Content Include="main\blasts\clickslinks.aspx" />
+    <Content Include="main\blasts\collapse.gif" />
+    <Content Include="main\blasts\conversionTracker.aspx" />
+    <Content Include="main\blasts\default.aspx" />
+    <Content Include="main\blasts\Report\ABSummaryReport.aspx" />
+    <Content Include="main\blasts\Report\EmailFatigueReport.aspx" />
+    <Content Include="main\blasts\Report\EmailPerformanceByDomainReport.aspx" />
+    <Content Include="main\blasts\Report\EmailsDeliveredByPercentage.aspx" />
+    <Content Include="main\blasts\expand.gif" />
+    <Content Include="main\blasts\forwards.aspx" />
+    <Content Include="main\blasts\ISPReports.aspx" />
+    <Content Include="main\blasts\logs.aspx" />
+    <Content Include="main\blasts\NoClicks.aspx" />
+    <Content Include="main\blasts\NoOpens.aspx" />
+    <Content Include="main\blasts\opens.aspx" />
+    <Content Include="main\blasts\preview.aspx" />
+    <Content Include="main\blasts\reports.aspx" />
+    <Content Include="main\blasts\reportsGraphical.aspx" />
+    <Content Include="main\blasts\reportsummary.aspx" />
+    <Content Include="main\blasts\Report\BlastComparisonReport.aspx" />
+    <Content Include="main\blasts\Report\BlastDeliveryReport.aspx" />
+    <Content Include="main\blasts\Report\LinkReport.aspx" />
+    <Content Include="main\blasts\Report\MasterSuppressionSourceReport.aspx" />
+    <Content Include="main\blasts\Report\Reports.aspx" />
+    <Content Include="main\blasts\Report\UndeliverableReport.aspx" />
+    <Content Include="main\blasts\resends.aspx" />
+    <Content Include="main\blasts\rpt_BlastReport.aspx" />
+    <Content Include="main\blasts\Sends.aspx" />
+    <Content Include="main\blasts\smtperrorcodes.htm" />
+    <Content Include="main\blasts\Social.aspx" />
+    <Content Include="main\blasts\status.aspx" />
+    <Content Include="main\blasts\subjectline-tester.htm" />
+    <Content Include="main\blasts\subscribes.aspx" />
+    <Content Include="main\blasts\title-bar-center.gif" />
+    <Content Include="main\blasts\title-bar.gif" />
+    <Content Include="main\blasts\title-bar.gif-left.gif" />
+    <Content Include="main\blasts\title-bar.gif-right.gif" />
+    <Content Include="main\ClearCache.aspx" />
+    <Content Include="main\content\collapse.gif" />
+    <Content Include="main\content\contenteditor.aspx" />
+    <Content Include="main\content\contentfilters.aspx" />
+    <Content Include="main\content\contentPreview.aspx" />
+    <Content Include="main\content\conversionTrackingLinks.aspx" />
+    <Content Include="main\content\default.aspx" />
+    <Content Include="main\blasts\EmailPreviewUsage.aspx" />
+    <Content Include="main\content\dynamicTagEdit.aspx" />
+    <Content Include="main\content\dynamicTagList.aspx" />
+    <Content Include="main\content\expand.gif" />
+    <Content Include="main\content\filemanager.aspx" />
+    <Content Include="main\content\layoutCostEditor.aspx" />
+    <Content Include="main\content\layouteditor.aspx" />
+    <Content Include="main\content\linkAlias.aspx" />
+    <Content Include="main\content\preview.aspx" />
+    <Content Include="main\content\ruleEdit.aspx" />
+    <Content Include="main\content\ruleList.aspx" />
+    <Content Include="main\dripmarketing\blastDesigner.aspx" />
+    <Content Include="main\dripmarketing\Controls\regBlast.ascx" />
+    <Content Include="main\dripmarketing\dripCampaignEditor.aspx" />
+    <Content Include="main\dripmarketing\editDripCampaign.aspx" />
+    <Content Include="main\dripmarketing\images\add_node.gif" />
+    <Content Include="main\dripmarketing\images\arrow.gif" />
+    <Content Include="main\dripmarketing\images\background_color.gif" />
+    <Content Include="main\dripmarketing\images\bg.gif" />
+    <Content Include="main\dripmarketing\images\bg.png" />
+    <Content Include="main\dripmarketing\images\border_color.gif" />
+    <Content Include="main\dripmarketing\images\border_width.gif" />
+    <Content Include="main\dripmarketing\images\circle.gif" />
+    <Content Include="main\dripmarketing\images\computer.png" />
+    <Content Include="main\dripmarketing\images\configure_diagram.png" />
+    <Content Include="main\dripmarketing\images\decision.gif" />
+    <Content Include="main\dripmarketing\images\delete_node.gif" />
+    <Content Include="main\dripmarketing\images\email.png" />
+    <Content Include="main\dripmarketing\images\font_color.gif" />
+    <Content Include="main\dripmarketing\images\font_family.gif" />
+    <Content Include="main\dripmarketing\images\font_size.gif" />
+    <Content Include="main\dripmarketing\images\greenport.png" />
+    <Content Include="main\dripmarketing\images\load_diagram.png" />
+    <Content Include="main\dripmarketing\images\ne.png" />
+    <Content Include="main\dripmarketing\images\node.gif" />
+    <Content Include="main\dripmarketing\images\node2.gif" />
+    <Content Include="main\dripmarketing\images\nw.png" />
+    <Content Include="main\dripmarketing\images\redport.png" />
+    <Content Include="main\dripmarketing\images\rule.png" />
+    <Content Include="main\dripmarketing\images\rule_small.png" />
+    <Content Include="main\dripmarketing\images\save_diagram.gif" />
+    <Content Include="main\dripmarketing\images\save_diagram1.gif" />
+    <Content Include="main\dripmarketing\images\se.png" />
+    <Content Include="main\dripmarketing\images\start.png" />
+    <Content Include="main\dripmarketing\images\start_small.png" />
+    <Content Include="main\dripmarketing\images\stop.png" />
+    <Content Include="main\dripmarketing\images\stop_small.png" />
+    <Content Include="main\dripmarketing\images\sw.png" />
+    <Content Include="main\dripmarketing\images\text.gif" />
+    <Content Include="main\dripmarketing\images\text2.gif" />
+    <Content Include="main\dripmarketing\images\timer.png" />
+    <Content Include="main\dripmarketing\images\transparent.gif" />
+    <Content Include="main\dripmarketing\images\Untitled-1.png" />
+    <Content Include="main\dripmarketing\images\user.png" />
+    <Content Include="main\dripmarketing\styles\diagram.css" />
+    <Content Include="main\dripmarketing\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="main\dripmarketing\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="main\dripmarketing\images\ui-icons_222222_256x240.png" />
+    <Content Include="main\dripmarketing\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="main\dripmarketing\images\ui-icons_454545_256x240.png" />
+    <Content Include="main\dripmarketing\images\ui-icons_888888_256x240.png" />
+    <Content Include="main\dripmarketing\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.accordion.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.autocomplete.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.base.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.button.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.core.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.datepicker.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.dialog.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.progressbar.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.resizable.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.selectable.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.slider.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.tabs.css" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.theme.css" />
+    <Content Include="main\ECNWizard\Content\contentEditor.ascx" />
+    <Content Include="main\ECNWizard\Content\contentExplorer.ascx" />
+    <Content Include="main\ECNWizard\Content\layoutEditor.ascx" />
+    <Content Include="main\ECNWizard\Content\layoutEditorNew.ascx" />
+    <Content Include="main\ECNWizard\Content\layoutExplorer.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardContent_AB.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardContent_Champion.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardContent_SMS.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardPreview_AB.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardPreview_SMS.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardSchedule.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardCampaign.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardContent_Regular.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardGroup.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardPreview_Regular.ascx" />
+    <Content Include="main\ECNWizard\Controls\WizardSentCampaigns.ascx" />
+    <Content Include="main\ECNWizard\Group\groupsExplorer.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\AddTemplate.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\ruleEditor.ascx" />
+    <Content Include="main\ECNWizard\templateEdit.aspx" />
+    <Content Include="main\ECNWizard\default.aspx" />
+    <Content Include="main\ECNWizard\templateList.aspx" />
+    <Content Include="main\ECNWizard\Group\testGroupExplorer.ascx" />
+    <Content Include="main\ECNWizard\Group\filters.ascx" />
+    <Content Include="main\ECNWizard\OtherControls\BlastFieldsConfig.ascx" />
+    <Content Include="main\ECNWizard\wizardSetup.aspx" />
+    <Content Include="main\ECNWizard\Group\addSubscribers.ascx" />
+    <Content Include="main\ECNWizard\Group\addGroup.ascx" />
+    <Content Include="main\ECNWizard\Group\groupExplorer.ascx" />
+    <Content Include="main\ECNWizard\Group\importSubscribers.ascx" />
+    <Content Include="main\ECNWizard\wizardSetup_Numbers.aspx" />
+    <Content Include="main\events\BlastPlanner.aspx" />
+    <Content Include="main\events\MessageTriggers.aspx" />
+    <Content Include="main\events\default.aspx" />
+    <Content Include="main\events\EventTimerEditor.aspx" />
+    <Content Include="main\events\GroupTriggers.aspx" />
+    <Content Include="main\folders\foldersAddHandler.aspx" />
+    <Content Include="main\folders\folderseditor.aspx" />
+    <Content Include="main\lists\addressloader.aspx" />
+    <Content Include="main\lists\addressverifier.aspx" />
+    <Content Include="main\lists\bounceScore.aspx" />
+    <Content Include="main\lists\collapse.gif" />
+    <Content Include="main\lists\ATHBimportDatafromFile.aspx" />
+    <Content Include="main\lists\DomainTrackerReport.aspx" />
+    <Content Include="main\lists\domainTrackerUsers.aspx" />
+    <Content Include="main\lists\mergeProfiles.aspx" />
+    <Content Include="main\lists\groupconfig.aspx" />
+    <Content Include="main\lists\customdefinedfieldeditor.aspx" />
+    <Content Include="main\lists\customerdefinedfields.aspx" />
+    <Content Include="main\lists\default.aspx" />
+    <Content Include="main\lists\DomainTrackerEdit.aspx" />
+    <Content Include="main\lists\domainTrackerList.aspx" />
+    <Content Include="main\lists\download.aspx" />
+    <Content Include="main\lists\downloadxmlList.aspx" />
+    <Content Include="main\lists\emaildataeditor.aspx" />
+    <Content Include="main\lists\emaileditor.aspx" />
+    <Content Include="main\lists\expand.gif" />
+    <Content Include="main\lists\filterPreview.aspx" />
+    <Content Include="main\lists\filtersOld.aspx" />
+    <Content Include="main\lists\groupeditor.aspx" />
+    <Content Include="main\lists\groupsubscribe.aspx" />
+    <Content Include="main\lists\groupsubscribePrePopScript.aspx" />
+    <Content Include="main\lists\groupsubscribePrePopSF.aspx" />
+    <Content Include="main\lists\importDatafromFile.aspx" />
+    <Content Include="main\lists\importmanager.aspx" />
+    <Content Include="main\lists\optinHTMLPreview.aspx" />
+    <Content Include="main\lists\ReferralProgram.aspx" />
+    <Content Include="main\lists\reports\FlashReport.aspx" />
+    <Content Include="main\lists\reports\Controls\GroupExportUdfSetting.ascx" />
+    <Content Include="main\lists\reports\ListSizeOvertimeReport.aspx" />
+    <Content Include="main\lists\schema.htm" />
+    <Content Include="main\Omniture\OmnitureBaseChannelSetup.aspx" />
+    <Content Include="main\Omniture\OmnitureCustomerSetup.aspx" />
+    <Content Include="main\Reports\BlastReports.aspx" />
+    <Content Include="main\Reports\ListReports.aspx" />
+    <Content Include="main\Reports\ReportSettingsControls\AudienceEngagementSettings.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\AdvertiserClickSettings.ascx" />
+    <Content Include="main\Reports\ReportSettingsControls\GroupStatisticsSettings.ascx" />
+    <Content Include="main\Reports\scheduledReportList.aspx" />
+    <Content Include="main\Reports\scheduledReportSetup.aspx" />
+    <Content Include="main\Reports\SentCampaignsReport.aspx" />
+    <Content Include="main\Salesforce\Controls\Message.ascx" />
+    <Content Include="main\Salesforce\Controls\SF_Search.ascx" />
+    <Content Include="main\Salesforce\ECN_SF_Integration_old.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_Accounts.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_CampaignActivity.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_CampaignGroup.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_Contacts.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_Leads.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_OptOut.aspx" />
+    <Content Include="main\Salesforce\SF_Pages\SF_Suppression.aspx" />
+    <Content Include="App_Browsers\Telerik_IE11_fix.browser" />
+    <Content Include="scripts\toastr.less" />
+    <Content Include="App_Data\RadSpell\de-DE.tdf" />
+    <Content Include="App_Data\RadSpell\en-US.tdf" />
+    <Content Include="App_Data\RadSpell\fr-FR.tdf" />
+    <Content Include="App_Themes\Default\RadEditor.skin" />
+    <Content Include="font\SourceSansPro\SourceSansPro-Black.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-BlackIt.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-Bold.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-BoldIt.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-ExtraLight.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-ExtraLightIt.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-It.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-Light.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-LightIt.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-Regular.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-Semibold.otf" />
+    <Content Include="font\SourceSansPro\SourceSansPro-SemiboldIt.otf" />
+    <None Include="main\Salesforce\Entity\SF_Settings.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="main\SMSWizard\Controls\BlastSchedule.ascx" />
+    <Content Include="main\SMSWizard\Controls\CampaignInfo.ascx" />
+    <Content Include="main\SMSWizard\Controls\ContentInfo.ascx" />
+    <Content Include="main\SMSWizard\Controls\GroupInfo.ascx" />
+    <Content Include="main\SMSWizard\Controls\Preview.ascx" />
+    <Content Include="main\SMSWizard\default.aspx" />
+    <Content Include="main\SMSWizard\SetupCampaign.aspx" />
+    <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Prod.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
+    <Content Include="MasterPages\ECN_Controls.css" />
+    <Content Include="MasterPages\ECN_MainMenu.css" />
+    <Content Include="scripts\AjaxHack.js" />
+    <Content Include="scripts\ddmenu.css" />
+    <Content Include="scripts\ddmenu.js" />
+    <Content Include="scripts\dripMarketing\jgraphui.js" />
+    <Content Include="scripts\dripMarketing\jquery-1.6.2.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.effects.core.min.js" />
+    <Content Include="main\dripmarketing\styles\jquery.ui.all.css" />
+    <Content Include="scripts\dripMarketing\jquery.ui.button.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.core.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.draggable.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.droppable.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.mouse.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.resizable.min.js" />
+    <Content Include="scripts\dripMarketing\jquery.ui.widget.min.js" />
+    <Content Include="scripts\dripMarketing\wz_jsgraphics.js" />
+    <Content Include="scripts\jquery-1.3.2.min.js" />
+    <None Include="scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="scripts\jquery-1.6.4.js" />
+    <Content Include="scripts\jquery-1.6.4.min.js" />
+    <Content Include="scripts\jquery-ui-1.8.21.custom.css" />
+    <Content Include="scripts\jquery-ui-1.8.21.custom.min.js" />
+    <Content Include="scripts\jquery-ui-sliderAccess.js" />
+    <Content Include="scripts\jquery-ui-timepicker-addon.js" />
+    <Content Include="scripts\jquery.qtip-1.0.0-rc3.min.js" />
+    <Content Include="scripts\toastr.min.js" />
+    <Content Include="scripts\Twemoji\twemoji-picker.css" />
+    <Content Include="scripts\Twemoji\twemoji-picker.js" />
+    <Content Include="scripts\Twemoji\twemoji.js" />
+    <Content Include="scripts\validations.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\1\ECN.skin" />
+    <Content Include="App_Themes\25\ECN.skin" />
+    <Content Include="App_Themes\31\GD.skin" />
+    <Content Include="App_Themes\51\ECN.skin" />
+    <Content Include="ecn_activityDataSet.xsc">
+      <DependentUpon>ecn_activityDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="ecn_activityDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ecn_activityDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="ecn_activityDataSet.xss">
+      <DependentUpon>ecn_activityDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="main\blasts\DataSets\BlastComparision.xsc">
+      <DependentUpon>BlastComparision.xsd</DependentUpon>
+    </None>
+    <None Include="main\blasts\DataSets\BlastComparision.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BlastComparision.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="main\blasts\DataSets\BlastComparision.xss">
+      <DependentUpon>BlastComparision.xsd</DependentUpon>
+    </None>
+    <None Include="main\blasts\DataSets\BlastBounces.xsc">
+      <DependentUpon>BlastBounces.xsd</DependentUpon>
+    </None>
+    <None Include="main\blasts\DataSets\BlastBounces.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BlastBounces.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="main\blasts\DataSets\BlastBounces.xss">
+      <DependentUpon>BlastBounces.xsd</DependentUpon>
+    </None>
+    <None Include="main\blasts\rpt_BlastPDFReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_BlastPDFReport.cs</LastGenOutput>
+    </None>
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="scripts\toastr.min.js.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Local.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Prod.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.QA.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Customers\MTAEditor.aspx" />
+    <Content Include="engines\conversion.aspx" />
+    <Content Include="engines\editProfileOnly.aspx" />
+    <Content Include="engines\emailProfileManager.aspx" />
+    <Content Include="engines\emailtofriend.aspx" />
+    <Content Include="engines\linkfrom.aspx" />
+    <Content Include="engines\ManageSubscriptions.aspx" />
+    <Content Include="engines\open.aspx" />
+    <Content Include="engines\PrePopForms.aspx" />
+    <Content Include="engines\publicPreview.aspx" />
+    <Content Include="engines\pubSubscriptions_SO_subscribe.aspx" />
+    <Content Include="engines\read.aspx" />
+    <Content Include="engines\reportSpam.aspx" />
+    <Content Include="engines\SO_subscribe.aspx" />
+    <Content Include="engines\subscribe.aspx" />
+    <Content Include="engines\unsubscribeDirect.aspx" />
+    <Content Include="engines\websubscribe.aspx" />
+    <Content Include="engines\whitelistEmailAddress.aspx" />
+    <Content Include="images\arrowright.gif" />
+    <Content Include="images\calendar-next.png" />
+    <Content Include="images\calendar-previous.png" />
+    <Content Include="images\CalendarIcon.jpg" />
+    <Content Include="images\ic-cal-arrblu-nxt.gif" />
+    <Content Include="images\ic-cal-arrblu-prv.gif" />
+    <Content Include="images\ic-cal-arrgry-nxt.gif" />
+    <Content Include="images\ic-cal-arrgry-prv.gif" />
+    <Content Include="images\ic-cal-arrorg-nxt.gif" />
+    <Content Include="images\ic-cal-arrorg-prv.gif" />
+    <Content Include="images\ic-cal-arrwht-nxt.gif" />
+    <Content Include="images\ic-cal-arrwht-prv.gif" />
+    <Content Include="images\ic-daily.gif" />
+    <Content Include="images\ic-Monthly.gif" />
+    <Content Include="images\ic-weekly.gif" />
+    <Content Include="images\icon-cal.png" />
+    <Content Include="images\icon-calendar.gif" />
+    <Content Include="images\sbzone_vline.gif" />
+    <Content Include="images\sccorner-blu2-botline.gif" />
+    <Content Include="images\sccorner-blu2-lfbot.gif" />
+    <Content Include="images\sccorner-blu2-rtbot.gif" />
+    <Content Include="images\sccorner-gry-botline.gif" />
+    <Content Include="images\sccorner-gry-lfbot.gif" />
+    <Content Include="images\sccorner-gry-lftop.gif" />
+    <Content Include="images\sccorner-gry-rtbot.gif" />
+    <Content Include="images\sccorner-gry-rttop.gif" />
+    <Content Include="images\sccorner-org-botline.gif" />
+    <Content Include="images\sccorner-org-lfbot.gif" />
+    <Content Include="images\sccorner-org-lftop.gif" />
+    <Content Include="images\sccorner-org-rttop.gif" />
+    <Content Include="images\sccorner-red-botline.gif" />
+    <Content Include="images\sccorner-red-lfbot.gif" />
+    <Content Include="images\sccorner-red-lftop.gif" />
+    <Content Include="images\sccorner-red-rtbot.gif" />
+    <Content Include="images\sccorner-red-rttop.gif" />
+    <Content Include="images\sccorner-red-topline.gif" />
+    <Content Include="images\sccorner-shd1-botline.gif" />
+    <Content Include="images\sccorner-shd1-lfbot.gif" />
+    <Content Include="images\sccorner-shd1-lftop.gif" />
+    <Content Include="images\sccorner-shd1-rtbot.gif" />
+    <Content Include="images\sccorner-shd1-rttop.gif" />
+    <Content Include="images\schd_hdr_top_bg_blu.gif" />
+    <Content Include="images\space.gif" />
+    <Content Include="includes\emailProfile_Base.ascx" />
+    <Content Include="includes\emailProfile_EmailActivity.ascx" />
+    <Content Include="main\blasts\BlastCalendarView.aspx" />
+    <Content Include="main\blasts\collapse_blue.jpg" />
+    <Content Include="main\blasts\DCReports.aspx" />
+    <Content Include="main\blasts\expand_blue.jpg" />
+    <Content Include="main\blasts\SetMessageThreshold.aspx" />
+    <Content Include="main\blasts\suppressed.aspx" />
+    <Content Include="main\content\buttonMedium.gif" />
+    <Content Include="main\content\LinkSource.aspx" />
+    <Content Include="main\content\MessageTypeSetup.aspx" />
+    <Content Include="main\content\MessageTypeSort.aspx" />
+    <Content Include="main\lists\channelMasterSuppression.aspx" />
+    <Content Include="main\lists\channelNoThresholdList.aspx" />
+    <Content Include="main\lists\filtersplusedit.aspx" />
+    <Content Include="main\lists\emailAddressCheck.aspx" />
+    <Content Include="main\lists\filters.aspx" />
+    <Content Include="main\lists\reports\AdvertiserReport.aspx" />
+    <Content Include="main\lists\reports\AudienceEngagementReport.aspx" />
+    <Content Include="main\lists\reports\default.aspx" />
+    <Content Include="main\lists\reports\groupStatisticsReport.aspx" />
+    <Content Include="main\lists\reports\OnOffReport.aspx" />
+    <Content Include="main\lists\reports\StatisticsbyField.aspx" />
+    <Content Include="main\lists\sfintegration.aspx" />
+    <Content Include="main\lists\Suppression.aspx" />
+    <Content Include="main\PageWatch\PageWatchEditor.aspx" />
+    <Content Include="main\PageWatch\PageWatchTagsEditor.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="xsl\DailyBlast.xsl" />
+    <Content Include="xsl\Weekly.xsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\KM.Framework.Web.WebForms\KM.Framework.Web.WebForms.csproj">
+      <Project>{5de18bc0-1320-46c4-bcef-4107069065c1}</Project>
+      <Name>KM.Framework.Web.WebForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AgileComponents\ActiveUp.WebControls.csproj">
+      <Project>{847ff6d7-b5c4-4884-933f-425fc3c3525f}</Project>
+      <Name>ActiveUp.WebControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CssConvert_2_0\CssConvert_2_0.csproj">
+      <Project>{AC8C6FE6-4F0B-4B2B-A8F2-1DFE658B01DD}</Project>
+      <Name>CssConvert_2_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.controls\ecn.controls.csproj">
+      <Project>{fb0cacb3-28b6-45fc-a266-e5068537f136}</Project>
+      <Name>ecn.controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.EmailPreview\ecn.EmailPreview.csproj">
+      <Project>{4BF970D0-3B03-4949-A105-E23593AF6C34}</Project>
+      <Name>ecn.EmailPreview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.FormDesigner\Projects\KMSite\KMSite.csproj">
+      <Project>{347570d6-a43f-4e0a-ac0d-e1d48d2308c6}</Project>
+      <Name>KMSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3b505ae1-fd1c-429a-a534-81ae42f7ccc5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63b4326c-31f4-4c42-9110-a1d51dc4dde6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1BCE78E7-DD4D-48BC-85C3-D77FCE995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="classes\SalesForcePartner.wsdl" />
+    <None Include="main\blasts\rpt_BlastGroupPDFReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_BlastGroupPDFReport.cs</LastGenOutput>
+    </None>
+    <Content Include="MasterPages\Communicator.Master">
+      <BrowseToURL>~/MasterPages/Communicator.Master</BrowseToURL>
+    </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\SalesForcePartner\DeleteResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeDataCategoryGroupResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeDataCategoryGroupStructureResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeGlobalResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeLayoutResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeSObjectResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeSoftphoneLayoutResult.datasource" />
+    <None Include="Web References\SalesForcePartner\DescribeTabSetResult.datasource" />
+    <None Include="Web References\SalesForcePartner\EmptyRecycleBinResult.datasource" />
+    <None Include="Web References\SalesForcePartner\GetDeletedResult.datasource" />
+    <None Include="Web References\SalesForcePartner\GetServerTimestampResult.datasource" />
+    <None Include="Web References\SalesForcePartner\GetUpdatedResult.datasource" />
+    <None Include="Web References\SalesForcePartner\GetUserInfoResult.datasource" />
+    <None Include="Web References\SalesForcePartner\InvalidateSessionsResult.datasource" />
+    <None Include="Web References\SalesForcePartner\LeadConvertResult.datasource" />
+    <None Include="Web References\SalesForcePartner\LoginResult.datasource" />
+    <None Include="Web References\SalesForcePartner\MergeResult.datasource" />
+    <None Include="Web References\SalesForcePartner\ProcessResult.datasource" />
+    <None Include="Web References\SalesForcePartner\QueryResult.datasource" />
+    <None Include="Web References\SalesForcePartner\Reference.map" />
+    <None Include="Web References\SalesForcePartner\ResetPasswordResult.datasource" />
+    <None Include="Web References\SalesForcePartner\SalesForcePartner.wsdl" />
+    <None Include="Web References\SalesForcePartner\SaveResult.datasource" />
+    <None Include="Web References\SalesForcePartner\SearchResult.datasource" />
+    <None Include="Web References\SalesForcePartner\SendEmailResult.datasource" />
+    <None Include="Web References\SalesForcePartner\SetPasswordResult.datasource" />
+    <None Include="Web References\SalesForcePartner\sObject.datasource" />
+    <None Include="Web References\SalesForcePartner\UndeleteResult.datasource" />
+    <None Include="Web References\SalesForcePartner\UpsertResult.datasource" />
+    <Content Include="main\blasts\Report\rpt_ABSummary.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\blasts\Report\rpt_EmailPerformanceByDomain.rdlc" />
+    <Content Include="main\blasts\Report\rpt_EmailsDeliveredByPercentage.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastOpensByTime.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastsBounces.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastClickReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\blasts\Report\rpt_BlastComparision.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastDelivery.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\blasts\Report\rpt_BlastOpens.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastPDFReport.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastPerformance.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastResponseDetail.rdlc" />
+    <Content Include="main\blasts\Report\rpt_LinkDetails.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\blasts\Report\rpt_LinkReportList.rdlc" />
+    <Content Include="main\blasts\Report\rpt_UndeliverableReport.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastClickDetail.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastClickSummary.rdlc" />
+    <Content Include="main\blasts\Report\rpt_BlastClickSummary_SubReport.rdlc" />
+    <Content Include="main\blasts\Report\rpt_EmailFatigueReport.rdlc" />
+    <Content Include="main\blasts\Report\rpt_ChampionAudit.rdlc" />
+    <Content Include="main\blasts\Report\rpt_PerformanceByDayAndTime.rdlc" />
+    <Content Include="main\blasts\Report\rpt_EmailFatigueReport_InPage.rdlc" />
+    <Content Include="main\blasts\Report\UnsubscribeReasonDetail.rdlc" />
+    <Content Include="main\blasts\Report\rpt_CampaignStatistics.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="main\blasts\Report\rpt_TopEvangelistsReport.rdlc" />
+    <Content Include="main\blasts\Report\TopEvangelistsReport.rdlc" />
+    <EmbeddedResource Include="main\blasts\rpt_BlastDelivery.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_BlastDelivery.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="main\blasts\rpt_LinkReportDetails.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_LinkReportDetails.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="main\blasts\rpt_LinkReportList.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_LinkReportList.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="main\lists\reports\rpt_AdvertiserClickReport.rdlc" />
+    <EmbeddedResource Include="main\lists\reports\rpt_AdvertiserClickReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_AdvertiserClickReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="main\lists\reports\rpt_AudienceEngagementReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="main\lists\reports\rpt_AudienceEngagementReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_AudienceEngagementReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="main\lists\reports\rpt_GroupStatisticsReport.rdlc" />
+    <EmbeddedResource Include="main\lists\reports\rpt_groupStatisticsReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_groupStatisticsReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="main\lists\reports\rpt_ListSizeOvertime.rdlc" />
+    <Content Include="main\lists\reports\rpt_OnOffReport.rdlc" />
+    <EmbeddedResource Include="main\lists\reports\rpt_OnOffReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_OnOffReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="main\lists\reports\rpt_Platform_SubReport.rdlc" />
+    <Content Include="main\lists\reports\rpt_StatisticsByField.rdlc" />
+    <EmbeddedResource Include="main\lists\reports\rpt_StatisticsbyField.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_StatisticsbyField1.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Themes\31\images\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ecn.communicator.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ecn.communicator.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ecn.communicator.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>32561</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ecn.communicator</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/ecn.communicator</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!--<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>-->
+</Project>

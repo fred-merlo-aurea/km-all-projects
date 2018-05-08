@@ -1,0 +1,66 @@
+﻿@model UAS.Web.Models.UAD.Filter.DynamicFilter
+
+<div>
+    @if (Model.ShowBrandPanel)
+    {
+        <div style="margin:auto 20px;">
+            <h4>
+                Brand
+            </h4>
+            <p>
+                <div  id="dvBrandPanel">
+                    @Html.Partial("_brandFilter")
+                </div>
+            </p>
+        </div>
+    }
+    @if (Model.DcFilterList != null && Model.DcFilterList.Count > 0)
+    {
+        <div style="margin:auto 20px;">
+            <h4>
+                Data Compare File
+            </h4>
+            <p>
+                <div  id="dvDCFilePanel">
+                    @Html.Partial("_dataCompareFileFilter")
+                </div>
+            </p>
+        </div>
+    }
+    @if (Model.MarketFilterList != null && Model.MarketFilterList.Count > 0)
+    {
+        <div style="margin:auto 20px;">
+            <h4>
+                <a data-market="Market" onclick="openMarketListBoxPopup(event)" id="lnkPubType_Market">Market</a>
+            </h4>
+            <p>
+                <div  id="dvMarketPanel">
+                    @Html.Partial("_marketFilter")
+                </div>
+            </p>
+        </div>
+    }
+
+    <div style="margin:auto 20px;">
+        <h4>
+            Pub Types <span class="k-icon k-i-plus" id="showAllPubList" onclick="displayAllPubTypeListBoxes(event)"></span>
+        </h4>
+        <p>
+            
+            <div id="dvPubTypePanel">
+                @Html.Partial("_dynamicPubTypeRepeaterFilter")
+            </div>
+        </p>
+
+    </div>
+    <div style="margin:auto 20px;">
+        <h4>
+            Dimensions
+        </h4>
+        <p>
+            <div  id="dvDimensionPanel">
+                @Html.Partial("_dynamicDimensionRepeaterFilter")
+            </div>
+        </p>
+    </div>
+</div>

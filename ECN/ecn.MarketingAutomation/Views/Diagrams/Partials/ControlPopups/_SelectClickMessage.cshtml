@@ -1,0 +1,177 @@
+﻿<style>
+    #lstBox1 li, #lstBox2 li {
+        border-bottom: 1px dotted Gray;
+    }
+
+        #lstBox1 li.selected, #lstBox2 li.selected {
+            background-color: #115fa9;
+            color: white;
+        }
+
+    .droptrue {
+        width: 300px;
+        height: 448px;
+        line-height: 2em;
+        border: 1px solid #ccc;
+        padding: 0;
+        margin: 0;
+        overflow: auto;
+        list-style-type: none;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .dataItems {
+        outline: none;
+        background-color: transparent;
+        border: 0px solid;
+        color: #115fa9;
+        font-weight: 300;
+        font-size: 12px;
+        color: #115fa9;
+        font-family: 'Arial';
+        width: 56px;
+    }
+
+        .dataItems:focus, input:focus {
+            outline: none;
+            background-color: transparent;
+            border: 1px solid #115fa9;
+        }
+
+    .buttonsselectgroup {
+        margin: 520px 0 0 830px;
+    }
+</style>
+
+<div class="wrapper modal modalgroupexplorer">
+    <fieldset>
+        <legend>Select Message</legend>
+        <div>
+            <span>Message Name to Search:</span>
+            <input type="text" id="searchInput" />
+            <input type="checkbox" id="allFoldersCB" /> All Folders
+            @Html.Kendo().Button().Name("Search").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "search()" })
+            @Html.Kendo().Button().Name("ClearSearch").Content("Clear Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "clearSearch()" })
+        </div>
+        <div class="customerlist">
+            <fieldset title="Customer/Folder ">
+                <legend>Folders</legend>
+                <div id="Folders"></div>
+            </fieldset>
+        </div>
+        <div class="customerlist">
+            <fieldset title="Group">
+                <legend>Message Name</legend>
+                <div id="Message" style="height:450px;">
+                </div>
+            </fieldset>
+        </div>
+    </fieldset>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var treeview = $("#Folders").kendoTreeView({
+            dataSource: {
+                data: [
+                    {
+                        text: "Item 1", items: [
+                          { text: "Child 1" },
+                          { text: "Child 2" },
+                          { text: "Child 3" }
+                        ]
+                    },
+                    {
+                        text: "Item 2", items: [
+                          { text: "Child 4" },
+                          { text: "Child 5" },
+                          { text: "Child 6" }
+                        ]
+                    },
+                    {
+                        text: "Item 3", items: [
+                          { text: "Child 7" },
+                          { text: "Child 8" }
+                        ]
+                    }
+                ]
+            },
+            loadOnDemand: false,
+            select: function (e) {
+                var tag = '';
+                $("#Message").empty();
+                switch (e.node.textContent) {
+                    case "Child 1":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 1</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 2</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                    case "Child 2":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 3</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 4</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                    case "Child 3":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 5</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 6</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                    case "Child 4":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 7</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 8</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                    case "Child 5":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 9</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 10</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                    case "Child 6":
+                        tag += '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup"><tr class="campaignName" role="row" onclick="addMessage(0)"><td role="gridcell">Message 11</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr><tr class="k-alt campaignName" role="row" onclick="addMessage(1)"><td role="gridcell">Message 12</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr></tbody></table>';
+                        break;
+                }
+                $("#Message").append(tag);
+            }
+        }).data("kendoTreeView");
+    });
+
+    function addMessage(id) {
+        var tr = "tr:eq(" + id + ")";
+        var item = $("#Message").find(tr).find("td:eq(0)").text();
+        if (item.indexOf("-") !== -1) {
+            var value = item.split('-');
+            $("#cli05").text(value[1].trim());
+            $("#eco03").text(value[1].trim());
+        }
+        else {
+            $("#cli05").text(item);
+            $("#eco03").text(item);
+        }
+        $("#PopupWindow").data('kendoWindow').close();
+    };
+    function search() {
+        var searchString = $("#searchInput").val();
+        var iFound = [];
+        var items = [];
+        if ($("#allFoldersCB").prop('checked'))
+            items = ["Item 1 - Message 1", "Item 1 - Message 2", "Item 1 - Message 3", "Item 1 - Message 4", "Item 1 - Message 5", "Item 1 - Message 6", "Item 2 - Message 7", "Item 2 - Message 8", "Item 2 - Message 9", "Item 2 - Message 10", "Item 2 - Message 11", "Item 2 - Message 12"];
+        else {
+            var selected = $("#Folders_tv_active");
+            var folder = selected[0].children[0].children[1].innerHTML;
+            if (folder == "Item 1")
+                items = ["Item 1 - Message 1", "Item 1 - Message 2", "Item 1 - Message 3", "Item 1 - Message 4", "Item 1 - Message 5", "Item 1 - Message 6"];
+            else if (folder == "Item 2")
+                items = ["Item 2 - Message 7", "Item 2 - Message 8", "Item 2 - Message 9", "Item 2 - Message 10", "Item 2 - Message 11", "Item 2 - Message 12"];
+        }
+
+        for (var i = 0; i < items.length; i++) {
+            var itemLowerCase = items[i].toLowerCase()
+            if (itemLowerCase.indexOf(searchString.toLowerCase()) !== -1)
+                iFound.push(items[i]);
+        }
+
+        $("#Message").empty();
+        var tag = '<table role="grid" data-role="selectable" class="k-selectable"><colgroup><col><col></colgroup><tbody role="rowgroup">';
+        for (var i = 0; i < iFound.length; i++) {
+            if (i % 2 == 0)
+                tag += '<tr class="k-alt campaignName" role="row" onclick="addMessage(' + i + ')"><td role="gridcell">' + iFound[i] + '</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr>';
+            else
+                tag += '<tr class="campaignName" role="row" onclick="addMessage(' + i + ')"><td role="gridcell">' + iFound[i] + '</td><td role="gridcell"><i class="km-icon icon-kmplus-circled-1"></i></td></tr>';
+        }
+        $("#Message").append(tag);
+    };
+    function clearSearch() {
+        $("#searchInput").val('');
+    };
+</script>

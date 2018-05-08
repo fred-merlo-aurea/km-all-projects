@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3B505AE1-FD1C-429A-A534-81AE42F7CCC5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECN_Framework</RootNamespace>
+    <AssemblyName>ECN_Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Local\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Prod\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\Object\ProductFeatures.cs" />
+    <Compile Include="Accounts\Object\UserPermissions.cs" />
+    <Compile Include="Accounts\Report\BillingNoteProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IBillingNoteProxy.cs" />
+    <Compile Include="Accounts\Report\DigitalEditionBillingProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IDigitalEditionBillingProxy.cs" />
+    <Compile Include="Accounts\Report\DiskMonitorProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\INewUserProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\INewCustomerProxy.cs" />
+    <Compile Include="Accounts\Report\ECNTodayProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IECNTodayProxy.cs" />
+    <Compile Include="Accounts\Report\NewUserProxy.cs" />
+    <Compile Include="Accounts\Report\NewCustomerProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IKMLogoClickReportProxy.cs" />
+    <Compile Include="Accounts\Report\KMLogoClickReportProxy.cs" />
+    <Compile Include="Accounts\Report\ChannelLookProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IDiskMonitorProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IChannelLookProxy.cs" />
+    <Compile Include="Accounts\Report\Interfaces\INoUsageProxy.cs" />
+    <Compile Include="Accounts\Report\NoUsageProxy.cs" />
+    <Compile Include="Accounts\Report\BillingProxy.cs" />
+    <Compile Include="Accounts\Report\EmailDirectReport.cs" />
+    <Compile Include="Accounts\Report\Interfaces\IBillingProxy.cs" />
+    <Compile Include="Accounts\Report\ReportBase.cs" />
+    <Compile Include="Common\ChannelCheck.cs" />
+    <Compile Include="Common\ecnSession.cs" />
+    <Compile Include="Common\FileManagerBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\Helpers\DataFunctionsAdapter.cs" />
+    <Compile Include="Common\Interfaces\IDataFunctions.cs" />
+    <Compile Include="Common\Interfaces\IReportDefinitionProvider.cs" />
+    <Compile Include="Common\Interfaces\IReportContentGenerator.cs" />
+    <Compile Include="Common\AssemblyReportDefinitionProvider.cs" />
+    <Compile Include="Common\ReportContentGenerator.cs" />
+    <Compile Include="Common\ReportPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Common\SecurityAccess.cs" />
+    <Compile Include="Common\SecurityCheck.cs" />
+    <Compile Include="Accounts\Report\Billing.cs" />
+    <Compile Include="Accounts\Report\ChannelLook.cs" />
+    <Compile Include="Accounts\Report\ChannelLook_Details.cs" />
+    <Compile Include="Accounts\Report\ECNToday.cs" />
+    <Compile Include="Accounts\Report\KMLogoClickReport.cs" />
+    <Compile Include="Accounts\Report\NewCustomer.cs" />
+    <Compile Include="Accounts\Report\NewUser.cs" />
+    <Compile Include="Accounts\Report\NoUsage.cs" />
+    <Compile Include="Common\WebPageHelper.cs" />
+    <Compile Include="Communicator\Abstract\BlastAbstract.cs" />
+    <Compile Include="Communicator\Entity\Blast.cs" />
+    <Compile Include="Communicator\Entity\BlastNew.cs" />
+    <Compile Include="Communicator\Object\BlastAB.cs" />
+    <Compile Include="Communicator\Object\BlastABMaster.cs" />
+    <Compile Include="Communicator\Object\BlastChampion.cs" />
+    <Compile Include="Communicator\Object\BlastEmails.cs" />
+    <Compile Include="Communicator\Object\BlastLayout.cs" />
+    <Compile Include="Communicator\Object\BlastRegular.cs" />
+    <Compile Include="Communicator\Object\BlastSMS.cs" />
+    <Compile Include="Communicator\Object\BlastSocial.cs" />
+    <Compile Include="Accounts\Entity\CustomerContact.cs" />
+    <Compile Include="Accounts\Entity\CustomerDiskUsage.cs" />
+    <Compile Include="Accounts\Entity\CustomerInquiry.cs" />
+    <Compile Include="Accounts\Entity\CustomerIP.cs" />
+    <Compile Include="Accounts\Entity\Staff.cs" />
+    <Compile Include="Accounts\Entity\Wizard_BaseFee.cs" />
+    <Compile Include="Accounts\Entity\Wizard_EmailRate.cs" />
+    <Compile Include="Accounts\Report\BillingNote.cs" />
+    <Compile Include="Accounts\Report\DigitalEditionBilling.cs" />
+    <Compile Include="Accounts\Report\DiskMonitor.cs" />
+    <Compile Include="Consts\ResponseConsts.cs" />
+    <Compile Include="Consts\ReportConsts.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ToggleEnvelopePanelHelper.cs" />
+    <Compile Include="WebPageHelper.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1BCE78E7-DD4D-48BC-85C3-D77FCE995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

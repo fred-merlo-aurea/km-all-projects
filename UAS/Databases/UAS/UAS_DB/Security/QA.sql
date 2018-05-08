@@ -1,0 +1,4 @@
+﻿CREATE ROLE [QA]
+    AUTHORIZATION [dbo];
+GO
+

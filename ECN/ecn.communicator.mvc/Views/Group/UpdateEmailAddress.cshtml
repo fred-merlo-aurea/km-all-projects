@@ -1,0 +1,81 @@
+﻿@using KMEnums
+@{
+    ViewBag.Title = "Update Email Address";
+}
+
+<script>
+    function updateEmailAddress() {
+        clearValidationErrorMessages();
+        var lastControlsError = [];
+        if ($('#oldEmailAddress').val() == "")
+        {
+            lastControlsError.push({ name: "oldEmailAddress", message: "Email Address cannot be empty", label: "oldEmailAddressLabel", isKendo: false });
+        }
+        if ($('#newEmailAddress').val() == "")
+        {
+            lastControlsError.push({ name: "newEmailAddress", message: "Email Address cannot be empty", label: "newEmailAddressLabel", isKendo: false });
+        }
+
+        if (lastControlsError.length > 0) {
+            setValidationClient(lastControlsError);
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateEmail", "Group")",
+                data: {
+                    oldEmailAddress: $('#oldEmailAddress').val(),
+                    newEmailAddress: $('#newEmailAddress').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose:true,
+                            text: response[1]
+                        });
+                        $("#oldEmailAddress").val("");
+                        $("#newEmailAddress").val("");
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Update Email Address for the Base Channel</a></li>
+</ol>
+<div id="UEA_Validation" style="margin:10px;padding-left:15px;">
+
+</div>
+<div class="wrapper modal modaladdnewform" style="padding-left:50px;margin-top:10px;">
+    <div class="formbox">
+        <div class="subtitle" id="oldEmailAddressLabel">Old Email Address</div>
+        <div class="formitem formiteminline">
+            @Html.TextBox("oldEmailAddress")
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="subtitle" id="newEmailAddressLabel">New Email Address</div>
+        <div class="formitem formiteminline">
+            @Html.TextBox("newEmailAddress")
+        </div>
+    </div>
+
+    <div class="buttonsgroup" style="margin-bottom:10px;" >
+        @Html.Kendo().Button().Name("Update").Content("Update").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "updateEmailAddress()" })
+    </div>
+</div>
+
+@Html.Partial("Partials/Modals/_GroupExplorer")

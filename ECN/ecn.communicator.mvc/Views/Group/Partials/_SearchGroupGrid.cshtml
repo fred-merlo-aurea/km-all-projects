@@ -1,0 +1,47 @@
+﻿@model List<ecn.communicator.mvc.Models.Group>
+@using ecn.communicator.mvc.Infrastructure
+
+@(Html.Kendo()
+    .Grid<ecn.communicator.mvc.Models.Group>(Model)
+    .Name("searchGroupsGrid")
+    .Events(e => e.DataBound("dataBound"))
+    .DataSource(dataSource => dataSource
+        .Ajax() //Specify that Ajax binding is used.
+        .PageSize(10)
+        .ServerOperation(false)
+    )
+    .Columns(columns =>
+    {
+        if (ViewBag.AllFolders != null && ViewBag.AllFolders != false)
+            columns.Bound(e => e.FolderName).Title("Folder Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+        columns.Bound(e => e.GroupName).Title("Group Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+        columns.Bound(e => e.IsSeedList).Title("Is Seed List").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).ClientTemplate("#= IsSeedList ? 'Yes' : 'No' #");
+        columns.Bound(e => e.Subscribers).Title("Subscribers").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+        columns.Bound(p => p).Title("").ClientTemplate(GetActions().ToString()).Filterable(false).HtmlAttributes(new { @style = "width:95px" });
+    })
+    .Pageable()
+    .Sortable()
+    .HtmlAttributes(new { style = "min-height:648px;min-width:100px;" }))
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=GroupID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("Filters").Action("Index", "Filter", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("User Defined Fields").Action("Index", "DataField", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Edit Group").Action("Edit", "Group", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Edit Subscribers").Action("Index", "Subscriber", new { id = "#=GroupID#" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteGroup('#=GroupID#')" });
+                    innerItems.Add().Text("#=getArchiveButtonText(Archived)#").HtmlAttributes(new { onclick = "archiveGroup('#=GroupID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}

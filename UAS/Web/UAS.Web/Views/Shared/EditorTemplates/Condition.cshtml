@@ -1,0 +1,99 @@
+﻿@model FrameworkUAS.Model.Condition
+@{ 
+    var rowNumber = Model.lineNumber.ToString();
+}
+<div class="row" style="width: inherit;" id="@("condRow"+rowNumber)" >
+    <div class="col-xs-2" style="width:70px; text-align:center;">
+        @Html.CheckBoxFor(x => x.isGrouped)
+    </div>
+    <div class="col-xs-2" style="width:70px; text-align:center;"  id="@("connectorCellRow"+rowNumber)" name="@("connectorCellRow"+rowNumber)">
+        @if (Model.connectors != null)
+        {
+            @Html.DropDownListFor(x => x.connector, new SelectList(Model.connectors, "Value", "Text"))
+        }
+    </div>
+    <div class="col-xs-2">
+        @Html.HiddenFor(x => x.lineNumber, Model.lineNumber.ToString())
+        @Html.HiddenFor(x => x.fieldDataType, Model.fieldDataType.ToString())
+        @Html.DropDownListFor(x => x.mafField, new SelectList(Model.mappedFields, "Id", "ColumnName"), "--Select--", new { @class = "EditCondition" })
+    </div>
+    <div class="col-xs-2">
+        @if (Model.Operator != null)
+        {
+            @Html.DropDownListFor(x => x.Operator, new SelectList(Model.operators, "operatorValue", "operatorText"), null, new { @class = "EditCondition" })
+        }
+    </div>
+    <div class="col-xs-2">
+        @if (Model.Operator != null)
+        {
+            switch (Model.fieldDataType)
+            {
+                case FrameworkUAD_Lookup.Enums.FieldDataType.String:
+                    @Html.TextBoxFor(x => x.values, Model.values);
+                    break;
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Int:
+                    @Html.TextBox("txtValues" + Model.lineNumber.ToString(), Model.values);
+                    break;
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Float:
+                    @Html.TextBox("txtValues" + Model.lineNumber.ToString(), Model.values);
+                    break;
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Date:
+                    {
+                        if (@Model.Operator.ToUpper() == "DATERANGE")
+                        {
+                            <input id="datepickerFrom" name="dateFrom" value="@Model.values" style="width:150px;" />
+                            @Html.Label("", " To ")
+                            <input id="datepickerTo" name="dateTo" value="@Model.values" style="width:150px;" />
+
+                            <script>
+                                $(document).ready(function () { $("#datepickerFrom").kendoDatePicker(); $("#datepickerTo").kendoDatePicker(); });
+                            </script>
+                        }
+                        else if (@Model.Operator.ToUpper() == "XDAYS")
+                        {
+                            <select id="drpXDays" style="width: 100px; display: inline;">
+                                <option selected="selected" value="7">7 days</option>
+                                <option value="14">14 days</option>
+                                <option value="21">21 days</option>
+                                <option value="30">30 days</option>
+                                <option value="60">60 days</option>
+                                <option value="90">90 days</option>
+                                <option value="120">120 days</option>
+                                <option value="150">150 days</option>
+                                <option value="6mon">6 months</option>
+                                <option value="1yr">1 year</option>
+                                <option value="2yr">2 year</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <input id="YearFrom" name="YearFrom" type="text" value="" style="width:50px;" />
+                            @Html.Label("", " To ")
+                            <input id="YearTo" name="YearTo" type="text" value="" style="width:50px;" />
+                        }
+                        break;
+                    }
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Demo:
+                    @Html.DropDownList("Demo_" + Model.lineNumber.ToString(), new List<SelectListItem>
+            {
+              new SelectListItem{ Text = " -- Select --", Value = "0" }
+            })
+                    break;
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Lookup:
+
+                    if (Model.lookupData != null)
+                    {
+                        @Html.DropDownListFor(x => x.values, Model.lookupData, new List<SelectListItem>
+                            {
+                              new SelectListItem{ Text = " -- Select -- ", Value = "0" }
+                            })
+                    }
+
+                    break;
+                case FrameworkUAD_Lookup.Enums.FieldDataType.Bit:
+                    <input type="checkbox" name="chkValues_" value="Yes" />
+                    break;
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,1507 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model FormRulesPostModel
+@{
+    bool viewOnly = false;
+    if (ViewBag.ViewOnly != null)
+    {
+        viewOnly = (bool)ViewBag.ViewOnly;
+    }
+}
+<script>
+
+    function changeControl(controlId,  sender) {
+
+        var ruleId = parseRuleIDFormat(controlId);
+        var groupId = parseElmIDFormat(controlId,"ConditionGroup");
+        var conditionId = parseElmIDFormat(controlId,"Conditions");
+
+        var condition = $("#" + formatRuleString(ruleId, groupId, conditionId)+"__ConditionRowBox");
+
+        var comparisonType = condition.find("[name$='ComparisonType']");
+
+        var valueContainer = condition.find("li.value");
+
+        //var name = conditionId + ".Value";
+        var input = $(String.format("<input id='{0}__Value' name='{1}.Value' />", formatRuleString(ruleId, groupId, conditionId), formatNameRuleString(ruleId, groupId, conditionId)));
+        var dataItem = sender.dataItem();
+        var dataType = dataItem.DataType;
+        valueContainer.empty();
+        input.appendTo(valueContainer);
+        var comparisonTypes;
+
+        if (dataType == '@((int)DataType.Selection)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Selection)));
+            input.kendoDropDownList({
+                dataSource: dataItem.SelectableItems,
+                dataTextField: "Label",
+                dataValueField: "Id"
+            });
+        }
+        if (dataType == '@((int)DataType.Text)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Text)));
+            input.addClass('k-textbox');
+        }
+        if (dataType == '@((int)DataType.Date)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Date)));
+            input.kendoDateTimePicker();
+        }
+        if (dataType == '@((int)DataType.Number)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Number)));
+            input.kendoNumericTextBox({ decimals: 0, format: "#" });
+        }
+        if (dataType == '@((int)DataType.Decimal)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Decimal)));
+            input.kendoNumericTextBox();
+        }
+        if (dataType == '@((int)DataType.Newsletter)') {
+            comparisonTypes = @Html.Raw(Json.Encode(GetComparisonTypeNames(DataType.Newsletter)));
+            input.kendoDropDownList({
+                dataSource: [ 'Subscribe' ]
+            });
+        }
+        comparisonType.kendoDropDownList({
+            dataSource: comparisonTypes
+        });
+    }
+</script>
+
+@Html.HiddenFor(x => x.Id)
+
+<div id="formRules">
+    @Html.Partial("Partials/FormRules/TemplatesRules/_FieldRuleTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_FormRuleTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_PageRuleTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_GroupTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_ConditionTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_GroupConnectorTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_RedirectQueryStringTemplate")
+    @Html.Partial("Partials/FormRules/TemplatesRules/_OverwriteDataTemplate")
+
+    <div class="formedit-rules" style='width: 100%'>
+        @(Html.Kendo().TabStrip()
+          .Name("tabstrip")
+          .Animation(false)
+          .Navigatable(false)
+          .Items(tabstrip =>
+          {
+              tabstrip.Add().Text("Field Rules").Content(GetRules(Model.Rules, RuleTypes.Field).ToString()).Selected(true);
+              tabstrip.Add().Text("Page Rules").Content(GetRules(Model.Rules, RuleTypes.Page).ToString());
+              tabstrip.Add().Text("Form Rules").Content(GetRules(Model.Rules, RuleTypes.Form).ToString());
+          })
+        )
+    </div>
+</div>
+
+<script>
+    var constants = { TextEdit: "_TextEdit", Row: "_QueryRow", ListSelect: "_ListValues",  DeleteBtn: "_DeleteBtn",OverDeleteBtn: "_OverDeleteBtn" };
+    var loaded_indx = $(".class_row_formrulequerystring").length - 1;
+    var indx = loaded_indx + 1;
+    var loaded_Overindx = $(".class_row_formruleoverwritedata").length - 1;
+    var Overindx = loaded_Overindx + 1;
+
+    function changeConditionGroup(Name, sender, e)
+    {
+        e.preventDefault();
+
+        var Id = Name.replace(/\[/g,'_').replace(/\]/g,'_').replace(/\./g,'_');
+
+        var div = $('.' + Id + '_LogicGroup' + ":input");
+
+        var change = function() {
+            var val = sender.dataItem(e.item).Value;
+            sender.value(val);
+            var newIndx= sender.select();
+
+            div.each(function () {
+                $(this).data('kendoDropDownList').select(newIndx);
+            });
+        };
+        if(div.length > 1) {
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Changing all connectors within condition group?',
+                action: change
+            });
+        }
+        else {
+            change();
+        }
+    }
+    function onRuleCustomToolClick (e,rulenum) {
+        debugger;
+        var popupHtml = null;
+        if ('@viewOnly' == 'false' || '@viewOnly' == 'False')
+        {
+            popupHtml =
+              '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                  '<fieldset title="Java Script">' +
+                  '<div style="padding: 0 1em;">' +
+                  '<p><h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea></p>' +
+                '</div>' +
+                '<div class="k-edit-buttons k-state-default">' +
+                  '<button class="k-dialog-insert k-button k-primary">Update</button>' +
+                  '<button class="k-dialog-close k-button">Cancel</button>' +
+                '</div>' +'</fieldset>' +
+              '</div>';
+        }
+        else
+        {
+            popupHtml =
+                      '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width: 600px;height: 350px;padding: .2em .2em .2em .4em;border-width: 1px;border-style: solid;overflow: auto">' +
+                          '<fieldset title="Java Script">' +
+                          '<div style="padding: 0 1em;">' +
+                          '<p><h4>Java Script</h4><textarea cols="60" rows="15" style="width:90%"></textarea></p>' +
+                        '</div>' +
+                        '</fieldset>' +
+                      '</div>';
+        }
+                      
+        // create a modal Window from a new DOM element
+        var popupWindow = $(popupHtml)
+        .appendTo(document.body)
+        .kendoWindow({
+            // modality is recommended in this scenario
+            modal: true,
+            width: 600,
+            resizable: false,
+            // ensure opening animation
+            visible: false,
+            // remove the Window from the DOM after closing animation is finished
+            deactivate: function(e){ e.sender.destroy(); }
+        }).data("kendoWindow")
+         .center().open();
+        var actionjsctl= $("input[type='hidden'][name='" + rulenum +"']");
+        popupWindow.element.find("textarea").val(actionjsctl.val());
+       
+        // insert the new content in the Editor when the Insert button is clicked
+        popupWindow.element.find(".k-dialog-insert").click(function(){
+            var rawinput = null;
+            rawinput = popupWindow.element.find("textarea").val();
+            if(rawinput!=null)
+            {
+                var actionjsControl= $("input[type='hidden'][name='" + rulenum +"']");
+                var regx = new RegExp(/(<script[\S\s]*?>[\S\s]*?<\/script>)/gmi);
+                var fullJS = "";
+                var result;
+                while(result = regx.exec(rawinput))
+                {
+                    var matchJs =result[1];
+                    fullJS += matchJs;
+                }
+                actionjsControl.val(fullJS);
+            }
+        });
+
+        // close the Window when any button is clicked
+        popupWindow.element.find(".k-edit-buttons button").click(function(){
+            // detach custom event handlers to prevent memory leaks
+            popupWindow.element.find(".k-edit-buttons button").off();
+            popupWindow.close();
+        });
+    }
+    function changeCondition(Name, sender, e) {
+        e.preventDefault();
+        var conditions = $("[name='" + Name + ".Conditions.Index']");
+        var Id = Name.replace(/\[/g,'_').replace(/\]/g,'_').replace(/\./g,'_');
+        var div = $('#'+Id+'_ListOfConditions');
+        var change = function() {
+            var val = sender.dataItem(e.item).Value;
+            sender.value(val);
+            div.find(".conditionTypeItem").text(val);
+        };
+        if(conditions.length > 1) {
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Changing all connectors within condition group?',
+                action: change
+            });
+        }
+        else {
+            change();
+        }
+    }
+    //================ block of common functions ====================
+    function formatRuleString(ruleId, groupId, conditionId) {
+        if (groupId == null)
+            return "Rules_" + ruleId + "_";
+        if (conditionId == null)
+            return "Rules_" + ruleId + "__ConditionGroup_" + groupId + "_";
+        else
+            return "Rules_" + ruleId + "__ConditionGroup_" + groupId + "__Conditions_" + conditionId;
+    }
+
+    function formatNameRuleString(ruleId, groupId, conditionId) {
+        if (groupId == null)
+            return "Rules[" + ruleId + "]";
+        if (conditionId == null)
+            return "Rules[" + ruleId + "].ConditionGroup[" + groupId + "]";
+        else
+            return "Rules[" + ruleId + "].ConditionGroup[" + groupId + "].Conditions[" + conditionId+"]";
+    }
+
+    function guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+        }
+        return s4() + s4() + s4() + s4() +
+          s4() + s4() + s4() + s4();
+    }
+    function parseElmIDFormat(id, elm) {
+        var rx = new RegExp(elm + "_([^_]+)_");
+        var array = rx.exec(id);
+        return RegExp.$1;
+    }
+
+    function parseRuleIDFormat(id) {
+        return parseElmIDFormat(id, 'Rules');
+    }
+
+    function parseGroupIDFormat(id) {
+        return parseElmIDFormat(id, 'ConditionGroup');
+    }
+    function parseOverwriteIDFormat(id) {
+        return parseElmIDFormat(id, 'OverwritePostValue');
+    }
+    function getLastIndxByClass(css_class, searchObject) {
+
+        var currIndx = 0;
+        if ($('.' + css_class) && $('.' + css_class).length > 0) {
+            var currID = $('.' + css_class).sort(function (a, b) //order by Rules -> reason existence tabs.
+            {
+                var a1 = parseInt(parseElmIDFormat(a.id, searchObject)); // get indx of element (Rules)
+                var b1 = parseInt(parseElmIDFormat(b.id, searchObject));
+                return a1 > b1 ? 1 : -1;
+            }
+            ).last().attr("id");
+
+            return parseElmIDFormat(currID, searchObject);
+        }
+        return -1;
+    }
+
+    //================ end block of common functions =================
+    $(function () {
+        Init();
+        assignHandlers();
+        StoreDataSelectCondition();
+
+        function StoreDataSelectCondition() {
+            $('.RuleRowBox').each(function () {
+                var ruleID = parseRuleIDFormat(this.id);
+                $('.' + formatRuleString(ruleID) + "_ConditionGroupRowBox").each(function () {
+                    var groupID = parseGroupIDFormat(this.id);
+                    $("#" + formatRuleString(ruleID, groupID) + "_LogicGroup").data("currentIndex", $("#" + formatRuleString(ruleID, groupID) + "_LogicGroup").data('kendoDropDownList').select());
+                });
+            });
+        }
+
+
+        function Init() {
+            $('.AddNewRule').on("click", AddRule);
+
+            HideFirstLastArrows();
+            SetOrderPosition();
+
+
+            $("#DeleteWindow").find('.CloseBtn').on("click", function () { $("#DeleteWindow").data('kendoWindow').close(); });
+        }
+        function assignHandlers() {
+
+            $('.AddGroup').off("click", AddGroupHandler);
+            $('.AddGroup').on("click", AddGroupHandler);
+            $('.AddCondition').off("click", AddCondition);
+            $('.AddCondition').on("click", AddCondition);
+            $('.CopyRule').off("click", CopyRule);
+            $('.CopyRule').on("click", CopyRule);
+            $('.DeleteRule').off("click", DeleteRule);
+            $('.DeleteRule').on("click", DeleteRule);
+            $('.DeleteCondition').off("click", DeleteCondition);
+            $('.DeleteCondition').on("click", DeleteCondition);
+            $('.UpRuleOrder').off("click",UpRuleOrder);
+            $('.UpRuleOrder').on("click",UpRuleOrder);
+            $('.DownRuleOrder').off("click",DownRuleOrder);
+            $('.DownRuleOrder').on("click",DownRuleOrder);
+            $('.ResultOnSubmit').off("click",ChangeResultType);
+            $('.ResultOnSubmit').on("click",ChangeResultType);
+            $('.AddResultTypeURL').off("click",AddResultTypeURL);
+            $('.AddResultTypeURL').on("click",AddResultTypeURL);
+            $('.AddAllURL').off("click",AddAllURL);
+            $('.AddAllURL').on("click",AddAllURL);
+            $('.AddAllPaidPage').off("click",AddAllPaidPage);
+            $('.AddAllPaidPage').on("click",AddAllPaidPage);
+            $('.DeleteBtnClass').unbind("click", RemoveParameterHandler);
+            $('.DeleteBtnClass').on("click", RemoveParameterHandler);
+            $('.IsNonQualifyRule').off("click",ChangeNonQRule);
+            $('.IsNonQualifyRule').on("click",ChangeNonQRule);
+            $('.IsSuspendPostDB').off("click",ChangeSuspendPostDB);
+            $('.IsSuspendPostDB').on("click",ChangeSuspendPostDB);
+            $('.IsOverWriteDataPost').off("click",ChangeOverWriteDataPost);
+            $('.IsOverWriteDataPost').on("click",ChangeOverWriteDataPost);
+            $('.OverWriteDataAdd').off("click",OverWriteDataAdd);
+            $('.OverWriteDataAdd').on("click",OverWriteDataAdd);
+            $('.OverDeleteBtnClass').unbind("click", RemoveOverwriteParaHandler);
+            $('.OverDeleteBtnClass').on("click", RemoveOverwriteParaHandler);
+        }
+        function RemoveOverwriteParaHandler()
+        {
+            var that = this;
+            var DeleteParameterAction = function () {
+                var current_number = that.id.replace(constants.OverDeleteBtn, "");
+                var ruleID = parseRuleIDFormat(that.id);
+                $("#" + current_number).remove();
+            }
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Are you sure you want to delete this item?',
+                action: DeleteParameterAction
+            });
+        }
+        function IsEmptyValue(ruleID) {
+            var result = false;
+            var findDiv ="div[id^='Rules_"+ruleID+"_OverwritePostValue_']";
+            $(findDiv).each(function(){
+                var temp = $(this).attr('id');
+                var tempid= parseInt(temp.replace("Rules_"+ruleID+"_OverwritePostValue_",""),10);
+                var ctlid = $("#Rules_"+ruleID+"__OverwritePostValue_"+tempid+"__Value");
+                if(ctlid.val().trim()=="")
+                {
+                    result = true;
+                }
+            });
+            return result;
+        }
+        function OverWriteDataAdd()
+        {
+            //  try {
+            var subcontrols = @Html.Raw(Json.Encode(@ViewBag.SubVisibleControls));
+            if(subcontrols.length >0 )
+            {
+                if ($(".class_row_formruleoverwritedata").length == 0)
+                {
+                    $("#OvertitleParameters").css("display", "block");
+                }
+                Overindx =0;
+                var ruleID = parseRuleIDFormat(this.id);
+                var findDiv ="div[id^='Rules_"+ruleID+"_OverwritePostValue_']";
+                Overindx = $(findDiv).length;
+
+                if (IsEmptyValue(ruleID))
+                {
+                     showMessage({
+                       type: '@MessageType.Error',
+                       text: 'Fill in Value for Overwrite Data' });
+                   return;
+                }
+
+                var bigid = 0 ;
+                $(findDiv).each(function(){
+                    var temp = $(this).attr('id');
+                    var tempid= parseInt(temp.replace("Rules_"+ruleID+"_OverwritePostValue_",""),10);
+                    if(bigid < tempid)
+                    {
+                        bigid = tempid;
+                    }
+                });
+                if(Overindx < bigid)
+                {
+                    Overindx = bigid;
+                    Overindx++;
+                }
+                else if(Overindx ==bigid)
+                {
+                    Overindx++;
+                }
+
+
+
+                var scriptTemplate = kendo.template($("#formruleoverwritedata-template").html());
+                var listDIv =  $("#Rules_"+ruleID+"__OverwriteListOfParameters");
+                var FormattedOverwriteId = "Rules_"+ruleID+"__OverwritePostValue_"+Overindx;
+                listDIv.append(scriptTemplate({"RuleNum": ruleID,"FormattedOverwriteId":FormattedOverwriteId,"Num": Overindx + ""}));
+                assignHandlers();
+
+            }
+            //  }
+            //   catch (e) {
+            ///      alert(e.message);
+        }
+        function ChangeNonQRule()
+        {
+            var ruleID = parseRuleIDFormat(this.id);
+            var radioControls = $("#Rules_" + ruleID + "_NonQRuleOnSubmit");
+
+            if(this.value == 'True')
+            {
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__SuspendPostDB").css("display", "block");
+
+                }
+                else{
+                    $( "#Rules_"+ruleID+"__SuspendPostDB").css("display", "none");
+
+                }
+
+            }
+            else if(this.value == 'False')
+            {
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__SuspendPostDB").css("display", "none");
+                    $("#Rules_"+ruleID+"__IsSuspendPostDB_True").prop('checked', false);
+                    $("#Rules_"+ruleID+"__IsSuspendPostDB_False").prop('checked', true);
+                    $("#Rules_"+ruleID+"__IsSuspendPostDB_False").trigger('click');
+
+                }
+                else{
+                    $( "#Rules_"+ruleID+"__SuspendPostDB").css("display", "block");
+
+                }
+
+            }
+
+
+        }
+        function ChangeSuspendPostDB()
+        {
+            var ruleID = parseRuleIDFormat(this.id);
+            var messageRadio = $("#Rules_"+ruleID+"__ResultOnSubmit_Message").prop('checked');
+            if(this.value == 'True')
+            {
+                if(this.checked == true && messageRadio)
+                {
+                    $("#Rules_"+ruleID+"__IsOverWriteDataPost_False").prop('checked', true);
+                    $("#Rules_"+ruleID+"__IsOverWriteDataPost_True").prop('checked', false);
+                    $("#Rules_"+ruleID+"__OverWriteDataPost").css("display", "none");
+                    $("#Rules_"+ruleID+"__OverWriteDataPost_True").css("display", "none");
+                }
+            }
+            else if(this.value == 'False')
+            {
+                if(this.checked == true)
+                {
+                    $("#Rules_"+ruleID+"__OverWriteDataPost").css("display", "block").css("width","100%");
+                }
+            }
+        }
+        function  ChangeOverWriteDataPost()
+        {
+            var ruleID = parseRuleIDFormat(this.id);
+            if(this.value == 'True')
+            {
+                if(this.checked == true)
+                {
+
+                    $( "#Rules_"+ruleID+"__OverWriteDataPost_True").css("display", "block");
+
+                }
+                else
+                {
+                    $( "#Rules_"+ruleID+"__OverWriteDataPost_True").css("display", "none");
+                }
+
+            }
+            else if(this.value == 'False')
+            {
+
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__OverWriteDataPost_True").css("display", "none");
+                }
+                else
+                {
+                    $( "#Rules_"+ruleID+"__OverWriteDataPost_True ").css("display", "block");
+                }
+            }
+
+        }
+        function AddAllPaidPage()
+        {
+            var that = this;
+            var urlcontrols = @Html.Raw(Json.Encode(@ViewBag.URLControls));
+            var ruleID = parseRuleIDFormat(that.id);
+            var AddAllAction = function () {
+                var findDiv ="div[id^='Rules_"+ruleID+"_RequestQueryValue_']"
+                $(findDiv).each(function(){
+                    $(this).remove();
+                });
+                for(var item = 0; item < urlcontrols.length; item++)
+                {
+                    if ($(".class_row_formrulequerystring").length == 0)
+                    {
+                        $("#titleParameters").css("display", "block");
+                    }
+                    var scriptTemplate = kendo.template($("#formrulequerystring-template").html());
+                    var listDIv =  $("#Rules_"+ruleID+"__PaidListOfParameters");
+                    var test = urlcontrols[item].KMPaidQueryString
+                    var FormattedQueryId = "Rules_"+ruleID+"__RequestQueryValue_"+indx;
+                    listDIv.append(scriptTemplate({"RuleNum": ruleID,"FormattedQueryId": FormattedQueryId,"Num": indx + ""}));
+                    var urlname = $("#"+FormattedQueryId+"__Name");
+                    var urllist = $("#"+FormattedQueryId+"__Value").data('kendoDropDownList');
+                    urlname.prop('readOnly', false);
+                    urlname.val(urlcontrols[item].KMPaidQueryString);
+                    urlname.prop('readOnly', true);
+                    urllist.enable();
+                    urllist.select(item);                    
+                    assignHandlers();
+                    indx++;
+                }
+
+            }
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Do you want to overwrite all item?',
+                action: AddAllAction
+            });
+
+        }
+        function AddAllURL()
+        {
+
+            var that = this;
+            var urlcontrols = @Html.Raw(Json.Encode(@ViewBag.URLControls));
+            var ruleID = parseRuleIDFormat(that.id);
+            var AddAllURLAction = function () {
+                var findDiv ="div[id^='Rules_"+ruleID+"_RequestQueryValue_']"
+                $(findDiv).each(function(){
+                    $(this).remove();
+                });
+                for(var item = 0; item < urlcontrols.length; item++)
+                {
+                    if ($(".class_row_formrulequerystring").length == 0)
+                    {
+                        $("#titleParameters").css("display", "block");
+                    }
+                    var scriptTemplate = kendo.template($("#formrulequerystring-template").html());
+                    var listDIv =  $("#Rules_"+ruleID+"__URLListOfParameters");
+                    //listDIv.append(scriptTemplate({"Num": indx + ""}));
+                    var FormattedQueryId = "Rules_"+ruleID+"__RequestQueryValue_"+indx;
+                    listDIv.append(scriptTemplate({"RuleNum": ruleID,"FormattedQueryId": FormattedQueryId,"Num": indx + ""}));
+                    var urlname = $("#"+FormattedQueryId+"__Name");
+                    var urllist = $("#"+FormattedQueryId+"__Value").data('kendoDropDownList');
+                    urlname.val(urlcontrols[item].FieldLabel);
+                    urllist.select(item);
+                    assignHandlers();
+                    indx++;
+                }
+
+            }
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Do you want to overwrite all item?',
+                action: AddAllURLAction
+            });
+        }
+        function IsEmptyName(ruleID) {
+            var result = false;
+            var findDiv ="div[id^='Rules_"+ruleID+"_RequestQueryValue_']";
+            $(findDiv).each(function(){
+                var temp = $(this).attr('id');
+                var tempid= parseInt(temp.replace("Rules_"+ruleID+"_RequestQueryValue_",""),10);
+                var ctlid = $("#Rules_"+ruleID+"__RequestQueryValue_"+tempid+"__Name");
+                if(ctlid.val().trim()=="")
+                {
+                    result = true;
+                }
+            });
+            return result;
+        }
+        function AddResultTypeURL()
+        {
+            //  try {
+            var urlcontrols = @Html.Raw(Json.Encode(@ViewBag.URLControls));
+            if(urlcontrols.length >0 )
+            {
+                if ($(".class_row_formrulequerystring").length == 0)
+                {
+                    $("#titleParameters").css("display", "block");
+                }
+                var ruleID = parseRuleIDFormat(this.id);
+                if(IsEmptyName(ruleID))
+                {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: 'Fill in Name'
+                    });
+
+                    return;
+                }
+
+                var ruleID = parseRuleIDFormat(this.id);
+                indx=0;
+                var findDiv ="div[id^='Rules_"+ruleID+"_RequestQueryValue_']";
+                Overindx = $(findDiv).length;
+                var bigid = 0 ;
+                $(findDiv).each(function(){
+                    var temp = $(this).attr('id');
+                    var tempid= parseInt(temp.replace("Rules_"+ruleID+"_RequestQueryValue_",""),10);
+                    if(bigid < tempid)
+                    {
+                        bigid = tempid;
+                    }
+                });
+                if(indx < bigid)
+                {
+                    indx = bigid;
+                    indx++;
+                }
+                else if(indx ==bigid)
+                {
+                    indx++;
+                }
+                var scriptTemplate = kendo.template($("#formrulequerystring-template").html());
+                var listDIv =  $("#Rules_"+ruleID+"__URLListOfParameters");
+                var FormattedQueryId = "Rules_"+ruleID+"__RequestQueryValue_"+indx;
+                listDIv.append(scriptTemplate({"RuleNum": ruleID,"FormattedQueryId":FormattedQueryId,"Num": indx + ""}));
+                assignHandlers();
+
+
+            }
+            //  }
+            //   catch (e) {
+            ///      alert(e.message);
+        }
+
+        function RemoveParameterHandler() {
+            var that = this;
+            var DeleteAction = function () {
+                var current_number = that.id.replace(constants.DeleteBtn, "");
+                var ruleID = parseRuleIDFormat(that.id);
+                $("#"+ current_number).remove();
+
+            }
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Are you sure you want to delete this item?',
+                action: DeleteAction
+            });
+
+        };
+        function ChangeResultType()
+        {
+            /// Rules[0].ResultOnSubmit
+            debugger;
+            var ruleID = parseRuleIDFormat(this.id);
+            if(ruleID=="")
+            {
+                var selectedVal = "";
+                ruleID = parseInt(getLastIndxByClass('RuleRowBox', 'Rules'));
+                ///var radioControls = $("#Rules_" + ruleID + "__ResultOnSubmit");
+                var radioControls= $("input[type='radio'][name='Rules["+ruleID+"].ResultOnSubmit']:checked");
+                if (radioControls.length > 0) {
+                    selectedVal = radioControls.val();
+
+                }
+            }
+
+            var RedirectDiv;
+            var ShowMessageDiv;
+            $( "#Rules_"+ruleID+"__UrlToRedirect").val("");
+            $( "#Rules_"+ruleID+"__UrlToRedirectKM").val("");
+            if(this.value == '@ResultType.Message')
+            {
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "block");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "none");
+
+                    if ($("#Rules_"+ruleID+"__IsSuspendPostDB_True").prop('checked')) {
+                        $("#Rules_"+ruleID+"__IsOverWriteDataPost_False").prop('checked', true);
+                        $("#Rules_"+ruleID+"__IsOverWriteDataPost_True").prop('checked', false);
+                        $("#Rules_"+ruleID+"__OverWriteDataPost").css("display", "none");
+                        $("#Rules_"+ruleID+"__OverWriteDataPost_True").css("display", "none");
+                    }
+
+                }
+                else
+                {
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "block");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "none");
+                }
+
+            }
+            else if(this.value == '@ResultType.URL')
+            {
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "block");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "inline-block");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "none");
+
+                    $("#Rules_"+ruleID+"__OverWriteDataPost").css("display", "block");
+                }
+                else
+                {
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "block");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "none");
+                }
+            }
+            else if(this.value == '@ResultType.KMPaidPage')
+            {
+                if(this.checked == true)
+                {
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "inline-block");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "inline-block");
+
+                    $("#Rules_"+ruleID+"__OverWriteDataPost").css("display", "block");
+                    var findDiv ="div[id^='Rules_"+ruleID+"_RequestQueryValue_']"
+                    $(findDiv).each(function(){
+                        $(this).remove();
+                    });
+                }
+                else
+                {
+
+                    $( "#Rules_"+ruleID+"__ShowMessage").css("display", "block");
+                    $( "#Rules_"+ruleID+"__RedirectURL").css("display", "none");
+                    $( "#Rules_"+ruleID+"__RedirectURLText").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPage").css("display", "none");
+                    $( "#Rules_"+ruleID+"__KMPaidPageText").css("display", "none");
+                }
+            }
+
+        }
+
+        function DeleteRule() {
+            var that = this;
+            var DeleteRuleAction =  function()
+            {
+                var ruleId = that.id.replace('_DeleteRule','') + "_RuleRowBox";
+                $('#' + ruleId).remove();
+                SetOrderPosition();
+                HideFirstLastArrows();
+            }
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Are you sure you want to delete this item?',
+                action: DeleteRuleAction
+            });
+        }
+        function DeleteCondition()
+        {
+            var that = this;
+
+            var DeleteConditionAction = function () {
+                try {
+                    var ruleID = parseRuleIDFormat(that.id);
+                    var groupID = parseGroupIDFormat(that.id);
+                    var row = that.id.replace("DeleteCondition", "ConditionRowBox");
+                    $('#' + row).remove();
+                    if ($('.' + formatRuleString(ruleID, groupID) + "_ConditionRowBox").length == 0) //remove group  if condition not exist.
+                    {
+                        $('#' + formatRuleString(ruleID, groupID) + "_ConditionGroupRowBox").remove();
+                        var counterGroup = 1;
+                        $('#' + formatRuleString(ruleID) + "_RuleRowBox").find('.GroupNumber').each(function () {
+                            $(that).html(counterGroup);
+                            counterGroup++;
+                        });
+                        $('#' + formatRuleString(ruleID, groupID) + "_GroupConnector").remove(); // remove extra group connector
+                        if ($('.' + formatRuleString(ruleID) + "_ConditionGroupRowBox").length == 0) //remove group  if condition not exist.
+                        {
+                            $('#' + formatRuleString(ruleID) + "_RuleRowBox").remove();
+                        }
+                    }
+                } catch (e) { alert(e); }
+            }
+
+            showMessage({
+                type: '@MessageType.Confirm',
+                text: 'Are you sure you want to delete this item?',
+                action: DeleteConditionAction
+            });
+
+        }
+
+        function CopyRule() {
+            showLoadingWindow();
+            ruleID = parseRuleIDFormat(this.id);
+            var RuleType = $('#' + formatRuleString(ruleID) + '_RuleRowBox').parent("div").attr("id").replace("RuleBox_", "");
+            var currIndx = parseInt(getLastIndxByClass('RuleRowBox', 'Rules')) + 1; //id new rule
+
+            if(RuleType == "Form") {
+                try {
+                    var scriptTemplate = kendo.template($("#" + RuleType + "Rules-template").html());
+                    var currIndx = parseInt(getLastIndxByClass('RuleRowBox', 'Rules')) + 1;
+                    $("#RuleBox_" + RuleType).append(scriptTemplate({ "RuleNum": currIndx + "", "PrefixRuleNum": "Rules[" + currIndx + "]" }));
+
+                    //find conditionsbox in source rule
+                    var sourceCond = $('#' + formatRuleString(ruleID) + '_RuleRowBox').find('#' + formatRuleString(ruleID) + '_GroupConditions').prop('outerHTML');
+                    var newCond = sourceCond.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+
+                    AddGroupCopy(currIndx, newCond);
+                    assignHandlers();
+                    SetOrderPosition();
+                    HideFirstLastArrows();
+                }
+                catch (e) {
+                    alert(e.message);
+                }
+                copyObject = $('#' + formatRuleString(ruleID) + '_RuleRowBox');
+                var name = formatNameRuleString(ruleID).replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+                var inputs = copyObject.find("[name*='Rules\\[" + ruleID + "\\]']");
+
+            }
+            else
+            {
+                copyObject = $('#' + formatRuleString(ruleID) + '_RuleRowBox');
+                var text = $(copyObject).prop("outerHTML");
+                var name = formatNameRuleString(ruleID).replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+                var inputs = copyObject.find("[name*='Rules\\[" + ruleID + "\\]']");
+                var newRuleText = text.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                $("#RuleBox_" + RuleType).append(newRuleText);
+            }
+
+            inputs.each(function () {
+                var source = $(this);
+                var sourceName = $(this).attr("name");
+                if(sourceName.indexOf("ConditionGroup.Index") != -1 ||
+                   sourceName.indexOf("Conditions.Index") != -1 || sourceName.indexOf(".RequestQueryValue.Index") != -1 || sourceName.indexOf(".OverwritePostValue.Index") != -1) {
+                    return;
+                }
+                var targetName = sourceName.replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                //if (targetName.endsWith("RequestQueryValue")) {
+                //    $("#Rules_"+ currIndx +"__URL__Add").trigger("click");
+                //}
+                target = $("[name='" + targetName + "']");
+                if(target.attr("type")=="radio")
+                {
+                    var sourceID = $(this).attr("id");
+                    var targetID = sourceID.replace(new RegExp('Rules_' + ruleID + '_', "g"), 'Rules_' + currIndx + '_');
+                    $("#" + targetID).prop("checked", $(this).prop("checked"));
+                    var checked = $(this).prop("checked");
+                    var value =  $(this).prop("value");
+                    if (checked && targetID.endsWith("ResultOnSubmit_URL")) {
+                        $("#" + targetID).trigger("click");
+                        var sourceQSURL= $('#' + formatRuleString(ruleID) + '_RedirectURL').prop('innerHTML');
+                        var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                        $("#" + formatRuleString(currIndx) + "_RedirectURL").empty().append(newQSURL);
+                    }
+                    if (checked && targetID.endsWith("ResultOnSubmit_KMPaidPage")) {
+                        $("#" + targetID).trigger("click");
+                        var sourceQSURL= $('#' + formatRuleString(ruleID) + '_PaidListOfParameters').prop('innerHTML');
+                        var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                        $("#" + formatRuleString(currIndx) + "_PaidListOfParameters").empty().append(newQSURL);
+                    }
+                    if (checked && targetID.endsWith("IsOverWriteDataPost_True")) {
+                        $("#" + targetID).trigger("click");
+                        var sourceQSURL= $('#' + formatRuleString(ruleID) + '_OverwriteListOfParameters').prop('innerHTML');
+                        var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                        $("#" + formatRuleString(currIndx) + "_OverwriteListOfParameters").empty().append(newQSURL);
+                    }
+                    if (checked && targetID.endsWith("IsNonQualifyRule_True")) {
+                        $("#" + targetID).trigger("click");
+                    }
+                }
+                else if (target.length != 0) {
+                    var sourceWidget = kendo.widgetInstance(source);
+                    var targetWidget = kendo.widgetInstance(target);
+                    if (sourceWidget) {
+                        var sourceRuleName = ('Rules[' + ruleID + ']');
+                        var targetRuleName = ('Rules[' + currIndx + ']');
+                        var sourceRuleId = 'Rules_' + ruleID + '_';
+                        var targetRuleId = 'Rules_' + currIndx + '_';
+                        var type = getWidgetType(source);
+                        if (type != "kendoEditor") {
+                            var sourceOptions = serialize(sourceWidget.options);
+                            var targetOptions = sourceOptions
+                                                    .replace(new RegExp(sourceRuleName.escape(), "g"), targetRuleName)
+                                                    .replace(new RegExp(sourceRuleId, "g"), targetRuleId)
+                                                    .replace(new RegExp('"FieldLabel":"function', "g"), '"FieldLabel":" function');
+                            var options = deserialize(targetOptions);
+                            target[type](options);
+                            targetWidget = target.data(type);
+                            targetWidget.value(sourceWidget.value());
+                        }
+                        else
+                        {
+                            var sourceOptions = serialize(sourceWidget.options);
+                            targetWidget.value(sourceWidget.value());
+                        }
+                    }
+                    else {
+                        if ((source[0].name == undefined)){// || source[0].id.indexOf("RequestQueryValue") >= 0) {
+                            // prevent Index value overwrite
+                        }
+                        else {
+                            target.val(source.val());
+                        }
+                    }
+                }
+            });
+            $('.editorRefresh_Rules').each(function(index, obj){
+                try{
+                    //alert(obj);
+                    var editorRefresh = $(obj).data("kendoEditor");
+                    editorRefresh.refresh();
+                }
+                catch(Error)
+                {
+                    //alert(Error);
+                }
+            });
+            $("[name='Rules[" + currIndx + "].Id']").val(0); //for create new rule - need set up Rule[x].Id = 0
+            $('#' + formatRuleString(currIndx) + '_RuleRowBox').find("[name='Rules.Index']").val(currIndx);
+            SetOrderPosition();
+            HideFirstLastArrows();
+            assignHandlers();
+            setTimeout(function(){
+                closeLoadingWindow();
+            }, 500);
+        }
+
+        //exceptions for naming 1. AddNewRule 2. Containers for types
+        //RuleBox_Type -> container for rules of different type (type - string of enum)
+        //id for rule  -  RuleRowBox
+        //       group -  ConditionGroupRowBox
+        //   condition -  ConditionRowBox
+
+        function AddRule() {
+            var type = this.id.replace("AddNewRule", "");
+            try {
+                var scriptTemplate = kendo.template($("#" + type + "Rules-template").html());
+                var currIndx = parseInt(getLastIndxByClass('RuleRowBox', 'Rules')) + 1;
+                $("#RuleBox_" + type).append(scriptTemplate({ "RuleNum": currIndx + "", "PrefixRuleNum": "Rules[" + currIndx + "]" }));
+                AddGroup(currIndx);
+                assignHandlers();
+                SetOrderPosition();
+                HideFirstLastArrows();
+
+
+            }
+            catch (e) {
+                alert(e.message);
+            }
+        };
+
+        function AddGroup(ruleID) {
+            try {
+                var selectIndx = null;
+                var uid = guid();
+                var scriptTemplate = kendo.template($("#group-template").html());
+                var scriptConnectorTemplate = kendo.template($("#conditiongroupconnector-template").html());
+                var currIndx = parseInt(getLastIndxByClass(formatRuleString(ruleID) + '_ConditionGroupRowBox', 'ConditionGroup')) + 1;
+                if ($('.' + formatRuleString(ruleID) + "_LogicGroup" + ":input").length >= 1) {
+                    selectIndx = $('.' + formatRuleString(ruleID) + "_LogicGroup" + ":input").first().data('kendoDropDownList').select();
+                }
+
+                $("#" + formatRuleString(ruleID, currIndx - 1) + "_ConditionGroupRowBox").after(scriptConnectorTemplate({
+                    "uid": uid,
+                    "RuleNum": ruleID + "",
+                    "GroupId": currIndx + ""
+                }));
+
+                if (selectIndx) {
+                    $("#" + formatRuleString(ruleID) + "_LogicGroup" + "_" + uid).data('kendoDropDownList').select(selectIndx);
+                }
+                var dispayGroupID = $('#' + formatRuleString(ruleID) + "_RuleRowBox").find('.GroupNumber').length + 1;
+                $("#" + formatRuleString(ruleID) + "_GroupConditions").append(scriptTemplate({
+                    "uid": uid,
+                    "displayGroupId": dispayGroupID,
+                    "RuleNum": ruleID + "",
+                    "GroupId": currIndx + ""
+                }));
+
+
+                $("#" + formatRuleString(ruleID, currIndx) + "_LogicGroup").data("currentIndex", $("#" + formatRuleString(ruleID, currIndx) + "_LogicGroup").data('kendoDropDownList').select());
+                assignHandlers();
+                $("#" + formatRuleString(ruleID, currIndx) + "_AddCondition").trigger("click");
+            }
+            catch (e) { alert(e.message); }
+        }
+
+        function AddGroupCopy(ruleID, newConditions) {
+            try {
+                var selectIndx = null;
+                var uid = guid();
+                var scriptTemplate = kendo.template($("#group-template").html());
+                var scriptConnectorTemplate = kendo.template($("#conditiongroupconnector-template").html());
+                var currIndx = parseInt(getLastIndxByClass(formatRuleString(ruleID) + '_ConditionGroupRowBox', 'ConditionGroup')) + 1;
+                if ($('.' + formatRuleString(ruleID) + "_LogicGroup" + ":input").length >= 1) {
+                    selectIndx = $('.' + formatRuleString(ruleID) + "_LogicGroup" + ":input").first().data('kendoDropDownList').select();
+                }
+
+                $("#" + formatRuleString(ruleID, currIndx - 1) + "_ConditionGroupRowBox").after(scriptConnectorTemplate({
+                    "uid": uid,
+                    "RuleNum": ruleID + "",
+                    "GroupId": currIndx + ""
+                }));
+
+                if (selectIndx) {
+                    $("#" + formatRuleString(ruleID) + "_LogicGroup" + "_" + uid).data('kendoDropDownList').select(selectIndx);
+                }
+
+                $("#" + formatRuleString(ruleID) + "_GroupConditions").empty().append(newConditions);
+
+
+
+                assignHandlers();
+
+            }
+            catch (e) { alert(e.message); }
+        }
+
+
+        function AddGroupHandler() {
+            ruleID = parseRuleIDFormat(this.id);
+            AddGroup(ruleID);
+        };
+
+        function AddCondition() {
+            try {
+                var scriptTemplate = kendo.template($("#rules_condition-template").html());
+                var ruleID = parseRuleIDFormat(this.id);
+                var groupID = parseGroupIDFormat(this.id);
+
+                var currIndx = parseInt(getLastIndxByClass(formatRuleString(ruleID, groupID) + '_ConditionRowBox', 'Conditions')) + 1;
+
+                var list = $("input[name='Rules[" + ruleID + "].ConditionGroup[" + groupID + "].LogicGroup']").data('kendoDropDownList')
+
+                var conditionType = list.dataItem(list.select());
+
+                var ConditionID = "Rules[" + ruleID + "].ConditionGroup[" + groupID + "].Conditions[" + currIndx + "]";
+                var indexForCondition = "Rules[" + ruleID + "].ConditionGroup[" + groupID + "].Conditions.Index";
+                $("#" + formatRuleString(ruleID, groupID) + "_ListOfConditions").append(scriptTemplate({ "ConditionId": ConditionID, "ConditionType": conditionType["Text"], "ConditionClass": formatRuleString(ruleID, groupID), "FormattedConditionId": formatRuleString(ruleID, groupID, currIndx), "currIndx": currIndx, "IndexForCondition": indexForCondition }));
+
+                assignHandlers();
+            }
+            catch (e) { alert(e.message); }
+        };
+
+        function SetOrderPosition()
+        {
+            $("div[id^='RuleBox_']").each(function(){
+                var i=0;
+                $($(this).find("input[name$='Order']")).each(function()
+                {
+                    $(this).val(i);
+                    i++;
+                });
+            });
+        }
+        function HideFirstLastArrows(){
+            $(".rulesorderbox").css("display","inline-block");
+            $(".UpRuleOrder").css("display","inline-block");
+            $(".DownRuleOrder").css("display","inline-block");
+            $("div[id^='RuleBox_']").each(function(){
+                if( $(this).find(".UpRuleOrder").length == 1 )
+                {
+                    $(this).find(".rulesorderbox").css("display","none");
+                    return;
+                }
+                $(this).find(".UpRuleOrder").first().css("display","none");
+                $(this).find(".DownRuleOrder").last().css("display","none");
+            });
+        }
+        function getWidgetType(element) {
+            var type;
+            switch(element.data("role")) {
+                case "numerictextbox": type = "kendoNumericTextBox"; break;
+                case "dropdownlist": type = "kendoDropDownList"; break;
+                case "datetimepicker": type = "kendoDateTimePicker"; break;
+                case "editor": type = "kendoEditor"; break;
+            }
+            return type;
+        }
+        function SaveInputs(ruleID)
+        {
+            var InputList = new Object();
+            var inputs = $("#Rules_" + ruleID + "__RuleRowBox").find("[name*='Rules\\[" + ruleID + "\\]']");
+            inputs.each(function () {
+                var source = $(this);
+                var sourceName = $(this).attr("name");
+
+                var sourceWidget = kendo.widgetInstance(source);
+                if(source.attr("type")=="radio")
+                {
+                    var sourceID = $(this).attr("id");
+                    InputList[sourceID] = $(this).prop("checked");
+                }
+                else if (sourceWidget)
+                {
+
+                    var type = getWidgetType(source);
+                    var options = sourceWidget.options;
+                    InputList[sourceName] = new Object();
+                    InputList[sourceName].value = sourceWidget.value();
+                    InputList[sourceName].options = options;
+                }
+                else
+                {
+
+                    InputList[sourceName] = source.val();
+                }
+            });
+            return InputList;
+        }
+
+        //copy inputs values from InputList to Rule with ID ruleID
+        function CopyInputsValues(ruleID , InputList)
+        {
+            var inputs = $("#Rules_" + ruleID + "__RuleRowBox").find("[name*='Rules\\[" + ruleID + "\\]']");
+            inputs.each(function()
+            {
+                var target = $(this);
+                var targetName = $(this).attr("name");
+                if(targetName.indexOf("ConditionGroup.Index") != -1 ||
+                   targetName.indexOf("Conditions.Index") != -1 || targetName.indexOf(".RequestQueryValue.Index") != -1 || targetName.indexOf(".OverwritePostValue.Index") != -1) {
+                    return;
+                }
+                if (target.length != 0) {
+                    var sourceWidgetValue = InputList[targetName];
+                    var targetWidget = kendo.widgetInstance(target);
+                    if( target.attr("type") == "radio" )
+                    {
+                        var targetID = $(this).attr("id");
+                        $("#"+targetID).prop("checked", InputList[targetID]);
+                    }
+                    else if (targetWidget) {
+                        var type = getWidgetType(target);
+                        target[type](sourceWidgetValue.options);
+                        targetWidget.value(sourceWidgetValue.value);
+                    }
+                    else {
+                        target.val(InputList[targetName]);
+                    }
+                }
+            });
+        }
+
+        function UpRuleOrder()
+        {
+            var ruleID = parseRuleIDFormat(this.id);
+            var divId = "Rules_" + ruleID + "__RuleRowBox";
+
+            if ( $("#Rules_" + (ruleID) + "__RuleRowBox").prev().attr("id") != null )
+            {
+                var prev = $("#Rules_" + ruleID + "__RuleRowBox").prev();
+                var RuleType = $('#' + formatRuleString(ruleID) + '_RuleRowBox').parent("div").attr("id").replace("RuleBox_", "");
+                if(RuleType == "Form") {
+                    var scriptTemplate = kendo.template($("#" + RuleType + "Rules-template").html());
+                    var currIndx = parseInt(getLastIndxByClass('RuleRowBox', 'Rules')) + 1;
+                    $($(prev)).before(scriptTemplate({ "RuleNum": currIndx + "", "PrefixRuleNum": "Rules[" + currIndx + "]" }));
+
+                    //find conditionsbox in source rule
+                    var sourceCond = $('#' + formatRuleString(ruleID) + '_RuleRowBox').find('#' + formatRuleString(ruleID) + '_GroupConditions').prop('outerHTML');
+                    var newCond = sourceCond.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+
+                    AddGroupCopy(currIndx, newCond);
+
+                    copyObject = $('#' + formatRuleString(ruleID) + '_RuleRowBox');
+                    var name = formatNameRuleString(ruleID).replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+                    var inputs = copyObject.find("[name*='Rules\\[" + ruleID + "\\]']");
+
+                    inputs.each(function () {
+                        var source = $(this);
+                        var sourceName = $(this).attr("name");
+                        if(sourceName.indexOf("ConditionGroup.Index") != -1 ||
+                           sourceName.indexOf("Conditions.Index") != -1 || sourceName.indexOf("RequestQueryValue.Index") != -1 || sourceName.indexOf(".OverwritePostValue.Index") != -1){
+                            return;
+                        }
+                        var targetName = sourceName.replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                        target = $("[name='" + targetName + "']");
+                        if(target.attr("type")=="radio")
+                        {
+                            var sourceID = $(this).attr("id");
+                            var targetID = sourceID.replace(new RegExp('Rules_' + ruleID + '_', "g"), 'Rules_' + currIndx + '_');
+                            $("#"+targetID).prop("checked", $(this).prop("checked"));
+                            var checked = $(this).prop("checked");
+                            var value =  $(this).prop("value");
+                            if (checked && targetID.endsWith("ResultOnSubmit_URL")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_RedirectURL').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_RedirectURL").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("ResultOnSubmit_KMPaidPage")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_PaidListOfParameters').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_PaidListOfParameters").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("IsOverWriteDataPost_True")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_OverwriteListOfParameters').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_OverwriteListOfParameters").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("IsNonQualifyRule_True")) {
+                                $("#" + targetID).trigger("click");
+                            }
+                        }
+                        else if (target.length != 0) {
+                            for(var i = 0;i < target.length; i++)
+                            {
+                                var currentTarget = $(target[i]);
+                                var sourceWidget = kendo.widgetInstance(source);
+                                var targetWidget = kendo.widgetInstance(currentTarget);
+                                if (sourceWidget) {
+                                    var sourceRuleName = ('Rules[' + ruleID + ']');
+                                    var targetRuleName = ('Rules[' + currIndx + ']');
+                                    var sourceRuleId = 'Rules_' + ruleID + '_';
+                                    var targetRuleId = 'Rules_' + currIndx + '_';
+                                    var type = getWidgetType(source);
+                                    if (type != "kendoEditor") {
+                                        var sourceOptions = serialize(sourceWidget.options);
+                                        var targetOptions = sourceOptions
+                                                                .replace(new RegExp(sourceRuleName.escape(), "g"), targetRuleName)
+                                                                .replace(new RegExp(sourceRuleId, "g"), targetRuleId)
+                                                                .replace(new RegExp('"FieldLabel":"function', "g"), '"FieldLabel":" function');
+                                        var options = deserialize(targetOptions);
+                                        currentTarget[type](options);
+                                        targetWidget = currentTarget.data(type);
+                                        targetWidget.value(sourceWidget.value());
+                                    }
+                                    else
+                                    {
+                                        var sourceOptions = serialize(sourceWidget.options);
+                                        targetWidget.value(sourceWidget.value());
+                                    }
+                                }
+                                else {
+
+                                    currentTarget.val(source.val());
+
+                                }
+                            }
+                        }
+                    });
+                    $('.editorRefresh_Rules').each(function(index, obj){
+                        try{
+                            //alert(obj);
+                            var editorRefresh = $(obj).data("kendoEditor");
+                            editorRefresh.refresh();
+                        }
+                        catch(Error)
+                        {
+                            //alert(Error);
+                        }
+                    });
+                    //$("[name='Rules[" + currIndx + "].Id']").val(0); //for create new rule - need set up Rule[x].Id = 0
+                    //$('#' + formatRuleString(currIndx) + '_RuleRowBox').find("[name='Rules.Index']").val(currIndx + 1);
+                    $("#Rules_" + ruleID + "__RuleRowBox").remove();
+                    assignHandlers();
+                    SetOrderPosition();
+                    HideFirstLastArrows();
+                }
+                else {
+                    var temp = $("#Rules_" + ruleID + "__RuleRowBox").prop("outerHTML");
+                    //save inputs
+                    var InputList = SaveInputs(ruleID);
+                    $("#Rules_" + ruleID + "__RuleRowBox").remove();
+                    $(temp).insertBefore($(prev));
+                    //copy inputs
+                    CopyInputsValues(ruleID,InputList);
+                    assignHandlers();
+                    SetOrderPosition();
+                    HideFirstLastArrows();
+                }
+            }
+        }
+
+        function DownRuleOrder()
+        {
+            var ruleID = parseRuleIDFormat(this.id);
+            var divId = "Rules_" + ruleID + "__RuleRowBox";
+
+            if ($("#Rules_" + (ruleID) + "__RuleRowBox").next().attr("id") != null )
+            {
+                var next = $("#Rules_" + ruleID + "__RuleRowBox").next();
+                var RuleType = $('#' + formatRuleString(ruleID) + '_RuleRowBox').parent("div").attr("id").replace("RuleBox_", "");
+                if(RuleType == "Form") {
+                    var scriptTemplate = kendo.template($("#" + RuleType + "Rules-template").html());
+                    var currIndx = parseInt(getLastIndxByClass('RuleRowBox', 'Rules')) + 1;
+                    $($(next)).after(scriptTemplate({ "RuleNum": currIndx + "", "PrefixRuleNum": "Rules[" + currIndx + "]" }));
+
+                    //find conditionsbox in source rule
+                    var sourceCond = $('#' + formatRuleString(ruleID) + '_RuleRowBox').find('#' + formatRuleString(ruleID) + '_GroupConditions').prop('outerHTML');
+                    var newCond = sourceCond.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+
+                    AddGroupCopy(currIndx, newCond);
+
+                    copyObject = $('#' + formatRuleString(ruleID) + '_RuleRowBox');
+                    var name = formatNameRuleString(ruleID).replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+                    var inputs = copyObject.find("[name*='Rules\\[" + ruleID + "\\]']");
+
+                    inputs.each(function () {
+                        var source = $(this);
+                        var sourceName = $(this).attr("name");
+                        if(sourceName.indexOf("ConditionGroup.Index") != -1 ||
+                           sourceName.indexOf("Conditions.Index") != -1 ||
+                            sourceName.indexOf("RequestQueryValue.Index") != -1 || sourceName.indexOf(".OverwritePostValue.Index") != -1){
+                            return;
+                        }
+                        var targetName = sourceName.replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                        target = $("[name='" + targetName + "']");
+                        if(target.attr("type")=="radio")
+                        {
+                            var sourceID = $(this).attr("id");
+                            var targetID = sourceID.replace(new RegExp('Rules_' + ruleID + '_', "g"), 'Rules_' + currIndx + '_');
+                            $("#"+targetID).prop("checked", $(this).prop("checked"));
+                            var checked = $(this).prop("checked");
+                            var value =  $(this).prop("value");
+                            if (checked && targetID.endsWith("ResultOnSubmit_URL")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_RedirectURL').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_RedirectURL").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("ResultOnSubmit_KMPaidPage")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_PaidListOfParameters').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_PaidListOfParameters").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("IsOverWriteDataPost_True")) {
+                                $("#" + targetID).trigger("click");
+                                var sourceQSURL= $('#' + formatRuleString(ruleID) + '_OverwriteListOfParameters').prop('innerHTML');
+                                var newQSURL = sourceQSURL.replace(new RegExp(formatRuleString(ruleID), "g"), formatRuleString(currIndx)).replace(new RegExp('Rules\\[' + ruleID + '\\]', "g"), 'Rules[' + currIndx + ']');
+                                $("#" + formatRuleString(currIndx) + "_OverwriteListOfParameters").empty().append(newQSURL);
+                            }
+                            if (checked && targetID.endsWith("IsNonQualifyRule_True")) {
+                                $("#" + targetID).trigger("click");
+                            }
+                        }
+                        else if (target.length != 0) {
+                            for(var i = 0;i<target.length; i++)
+                            {
+                                var currentTarget = $(target[i]);
+                                var sourceWidget = kendo.widgetInstance(source);
+                                var targetWidget = kendo.widgetInstance(currentTarget);
+                                if (sourceWidget) {
+                                    var sourceRuleName = ('Rules[' + ruleID + ']');
+                                    var targetRuleName = ('Rules[' + currIndx + ']');
+                                    var sourceRuleId = 'Rules_' + ruleID + '_';
+                                    var targetRuleId = 'Rules_' + currIndx + '_';
+                                    var type = getWidgetType(source);
+                                    if (type != "kendoEditor") {
+                                        var sourceOptions = serialize(sourceWidget.options);
+                                        var targetOptions = sourceOptions
+                                                                .replace(new RegExp(sourceRuleName.escape(), "g"), targetRuleName)
+                                                                .replace(new RegExp(sourceRuleId, "g"), targetRuleId)
+                                                                .replace(new RegExp('"FieldLabel":"function', "g"), '"FieldLabel":" function');
+                                        var options = deserialize(targetOptions);
+                                        currentTarget[type](options);
+                                        targetWidget = currentTarget.data(type);
+                                        targetWidget.value(sourceWidget.value());
+                                    }
+                                    else
+                                    {
+                                        var sourceOptions = serialize(sourceWidget.options);
+                                        targetWidget.value(sourceWidget.value());
+                                    }
+                                }
+                                else {
+
+                                    currentTarget.val(source.val());
+
+                                }
+                            }
+                        }
+                    });
+                    $('.editorRefresh_Rules').each(function(index, obj){
+                        try{
+                            //alert(obj);
+                            var editorRefresh = $(obj).data("kendoEditor");
+                            editorRefresh.refresh();
+                        }
+                        catch(Error)
+                        {
+                            //alert(Error);
+                        }
+                    });
+                    //$("[name='Rules[" + currIndx + "].Id']").val(0); //for create new rule - need set up Rule[x].Id = 0
+                    //$('#' + formatRuleString(currIndx) + '_RuleRowBox').find("[name='Rules.Index']").val(currIndx + 1);
+                    $("#Rules_" + ruleID + "__RuleRowBox").remove();
+                    assignHandlers();
+                    SetOrderPosition();
+                    HideFirstLastArrows();
+                }
+                else {
+                    var temp = $("#Rules_" + ruleID + "__RuleRowBox").prop("outerHTML");
+                    //save inputs
+                    var InputList = SaveInputs(ruleID);
+                    $("#Rules_" + ruleID + "__RuleRowBox").remove();
+                    $(temp).insertAfter($(next));
+                    //copy inputs
+                    CopyInputsValues(ruleID,InputList);
+                    assignHandlers();
+                    SetOrderPosition();
+                    HideFirstLastArrows();
+                }
+            }
+        }
+    })
+</script>
+
+
+
+@helper GetRules(IEnumerable<RuleModel> models, RuleTypes type)
+{
+    string path = "Partials/FormRules/_" + type.ToString() + "RulesHead";
+
+    <div>
+        <div class="k-content " id="tabstrip-2" role="tabpanel" aria-hidden="true" aria-expanded="false" style="display: block;">
+            @(Html.Kendo().Button().Content("Add New Rule<i class=\"km-icon icon-kmplus-circled-1\"></i>").Name("AddNewRule" + type.ToString()).HtmlAttributes(new { type = "button", @class = "AddNewRule gridbtn-addnewrule btn  btn-blue2 float-right", id = "AddNewRule" + type.ToString() }))
+            <div id="@String.Format("RuleBox_{0}", type.ToString())">
+
+                @if (models != null && models.Count() != 0)
+                {
+                    foreach (var rule in models.Select((Rule, Index) => new { Index, Rule }).Where(x => x.Rule.Type == type))
+                    {
+                        var internalRuleId = string.Format("Rules[{0}]", rule.Index);
+                        var htmlFielPrefix = new ViewDataDictionary
+                                {
+                                    TemplateInfo = new TemplateInfo
+                                    {
+                                        HtmlFieldPrefix = internalRuleId
+                                    }
+                                };
+                        <div id="@String.Format("Rules_{0}__RuleRowBox", rule.Index)" class="RuleRowBox rulesbox">
+                            <input type="hidden" value="@rule.Index" name="Rules.Index" />
+                            @Html.Partial(path, rule.Rule, htmlFielPrefix)
+                            @Html.Partial("Partials/FormRules/_Rule", rule.Rule, htmlFielPrefix)
+
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@if (!ViewContext.ViewData.ModelState.IsValid)
+{
+    var summary = Html.ValidationSummary().ToString();
+
+    var errors = Html.Raw(HttpUtility.JavaScriptStringEncode(summary));
+
+    <script>
+        var tabIndx = @(ViewBag.selectedTab);
+        if (tabIndx == undefined || tabIndx == null)
+            tabIndx = 0;
+        $("#tabstrip").data("kendoTabStrip").select(tabIndx);
+        $('html,body').scrollTop(0);
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@errors'
+        });
+    </script>
+}

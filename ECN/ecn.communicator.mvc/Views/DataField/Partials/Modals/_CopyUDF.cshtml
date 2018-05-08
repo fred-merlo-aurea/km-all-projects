@@ -1,0 +1,136 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ecn.communicator.mvc.Models.CopyUDF
+@{ 
+    int customerID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+}
+<script>
+    var lastControlError = [];
+    function changeGroupSelection() {
+        var groupID = $("#Groups").val();
+        if (groupID > 0) {
+            $.ajax({
+                url: "@Url.Action("LoadCopyUDFsList", "DataField")",
+                type: "GET",
+                data: { sourceGroupID: groupID, destGroupID: @Model.CurrentGroupID },
+                success: function (result) {
+                    $("#divUDFsCheckBox").html(result);
+                }
+            });
+        }
+    };
+
+    function btnSelectGroup_Click() {
+        clearValidationErrorMessages();        
+        groupExplorer(groupSelected, @customerID);
+    }
+
+    function groupSelected(select) {
+        var group = select.group;
+        $("#selectedGroupName").html(group.GroupName);
+        $("#hfSelectedGroupID").val(group.GroupID);        
+         if (group.GroupID > 0) {
+            $.ajax({
+                url: "@Url.Action("LoadCopyUDFsList", "DataField")",
+                type: "GET",
+                data: { sourceGroupID: group.GroupID, destGroupID: @Model.CurrentGroupID },
+            success: function (result) {
+                $("#divUDFsCheckBox").html(result);
+            }
+        });
+    }
+    }
+
+    function copyUDFs() {
+        clearValidationErrorMessages();
+        lastControlError = [];
+        var selected = [];
+        var groupID = $("#hfSelectedGroupID").val();
+        if(isNaN(groupID) || groupID.length == 0)
+        {
+            lastControlError.push({ name: "selectedGroupName", message: "Please select a group", label: "selectedGroupNameLabel", isKendo: false });
+            setValidationClient(lastControlError);
+            return;
+        }
+        $('#divUDFsCheckBox input:checked').each(function () {
+            selected.push($(this).val());
+        });
+        if (selected.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CopyUDFs", "DataField")",
+                data: { selected: selected, sourceGroup: groupID, currentGroup: @Model.CurrentGroupID },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('CopyUDFs');
+                        $("#divUdfGrid").html(response[1]);
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray, "#copyUDF_Validation");
+                    }
+                }
+            });
+        }
+        else
+        {
+            var errorArray = [];
+            errorArray.push("Please select at least one UDF to copy");            
+            setValidationServer(errorArray, "#copyUDF_Validation");
+        }
+    };
+</script>
+
+<div class="wrapper modal modaladdnewform" style="width:650px;">
+    <fieldset class="no-border">
+        <legend>Copy UDF</legend>
+
+        <div class="formbox">
+            <div id="copyUDF_Validation"></div>
+            <div class="subtitle" id="selectedGroupNameLabel">Source Group</div>
+            <div class="formitem formiteminline">
+                <label id="selectedGroupName" style="font-family: arial;"> -No Group Selected-</label>
+                @Html.Hidden("hfSelectedGroupID")
+                @*@(Html.Kendo().DropDownList()
+                .Name("Groups")
+                .DataTextField("GroupName")
+                .DataValueField("GroupID")
+                .Events(e => e.Change("changeGroupSelection"))
+                .BindTo(Model.Groups)
+                .Value("0")
+                .Height(400)
+                .HtmlAttributes(new { style = "width: 400px" })
+            )*@
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().Button().Name("btnSelectGroup").Content("Select Group").Events(x => x.Click("btnSelectGroup_Click"))
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="formitem formiteminline" id="divUDFsCheckBox" style="width: 100%; text-align: center;"></div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:80px;text-align:center;padding-left:160px;">
+                        @Html.Kendo().Button().Name("Copy").Content("Copy").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "copyUDFs()" })
+                    </td>
+                    <td style="width:80px;text-align:center;padding-right:160px;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('CopyUDFs')" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>     
+   @Html.Partial("~/Views/Group/Partials/Modals/_GroupExplorer.cshtml")

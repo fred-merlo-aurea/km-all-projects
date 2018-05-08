@@ -1,0 +1,233 @@
+﻿@model FrameworkUAD.Entity.ProductSubscription
+
+@*<table>
+    <tr>
+        <td class="collabelwidth"><label>First Name:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.FirstName"   /></td>
+        <td class="collabelwidth"><label>Address2:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Address2"   id="Address2" /></td>
+        <td class="collabelwidth"><label>Phone:</label></td>
+        <td class="colinputwidth">
+            <input type="text" class="k-textbox" ng-model="subscrberViewModel.PubSubscription.PhoneCode" disabled style="width:40px;" />
+            <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.Phone"   k-mask="'000-000-0000'" style="width:140px;" />
+            <input type="text" class="k-textbox" ng-model="subscrberViewModel.PubSubscription.PhoneExt"   style="width:40px;" />
+
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Last Name:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.LastName"   /></td>
+        <td class="collabelwidth"><label>Address 3:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Address3"   id="Address3" /></td>
+        <td class="collabelwidth"><label>Mobile:</label></td>
+        <td class="colinputwidth">
+            <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.Mobile" k-mask="'000-000-0000'"   style="width:250px;" />
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Title:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Title"   /></td>
+        <td class="collabelwidth"><label>City:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.City"   id="City" /></td>
+        <td class="collabelwidth"><label>Fax:</label></td>
+        <td class="colinputwidth">
+            <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.Fax" k-mask="'000-000-0000'"   style="width:250px;" />
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Company:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Company"   /></td>
+        <td class="collabelwidth"><label>Country:</label></td>
+        <td class="colinputwidth">
+            <select id="Country"
+                    kendo-drop-down-list
+                    k-data-text-field="'ShortName'"
+                    k-data-value-field="'CountryID'"
+                    k-data-source="subscrberViewModel.entlst.countryList"
+                    ng-disabled="!subscrberViewModel.Enabled || !subscrberViewModel.IsCountryEnabled"
+                    ng-model="subscrberViewModel.PubSubscription.CountryID"></select>
+          
+        </td>
+        <td class="collabelwidth"><label>Email:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Email"   style="width:250px;" />
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Add-Type:</label></td>
+        <td class="colinputwidth">
+            <select kendo-drop-down-list k-data-text-field="'DisplayName'"
+                    k-data-value-field="'CodeId'"
+                    k-data-source="subscrberViewModel.entlst.addressTypeList"
+                     
+                    ng-model="subscrberViewModel.PubSubscription.AddressTypeCodeId"
+                    id="AddressTypeCodeId"></select>
+        </td>
+        <td class="collabelwidth"><label>State:</label></td>
+        <td class="colinputwidth">
+            <select id="Region"
+                    kendo-drop-down-list
+                    k-data-text-field="'RegionName'"
+                    k-data-value-field="'RegionID'"
+                    k-data-source="subscrberViewModel.entlst.regions"
+                    k-cascade-from-field="'CountryID'"
+                    k-cascade-from="'Country'"
+                    ng-model="subscrberViewModel.PubSubscription.RegionID"
+                     ></select>
+           
+
+        </td>
+        <td class="collabelwidth"><label>Website:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Website"   style="width:250px;" />
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"><label>Address 1:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Address1"   id="Address1" /></td>
+        <td class="collabelwidth"><label>County:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.County"   id="County" /></td>
+        <td class="collabelwidth"><label>SubscriptionID:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.SubscriptionID"   style="width:250px;" readonly />
+        </td>
+    </tr>
+    <tr>
+        <td class="collabelwidth"></td>
+        <td class="colinputwidth"></td>
+        <td class="collabelwidth"><label>Zip:</label></td>
+        <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.FullZip"   id="FullZip" /></td>
+        <td class="collabelwidth"><label>Sequence #:</label></td>
+        <td class="colinputwidth">
+            <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.SequenceID"   style="width:250px;" readonly />
+        </td>
+    </tr>
+</table>*@
+
+
+{{FirstName}}
+ 
+
+
+<style>
+    td.quickEdit{
+        margin: 1%;
+        padding: 0.5%;
+        padding-left: 10px;
+    }
+
+    #quickEdit_centerButtonTable{
+         width:30%;
+         margin-left: 40%;
+         margin-right: 40%;
+    }
+</style>
+
+<input type="hidden" id="quickEdit_PubID" />
+<input type="hidden" id="quickEdit_PubSubscriptionID" />
+<input type="hidden" id="quickEdit_IsActive" />
+<input type="hidden" id="quickEdit_IsSubscribed" />
+
+<div>
+    <h4 id="dataentrylocked"></h4>
+</div>
+<table style="width:100%;">
+    <tr>
+        <td class="quickEdit"> First Name: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.FirstName, new { id = "quickEdit_FirstName" }) </td>
+        <td class="quickEdit"> Address 3: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Address3, new { id = "quickEdit_Address3" }) </td>
+        <td class="quickEdit"> Mobile: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Mobile, new { id = "quickEdit_Mobile" }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Last Name: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.LastName, new { id = "quickEdit_LastName" }) </td>
+        <td class="quickEdit"> City </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.City, new { id = "quickEdit_City" }) </td>
+        <td class="quickEdit"> Fax: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Fax, new { id = "quickEdit_Fax" }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Title: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Title, new { id = "quickEdit_Title" }) </td>
+        <td class="quickEdit"> Country: </td>
+        @if (ViewData["country"] != null)
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.CountryID, ViewData["country"] as List<SelectListItem>, "", new { id = "quickEdit_CountryID" })
+            </td>
+        }
+        else
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.CountryID, new SelectList(string.Empty, "Value", "Text"), "", new { id = "quickEdit_CountryID" })
+            </td>
+        }
+
+        <td class="quickEdit"> Email: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Email, new { id = "quickEdit_Email" }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Company: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Company, new { id = "quickEdit_Company" }) </td>
+        <td class="quickEdit"> State: </td>
+        @if (ViewData["states"] != null)
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.RegionID, ViewData["states"]  as List<SelectListItem>, new { id = "quickEdit_RegionID" })
+            </td>
+        }
+        else
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.RegionID, new SelectList(string.Empty, "Value", "Text"), new { id = "quickEdit_RegionID" })
+            </td>
+        }
+        <td class="quickEdit"> Website: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Website, new { id = "quickEdit_Website" }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Address Type: </td>
+        @if (ViewData["addrestypes"] != null)
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.AddressTypeCodeId, ViewData["addrestypes"] as List<SelectListItem>,  new { id = "quickEdit_AddressTypeCodeId" })
+            </td>
+        }
+        else
+        {
+            <td class="quickEdit">
+                @Html.DropDownListFor(x => x.AddressTypeCodeId, new SelectList(string.Empty, "Value", "Text"),  new { id = "quickEdit_AddressTypeCodeId" })
+            </td>
+        }
+
+        <td class="quickEdit"> Zip: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.ZipCode, new { id = "quickEdit_ZipCode" }) </td>
+        <td class="quickEdit"> Sequence #: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.SequenceID, new { id = "quickEdit_SequenceID", disabled = true }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Address 1: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Address1, new { id = "quickEdit_Address1" })</td>
+        <td class="quickEdit"> County: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.County, new { id = "quickEdit_County" })</td>
+        <td class="quickEdit"> SubscriptionID: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.SubscriptionID, new { id = "quickEdit_SubscriptionID", disabled =true }) </td>
+    </tr>
+    <tr>
+        <td class="quickEdit"> Address 2: </td>
+        <td class="quickEdit"> @Html.TextBoxFor(x => x.Address2, new { id = "quickEdit_Address2" })</td>
+        <td class="quickEdit"> Phone: </td>
+        <td class="quickEdit">@Html.TextBoxFor(x => x.PhoneCode, new { id = "quickEdit_PhoneCode" , disabled = true}) @Html.TextBoxFor(x => x.Phone, new { id = "quickEdit_Phone" }) @Html.TextBoxFor(x => x.PhoneExt, new { id = "quickEdit_PhoneExt", placeholder ="Ext." }) </td>
+        <td class="quickEdit"> </td>
+        <td class="quickEdit"> </td>
+    </tr>
+</table>
+<table id="quickEdit_centerButtonTable">
+    <tr>
+        <td><button type="button" id="quickEdit_SaveButton" data-dismiss="modal" class="btn k-button">Save</button></td>
+        <td><button type="button" id="quickEdit_CancelButton" data-dismiss="modal" class="btn k-button">Cancel</button></td>
+    </tr>
+</table>
+

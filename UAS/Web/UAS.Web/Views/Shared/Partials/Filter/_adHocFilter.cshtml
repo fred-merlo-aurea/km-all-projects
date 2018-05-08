@@ -1,0 +1,187 @@
+﻿@model UAS.Web.Models.UAD.Filter.AdHocFilterViewModel
+@{
+    var columnid = "";
+}
+<style>
+    .tblAdhocList{
+        margin:0px 0px 0px 10px;
+        width:100%;
+    }
+</style>
+<div id="header" style="overflow:hidden;position:absolute; top:0; left:0;width:100%; height:50px;background-color: #5783BD;margin:0;">
+    <h4 style="margin:15px auto;font-size: 20px;text-align:center; color: #ffffff; font-weight: bold; ">
+        AdHoc Filter
+    </h4>
+</div>
+<div id="adhocsbody" style="overflow:auto; position:absolute; top:50px; left:10px; bottom:50px;">
+    <table align="center"  style="width:100%;border: solid 1px #5783BD;margin:10px 0px 0px 0px;">
+       <tr>
+           <td style="background-color: #5783BD;color: #ffffff;margin:0;padding:0">
+               Category
+           </td>
+       </tr>
+        @foreach (var c in Model.AdHocDetails)
+        {
+            <tr>
+                <td>
+                    <table style="width:100%;">
+                        <tr id="categoryheader_@c.CategoryID">
+                            <td  style="background-color: #d5d5d5;padding:0;">@c.CategoryName </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 0 10px;">
+                                <table class="tblAdhocList">
+                                    @foreach (var a in c.AdHocFilter)
+                                    {
+                                        columnid = @a.ColumnValue.Replace("|", "").Replace("[", "").Replace("]", "");
+                                        <tr id="tr_@columnid" data-columntype="@a.ColumnType" data-columnvalue="@a.ColumnValue">
+                                            <td width="25%">
+                                                @a.DisplayName
+                                            </td>
+                                            @if (a.ColumnType.ToLower().Contains("date"))
+                                            {
+
+                                                <td width="20%">
+                                                    @(Html.Kendo().DropDownList()
+                                              .Name("drpAdHocDateField_" + @columnid)
+                                              .BindTo(Model.DateRangeList)
+                                              .DataTextField("Text")
+                                              .DataValueField("Value")
+                                              .Events(e =>
+                                              {
+                                                  e.Change("onAdHocDateDrpChange");
+                                              }))
+                                                </td>
+                                                <td width="55%">
+                                                    <div id="DateRangeDiv_@columnid" class="displayInline">
+                                                        <input type="text" class="k-textbox" id="txtDateRangeFrom_@columnid" style="width:30%" />
+                                                        <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('txtDateRangeFrom_@columnid')" />
+                                                        <span>To</span>
+                                                        <input type="text" class="k-textbox" id="txtDateRangeTo_@columnid" style="width:30%" />
+                                                        <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('txtDateRangeTo_@columnid')" />
+                                                    </div>
+                                                    <div id="LastXDaysDiv_@columnid" class="displayNone">
+                                                        @(Html.Kendo().DropDownList()
+                                                      .Name("drpLastXDays_" + @columnid)
+                                                      .BindTo(Model.XDaysList)
+                                                      .DataTextField("Text")
+                                                      .DataValueField("Value")
+                                                      .HtmlAttributes(new { id = "drpLastXDays_" + @columnid })
+                                                      .Events(e =>
+                                                      {
+                                                          e.Change("onAdHocLastXDaysChange");
+                                                      })
+                                                        )
+                                                       <span id="spCustomDays_@columnid" class="displayNone"><input type="number" class="k-textbox" id="txtCustomDays_@columnid" style="width:20%;" /> Days</span> 
+                                                    </div>
+                                                    <div id="YearDiv_@columnid" class="displayNone">
+                                                        <input type="number" class="k-textbox" id="txtYearFrom_@columnid" style="width:35%;" />
+                                                        <span>To</span>
+                                                        <input type="number" class="k-textbox" id="txtYearTo_@columnid" style="width:35%;" />
+                                                    </div>
+                                                </td>
+
+                                            }
+                                            else if (a.ColumnType.ToLower().Contains("int") || a.ColumnType.ToLower().Contains("float"))
+                                            {
+                                                if (@a.ColumnValue.Equals("[PRODUCT COUNT]", StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    <input type="number" class="k-textbox" id="txtPubCount_@columnid" style="width:100%;" />
+                                                }
+                                                else
+                                                {
+                                                    <td width="20%">
+                                                        @(Html.Kendo().DropDownList()
+                                                  .Name("drpAdHocIntField_" + @columnid)
+                                                   .BindTo(Model.NumericList)
+                                                  .DataTextField("Text")
+                                                  .DataValueField("Value")
+                                                  .Events(e =>
+                                                  {
+                                                      e.Change("onAdHocIntDrpChange");
+                                                  }))
+                                                    </td>
+
+                                                    <td width="55%">
+                                                        <div id="RangeDiv_@columnid" class="displayInline">
+                                                            <input type="number" class="k-textbox" id="txtRangeFrom_@columnid" style="width:35%;" />
+                                                            <span>To</span>
+                                                            <input type="number" class="k-textbox" id="txtRangeTo_@columnid" style="width:35%;" />
+                                                        </div>
+                                                        <div id="SearchValueDiv_@columnid" class="displayNone">
+                                                            <input type="number" class="k-textbox" id="txtSearchValue_@columnid" style="width:100%;" />
+                                                        </div>
+
+                                                    </td>
+                                                }
+
+
+                                            }
+                                            else if (a.ColumnType.ToLower().Contains("varchar") || a.ColumnType.ToLower().Contains("uniqueidentifier"))
+                                            {
+                                                <td width="20%">
+                                                    @(Html.Kendo().DropDownList()
+                                                  .Name("drpAdHocVarcharField_" + @columnid)
+                                                  .BindTo(Model.ZipVarCharList)
+                                                  .DataTextField("Text")
+                                                  .DataValueField("Value")
+                                                   .Events(e =>
+                                                  {
+                                                      e.Change("onAdHocVarcharChange");
+                                                  }))
+
+                                                </td>
+                                                if (columnid.ToLower().Contains("zip"))
+                                                {
+
+
+                                                    <td width="55%">
+                                                        <div id="SearchValueDiv_@columnid"  class="displayInline">
+                                                            <input type="text" class="k-textbox" id="txtSearchValue_@columnid" style="width:100%;" />
+                                                        </div>
+                                                        <div id="RangeDiv_@columnid" class="displayNone">
+                                                            <input type="text" class="k-textbox" id="txtRangeFrom_@columnid" style="width:35%;" />
+                                                            <span>To</span>
+                                                            <input type="text" class="k-textbox" id="txtRangeTo_@columnid" style="width:35%;" />
+                                                        </div>
+                                                       
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                   
+                                                    <td width="55%">
+                                                        <div id="SearchValueDiv_@columnid" class="displayInline">
+                                                            <input type="text" class="k-textbox" id="txtSearchValue_@columnid" style="width:100%;" />
+                                                        </div>
+                                                    </td>
+                                                }
+
+
+                                            }
+                                            else if (a.ColumnType.ToLower().Contains("bit"))
+                                            {
+
+                                                <td width="20%">
+                                                    @Html.DropDownList("drpAdHocBitField_" + @columnid,
+                                                   new List<SelectListItem>() { new SelectListItem() { Text = " ", Value = "" }, new SelectListItem() { Text = "Yes", Value = "1" }, new SelectListItem() { Text = "No", Value = "0" } }
+                                                 )
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+<div id="footer" style="overflow:hidden;width:100%;text-align:center;position:absolute; bottom:0; left:0; height:50px;" >
+    <input type="button" name="btnSelectAdhocFilter" onclick="SelectCloseAdhocFilter()" value="Select/Close" class="filterButton">
+    <input type="button" name="btnResetAdhocFilter" onclick="ResetCloseAdhocFilter()" value="Reset" class="filterButton">
+</div>

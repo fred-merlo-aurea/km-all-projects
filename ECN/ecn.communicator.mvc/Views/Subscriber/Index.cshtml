@@ -1,0 +1,145 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+@{
+    ViewBag.Title = "Group Subscribers";
+}
+<script>
+    $(document).ready(function () {
+        $("#profileName").val('@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.SearchValue))');
+    });
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+    function deleteSubscriberModal(id, currentGroupID) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id, SubGroupID: currentGroupID });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function emailFilterSearch() {
+        //var grid = $("#subscribersGrid").data("kendoGrid");
+        //grid.dataSource.read();
+        //var dataSource = grid.dataSource;
+        //var data = dataSource.data();
+        //if (data.length > 0) {
+        //    dataSource.page(1);
+        //}
+        Search();
+    }
+    function getParams() {
+        return {
+            GroupID: '@Model.group.GroupID',
+            SubscribeTypeCodes: $('#subscribeTypeCodes').data('kendoDropDownList').value(),
+            SearchCriterion: $('#searchCriterion').data('kendoDropDownList').value(),
+            ProfileName: $('#profileName').val(),
+            FromDate: '',
+            ToDate: '',
+            WithActivity: false
+        };
+    }
+    function downloadEmails() {
+        var searchModel = {
+            groupID: '@Model.group.GroupID',
+            subscribeType: $('#subscribeTypeCodes').data('kendoDropDownList').value(),
+            emailAddr: $('#profileName').val(),
+            searchType: $('#searchCriterion').data('kendoDropDownList').value(),
+            downloadType: $('#downloadType').data('kendoDropDownList').value(),
+            profFilter: $('#profFilter').data('kendoDropDownList').value(),
+            FromDate: '',
+            ToDate: '',
+            WithActivity: false
+        }
+        var form = $('#modelForm');
+        form.attr('method', 'POST');
+        form.attr('action', '@Url.Action("ExportData", "Subscriber")' + '?' + $.param(searchModel));
+        form.submit();
+    }
+</script>
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Subscribers / @Model.group.GroupName</a></li>
+</ul>
+<input type="hidden" value="@(HttpContext.Current.Session["url"] = Request.Url.ToString())" />
+<div style="height: 60px; margin-top: -1px;">
+    <div id="panelFilterExport" style="width: 45%; float: left;">
+        <table>
+            <tr>
+                <td> Export this view to </td>
+                <td>
+                    @Html.Kendo().DropDownList().Name("downloadType").BindTo( new List<SelectListItem> {
+                    new SelectListItem { Text = "XML [.xml]", Value = ".xml" },
+                    new SelectListItem { Text = "EXCEL", Value = ".xls", Selected = true },
+                    new SelectListItem { Text = "CSV [.csv]", Value = ".csv" },
+                    new SelectListItem { Text = "TXT [.txt]", Value = ".txt" }
+                    }).DataTextField("Text").DataValueField("Value")
+                <td> Download Only </td>
+                <td>
+                    @Html.Kendo().DropDownList().Name("profFilter").BindTo( new List<SelectListItem> {
+                    new SelectListItem { Text = "Profile Only", Value = "ProfileOnly" },
+                    new SelectListItem { Text = "Profile plus Standalone UDFs", Value = "ProfilePlusStandalone" },
+                    new SelectListItem { Text = "Profile plus Standalone and  Transactional UDFs", Value = "ProfilePlusAllUDFs" },
+                    }).DataTextField("Text").DataValueField("Value")
+                </td>
+                <td> <button type="button" class="btn k-button" id="btnExport" onclick="downloadEmails()"> Download </button></td>
+            </tr>
+        </table>
+        <form id="modelForm"></form>
+        @Html.Raw(ViewBag.xsdDownloadLbl)
+    </div>
+    
+</div>
+<div id="panelSearch" style="text-align:center">
+    <table style="width:100%; margin-top:0px">
+        <tr>
+            <td style="width:100%;">
+                Filter by
+
+                @Html.Kendo().DropDownList().Name("subscribeTypeCodes").BindTo(Model.SubscribeTypeCodes.Select(item => new SelectListItem
+               {
+                   Value = item.Item2,
+                   Text = item.Item1
+               })).DataTextField("Text").DataValueField("Value")
+
+                &nbsp;&nbsp; [or]&nbsp;&nbsp;email address
+
+                @Html.Kendo().DropDownList().Name("searchCriterion").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "contains", Value = "like", Selected = Model.Comparator.ToLower().Equals("like") },
+                new SelectListItem { Text = "equals", Value = "equals", Selected = Model.Comparator.ToLower().Equals("equals") },
+                new SelectListItem { Text = "starts with", Value = "starts", Selected = Model.Comparator.ToLower().Equals("starts") },
+                new SelectListItem { Text = "ends with", Value = "ends", Selected = Model.Comparator.ToLower().Equals("ends") }
+                }).DataTextField("Text").DataValueField("Value")
+                @Html.TextBox("profileName")
+                <button type="button" class="btn k-button" onclick="emailFilterSearch()">Search</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="divSubscribersGrid">
+    @Html.Partial("Partials/_SubscribersGrid", Model.group)
+</div>
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DeleteWindow")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteSubscriber")
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

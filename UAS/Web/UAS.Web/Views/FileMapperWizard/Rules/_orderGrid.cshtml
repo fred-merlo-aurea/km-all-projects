@@ -1,0 +1,88 @@
+﻿@model UAS.Web.Models.FileMapperWizard.RuleOrderGridViewModel
+
+@{ 
+    int rsid = 0;
+    if (Model.rules.Count > 0)
+    {
+        rsid = Model.rules.First().RuleSetId;
+    }
+}
+
+<script>
+    var noHint = $.noop;
+
+    $(document).ready(function () {
+        sessionStorage.ruleSetId = @rsid;                
+    });
+
+    function placeholder(element) {
+        return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+    }
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+</script>
+
+
+@( Html.Kendo()
+               .Grid(Model.rules)
+               .Name("customRuleGrid")
+               .Columns(columns =>
+               {
+                   columns.Bound(c => c.RuleSetId).Hidden(true);
+                   columns.Bound(c => c.RuleId).Hidden(true);
+                   columns.Bound(c => c.RuleName).Title("Name");
+                   columns.Bound(c => c.RuleTypeAction).Title("Action").Width(150);
+                   columns.Bound(c => c.RuleScript).Title("Script");
+                   columns.Bound(c => c.ExecutionOrder).Title("Order");
+                   columns.Bound(c => c).ClientTemplate(GetActions("grid").ToString()).Width(100).Filterable(false).Sortable(false);
+               })
+               .Events(e => e.DataBound("dataBound"))
+//               .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+               .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .ServerOperation(false)
+                 )
+
+)
+
+@(Html.Kendo().Sortable()
+                .For("#customRuleGrid")
+                .Filter("table > tbody > tr") //.Filter("table > tbody > tr")
+                .Cursor("move")
+                //.Ignore("TD, input")
+                .HintHandler("noHint")
+                .PlaceholderHandler("placeholder")
+                .ContainerSelector("#customRuleGrid tbody")
+                .Events(events => events.Change("customRuleGrid_onChange"))
+)
+
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("btnDeleteRule_RuleId_#=RuleId#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "return EditRule(#=RuleId#,#=RuleSetId#)" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "return DeleteRule(#=RuleId#,#=RuleSetId#)" });
+                }
+            )
+        ).ToClientTemplate())
+}

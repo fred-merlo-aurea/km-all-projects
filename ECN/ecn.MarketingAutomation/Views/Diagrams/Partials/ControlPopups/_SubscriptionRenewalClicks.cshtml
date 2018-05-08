@@ -1,0 +1,51 @@
+﻿
+<div class="wrapper modal" style="min-width:600px">
+    <fieldset>
+        <legend></legend>
+        <div style="float:right;">
+            @Html.Kendo().Button().Name("back").Content("Automation Heat Map").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow()" })
+        </div>
+        <div style="float:right;clear:both;margin-top:10px;">Download as:
+            <select>
+                <option value="xls">XLS file</option>
+                <option value="pdf">PDF file</option>
+                <option value="cvs">CVS file</option>
+            </select>
+        @Html.Kendo().Button().Name("Download").Content("Download").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "download()" })</div>
+        <div id="renewalClicks">
+            <table role="grid" data-role="selectable" class="k-selectable" style="width:100%;">
+                <colgroup><col><col></colgroup>
+                <tbody role="rowgroup">
+                    <tr>
+                        <th>Email Address</th>
+                    </tr>
+                    <tr class="subscription" role="row">
+                        <td role="gridcell">test01@test.com</td>
+                    </tr>
+                    <tr class="k-alt subscription" role="row">
+                        <td role="gridcell">test02@test.com</td>
+                    </tr>
+                    <tr class="subscription" role="row">
+                        <td role="gridcell">test03@test.com</td>
+                    </tr>
+                    <tr class="k-alt subscription" role="row">
+                        <td role="gridcell">test04@test.com</td>
+                    </tr>
+                    <tr class="subscription" role="row">
+                        <td role="gridcell">test05@test.com</td>
+                    </tr>
+                    <tr class="k-alt subscription" role="row">
+                        <td role="gridcell">test06@test.com</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    function closeWindow() {
+        $("#PopupWindow").data('kendoWindow').close();
+    };
+</script>

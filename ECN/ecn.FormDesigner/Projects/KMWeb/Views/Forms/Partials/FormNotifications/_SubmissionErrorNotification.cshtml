@@ -1,0 +1,41 @@
+﻿@using KMEnums
+@using KMModels
+
+@model InternalUserNotificationModel
+
+@{
+    var notificationId = ViewData.TemplateInfo.HtmlFieldPrefix;
+
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+}
+
+@Html.HiddenFor(x => x.Id)
+
+<div class="notifinfo">
+    <div class="subscrbinfo">
+        <div class="subtitle">Submission Error Notification</div>
+        <div class="formbox">
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.FromName, "From Name")
+                @Html.Kendo().TextBoxFor(x => x.FromName).HtmlAttributes(new { @class = "longinput", Style = "width:340px;" })
+            </div>
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.SubjectLine, "Subject Line")
+                @Html.Kendo().TextBoxFor(x => x.SubjectLine).HtmlAttributes(new { @class = "longinput", Style = "width:340px;" })
+            </div>
+            <div class="formitem formitemlabeltop" style="width:750px;" >
+                <div class="formitem formiteminline">
+                    <div class="float-left">
+                        @Html.LabelFor(x => x.ToEmail, "Email to")
+                        <img style="width:30px; height: 30px; max-width:100%;max-height: 100%;" src="../../images/modal-icon-info.png">
+                    </div>
+                        <div class="float-left" style="margin:10px; font-style:italic; margin-left: 5px;">
+                            Multiple email addresses should be separated by a comma.
+                        </div>
+                        @Html.Kendo().TextBoxFor(x => x.ToEmail).HtmlAttributes(new { @class = "longinput", Style = "width:970px;" })
+                        @Html.Kendo().TextBoxFor(x => x.Message).HtmlAttributes(new { @class = "longinput", Style = "display:none;" })
+                    </div>
+           
+        </div>
+    </div>
+</div>

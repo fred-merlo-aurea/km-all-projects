@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfControls.WindowsAndDialogs.TwoTextBoxDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+        Title="Confirmation" Height="250" Width="400" Loaded="Window_Loaded" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5,10,10,10" VerticalAlignment="Top" Orientation="Vertical" Grid.ColumnSpan="3">
+            <TextBlock Name="txtHeader"  Margin="0,10,10,10" VerticalAlignment="Top" Text="Save/Cancel" FontSize="20" />
+            <TextBlock Name="txtDescription" Margin="0,0,10,10" VerticalAlignment="Bottom" Text="Please enter a name for this Add/Remove Filter: " />
+        </StackPanel>
+        <TextBlock Name="txtBoxOneHeader" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" VerticalAlignment="Center"/>
+        <TextBox Name="txtBoxNameOne" Width="300" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" Margin="10" HorizontalAlignment="Left" Height="23"/>
+        <TextBlock Name="txtBoxTwoHeader" Grid.Column="0" Grid.Row="2" Margin="5,0,5,0" VerticalAlignment="Center"/>
+        <TextBox Name="txtBoxNameTwo" Width="300" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" Margin="10" HorizontalAlignment="Left" Height="23"/>
+        <Rectangle Grid.Row="3" Grid.ColumnSpan="3" Fill="#C7CACC" />
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3" HorizontalAlignment="Right" Grid.ColumnSpan="3">
+            <telerik:RadButton Name="btnSave" Grid.Row="1" Width="89" Height="23" Content="Save" Click="btnSave_Click" IsDefault="True"/>
+            <telerik:RadButton Name="btnCancel" Grid.Row="1" Width="89" Height="23" Content="Cancel" Click="btnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

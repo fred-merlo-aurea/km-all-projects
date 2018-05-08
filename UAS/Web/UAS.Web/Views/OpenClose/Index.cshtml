@@ -1,0 +1,289 @@
+﻿@model IEnumerable<UAS.Web.Models.Circulations.OpenCloseViewModel>
+@{
+    ViewBag.Title = "Open Close";
+}
+
+<style>
+    .k-grid-header th.k-header{
+        text-align:center;
+    }
+    .k-grid td{
+        border: solid white 0;
+    }
+</style>
+<script>
+    var productItem = [];
+
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+            
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            productItem.push({ MenuId: dataItem.MenuId, Status: dataItem.Status });
+           if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+
+        
+        
+    }
+
+    function getVisibility(status, id, action) {
+        var visible = "display:visible;";
+        var hidden = "display:none;";
+        var style = "";
+       
+        switch (action) {
+
+            case 'Unlock':
+                if (status) {
+                    style = hidden;
+                } else {
+                    style = visible;
+                }
+                break;
+            case 'Lock':
+                if (status) {
+                    style = visible;
+                } else {
+                    style = hidden;
+                }
+
+                break;
+            case 'Edit':
+                if (id == 1) {
+                    
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = visible;
+                       
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = visible;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+            case 'ImportFile':
+                if (id == 1) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = visible;
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = visible;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+            case 'RecordUpdate':
+                if (id == 1) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = visible;
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = visible;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+            case 'ImportComp':
+                if (id == 1) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = visible;
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+            case 'IssueSplit':
+                if (id == 1) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = visible;
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+            case 'AddRemove':
+                if (id == 1) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+
+                }
+                else if (id == 2 || id == 3) {
+                    if (status) {
+                        style = hidden;
+                    } else {
+                        style = hidden;
+                    }
+
+                } else {
+                    if (status) {
+                        style = visible;
+                    } else {
+                        style = hidden;
+                    }
+                }
+                break;
+
+
+        }
+
+       
+        return style;
+    }
+   
+
+</script>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div style="margin:5% 25%;">
+    @(Html.Kendo()
+    .Grid(Model)
+    .Name("grid")
+    .Columns(columns =>
+    {
+
+        columns.Bound(e => e.MenuName).Title("").ClientTemplate("<h2 style='margin:0;padding:0;color:navyblue;'>#=MenuName#</h2>").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;color:blue; font-weight:bold;font-size:larger;" }).Width(200);
+        columns.Bound(e => e.Status).Title("<span style='text-align:center;'>Status<span>").ClientTemplate(
+        "# if(Status){ #" +
+        "<span style='align:middle'><img src='" + Url.Content("~/Images/") + "unlock-64.png' style='width:30px;height:30px;background-color:orange;padding:10px;' /></span>" +
+        "# } else { #" +
+        "<span style='align:middle'><img src='" + Url.Content("~/Images/") + "lock-64.png' style='width:30px;height:30px;background-color:orange;padding:10px;' /></span>" +
+        "# } #").HtmlAttributes(new
+        {
+            @style = "overflow: hidden;text-align:center; vertical-align:middle;padding:10px;"
+        }).Width(200);
+        columns.Bound(p => p).ClientTemplate(GetActions().ToString()).HtmlAttributes(new
+        {
+            @style = "vertical-align:middle;margin-left:10px;"
+        }).Width(200).Filterable(false).Sortable(false);
+
+
+    })
+    .Events(e => e.DataBound("dataBound"))
+    .HtmlAttributes(new { style = "height:350px;min-width:100px;" })
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(20)
+    .ServerOperation(false)
+    )
+
+    )
+</div>
+
+
+@helper  GetActions()
+{
+
+    @(Html.Kendo()
+                    .Menu()
+                    .Name("Menu#=MenuId#")
+                    .Items(
+                    items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                    innerItems =>
+                    {
+                        innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" });
+                        innerItems.Add().Text("Unlock").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'Unlock')#" });
+                        innerItems.Add().Text("Lock").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'Lock')#" });
+                        innerItems.Add().Text("Edit File Mapping").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'Edit')#" });
+                        innerItems.Add().Text("Import File").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'ImportFile')#" });
+                        innerItems.Add().Text("Record Update").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'RecordUpdate')#" });
+                        innerItems.Add().Text("Import Comp").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId ,'ImportComp')#" });
+                        innerItems.Add().Text("Issue Split").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId,'IssueSplit')#" });
+                        innerItems.Add().Text("Add Remove").HtmlAttributes(new { style = "#=getVisibility(Status, MenuId, 'AddRemove')#" });
+
+                    }
+                    )
+                    )
+                    .HtmlAttributes(new { @style = "float:none;padding-left:80px;width:80px;"})
+                    .Direction(MenuDirection.Right)
+                    .Orientation(MenuOrientation.Vertical)
+                    .Animation(false)
+                    .ToClientTemplate())
+    }
+

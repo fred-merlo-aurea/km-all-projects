@@ -1,0 +1,121 @@
+﻿@model ecn.communicator.mvc.Models.Email
+@using ecn.communicator.mvc.Infrastructure
+
+@{
+    ViewBag.Title = "_SubscriberEditor_Details";
+    Layout = null;
+}
+
+<table style="width:100%;">
+    <tr>
+        <td style="width:6%;"> Title: </td>
+        <td style="width:21%;"> @Html.TextBoxFor(e => e.Title) </td>
+        <td style="width:6%;"> Full Name: </td>
+        <td style="width:67%;"> @Html.TextBoxFor(e => e.FullName)</td>
+    </tr>
+    <tr>
+        <td> First Name: </td>
+        <td> @Html.TextBoxFor(e => e.FirstName) </td>
+        <td> Last Name: </td>
+        <td> @Html.TextBoxFor(e => e.LastName) </td> 
+    </tr>
+</table>
+<hr />
+<table style="width:100%;">
+    <tr>
+        <td style="width:6%;">Company: </td>
+        <td style="width:21%;">@Html.TextBoxFor(e => e.Company)</td>
+        <td style="width:6%;">Occupation: </td>
+        <td style="width:67%;">@Html.TextBoxFor(e => e.Occupation)</td>
+    </tr>
+    <tr>
+        <td>Address: </td>
+        <td>@Html.TextBoxFor(e => e.Address)</td>
+        <td>Address2: </td>
+        <td>@Html.TextBoxFor(e => e.Address2)</td>
+    </tr>
+    <tr>
+        <td>City: </td>
+        <td>@Html.TextBoxFor(e => e.City)</td>
+        <td>State/Zip: </td>
+        <td>
+            @Html.TextBoxFor(e => e.State)
+            @Html.TextBoxFor(e => e.Zip)
+        </td>
+    </tr>
+    <tr>
+        <td>Country: </td>
+        <td> @Html.TextBoxFor(e => e.Country)</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<hr />
+<table style="width:100%;">
+    <tr>
+        <td style="width:6%;">Voice: </td>
+        <td style="width:21%;">@Html.TextBoxFor(e => e.Voice)</td>
+        <td style="width:6%;">Mobile: </td>
+        <td style="width:21%;">@Html.TextBoxFor(e => e.Mobile)</td>
+        <td style="width:8%;">Fax: </td>
+        <td style="width:37%;">@Html.TextBoxFor(e => e.Fax)</td>
+    </tr>
+    <tr>
+        <td>Income: </td>
+        <td>@Html.TextBoxFor(e => e.Income)</td>
+        <td>Gender: </td>
+        <td>@Html.TextBoxFor(e => e.Gender)</td>
+        <td>Website: </td>
+        <td>@Html.TextBoxFor(e => e.Website)</td>
+    </tr>
+    <tr>
+        <td>Age: </td>
+        <td>@Html.TextBoxFor(e => e.Age)</td>
+        <td><span id="BirthdateLabel">Birthdate: </span></td>
+        <td>@Html.TextBoxFor(e => e.Birthdate)</td>
+        <td>[MM/DD/YYYY]</td>
+        <td></td>
+    </tr>
+</table>
+<hr />
+@Html.ActionLink("Access other UDF Data", "EditUDF", new { id = Model.EmailID, groupID = Model.CurrentGroupID }, new { style = "float:right;" })
+@Html.ActionImage("EditUDF", "Subscriber", new { id = Model.EmailID}, "~/Images/icon-groupFields.gif", "Image for UDFs", "", "float: right;")
+<br />
+<table style="width:100%;">
+    <tr>
+        <td style="width:6%;">User1: </td>
+        <td style="width:21%;">@Html.TextBoxFor(e => e.User1)</td>
+        <td style="width:6%;">User Event1: </td>
+        <td style="width:67%;">@Html.TextBoxFor(e => e.UserEvent1)</td>
+    </tr>
+    <tr>
+        <td>User2: </td>
+        <td>@Html.TextBoxFor(e => e.User2)</td>
+        <td><span id="UserEvent1DateLabel">User Event1 Date [MM/DD/YYYY]:</span></td>
+        <td>@Html.TextBoxFor(e => e.UserEvent1Date)</td>
+    </tr>
+    <tr>
+        <td>User3: </td>
+        <td>@Html.TextBoxFor(e => e.User3)</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>User4: </td>
+        <td>@Html.TextBoxFor(e => e.User4)</td>
+        <td>User Event2: </td>
+        <td>@Html.TextBoxFor(e => e.UserEvent2)</td>
+    </tr>
+    <tr>
+        <td>User5: </td>
+        <td>@Html.TextBoxFor(e => e.User5)</td>
+        <td><span id="UserEvent2DateLabel">User Event2 Date [MM/DD/YYYY]:</span></td>
+        <td>@Html.TextBoxFor(e => e.UserEvent2Date)</td>
+    </tr>
+    <tr>
+        <td>User6: </td>
+        <td>@Html.TextBoxFor(e => e.User6)</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>

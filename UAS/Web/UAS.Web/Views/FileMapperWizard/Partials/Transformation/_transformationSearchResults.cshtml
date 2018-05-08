@@ -1,0 +1,257 @@
+﻿
+@model  UAS.Web.Models.FileMapperWizard.TransformationSearchViewModel
+
+<script language="JavaScript" type="text/JavaScript">
+    function transformationSearchCopy(transformationID) {
+        var transformationName = "";
+        var model = { TransformationID: transformationID, TransformationName: transformationName }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/CopyTransformationSetup",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: model,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                if (returnData.Complete) {
+                    var oldwin = $("#transformationSearchWindow").data('kendoWindow');
+                    oldwin.close();
+
+                    var oldwin2 = $("#transformationWindow").data('kendoWindow');
+                    oldwin2.close();
+
+                    var win = $("#transformationWindow").data('kendoWindow');
+                    $("#transformationWindow").html("");
+                    win.content("Loading...");
+                    win.center();
+                    win.open();
+
+                    var model = { TransformationID: returnData.TransformationID }
+
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/LoadTransformationSetup",
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        data: model,
+                        cache: !0,
+                        datatype: "html",
+                        success: function (returnData) {
+                            win.content(returnData);
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });
+
+                    @*$.ajax({
+                        url: "/UAS.Web/FileMapperWizard/LoadTransformationSearch",
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        cache: !0,
+                        datatype: "html",
+                        success: function (returnData) {
+                            win.content(returnData);
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });*@
+                } else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: 'Error has occurred while trying to copy the transformation.',
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });        
+    }
+
+    function transformationSearchLoad(transformationID) {
+        var oldwin = $("#transformationSearchWindow").data('kendoWindow');
+        oldwin.close();
+
+        var oldwin2 = $("#transformationWindow").data('kendoWindow');
+        oldwin2.close();
+
+        var win = $("#transformationWindow").data('kendoWindow');
+        $("#transformationWindow").html("");
+        win.content("Loading...");
+        win.center();
+        win.open();
+
+        var model = { TransformationID: transformationID }
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/LoadTransformationSetup",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: model,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                win.content(returnData);
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function transformationSearchDelete(transformationID) {        
+        var model = { TransformationID: transformationID }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/DeleteTransformationSetup",
+            traditional: true,
+            contentType: "application/html; charset=utf-8",
+            type: "GET",
+            data: model,
+            cache: !0,
+            datatype: "html",
+            success: function (returnData) {
+                if (returnData) {
+                    var win = $("#transformationSearchWindow").data('kendoWindow');
+                    $("#transformationSearchWindow").html("");
+                    win.content("Loading...");
+                    win.center();
+                    win.open();
+
+                    $.ajax({
+                        url: "/UAS.Web/FileMapperWizard/LoadTransformationSearch",
+                        traditional: true,
+                        contentType: "application/html; charset=utf-8",
+                        type: "GET",
+                        cache: !0,
+                        datatype: "html",
+                        success: function (returnData) {
+                            win.content(returnData);
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        },
+                        error: function (data) {
+                            alert("An error has occured!!!");
+                        }
+                    });
+                } else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: 'Error has occurred while trying to delete the transformation.',
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            },
+            error: function (data) {
+                alert("An error has occured!!!");
+            }
+        });        
+    }
+
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+
+    function transformationNameFilter(element) {
+        element.kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: "@Url.Action("Transformation_Search_Filter_TransformationName")",
+                }
+            },
+            optionLabel: "-- Select --"
+        });
+    }
+
+    function transformationDescFilter(element) {
+        element.kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: "@Url.Action("Transformation_Search_Filter_TransformationDesc")",
+                }
+            },
+            optionLabel: "-- Select --"
+        });
+    }
+</script>
+<div style="margin-bottom: 35px;">    
+    @{
+
+        Html.Kendo()
+            .Grid(Model.transformations)
+            .Name("grid_TransformationSearch")
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.TransformationName).Title("Transformation Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(filterable => filterable.Cell(c => c.DataTextField("transformationName").Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("transformationNameFilter"));
+                columns.Bound(e => e.TransformationDescription).Title("Transformation Description").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(filterable => filterable.Cell(c => c.DataTextField("TransformationDescription").Operator("eq").ShowOperators(false).SuggestionOperator(FilterType.StartsWith)).UI("transformationDescFilter"));
+                columns.Bound(e => e.TransformationType).Title("Transformation Type").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Filterable(false);
+                columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Width(110).Filterable(false).Sortable(false);
+            })
+            .Sortable()
+            .Filterable(f => f.Extra(false)
+                          .Mode(GridFilterMode.Row | GridFilterMode.Menu)//Menu
+                          .Operators(operators => operators
+                              .ForString(str => str.Clear()
+                                .StartsWith("Starts with")
+                                .IsEqualTo("Is equal to")
+                                .IsNotEqualTo("Is not equal to")
+                            )))
+            .HtmlAttributes(new { style = "min-width:100px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(Model.transformations.Count())
+                .ServerOperation(false)
+            )
+            .Events(ev => ev.DataBound("dataBound"))
+            .Render();
+    }
+</div>
+
+<div id="client-detail-modal">
+    @helper  GetActions()
+{
+    @(Html.Kendo()
+            .Menu()
+            .Name("menu_TransformationSearch_#=TransformationId#")
+            .Direction(MenuDirection.Left)
+            .Orientation(MenuOrientation.Vertical)
+            .Animation(false)
+            .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                            innerItems =>
+                            {
+                                innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                innerItems.Add().Text("Copy").HtmlAttributes(new { onclick = "transformationSearchCopy(#=TransformationId#);" });
+                                innerItems.Add().Text("Load").HtmlAttributes(new { onclick = "transformationSearchLoad(#=TransformationId#);" });
+                                //innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "transformationSearchDelete(#=TransformationId#);" });
+                            }
+                        )
+                    )
+                    .ToClientTemplate()
+    )
+}
+</div>

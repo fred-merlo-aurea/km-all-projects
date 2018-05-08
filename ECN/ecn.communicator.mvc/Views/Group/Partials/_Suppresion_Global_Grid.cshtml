@@ -1,0 +1,246 @@
+﻿@model string
+
+<script>
+    function searchParams() {
+        return {
+
+        }
+    }
+    var GS_targetUrl = '@Url.Action("GS_ReadToGrid", "Group")';
+    var GS_firstGridLoad = true;
+    function GS_DataBound() {
+        var grid = this;
+
+        if (GS_firstGridLoad) {
+            //grid.dataSource.read();
+            GS_firstGridLoad = false;
+            GS_SetPagerWidget("GS_firstpage");
+
+        }
+    }
+
+    $(document).ready(function () {
+        $("#GS_ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+    });
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GS_GoToPage(e) {
+
+        GS_SetPagerWidget(e.target.id);
+        var data = GS_GridParams();
+        GS_ReBindGrid(data)
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function GS_Search() {
+        GS_SetPagerWidget("GS_firstpage");
+        GS_firstGridLoad = true;
+        var data = GS_GridParams();
+        GS_ReBindGrid(data);
+    }
+
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function GS_GridParams() {
+
+        return {
+            searchTermValue: $('#SearchGlobalTxt').val(),            
+            PageNumber: $("#GS_pagerInputPageNumber").val(),
+            PageSize: $("#GS_ddPageSize").val()
+        };
+
+    }
+
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function GS_ReBindGrid(obj) {
+        var grid = $("#globalSuppresionGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: GS_targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function GS_RebindOnPageOrSizeChange() {
+        GS_SetPagerWidget("GS_firstpage");
+        GS_firstGridLoad = true;
+        var data = GS_GridParams();
+        GS_ReBindGrid(data);
+     }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function GS_SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#globalSuppresionGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalCount);
+        }
+        var pagesize = parseInt($("#GS_ddPageSize").val());
+        var currentpage = parseInt($("#GS_pagerInputPageNumber").val());
+        var lastpage = 0;
+        if (totalrecordCount % pagesize > 0) {
+            lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+        else {
+            lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        var firstpage = 1;
+
+        if (id == "GS_firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "GS_prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "GS_nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "GS_lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#GS_currentpage").text(currentpage);
+        $("#GS_pagerDisplay").text(displaymessage);
+        $("#GS_pagerTotalItems").text(lastpage);
+        $("#GS_pagerInputPageNumber").val(currentpage);
+
+    }
+
+    function GS_checkChange(e) {
+        GS_RebindOnPageOrSizeChange()
+    }
+    function GS_InputPageNumber_KeyDown() {
+
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            if (parseInt($("#GS_pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#GS_pagerInputPageNumber").val())) && $("#GS_pagerInputPageNumber").val() <= parseInt($("#GS_pagerTotalItems").text())) {
+                if (typeof e != 'undefined') {
+                    GS_SetPagerWidget(e.target.id);
+                }
+                else {
+                    var spage = $("#GS_pagerInputPageNumber").val();
+                    GS_SetPagerWidget(spage);
+                }
+                var data = GS_GridParams();
+                GS_ReBindGrid(data);
+            }
+            else {
+                showMessage({
+                    type: 'Error',
+                    text: 'Please enter valid page number.',
+                    autoClose: false, action: function () {
+                        GS_SetPagerWidget("GS_firstpage");
+                        GS_firstGridLoad = true;
+                        var data = GS_GridParams();
+                        GS_ReBindGrid(data);
+                    }
+                });
+               
+            }
+        }
+
+
+    }
+</script>
+@(Html.Kendo()
+    .Grid<ECN_Framework_Entities.Communicator.GlobalMasterSuppressionList>()
+    .Name("globalSuppresionGrid")
+    .Events(x=> x.DataBound("GS_DataBound"))
+    .Columns(columns =>
+    {
+        columns.Bound(e => e.TotalCount).Hidden(true);
+        columns.Bound(e => e.EmailAddress).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Email Address").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+        columns.Bound(e => e.CreatedDate).Format("{0:G}").Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Date Added").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+        columns.Bound(e => e).ClientTemplate("<button class='btn k-button' onclick=\"DeleteGlobalSuppression(#=GSID#)\" type='button'>Delete<i class='km-icon icon-kmcustom-delete'></i></button>").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" });
+    })
+    .Pageable(x => x.Enabled(false))
+    .Sortable(x => x.SortMode(GridSortMode.SingleColumn))
+    .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(m =>
+        {
+            m.Id(y => y.GSID);
+        })
+        .PageSize(10)
+        .Read(read => read
+                .Action("GS_ReadToGrid", "Group")
+                .Data("GS_GridParams")
+            )
+    )
+)
+<div id="GS_pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+    <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+        <span onclick="GS_GoToPage(event)" id="GS_firstpage" class="k-icon k-i-seek-w">seek-w</span>
+    </a>
+    <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+        <span onclick="GS_GoToPage(event)" id="GS_prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+    </a>
+
+    <ul class="k-pager-numbers k-reset">
+        <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+        <li><span class="k-state-selected" id="GS_currentpage">1</span></li>
+
+    </ul>
+    <span class="k-pager-input k-label">Page<input class="k-textbox" id="GS_pagerInputPageNumber" onkeydown="GS_InputPageNumber_KeyDown()">of <span id="GS_pagerTotalItems"></span></span>
+    <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+        <span onclick="GS_GoToPage(event)" id="GS_nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+    </a>
+    <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+        <span onclick="GS_GoToPage(event)" id="GS_lastpage" class="k-icon k-i-seek-e">seek-e</span>
+    </a>
+
+    <span class="k-pager-sizes k-label">
+        <span title="" class="k-widget k-dropdown k-header">
+            <input id="GS_ddPageSize" onchange="GS_checkChange()" />
+        </span>items per page
+    </span>
+    <span class="float-right" style="margin-right:10px;">
+        <lable id="GS_pagerDisplay"></lable>
+    </span>
+</div>
+
+
+

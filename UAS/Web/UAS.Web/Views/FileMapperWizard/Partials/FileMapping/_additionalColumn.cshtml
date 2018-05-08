@@ -1,0 +1,170 @@
+﻿@model UAS.Web.Models.FileMapperWizard.AdditionalColumnMapModel
+
+<script>    
+    $(document).ready(function () {
+        $(".k-grid .k-grid-header").hide();
+    });
+
+    function DeleteAdditionalCondition(sfid, fieldMapID, fieldIndex) {        
+        var grid = $("#grid_AdditionalColumns").data("kendoGrid");
+        var totalItems = grid.dataSource._data.length;
+        //Over complicate things to get the row uid to remove row. But it even gives a confirmation to delete
+        //Woah... thats cool. So now run through the datasource data looking at the column ACMFieldMapID (practically the primary key in the model)
+        //Find the row that matches. Get the uid that Kendo is assigning to that row and remove that puppy. Not to bad for over complicating.        
+        for (var i = 0; i < grid.dataSource._data.length; i++) {
+            var rowFieldMapID = grid.dataSource._data[i].ACMFieldMapID;
+            var rowIndex = grid.dataSource._data[i].ACMIndex;
+            //Existing will have ACMFieldMapID
+            if (rowFieldMapID != null && rowFieldMapID > 0) {
+                if (rowFieldMapID == fieldMapID) {
+                    var uid = grid.dataSource._data[i].uid;
+                    grid.removeRow('tr[data-uid="' + uid + '"]');
+
+                    if (grid.dataSource._data.length == 0) {
+                        $("#divAdditionalColumns").hide();
+                    }
+                    break;
+                }
+            //New will not have ACMFieldMapID so use ACMIndex 
+            } else if (rowIndex != null) {
+                if (rowIndex == fieldIndex) {
+                    var uid = grid.dataSource._data[i].uid;
+                    grid.removeRow('tr[data-uid="' + uid + '"]');
+
+                    if (grid.dataSource._data.length == 0) {
+                        $("#divAdditionalColumns").hide();
+                    }
+                    break;
+                }
+            }
+        }
+
+        //Only call db delete if row has FieldMappingID 
+        //And only delete if row was removed. grid.removeRow will ask to confirm. If cancel row will still exist so don't delete.
+        if (fieldMapID > 0) {
+            var itemsNow = grid.dataSource._data.length;
+            if (totalItems != itemsNow) {
+                var modelData = {
+                    SourceFileID: sfid,
+                    FieldMappingID: fieldMapID
+                }
+                $.ajax({
+                    url: "/UAS.Web/FileMapperWizard/DeleteAdditionalColumnMapping",
+                    type: "POST",
+                    data: modelData,
+                    dataType: 'html',//this is data type of what you are returning
+                    success: function (returnData) {
+                        if (returnData) {
+                            showMessage({
+                                type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                                autoClose: false,
+                                IsOpen: false
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert("An error has occured!!!");
+                    }
+                })
+            }
+        }  else {
+            var itemsNow = grid.dataSource._data.length;
+            if (totalItems != itemsNow) {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                    autoClose: false,
+                    IsOpen: false
+                });
+            }
+        }
+    }
+    function onSelectMAFField(e) {
+        //var grid = $("#grid_AdditionalColumns").data("kendoGrid");
+        ////var row = $(event.srcElement).closest("tr");
+        ////var grid = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+        ////selDbField = row[0].cells[0].innerText;
+        //var row = $("#grid_AdditionalColumns").data("kendoGrid").tbody.find("tr[data-uid='" + e.dataItem.uid + "']");
+        var row = $(event.srcElement).closest("tr");
+        //var grid = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+        //dataItem = grid.dataItem(row);
+        //selDbField = row[0].cells[6].innerText;//this is selected Database Field - RegionCode
+    }    
+    function onChangeMAFField(e) {
+        var grid = $("#grid_AdditionalColumns").data("kendoGrid");
+        //var row = $(event.srcElement).closest("tr");
+        //var grid2 = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+
+        //console.log(row[0].cells[2].innerText);
+        //console.log(row[0].cells[3].innerText);
+    }
+    function onSelectDemoUpdate(e) {
+        var grid = $("#grid_AdditionalColumns").data("kendoGrid");
+        //var row = $(event.srcElement).closest("tr");
+        //var grid = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+        //var dataItem = grid.dataItem(row);
+        //selDbField = row[0].cells[1].innerText;
+    }
+    function onChangeDemoUpdate(e) {
+        var grid = $("#grid_AdditionalColumns").data("kendoGrid");
+        //var row = $(event.srcElement).closest("tr");
+        //var grid2 = $(event.srcElement).closest("[data-role=grid]").data("kendoGrid");
+
+        //console.log(row[0].cells[2].innerText);
+        //console.log(row[0].cells[3].innerText);
+
+        //dataItem = grid.dataItem(row);
+    }
+
+    
+</script>
+
+
+        @{
+            Html.Kendo()
+                .Grid(Model.AdditionalColumns)
+                .Name("grid_AdditionalColumns")
+                .Columns(columns =>
+                {
+                columns.Bound(c => c.ACMIndex).Hidden(true);
+                columns.Bound(c => c.ACMSourceFileID).Hidden(true);
+                columns.Bound(c => c.ACMFieldMapID).Hidden(true);
+                columns.Bound(c => c.ACMFieldMapTypeID).Hidden(true);
+                columns.Bound(c => c.ACMIsNonFileColumn).Hidden(true);
+                columns.Bound(c => c.ACMSourceColumn).Hidden(true);
+                columns.Bound(c => c.ACMColumnOrder).Hidden(true);
+                columns.Template(@<text></text>).Width(250).ClientTemplate("");
+                columns.Bound(c => c.selectedMAFField.Text).ClientTemplate("#=selectedMAFField.Text#").Width(250).Title("").EditorTemplateName("ColumnMapMAFField");//required
+                columns.Bound(c => c.selectedDemoUpdate.Text).ClientTemplate("#=selectedDemoUpdate.Text#").Width(100).Title("").EditorTemplateName("ColumnMapDemoUpdate");//required
+
+                columns.Template(@<text></text>).HtmlAttributes(new { @class = "templateCell" }).ClientTemplate(
+                                        @Html.Kendo().Button().Name("btnDeleteCondition")
+                                            .Content("Delete <i class='km-icon icon-kmcustom-delete'></i>")
+                                            .HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "return DeleteAdditionalCondition(#=ACMSourceFileID#,#=ACMFieldMapID#,#=ACMIndex#)" })
+                                            .ToClientTemplate().ToHtmlString()
+                                        );
+                })
+                //.Selectable()
+                .Editable(editable => editable.Mode(GridEditMode.InCell).DisplayDeleteConfirmation(false).CreateAt(GridInsertRowPosition.Bottom))
+                .HtmlAttributes(new { style = "margin: 0 auto; width: 700px;" })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    //.PageSize(Model.AdditionalColumns.Count())
+                    .ServerOperation(false)
+                    .Model(m =>
+                    {
+                        m.Id(i => i.ACMIndex);
+                        m.Field(i => i.ACMIndex).Editable(false);
+                        m.Field(i => i.ACMSourceFileID).Editable(false);
+                        m.Field(i => i.ACMFieldMapID).Editable(false);
+                        m.Field(i => i.ACMFieldMapTypeID).Editable(false);
+                        m.Field(i => i.ACMIsNonFileColumn).Editable(false);
+                        m.Field(i => i.ACMSourceColumn).Editable(false);
+                        m.Field(i => i.ACMColumnOrder).Editable(false);
+                        m.Field(i => i.selectedMAFField).Editable(true).DefaultValue(new SelectListItem { Text = "", Value = "" });
+                        m.Field(i => i.selectedDemoUpdate).Editable(true).DefaultValue(new SelectListItem { Text = "", Value = "" });
+                    })
+                )
+                .Render();
+        }
+
+<br />

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<UAS.Web.Models.Circulations.File>
+
+@(
+ Html.Kendo()
+        .Grid(Model)
+    .Name("fileList")
+    .Columns(columns =>
+    {
+        columns.Bound(e => e.Name).Title("Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle", @class = "fileListName" }).Width(100);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "min-width:100px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+     )
+
+)
+
+
+
+
+
+

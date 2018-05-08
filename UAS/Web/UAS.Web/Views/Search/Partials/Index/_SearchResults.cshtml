@@ -1,0 +1,143 @@
+﻿@model IEnumerable<FrameworkUAD.Entity.ProductSubscription>
+@using UAD.DataCompare.Web.Infrastructure
+
+
+
+<script>
+    var noHint = $.noop;
+
+    function placeholder(element) {
+        return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+    }
+
+    function onChange(e) {
+        var grid = $("#grid").data("kendoGrid"),
+            skip = grid.dataSource.skip(),
+            oldIndex = e.oldIndex + skip,
+            newIndex = e.newIndex + skip,
+            data = grid.dataSource.data(),
+            dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+        grid.dataSource.remove(dataItem);
+        grid.dataSource.insert(newIndex, dataItem);
+    }
+
+    function dataBounds() {
+
+        ActionMenu_OnGridDataBoundEvent();
+    }
+    function dataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+       
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+
+    function getProfile(id) {
+        var title = 'Edit Profile';
+        var tempurl = '@Url.Action("GetProfile", "Search",new { id = "temp"})';
+        var getUrl = tempurl.replace("temp", id);
+        var window = $("#FormWindow");
+        var kendoWindow = window.data('kendoWindow');
+        $.ajax({
+            url: getUrl,
+            type: "GET",
+        })
+        .done(function (result) {
+            kendoWindow.content(result);
+            kendoWindow.center().open();
+        });
+       
+        
+    }
+
+    function showLoadingMessage() {
+        showLoadingWindow();
+    }
+
+</script>
+<div>
+    @(
+ Html.Kendo()
+    .Grid(Model)
+    .Name("grid")
+    .Columns(columns =>
+    {
+        //columns.Bound(e => e.PubSubscriptionID).Title("").ClientTemplate(Html.ActionMenu_Content()).Filterable(false).Width(100);
+        columns.Bound(p => p).ClientTemplate(GetActions("grid").ToString()).Width(100).Filterable(false).Sortable(false);
+        columns.Bound(e => e.SubscriptionStatusID).Title("Status").ClientTemplate(
+        "# if (SubscriptionStatusID == 1) { #" +
+        "<span style='align:middle'><img src='" + Url.Content("~/Images/SubscriptionStatus/") + "Prospect_72.png' witdth='25px'  height='25px' /></span>" +
+        "# } if(SubscriptionStatusID == 2 ||SubscriptionStatusID == 5 ||SubscriptionStatusID == 6)  { #" +
+        "<span style='align:middle'><img src='" + Url.Content("~/Images/SubscriptionStatus/") + "InActive_72.png' witdth='25px'  height='25px' /></span>" +
+        "# } if(SubscriptionStatusID == 3 ||SubscriptionStatusID == 4) { #" +
+        "<span style='align:middle'><img src='" + Url.Content("~/Images/SubscriptionStatus/") + "Active_72.png' witdth='25px'  height='25px' /></span>" +
+        "# } #").HtmlAttributes(new { @style = "text-align:center; vertical-align:middle" }).HeaderHtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(65);
+        columns.Bound(e => e.SequenceID).Title("Sequence #").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(100);
+        columns.Bound(e => e.ClientName).Title("Publisher").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(200);
+        columns.Bound(e => e.PubCode).Title("Product").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(75);
+        columns.Bound(e => e.FullName).Title("Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(120);
+        columns.Bound(e => e.Title).Title("Title").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(100);
+        columns.Bound(e => e.Company).Title("Company").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(200);
+        columns.Bound(e => e.FullAddress).Title("Address").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(200);
+        columns.Bound(e => e.Email).Title("Email").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(200);
+        columns.Bound(e => e.Phone).Title("Phone").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(110);
+        columns.Bound(e => e.Mobile).Title("Mobile").HtmlAttributes(new { @style = " vertical-align:middle" }).Width(110);
+        columns.Bound(e => e.SubscriptionID).Title("Subscription ID").HtmlAttributes(new { @style = " vertical-align:middle" }).Width(110);
+        columns.Bound(e => e.AccountNumber).Title("Old Acct#").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle" }).Width(100);
+
+    })
+    .Events(e => e.DataBound("dataBound"))
+    .Pageable(pages => pages.PageSizes(true).ButtonCount(1).Input(true).PageSizes(new int[] { 5, 10, 15, 20 }))
+    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .ServerOperation(false)
+     )
+
+    )
+
+    @(Html.Kendo().Sortable()
+    .For("#grid")
+    .Filter("table > tbody > tr")
+    .Cursor("move")
+    .HintHandler("noHint")
+    .PlaceholderHandler("placeholder")
+    .ContainerSelector("#grid tbody")
+    .Events(events => events.Change("onChange"))
+    )
+</div>
+
+
+
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=PubSubscriptionID#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" }); ;
+                    innerItems.Add().Text("Edit Profile").HtmlAttributes(new { onclick = "getProfile('#=PubSubscriptionID#')" });
+                    innerItems.Add().Text("Edit Record").Action("Subscribe", "Search", new { PubSubscriptionID = "#=PubSubscriptionID#", PubID = "#=PubID#" })
+                        .HtmlAttributes(new { onclick ="showLoadingMessage()" });
+
+                }
+            )
+        ).ToClientTemplate())
+}
+
+   

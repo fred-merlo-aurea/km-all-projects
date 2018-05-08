@@ -1,0 +1,181 @@
+﻿@using UAD.Web.Admin.Infrastructure
+@{
+    ViewBag.Title = "Custom Fields";
+}
+
+<script>
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                Search();
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $('#btnNewCustomField').click(function () {
+            window.location.href = "/UAD.Web.Admin/CustomField/AddEdit";
+        });
+    });
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#grid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetCustomFieldData", "CustomField")',
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        })
+        options.dataSource.data = dataSource.data;
+        grid.setOptions(options);
+    }
+
+    function onDataBound(arg) {
+        $("#filterCriteria li").remove();
+        $("ul.k-pager-numbers.k-reset li:nth-child(3)").remove()
+        var grid = $("#grid").data("kendoGrid");
+        var options = grid.getOptions();
+        var filter = [];
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+    }
+
+    function dataBounds() {
+        ActionMenu_OnGridDataBoundEvent();
+    }
+
+    function showDeleteAlert(id) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to delete?",
+            autoClose: false,
+            IsOpen: false,
+            action: deleteCustomField,
+            data: { id: id },
+        });
+        return false;
+    }
+
+    function deleteCustomField(values) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Delete", "CustomField")',
+            data: { id: values.id },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var result = JSON.parse(response);
+                if (result.Success) {
+                    $("#alertDiv").hide();
+                    var data = {
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        text: result.Text,
+                        autoClose: false,
+                        action: RedirectPage,
+                        IsOpen: false
+                    }
+                    showMessage(data);
+                }
+                else
+                {
+                    $("#alertMsg").html(result.Text);
+                    $("#alertDiv").show();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        var RedirectPage = function () {
+            window.location = '@Url.Action("Index", "CustomField")';
+        }
+    }
+</script>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <div style="text-align:right">
+                    @Html.Kendo().Button().Name("Addbb").Content("Add Custom Field<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { type = "button", id = "btnNewCustomField", @class = "btn-blue2 float-right" })
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    @(
+     Html.Kendo()
+            .Grid<FrameworkUAD.Entity.SubscriptionsExtensionMapper>()
+        .Name("grid")
+        .Events(e => e.DataBound("onDataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.CustomField).Title("Name").HtmlAttributes(new { @style = "vertical-align:middle;" });
+            columns.Bound(e => e.CustomFieldDataType).Title("Data Type").HtmlAttributes(new { @style = "vertical-align:middle" });
+            columns.Bound(e => e.Active).ClientTemplate(
+            "# if (Active == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+            ).Title("Active").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+            columns.Bound(p => p).ClientTemplate(GetActions("grid").ToString()).Width(100).Filterable(false).Sortable(false);
+        })
+        .Pageable(pages => pages.PageSizes(true).ButtonCount(1).Input(true).PageSizes(new int[] { 5, 10, 15, 20 }))
+        .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn).AllowUnsort(false))
+        .DataSource(dataSource => dataSource // Configure the grid data source
+                        .Ajax() // Specify that ajax binding is used
+                        .Read(read => read.Data("").Action("GetCustomFieldData", "CustomField"))// Set the action method which will return the data in JSON format
+                        .PageSize(10) //Set up page size
+                        .ServerOperation(false) //Get Data from Server
+        ))
+</div>
+<br /><br />
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=SubscriptionsExtensionMapperID#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" });
+                    innerItems.Add().Text("Edit")
+                        .Action("AddEdit", "CustomField", new { id = "#=SubscriptionsExtensionMapperID#" })
+                        .HtmlAttributes(new { onclick = "showLoadingMessage()" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "showDeleteAlert(id)", id = "#=SubscriptionsExtensionMapperID#" });
+                }
+            )
+        ).ToClientTemplate())
+}

@@ -1,0 +1,88 @@
+﻿<style>
+    .status-table {
+        width: 100%;
+        margin-left: 3px;
+    }
+
+    .status-col {
+        width: 80%;
+        padding-left:5%;
+    }
+    .status-inactive-btn{
+         width:95%;
+          margin-left: 5%;
+    }
+</style>
+<div style="width:100%;">
+    <table class="status-table">
+        <tbody>
+            <tr>
+                <td class="status-col"><h4>Subscribe</h4></td>
+            </tr>
+            <tr>
+                <td class="status-col">
+                    <kendo-button ng-click="onReactivationClicked()" type="button"
+                                  class="k-button btn-orange1" id="reactivateBtn"
+                                  ng-hide="subscrberViewModel.PubSubscription.IsNewSubscription">Reactivation</kendo-button>
+                </td>
+            </tr>
+            <tr>
+                <td class="status-col">
+                    <label style="width:95px;">Free/Paid:<span style="color:red;"><strong>*</strong></span></label>
+                    <input id="PubCategoryTypeID" ng-model="subscrberViewModel.CategoryCodeTypeID" name="PubCategoryTypeID" style="width:90%;font-size:small;" tabindex="20" rqrd />
+                    <div ng-show="loadcomplete" ng-messages="subscriberform.PubCategoryTypeID.$error" style="color:red">
+                        <div ng-message="rqrd">Please select subscription Category.</div>
+                    </div>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td class="status-col">
+                    <label style="width:95px;">
+                        Category Type:<span style="color:red;"><strong>*</strong></span>
+                    </label>
+                    <input id="PubCategoryCodeID" ng-model="subscrberViewModel.PubSubscription.PubCategoryID" name="PubCategoryID" style="width:90%;font-size:small;" tabindex="21" rqrd />
+                    <div ng-show="loadcomplete" ng-messages="subscriberform.PubCategoryID.$error" style="color:red">
+                        <div ng-message="rqrd">Please select subscription Category Type.</div>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr ng-hide="subscrberViewModel.PubSubscription.IsNewSubscription">
+                <td class="status-col">
+                    <h4>
+                        UnSubscribe <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.OnBehalfOf"   placeholder="On Behalf Request" style="width:50%;margin-top:5px;margin-right:15px;display:none;" id="txtOnBehalf" />
+                    </h4> 
+                </td>
+            </tr>
+            <tr ng-hide="subscrberViewModel.PubSubscription.IsNewSubscription">
+                <td class="status-inactive-btn" ng-hide="subscrberViewModel.PubSubscription.IsPaid">
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="btnPOKillChecked"
+                                  ng-click="unSubscribe($event)">Post Office</kendo-button>
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="btnPersonKillChecked"
+                                  ng-click="unSubscribe($event)">Personal Request</kendo-button>
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="btnOnBehalfKillChecked"
+                                  ng-click="unSubscribe($event)">On Behalf Request</kendo-button>
+                       </td>
+            </tr>
+            <tr ng-hide="subscrberViewModel.PubSubscription.IsNewSubscription">
+                <td class="status-inactive-btn" ng-show="subscrberViewModel.PubSubscription.IsPaid">
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="paidPostOffice"
+                                  ng-click="unSubscribe($event)">Post Office</kendo-button>
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="paidExpireCancel"
+                                  ng-click="unSubscribe($event)">Paid Expire Cancel</kendo-button>
+                    <kendo-button class="k-button btn-orange1" type="button" style="margin-bottom:2px"
+                                  id="paidCreditCancel"
+                                  ng-click="unSubscribe($event)">Paid Credit Cancel</kendo-button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

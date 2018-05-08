@@ -1,0 +1,1021 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F06FDD51-F454-4905-A389-DFAE9E08DCC9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UAS.UnitTests</RootNamespace>
+    <AssemblyName>UAS.UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ADMS.Fakes">
+      <HintPath>FakesAssemblies\ADMS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="AMS_Operations.Fakes">
+      <HintPath>FakesAssemblies\AMS_Operations.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClientServices.Fakes">
+      <HintPath>FakesAssemblies\ClientServices.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ControlCenter.Fakes">
+      <HintPath>FakesAssemblies\ControlCenter.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Core.ADMS.Fakes">
+      <HintPath>FakesAssemblies\Core.ADMS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Core_AMS.Utilities.Fakes">
+      <HintPath>FakesAssemblies\Core_AMS.Utilities.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="DataCompare.Fakes">
+      <HintPath>FakesAssemblies\DataCompare.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="DQM.Fakes">
+      <HintPath>FakesAssemblies\DQM.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ECN_Framework_BusinessLayer.Fakes">
+      <HintPath>FakesAssemblies\ECN_Framework_BusinessLayer.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FileMapperWizard.Fakes">
+      <HintPath>FakesAssemblies\FileMapperWizard.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkServices.Fakes">
+      <HintPath>FakesAssemblies\FrameworkServices.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkSubGen.Fakes">
+      <HintPath>FakesAssemblies\FrameworkSubGen.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAD.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAD.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAD_Lookup.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAD_Lookup.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="FrameworkUAS.Fakes">
+      <HintPath>FakesAssemblies\FrameworkUAS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KM.Common.Fakes">
+      <HintPath>FakesAssemblies\KM.Common.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="KMPlatform.Fakes">
+      <HintPath>FakesAssemblies\KMPlatform.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="MapPoint, Version=8.3.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\..\..\ThirdPartyDLLs\MapPoint.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.QualityTools.UnitTestFramework.Updated.15.0.26228\lib\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.8.1\lib\net45\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationCore.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\PresentationCore.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\PresentationFramework.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="ReportLibrary.Fakes">
+      <HintPath>FakesAssemblies\ReportLibrary.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.4.0.0.1.Fakes">
+      <HintPath>FakesAssemblies\System.4.0.0.1.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Configuration.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Data.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.ServiceModel.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Transactions.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.Transactions.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Dlls\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Reporting, Version=11.1.17.614, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Reporting.11.1.17.614.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Reporting.11.1.17.614.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls, Version=2016.3.1024.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7">
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.2016.3.1024.45.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Windows.Controls.2016.3.1024.45.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data, Version=2016.3.1024.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView, Version=2016.3.1024.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2016.3.1024.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2016.3.1024.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data.2016.3.1024.45.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Windows.Data.2016.3.1024.45.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Fixed, Version=2016.3.1021.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Fixed.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.FormatProviders.OpenXml.2016.3.1024.45.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Windows.Documents.FormatProviders.OpenXml.2016.3.1024.45.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2016.3.1021.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.2016.3.1021.40.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Windows.Documents.Spreadsheet.2016.3.1021.40.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2016.3.1021.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.2016.3.1021.40.Fakes">
+      <HintPath>FakesAssemblies\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.2016.3.1021.40.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="UAD_Lookup_WS.Fakes">
+      <HintPath>FakesAssemblies\UAD_Lookup_WS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="UAD_WS.Fakes">
+      <HintPath>FakesAssemblies\UAD_WS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="UAS.ReportLibrary.Fakes">
+      <HintPath>FakesAssemblies\UAS.ReportLibrary.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="UAS.Web.Fakes">
+      <HintPath>FakesAssemblies\UAS.Web.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="UAS_WS.Fakes">
+      <HintPath>FakesAssemblies\UAS_WS.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WebServiceFramework.Fakes">
+      <HintPath>FakesAssemblies\WebServiceFramework.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WpfControls.Fakes">
+      <HintPath>FakesAssemblies\WpfControls.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdPartyDLLs\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ADMS\ClientMethods\AdvanstarTest.cs" />
+    <Compile Include="ADMS\ClientMethods\BriefMediaTest.cs" />
+    <Compile Include="ADMS\ClientMethods\CanonTest.cs" />
+    <Compile Include="ADMS\ClientMethods\ClientSpecialCommonTest.cs" />
+    <Compile Include="ADMS\ClientMethods\NordstarTests.cs" />
+    <Compile Include="ADMS\ClientMethods\HVCBTests.cs" />
+    <Compile Include="ADMS\ClientMethods\GLMTests.cs" />
+    <Compile Include="ADMS\ClientMethods\Common\Consts.cs" />
+    <Compile Include="ADMS\ClientMethods\Common\Fakes.cs" />
+    <Compile Include="ADMS\ClientMethods\ClientMethodHelpersTest.cs" />
+    <Compile Include="ADMS\ClientMethods\SAETBTest.cs" />
+    <Compile Include="ADMS\ClientMethods\SpecialtyFoodsTest.cs" />
+    <Compile Include="ADMS\ClientMethods\StagnitoTest.cs" />
+    <Compile Include="ADMS\ClientMethods\AtcomTest.cs" />
+    <Compile Include="ADMS\ClientMethods\LebharTest.cs" />
+    <Compile Include="ADMS\ClientMethods\MeisterTest.cs" />
+    <Compile Include="ADMS\ClientMethods\MeisterWrapper.cs" />
+    <Compile Include="ADMS\ClientMethods\ScrantonWrapper.cs" />
+    <Compile Include="ADMS\ClientMethods\CanonWrapper.cs" />
+    <Compile Include="ADMS\ClientMethods\StagnitoWrapper.cs" />
+    <Compile Include="ADMS\ClientMethods\TenMissionsTest.cs" />
+    <Compile Include="ADMS\ClientMethods\ScrantonTest.cs" />
+    <Compile Include="ADMS\ClientMethods\TradePressTest.cs" />
+    <Compile Include="ADMS\ClientMethods\VcastTest.cs" />
+    <Compile Include="ADMS\ClientMethods\WattTest.cs" />
+    <Compile Include="ADMS\Services\DataCleanser\DQMCleanerTest.RunStandardization.cs" />
+    <Compile Include="ADMS\Services\DataCleanser\DQMCleanerTest.cs" />
+    <Compile Include="ADMS\Services\UAD\UADProcessorTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Common\Constants.cs" />
+    <Compile Include="ADMS\Services\Validator\Common\Enum.cs" />
+    <Compile Include="ADMS\Services\Validator\Common\Fakes.cs" />
+    <Compile Include="ADMS\Services\Validator\Common\Mocks.cs" />
+    <Compile Include="ADMS\Services\Validator\Common\TestEntity.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\CombineValuesTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\CreateSubscriberTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\AcsExtractDataFromFilesTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\CreateTransformedSubscriberTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ProcessFileAsObjectTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\RemoveFileFromRepositoryTests.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveAdmsLogTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscribersTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscribersTest.Data.cs">
+      <DependentUpon>SaveSubscribersTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SendXmlToDatabaseTests.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SetCurrentRowValuesTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SetIncomeFieldTests.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SetMafFieldRowsTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SetRuleIsQualifiedTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\TransformImportFileData.TestCases.cs">
+      <DependentUpon>TransformImportFileDataTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMS\Services\Validator\Validator_cs\TransformImportFileDataTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscriberTransformedTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscriberTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscriberTest.Data.cs">
+      <DependentUpon>SaveSubscriberTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\FileValidator_cs\FileValidatorTestExtensions.cs" />
+    <Compile Include="AMS_Operations\FileValidator_cs\HasQualifiedProfileTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ValidateDataTest.cs" />
+    <Compile Include="AMS_Operations\OperationTest.CreateFile.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\OperationTest.EmailErrorLog.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\OperationTest.DeleteFile.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\OperationTest.SubGenToUAD.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ClientServices\UAD\UADServiceTest.cs" />
+    <Compile Include="ControlCenter\Common\Fakes.cs" />
+    <Compile Include="ControlCenter\Controls\CircCodesheet\GroupTest.BtnSave_Click.cs" />
+    <Compile Include="ControlCenter\Controls\CircCodesheet\GroupTest.cs" />
+    <Compile Include="ControlCenter\Controls\CircCodesheet\MagazinesTest.BtnSave_Click.cs" />
+    <Compile Include="ControlCenter\Controls\CircCodesheet\MagazinesTest.cs" />
+    <Compile Include="ControlCenter\Controls\ProductCreationTest.cs" />
+    <Compile Include="AMS_Operations\OperationTest.Convert_ImportSubscriber_to_SubscriberTrans.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\OperationTest.cs" />
+    <Compile Include="ControlCenter\Controls\ResponseGroupsTest.BtnSave_Click.cs" />
+    <Compile Include="ControlCenter\Controls\ResponseGroupsTest.cs" />
+    <Compile Include="ControlCenter\Modules\ClientManagementTest.cs" />
+    <Compile Include="ControlCenter\Modules\PublicationManagementTest.BtnSave_Click.cs" />
+    <Compile Include="ControlCenter\Modules\PublicationManagementTest.cs" />
+    <Compile Include="Core.ADMS\Events\FileValidatedTest.cs" />
+    <Compile Include="Core.ADMS\Events\FileAddressGeocodedTest.cs" />
+    <Compile Include="Core_AMS.Utilities\AddressParserTests.cs" />
+    <Compile Include="Core_AMS.Utilities\FileFunctions_cs\CreateTSVFromDataTableTest.cs" />
+    <Compile Include="Core_AMS.Utilities\AddressValidatorTests.cs" />
+    <Compile Include="Core_AMS.Utilities\FileFunctions_cs\WriteToFileTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\Fakes.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\LoadFileDataSet_StartRow_Test.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\LoadFileDataSetTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\GetDataSet_NoHeaderTest.cs" />
+    <Compile Include="AMS_Operations\FileValidator_cs\CreateSubscriberTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileWorker_cs\QuoteEncapsulateFileTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileWorker_cs\RemoveTrailingCharactersFromTextFileTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FtpFunctionsTests.cs" />
+    <Compile Include="DataCompare\Common\Enum.cs" />
+    <Compile Include="DQM\Helpers\Validation\AddressCleanerTest.cs" />
+    <Compile Include="AMS_Operations\FileValidator_cs\CreateTransformedSubscriberTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\CreateSubscriberTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\GetDataSetTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\LoadFileTopRowsTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\LoadFileTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileWorker_cs\CheckTextFileHeadersForUnicodeCharsTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileWorker_cs\Fakes.cs" />
+    <Compile Include="AMS_Operations\FileValidatorTest.cs" />
+    <Compile Include="AMS_Operations\FileValidatorTest.TransformImportFileData.cs">
+      <DependentUpon>FileValidatorTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\FileValidatorTest.TransformImportFileData.Data.cs">
+      <DependentUpon>FileValidatorTest.TransformImportFileData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\FileValidatorTest.TransformImportFileData.TestCases.cs">
+      <DependentUpon>FileValidatorTest.TransformImportFileData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AMS_Operations\FileValidatorTest.TransformImportFileData.TransformByPubCodeTestCases.cs">
+      <DependentUpon>FileValidatorTest.TransformImportFileData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMS\Services\Validator\Validator_cs\SaveSubscriberTransformedTest.Data.cs">
+      <DependentUpon>SaveSubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMS\Services\Validator\Validator_cs\TransformImportFileDataTest.Data.cs">
+      <DependentUpon>TransformImportFileDataTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ADMS\Services\Validator\Validator_cs\TransformImportFileDataTest.TransformByPubCodeTestCases.cs">
+      <DependentUpon>TransformImportFileDataTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DQM\Helpers\Validation\Common\Fakes.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ACSSetValuesTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\CreateTransformedSubscriberTest.cs" />
+    <Compile Include="Core_AMS.Utilities\FileImporter_cs\getDatafromTXTTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\InsertOriginalSubscribersTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\ScrantonCompanySurveyTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\SetAdHocTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\HasQualifiedProfileTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\GetReportBodyForSingleEmailTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\ApplyAdHocDimensionsTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\FileValidator_cs\ValidateDataTest.cs" />
+    <Compile Include="DQM\Helpers\Validation\Validation_cs\ValidateFileAsObjectTest.cs" />
+    <Compile Include="DQM\Modules\UAD_FileValidatorTest.cs" />
+    <Compile Include="DQM\Modules\DataImportTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\DataMapTransformationTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\DataMapTransformationTest.SaveDataMap.cs">
+      <DependentUpon>DataMapTransformationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\DcDemoAttributesTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\DcDemoAttributesTest.BtnNextClick.cs">
+      <DependentUpon>DcDemoAttributesTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\DcDemoAttributesTest.CheckBoxChecked.cs">
+      <DependentUpon>DcDemoAttributesTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\DcLikeCriteriaTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\DcMatchCriteriaTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\DcProfileAttributesTest.BtnNextClick.cs">
+      <DependentUpon>DcProfileAttributesTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\DcProfileAttributesTest.CheckBoxChecked.cs">
+      <DependentUpon>DcProfileAttributesTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\DcProfileAttributesTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\MapColumnsTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\MapColumnsTest.LoadData.cs">
+      <DependentUpon>MapColumnsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Helpers\ApplyTransformationHelperTest.cs" />
+    <Compile Include="FileMapperWizard\Helpers\SaveTransformationHelperTest.cs" />
+    <Compile Include="FileMapperWizard\Helpers\ServiceClientSetTest.cs" />
+    <Compile Include="FileMapperWizard\Controls\MapColumnsTest.Rescan.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\AccountTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\AddressTest.cs" />
+    <Compile Include="FileMapperWizard\Common\Fakes.cs" />
+    <Compile Include="FileMapperWizard\Controls\EditSetupTest.btnStep1Next_Click.cs">
+      <DependentUpon>EditSetupTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileMapperWizard\Controls\EditSetupTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\ChangeDataCaptureTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\CustomFieldTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\AccountTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\AddressTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\HistoryTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\SubscriberTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\API\SubscriptionTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\BundleTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\CustomFieldTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\HistoryTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\SubscriptionTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\ImportSubscriberTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\PaymentTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\SubscriberTest.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\BulkDataInsertTestData.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\BulkDataInsertTest.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\AccountTest.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\IBulkDataInsertTestData.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\PublicationTest.cs" />
+    <Compile Include="FrameworkSubGen\DataAccess\SqlCommandData.cs" />
+    <Compile Include="FrameworkSubGen\SubGenUtilsTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\FilterMVCTest.GetFilterQuery.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\FilterMVCTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\Common\Fakes.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\Helpers\ValidatorMethodsTests.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ImportErrorSummaryTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ImportFileTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\AcsFileDetailTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\ImportOrderTest.cs" />
+    <Compile Include="FrameworkSubGen\BusinessLogic\ImportDimensionTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ProductSubscriptionTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\SubscriberFinalTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\SubscriberOriginalTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\SubscriberTransformedTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\SubscriptionTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResult.CleanBadDataLocation.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResultTest.AppendHeaders.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResultTest.AppendImportErrors.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResultTest.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResultTest.GetCustomerErrorMessage.cs" />
+    <Compile Include="FrameworkUAD\BusinessLogic\ValidationResultTest.GetCustomerErrorMessageFileValidator.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AcsFileDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AcsFileDetailTest.Save.cs">
+      <DependentUpon>AcsFileDetailTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\AcsFileHeaderTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AcsMailerInfoTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AcsShippingDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ActionBackUpTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AdhocCategoryTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\AdhocTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ArchivePubSubscriptionsExtensionTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\BatchHistoryDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\BatchTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\BrandTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CampaignFilterDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CampaignFilterTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CampaignTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CircImportExportTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CodeSheetMasterCodeSheetBridgeTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\CodeSheetTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DataCompareDimensionTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DataCompareProfileTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DataImportExportTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DownloadTemplateDetailsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DownloadTemplateTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FileProcessingStatTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FileValidator_DemographicTransformedTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FileValidator_ImportErrorTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterCategoryTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterDetailsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterGroupTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterMVCTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterScheduleLogTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterSegmentationGroupTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterSegmentationTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FrequencyTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryMarketingMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryPaidTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryResponseMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryTest.Other.cs">
+      <DependentUpon>HistoryTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ImportErrorTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueArchiveProductSubscriptionDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueArchiveProductSubscriptionTest.Other.cs">
+      <DependentUpon>IssueArchiveProductSubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\IssueCompDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueCompErrorTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueCompTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueSplitFilterDetailsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueSplitFilterTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MarketingMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MarketTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MasterCodeSheetTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MasterCodeSheetTest.Other.cs">
+      <DependentUpon>MasterCodeSheetTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\MasterDataTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MasterGroupTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\MasterGroupTest.Other.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ObjectsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\PaidOrderDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductAuditTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductGroupTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionsExtensionMapperTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionTest.Constants.cs">
+      <DependentUpon>ProductSubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionTest.Other.cs">
+      <DependentUpon>ProductSubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionTest.Procedures.cs">
+      <DependentUpon>ProductSubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionTest.Select.cs">
+      <DependentUpon>ProductSubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ProductTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductTest.Other.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductTypesTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProfileTest.Other.cs">
+      <DependentUpon>ProfileTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ProspectTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\PubCodeTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\QuestionCategoryTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ReportGroupsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.Constants.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.GetMethod.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.Parameters.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.Procedures.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.SelectMethods.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ReportTest.SelectMVC.cs">
+      <DependentUpon>ReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\ResponseGroupTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ResponseGroupTest.Other.cs">
+      <DependentUpon>ResponseGroupTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SecurityGroupBrandMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SecurityGroupProductMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberAddKillTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberAddKillTest.Select.cs">
+      <DependentUpon>SubscriberAddKillTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberArchiveTest.Select.cs">
+      <DependentUpon>SubscriberArchiveTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberDemographicFinalTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberDemographicInvalidTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberDemographicOriginalTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberDemographicTransformedTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberFinalTest.Other.cs">
+      <DependentUpon>SubscriberFinalTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberFinalTests.Contants.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberMarketingMapTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberMasterValueTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberProductDemographicTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Constants.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Other.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Paramaters.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Procedures.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Select.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionSearchResultTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionsExtensionMapperTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionTest.Other.cs">
+      <DependentUpon>SubscriptionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionTests.Contants.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SuppressedTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SuppressionFileDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SuppressionFileTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\TableTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\UADFilterTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\UserDataMaskTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\WaveMailingDetailTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\WaveMailingTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\PriceCodeTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueSplitTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberArchiveTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberDemographicArchiveTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionPaidTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\PaidOrderTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\DataFunctionsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FileValidator_Transformed_Test.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\FilterScheduleTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistoryPaidBillToTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\HistorySubscriptionTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\IssueArchiveProductSubscriptionTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\PaidBillToTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProductSubscriptionTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\ProfileTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberOriginalTest.Save.cs">
+      <DependentUpon>SubscriberOriginalTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.Save.cs">
+      <DependentUpon>SubscriberTransformedTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\BusinessLogic\AdHocDimensionGroupTest.cs" />
+    <Compile Include="FrameworkUAS\BusinessLogic\AdmsLogTest.cs" />
+    <Compile Include="FrameworkUAS\BusinessLogic\ClientMethodsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberFinalTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberOriginalTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberInvalidTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriberTransformedTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\AdHocDimensionGroupPubcodeMapTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.BriefMedia.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.Glm.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.Haymarket.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.Northstar.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.Vcast.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\ClientMethodsTest.Watt.cs">
+      <DependentUpon>ClientMethodsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrameworkUAS\DataAccess\Common\Consts.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\Common\Fakes.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ToDataTableSubscriberInvalidTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ToDataTableSubscriberTransformedTest.cs" />
+    <Compile Include="ADMS\Services\Validator\Validator_cs\ToDataTableSubscriberTransformedDimensionErrorsTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\Common\SampleClass.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\DataFunctionsTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\DynamicHelperTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\FilterTest.cs" />
+    <Compile Include="FrameworkUAS\DataAccess\SqlCommandExtensionsTest.cs" />
+    <Compile Include="FrameworkUAS\Entity\DataCompareCostClientTest.cs" />
+    <Compile Include="FrameworkUAS\Entity\FilterGroupTest.cs" />
+    <Compile Include="FrameworkUAS\Entity\SourceFileTest.cs" />
+    <Compile Include="Helpers\ADMSClientMethodsHelper.cs" />
+    <Compile Include="Helpers\AsyncHelper.cs" />
+    <Compile Include="Helpers\CreateSubscriberTestHelper.cs" />
+    <Compile Include="Helpers\TestAdHockMethodAssertionTarget.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="DataCompare\HomeTest.cs" />
+    <Compile Include="Helpers\WebServiceTestBase.cs" />
+    <Compile Include="Interfaces\IAddressClean.cs" />
+    <Compile Include="Interfaces\IAdmsLog.cs" />
+    <Compile Include="Interfaces\ICategoryCode.cs" />
+    <Compile Include="Interfaces\IClient.cs" />
+    <Compile Include="Interfaces\ICode.cs" />
+    <Compile Include="Interfaces\IDQMQue.cs" />
+    <Compile Include="Interfaces\IEmailStatus.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IProductSubscriptionsExtensionMapper.cs" />
+    <Compile Include="Interfaces\IService.cs" />
+    <Compile Include="Interfaces\IServiceBase.cs" />
+    <Compile Include="Interfaces\IServiceFeature.cs" />
+    <Compile Include="Interfaces\ISourceFile.cs" />
+    <Compile Include="Interfaces\ISubscriberOriginal.cs" />
+    <Compile Include="Interfaces\ISubscriberTransformed.cs" />
+    <Compile Include="Interfaces\ITransactionCode.cs" />
+    <Compile Include="Interfaces\ITransformAssign.cs" />
+    <Compile Include="Interfaces\ITransformation.cs" />
+    <Compile Include="Interfaces\ITransformDataMap.cs" />
+    <Compile Include="Interfaces\ITransformJoin.cs" />
+    <Compile Include="Interfaces\ITransformSplit.cs" />
+    <Compile Include="Interfaces\ITransformSplitTrans.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportLibrary\CategorySummaryTest.cs" />
+    <Compile Include="ReportLibrary\Common\CommonHelper.cs" />
+    <Compile Include="ReportLibrary\CrossTabTest.cs" />
+    <Compile Include="ReportLibrary\DemoXQualificationTest.cs" />
+    <Compile Include="ReportLibrary\FullSubscriberDetailsTest.cs" />
+    <Compile Include="ReportLibrary\GeoInternationalBreakDownTest.cs" />
+    <Compile Include="ReportLibrary\Reports\Par3CTests.cs" />
+    <Compile Include="ReportLibrary\Reports\QualificationBreakDownTest.cs" />
+    <Compile Include="ReportLibrary\Reports\QualificationBreakDownTest.GetParameters.cs" />
+    <Compile Include="ReportLibrary\Reports\ReportUtilitiesTest.cs" />
+    <Compile Include="ReportLibrary\Reports\SubSourceSummaryTests.cs" />
+    <Compile Include="ReportLibrary\Reports\SubFieldsTest.cs" />
+    <Compile Include="ReportLibrary\Reports\ProfileFieldTest.cs" />
+    <Compile Include="ReportLibrary\Reports\SubscriberDetailsTest.cs" />
+    <Compile Include="ReportLibrary\Reports\SingleResponseTest.cs" />
+    <Compile Include="FrameworkUAD\DataAccess\SubscriptionDetailTest.cs" />
+    <Compile Include="ReportLibrary\Reports\GeoSingleCountryTest.cs" />
+    <Compile Include="UAD_Lookup_WS\Service\ActionTest.cs" />
+    <Compile Include="UAD_Lookup_WS\Service\CodeTest.cs" />
+    <Compile Include="ReportLibrary\GeoDomesticBreakDownTest.cs" />
+    <Compile Include="UAD_WS\Service\AcsMailerInfoTest.cs" />
+    <Compile Include="UAD_WS\Service\AcsShippingDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\ActionBackUpTest.cs" />
+    <Compile Include="UAD_WS\Service\AdhocCategoryTest.cs" />
+    <Compile Include="UAD_WS\Service\AdhocTest.cs" />
+    <Compile Include="UAD_WS\Service\ArchivePubSubscriptionsExtensionTest.cs" />
+    <Compile Include="UAD_WS\Service\BatchHistoryDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\BatchTest.cs" />
+    <Compile Include="UAD_WS\Service\BrandTest.cs" />
+    <Compile Include="UAD_WS\Service\CampaignTest.cs" />
+    <Compile Include="UAD_WS\Service\CircImportExportTest.cs" />
+    <Compile Include="UAD_WS\Service\CodeSheetMasterCodeSheetBridgeTest.cs" />
+    <Compile Include="UAD_WS\Service\CodeSheetTest.cs" />
+    <Compile Include="UAD_WS\Service\Common\Fakes.cs" />
+    <Compile Include="UAD_WS\Service\FilterTest.cs" />
+    <Compile Include="UAD_WS\Service\HistoryPaidTest.cs" />
+    <Compile Include="UAD_WS\Service\HistorySubscriptionTest.cs" />
+    <Compile Include="UAD_WS\Service\HistoryTest.cs" />
+    <Compile Include="UAD_WS\Service\ImportErrorSummaryTest.cs" />
+    <Compile Include="UAD_WS\Service\ImportErrorTest.cs" />
+    <Compile Include="UAD_WS\Service\ImportSummaryTest.cs" />
+    <Compile Include="UAD_WS\Service\IssueArchiveProductSubscriptionDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\ImportVesselTest.cs" />
+    <Compile Include="UAD_WS\Service\IssueArchiveProductSubscriptionTest.cs" />
+    <Compile Include="UAD_WS\Service\IssueCompDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\IssueTest.cs" />
+    <Compile Include="UAD_WS\Service\MasterCodeSheetTest.cs" />
+    <Compile Include="UAD_WS\Service\MasterGroupTest.cs" />
+    <Compile Include="UAD_WS\Service\OperationsTest.cs" />
+    <Compile Include="UAD_WS\Service\ProductGroupTest.cs" />
+    <Compile Include="UAD_WS\Service\ProductSubscriptionTest.cs" />
+    <Compile Include="UAD_WS\Service\ProductTest.cs" />
+    <Compile Include="UAD_WS\Service\ProductTypesTest.cs" />
+    <Compile Include="UAD_WS\Service\PubSubscriptionDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\ReportsTest.cs" />
+    <Compile Include="UAD_WS\Service\ResponseGroupTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberAddKillTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberArchiveTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberDemographicTransformedTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberFinalTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberMasterValueTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberOriginalTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriberTransformedTest.cs" />
+    <Compile Include="UAD_WS\Service\SubscriptionDetailTest.cs" />
+    <Compile Include="UAD_WS\Service\SuppressedTest.cs" />
+    <Compile Include="UAD_WS\Service\WaveMailingDetailTest.cs" />
+    <Compile Include="UAS_Web\Common\Fakes.cs" />
+    <Compile Include="UAS_Web\FileMapperWizardControllerTest.cs" />
+    <Compile Include="UAS_WS\Service\ApplicationLogTest.cs" />
+    <Compile Include="UAS_WS\Service\ApplicationTest.cs" />
+    <Compile Include="UAS_WS\Service\ClientCustomProcedureTest.cs" />
+    <Compile Include="UAS_WS\Service\ClientGroupTest.cs" />
+    <Compile Include="UAS_WS\Service\ClientTest.cs" />
+    <Compile Include="UAS_WS\Service\AdHocDimensionGroupPubcodeMapTest.cs" />
+    <Compile Include="UAS_WS\Service\AdHocDimensionGroupTest.cs" />
+    <Compile Include="UAS_WS\Service\AdHocDimensionTest.cs" />
+    <Compile Include="UAS_WS\Service\ClientUADUsersMapTest.cs" />
+    <Compile Include="UAS_WS\Service\Common\Fakes.cs" />
+    <Compile Include="UAS_WS\Service\EncryptionTest.cs" />
+    <Compile Include="UAS_WS\Service\EngineLogTest.cs" />
+    <Compile Include="UAS_WS\Service\FieldMappingTest.cs" />
+    <Compile Include="UAS_WS\Service\FieldMultiMapTest.cs" />
+    <Compile Include="UAS_WS\Service\MenuTest.cs" />
+    <Compile Include="UAS_WS\Service\ProfileTest.cs" />
+    <Compile Include="UAS_WS\Service\SecurityGroupTest.cs" />
+    <Compile Include="UAS_WS\Service\FpsCustomRuleTest.cs" />
+    <Compile Include="UAS_WS\Service\FpsMapTest.cs" />
+    <Compile Include="UAS_WS\Service\FpsStandardRuleTest.cs" />
+    <Compile Include="UAS_WS\Service\SourceFileTest.cs" />
+    <Compile Include="UAS_WS\Service\SplitTransformTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformationDetailTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformationFieldMapTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformationFieldMultiMapTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformationPubMapTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformDataMapTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformSplitTransTest.cs" />
+    <Compile Include="UAS_WS\Service\TransformationTest.cs" />
+    <Compile Include="UAS_WS\Service\UserClientSecurityGroupMapTest.cs" />
+    <Compile Include="UAS_WS\Service\UserLogTest.cs" />
+    <Compile Include="UAS_WS\Service\UserTest.cs" />
+    <Compile Include="WpfControls\AddRemoveDataFetcherTest.cs" />
+    <Compile Include="WpfControls\WindowsAndDialogs\RecordUpdateChangeSelectorTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AMS_Operations\OperationTest.HourlyDataSync.cs">
+      <DependentUpon>OperationTest.cs</DependentUpon>
+    </Compile>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Fakes Include="Fakes\FrameworkUAD_Lookup.fakes" />
+    <Fakes Include="Fakes\FrameworkUAS.fakes" />
+    <Fakes Include="Fakes\System.Configuration.fakes" />
+    <Fakes Include="Fakes\KMPlatform.fakes" />
+    <Fakes Include="Fakes\ADMS.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_BusinessLayer.fakes" />
+    <Fakes Include="Fakes\FrameworkServices02.fakes" />
+    <Fakes Include="Fakes\DQM01.fakes" />
+    <Fakes Include="Fakes\Core.ADMS01.fakes" />
+    <Fakes Include="Fakes\Core_AMS.Utilities01.fakes" />
+    <Fakes Include="Fakes\UAD_Lookup_WS01.fakes" />
+    <Fakes Include="Fakes\UAD_WS.fakes" />
+    <Fakes Include="Fakes\UAS_WS.fakes" />
+    <Fakes Include="Fakes\ECN_Framework_BusinessLayer.fakes" />
+    <Fakes Include="Fakes\System.ServiceModel.fakes" />
+    <Fakes Include="Fakes\WebServiceFramework.fakes" />
+    <Fakes Include="Fakes\mscorlib.fakes" />
+    <Fakes Include="Fakes\FrameworkSubGen.fakes" />
+    <Fakes Include="Fakes\Telerik.Windows.Documents.Spreadsheet.fakes" />
+    <Fakes Include="Fakes\Telerik.Windows.Documents.FormatProviders.OpenXml.fakes" />
+    <Fakes Include="Fakes\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.fakes" />
+    <Fakes Include="Fakes\System.Transactions01.fakes" />
+    <Fakes Include="Fakes\Telerik.Reporting.fakes" />
+    <Fakes Include="Fakes\ReportLibrary.fakes">
+      <SubType>Designer</SubType>
+    </Fakes>
+    <Fakes Include="Fakes\UAS.Web.fakes" />
+    <Fakes Include="Fakes\Telerik.Windows.Controls.fakes" />
+    <Fakes Include="Fakes\KM.Common.fakes" />
+    <Fakes Include="Fakes\ClientServices.fakes" />
+    <Fakes Include="Fakes\System.fakes" />
+    <Fakes Include="Fakes\FrameworkUAD.fakes" />
+    <Fakes Include="Fakes\Telerik.Windows.Data.fakes" />
+    <Fakes Include="Fakes\WpfControls.fakes" />
+    <Fakes Include="Fakes\UAS.ReportLibrary.fakes" />
+    <None Include="packages.config" />
+    <Fakes Include="Fakes\System.Data.fakes" />
+    <Fakes Include="Fakes\ControlCenter.fakes" />
+    <Fakes Include="Fakes\FrameworkSubGen.fakes" />
+    <Fakes Include="Fakes\AMS_Operations01.fakes" />
+    <Fakes Include="Fakes\PresentationCore.fakes" />
+    <Fakes Include="Fakes\FileMapperWizard.fakes" />
+    <Fakes Include="Fakes\PresentationFramework.fakes" />
+    <Fakes Include="Fakes\DataCompare.fakes" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ECN\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{a0803dc4-88c9-4f0b-b567-2ea5504e5f47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{f17a88c4-2fa5-4312-9aa7-d674a24221a8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ECN\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Applications\ControlCenter\ControlCenter.csproj">
+      <Project>{1bcccbf6-03b4-49b8-a52c-bcbf38456cd4}</Project>
+      <Name>ControlCenter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Applications\DataCompare\DataCompare.csproj">
+      <Project>{CF80E43F-C5DD-4A50-BC30-6652A0636038}</Project>
+      <Name>DataCompare</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Applications\DQM\DQM.csproj">
+      <Project>{DC97D9DF-62C7-4512-8271-784200428BB4}</Project>
+      <Name>DQM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Applications\FileMapperWizard\FileMapperWizard.csproj">
+      <Project>{167371DD-3017-462B-9E8E-17DBCF6D189B}</Project>
+      <Name>FileMapperWizard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\ADMS\Core.ADMS.csproj">
+      <Project>{f1438266-1b41-48c2-aed3-ac0f56079df0}</Project>
+      <Name>Core.ADMS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Utilities\Core_AMS.Utilities.csproj">
+      <Project>{e151a8a8-19fa-44a2-9cd3-4dfa3627b7ac}</Project>
+      <Name>Core_AMS.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\AMS_Operations\AMS_Operations.csproj">
+      <Project>{b6cbe6bb-240c-4294-b985-0f04d84aa8d4}</Project>
+      <Name>AMS_Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engines\AMS_Operations\AMS_Operations.csproj">
+      <Project>{b6cbe6bb-240c-4294-b985-0f04d84aa8d4}</Project>
+      <Name>AMS_Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkServices\FrameworkServices.csproj">
+      <Project>{609c1392-849d-4095-ab9b-fe4fdda7e57a}</Project>
+      <Name>FrameworkServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkSubGen\FrameworkSubGen.csproj">
+      <Project>{8c1c4d44-e3c1-46cf-90a5-4e83942f330f}</Project>
+      <Name>FrameworkSubGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD\FrameworkUAD.csproj">
+      <Project>{cba5b2c6-3ce4-4782-bae0-570528690b4b}</Project>
+      <Name>FrameworkUAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAD_Lookup\FrameworkUAD_Lookup\FrameworkUAD_Lookup.csproj">
+      <Project>{8ad0b7b7-73a4-437a-b533-1f9d5a90f2be}</Project>
+      <Name>FrameworkUAD_Lookup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\FrameworkUAS\FrameworkUAS.csproj">
+      <Project>{824833b3-d839-4878-ab71-b4dfdf802085}</Project>
+      <Name>FrameworkUAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ReportLibrary\ReportLibrary.csproj">
+      <Project>{3acb653d-5938-41f7-84dc-50fd0c743a09}</Project>
+      <Name>ReportLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\UAS.ReportLibrary\UAS.ReportLibrary.csproj">
+      <Project>{56f23cc9-f959-4a5e-b2b4-659d90489e04}</Project>
+      <Name>UAS.ReportLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\WpfControls\WpfControls.csproj">
+      <Project>{7b99e614-92e1-40f3-a6f2-b1b12f449567}</Project>
+      <Name>WpfControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\AutomatedDataMigrationService\ADMS.csproj">
+      <Project>{128b0a2c-1e47-4206-84bc-4c15fc4b4129}</Project>
+      <Name>ADMS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\ClientServices\ClientServices.csproj">
+      <Project>{c34a543c-9c28-44ae-90b4-d56883dbbc7d}</Project>
+      <Name>ClientServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAD_Lookup_WS\UAD_Lookup_WS.csproj">
+      <Project>{eca86827-0960-47cf-abf7-a4b6cad4cd74}</Project>
+      <Name>UAD_Lookup_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAD_WS\UAD_WS.csproj">
+      <Project>{dc9b6839-c4a2-4e72-9ea9-72a888e43938}</Project>
+      <Name>UAD_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\UAS_WS\UAS_WS.csproj">
+      <Project>{63e0167c-0f7f-4486-8175-8eec61e50e64}</Project>
+      <Name>UAS_WS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WebServices\WebServiceFramework\WebServiceFramework.csproj">
+      <Project>{c4781235-eaeb-4b7c-ac64-97d51f2a88ef}</Project>
+      <Name>WebServiceFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Web\UAS.Web\UAS.Web.csproj">
+      <Project>{9B93F15D-BFA2-4432-9819-F5B4B501515E}</Project>
+      <Name>UAS.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.9.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

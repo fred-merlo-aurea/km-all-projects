@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your ACCOUNTS in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="AddCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="WebAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Salutation" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactFirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactLastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactTitle" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechContact" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield4" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield5" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddCustomerResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="WebAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Salutation" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactFirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactLastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContactTitle" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechContact" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TechPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield4" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userdefinedfield5" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateCustomerResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerbyID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomerbyIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomerbyIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddUserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateUserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUsers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUsersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUsersResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserbyID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="CustomerID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserbyIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserbyIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLogin">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ecnUserID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="additionalParams" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLoginResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBaseChanels_Internal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBaseChanels_InternalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBaseChanels_InternalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomers_Internal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="BaseChannelID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCustomers_InternalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCustomers_InternalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AddCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:AddCustomer" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:AddCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateCustomer" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomers" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomerbyID" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomerbyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddUserSoapIn">
+    <wsdl:part name="parameters" element="tns:AddUser" />
+  </wsdl:message>
+  <wsdl:message name="AddUserSoapOut">
+    <wsdl:part name="parameters" element="tns:AddUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUsers" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserbyID" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserbyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLogin" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBaseChanels_Internal" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBaseChanels_InternalResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCustomers_Internal" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCustomers_InternalResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomerHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="State" type="s:string" />
+    <wsdl:part name="Country" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="WebAddress" type="s:string" />
+    <wsdl:part name="Phone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="Salutation" type="s:string" />
+    <wsdl:part name="ContactFirstName" type="s:string" />
+    <wsdl:part name="ContactLastName" type="s:string" />
+    <wsdl:part name="ContactTitle" type="s:string" />
+    <wsdl:part name="TechContact" type="s:string" />
+    <wsdl:part name="TechEmail" type="s:string" />
+    <wsdl:part name="TechPhone" type="s:string" />
+    <wsdl:part name="userdefinedfield1" type="s:string" />
+    <wsdl:part name="userdefinedfield2" type="s:string" />
+    <wsdl:part name="userdefinedfield3" type="s:string" />
+    <wsdl:part name="userdefinedfield4" type="s:string" />
+    <wsdl:part name="userdefinedfield5" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomerHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="State" type="s:string" />
+    <wsdl:part name="Country" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="WebAddress" type="s:string" />
+    <wsdl:part name="Phone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="Salutation" type="s:string" />
+    <wsdl:part name="ContactFirstName" type="s:string" />
+    <wsdl:part name="ContactLastName" type="s:string" />
+    <wsdl:part name="ContactTitle" type="s:string" />
+    <wsdl:part name="TechContact" type="s:string" />
+    <wsdl:part name="TechEmail" type="s:string" />
+    <wsdl:part name="TechPhone" type="s:string" />
+    <wsdl:part name="userdefinedfield1" type="s:string" />
+    <wsdl:part name="userdefinedfield2" type="s:string" />
+    <wsdl:part name="userdefinedfield3" type="s:string" />
+    <wsdl:part name="userdefinedfield4" type="s:string" />
+    <wsdl:part name="userdefinedfield5" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUserHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUserHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="URL" type="s:string" />
+    <wsdl:part name="ecnUserID" type="s:string" />
+    <wsdl:part name="additionalParams" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BaseChannelID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomerHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="State" type="s:string" />
+    <wsdl:part name="Country" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="WebAddress" type="s:string" />
+    <wsdl:part name="Phone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="Salutation" type="s:string" />
+    <wsdl:part name="ContactFirstName" type="s:string" />
+    <wsdl:part name="ContactLastName" type="s:string" />
+    <wsdl:part name="ContactTitle" type="s:string" />
+    <wsdl:part name="TechContact" type="s:string" />
+    <wsdl:part name="TechEmail" type="s:string" />
+    <wsdl:part name="TechPhone" type="s:string" />
+    <wsdl:part name="userdefinedfield1" type="s:string" />
+    <wsdl:part name="userdefinedfield2" type="s:string" />
+    <wsdl:part name="userdefinedfield3" type="s:string" />
+    <wsdl:part name="userdefinedfield4" type="s:string" />
+    <wsdl:part name="userdefinedfield5" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomerHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+    <wsdl:part name="Address" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="State" type="s:string" />
+    <wsdl:part name="Country" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="WebAddress" type="s:string" />
+    <wsdl:part name="Phone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="Salutation" type="s:string" />
+    <wsdl:part name="ContactFirstName" type="s:string" />
+    <wsdl:part name="ContactLastName" type="s:string" />
+    <wsdl:part name="ContactTitle" type="s:string" />
+    <wsdl:part name="TechContact" type="s:string" />
+    <wsdl:part name="TechEmail" type="s:string" />
+    <wsdl:part name="TechPhone" type="s:string" />
+    <wsdl:part name="userdefinedfield1" type="s:string" />
+    <wsdl:part name="userdefinedfield2" type="s:string" />
+    <wsdl:part name="userdefinedfield3" type="s:string" />
+    <wsdl:part name="userdefinedfield4" type="s:string" />
+    <wsdl:part name="userdefinedfield5" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCustomerHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomerbyIDHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUserHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddUserHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="IsActive" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUsersHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetUserbyIDHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="URL" type="s:string" />
+    <wsdl:part name="ecnUserID" type="s:string" />
+    <wsdl:part name="additionalParams" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLoginHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBaseChanels_InternalHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BaseChannelID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomers_InternalHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="AccountManagerSoap">
+    <wsdl:operation name="AddCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomerSoapIn" />
+      <wsdl:output message="tns:AddCustomerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomerSoapIn" />
+      <wsdl:output message="tns:UpdateCustomerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all customer accounts within the Channel.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomersSoapIn" />
+      <wsdl:output message="tns:GetCustomersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the Customer.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerbyIDSoapIn" />
+      <wsdl:output message="tns:GetCustomerbyIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:AddUserSoapIn" />
+      <wsdl:output message="tns:AddUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateUserSoapIn" />
+      <wsdl:output message="tns:UpdateUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all users with in the Customer account.</wsdl:documentation>
+      <wsdl:input message="tns:GetUsersSoapIn" />
+      <wsdl:output message="tns:GetUsersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the user.</wsdl:documentation>
+      <wsdl:input message="tns:GetUserbyIDSoapIn" />
+      <wsdl:output message="tns:GetUserbyIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates encrypted query string for auto login</wsdl:documentation>
+      <wsdl:input message="tns:GetLoginSoapIn" />
+      <wsdl:output message="tns:GetLoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetBaseChanels_InternalSoapIn" />
+      <wsdl:output message="tns:GetBaseChanels_InternalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomers_InternalSoapIn" />
+      <wsdl:output message="tns:GetCustomers_InternalSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="AccountManagerHttpGet">
+    <wsdl:operation name="AddCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomerHttpGetIn" />
+      <wsdl:output message="tns:AddCustomerHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomerHttpGetIn" />
+      <wsdl:output message="tns:UpdateCustomerHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all customer accounts within the Channel.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomersHttpGetIn" />
+      <wsdl:output message="tns:GetCustomersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the Customer.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerbyIDHttpGetIn" />
+      <wsdl:output message="tns:GetCustomerbyIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:AddUserHttpGetIn" />
+      <wsdl:output message="tns:AddUserHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateUserHttpGetIn" />
+      <wsdl:output message="tns:UpdateUserHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all users with in the Customer account.</wsdl:documentation>
+      <wsdl:input message="tns:GetUsersHttpGetIn" />
+      <wsdl:output message="tns:GetUsersHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the user.</wsdl:documentation>
+      <wsdl:input message="tns:GetUserbyIDHttpGetIn" />
+      <wsdl:output message="tns:GetUserbyIDHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates encrypted query string for auto login</wsdl:documentation>
+      <wsdl:input message="tns:GetLoginHttpGetIn" />
+      <wsdl:output message="tns:GetLoginHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetBaseChanels_InternalHttpGetIn" />
+      <wsdl:output message="tns:GetBaseChanels_InternalHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomers_InternalHttpGetIn" />
+      <wsdl:output message="tns:GetCustomers_InternalHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="AccountManagerHttpPost">
+    <wsdl:operation name="AddCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:AddCustomerHttpPostIn" />
+      <wsdl:output message="tns:AddCustomerHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update customer accounts in ECN.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateCustomerHttpPostIn" />
+      <wsdl:output message="tns:UpdateCustomerHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all customer accounts within the Channel.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomersHttpPostIn" />
+      <wsdl:output message="tns:GetCustomersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the Customer.</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomerbyIDHttpPostIn" />
+      <wsdl:output message="tns:GetCustomerbyIDHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to add user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:AddUserHttpPostIn" />
+      <wsdl:output message="tns:AddUserHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to update user account in ECN for a Customer.</wsdl:documentation>
+      <wsdl:input message="tns:UpdateUserHttpPostIn" />
+      <wsdl:output message="tns:UpdateUserHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">List all users with in the Customer account.</wsdl:documentation>
+      <wsdl:input message="tns:GetUsersHttpPostIn" />
+      <wsdl:output message="tns:GetUsersHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the information for the user.</wsdl:documentation>
+      <wsdl:input message="tns:GetUserbyIDHttpPostIn" />
+      <wsdl:output message="tns:GetUserbyIDHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates encrypted query string for auto login</wsdl:documentation>
+      <wsdl:input message="tns:GetLoginHttpPostIn" />
+      <wsdl:output message="tns:GetLoginHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetBaseChanels_InternalHttpPostIn" />
+      <wsdl:output message="tns:GetBaseChanels_InternalHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is used by internal KM Applications</wsdl:documentation>
+      <wsdl:input message="tns:GetCustomers_InternalHttpPostIn" />
+      <wsdl:output message="tns:GetCustomers_InternalHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AccountManagerSoap" type="tns:AccountManagerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddCustomer">
+      <soap:operation soapAction="http://tempuri.org/AddCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <soap:operation soapAction="http://tempuri.org/UpdateCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <soap:operation soapAction="http://tempuri.org/GetCustomers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <soap:operation soapAction="http://tempuri.org/GetCustomerbyID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <soap:operation soapAction="http://tempuri.org/AddUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="http://tempuri.org/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <soap:operation soapAction="http://tempuri.org/GetUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <soap:operation soapAction="http://tempuri.org/GetUserbyID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <soap:operation soapAction="http://tempuri.org/GetLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <soap:operation soapAction="http://tempuri.org/GetBaseChanels_Internal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <soap:operation soapAction="http://tempuri.org/GetCustomers_Internal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AccountManagerSoap12" type="tns:AccountManagerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddCustomer">
+      <soap12:operation soapAction="http://tempuri.org/AddCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <soap12:operation soapAction="http://tempuri.org/UpdateCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <soap12:operation soapAction="http://tempuri.org/GetCustomers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <soap12:operation soapAction="http://tempuri.org/GetCustomerbyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <soap12:operation soapAction="http://tempuri.org/AddUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap12:operation soapAction="http://tempuri.org/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <soap12:operation soapAction="http://tempuri.org/GetUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <soap12:operation soapAction="http://tempuri.org/GetUserbyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <soap12:operation soapAction="http://tempuri.org/GetLogin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <soap12:operation soapAction="http://tempuri.org/GetBaseChanels_Internal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <soap12:operation soapAction="http://tempuri.org/GetCustomers_Internal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AccountManagerHttpGet" type="tns:AccountManagerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="AddCustomer">
+      <http:operation location="/AddCustomer" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <http:operation location="/UpdateCustomer" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <http:operation location="/GetCustomers" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <http:operation location="/GetCustomerbyID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <http:operation location="/AddUser" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <http:operation location="/UpdateUser" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <http:operation location="/GetUsers" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <http:operation location="/GetUserbyID" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <http:operation location="/GetLogin" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <http:operation location="/GetBaseChanels_Internal" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <http:operation location="/GetCustomers_Internal" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AccountManagerHttpPost" type="tns:AccountManagerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="AddCustomer">
+      <http:operation location="/AddCustomer" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <http:operation location="/UpdateCustomer" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers">
+      <http:operation location="/GetCustomers" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerbyID">
+      <http:operation location="/GetCustomerbyID" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddUser">
+      <http:operation location="/AddUser" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <http:operation location="/UpdateUser" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUsers">
+      <http:operation location="/GetUsers" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserbyID">
+      <http:operation location="/GetUserbyID" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLogin">
+      <http:operation location="/GetLogin" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBaseChanels_Internal">
+      <http:operation location="/GetBaseChanels_Internal" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomers_Internal">
+      <http:operation location="/GetCustomers_Internal" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountManager">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The ECN Application Programming Interface (API) is a web service that allows you to control your ECN account programatically via an HTTP POST, an HTTP GET, or an XML-based SOAP call. The following web service methods allow access to managing your ACCOUNTS in ECN. The supported methods are shown below. &lt;u&gt;IMPORTANT NOTE:&lt;/u&gt; All methods need ECN ACCESS KEY to work properly.</wsdl:documentation>
+    <wsdl:port name="AccountManagerSoap" binding="tns:AccountManagerSoap">
+      <soap:address location="http://webservices.ecn5.com/AccountManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AccountManagerSoap12" binding="tns:AccountManagerSoap12">
+      <soap12:address location="http://webservices.ecn5.com/AccountManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AccountManagerHttpGet" binding="tns:AccountManagerHttpGet">
+      <http:address location="http://webservices.ecn5.com/AccountManager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AccountManagerHttpPost" binding="tns:AccountManagerHttpPost">
+      <http:address location="http://webservices.ecn5.com/AccountManager.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,83 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+<script>
+    $(document).ready(function () {
+        $('#btnEmailFilter').click(filterEmails);
+        $('#btnExport').click(DownloadEmails);
+    });
+    function filterEmails(){
+        var searchModel = {
+            GroupID: $('#hfGroupID').val(),
+            searchType: $('#searchType').val(),
+            searchCriterion: $('#searchCriterion').val(),
+            searchString: $('#searchString').val()
+        }
+        $.ajax({
+            url: '@Url.Action("FilterEmails")',
+            type: 'POST',
+            data: JSON.stringify(searchModel),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#gridEmails').html(response);
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+    function DownloadEmails() {
+        var searchModel = {
+            groupID : $('#hfGroupID').val(), 
+            subscribeType: $('#searchType').val(),
+            emailAddr: $('#searchString').val(),
+            searchType: $('#searchType').val(),
+            downloadType: $('#downloadType').val(),
+            profFilter: $('#profFilter').val()
+        }
+        var form = $('#modelForm');
+        form.attr('method', 'POST');
+        form.attr('action', '@Url.Action("Export", "Group")' + '?' + $.param(searchModel));
+        form.submit();
+    }
+</script>
+<table>
+    @*<tr>
+        <td> Filter by </td>
+        <td>
+            @Html.DropDownList("searchType", Model.SubscribeTypeCodes.Select(item => new SelectListItem
+            {
+            Value = item.Item2,
+            Text = item.Item1
+            }), new { id = "searchType" })
+        </td>
+        <td> [or] email address </td>
+        <td> 
+            @Html.DropDownList("searchCriterion", new List<SelectListItem> {
+            new SelectListItem { Text = "contains", Value = "like" },
+            new SelectListItem { Text = "equals", Value = "equals" },
+            new SelectListItem { Text = "starts with", Value = "starts" },
+            new SelectListItem { Text = "ends with", Value = "ends" }
+            }) 
+        </td>
+        <td> @Html.TextBox("searchString") </td>
+        <td> <button type="button" class="btn k-button" id="btnEmailFilter"> Get Results </button></td>
+    </tr>*@
+    <tr>
+        <td> Export this view to </td>
+        <td> @Html.DropDownList("downloadType", new List<SelectListItem> {
+            new SelectListItem { Text = "XML [.xml]", Value = ".xml" },
+            new SelectListItem { Text = "EXCEL", Value = ".xls" },
+            new SelectListItem { Text = "CSV [.csv]", Value = ".csv" },
+            new SelectListItem { Text = "TXT [.txt]", Value = ".txt" }
+            })
+        <td> Download Only </td>
+        <td>
+            @Html.DropDownList("profFilter", new List<SelectListItem> {
+            new SelectListItem { Text = "ProfileOnly", Value = "ProfileOnly" },
+            new SelectListItem { Text = "ProfilePlusStandalone", Value = "ProfilePlusStandalone" },
+            new SelectListItem { Text = "ProfilePlusAllUDFs", Value = "ProfilePlusAllUDFs" },
+            })
+        </td>
+        <td> <button type="button" class="btn k-button" id="btnExport"> Export </button></td>
+    </tr>
+</table>
+<form id="modelForm"></form>

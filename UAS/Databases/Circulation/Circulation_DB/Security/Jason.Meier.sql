@@ -1,0 +1,9 @@
+﻿CREATE USER [Jason.Meier] WITHOUT LOGIN;
+
+
+GO
+CREATE LOGIN [Jason.Meier]
+    WITH PASSWORD = N'txjqz9d$jpe`mzducu{Rsh{lmsFT7_&#$!~<jc}nHcCxhrkl', SID = 0x46E679369DAC554C8714D0D34B60EB90, DEFAULT_DATABASE = [UAS], DEFAULT_LANGUAGE = [us_english];
+
+
+

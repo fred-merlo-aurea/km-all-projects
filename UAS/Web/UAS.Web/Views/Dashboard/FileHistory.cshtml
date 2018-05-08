@@ -1,0 +1,263 @@
+﻿@model UAS.Web.Models.Circulations.FileHistorySearch
+@{
+    ViewBag.Title = "File History";
+}
+
+<script language="JavaScript" type="text/JavaScript">
+
+    //$(document).ready(function() {
+    //    LoadSearchResults();
+    //});
+
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            $("#spanError").html("");
+            LoadSearchResults();
+        });
+    });
+
+    $(document).ready(function () {
+        $('#btnReset').click(function () {
+            ResetDropDowns();
+        });
+    });
+
+    $(document).ready(function () {
+        $("input[name='isCirc']").bind('change', function () {
+            ChangeDropDownOptions();
+            LoadSearchResults();
+        });
+    });
+
+    $(document).ready(function () {
+        var field = 'SingleView';
+        var url = window.location.href;
+        if (url.indexOf('?' + field + '=') != -1) {
+            ViewSingleFileHistory();
+        } else if (url.indexOf('&' + field + '=') != -1) {
+            ViewSingleFileHistory();
+        }
+    });   
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    function ViewSingleFileHistory() {
+        $("#divShowResults").html("");
+
+        var url = window.location.href;
+        //var id = url.searchParams.get("SingleView");
+        var id = getParameterByName("SingleView", url);
+
+        var model = {
+            SourceFileID: id
+        }
+
+        $.ajax({
+            url: "/UAS.Web/Dashboard/SingleFileHistory",
+            type: "POST",
+            data: model,
+            traditional: true,
+            cache: false,
+            success: function (data) {
+                $("#divShowResults").html(data);
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+    function LoadSearchResults() {        
+        $("#divShowResults").html("");
+        debugger;
+        var IsCirc = ($("input[name='isCirc']:checked").val() == "CIRC" ? true : false);
+
+        var rbCirc = $("#rbCirc").is(":checked");
+        var rbUAD =  $("#rbUAD").is(":checked");
+        var rbAPI =  $("#rbAPI").is(":checked");
+        var rs = $('input[name=recordSource]:checked', '#fileHistoryForm').val()
+
+        if (rs == "API")
+        {
+            var date1 = new Date($('#StartDate').val());
+            var date2 = new Date($('#EndDate').val());
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            if(diffDays > 3)
+            {
+                var datepicker = $("#EndDate").data("kendoDatePicker");
+                var date3 = new Date($('#StartDate').val());
+                date3.setDate(date1.getDate() + 3);
+                datepicker.value(date3);
+            }
+        }
+        var filehistorysearchModel = {
+            PubID: 0,//$('#PubID').val(),
+            FileName: '',//$('#FileName').val(),
+            StartDate: $('#StartDate').val(),
+            EndDate: $('#EndDate').val(),
+            FileTypeID: 0,//$('#FileTypeID').val(),
+            FileTypeName: '',//$("#FileTypeID option:selected").text(),
+            RecordSource: rs,
+            isCirc: IsCirc
+        }
+
+        $.ajax({
+            url: "/UAS.Web/Dashboard/FileHistory",
+            type: "POST",
+            data: filehistorysearchModel,
+            traditional: true,
+            cache: false,
+            success: function (response) {
+                $("#divShowResults").html(response);
+            },
+            error: function (response) {
+               console.log(response);
+            }
+        });
+    }
+
+    function ResetDropDowns() {
+        //$("#FileTypeID option:first-child").attr('selected','selected');
+        //$("#PubID option:first-child").attr('selected','selected');
+
+        //var ftID = $("#FileTypeID");
+        //ftID[0].selectedIndex = 0;
+        //var pID = $("#PubID");
+        //pID[0].selectedIndex = 0;
+
+        //$("#FileName").val("");
+        $("#spanError").html("");
+        var result = new Date();
+        result.setDate(result.getDate() - 7);
+        var start = kendo.toString(kendo.parseDate(result), 'MM/dd/yyyy');
+        $("#StartDate").data("kendoDatePicker").value(start);
+        var end = kendo.toString(kendo.parseDate(new Date()), 'MM/dd/yyyy');
+        $("#EndDate").data("kendoDatePicker").value(end);
+        $("#divShowResults").html("");
+    }
+
+    function ChangeDropDownOptions() {
+        @*var IsCirc = ($("input[name='isCirc']:checked").val() == "CIRC" ? true : false)
+        var fileTypes;
+        if (IsCirc == true) {
+            fileTypes = @Html.Raw(Json.Encode(Model.FileTypes.Where(x => x.IsCirc == true)));
+        } else {
+            fileTypes = @Html.Raw(Json.Encode(Model.FileTypes.Where(x => x.IsCirc == false)));
+        }
+        $("#FileTypeID").html("");
+        $("#FileTypeID").append($('<option></option>').val("-- Select --").html("-- Select --"));
+        $.each(fileTypes, function () {
+            $("#FileTypeID").append($('<option></option>').val(this.FileTypeID).html(this.FileTypeName));
+        });
+
+        var pubs;
+        if (IsCirc == true) {
+            pubs = @Html.Raw(Json.Encode(Model.Pubs.Where(x => x.IsCirc == true).OrderBy(x => x.Pubcode)));
+        } else {
+            pubs = @Html.Raw(Json.Encode(Model.Pubs.Where(x => x.IsCirc == false).OrderBy(x => x.Pubcode)));
+        }
+        $("#PubID").html("");
+        $("#PubID").append($('<option></option>').val("-- Select --").html("-- Select --"));
+        $.each(pubs, function () {
+            $("#PubID").append($('<option></option>').val(this.PubID).html(this.Pubcode));
+        });*@
+    }
+
+
+</script>
+<style>
+    .tableFH {
+        width: 100%;
+       
+    }
+
+    .tdTen {
+        width: 10%;
+        max-width: 10%;
+    }
+
+    .tdTwenty {
+        width: 20%;
+        max-width: 20%;
+    }
+
+    .tdThirty {
+        width: 30%;
+        max-width: 30%;
+    }
+</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<span id="spanError" style="color: red; display: block; text-align: center;">@if (TempData["FileHistoryMessage"] != null) { @TempData["FileHistoryMessage"] }</span>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "fileHistoryForm" }))
+{
+
+    <table class="tableFH">
+        <tr>
+            <td class="tdThirty" valign="middle">
+                <div class="formitem formiteminline" style="text-align:center">
+                    @Html.Kendo().RadioButtonFor(x => x.RecordSource).Name("recordSource").Label("CIRC").Value("CIRC").Enable(Model.isCirc).Checked(Model.RecordSource == "CIRC")
+                    @Html.Kendo().RadioButtonFor(x => x.RecordSource).Name("recordSource").Label("UAD").Value("UAD").Enable(Model.isUAD).Checked(Model.RecordSource == "UAD")
+                    @Html.Kendo().RadioButtonFor(x => x.RecordSource).Name("recordSource").Label("API").Value("API").Enable(Model.isUAD).Checked(Model.RecordSource == "API")
+                </div>
+            </td>
+            @*<td class="tdThirty" colspan="2">
+                File Type:
+                @Html.DropDownList("FileTypeID", Model.FileTypes.Where(x => x.RecordSource == Model.RecordSource).Select(item => new SelectListItem
+           {
+               Value = item.FileTypeID.ToString(),
+               Text = item.FileTypeName.ToString(),
+               Selected = "select" == Model.FileTypeID.ToString()
+           }), "-- Select --",
+                new { style = "width: 70%;" })
+            </td>*@
+            <td class="tdThirty">
+                Start Date:
+                @Html.Kendo().DatePickerFor(x => x.StartDate).HtmlAttributes(new { @type = "" })
+            </td>
+            <td class="tdThirty">
+                <span style="margin-right: 5px;">End Date:</span>
+                @Html.Kendo().DatePickerFor(x => x.EndDate).HtmlAttributes(new { @type = "" })
+            </td>
+            <td class="tdTen" align="center">
+                <input type="button" id="btnSearch" class="btn btn-blue2 k-button" value="Search" style="margin:10px;" />
+                <input type="button" id="btnReset" class="btn btn-blue2 k-button" value="Reset" style="margin-left:10px;" />
+            </td>
+        </tr>
+        <tr>
+            @*<td class="tdThirty" colspan="2">
+                Product:
+                @Html.DropDownList("PubID", Model.Pubs.Where(x => x.IsCirc == Model.isCirc).OrderBy(x => x.Pubcode).Select(item => new SelectListItem
+           {
+               Value = item.PubID.ToString(),
+               Text = item.Pubcode.ToString(),
+               Selected = "select" == Model.PubID.ToString()
+           }), "-- Select --",
+                new { style = "width: 70%;" })
+            </td>*@
+            @*<td class="tdThirty" colspan="2">
+                File Name:
+                @Html.TextBoxFor(x => x.FileName)
+            </td>*@
+            
+        </tr>
+
+    </table>
+    <br />
+
+}
+<div id="divShowResults">
+
+</div>

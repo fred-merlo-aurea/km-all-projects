@@ -1,0 +1,20 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ThirdPartyQueryValueModel
+@{
+    var htmlFieldPrefix = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var current_id = htmlFieldPrefix.Replace("ThirdPartyQueryValue[", "").Replace("]", "");
+}     
+     <ul class="inline" >
+        <li class="name">
+            @Html.Kendo().TextBoxFor(x => x.Name)
+        </li>
+        <li class="value">
+            @Html.Kendo().DropDownListFor(x => x.Value).BindTo(ViewContext.Controller.ViewBag.Controls).DataTextField("FieldLabel").DataValueField("Id")
+        </li>
+         <li class="acts">
+             
+             @(Html.Kendo().Button().Content( "Delete<i class='km-icon icon-kmcustom-delete'></i>" ).Name(current_id + "_DeleteBtn").HtmlAttributes(new { @class="DeleteBtnClass btn btn-blue3" , type = "button" }))
+         </li>
+     </ul>

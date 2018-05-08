@@ -1,0 +1,202 @@
+﻿@model ecn.communicator.mvc.Models.GroupWrapper
+@using ecn.communicator.mvc.Infrastructure
+@using KMEnums
+@{
+    ViewBag.Title = "Add Group";
+}
+<style>
+    td, th {
+        padding: 3px;
+    }
+
+    .validation {
+        color: red;
+    }
+
+    #GroupDescription {
+        width: 300px;
+        height: 100px;
+        font-size: 13px;
+        font-family: Arial;
+    }
+
+    #GroupName {
+        width: 300px;
+        font-size: 13px;
+        font-family: Arial;
+    }
+</style>
+
+<script>
+    var lastControlsError = [];
+    function btnCloseSelectFolder_Click() {
+        var win = $("#SelectFolder");
+
+        var kendoWindow = win.data('kendoWindow');
+
+        kendoWindow.close();
+    }
+
+    function FolderSelected(e) {
+        clearValidationErrorMessages();
+        var tv = this;
+        var selectedFolder = tv.dataItem(e.node);
+        var hidden = $('#group_FolderID');
+        hidden.val(selectedFolder.id);
+        var folderLabel = $('#selectedFolderName');
+        folderLabel.html(selectedFolder.text);
+        btnCloseSelectFolder_Click();
+    }
+
+    $(document).ready(function () {
+        $('#btnSelectFolder').click(function () {
+            var win = $("#SelectFolder");
+
+            var kendoWindow = win.data('kendoWindow');
+
+            kendoWindow.center().open();
+
+
+
+        });
+        $('#btnAddGroup').click(function () {
+            if (!validate()) return;
+
+            var groupModel = {
+                GroupName: $('#GroupName').val(),
+                GroupDescription: $('#GroupDescription').val(),
+                FolderID: $('#group_FolderID').val(),
+                IsSeedList: $('#group_IsSeedList_True').is(':checked') ? true : false
+            };
+
+            $.ajax({
+                url: '@Url.Action("Add")',
+                type: 'POST',
+                data: JSON.stringify(groupModel),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        window.location.href = response[1];
+                    }
+                    else {
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        });
+    });
+
+    function validate() {
+        clearValidationErrorMessages();
+        lastErrorControls = [];
+        var ret_val = true;
+        if ($('#GroupName').val() == "") {
+            lastErrorControls.push({ name: "GroupName", message: "Please enter a name", label: "groupNameLabel", isKendo: false });
+            ret_val = false;
+        }
+        if ($('#group_FolderID').val() == '') {
+            lastErrorControls.push({ name: "selectedFolderName", message: "Please select a Folder", label: "selectedFolderNameLabel", isKendo: false });
+            ret_val = false;
+        }
+
+        if (!ret_val) {
+            setValidationClient(lastErrorControls);
+        }
+        return ret_val;
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="#">Add</a></li>
+</ol>
+<div id="AddGroup_Validation" style="margin:10px;padding-left:15px;">
+
+</div>
+<div id="errorPanel">@Html.ECNErrors(Model.Errors)</div>
+<table style="margin-left:30px;">
+    <tr>
+        <td id="groupNameLabel">Name:</td>
+        <td>
+            @Html.TextBoxFor(e => e.group.GroupName, new { id = "GroupName" })
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td>
+            @Html.TextAreaFor(e => e.group.GroupDescription, new { id = "GroupDescription" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="subtitle" id="selectedFolderNameLabel">Folder:</div>
+        </td>
+        <td>
+            <div class="formitem formiteminline">
+                <span id="selectedFolderName">-- Select Folder --</span>
+                @Html.HiddenFor(x => x.group.FolderID)
+            </div>
+            <div class="formitem formiteminline">
+                <button type="button" id="btnSelectFolder" class="btn k-button">Select</button>
+                @*@Html.DropDownListFor(x => x.group.FolderID, Model.FolderList.Select(item => new SelectListItem
+                {
+                    Value = item.FolderID.ToString(),
+                    Text = item.FolderName,
+                    Selected = item.FolderID == Model.group.FolderID
+                }), new { id = "FolderID" })*@
+            </div>
+        </td>
+</tr>
+    @if (Model.SeedListAllowed)
+    {
+        <tr>
+            <td>Is This Seed List:</td>
+            <td>
+                @(Html.Kendo().RadioButtonFor(m => m.group.IsSeedList).Label("No").Value(false).Checked(true))
+                @(Html.Kendo().RadioButtonFor(m => m.group.IsSeedList).Label("Yes").Value(true))
+                &nbsp&nbsp (ECN will automatically send a copy of the blasts to all the emails in the Seed list group. )
+            </td>
+            <td></td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td>
+            <button type="button" id="btnAddGroup" class="btn k-button" style="margin-bottom:10px;"> Create </button>
+        </td>
+    </tr>
+</table>
+
+
+    @{
+        Html.Kendo()
+            .Window()
+            .Modal(true)
+            .Animation(false)
+            .Name("SelectFolder")
+            .Actions(x => x.Clear())
+            .Title("Folders")
+
+            .Content(
+            @<text>
+                <div id="deleteDiv">
+                    @Html.Partial("Partials/_SelectFolder", Model.KendoFolders)
+                </div>
+            </text>
+        )
+        .Visible(false)
+        .Render();
+    }

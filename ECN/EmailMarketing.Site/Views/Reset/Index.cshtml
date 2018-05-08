@@ -1,0 +1,61 @@
+﻿@model EmailMarketing.Site.Models.ResetPasswordViewModel
+@{
+    ViewBag.Title = "Reset";
+    Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
+}
+<div id="login">
+    <h2>
+        <img src="@ViewBag.BrandingImageSrc" />
+    </h2>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <p><label for="user">User Name</label></p>
+            <p>@Html.TextBoxFor(m => m.UserName)</p>
+
+            <p><label for="password">Temporary Password</label></p>
+            <p><input type="password" id="temppassword" value="" name="temppassword">
+            
+            @if(Model.InvalidTemp_Password)
+            { 
+            <br /><font style="color:red;">Invalid Temporary Password</font>
+            }
+            
+            </p>            
+            
+            <p><label for="password">New Password</label></p>
+            <p><input type="password" id="newpassword" value="" name="newpassword">
+            
+            </p>            
+
+            <p><label for="password">Confirm New Password</label></p>
+            <p><input type="password" id="confirmpassword" value="" name="confirmpassword">
+            @if(Model.PasswordCompare)
+            { 
+                <br /><font style="color:red;">Passwords must match</font>
+            }
+            </p>
+            
+           @if (Model.NoActiveRoles)
+           {
+            <p style="color:red;">There are no roles currently associated with this User.  Please contact your administrator.</p>
+           }
+           else if (Model.UserIsLocked)
+           {
+            <p style="color:red;">This User is currently locked.  Please contact Customer Service to continue.</p>
+           }
+           else if (Model.UserIsDisabled)
+           {
+            <p style="color:red;">This User is currently disabled.  Please contact Customer Service to continue.</p>
+           }
+           else if (Model.InvalidUsername_Password)
+           {
+            <p style="color:red;">Invalid Username/Password.</p>
+           }
+          
+            @Html.HiddenFor(m => m.UserID)
+            <p><input type="submit" style="width:200px;" value="Reset Password" /></p>
+        </fieldset>
+    }
+</div>

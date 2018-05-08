@@ -1,0 +1,20 @@
+﻿CREATE TABLE [dbo].[AcsShippingDetail] (
+    [AcsShippingDetailId] INT             IDENTITY (1, 1) NOT NULL,
+    [CustomerNumber]      INT             NOT NULL,
+    [AcsDate]             DATE            NOT NULL,
+    [ShipmentNumber]      BIGINT          NOT NULL,
+    [AcsTypeId]           INT             NOT NULL,
+    [AcsId]               INT             NOT NULL,
+    [AcsName]             VARCHAR (250)   NOT NULL,
+    [ProductCode]         VARCHAR (100)   NOT NULL,
+    [Description]         VARCHAR (250)   NOT NULL,
+    [Quantity]            INT             NOT NULL,
+    [UnitCost]            DECIMAL (8, 2)  NOT NULL,
+    [TotalCost]           DECIMAL (12, 2) NOT NULL,
+    [DateCreated]         DATETIME        NOT NULL,
+    [IsBilled]            BIT             DEFAULT ('false') NOT NULL,
+    [BilledDate]          DATETIME        NULL,
+    [BilledByUserID]      INT             NULL,
+    [ProcessCode]         VARCHAR (50)    NULL,
+    CONSTRAINT [PK_AcsShippingDetail_AcsShippingDetailId] PRIMARY KEY CLUSTERED ([AcsShippingDetailId] ASC) WITH (FILLFACTOR = 90)
+);

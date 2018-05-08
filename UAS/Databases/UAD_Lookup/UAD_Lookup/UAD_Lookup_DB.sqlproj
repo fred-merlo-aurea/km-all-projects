@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>UAD_Lookup_DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{0e5ce7ab-df6a-46d0-979f-70245ad7ee7f}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>UAD_Lookup</RootNamespace>
+    <AssemblyName>UAD_Lookup</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="Comparisons" />
+    <Folder Include="dbo\Views" />
+    <Folder Include="dbo\Functions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Code.sql" />
+    <Build Include="dbo\Tables\CodeType.sql" />
+    <Build Include="dbo\Tables\Country.sql" />
+    <Build Include="dbo\Tables\CountryMap.sql" />
+    <Build Include="dbo\Tables\Region.sql" />
+    <Build Include="dbo\Tables\RegionGroup.sql" />
+    <Build Include="dbo\Tables\RegionMap.sql" />
+    <Build Include="dbo\Tables\SubscriptionStatus.sql" />
+    <Build Include="dbo\Tables\SubscriptionStatusMatrix.sql" />
+    <Build Include="dbo\Tables\Suffix.sql" />
+    <Build Include="dbo\Tables\TransactionCodeType.sql" />
+    <Build Include="dbo\Tables\TransactionCode.sql" />
+    <Build Include="dbo\Tables\Action.sql" />
+    <Build Include="dbo\Tables\CategoryCode.sql" />
+    <Build Include="dbo\Tables\CategoryCodeType.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select_ActionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Action_Select_CatCodeID_TranCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Active_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CategoryCodeType_Select_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_CodeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_CodeTypeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_CodeTypeName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_CodeTypeName_CodeName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_CodeTypeName_CodeValue.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_ParentCodeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_CodeType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_CodeType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CodeType_Select_CodeTypeId.sql" />
+    <Build Include="dbo\Stored Procedures\e_CodeType_Select_CodeTypeName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Country_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_CountryMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Region_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_RegionGroup_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_RegionMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select_CatCodeID_TranCodeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatus_Select_SubscriptionStatusID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select_CatID_TranID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubscriptionStatusMatrix_Select_SubscriptionStatusID_CatID_TranID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Suffix_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Suffix_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Suffix_Select_SuffixCodeTypeID.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Active_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCode_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_TransactionCodeType_Select_IsFree.sql" />
+    <Build Include="dbo\Stored Procedures\o_CodeExist_CodeName_CodeValue.sql" />
+    <Build Include="dbo\Stored Procedures\o_CodeExist_CodeTypeName_CodeName.sql" />
+    <Build Include="dbo\Stored Procedures\o_CodeValueExist_CodeTypeId_CodeValue.sql" />
+    <Build Include="dbo\Stored Procedures\o_CodeValueExist_CodeTypeName_CodeValue.sql" />
+    <Build Include="dbo\Views\vw_Action.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_SelectForDemographicAttribute.sql" />
+    <Build Include="dbo\Tables\ZipCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Country_Select_For_Report.sql" />
+    <Build Include="dbo\Stored Procedures\e_ZipCode_Select.sql" />
+    <Build Include="dbo\Functions\RevertXmlFormatting.sql" />
+    <Build Include="dbo\Stored Procedures\dt_CodeType.sql" />
+    <Build Include="dbo\Stored Procedures\o_Operators_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_ParentCodeType_ParentCodeName.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Comparisons\schemaCompare.scmp" />
+    <None Include="UAD_Lookup.tfignore" />
+  </ItemGroup>
+</Project>

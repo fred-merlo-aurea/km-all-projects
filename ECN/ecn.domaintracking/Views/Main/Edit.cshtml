@@ -1,0 +1,326 @@
+﻿@model ecn.domaintracking.Models.DomainTrackerFieldsViewModel
+@using Kendo.Mvc.UI;
+@using KMEnums;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int domainID = Model.DomainTracker.DomainTrackerID;
+    int records = Model.DomainTrackerFields.Count;
+}
+
+<script type="text/javascript">
+    function DomainFieldsDataBound() {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+
+    function validateForm() {
+        var errorString = '';
+        var fieldName = document.forms["editForm"]["FieldName"].value;
+        var source = document.forms["editForm"]["Source"].value;
+        var sourceid = document.forms["editForm"]["SourceID"].value;
+
+        if (fieldName == '') {
+            errorString += "The 'Data Point Name' textbox needs a value.\n";
+        }
+        if (source == '0') {
+            errorString += "Please choose a value from the 'Source' list.\n";
+        }
+        if (sourceid == '') {
+            errorString += "The 'SourceID' textbox needs a value.";
+        }
+        if (errorString.length > 0) {
+            alert(errorString);
+            return false;
+        }
+    }
+
+    function deleteDomainTrackerField(id) {
+        var win = $("#DeleteFieldWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+
+        kendoWindow.title('Delete');
+        kendoWindow.center().open();
+
+    }   
+
+    function closeDeleteDomainTrackerField(id) {
+        var win = $("#DeleteFieldWindow");
+        
+        var kendoWindow = win.data('kendoWindow');
+
+        
+        kendoWindow.close();
+
+    }
+
+    function addDomainTrackerField()
+    {
+        showLoadingWindow();
+        var domainTracker = { DomainTrackerID: $("#DomainTracker_DomainTrackerID").val() };
+        var source = $("#Source").data('kendoDropDownList').value();
+        var domain = {DomainTracker:domainTracker, FieldName:$("#FieldName").val(), SourceID:$("#SourceID").val(), Source:source };
+        $.ajax({
+            url: '@Url.Action("Edit", "Main")',
+            type: 'POST',
+            data: JSON.stringify({Model:domain}),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                if (response[0] == '200') {
+
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    window.location.href = response[1];
+                }
+                else {
+                    closeLoadingWindow();
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: response[1]
+                    });
+                }
+            },
+            error: function () {
+                closeLoadingWindow();
+                alert("error");
+            }
+        });
+    }
+
+
+</script>
+<style type="text/css">
+    label.error {
+        float: none;
+        color: red;
+        padding-left: .5em;
+        vertical-align: top;
+    }
+</style>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Main", new { onclick="showLoadingWindow()" })">Domain Tracking /</a></li>
+    <li class="breadcrumb-item">Edit Domain</li>
+</ol>
+
+<div style="float: left;text-align:left;font-weight:bold;font-size:medium;display:block;clear:both;">Domain Tracking</div>
+<div style="float:right;text-align:right;">
+    @Html.ActionLink("Back to Domains", "Index", "Main", null, new { @class = "btn k-button", onclick="showLoadingWindow()"})
+</div><br /><br /><br /> 
+<br />
+<table style="display:block;clear:both;">
+    <tr>
+        <td style="width:700px%;">
+            Domain Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.DomainTracker.Domain
+        </td>
+        <td style="font-size:10px;"></td>
+    </tr>
+</table>
+<br />
+<div style="float: left;text-align:left;font-weight:bold;font-size:medium;display:block;clear:both;">Standard Data Points<br /><br /></div>
+<ul style="float: left;text-align:left;font-size:medium;display:block;clear:both;">
+    <li>Email Address</li>
+    <li>Page URL</li>
+    <li>TimeStamp</li>
+    <li>Operating System</li>
+    <li>Browser Info</li>
+    <li>IP Address</li>
+</ul>
+@*<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>*@
+
+
+
+<div style="float: left;text-align:left;font-weight:bold;font-size:medium;display:block;clear:both;"><br /><br />Additional Data Points (Optional)</div>
+<div style="display:block;clear:both;float:left;">
+    @using (Html.BeginForm("Edit", "Main", FormMethod.Post, new { id = "formDomainTracking", name = "editForm", onsubmit = "return validateForm()" }))
+    {
+        @Html.HiddenFor(model => model.DomainTrackerField.DomainTrackerID)
+        @Html.HiddenFor(model => model.DomainTracker.DomainTrackerID)
+        @Html.HiddenFor(model => model.DomainTracker.Domain)
+        @Html.HiddenFor(model => model.DomainTracker.BaseChannelID)
+        @Html.HiddenFor(model => model.DomainTracker.TrackerKey)
+        @Html.HiddenFor(model => model.DomainTracker.UpdatedUserID)
+
+        <div>
+            
+            @Html.LabelFor(model => model.FieldName,"Data Point Name", new { @style = "font-weight:normal;" })&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Html.TextBoxFor(model => model.FieldName)
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @{
+        List<SelectListItem> listItems = new List<SelectListItem>
+                ();
+        listItems.Add(new SelectListItem
+        {
+            Text = "-Select-",
+            Value = "0"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Query String",
+            Value = "QueryString"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "Cookie",
+            Value = "Cookie"
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = "HTML Control",
+            Value = "HTMLElement"
+        });
+            }
+
+            @Html.LabelFor(model => model.Source, new { @style = "font-size:10px;font-weight:normal;" })
+            @*@Html.DropDownListFor(model => model.Source, listItems)*@
+            @Html.Kendo().DropDownListFor(m => m.Source).BindTo(listItems).DataTextField("Text").DataValueField("Value")
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Html.LabelFor(model => model.SourceID, new { @style = "font-size:10px;font-weight:normal;" })
+            @Html.TextBoxFor(model => model.SourceID)
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" class="btn k-button" style="padding:3px 7px 3px 7px;" onclick="addDomainTrackerField()" value="Add" />
+            <br />
+            <br />
+
+        </div>
+    }
+</div>
+<div style="text-align:left;display:block;clear:both;color:red;font-weight:bold;">
+    @if (Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            @Html.Raw(HttpUtility.HtmlDecode(Model.ErrorMessage))
+        }
+    }
+</div>
+
+
+@(Html.Kendo()
+            .Grid(Model.DomainTrackerFields)
+            .Name("DomainFieldsGrid")
+            .Events(x => x.DataBound("DomainFieldsDataBound"))
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.FieldName).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Data Point Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+                columns.Bound(e => e.Source).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Source").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+                columns.Bound(e => e.SourceID).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("SourceID").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+                columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Title("").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" }); ;
+            })
+            .Pageable(p => p.PageSizes(true).Numeric(true).Input(true).Info(true).Enabled(true))
+            .Sortable()
+            .HtmlAttributes(new { style = "min-height:450px;min-width:100px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(m =>
+                {
+                    m.Id(y => y.DomainTrackerFieldsID);
+                })
+                .PageSize(10)
+                .ServerOperation(false)
+            )
+)
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("DomainFieldsAction#=DomainTrackerFieldsID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteDomainTrackerField(#=DomainTrackerFieldsID#)" });
+                }
+            )
+        ).ToClientTemplate())
+}
+
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Name("DeleteFieldWindow")
+        .Actions(x => x.Clear())
+        .Title("Delete")
+        .Content(
+        @<text>
+
+            
+            <script type="text/javascript">
+            function deleteDomainTrackerFieldConfirm()
+            {
+                showLoadingWindow();
+                var id = $("#FieldId").val();
+                //Action("DeleteDomainTrackerField", "Main", new { DomainTrackerID = Model.DomainTracker.DomainTrackerID, FieldsID = "#=DomainTrackerFieldsID#" });
+                $.ajax({url: '@Url.Action("DeleteDomainTrackerField", "Main")' + "?DomainTrackerID=" + @Model.DomainTracker.DomainTrackerID + "&FieldsID=" + id,
+                    type: 'POST',           
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+
+                        if (response[0] == '200') {
+                            showMessage({
+                                type: '@MessageType.Success',
+                                text: 'Success'
+                            });
+                            window.location = response[1];
+                        }
+                        else {
+                            closeLoadingWindow();
+                            showMessage({
+                                type: '@MessageType.Error',
+                                text: response[1]
+                            });
+                        }
+                    },
+                    error: function () {
+                        closeLoadingWindow();
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: 'An error occurred'
+                        });
+                    }
+                });
+            }
+                    </script>
+
+                    <div class="wrapper km-modal modalnotify">
+                        <fieldset title="Delete">
+                            <div class="picon" style="margin: 0 auto; width: 100px;">
+                                <img src="/ecn.domaintracking/Content/Images/modal-icon-warning.png" border="0" />
+                            </div>
+                            @Html.Hidden("FieldId", null, new Dictionary<string, object> { { "data-bind", "value:Id" } })
+                            <div class="text" style="margin: 0 auto; width: 400px; text-align: left; padding-left: 2em; padding-top: 2em;">
+                                <span>Are you sure you want to delete this item?</span>
+                            </div>
+                            <div class="buttons" style="margin: 0 auto; width: 300px; text-align: center;">
+                                @Html.Kendo().Button().Name("Delete").Content("Delete").HtmlAttributes(new { @class = "btn", type = "button", onclick = "deleteDomainTrackerFieldConfirm()" })
+                                @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeDeleteDomainTrackerField()" })
+                            </div>
+                        </fieldset>
+                    </div>
+
+
+                </text>
+)
+        .Visible(false)
+        .Render();
+}
+
+
+
+

@@ -1,0 +1,2297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="kmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__RefactorLog">
+          <Key>
+            <PropertyRef Name="OperationKey" />
+          </Key>
+          <Property Name="OperationKey" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Condition">
+          <Key>
+            <PropertyRef Name="Condition_Seq_ID" />
+          </Key>
+          <Property Name="Condition_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="ConditionGroup_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Operation_ID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConditionGroup">
+          <Key>
+            <PropertyRef Name="ConditionGroup_Seq_ID" />
+          </Key>
+          <Property Name="ConditionGroup_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MainGroup_ID" Type="int" />
+          <Property Name="LogicGroup" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Control">
+          <Key>
+            <PropertyRef Name="Control_ID" />
+          </Key>
+          <Property Name="Control_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Order" Type="int" Nullable="false" />
+          <Property Name="Type_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="FieldLabel" Type="nvarchar(max)" />
+          <Property Name="HTMLID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FieldID" Type="int" />
+          <Property Name="FieldLabelHTML" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ControlCategory">
+          <Key>
+            <PropertyRef Name="ControlCategoryID" />
+          </Key>
+          <Property Name="ControlCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="LabelHTML" Type="varchar(max)" />
+          <Property Name="Order" Type="int" />
+        </EntityType>
+        <EntityType Name="ControlProperty">
+          <Key>
+            <PropertyRef Name="ControlProperty_Seq_ID" />
+          </Key>
+          <Property Name="ControlProperty_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type_ID" Type="int" Nullable="false" />
+          <Property Name="PropertyName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="PropertyType" Type="int" Nullable="false" />
+          <Property Name="PropertyValues" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="ControlPropertyGrid">
+          <Key>
+            <PropertyRef Name="ControlPropertyGrid_Seq_ID" />
+          </Key>
+          <Property Name="ControlPropertyGrid_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ControlProperty_ID" Type="int" Nullable="false" />
+          <Property Name="DataValue" Type="nvarchar" MaxLength="500" />
+          <Property Name="DataText" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDefault" Type="bit" />
+        </EntityType>
+        <EntityType Name="ControlType">
+          <Key>
+            <PropertyRef Name="ControlType_Seq_ID" />
+          </Key>
+          <Property Name="ControlType_Seq_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MainType_ID" Type="int" />
+          <Property Name="KMPaidQueryString" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CssClass">
+          <Key>
+            <PropertyRef Name="CssClass_Seq_ID" />
+          </Key>
+          <Property Name="CssClass_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CssFile">
+          <Key>
+            <PropertyRef Name="CssFile_Seq_ID" />
+          </Key>
+          <Property Name="CssFile_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CssFileUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DataTypePattern">
+          <Key>
+            <PropertyRef Name="DataTypePattern_Seq_ID" />
+          </Key>
+          <Property Name="DataTypePattern_Seq_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DataTypeName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Pattern" Type="nvarchar" MaxLength="400" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="Form_Seq_ID" />
+          </Key>
+          <Property Name="Form_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TokenUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ActivationDateFrom" Type="datetime" />
+          <Property Name="ActivationDateTo" Type="datetime" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="LastPublished" Type="datetime" />
+          <Property Name="OptInType" Type="int" Nullable="false" />
+          <Property Name="CssUri" Type="nvarchar" MaxLength="200" />
+          <Property Name="HeaderHTML" Type="nvarchar(max)" />
+          <Property Name="FooterHTML" Type="nvarchar(max)" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Active" Type="int" Nullable="false" />
+          <Property Name="SubmitButtonText" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentForm_ID" Type="int" />
+          <Property Name="CssFile_Seq_ID" Type="int" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="StylingType" Type="int" Nullable="false" />
+          <Property Name="CustomerAccessKey" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PublishAfter" Type="datetime" />
+          <Property Name="LanguageTranslationType" Type="bit" Nullable="false" />
+          <Property Name="Iframe" Type="bit" Nullable="false" />
+          <Property Name="Delay" Type="int" Nullable="false" />
+          <Property Name="FormType" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="HeaderJs" Type="nvarchar(max)" />
+          <Property Name="FooterJs" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FormControlProperty">
+          <Key>
+            <PropertyRef Name="FormControlProperty_Seq_ID" />
+          </Key>
+          <Property Name="FormControlProperty_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="ControlProperty_ID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FormControlPropertyGrid">
+          <Key>
+            <PropertyRef Name="FormControlPropertyGrid_Seq_ID" />
+          </Key>
+          <Property Name="FormControlPropertyGrid_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="ControlProperty_ID" Type="int" Nullable="false" />
+          <Property Name="DataValue" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="DataText" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDefault" Type="bit" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Order" Type="int" />
+        </EntityType>
+        <EntityType Name="FormResult">
+          <Key>
+            <PropertyRef Name="FormResult_Seq_ID" />
+          </Key>
+          <Property Name="FormResult_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="ResultType" Type="int" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="URL" Type="nvarchar" MaxLength="1792" />
+          <Property Name="JsMessage" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FormStatistic">
+          <Key>
+            <PropertyRef Name="FormStatistic_Seq_ID" />
+          </Key>
+          <Property Name="FormStatistic_Seq_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" />
+          <Property Name="Email" Type="nvarchar" MaxLength="60" />
+          <Property Name="StartForm" Type="datetime" />
+          <Property Name="FinishForm" Type="datetime" />
+          <Property Name="TotalPages" Type="int" Nullable="false" />
+          <Property Name="IsSubmitted" Type="bit" />
+        </EntityType>
+        <EntityType Name="FormStatisticLog">
+          <Key>
+            <PropertyRef Name="FormStatisticLog_Seq_ID" />
+          </Key>
+          <Property Name="FormStatisticLog_Seq_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FormStatistic_Seq_ID" Type="bigint" />
+          <Property Name="PageNumber" Type="int" />
+          <Property Name="StartPage" Type="datetime" />
+          <Property Name="FinishPage" Type="datetime" />
+        </EntityType>
+        <EntityType Name="NewsletterGroup">
+          <Key>
+            <PropertyRef Name="NewsletterGroupID" />
+          </Key>
+          <Property Name="NewsletterGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="ControlCategoryID" Type="int" />
+          <Property Name="Order" Type="int" />
+          <Property Name="IsPreSelected" Type="bit" Nullable="false" />
+          <Property Name="LabelHTML" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="NewsletterGroupUDF">
+          <Key>
+            <PropertyRef Name="NewsletterGroupUDFID" />
+          </Key>
+          <Property Name="NewsletterGroupUDFID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NewsletterGroupID" Type="int" Nullable="false" />
+          <Property Name="FormGroupDataFieldID" Type="int" Nullable="false" />
+          <Property Name="NewsletterDataFieldID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Notification_Seq_ID" />
+          </Key>
+          <Property Name="Notification_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConditionGroup_Seq_ID" Type="int" />
+          <Property Name="IsConfirmation" Type="bit" Nullable="false" />
+          <Property Name="IsInternalUser" Type="bit" Nullable="false" />
+          <Property Name="FromName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ToEmail" Type="nvarchar" MaxLength="200" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="100" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="LandingPage" Type="nvarchar(max)" />
+          <Property Name="IsDoubleOptIn" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OverwritedataPostValue">
+          <Key>
+            <PropertyRef Name="OverwritedataValue_Seq_ID" />
+          </Key>
+          <Property Name="OverwritedataValue_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="Rule_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RequestQueryValue">
+          <Key>
+            <PropertyRef Name="RequestQueryValue_Seq_ID" />
+          </Key>
+          <Property Name="RequestQueryValue_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="Rule_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rule">
+          <Key>
+            <PropertyRef Name="Rule_Seq_ID" />
+          </Key>
+          <Property Name="Rule_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" />
+          <Property Name="Control_ID" Type="int" />
+          <Property Name="ConditionGroup_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Action" Type="nvarchar(max)" />
+          <Property Name="UrlToRedirect" Type="nvarchar" MaxLength="1792" />
+          <Property Name="Order" Type="int" Nullable="false" />
+          <Property Name="ResultType" Type="int" Nullable="false" />
+          <Property Name="NonQualify" Type="int" />
+          <Property Name="SuspendpostDB" Type="int" />
+          <Property Name="Overwritedatapost" Type="int" />
+          <Property Name="ActionJs" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="SubmitData">
+          <Key>
+            <PropertyRef Name="SubmitData_Seq_ID" />
+          </Key>
+          <Property Name="SubmitData_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubmitHistory_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="SubmitHistory">
+          <Key>
+            <PropertyRef Name="SubmitHistory_Seq_ID" />
+          </Key>
+          <Property Name="SubmitHistory_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HistoryToken" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Form_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Added" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubscriberLogin">
+          <Key>
+            <PropertyRef Name="SubscriberLoginID" />
+          </Key>
+          <Property Name="SubscriberLoginID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FormID" Type="int" Nullable="false" />
+          <Property Name="LoginRequired" Type="bit" Nullable="false" />
+          <Property Name="OtherIdentification" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="PasswordRequired" Type="bit" Nullable="false" />
+          <Property Name="AutoLoginAllowed" Type="bit" Nullable="false" />
+          <Property Name="LoginModalHTML" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LoginButtonText" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SignUpButtonText" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ForgotPasswordButtonText" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="NewSubscriberButtonText" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ExistingSubscriberButtonText" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ForgotPasswordMessageHTML" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ForgotPasswordNotificationHTML" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ForgotPasswordFromName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ForgotPasswordSubject" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmailAddressQuerystringName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OtherQuerystringName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordQuerystringName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThirdPartyQueryValue">
+          <Key>
+            <PropertyRef Name="ThirdPartyQueryValue_Seq_ID" />
+          </Key>
+          <Property Name="ThirdPartyQueryValue_Seq_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Control_ID" Type="int" Nullable="false" />
+          <Property Name="FormResult_Seq_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ConditionGroup_Condition">
+          <End Role="ConditionGroup" Type="Self.ConditionGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Condition" Type="Self.Condition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Condition">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_ConditionGroup">
+          <End Role="ConditionGroup" Type="Self.ConditionGroup" Multiplicity="0..1" />
+          <End Role="ConditionGroup1" Type="Self.ConditionGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="ConditionGroup1">
+              <PropertyRef Name="MainGroup_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_Notification">
+          <End Role="ConditionGroup" Type="Self.ConditionGroup" Multiplicity="0..1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_Rule">
+          <End Role="ConditionGroup" Type="Self.ConditionGroup" Multiplicity="1" />
+          <End Role="Rule" Type="Self.Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_Condition">
+          <End Role="Control" Type="Self.Control" Multiplicity="1" />
+          <End Role="Condition" Type="Self.Condition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="Condition">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_ControlCategory">
+          <End Role="Control" Type="Self.Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ControlCategory" Type="Self.ControlCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="ControlCategory">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_FormControlProperty">
+          <End Role="Control" Type="Self.Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FormControlProperty" Type="Self.FormControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="FormControlProperty">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_FormControlPropertyGrid">
+          <End Role="Control" Type="Self.Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FormControlPropertyGrid" Type="Self.FormControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="FormControlPropertyGrid">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_NewsletterGroup">
+          <End Role="Control" Type="Self.Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NewsletterGroup" Type="Self.NewsletterGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="NewsletterGroup">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_OverwritedataPost">
+          <End Role="Control" Type="Self.Control" Multiplicity="1" />
+          <End Role="OverwritedataPostValue" Type="Self.OverwritedataPostValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="OverwritedataPostValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_RequestQueryValue">
+          <End Role="Control" Type="Self.Control" Multiplicity="1" />
+          <End Role="RequestQueryValue" Type="Self.RequestQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="RequestQueryValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_Rule">
+          <End Role="Control" Type="Self.Control" Multiplicity="0..1" />
+          <End Role="Rule" Type="Self.Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_ThirdPartyQueryValue">
+          <End Role="Control" Type="Self.Control" Multiplicity="1" />
+          <End Role="ThirdPartyQueryValue" Type="Self.ThirdPartyQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="ThirdPartyQueryValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_ControlPropertyGrid">
+          <End Role="ControlProperty" Type="Self.ControlProperty" Multiplicity="1" />
+          <End Role="ControlPropertyGrid" Type="Self.ControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlPropertyGrid">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_FormControlProperty">
+          <End Role="ControlProperty" Type="Self.ControlProperty" Multiplicity="1" />
+          <End Role="FormControlProperty" Type="Self.FormControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormControlProperty">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_FormControlPropertyGrid">
+          <End Role="ControlProperty" Type="Self.ControlProperty" Multiplicity="1" />
+          <End Role="FormControlPropertyGrid" Type="Self.FormControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormControlPropertyGrid">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_Control">
+          <End Role="ControlType" Type="Self.ControlType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Control" Type="Self.Control" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="Control">
+              <PropertyRef Name="Type_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_ControlProperty">
+          <End Role="ControlType" Type="Self.ControlType" Multiplicity="1" />
+          <End Role="ControlProperty" Type="Self.ControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlProperty">
+              <PropertyRef Name="Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_ControlType">
+          <End Role="ControlType" Type="Self.ControlType" Multiplicity="0..1" />
+          <End Role="ControlType1" Type="Self.ControlType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlType1">
+              <PropertyRef Name="MainType_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CssFile_Form">
+          <End Role="CssFile" Type="Self.CssFile" Multiplicity="0..1" />
+          <End Role="Form" Type="Self.Form" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CssFile">
+              <PropertyRef Name="CssFile_Seq_ID" />
+            </Principal>
+            <Dependent Role="Form">
+              <PropertyRef Name="CssFile_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Control">
+          <End Role="Form" Type="Self.Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Control" Type="Self.Control" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Control">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Form">
+          <End Role="Form" Type="Self.Form" Multiplicity="0..1" />
+          <End Role="Form1" Type="Self.Form" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Form1">
+              <PropertyRef Name="ParentForm_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_FormResult">
+          <End Role="Form" Type="Self.Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FormResult" Type="Self.FormResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormResult">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Notification">
+          <End Role="Form" Type="Self.Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Rule">
+          <End Role="Form" Type="Self.Form" Multiplicity="0..1" />
+          <End Role="Rule" Type="Self.Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_SubmitHistory">
+          <End Role="Form" Type="Self.Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubmitHistory" Type="Self.SubmitHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubmitHistory">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormStatistic_Form">
+          <End Role="Form" Type="Self.Form" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FormStatistic" Type="Self.FormStatistic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormStatistic">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormStatisticLog_FormStatistic">
+          <End Role="FormStatistic" Type="Self.FormStatistic" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FormStatisticLog" Type="Self.FormStatisticLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormStatistic">
+              <PropertyRef Name="FormStatistic_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormStatisticLog">
+              <PropertyRef Name="FormStatistic_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsletterGroup_NewsletterGroupUDF">
+          <End Role="NewsletterGroup" Type="Self.NewsletterGroup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NewsletterGroupUDF" Type="Self.NewsletterGroupUDF" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NewsletterGroup">
+              <PropertyRef Name="NewsletterGroupID" />
+            </Principal>
+            <Dependent Role="NewsletterGroupUDF">
+              <PropertyRef Name="NewsletterGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rule_OverwritedataPost">
+          <End Role="Rule" Type="Self.Rule" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OverwritedataPostValue" Type="Self.OverwritedataPostValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Principal>
+            <Dependent Role="OverwritedataPostValue">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rule_RequestQueryValue">
+          <End Role="Rule" Type="Self.Rule" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RequestQueryValue" Type="Self.RequestQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Principal>
+            <Dependent Role="RequestQueryValue">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubmitHistory_SubmitData">
+          <End Role="SubmitHistory" Type="Self.SubmitHistory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubmitData" Type="Self.SubmitData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubmitHistory">
+              <PropertyRef Name="SubmitHistory_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubmitData">
+              <PropertyRef Name="SubmitHistory_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberLogin_Form">
+          <End Role="Form" Type="Self.Form" Multiplicity="1" />
+          <End Role="SubscriberLogin" Type="Self.SubscriberLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubscriberLogin">
+              <PropertyRef Name="FormID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="e_Form_UpdateStaticstic" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentID" Type="int" Mode="In" />
+          <Parameter Name="NewID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="kmModelStoreContainer">
+          <EntitySet Name="__RefactorLog" EntityType="Self.__RefactorLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Condition" EntityType="Self.Condition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConditionGroup" EntityType="Self.ConditionGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Control" EntityType="Self.Control" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ControlCategory" EntityType="Self.ControlCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ControlProperty" EntityType="Self.ControlProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ControlPropertyGrid" EntityType="Self.ControlPropertyGrid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ControlType" EntityType="Self.ControlType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CssClass" EntityType="Self.CssClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CssFile" EntityType="Self.CssFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataTypePattern" EntityType="Self.DataTypePattern" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Form" EntityType="Self.Form" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormControlProperty" EntityType="Self.FormControlProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormControlPropertyGrid" EntityType="Self.FormControlPropertyGrid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormResult" EntityType="Self.FormResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormStatistic" EntityType="Self.FormStatistic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormStatisticLog" EntityType="Self.FormStatisticLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewsletterGroup" EntityType="Self.NewsletterGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewsletterGroupUDF" EntityType="Self.NewsletterGroupUDF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OverwritedataPostValue" EntityType="Self.OverwritedataPostValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RequestQueryValue" EntityType="Self.RequestQueryValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rule" EntityType="Self.Rule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubmitData" EntityType="Self.SubmitData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubmitHistory" EntityType="Self.SubmitHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubscriberLogin" EntityType="Self.SubscriberLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThirdPartyQueryValue" EntityType="Self.ThirdPartyQueryValue" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ConditionGroup_Condition" Association="Self.FK_ConditionGroup_Condition">
+            <End Role="ConditionGroup" EntitySet="ConditionGroup" />
+            <End Role="Condition" EntitySet="Condition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_ConditionGroup" Association="Self.FK_ConditionGroup_ConditionGroup">
+            <End Role="ConditionGroup" EntitySet="ConditionGroup" />
+            <End Role="ConditionGroup1" EntitySet="ConditionGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_Notification" Association="Self.FK_ConditionGroup_Notification">
+            <End Role="ConditionGroup" EntitySet="ConditionGroup" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_Rule" Association="Self.FK_ConditionGroup_Rule">
+            <End Role="ConditionGroup" EntitySet="ConditionGroup" />
+            <End Role="Rule" EntitySet="Rule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_Condition" Association="Self.FK_Control_Condition">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="Condition" EntitySet="Condition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_ControlCategory" Association="Self.FK_Control_ControlCategory">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="ControlCategory" EntitySet="ControlCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_FormControlProperty" Association="Self.FK_Control_FormControlProperty">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="FormControlProperty" EntitySet="FormControlProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_FormControlPropertyGrid" Association="Self.FK_Control_FormControlPropertyGrid">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="FormControlPropertyGrid" EntitySet="FormControlPropertyGrid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_NewsletterGroup" Association="Self.FK_Control_NewsletterGroup">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="NewsletterGroup" EntitySet="NewsletterGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_OverwritedataPost" Association="Self.FK_Control_OverwritedataPost">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="OverwritedataPostValue" EntitySet="OverwritedataPostValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_RequestQueryValue" Association="Self.FK_Control_RequestQueryValue">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="RequestQueryValue" EntitySet="RequestQueryValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_Rule" Association="Self.FK_Control_Rule">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="Rule" EntitySet="Rule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_ThirdPartyQueryValue" Association="Self.FK_Control_ThirdPartyQueryValue">
+            <End Role="Control" EntitySet="Control" />
+            <End Role="ThirdPartyQueryValue" EntitySet="ThirdPartyQueryValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_ControlPropertyGrid" Association="Self.FK_ControlProperty_ControlPropertyGrid">
+            <End Role="ControlProperty" EntitySet="ControlProperty" />
+            <End Role="ControlPropertyGrid" EntitySet="ControlPropertyGrid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_FormControlProperty" Association="Self.FK_ControlProperty_FormControlProperty">
+            <End Role="ControlProperty" EntitySet="ControlProperty" />
+            <End Role="FormControlProperty" EntitySet="FormControlProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_FormControlPropertyGrid" Association="Self.FK_ControlProperty_FormControlPropertyGrid">
+            <End Role="ControlProperty" EntitySet="ControlProperty" />
+            <End Role="FormControlPropertyGrid" EntitySet="FormControlPropertyGrid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_Control" Association="Self.FK_ControlType_Control">
+            <End Role="ControlType" EntitySet="ControlType" />
+            <End Role="Control" EntitySet="Control" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_ControlProperty" Association="Self.FK_ControlType_ControlProperty">
+            <End Role="ControlType" EntitySet="ControlType" />
+            <End Role="ControlProperty" EntitySet="ControlProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_ControlType" Association="Self.FK_ControlType_ControlType">
+            <End Role="ControlType" EntitySet="ControlType" />
+            <End Role="ControlType1" EntitySet="ControlType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CssFile_Form" Association="Self.FK_CssFile_Form">
+            <End Role="CssFile" EntitySet="CssFile" />
+            <End Role="Form" EntitySet="Form" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Control" Association="Self.FK_Form_Control">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Control" EntitySet="Control" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Form" Association="Self.FK_Form_Form">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Form1" EntitySet="Form" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_FormResult" Association="Self.FK_Form_FormResult">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="FormResult" EntitySet="FormResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Notification" Association="Self.FK_Form_Notification">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Rule" Association="Self.FK_Form_Rule">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Rule" EntitySet="Rule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_SubmitHistory" Association="Self.FK_Form_SubmitHistory">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="SubmitHistory" EntitySet="SubmitHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormStatistic_Form" Association="Self.FK_FormStatistic_Form">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="FormStatistic" EntitySet="FormStatistic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormStatisticLog_FormStatistic" Association="Self.FK_FormStatisticLog_FormStatistic">
+            <End Role="FormStatistic" EntitySet="FormStatistic" />
+            <End Role="FormStatisticLog" EntitySet="FormStatisticLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsletterGroup_NewsletterGroupUDF" Association="Self.FK_NewsletterGroup_NewsletterGroupUDF">
+            <End Role="NewsletterGroup" EntitySet="NewsletterGroup" />
+            <End Role="NewsletterGroupUDF" EntitySet="NewsletterGroupUDF" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rule_OverwritedataPost" Association="Self.FK_Rule_OverwritedataPost">
+            <End Role="Rule" EntitySet="Rule" />
+            <End Role="OverwritedataPostValue" EntitySet="OverwritedataPostValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rule_RequestQueryValue" Association="Self.FK_Rule_RequestQueryValue">
+            <End Role="Rule" EntitySet="Rule" />
+            <End Role="RequestQueryValue" EntitySet="RequestQueryValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubmitHistory_SubmitData" Association="Self.FK_SubmitHistory_SubmitData">
+            <End Role="SubmitHistory" EntitySet="SubmitHistory" />
+            <End Role="SubmitData" EntitySet="SubmitData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberLogin_Form" Association="Self.FK_SubscriberLogin_Form">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="SubscriberLogin" EntitySet="SubscriberLogin" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="kmModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="kmEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Conditions" EntityType="kmModel.Condition" />
+          <EntitySet Name="ConditionGroups" EntityType="kmModel.ConditionGroup" />
+          <EntitySet Name="Controls" EntityType="kmModel.Control" />
+          <EntitySet Name="ControlProperties" EntityType="kmModel.ControlProperty" />
+          <EntitySet Name="ControlPropertyGrids" EntityType="kmModel.ControlPropertyGrid" />
+          <EntitySet Name="ControlTypes" EntityType="kmModel.ControlType" />
+          <EntitySet Name="CssFiles" EntityType="kmModel.CssFile" />
+          <EntitySet Name="DataTypePatterns" EntityType="kmModel.DataTypePattern" />
+          <EntitySet Name="CssClasses" EntityType="kmModel.CssClass" />
+          <EntitySet Name="FormControlProperties" EntityType="kmModel.FormControlProperty" />
+          <EntitySet Name="FormControlPropertyGrids" EntityType="kmModel.FormControlPropertyGrid" />
+          <EntitySet Name="FormResults" EntityType="kmModel.FormResult" />
+          <EntitySet Name="Notifications" EntityType="kmModel.Notification" />
+          <EntitySet Name="Rules" EntityType="kmModel.Rule" />
+          <EntitySet Name="ThirdPartyQueryValues" EntityType="kmModel.ThirdPartyQueryValue" />
+          <AssociationSet Name="FK_ConditionGroup_Condition" Association="kmModel.FK_ConditionGroup_Condition">
+            <End Role="ConditionGroup" EntitySet="ConditionGroups" />
+            <End Role="Condition" EntitySet="Conditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_Condition" Association="kmModel.FK_Control_Condition">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="Condition" EntitySet="Conditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_ConditionGroup" Association="kmModel.FK_ConditionGroup_ConditionGroup">
+            <End Role="ConditionGroup" EntitySet="ConditionGroups" />
+            <End Role="ConditionGroup1" EntitySet="ConditionGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_Notification" Association="kmModel.FK_ConditionGroup_Notification">
+            <End Role="ConditionGroup" EntitySet="ConditionGroups" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConditionGroup_Rule" Association="kmModel.FK_ConditionGroup_Rule">
+            <End Role="ConditionGroup" EntitySet="ConditionGroups" />
+            <End Role="Rule" EntitySet="Rules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_FormControlProperty" Association="kmModel.FK_Control_FormControlProperty">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="FormControlProperty" EntitySet="FormControlProperties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_FormControlPropertyGrid" Association="kmModel.FK_Control_FormControlPropertyGrid">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="FormControlPropertyGrid" EntitySet="FormControlPropertyGrids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_Rule" Association="kmModel.FK_Control_Rule">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="Rule" EntitySet="Rules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_ThirdPartyQueryValue" Association="kmModel.FK_Control_ThirdPartyQueryValue">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="ThirdPartyQueryValue" EntitySet="ThirdPartyQueryValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_Control" Association="kmModel.FK_ControlType_Control">
+            <End Role="ControlType" EntitySet="ControlTypes" />
+            <End Role="Control" EntitySet="Controls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_ControlPropertyGrid" Association="kmModel.FK_ControlProperty_ControlPropertyGrid">
+            <End Role="ControlProperty" EntitySet="ControlProperties" />
+            <End Role="ControlPropertyGrid" EntitySet="ControlPropertyGrids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_FormControlProperty" Association="kmModel.FK_ControlProperty_FormControlProperty">
+            <End Role="ControlProperty" EntitySet="ControlProperties" />
+            <End Role="FormControlProperty" EntitySet="FormControlProperties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlProperty_FormControlPropertyGrid" Association="kmModel.FK_ControlProperty_FormControlPropertyGrid">
+            <End Role="ControlProperty" EntitySet="ControlProperties" />
+            <End Role="FormControlPropertyGrid" EntitySet="FormControlPropertyGrids" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_ControlProperty" Association="kmModel.FK_ControlType_ControlProperty">
+            <End Role="ControlType" EntitySet="ControlTypes" />
+            <End Role="ControlProperty" EntitySet="ControlProperties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormResult_ThirdPartyQueryValue" Association="kmModel.FK_FormResult_ThirdPartyQueryValue">
+            <End Role="FormResult" EntitySet="FormResults" />
+            <End Role="ThirdPartyQueryValue" EntitySet="ThirdPartyQueryValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlType_ControlType" Association="kmModel.FK_ControlType_ControlType">
+            <End Role="ControlType" EntitySet="ControlTypes" />
+            <End Role="ControlType1" EntitySet="ControlTypes" />
+          </AssociationSet>
+          <EntitySet Name="SubmitDatas" EntityType="kmModel.SubmitData" />
+          <EntitySet Name="SubmitHistories" EntityType="kmModel.SubmitHistory" />
+          <AssociationSet Name="FK_SubmitHistory_SubmitData" Association="kmModel.FK_SubmitHistory_SubmitData">
+            <End Role="SubmitHistory" EntitySet="SubmitHistories" />
+            <End Role="SubmitData" EntitySet="SubmitDatas" />
+          </AssociationSet>
+          <EntitySet Name="FormStatistics" EntityType="kmModel.FormStatistic" />
+          <EntitySet Name="FormStatisticLogs" EntityType="kmModel.FormStatisticLog" />
+          <AssociationSet Name="FK_FormStatisticLog_FormStatistic" Association="kmModel.FK_FormStatisticLog_FormStatistic">
+            <End Role="FormStatistic" EntitySet="FormStatistics" />
+            <End Role="FormStatisticLog" EntitySet="FormStatisticLogs" />
+          </AssociationSet>
+          <EntitySet Name="ControlCategories" EntityType="kmModel.ControlCategory" />
+          <EntitySet Name="NewsletterGroups" EntityType="kmModel.NewsletterGroup" />
+          <EntitySet Name="NewsletterGroupUDFs" EntityType="kmModel.NewsletterGroupUDF" />
+          <AssociationSet Name="FK_Control_NewsletterGroup" Association="kmModel.FK_Control_NewsletterGroup">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="NewsletterGroup" EntitySet="NewsletterGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ControlCategory_NewsletterGroup" Association="kmModel.FK_ControlCategory_NewsletterGroup">
+            <End Role="ControlCategory" EntitySet="ControlCategories" />
+            <End Role="NewsletterGroup" EntitySet="NewsletterGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsletterGroup_NewsletterGroupUDF" Association="kmModel.FK_NewsletterGroup_NewsletterGroupUDF">
+            <End Role="NewsletterGroup" EntitySet="NewsletterGroups" />
+            <End Role="NewsletterGroupUDF" EntitySet="NewsletterGroupUDFs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_ControlCategory" Association="kmModel.FK_Control_ControlCategory">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="ControlCategory" EntitySet="ControlCategories" />
+          </AssociationSet>
+          <FunctionImport Name="e_Form_UpdateStaticstic">
+            <Parameter Name="CurrentID" Mode="In" Type="Int32" />
+            <Parameter Name="NewID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Form_UpdateStaticstic">
+            <Parameter Name="CurrentID" Mode="In" Type="Int32" />
+            <Parameter Name="NewID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="SubscriberLogins" EntityType="kmModel.SubscriberLogin" />
+          <EntitySet Name="C__RefactorLog" EntityType="kmModel.C__RefactorLog" />
+          <EntitySet Name="OverwritedataPostValues" EntityType="kmModel.OverwritedataPostValue" />
+          <EntitySet Name="RequestQueryValues" EntityType="kmModel.RequestQueryValue" />
+          <AssociationSet Name="FK_Control_OverwritedataPost" Association="kmModel.FK_Control_OverwritedataPost">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="OverwritedataPostValue" EntitySet="OverwritedataPostValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Control_RequestQueryValue" Association="kmModel.FK_Control_RequestQueryValue">
+            <End Role="Control" EntitySet="Controls" />
+            <End Role="RequestQueryValue" EntitySet="RequestQueryValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rule_OverwritedataPost" Association="kmModel.FK_Rule_OverwritedataPost">
+            <End Role="Rule" EntitySet="Rules" />
+            <End Role="OverwritedataPostValue" EntitySet="OverwritedataPostValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rule_RequestQueryValue" Association="kmModel.FK_Rule_RequestQueryValue">
+            <End Role="Rule" EntitySet="Rules" />
+            <End Role="RequestQueryValue" EntitySet="RequestQueryValues" />
+          </AssociationSet>
+          <EntitySet Name="Forms" EntityType="kmModel.Form" />
+          <AssociationSet Name="FK_Form_Control" Association="kmModel.FK_Form_Control">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="Control" EntitySet="Controls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CssFile_Form" Association="kmModel.FK_CssFile_Form">
+            <End Role="CssFile" EntitySet="CssFiles" />
+            <End Role="Form" EntitySet="Forms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Form" Association="kmModel.FK_Form_Form">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="Form1" EntitySet="Forms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_FormResult" Association="kmModel.FK_Form_FormResult">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="FormResult" EntitySet="FormResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Notification" Association="kmModel.FK_Form_Notification">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_Rule" Association="kmModel.FK_Form_Rule">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="Rule" EntitySet="Rules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_SubmitHistory" Association="kmModel.FK_Form_SubmitHistory">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="SubmitHistory" EntitySet="SubmitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormStatistic_Form" Association="kmModel.FK_FormStatistic_Form">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="FormStatistic" EntitySet="FormStatistics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubscriberLogin_Form" Association="kmModel.FK_SubscriberLogin_Form">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="SubscriberLogin" EntitySet="SubscriberLogins" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Condition">
+          <Key>
+            <PropertyRef Name="Condition_Seq_ID" />
+          </Key>
+          <Property Name="Condition_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="ConditionGroup_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Operation_ID" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="50" Unicode="true" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="ConditionGroup" Relationship="kmModel.FK_ConditionGroup_Condition" FromRole="Condition" ToRole="ConditionGroup" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_Condition" FromRole="Condition" ToRole="Control" />
+        </EntityType>
+        <EntityType Name="ConditionGroup">
+          <Key>
+            <PropertyRef Name="ConditionGroup_Seq_ID" />
+          </Key>
+          <Property Name="ConditionGroup_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="MainGroup_ID" Type="Int32" />
+          <Property Name="LogicGroup" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Conditions" Relationship="kmModel.FK_ConditionGroup_Condition" FromRole="ConditionGroup" ToRole="Condition" />
+          <NavigationProperty Name="ConditionGroup1" Relationship="kmModel.FK_ConditionGroup_ConditionGroup" FromRole="ConditionGroup" ToRole="ConditionGroup1" />
+          <NavigationProperty Name="ConditionGroup2" Relationship="kmModel.FK_ConditionGroup_ConditionGroup" FromRole="ConditionGroup1" ToRole="ConditionGroup" />
+          <NavigationProperty Name="Notifications" Relationship="kmModel.FK_ConditionGroup_Notification" FromRole="ConditionGroup" ToRole="Notification" />
+          <NavigationProperty Name="Rules" Relationship="kmModel.FK_ConditionGroup_Rule" FromRole="ConditionGroup" ToRole="Rule" />
+        </EntityType>
+        <EntityType Name="Control">
+          <Key>
+            <PropertyRef Name="Control_ID" />
+          </Key>
+          <Property Name="Control_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Form_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Order" Type="Int32" Nullable="false" />
+          <Property Name="Type_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="FieldLabel" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="FieldID" Type="Int32" />
+          <NavigationProperty Name="Conditions" Relationship="kmModel.FK_Control_Condition" FromRole="Control" ToRole="Condition" />
+          <NavigationProperty Name="FormControlProperties" Relationship="kmModel.FK_Control_FormControlProperty" FromRole="Control" ToRole="FormControlProperty" />
+          <NavigationProperty Name="FormControlPropertyGrids" Relationship="kmModel.FK_Control_FormControlPropertyGrid" FromRole="Control" ToRole="FormControlPropertyGrid" />
+          <NavigationProperty Name="Rules" Relationship="kmModel.FK_Control_Rule" FromRole="Control" ToRole="Rule" />
+          <NavigationProperty Name="ThirdPartyQueryValues" Relationship="kmModel.FK_Control_ThirdPartyQueryValue" FromRole="Control" ToRole="ThirdPartyQueryValue" />
+          <NavigationProperty Name="ControlType" Relationship="kmModel.FK_ControlType_Control" FromRole="Control" ToRole="ControlType" />
+          <Property Type="Guid" Name="HTMLID" Nullable="false" />
+          <Property Name="FieldLabelHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NewsletterGroups" Relationship="kmModel.FK_Control_NewsletterGroup" FromRole="Control" ToRole="NewsletterGroup" />
+          <NavigationProperty Name="ControlCategories" Relationship="kmModel.FK_Control_ControlCategory" FromRole="Control" ToRole="ControlCategory" />
+          <NavigationProperty Name="OverwritedataPostValues" Relationship="kmModel.FK_Control_OverwritedataPost" FromRole="Control" ToRole="OverwritedataPostValue" />
+          <NavigationProperty Name="RequestQueryValues" Relationship="kmModel.FK_Control_RequestQueryValue" FromRole="Control" ToRole="RequestQueryValue" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_Form_Control" FromRole="Control" ToRole="Form" />
+        </EntityType>
+        <EntityType Name="ControlProperty">
+          <Key>
+            <PropertyRef Name="ControlProperty_Seq_ID" />
+          </Key>
+          <Property Name="ControlProperty_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="PropertyType" Type="Int32" Nullable="false" />
+          <Property Name="PropertyValues" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ControlPropertyGrids" Relationship="kmModel.FK_ControlProperty_ControlPropertyGrid" FromRole="ControlProperty" ToRole="ControlPropertyGrid" />
+          <NavigationProperty Name="FormControlProperties" Relationship="kmModel.FK_ControlProperty_FormControlProperty" FromRole="ControlProperty" ToRole="FormControlProperty" />
+          <NavigationProperty Name="FormControlPropertyGrids" Relationship="kmModel.FK_ControlProperty_FormControlPropertyGrid" FromRole="ControlProperty" ToRole="FormControlPropertyGrid" />
+          <NavigationProperty Name="ControlType" Relationship="kmModel.FK_ControlType_ControlProperty" FromRole="ControlProperty" ToRole="ControlType" />
+        </EntityType>
+        <EntityType Name="ControlPropertyGrid">
+          <Key>
+            <PropertyRef Name="ControlPropertyGrid_Seq_ID" />
+          </Key>
+          <Property Name="ControlPropertyGrid_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ControlProperty_ID" Type="Int32" Nullable="false" />
+          <Property Name="DataValue" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="DataText" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="IsDefault" Type="Boolean" />
+          <NavigationProperty Name="ControlProperty" Relationship="kmModel.FK_ControlProperty_ControlPropertyGrid" FromRole="ControlPropertyGrid" ToRole="ControlProperty" />
+        </EntityType>
+        <EntityType Name="ControlType">
+          <Key>
+            <PropertyRef Name="ControlType_Seq_ID" />
+          </Key>
+          <Property Name="ControlType_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Controls" Relationship="kmModel.FK_ControlType_Control" FromRole="ControlType" ToRole="Control" />
+          <NavigationProperty Name="ControlProperties" Relationship="kmModel.FK_ControlType_ControlProperty" FromRole="ControlType" ToRole="ControlProperty" />
+          <Property Type="Int32" Name="MainType_ID" />
+          <NavigationProperty Name="ControlType1" Relationship="kmModel.FK_ControlType_ControlType" FromRole="ControlType" ToRole="ControlType1" />
+          <NavigationProperty Name="ControlType2" Relationship="kmModel.FK_ControlType_ControlType" FromRole="ControlType1" ToRole="ControlType" />
+          <Property Name="KMPaidQueryString" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CssFile">
+          <Key>
+            <PropertyRef Name="CssFile_Seq_ID" />
+          </Key>
+          <Property Name="CssFile_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CssFileUID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Forms" Relationship="kmModel.FK_CssFile_Form" FromRole="CssFile" ToRole="Form" />
+        </EntityType>
+        <EntityType Name="DataTypePattern">
+          <Key>
+            <PropertyRef Name="DataTypePattern_Seq_ID" />
+          </Key>
+          <Property Name="DataTypePattern_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="DataTypeName" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="Pattern" Type="String" Nullable="false" MaxLength="400" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="FormControlProperty">
+          <Key>
+            <PropertyRef Name="FormControlProperty_Seq_ID" />
+          </Key>
+          <Property Name="FormControlProperty_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="ControlProperty_ID" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_FormControlProperty" FromRole="FormControlProperty" ToRole="Control" />
+          <NavigationProperty Name="ControlProperty" Relationship="kmModel.FK_ControlProperty_FormControlProperty" FromRole="FormControlProperty" ToRole="ControlProperty" />
+        </EntityType>
+        <EntityType Name="FormControlPropertyGrid">
+          <Key>
+            <PropertyRef Name="FormControlPropertyGrid_Seq_ID" />
+          </Key>
+          <Property Name="FormControlPropertyGrid_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="ControlProperty_ID" Type="Int32" Nullable="false" />
+          <Property Name="DataValue" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="DataText" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="IsDefault" Type="Boolean" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_FormControlPropertyGrid" FromRole="FormControlPropertyGrid" ToRole="Control" />
+          <NavigationProperty Name="ControlProperty" Relationship="kmModel.FK_ControlProperty_FormControlPropertyGrid" FromRole="FormControlPropertyGrid" ToRole="ControlProperty" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Order" Type="Int32" />
+        </EntityType>
+        <EntityType Name="FormResult">
+          <Key>
+            <PropertyRef Name="FormResult_Seq_ID" />
+          </Key>
+          <Property Name="FormResult_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Form_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="ResultType" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="URL" Type="String" MaxLength="1792" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ThirdPartyQueryValues" Relationship="kmModel.FK_FormResult_ThirdPartyQueryValue" FromRole="FormResult" ToRole="ThirdPartyQueryValue" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_Form_FormResult" FromRole="FormResult" ToRole="Form" />
+          <Property Name="JsMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Notification_Seq_ID" />
+          </Key>
+          <Property Name="Notification_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ConditionGroup_Seq_ID" Type="Int32" />
+          <Property Name="IsConfirmation" Type="Boolean" Nullable="false" />
+          <Property Name="IsInternalUser" Type="Boolean" Nullable="false" />
+          <Property Name="IsDoubleOptIn" Type="Boolean" Nullable="false" />
+          <Property Name="FromName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ToEmail" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Subject" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="LandingPage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ConditionGroup" Relationship="kmModel.FK_ConditionGroup_Notification" FromRole="Notification" ToRole="ConditionGroup" />
+          <Property Type="Int32" Name="Form_Seq_ID" Nullable="false" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_Form_Notification" FromRole="Notification" ToRole="Form" />
+        </EntityType>
+        <EntityType Name="Rule">
+          <Key>
+            <PropertyRef Name="Rule_Seq_ID" />
+          </Key>
+          <Property Name="Rule_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Form_Seq_ID" Type="Int32" />
+          <Property Name="Control_ID" Type="Int32" />
+          <Property Name="ConditionGroup_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Action" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ConditionGroup" Relationship="kmModel.FK_ConditionGroup_Rule" FromRole="Rule" ToRole="ConditionGroup" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_Rule" FromRole="Rule" ToRole="Control" />
+          <Property Type="String" Name="UrlToRedirect" MaxLength="1792" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Order" Nullable="false" />
+          <Property Name="ResultType" Type="Int32" Nullable="false" />
+          <Property Name="NonQualify" Type="Int32" />
+          <Property Name="SuspendpostDB" Type="Int32" />
+          <Property Name="Overwritedatapost" Type="Int32" />
+          <NavigationProperty Name="OverwritedataPostValues" Relationship="kmModel.FK_Rule_OverwritedataPost" FromRole="Rule" ToRole="OverwritedataPostValue" />
+          <NavigationProperty Name="RequestQueryValues" Relationship="kmModel.FK_Rule_RequestQueryValue" FromRole="Rule" ToRole="RequestQueryValue" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_Form_Rule" FromRole="Rule" ToRole="Form" />
+          <Property Name="ActionJs" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ThirdPartyQueryValue">
+          <Key>
+            <PropertyRef Name="ThirdPartyQueryValue_Seq_ID" />
+          </Key>
+          <Property Name="ThirdPartyQueryValue_Seq_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="FormResult_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_ThirdPartyQueryValue" FromRole="ThirdPartyQueryValue" ToRole="Control" />
+          <NavigationProperty Name="FormResult" Relationship="kmModel.FK_FormResult_ThirdPartyQueryValue" FromRole="ThirdPartyQueryValue" ToRole="FormResult" />
+        </EntityType>
+        <EntityType Name="CssClass">
+          <Key>
+            <PropertyRef Name="CssClass_Seq_ID" />
+          </Key>
+          <Property Type="Int32" Name="CssClass_Seq_ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ConditionGroup_Condition">
+          <End Role="ConditionGroup" Type="kmModel.ConditionGroup" Multiplicity="1" />
+          <End Role="Condition" Type="kmModel.Condition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Condition">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_Condition">
+          <End Role="Control" Type="kmModel.Control" Multiplicity="1" />
+          <End Role="Condition" Type="kmModel.Condition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="Condition">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_ConditionGroup">
+          <End Role="ConditionGroup" Type="kmModel.ConditionGroup" Multiplicity="0..1" />
+          <End Role="ConditionGroup1" Type="kmModel.ConditionGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="ConditionGroup1">
+              <PropertyRef Name="MainGroup_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_Notification">
+          <End Role="ConditionGroup" Type="kmModel.ConditionGroup" Multiplicity="0..1" />
+          <End Role="Notification" Type="kmModel.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConditionGroup_Rule">
+          <End Role="ConditionGroup" Type="kmModel.ConditionGroup" Multiplicity="1" />
+          <End Role="Rule" Type="kmModel.Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConditionGroup">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="ConditionGroup_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_FormControlProperty">
+          <End Role="Control" Type="kmModel.Control" Multiplicity="1" />
+          <End Role="FormControlProperty" Type="kmModel.FormControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="FormControlProperty">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_FormControlPropertyGrid">
+          <End Role="Control" Type="kmModel.Control" Multiplicity="1" />
+          <End Role="FormControlPropertyGrid" Type="kmModel.FormControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="FormControlPropertyGrid">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_Rule">
+          <End Role="Control" Type="kmModel.Control" Multiplicity="0..1" />
+          <End Role="Rule" Type="kmModel.Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_ThirdPartyQueryValue">
+          <End Role="Control" Type="kmModel.Control" Multiplicity="1" />
+          <End Role="ThirdPartyQueryValue" Type="kmModel.ThirdPartyQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="ThirdPartyQueryValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_Control">
+          <End Role="ControlType" Type="kmModel.ControlType" Multiplicity="1" />
+          <End Role="Control" Type="kmModel.Control" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="Control">
+              <PropertyRef Name="Type_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_ControlPropertyGrid">
+          <End Role="ControlProperty" Type="kmModel.ControlProperty" Multiplicity="1" />
+          <End Role="ControlPropertyGrid" Type="kmModel.ControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlPropertyGrid">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_FormControlProperty">
+          <End Role="ControlProperty" Type="kmModel.ControlProperty" Multiplicity="1" />
+          <End Role="FormControlProperty" Type="kmModel.FormControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormControlProperty">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlProperty_FormControlPropertyGrid">
+          <End Role="ControlProperty" Type="kmModel.ControlProperty" Multiplicity="1" />
+          <End Role="FormControlPropertyGrid" Type="kmModel.FormControlPropertyGrid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlProperty">
+              <PropertyRef Name="ControlProperty_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormControlPropertyGrid">
+              <PropertyRef Name="ControlProperty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_ControlProperty">
+          <End Role="ControlType" Type="kmModel.ControlType" Multiplicity="1" />
+          <End Role="ControlProperty" Type="kmModel.ControlProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlProperty">
+              <PropertyRef Name="Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormResult_ThirdPartyQueryValue">
+          <End Role="FormResult" Type="kmModel.FormResult" Multiplicity="1" />
+          <End Role="ThirdPartyQueryValue" Type="kmModel.ThirdPartyQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormResult">
+              <PropertyRef Name="FormResult_Seq_ID" />
+            </Principal>
+            <Dependent Role="ThirdPartyQueryValue">
+              <PropertyRef Name="FormResult_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlType_ControlType">
+          <End Type="kmModel.ControlType" Role="ControlType" Multiplicity="0..1" />
+          <End Type="kmModel.ControlType" Role="ControlType1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlType">
+              <PropertyRef Name="ControlType_Seq_ID" />
+            </Principal>
+            <Dependent Role="ControlType1">
+              <PropertyRef Name="MainType_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SubmitData">
+          <Key>
+            <PropertyRef Name="SubmitData_Seq_ID" />
+          </Key>
+          <Property Type="Int32" Name="SubmitData_Seq_ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SubmitHistory_Seq_ID" Nullable="false" />
+          <Property Type="Int32" Name="Control_ID" Nullable="false" />
+          <Property Type="String" Name="Value" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SubmitHistory" Relationship="kmModel.FK_SubmitHistory_SubmitData" FromRole="SubmitData" ToRole="SubmitHistory" />
+        </EntityType>
+        <EntityType Name="SubmitHistory">
+          <Key>
+            <PropertyRef Name="SubmitHistory_Seq_ID" />
+          </Key>
+          <Property Type="Int32" Name="SubmitHistory_Seq_ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Guid" Name="HistoryToken" Nullable="false" />
+          <Property Type="Int32" Name="Form_Seq_ID" Nullable="false" />
+          <Property Type="Int32" Name="Status" />
+          <Property Type="DateTime" Name="Added" Nullable="false" Precision="3" />
+          <NavigationProperty Name="SubmitDatas" Relationship="kmModel.FK_SubmitHistory_SubmitData" FromRole="SubmitHistory" ToRole="SubmitData" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_Form_SubmitHistory" FromRole="SubmitHistory" ToRole="Form" />
+        </EntityType>
+        <Association Name="FK_SubmitHistory_SubmitData">
+          <End Type="kmModel.SubmitHistory" Role="SubmitHistory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.SubmitData" Role="SubmitData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubmitHistory">
+              <PropertyRef Name="SubmitHistory_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubmitData">
+              <PropertyRef Name="SubmitHistory_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FormStatistic">
+          <Key>
+            <PropertyRef Name="FormStatistic_Seq_ID" />
+          </Key>
+          <Property Type="Int64" Name="FormStatistic_Seq_ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Form_Seq_ID" />
+          <Property Type="String" Name="Email" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartForm" Precision="3" />
+          <Property Type="DateTime" Name="FinishForm" Precision="3" />
+          <Property Type="Int32" Name="TotalPages" Nullable="false" />
+          <NavigationProperty Name="FormStatisticLogs" Relationship="kmModel.FK_FormStatisticLog_FormStatistic" FromRole="FormStatistic" ToRole="FormStatisticLog" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_FormStatistic_Form" FromRole="FormStatistic" ToRole="Form" />
+          <Property Name="IsSubmitted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="FormStatisticLog">
+          <Key>
+            <PropertyRef Name="FormStatisticLog_Seq_ID" />
+          </Key>
+          <Property Type="Int64" Name="FormStatisticLog_Seq_ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="FormStatistic_Seq_ID" />
+          <Property Type="Int32" Name="PageNumber" />
+          <Property Type="DateTime" Name="StartPage" Precision="3" />
+          <NavigationProperty Name="FormStatistic" Relationship="kmModel.FK_FormStatisticLog_FormStatistic" FromRole="FormStatisticLog" ToRole="FormStatistic" />
+          <Property Type="DateTime" Name="FinishPage" Precision="3" />
+        </EntityType>
+        <Association Name="FK_FormStatisticLog_FormStatistic">
+          <End Type="kmModel.FormStatistic" Role="FormStatistic" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.FormStatisticLog" Role="FormStatisticLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormStatistic">
+              <PropertyRef Name="FormStatistic_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormStatisticLog">
+              <PropertyRef Name="FormStatistic_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ControlCategory">
+          <Key>
+            <PropertyRef Name="ControlCategoryID" />
+          </Key>
+          <Property Name="ControlCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="LabelHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Order" Type="Int32" />
+          <NavigationProperty Name="NewsletterGroups" Relationship="kmModel.FK_ControlCategory_NewsletterGroup" FromRole="ControlCategory" ToRole="NewsletterGroup" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_ControlCategory" FromRole="ControlCategory" ToRole="Control" />
+        </EntityType>
+        <EntityType Name="NewsletterGroup">
+          <Key>
+            <PropertyRef Name="NewsletterGroupID" />
+          </Key>
+          <Property Name="NewsletterGroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <Property Name="ControlCategoryID" Type="Int32" />
+          <Property Name="Order" Type="Int32" />
+          <Property Name="IsPreSelected" Type="Boolean" Nullable="false" />
+          <Property Name="LabelHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_NewsletterGroup" FromRole="NewsletterGroup" ToRole="Control" />
+          <NavigationProperty Name="ControlCategory" Relationship="kmModel.FK_ControlCategory_NewsletterGroup" FromRole="NewsletterGroup" ToRole="ControlCategory" />
+          <NavigationProperty Name="NewsletterGroupUDFs" Relationship="kmModel.FK_NewsletterGroup_NewsletterGroupUDF" FromRole="NewsletterGroup" ToRole="NewsletterGroupUDF" />
+        </EntityType>
+        <EntityType Name="NewsletterGroupUDF">
+          <Key>
+            <PropertyRef Name="NewsletterGroupUDFID" />
+          </Key>
+          <Property Name="NewsletterGroupUDFID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NewsletterGroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="NewsletterGroup" Relationship="kmModel.FK_NewsletterGroup_NewsletterGroupUDF" FromRole="NewsletterGroupUDF" ToRole="NewsletterGroup" />
+          <Property Name="FormGroupDataFieldID" Type="Int32" Nullable="false" />
+          <Property Name="NewsletterDataFieldID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Control_NewsletterGroup">
+          <End Type="kmModel.Control" Role="Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.NewsletterGroup" Role="NewsletterGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="NewsletterGroup">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ControlCategory_NewsletterGroup">
+          <End Type="kmModel.ControlCategory" Role="ControlCategory" Multiplicity="0..1" />
+          <End Type="kmModel.NewsletterGroup" Role="NewsletterGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlCategory">
+              <PropertyRef Name="ControlCategoryID" />
+            </Principal>
+            <Dependent Role="NewsletterGroup">
+              <PropertyRef Name="ControlCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsletterGroup_NewsletterGroupUDF">
+          <End Type="kmModel.NewsletterGroup" Role="NewsletterGroup" Multiplicity="1" />
+          <End Type="kmModel.NewsletterGroupUDF" Role="NewsletterGroupUDF" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NewsletterGroup">
+              <PropertyRef Name="NewsletterGroupID" />
+            </Principal>
+            <Dependent Role="NewsletterGroupUDF">
+              <PropertyRef Name="NewsletterGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_ControlCategory">
+          <End Type="kmModel.Control" Role="Control" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.ControlCategory" Role="ControlCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="ControlCategory">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SubscriberLogin">
+          <Key>
+            <PropertyRef Name="SubscriberLoginID" />
+          </Key>
+          <Property Name="SubscriberLoginID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="Int32" Nullable="false" />
+          <Property Name="LoginRequired" Type="Boolean" Nullable="false" />
+          <Property Name="OtherIdentification" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordRequired" Type="Boolean" Nullable="false" />
+          <Property Name="AutoLoginAllowed" Type="Boolean" Nullable="false" />
+          <Property Name="LoginModalHTML" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LoginButtonText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SignUpButtonText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForgotPasswordButtonText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NewSubscriberButtonText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ExistingSubscriberButtonText" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForgotPasswordMessageHTML" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ForgotPasswordNotificationHTML" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ForgotPasswordFromName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForgotPasswordSubject" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddressQuerystringName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OtherQuerystringName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordQuerystringName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Form" Relationship="kmModel.FK_SubscriberLogin_Form" FromRole="SubscriberLogin" ToRole="Form" />
+        </EntityType>
+        <EntityType Name="C__RefactorLog">
+          <Key>
+            <PropertyRef Name="OperationKey" />
+          </Key>
+          <Property Name="OperationKey" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OverwritedataPostValue">
+          <Key>
+            <PropertyRef Name="OverwritedataValue_Seq_ID" />
+          </Key>
+          <Property Name="OverwritedataValue_Seq_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rule_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_OverwritedataPost" FromRole="OverwritedataPostValue" ToRole="Control" />
+          <NavigationProperty Name="Rule" Relationship="kmModel.FK_Rule_OverwritedataPost" FromRole="OverwritedataPostValue" ToRole="Rule" />
+        </EntityType>
+        <EntityType Name="RequestQueryValue">
+          <Key>
+            <PropertyRef Name="RequestQueryValue_Seq_ID" />
+          </Key>
+          <Property Name="RequestQueryValue_Seq_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Control_ID" Type="Int32" Nullable="false" />
+          <Property Name="Rule_Seq_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Control" Relationship="kmModel.FK_Control_RequestQueryValue" FromRole="RequestQueryValue" ToRole="Control" />
+          <NavigationProperty Name="Rule" Relationship="kmModel.FK_Rule_RequestQueryValue" FromRole="RequestQueryValue" ToRole="Rule" />
+        </EntityType>
+        <Association Name="FK_Control_OverwritedataPost">
+          <End Type="kmModel.Control" Role="Control" Multiplicity="1" />
+          <End Type="kmModel.OverwritedataPostValue" Role="OverwritedataPostValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="OverwritedataPostValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Control_RequestQueryValue">
+          <End Type="kmModel.Control" Role="Control" Multiplicity="1" />
+          <End Type="kmModel.RequestQueryValue" Role="RequestQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Control">
+              <PropertyRef Name="Control_ID" />
+            </Principal>
+            <Dependent Role="RequestQueryValue">
+              <PropertyRef Name="Control_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rule_OverwritedataPost">
+          <End Type="kmModel.Rule" Role="Rule" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.OverwritedataPostValue" Role="OverwritedataPostValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Principal>
+            <Dependent Role="OverwritedataPostValue">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rule_RequestQueryValue">
+          <End Type="kmModel.Rule" Role="Rule" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.RequestQueryValue" Role="RequestQueryValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rule">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Principal>
+            <Dependent Role="RequestQueryValue">
+              <PropertyRef Name="Rule_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="Form_Seq_ID" />
+          </Key>
+          <Property Name="Form_Seq_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TokenUID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ActivationDateFrom" Type="DateTime" Precision="3" />
+          <Property Name="ActivationDateTo" Type="DateTime" Precision="3" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <Property Name="LastPublished" Type="DateTime" Precision="3" />
+          <Property Name="OptInType" Type="Int32" Nullable="false" />
+          <Property Name="CssUri" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="HeaderHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FooterHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Int32" Nullable="false" />
+          <Property Name="SubmitButtonText" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentForm_ID" Type="Int32" />
+          <Property Name="CssFile_Seq_ID" Type="Int32" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="StylingType" Type="Int32" Nullable="false" />
+          <Property Name="CustomerAccessKey" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PublishAfter" Type="DateTime" Precision="3" />
+          <Property Name="LanguageTranslationType" Type="Boolean" Nullable="false" />
+          <Property Name="Iframe" Type="Boolean" Nullable="false" />
+          <Property Name="Delay" Type="Int32" Nullable="false" />
+          <Property Name="FormType" Type="String" Unicode="false" FixedLength="false" MaxLength="50" />
+          <Property Name="Status" Type="String" Unicode="false" FixedLength="false" MaxLength="50" />
+          <NavigationProperty Name="Controls" Relationship="kmModel.FK_Form_Control" FromRole="Form" ToRole="Control" />
+          <NavigationProperty Name="CssFile" Relationship="kmModel.FK_CssFile_Form" FromRole="Form" ToRole="CssFile" />
+          <NavigationProperty Name="Form1" Relationship="kmModel.FK_Form_Form" FromRole="Form" ToRole="Form1" />
+          <NavigationProperty Name="Form2" Relationship="kmModel.FK_Form_Form" FromRole="Form1" ToRole="Form" />
+          <NavigationProperty Name="FormResults" Relationship="kmModel.FK_Form_FormResult" FromRole="Form" ToRole="FormResult" />
+          <NavigationProperty Name="Notifications" Relationship="kmModel.FK_Form_Notification" FromRole="Form" ToRole="Notification" />
+          <NavigationProperty Name="Rules" Relationship="kmModel.FK_Form_Rule" FromRole="Form" ToRole="Rule" />
+          <NavigationProperty Name="SubmitHistories" Relationship="kmModel.FK_Form_SubmitHistory" FromRole="Form" ToRole="SubmitHistory" />
+          <NavigationProperty Name="FormStatistics" Relationship="kmModel.FK_FormStatistic_Form" FromRole="Form" ToRole="FormStatistic" />
+          <NavigationProperty Name="SubscriberLogins" Relationship="kmModel.FK_SubscriberLogin_Form" FromRole="Form" ToRole="SubscriberLogin" />
+          <Property Name="HeaderJs" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FooterJs" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Form_Control">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.Control" Role="Control" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Control">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CssFile_Form">
+          <End Type="kmModel.CssFile" Role="CssFile" Multiplicity="0..1" />
+          <End Type="kmModel.Form" Role="Form" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CssFile">
+              <PropertyRef Name="CssFile_Seq_ID" />
+            </Principal>
+            <Dependent Role="Form">
+              <PropertyRef Name="CssFile_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Form">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="0..1" />
+          <End Type="kmModel.Form" Role="Form1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Form1">
+              <PropertyRef Name="ParentForm_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_FormResult">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.FormResult" Role="FormResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormResult">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Notification">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_Rule">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="0..1" />
+          <End Type="kmModel.Rule" Role="Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Form_SubmitHistory">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.SubmitHistory" Role="SubmitHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubmitHistory">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormStatistic_Form">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="kmModel.FormStatistic" Role="FormStatistic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="FormStatistic">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubscriberLogin_Form">
+          <End Type="kmModel.Form" Role="Form" Multiplicity="1" />
+          <End Type="kmModel.SubscriberLogin" Role="SubscriberLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="Form_Seq_ID" />
+            </Principal>
+            <Dependent Role="SubscriberLogin">
+              <PropertyRef Name="FormID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="kmModelStoreContainer" CdmEntityContainer="kmEntities">
+          <EntitySetMapping Name="Conditions">
+            <EntityTypeMapping TypeName="kmModel.Condition">
+              <MappingFragment StoreEntitySet="Condition">
+                <ScalarProperty Name="Condition_Seq_ID" ColumnName="Condition_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="ConditionGroup_Seq_ID" ColumnName="ConditionGroup_Seq_ID" />
+                <ScalarProperty Name="Operation_ID" ColumnName="Operation_ID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConditionGroups">
+            <EntityTypeMapping TypeName="kmModel.ConditionGroup">
+              <MappingFragment StoreEntitySet="ConditionGroup">
+                <ScalarProperty Name="ConditionGroup_Seq_ID" ColumnName="ConditionGroup_Seq_ID" />
+                <ScalarProperty Name="MainGroup_ID" ColumnName="MainGroup_ID" />
+                <ScalarProperty Name="LogicGroup" ColumnName="LogicGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Controls">
+            <EntityTypeMapping TypeName="kmModel.Control">
+              <MappingFragment StoreEntitySet="Control">
+                <ScalarProperty Name="FieldLabelHTML" ColumnName="FieldLabelHTML" />
+                <ScalarProperty Name="HTMLID" ColumnName="HTMLID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="Type_Seq_ID" ColumnName="Type_Seq_ID" />
+                <ScalarProperty Name="FieldLabel" ColumnName="FieldLabel" />
+                <ScalarProperty Name="FieldID" ColumnName="FieldID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlProperties">
+            <EntityTypeMapping TypeName="kmModel.ControlProperty">
+              <MappingFragment StoreEntitySet="ControlProperty">
+                <ScalarProperty Name="ControlProperty_Seq_ID" ColumnName="ControlProperty_Seq_ID" />
+                <ScalarProperty Name="Type_ID" ColumnName="Type_ID" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="PropertyType" ColumnName="PropertyType" />
+                <ScalarProperty Name="PropertyValues" ColumnName="PropertyValues" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlPropertyGrids">
+            <EntityTypeMapping TypeName="kmModel.ControlPropertyGrid">
+              <MappingFragment StoreEntitySet="ControlPropertyGrid">
+                <ScalarProperty Name="ControlPropertyGrid_Seq_ID" ColumnName="ControlPropertyGrid_Seq_ID" />
+                <ScalarProperty Name="ControlProperty_ID" ColumnName="ControlProperty_ID" />
+                <ScalarProperty Name="DataValue" ColumnName="DataValue" />
+                <ScalarProperty Name="DataText" ColumnName="DataText" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlTypes">
+            <EntityTypeMapping TypeName="kmModel.ControlType">
+              <MappingFragment StoreEntitySet="ControlType">
+                <ScalarProperty Name="KMPaidQueryString" ColumnName="KMPaidQueryString" />
+                <ScalarProperty Name="MainType_ID" ColumnName="MainType_ID" />
+                <ScalarProperty Name="ControlType_Seq_ID" ColumnName="ControlType_Seq_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CssFiles">
+            <EntityTypeMapping TypeName="kmModel.CssFile">
+              <MappingFragment StoreEntitySet="CssFile">
+                <ScalarProperty Name="CssFile_Seq_ID" ColumnName="CssFile_Seq_ID" />
+                <ScalarProperty Name="CssFileUID" ColumnName="CssFileUID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataTypePatterns">
+            <EntityTypeMapping TypeName="kmModel.DataTypePattern">
+              <MappingFragment StoreEntitySet="DataTypePattern">
+                <ScalarProperty Name="DataTypePattern_Seq_ID" ColumnName="DataTypePattern_Seq_ID" />
+                <ScalarProperty Name="DataTypeName" ColumnName="DataTypeName" />
+                <ScalarProperty Name="Pattern" ColumnName="Pattern" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormControlProperties">
+            <EntityTypeMapping TypeName="kmModel.FormControlProperty">
+              <MappingFragment StoreEntitySet="FormControlProperty">
+                <ScalarProperty Name="FormControlProperty_Seq_ID" ColumnName="FormControlProperty_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="ControlProperty_ID" ColumnName="ControlProperty_ID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormControlPropertyGrids">
+            <EntityTypeMapping TypeName="kmModel.FormControlPropertyGrid">
+              <MappingFragment StoreEntitySet="FormControlPropertyGrid">
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="FormControlPropertyGrid_Seq_ID" ColumnName="FormControlPropertyGrid_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="ControlProperty_ID" ColumnName="ControlProperty_ID" />
+                <ScalarProperty Name="DataValue" ColumnName="DataValue" />
+                <ScalarProperty Name="DataText" ColumnName="DataText" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormResults">
+            <EntityTypeMapping TypeName="kmModel.FormResult">
+              <MappingFragment StoreEntitySet="FormResult">
+                <ScalarProperty Name="JsMessage" ColumnName="JsMessage" />
+                <ScalarProperty Name="FormResult_Seq_ID" ColumnName="FormResult_Seq_ID" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="ResultType" ColumnName="ResultType" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="kmModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="LandingPage" ColumnName="LandingPage" />
+                <ScalarProperty Name="IsDoubleOptIn" ColumnName="IsDoubleOptIn" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="Notification_Seq_ID" ColumnName="Notification_Seq_ID" />
+                <ScalarProperty Name="ConditionGroup_Seq_ID" ColumnName="ConditionGroup_Seq_ID" />
+                <ScalarProperty Name="IsConfirmation" ColumnName="IsConfirmation" />
+                <ScalarProperty Name="IsInternalUser" ColumnName="IsInternalUser" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="ToEmail" ColumnName="ToEmail" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rules">
+            <EntityTypeMapping TypeName="kmModel.Rule">
+              <MappingFragment StoreEntitySet="Rule">
+                <ScalarProperty Name="ActionJs" ColumnName="ActionJs" />
+                <ScalarProperty Name="Overwritedatapost" ColumnName="Overwritedatapost" />
+                <ScalarProperty Name="SuspendpostDB" ColumnName="SuspendpostDB" />
+                <ScalarProperty Name="NonQualify" ColumnName="NonQualify" />
+                <ScalarProperty Name="ResultType" ColumnName="ResultType" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="UrlToRedirect" ColumnName="UrlToRedirect" />
+                <ScalarProperty Name="Rule_Seq_ID" ColumnName="Rule_Seq_ID" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="ConditionGroup_Seq_ID" ColumnName="ConditionGroup_Seq_ID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThirdPartyQueryValues">
+            <EntityTypeMapping TypeName="kmModel.ThirdPartyQueryValue">
+              <MappingFragment StoreEntitySet="ThirdPartyQueryValue">
+                <ScalarProperty Name="ThirdPartyQueryValue_Seq_ID" ColumnName="ThirdPartyQueryValue_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="FormResult_Seq_ID" ColumnName="FormResult_Seq_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CssClasses">
+            <EntityTypeMapping TypeName="kmModel.CssClass">
+              <MappingFragment StoreEntitySet="CssClass">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CssClass_Seq_ID" ColumnName="CssClass_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubmitDatas">
+            <EntityTypeMapping TypeName="kmModel.SubmitData">
+              <MappingFragment StoreEntitySet="SubmitData">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="SubmitHistory_Seq_ID" ColumnName="SubmitHistory_Seq_ID" />
+                <ScalarProperty Name="SubmitData_Seq_ID" ColumnName="SubmitData_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubmitHistories">
+            <EntityTypeMapping TypeName="kmModel.SubmitHistory">
+              <MappingFragment StoreEntitySet="SubmitHistory">
+                <ScalarProperty Name="Added" ColumnName="Added" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="HistoryToken" ColumnName="HistoryToken" />
+                <ScalarProperty Name="SubmitHistory_Seq_ID" ColumnName="SubmitHistory_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormStatistics">
+            <EntityTypeMapping TypeName="kmModel.FormStatistic">
+              <MappingFragment StoreEntitySet="FormStatistic">
+                <ScalarProperty Name="IsSubmitted" ColumnName="IsSubmitted" />
+                <ScalarProperty Name="TotalPages" ColumnName="TotalPages" />
+                <ScalarProperty Name="FinishForm" ColumnName="FinishForm" />
+                <ScalarProperty Name="StartForm" ColumnName="StartForm" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+                <ScalarProperty Name="FormStatistic_Seq_ID" ColumnName="FormStatistic_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormStatisticLogs">
+            <EntityTypeMapping TypeName="kmModel.FormStatisticLog">
+              <MappingFragment StoreEntitySet="FormStatisticLog">
+                <ScalarProperty Name="FinishPage" ColumnName="FinishPage" />
+                <ScalarProperty Name="StartPage" ColumnName="StartPage" />
+                <ScalarProperty Name="PageNumber" ColumnName="PageNumber" />
+                <ScalarProperty Name="FormStatistic_Seq_ID" ColumnName="FormStatistic_Seq_ID" />
+                <ScalarProperty Name="FormStatisticLog_Seq_ID" ColumnName="FormStatisticLog_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlCategories">
+            <EntityTypeMapping TypeName="kmModel.ControlCategory">
+              <MappingFragment StoreEntitySet="ControlCategory">
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="LabelHTML" ColumnName="LabelHTML" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="ControlCategoryID" ColumnName="ControlCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewsletterGroups">
+            <EntityTypeMapping TypeName="kmModel.NewsletterGroup">
+              <MappingFragment StoreEntitySet="NewsletterGroup">
+                <ScalarProperty Name="LabelHTML" ColumnName="LabelHTML" />
+                <ScalarProperty Name="IsPreSelected" ColumnName="IsPreSelected" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="ControlCategoryID" ColumnName="ControlCategoryID" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="NewsletterGroupID" ColumnName="NewsletterGroupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewsletterGroupUDFs">
+            <EntityTypeMapping TypeName="kmModel.NewsletterGroupUDF">
+              <MappingFragment StoreEntitySet="NewsletterGroupUDF">
+                <ScalarProperty Name="NewsletterDataFieldID" ColumnName="NewsletterDataFieldID" />
+                <ScalarProperty Name="FormGroupDataFieldID" ColumnName="FormGroupDataFieldID" />
+                <ScalarProperty Name="NewsletterGroupID" ColumnName="NewsletterGroupID" />
+                <ScalarProperty Name="NewsletterGroupUDFID" ColumnName="NewsletterGroupUDFID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="e_Form_UpdateStaticstic" FunctionName="kmModel.Store.e_Form_UpdateStaticstic" />
+          <FunctionImportMapping FunctionImportName="Form_UpdateStaticstic" FunctionName="kmModel.Store.e_Form_UpdateStaticstic" />
+          <EntitySetMapping Name="SubscriberLogins">
+            <EntityTypeMapping TypeName="kmModel.SubscriberLogin">
+              <MappingFragment StoreEntitySet="SubscriberLogin">
+                <ScalarProperty Name="PasswordQuerystringName" ColumnName="PasswordQuerystringName" />
+                <ScalarProperty Name="OtherQuerystringName" ColumnName="OtherQuerystringName" />
+                <ScalarProperty Name="EmailAddressQuerystringName" ColumnName="EmailAddressQuerystringName" />
+                <ScalarProperty Name="ForgotPasswordSubject" ColumnName="ForgotPasswordSubject" />
+                <ScalarProperty Name="ForgotPasswordFromName" ColumnName="ForgotPasswordFromName" />
+                <ScalarProperty Name="ForgotPasswordNotificationHTML" ColumnName="ForgotPasswordNotificationHTML" />
+                <ScalarProperty Name="ForgotPasswordMessageHTML" ColumnName="ForgotPasswordMessageHTML" />
+                <ScalarProperty Name="ExistingSubscriberButtonText" ColumnName="ExistingSubscriberButtonText" />
+                <ScalarProperty Name="NewSubscriberButtonText" ColumnName="NewSubscriberButtonText" />
+                <ScalarProperty Name="ForgotPasswordButtonText" ColumnName="ForgotPasswordButtonText" />
+                <ScalarProperty Name="SignUpButtonText" ColumnName="SignUpButtonText" />
+                <ScalarProperty Name="LoginButtonText" ColumnName="LoginButtonText" />
+                <ScalarProperty Name="LoginModalHTML" ColumnName="LoginModalHTML" />
+                <ScalarProperty Name="AutoLoginAllowed" ColumnName="AutoLoginAllowed" />
+                <ScalarProperty Name="PasswordRequired" ColumnName="PasswordRequired" />
+                <ScalarProperty Name="OtherIdentification" ColumnName="OtherIdentification" />
+                <ScalarProperty Name="LoginRequired" ColumnName="LoginRequired" />
+                <ScalarProperty Name="FormID" ColumnName="FormID" />
+                <ScalarProperty Name="SubscriberLoginID" ColumnName="SubscriberLoginID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C__RefactorLog">
+            <EntityTypeMapping TypeName="kmModel.C__RefactorLog">
+              <MappingFragment StoreEntitySet="__RefactorLog">
+                <ScalarProperty Name="OperationKey" ColumnName="OperationKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OverwritedataPostValues">
+            <EntityTypeMapping TypeName="kmModel.OverwritedataPostValue">
+              <MappingFragment StoreEntitySet="OverwritedataPostValue">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Rule_Seq_ID" ColumnName="Rule_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="OverwritedataValue_Seq_ID" ColumnName="OverwritedataValue_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequestQueryValues">
+            <EntityTypeMapping TypeName="kmModel.RequestQueryValue">
+              <MappingFragment StoreEntitySet="RequestQueryValue">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Rule_Seq_ID" ColumnName="Rule_Seq_ID" />
+                <ScalarProperty Name="Control_ID" ColumnName="Control_ID" />
+                <ScalarProperty Name="RequestQueryValue_Seq_ID" ColumnName="RequestQueryValue_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Forms">
+            <EntityTypeMapping TypeName="kmModel.Form">
+              <MappingFragment StoreEntitySet="Form">
+                <ScalarProperty Name="FooterJs" ColumnName="FooterJs" />
+                <ScalarProperty Name="HeaderJs" ColumnName="HeaderJs" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FormType" ColumnName="FormType" />
+                <ScalarProperty Name="Delay" ColumnName="Delay" />
+                <ScalarProperty Name="Iframe" ColumnName="Iframe" />
+                <ScalarProperty Name="LanguageTranslationType" ColumnName="LanguageTranslationType" />
+                <ScalarProperty Name="PublishAfter" ColumnName="PublishAfter" />
+                <ScalarProperty Name="CustomerAccessKey" ColumnName="CustomerAccessKey" />
+                <ScalarProperty Name="StylingType" ColumnName="StylingType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="CssFile_Seq_ID" ColumnName="CssFile_Seq_ID" />
+                <ScalarProperty Name="ParentForm_ID" ColumnName="ParentForm_ID" />
+                <ScalarProperty Name="SubmitButtonText" ColumnName="SubmitButtonText" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="FooterHTML" ColumnName="FooterHTML" />
+                <ScalarProperty Name="HeaderHTML" ColumnName="HeaderHTML" />
+                <ScalarProperty Name="CssUri" ColumnName="CssUri" />
+                <ScalarProperty Name="OptInType" ColumnName="OptInType" />
+                <ScalarProperty Name="LastPublished" ColumnName="LastPublished" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="ActivationDateTo" ColumnName="ActivationDateTo" />
+                <ScalarProperty Name="ActivationDateFrom" ColumnName="ActivationDateFrom" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TokenUID" ColumnName="TokenUID" />
+                <ScalarProperty Name="Form_Seq_ID" ColumnName="Form_Seq_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

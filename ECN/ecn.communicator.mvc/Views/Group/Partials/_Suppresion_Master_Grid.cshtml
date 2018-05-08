@@ -1,0 +1,277 @@
+﻿@model ecn.communicator.mvc.Models.Group
+
+<script type="text/javascript">
+    var MS_targetUrl = '@Url.Action("EmailsSubsReadToGrid", "Subscriber")';
+    var MS_firstGridLoad = true;
+    function MS_dataBound() {
+        var grid = this;
+        $(".menuCell").each(function () {
+
+            var cell = $(this), item = grid.dataItem(cell.closest("tr"));
+            var endScript = cell.children("script").last().html();
+            eval(cell.children("script").last().html());
+        });
+        if (MS_firstGridLoad) {
+            //grid.dataSource.read();
+            MS_firstGridLoad = false;
+            MS_SetPagerWidget("firstpage");
+
+        }
+    }
+
+    $(document).ready(function () {
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+    });
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function MS_GoToPage(e) {
+
+        MS_SetPagerWidget(e.target.id);
+        var data = MS_subscriberGridParams();
+        MS_ReBindGrid(data);
+
+    }
+    //Events - Triggers the Search using Search Criteria
+    function MS_Search() {
+        MS_SetPagerWidget("firstpage");
+        MS_firstGridLoad = true;
+        var data = MS_subscriberGridParams();
+        MS_ReBindGrid(data);
+    }
+
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function MS_subscriberGridParams() {
+
+        return {
+            GroupID: '@Model.GroupID',
+            SubscribeTypeCodes: $('#subscribeTypeCodes').val(),
+            SearchCriterion: $('#searchCriterion').val(),
+            ProfileName: $('#profileName').val(),
+            FromDate: $('#filterFrom').val(),
+            ToDate: $('#filterTo').val(),
+            WithActivity: false,
+            PageNumber: $("#MS_InputPageNumber").val(),
+            PageSize: $("#ddPageSize").val()
+        };
+
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function MS_ReBindGrid(obj) {
+        var grid = $("#MasterSuppressionGrid").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: MS_targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        });
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+
+
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function MS_RebindOnPageOrSizeChange() {
+
+        MS_SetPagerWidget("firstpage");
+        MS_firstGridLoad = true;
+        var data = MS_subscriberGridParams();
+        MS_ReBindGrid(data);
+    }
+
+    function MS_InputPageNumber_KeyDown() {
+         var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            if (parseInt($("#MS_InputPageNumber").val()) > 0 && !isNaN(parseInt($("#MS_InputPageNumber").val())) && $("#MS_InputPageNumber").val() <= parseInt($("#MS_pagerTotalItems").text())) {
+                if (typeof e != 'undefined') {
+                    MS_SetPagerWidget(e.target.id);
+                }
+                else {
+                    var spage = $("#MS_InputPageNumber").val();
+                    MS_SetPagerWidget(spage);
+                }
+                var data = MS_subscriberGridParams();
+                MS_ReBindGrid(data);
+
+            }
+            else {
+                showMessage({
+                    type: 'Error',
+                    text: 'Please enter valid page number.',
+                    autoClose: false,
+                    action:function()
+                    {
+                        MS_SetPagerWidget("firstpage");
+                        MS_firstGridLoad = true;
+                        var data = MS_subscriberGridParams();
+                        MS_ReBindGrid(data);
+                    }
+                });
+            }
+        }
+
+
+    }
+
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function MS_SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#MasterSuppressionGrid").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalCount);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#MS_InputPageNumber").val());
+        var lastpage = 0;
+        if (totalrecordCount % pagesize > 0) {
+            lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+        else {
+            lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#MS_pagerTotalItems").text(lastpage);
+        $("#MS_InputPageNumber").val(currentpage);
+
+    }
+
+    function MS_checkChange(e) {
+      //  debugger;
+        MS_RebindOnPageOrSizeChange()
+    }
+</script>
+@(
+    Html.Kendo()
+       .Grid<ecn.communicator.mvc.Models.Email>(Model.Emails)
+       .Name("MasterSuppressionGrid")
+       .Events(e => e.DataBound("MS_dataBound"))
+       .DataSource(dataSource => dataSource
+           .Ajax()
+           .PageSize(10)
+           .Read(read => read
+                .Action("EmailsSubsReadToGrid", "Subscriber")
+                .Data("MS_subscriberGridParams")
+            )
+
+       )
+       .Columns(columns =>
+       {
+           columns.Bound(p => p.TotalCount).Hidden(true);
+           columns.Bound(e => e.EmailAddress).Title("Email").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+           columns.Bound(e => e.FormatTypeCode).Title("Format").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+           columns.Bound(e => e.SubscribeTypeCode).Title("Subscribe").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+           columns.Bound(e => e.DateAdded).Format("{0:G}").Title("Date Added").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+           columns.Bound(e => e.DateUpdated).Format("{0:G}").Title("Date Modified").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle;text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle" });
+           columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).Sortable(false).HtmlAttributes(new { @class = "menuCell", @style = "width:95px" });
+       })
+       .Pageable(p => p.Enabled(false))
+       .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+       .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+)
+<div id="pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+    <a class="k-link k-pager-nav k-state-disabled k-pager-first" title="Go to the first page" tabindex="-1">
+        <span onclick="MS_GoToPage(event)" id="firstpage" class="k-icon k-i-seek-w">seek-w</span>
+    </a>
+    <a class="k-link k-pager-nav k-state-disabled" title="Go to the previous page" tabindex="-1">
+        <span onclick="MS_GoToPage(event)" id="prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+    </a>
+
+    <ul class="k-pager-numbers k-reset">
+        <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+        <li><span class="k-state-selected" id="currentpage">1</span></li>
+
+    </ul>
+    <span class="k-pager-input k-label">Page<input class="k-textbox" id="MS_InputPageNumber" onkeydown="MS_InputPageNumber_KeyDown()">of <span id="MS_pagerTotalItems"></span></span>
+    <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+        <span onclick="MS_GoToPage(event)" id="nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+    </a>
+    <a class="k-link k-pager-nav k-pager-last k-state-disabled" title="Go to the last page" tabindex="-1">
+        <span onclick="MS_GoToPage(event)" id="lastpage" class="k-icon k-i-seek-e">seek-e</span>
+    </a>
+
+    <span class="k-pager-sizes k-label">
+        <span title="" class="k-widget k-dropdown k-header">
+            <input id="ddPageSize" onchange="MS_checkChange()" />
+        </span>items per page
+    </span>
+    <span class="float-right" style="margin-right:10px;">
+        <lable id="pagerDisplay"></lable>
+    </span>
+</div>
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=EmailID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions menuitem" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("UDF").Action("EditUDF", "Subscriber", new { id = "#=EmailID#", groupID = Model.GroupID });
+                    innerItems.Add().Text("Edit Profile").Action("Edit", "Subscriber", new { id = "#=EmailID#", groupID = Model.GroupID });
+                    if (ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser.IsPlatformAdministrator)
+                    {
+                        innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteSubscriberModal('#=EmailID#', " + Model.GroupID + ")" });
+                    }
+                }
+            )
+        ).ToClientTemplate())
+}

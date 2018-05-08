@@ -1,0 +1,14 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownList()
+              .Name("selectedDemoUpdate")              
+              .DataSource(d => d.Read(r => r.Action("GetDemoUpdates", "FileMapperWizard")))
+              .DataTextField("Text")
+              .DataValueField("Value")
+    .Events(e =>
+    {
+        e.Select("onSelectDemoUpdate");
+        e.Change("onChangeDemoUpdate");        
+    })
+)
+

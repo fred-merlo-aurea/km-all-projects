@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[BillingReport] (
+    [BillingReportID]    INT             NOT NULL IDENTITY,
+    [BillingReportName]  VARCHAR (50)    NULL,
+    [CustomerIDs]        VARCHAR (500)   NULL,
+    [StartDate]          DATETIME        NULL,
+    [EndDate]            DATETIME        NULL,
+    [IncludeFulfillment] BIT             NULL,
+    [IncludeMasterFile]  BIT             NULL,
+    [IsRecurring]        BIT             NULL,
+    [RecurrenceType]     VARCHAR (50)    NULL,
+    [EmailBillingRate]   DECIMAL (18, 5) NULL,
+    [FulfillmentRate]    DECIMAL (18, 5) NULL,
+    [MasterFileRate]     DECIMAL (18, 5) NULL,
+    [FromEmail]          VARCHAR (255)   NULL,
+    [ToEmail]            VARCHAR (255)   NULL,
+    [FromName]           VARCHAR (255)   NULL,
+    [Subject]            VARCHAR (100)   NULL,
+    [IsDeleted]          BIT             NULL,
+    [CreatedDate]        DATETIME        NULL,
+    [CreatedUserID]      INT             NULL,
+    [UpdatedDate]        DATETIME        NULL,
+    [UpdatedUserID]      INT             NULL,
+    [BaseChannelID] INT NULL, 
+    [BlastFields] VARCHAR(200) NULL, 
+    [AllCustomers] BIT NULL, 
+    CONSTRAINT [PK_BillingReport] PRIMARY KEY CLUSTERED ([BillingReportID] ASC)
+);
+

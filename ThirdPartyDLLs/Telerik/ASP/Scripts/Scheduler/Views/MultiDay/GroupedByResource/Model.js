@@ -1,0 +1,18 @@
+Type.registerNamespace("Telerik.Web.UI");
+Type.registerNamespace("Telerik.Web.UI.Scheduler");
+(function(){var a=Telerik.Web.UI.Scheduler;
+a.ResourceGroupedMultiDayModel=function(d,b,c){a.ResourceGroupedMultiDayModel.initializeBase(this,[d,b,c]);
+};
+a.ResourceGroupedMultiDayModel.prototype={_createNestedModel:function(){return new a.MultiDayModel(this._owner);
+},get_visibleRangeStart:function(){return this._weekModels[0].get_visibleRangeStart();
+},get_visibleRangeEnd:function(){return this._weekModels[0].get_visibleRangeEnd();
+},get_numberOfDays:function(){return this._weekModels[0].get_numberOfDays();
+},_getFirstDayStart:function(){return this._weekModels[0]._getFirstDayStart();
+},get_slotsPerDay:function(){return this._weekModels[0].get_slotsPerDay();
+},get_dayStartTime:function(){return this._weekModels[0].get_dayStartTime();
+},get_dayEndTime:function(){return this._weekModels[0].get_dayEndTime();
+},_getRenderer:function(){if(!this._renderer){this._renderer=new a.Rendering.ResourceGroupedMultiDayViewRenderer(this);
+}return this._renderer;
+}};
+a.ResourceGroupedMultiDayModel.registerClass("Telerik.Web.UI.Scheduler.ResourceGroupedMultiDayModel",a.ResourceGroupedWeekModel);
+})();

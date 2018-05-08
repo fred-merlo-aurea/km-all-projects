@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Kendo.Mvc.UI.TreeViewItemModel>
+<!-- if we want to generalize this, need to take away references for id's and standardize an action naming convention -->
+<!-- Alternatively, pass in a better model -->
+<!-- events are declared in the Parent view using this partial view-->
+
+<div id="folderPanel" style="float:left;">
+    <div style="background-color:#E3E3E3 !important;width:100%;padding-top:7px;padding-bottom:7px;">
+        <span style="color: #f57f20; font-size: 16px; letter-spacing: 0.3pt; font-weight: 500;"><a href="/ecn.communicator/main/folders/folderseditor.aspx" style="text-decoration:none;color:#F57F20;">Folders</a></span>
+    </div>
+    @(
+    Html.Kendo().TreeView()
+        .Name("FolderTree")
+        .BindTo(Model)
+    )
+</div>

@@ -1,0 +1,51 @@
+﻿@model Tuple<ECN_Framework_Entities.Communicator.Email, ECN_Framework_Entities.Communicator.Email>
+@using KMEnums
+@{
+    ViewBag.Title = "MergeEmails";
+}
+
+<script>
+    function btnprofile_Click(emailID) {
+        var emailIDPrimare = emailID;
+        var emailIDNon = @Model.Item1.EmailID == emailID ? @Model.Item2.EmailID : @Model.Item1.EmailID;
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("MergeEmailsProcess", "Subscriber")",
+            data: { id: emailID, remove: emailIDNon, groupID: @ViewBag.GroupID},
+            success: function (response) {
+                if (response[0] == '200') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    window.location.href = response[1];
+                    showLoadingWindow();
+                }
+                else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: response[1]
+                    });
+                }
+            }
+        });
+        
+    };
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active"><a href="">Merge Profiles</a></li>
+</ol>
+<div style="margin:10px 30px;">
+    <div style="float:left; text-align:center; margin-bottom:15px; margin-right:50px;">
+        @Html.Partial("Partials/_MergeEmailsDetails", Model.Item1)
+        <button type="button" class="btn k-button" onclick="btnprofile_Click('@Model.Item1.EmailID');"> Make this primary </button>
+    </div>
+
+    <div style="float:left; text-align:center; margin-bottom:15px;">
+        @Html.Partial("Partials/_MergeEmailsDetails", Model.Item2)
+        <button type="button" class="btn k-button" onclick="btnprofile_Click('@Model.Item2.EmailID');"> Make this primary </button>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@using KMEnums
+@using KMModels
+@using KMModels.PostModels
+<script id="conditiongroupconnector-template" type="text/x-kendo-template">        
+    <div class="formitem formiteminline" id = "Rules_#=RuleNum#__ConditionGroup_#=GroupId#__GroupConnector">
+    <label>
+        Group Condition Connector
+    </label>
+            @(Html.Kendo().DropDownList().Name(GetName<RuleModel>("Rules[#=RuleNum#].MainConditionGroup", x => x.MainConditionGroup.LogicGroup))
+                .Items(items =>
+                {                    
+                    foreach (ConditionType type in Enum.GetValues(typeof(KMEnums.ConditionType)))
+                    {
+                        items.Add().Text(type.ToString()).Value(type.ToString()).Selected(type == ConditionType.Or);
+                    }
+                }).Events(e => e.Select(@<text>function(e){ changeConditionGroup('Rules[#=RuleNum#]', this, e); }</text>))
+            .HtmlAttributes(new {id="Rules_#=RuleNum#__LogicGroup_#=uid#", @class="Rules_#=RuleNum#__LogicGroup" } ).ToClientTemplate()) 
+</div>
+    </script>

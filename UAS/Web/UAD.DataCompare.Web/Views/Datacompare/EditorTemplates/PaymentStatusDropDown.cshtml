@@ -1,0 +1,106 @@
+﻿@using System.Collections
+
+<script>
+    function Save_Update(e) {
+        var grid = $("#Grid").data("kendoGrid");
+        var row = this.element.closest("tr");
+        var dcViewdID = row[0].cells[0].innerText;
+        var paymentStatus = row[0].cells[10].innerText.replace("select", "").trim();
+        console.log(dcViewdID + '  ' + paymentStatus);
+        var urlpath = '@Url.Action("UpdatePaymentStatus", "Datacompare")';
+        var status = {
+            DCViewID: dcViewdID,
+            PaymentStatusName: paymentStatus
+        };
+
+        $.ajax({
+            method: "POST",
+            url: urlpath,
+            traditional: true,
+            cache: false,
+            contentType: 'application/json',
+            data: JSON.stringify(status),
+            success: function () {
+                showMesssage(true);
+            },
+            error: function () {
+                showMesssage(false);
+            }
+        });
+        //$.ajax({
+        //    type: "POST",
+        //    url: urlpath,
+        //    traditional: true,
+        //    cache: false,
+        //    data: JSON.stringify(status),
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function () {
+        //        showMesssage(true);
+        //    },
+        //    error: function () {
+        //        showMesssage(false);
+        //    }
+        //});
+        @*var urlpath = '@Url.Action("UpdatePaymentStatus", "Datacompare")';
+        $.ajax({
+            url: urlpath,
+            type: "POST",
+            data: JSON.stringify(status),
+            dataType: "json",
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                showMesssage(true);
+            },
+            error: function () {
+                showMesssage(false);
+            }
+        });*@
+
+    }
+    function showMesssage(message) {
+        var notesTemplate = kendo.template($("#paystatusUpdated").html());
+        var wnd = $("#paymentstatusupdated").data("kendoWindow");
+        wnd.content(notesTemplate(message));
+        wnd.center().open();
+    }
+</script>
+
+@(Html.Kendo().DropDownList()
+.BindTo((IEnumerable)ViewData["Status"])
+.DataValueField("PaymentStatusID")
+.DataTextField("PaymentStatusName")
+.Name("PStatus")
+.Events( e =>
+{
+    e.Change("Save_Update");
+})
+
+)
+
+@(Html.Kendo().Window().Name("paymentstatusupdated")
+    .Title("paymentstatusupdated")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(600)
+    .Scrollable(false)
+)
+<script type="text/x-kendo-template" id="paystatusUpdated">
+    <div class="wrapper modal modalsave">
+        <fieldset>
+            <legend>Success:</legend>
+            #if(data){#
+            <p>
+                <img src='@Url.Content("~/Images/Notifications/Success_New.png")' />
+                <h3>Payment status has been updated successfully.</h3>
+            </p>
+            # }else{#
+            <p>
+                <img src='@Url.Content("~/Images/Notifications/Error_New.png")' />
+                <h3>Failed to update the payment status.</h3>
+            </p>
+           # }#
+        </fieldset>
+    </div>
+</script>

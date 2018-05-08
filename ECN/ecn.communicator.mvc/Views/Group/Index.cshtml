@@ -1,0 +1,168 @@
+﻿@model ecn.communicator.mvc.Models.FolderExplorer
+@using ecn.communicator.mvc.Infrastructure;
+@using KMEnums
+@{
+    ViewBag.Title = "Group Manager";
+}
+<script>
+    function dataBound() {
+        //$('#folderPanel').height($('#groupsGridPanel').height());
+        //ActionMenu_OnGridDataBoundEvent();
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+    function deleteGroup(id) {
+        var win = $("#DeleteWindow");
+        kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.center().open();
+    }
+    function DownloadWindow() {
+        $("#DownloadWindow").data('kendoWindow').center().open();
+    }
+    function closeWindow(id) {
+        $("#" + id).data('kendoWindow').close();
+    }
+    function archiveGroup(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ArchiveGroup", "Group")",
+            data: { id: id },
+            success: function (response) {
+                if (response != '') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    Search();
+                }
+            }
+        });
+    }
+
+    var currentFolderID = 0;
+    $(document).ready(function () {
+        $('li.k-item').hover(function () {
+            var id = $(this).attr('data-id');
+            $(this).children('div').children('span.k-in').attr('data-id', id);
+        });
+        $('li.k-item div span.k-in').click(function () {
+            var id = parseInt($(this).attr('data-id'));
+            if (id !== currentFolderID) {
+
+                @*var req = $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GroupGrid")' + '?folderID=' + id
+                });
+                req.done(function (resp) {
+                    $("#groupsGridDiv").html(resp);
+                });
+                currentFolderID = id;*@
+                $('#allFolders').removeAttr('checked');
+                $('#profileName').val('');
+                currentFolderID = id;
+                Search();
+
+            }
+        });
+        $('#btnAddGroup').click(function () {
+            window.location.href = '@Url.Action("Add")'
+        })
+    });
+    function groupGridFolderId() {
+        return {
+            FolderID: currentFolderID
+        }
+    }
+    function submitDownloadForm() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Download", "Group")",
+            success: function (response) {
+                document.getElementById("DownloadForm").submit();
+                closeWindow('DownloadWindow');
+            }
+        });
+    }
+</script>
+<style>
+
+    #groupsGridPanel{
+        width: 100%;
+        float: right;
+    }
+</style>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item active"><a href="#">Groups</a></li>
+    <li class="breadcrumb-button"><button type="button" class="btn k-button" id="btnAddGroup">Add Group<i class='km-icon icon-kmplus-circled-1'></i></button></li>
+</ol>
+
+
+<div id="errorPanel">@Html.ECNErrors(Model.Errors)</div>
+<div id="notificationDiv"></div>
+
+<div id="groupsGridPanel">
+    @Html.Partial("Partials/_GroupGrid", Model)
+</div>
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DeleteWindow")
+        .Title("Delete")
+        .Content(
+        @<text>
+            <div id="deleteDiv">
+                @Html.Partial("Partials/Modals/_DeleteGroup")
+            </div>            
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        .Actions(x => x.Clear())
+        .Name("DownloadWindow")
+        .Title("Download")
+        .Content(
+        @<text>
+            <div id="downloadDiv">
+                <div class="wrapper modal modaladdnewform">
+                    <div style="margin-left:100px;">
+                        Group Subscriber Count:                             
+                        @Html.Kendo().DropDownList().Name("fileType").BindTo(new List<SelectListItem> {
+                        new SelectListItem { Text = "Xml File", Value = "xml" }
+                        }).DataTextField("Text").DataValueField("Value")                        
+                    </div>
+                    <div class="buttonsgroup">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:25%;"></td>
+                                <td style="width:25%;text-align:center;">
+                                    <form id="DownloadForm" name="DownloadForm" action="@Url.Action("Download")" method="get"></form>
+                                    <button type="submit" class="btn k-button" id="btnDownload" onClick="submitDownloadForm()">Download</button>                                    
+                                </td>
+                                <td style="width:25%;text-align:center;">
+                                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('DownloadWindow')" })
+                                </td>
+                                <td style="width:25%;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}

@@ -1,0 +1,81 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ECN_Framework_Entities.Communicator.FilterGroup
+
+<script>
+    function addFilterGroupAjax() {
+        var model = {
+            Name: $('#FilterGroupName').val(),
+            ConditionCompareType: $('#FilterGroupComparator').val()
+        };
+        if (model.Name != "" && model.Name != null) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateFilterGroup", "Filter")",
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('CreateFilterGroup');
+                        window.location.href = response[1];
+                    }
+                    else {
+                        showMessage({
+                            type: '@MessageType.Error',
+                            text: response[1]
+                        });
+                    }
+                }
+            });
+        }
+        else
+        {
+            showMessage({
+                type: '@MessageType.Error',
+                text: 'Filter Group Name field cannot be empty'
+            });
+        }
+    };
+</script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Add Filter Group</legend>
+    </fieldset>
+        <div class="formbox">
+            <div class="subtitle">Filter Group Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("FilterGroupName")
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Filter Condition Connector</div>
+            <div class="formitem formiteminline">
+                @Html.DropDownList("FilterGroupComparator", new List<SelectListItem> {
+                new SelectListItem { Text = "OR", Value = "OR" },
+                new SelectListItem { Text = "AND", Value = "AND" }
+                })
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Add").Content("Add").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "addFilterGroupAjax()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeWindow('CreateFilterGroup')" })
+                    </td>
+                </tr>
+            </table>
+            
+            
+        </div>
+ 
+</div>     
+   

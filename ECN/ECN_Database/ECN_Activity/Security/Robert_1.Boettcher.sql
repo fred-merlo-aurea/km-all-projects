@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [Robert.Boettcher]
+    WITH PASSWORD = N'tyzuurUMfcgr,t6mRbikenXemsFT7_&#$!~<ake+vbxewhn1', SID = 0x08890D8D42021E4FA3B4F99E21E27B62, DEFAULT_DATABASE = [ECN5_ACCOUNTS], DEFAULT_LANGUAGE = [us_english];
+

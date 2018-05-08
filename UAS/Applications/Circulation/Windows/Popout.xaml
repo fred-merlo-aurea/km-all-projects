@@ -1,0 +1,41 @@
+﻿<Window x:Class="Circulation.Windows.Popout"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="/ImageLibrary;Component/Icons/Unified_24.ico"
+        WindowStyle="None" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" AllowsTransparency="False"
+        Closing="Window_Closing"
+        Title="Circulation Services" MinHeight="150" MinWidth="500" Height="768" Width="1090" Style="{DynamicResource WindowStyling}" MouseLeftButtonDown="Window_MouseLeftButtonDown_1">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" MouseDown="Grid_MouseDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="287*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="768*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Image Name="TitleBarImage" Stretch="Fill" Grid.Row="0" Grid.ColumnSpan="3"></Image>
+            <Image Grid.Row="1" Grid.ColumnSpan="3" Name="SystemBanner" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="3">
+                <Button Name="btnMinimize" Focusable="False" Style="{DynamicResource WindowButton}" VerticalAlignment="Top" Width="23" Height="20" BorderThickness="0" Padding="0" Click="btnMinimize_Click">
+                        <Image Source="/ImageLibrary;Component/Images/16/MinimizeWhiteX16.png" Height="16" Width="16" />
+                </Button>
+                <Button Name="btnMaximize" Focusable="False" Style="{DynamicResource WindowButton}" VerticalAlignment="Top" Width="23" Height="20" BorderThickness="0" Padding="0" Click="btnMaximize_Click">
+                    <Image Source="/ImageLibrary;Component/Images/16/MaximizeWhiteX16.png" Height="16" Width="16" />
+                </Button>
+                <Button Name="btnClose" Focusable="False" Style="{DynamicResource WindowButton}" VerticalAlignment="Top" Width="23" Padding="0" BorderThickness="0" IsCancel="True" Height="20" Click="btnClose_Click">
+                    <Image Source="/ImageLibrary;Component/Images/16/CloseWhiteX16.png" Height="16" Width="16" />
+                </Button>
+            </StackPanel>
+            
+        </Grid>
+            <Grid DockPanel.Dock="Bottom">
+                <DockPanel Name="spModule">
+
+                </DockPanel>
+            </Grid>
+    </DockPanel>
+</Window>

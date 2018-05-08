@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="ControlCenter.Controls.MasterCodeSheetSort"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:Chromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             xmlns:Navigation="clr-namespace:Telerik.Windows.Controls.Navigation;assembly=Telerik.Windows.Controls.Navigation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="738" d:DesignWidth="1024">
+    <telerik:RadBusyIndicator x:Name="busy" BusyContent="Loading...">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="256*"/>
+                <RowDefinition Height="223*"/>
+                <RowDefinition Height="259*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Background="{StaticResource KMLightBlueGradient}" VerticalAlignment="Center">
+                    <Label Content="Code Sheet Sort Order" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left"></Label>
+                </StackPanel>
+
+                <Label Content="Master Groups" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"></Label>
+                <telerik:RadComboBox Name="cbMasterGroup" Grid.Row="1" Grid.Column="1" Margin="3" SelectionChanged="cbMasterGroup_SelectionChanged"></telerik:RadComboBox>
+
+                <Label Content="Master Group Sheet:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                <ListBox Name="lbxAvailable" Grid.Row="2" Grid.RowSpan="6" Grid.Column="1" Margin="3" MaxHeight="400" SelectionMode="Multiple"></ListBox>
+
+                <telerik:RadButton Name="btnUp" Content="Move Up" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" Width="75" Height="23" Margin="0,3,2,3" Click="btnUp_Click"></telerik:RadButton>
+                <telerik:RadButton Name="btnDown" Content="Move Down" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Width="75" Height="23" Margin="3" Click="btnDown_Click"></telerik:RadButton>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="8" Margin="5,2,2,2">
+                    <telerik:RadButton Name="btnSave" Content="Save" Width="50" Click="btnSave_Click"></telerik:RadButton>
+                    <telerik:RadButton Name="btnCancel" Content="Cancel" Width="50" Height="23" VerticalAlignment="Top" Click="btnCancel_Click">
+                        <telerik:RadButton.Style>
+                            <Style TargetType="{x:Type telerik:RadButton}" BasedOn="{StaticResource DefaultButtonTelerik}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=lbxAvailable, Path=Items.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </telerik:RadButton.Style>
+                    </telerik:RadButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

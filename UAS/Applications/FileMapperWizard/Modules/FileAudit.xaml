@@ -1,0 +1,571 @@
+﻿<UserControl x:Class="FileMapperWizard.Modules.FileAudit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900" Width="900" Height="620">
+    <telerik:RadBusyIndicator Name="busyIcon">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="450" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="File Name:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadComboBox Name="cbFiles" Grid.Row="0" Grid.Column="1" Margin="5" Height="23" Width="175" SelectionChanged="cbFiles_SelectionChanged" />
+
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Select Data Location:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadComboBox Name="cbTable" Grid.Row="0" Grid.Column="3" Margin="5" Height="23" Width="175" HorizontalAlignment="Left" SelectionChanged="cbTable_SelectionChanged" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Process Code:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadComboBox Name="cbProcessCode" Grid.Row="1" Grid.Column="1" Margin="5" Height="23" Width="175" />
+            
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="View Mode:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
+                <RadioButton GroupName="View" Content="Data View" Name="rbDataView" Margin="5" IsChecked="True"></RadioButton>
+                <RadioButton GroupName="View" Content="Stat View" Name="rbStatView" Margin="5"></RadioButton>
+            </StackPanel>            
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Start Date:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadDatePicker Name="rdpStart" Grid.Row="2" Grid.Column="1" Margin="5" Height="23" Width="175" />
+            <telerik:RadButton Name="btnClearStart" Content="Clear" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnClearStart_Click"/>
+            
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="End Date:" Margin="5" Style="{DynamicResource TextBlockC14}" />
+            <telerik:RadDatePicker Name="rdpEnd" Grid.Row="3" Grid.Column="1" Margin="5" Height="23" Width="175" />
+            <telerik:RadButton Name="btnClearEnd" Content="Clear" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnClearEnd_Click"/>
+            
+            <telerik:RadButton Name="btnDisplay" Content="Display" Grid.Row="4" Grid.Column="0" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnDisplay_Click"/>
+            <telerik:RadButton Name="btnReset" Content="Reset" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Style="{DynamicResource RadButtonRound}" Height="23" Width="60" Click="btnReset_Click"/>
+            <ScrollViewer Name="spDataView" VerticalScrollBarVisibility="Auto"  Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="5">
+                <StackPanel Orientation="Vertical">
+                    <telerik:RadGridView Name="grdOriginal" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" Width="870" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubCode}" Header="PubCode" UniqueName="PubCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sequence}" Header="Sequence" UniqueName="Sequence" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FName}" Header="FName" UniqueName="FName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LName}" Header="LName" UniqueName="LName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Title}" Header="Title" UniqueName="Title" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Company}" Header="Company" UniqueName="Company" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address}" Header="Address" UniqueName="Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MailStop}" Header="MailStop" UniqueName="MailStop" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding City}" Header="City" UniqueName="City" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding State}" Header="State" UniqueName="State" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Zip}" Header="Zip" UniqueName="Zip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Plus4}" Header="Plus4" UniqueName="Plus4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ForZip}" Header="ForZip" UniqueName="ForZip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding County}" Header="County" UniqueName="County" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Country}" Header="Country" UniqueName="Country" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Phone}" Header="Phone" UniqueName="Phone" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Fax}" Header="Fax" UniqueName="Fax" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Email}" Header="Email" UniqueName="Email" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDate}" Header="TransactionDate" UniqueName="TransactionDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegCode}" Header="RegCode" UniqueName="RegCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Verified}" Header="Verified" UniqueName="Verified" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SubSrc}" Header="SubSrc" UniqueName="SubSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding OrigsSrc}" Header="OrigsSrc" UniqueName="OrigsSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Par3C}" Header="Par3C" UniqueName="Par3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Source}" Header="Source" UniqueName="Source" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Priority}" Header="Priority" UniqueName="Priority" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StatList}" Header="StatList" UniqueName="StatList" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sic}" Header="Sic" UniqueName="Sic" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SicCode}" Header="SicCode" UniqueName="SicCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address3}" Header="Address3" UniqueName="Address3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Home_Work_Address}" Header="Home_Work_Address" UniqueName="Home_Work_Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Mobile}" Header="Mobile" UniqueName="Mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailStatusID}" Header="EmailStatusID" UniqueName="EmailStatusID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ImportRowNumber}" Header="ImportRowNumber" UniqueName="ImportRowNumber" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SORecordIdentifier}" Header="SORecordIdentifier" UniqueName="SORecordIdentifier" Width="Auto" />
+                        </telerik:RadGridView.Columns>                        
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerOriginal" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdOriginal}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                    <telerik:RadGridView Name="grdDemoOriginal" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>                            
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubID}" Header="PubID" UniqueName="PubID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SORecordIdentifier}" Header="SORecordIdentifier" UniqueName="SORecordIdentifier" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAFField}" Header="MAFField" UniqueName="MAFField" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" UniqueName="Value" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding NotExists}" Header="NotExists" UniqueName="NotExists" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerDemoOriginal" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdDemoOriginal}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+
+                    <telerik:RadGridView Name="grdTransformed" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubCode}" Header="PubCode" UniqueName="PubCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sequence}" Header="Sequence" UniqueName="Sequence" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FName}" Header="FName" UniqueName="FName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LName}" Header="LName" UniqueName="LName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Title}" Header="Title" UniqueName="Title" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Company}" Header="Company" UniqueName="Company" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address}" Header="Address" UniqueName="Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MailStop}" Header="MailStop" UniqueName="MailStop" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding City}" Header="City" UniqueName="City" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding State}" Header="State" UniqueName="State" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Zip}" Header="Zip" UniqueName="Zip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Plus4}" Header="Plus4" UniqueName="Plus4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ForZip}" Header="ForZip" UniqueName="ForZip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding County}" Header="County" UniqueName="County" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Country}" Header="Country" UniqueName="Country" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Phone}" Header="Phone" UniqueName="Phone" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Fax}" Header="Fax" UniqueName="Fax" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Email}" Header="Email" UniqueName="Email" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDate}" Header="TransactionDate" UniqueName="TransactionDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegCode}" Header="RegCode" UniqueName="RegCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Verified}" Header="Verified" UniqueName="Verified" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SubSrc}" Header="SubSrc" UniqueName="SubSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding OrigsSrc}" Header="OrigsSrc" UniqueName="OrigsSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Par3C}" Header="Par3C" UniqueName="Par3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Source}" Header="Source" UniqueName="Source" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Priority}" Header="Priority" UniqueName="Priority" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StatList}" Header="StatList" UniqueName="StatList" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sic}" Header="Sic" UniqueName="Sic" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SicCode}" Header="SicCode" UniqueName="SicCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address3}" Header="Address3" UniqueName="Address3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Home_Work_Address}" Header="Home_Work_Address" UniqueName="Home_Work_Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Mobile}" Header="Mobile" UniqueName="Mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailStatusID}" Header="EmailStatusID" UniqueName="EmailStatusID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ImportRowNumber}" Header="ImportRowNumber" UniqueName="ImportRowNumber" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding STRecordIdentifier}" Header="STRecordIdentifier" UniqueName="STRecordIdentifier" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerTransformed" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdTransformed}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                    <telerik:RadGridView Name="grdDemoTransformed" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubID}" Header="PubID" UniqueName="PubID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SORecordIdentifier}" Header="SORecordIdentifier" UniqueName="SORecordIdentifier" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding STRecordIdentifier}" Header="STRecordIdentifier" UniqueName="STRecordIdentifier" Width="Auto" />                            
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAFField}" Header="MAFField" UniqueName="MAFField" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" UniqueName="Value" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding NotExists}" Header="NotExists" UniqueName="NotExists" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerDemoTransformed" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdDemoTransformed}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+
+                    <telerik:RadGridView Name="grdInvalid" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubCode}" Header="PubCode" UniqueName="PubCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sequence}" Header="Sequence" UniqueName="Sequence" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FName}" Header="FName" UniqueName="FName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LName}" Header="LName" UniqueName="LName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Title}" Header="Title" UniqueName="Title" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Company}" Header="Company" UniqueName="Company" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address}" Header="Address" UniqueName="Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MailStop}" Header="MailStop" UniqueName="MailStop" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding City}" Header="City" UniqueName="City" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding State}" Header="State" UniqueName="State" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Zip}" Header="Zip" UniqueName="Zip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Plus4}" Header="Plus4" UniqueName="Plus4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ForZip}" Header="ForZip" UniqueName="ForZip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding County}" Header="County" UniqueName="County" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Country}" Header="Country" UniqueName="Country" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Phone}" Header="Phone" UniqueName="Phone" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Fax}" Header="Fax" UniqueName="Fax" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Email}" Header="Email" UniqueName="Email" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDate}" Header="TransactionDate" UniqueName="TransactionDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegCode}" Header="RegCode" UniqueName="RegCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Verified}" Header="Verified" UniqueName="Verified" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SubSrc}" Header="SubSrc" UniqueName="SubSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding OrigsSrc}" Header="OrigsSrc" UniqueName="OrigsSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Par3C}" Header="Par3C" UniqueName="Par3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Source}" Header="Source" UniqueName="Source" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Priority}" Header="Priority" UniqueName="Priority" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StatList}" Header="StatList" UniqueName="StatList" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sic}" Header="Sic" UniqueName="Sic" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SicCode}" Header="SicCode" UniqueName="SicCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address3}" Header="Address3" UniqueName="Address3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Home_Work_Address}" Header="Home_Work_Address" UniqueName="Home_Work_Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Mobile}" Header="Mobile" UniqueName="Mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailStatusID}" Header="EmailStatusID" UniqueName="EmailStatusID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ImportRowNumber}" Header="ImportRowNumber" UniqueName="ImportRowNumber" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SIRecordIdentifier}" Header="SIRecordIdentifier" UniqueName="SIRecordIdentifier" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerInvalid" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdInvalid}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                    <telerik:RadGridView Name="grdDemoInvalid" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubID}" Header="PubID" UniqueName="PubID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SORecordIdentifier}" Header="SORecordIdentifier" UniqueName="SORecordIdentifier" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SIRecordIdentifier}" Header="SIRecordIdentifier" UniqueName="SIRecordIdentifier" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAFField}" Header="MAFField" UniqueName="MAFField" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" UniqueName="Value" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding NotExists}" Header="NotExists" UniqueName="NotExists" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerDemoInvalid" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdDemoInvalid}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+
+                    <telerik:RadGridView Name="grdArchive" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubCode}" Header="PubCode" UniqueName="PubCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sequence}" Header="Sequence" UniqueName="Sequence" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FName}" Header="FName" UniqueName="FName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LName}" Header="LName" UniqueName="LName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Title}" Header="Title" UniqueName="Title" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Company}" Header="Company" UniqueName="Company" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address}" Header="Address" UniqueName="Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MailStop}" Header="MailStop" UniqueName="MailStop" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding City}" Header="City" UniqueName="City" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding State}" Header="State" UniqueName="State" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Zip}" Header="Zip" UniqueName="Zip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Plus4}" Header="Plus4" UniqueName="Plus4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ForZip}" Header="ForZip" UniqueName="ForZip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding County}" Header="County" UniqueName="County" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Country}" Header="Country" UniqueName="Country" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Phone}" Header="Phone" UniqueName="Phone" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Fax}" Header="Fax" UniqueName="Fax" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Email}" Header="Email" UniqueName="Email" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDate}" Header="TransactionDate" UniqueName="TransactionDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegCode}" Header="RegCode" UniqueName="RegCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Verified}" Header="Verified" UniqueName="Verified" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SubSrc}" Header="SubSrc" UniqueName="SubSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding OrigsSrc}" Header="OrigsSrc" UniqueName="OrigsSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Par3C}" Header="Par3C" UniqueName="Par3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Source}" Header="Source" UniqueName="Source" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Priority}" Header="Priority" UniqueName="Priority" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StatList}" Header="StatList" UniqueName="StatList" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sic}" Header="Sic" UniqueName="Sic" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SicCode}" Header="SicCode" UniqueName="SicCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address3}" Header="Address3" UniqueName="Address3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Home_Work_Address}" Header="Home_Work_Address" UniqueName="Home_Work_Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Mobile}" Header="Mobile" UniqueName="Mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailStatusID}" Header="EmailStatusID" UniqueName="EmailStatusID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ImportRowNumber}" Header="ImportRowNumber" UniqueName="ImportRowNumber" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SARecordIdentifier}" Header="SARecordIdentifier" UniqueName="SARecordIdentifier" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerArchive" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdArchive}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                    <telerik:RadGridView Name="grdDemoArchive" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubID}" Header="PubID" UniqueName="PubID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SARecordIdentifier}" Header="SARecordIdentifier" UniqueName="SARecordIdentifier" Width="Auto" />                            
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAFField}" Header="MAFField" UniqueName="MAFField" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" UniqueName="Value" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding NotExists}" Header="NotExists" UniqueName="NotExists" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerDemoArchive" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdDemoArchive}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+
+                    <telerik:RadGridView Name="grdFinal" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>                            
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SourceFileID}" Header="SourceFileID" UniqueName="SourceFileID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubCode}" Header="PubCode" UniqueName="PubCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sequence}" Header="Sequence" UniqueName="Sequence" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FName}" Header="FName" UniqueName="FName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LName}" Header="LName" UniqueName="LName" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Title}" Header="Title" UniqueName="Title" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Company}" Header="Company" UniqueName="Company" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address}" Header="Address" UniqueName="Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MailStop}" Header="MailStop" UniqueName="MailStop" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding City}" Header="City" UniqueName="City" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding State}" Header="State" UniqueName="State" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Zip}" Header="Zip" UniqueName="Zip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Plus4}" Header="Plus4" UniqueName="Plus4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ForZip}" Header="ForZip" UniqueName="ForZip" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding County}" Header="County" UniqueName="County" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Country}" Header="Country" UniqueName="Country" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Phone}" Header="Phone" UniqueName="Phone" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Fax}" Header="Fax" UniqueName="Fax" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Email}" Header="Email" UniqueName="Email" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDate}" Header="TransactionDate" UniqueName="TransactionDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegCode}" Header="RegCode" UniqueName="RegCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Verified}" Header="Verified" UniqueName="Verified" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SubSrc}" Header="SubSrc" UniqueName="SubSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding OrigsSrc}" Header="OrigsSrc" UniqueName="OrigsSrc" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Par3C}" Header="Par3C" UniqueName="Par3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Source}" Header="Source" UniqueName="Source" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Priority}" Header="Priority" UniqueName="Priority" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StatList}" Header="StatList" UniqueName="StatList" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Sic}" Header="Sic" UniqueName="Sic" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SicCode}" Header="SicCode" UniqueName="SicCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Address3}" Header="Address3" UniqueName="Address3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Home_Work_Address}" Header="Home_Work_Address" UniqueName="Home_Work_Address" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Mobile}" Header="Mobile" UniqueName="Mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EmailStatusID}" Header="EmailStatusID" UniqueName="EmailStatusID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ProcessCode}" Header="ProcessCode" UniqueName="ProcessCode" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ImportRowNumber}" Header="ImportRowNumber" UniqueName="ImportRowNumber" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SFRecordIdentifier}" Header="SFRecordIdentifier" UniqueName="SFRecordIdentifier" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerFinal" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdFinal}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                    <telerik:RadGridView Name="grdDemoFinal" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubID}" Header="PubID" UniqueName="PubID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SFRecordIdentifier}" Header="SFRecordIdentifier" UniqueName="SFRecordIdentifier" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAFField}" Header="MAFField" UniqueName="MAFField" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Value}" Header="Value" UniqueName="Value" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding NotExists}" Header="NotExists" UniqueName="NotExists" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerDemoFinal" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdDemoFinal}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+
+                    <telerik:RadGridView Name="grdSubscriptions" Margin="5,10,5,0" Height="400" HorizontalAlignment="Left" Width="870"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         AutoGenerateColumns="False" RowIndicatorVisibility="Collapsed" ShowColumnHeaders="True" IsReadOnly="True">
+                        <telerik:RadGridView.Columns>                            
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SEQUENCE}" Header="SEQUENCE" UniqueName="SEQUENCE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FNAME}" Header="FNAME" UniqueName="FNAME" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding LNAME}" Header="LNAME" UniqueName="LNAME" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TITLE}" Header="TITLE" UniqueName="TITLE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding COMPANY}" Header="COMPANY" UniqueName="COMPANY" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ADDRESS}" Header="ADDRESS" UniqueName="ADDRESS" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding MAILSTOP}" Header="MAILSTOP" UniqueName="MAILSTOP" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CITY}" Header="CITY" UniqueName="CITY" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding STATE}" Header="STATE" UniqueName="STATE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ZIP}" Header="ZIP" UniqueName="ZIP" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PLUS4}" Header="PLUS4" UniqueName="PLUS4" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FORZIP}" Header="FORZIP" UniqueName="FORZIP" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding COUNTY}" Header="COUNTY" UniqueName="COUNTY" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding COUNTRY}" Header="COUNTRY" UniqueName="COUNTRY" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PHONE}" Header="PHONE" UniqueName="PHONE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding FAX}" Header="FAX" UniqueName="FAX" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding EMAIL}" Header="EMAIL" UniqueName="EMAIL" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CategoryID}" Header="CategoryID" UniqueName="CategoryID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionID}" Header="TransactionID" UniqueName="TransactionID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding TransactionDATE}" Header="TransactionDATE" UniqueName="TransactionDATE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QDate}" Header="QDate" UniqueName="QDate" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding QSourceID}" Header="QSourceID" UniqueName="QSourceID" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding REGCODE}" Header="REGCODE" UniqueName="REGCODE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding VERIFIED}" Header="VERIFIED" UniqueName="VERIFIED" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SUBSRC}" Header="SUBSRC" UniqueName="SUBSRC" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ORIGSSRC}" Header="ORIGSSRC" UniqueName="ORIGSSRC" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PAR3C}" Header="PAR3C" UniqueName="PAR3C" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo31}" Header="Demo31" UniqueName="Demo31" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo32}" Header="Demo32" UniqueName="Demo32" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo33}" Header="Demo33" UniqueName="Demo33" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo34}" Header="Demo34" UniqueName="Demo34" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo35}" Header="Demo35" UniqueName="Demo35" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo36}" Header="Demo36" UniqueName="Demo36" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SOURCE}" Header="SOURCE" UniqueName="SOURCE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PRIORITY}" Header="PRIORITY" UniqueName="PRIORITY" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding STATLIST}" Header="STATLIST" UniqueName="STATLIST" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SIC}" Header="SIC" UniqueName="SIC" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding SICCODE}" Header="SICCODE" UniqueName="SICCODE" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Gender}" Header="Gender" UniqueName="Gender" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding ADDRESS3}" Header="ADDRESS3" UniqueName="ADDRESS3" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding HOME_WORK_ADDRESS}" Header="HOME_WORK_ADDRESS" UniqueName="HOME_WORK_ADDRESS" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PubIDs}" Header="PubIDs" UniqueName="PubIDs" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Demo7}" Header="Demo7" UniqueName="Demo7" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExcluded}" Header="IsExcluded" UniqueName="IsExcluded" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding mobile}" Header="mobile" UniqueName="mobile" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Latitude}" Header="Latitude" UniqueName="Latitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Longitude}" Header="Longitude" UniqueName="Longitude" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsLatLonValid}" Header="IsLatLonValid" UniqueName="IsLatLonValid" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Score}" Header="Score" UniqueName="Score" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateCreated}" Header="DateCreated" UniqueName="DateCreated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding DateUpdated}" Header="DateUpdated" UniqueName="DateUpdated" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding AddressTypeCodeId}" Header="AddressTypeCodeId" UniqueName="AddressTypeCodeId" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsActive}" Header="IsActive" UniqueName="IsActive" Width="Auto" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsMailable}" Header="IsMailable" UniqueName="IsMailable" Width="Auto" />
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+                    <telerik:RadDataPager Name="pagerSubscriptions" Margin="5,0,5,10" HorizontalAlignment="Left" Width="870"
+                                      Source="{Binding Items, ElementName=grdSubscriptions}"
+                                     PageSize="100"
+                                     IsTotalItemCountFixed="True"
+                                     DisplayMode="All"/>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Name="spStatView" Visibility="Collapsed" Orientation="Vertical" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="5">
+                <TextBlock Text="No Stats To Show Currently - Under Construction" />
+            </StackPanel>            
+        </Grid>
+    </telerik:RadBusyIndicator>
+</UserControl>

@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>KMPlatform</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{276d7c85-8a9c-4685-8b6c-92911e5e598a}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>KMPlatform_DB</RootNamespace>
+    <AssemblyName>KMPlatform_DB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\UserLog.sql" />
+    <Build Include="dbo\Tables\UserClientSecurityGroupMap.sql" />
+    <Build Include="dbo\Tables\UserAuthorizationLog.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\tmp_Migration_AMSUsers.sql" />
+    <Build Include="dbo\Tables\SubGenUserMap.sql" />
+    <Build Include="dbo\Tables\ServiceFeatureAccessMap.sql" />
+    <Build Include="dbo\Tables\ServiceFeature.sql" />
+    <Build Include="dbo\Tables\Service.sql" />
+    <Build Include="dbo\Tables\SecurityGroupTemplatePermission.sql" />
+    <Build Include="dbo\Tables\SecurityGroupTemplate.sql" />
+    <Build Include="dbo\Tables\SecurityGroupPermission.sql" />
+    <Build Include="dbo\Tables\SecurityGroupOptIn.sql" />
+    <Build Include="dbo\Tables\SecurityGroup.sql" />
+    <Build Include="dbo\Tables\ProfileClientMap.sql" />
+    <Build Include="dbo\Tables\Profile.sql" />
+    <Build Include="dbo\Tables\MenuServiceFeatureMap.sql" />
+    <Build Include="dbo\Tables\MenuSecurityGroupMap.sql" />
+    <Build Include="dbo\Tables\MenuMenuFeatureMap.sql" />
+    <Build Include="dbo\Tables\MenuFeatureSecurityGroupMap.sql" />
+    <Build Include="dbo\Tables\MenuFeature.sql" />
+    <Build Include="dbo\Tables\Menu.sql" />
+    <Build Include="dbo\Tables\ClientUADUsersMap.sql" />
+    <Build Include="dbo\Tables\ClientServiceMap.sql" />
+    <Build Include="dbo\Tables\ClientServiceFeatureMap.sql" />
+    <Build Include="dbo\Tables\ClientGroupServiceMap.sql" />
+    <Build Include="dbo\Tables\ClientGroupServiceFeatureMap.sql" />
+    <Build Include="dbo\Tables\ClientGroupClientMap.sql" />
+    <Build Include="dbo\Tables\ClientGroup.sql" />
+    <Build Include="dbo\Tables\ClientConfigurationValueMap.sql" />
+    <Build Include="dbo\Tables\ClientConfigurationValueCData.sql" />
+    <Build Include="dbo\Tables\ClientConfigurationMap.sql" />
+    <Build Include="dbo\Tables\ClientApplicationMap.sql" />
+    <Build Include="dbo\Tables\Client.sql" />
+    <Build Include="dbo\Tables\ApplicationSettingMap.sql" />
+    <Build Include="dbo\Tables\ApplicationSetting.sql" />
+    <Build Include="dbo\Tables\ApplicationServiceMap.sql" />
+    <Build Include="dbo\Tables\ApplicationLog.sql" />
+    <Build Include="dbo\Tables\Application.sql" />
+    <Build Include="dbo\Tables\ApiLog.sql" />
+    <Build Include="dbo\Tables\Api.sql" />
+    <Build Include="dbo\Tables\Access.sql" />
+    <Build Include="dbo\Views\vw_ServiceFeatureAccess.sql" />
+    <Build Include="dbo\Views\vw_GetUserPermission.sql" />
+    <Build Include="dbo\Functions\fn_Table_Date.sql" />
+    <Build Include="dbo\Stored Procedures\v_User_Roles_KMStaff.sql" />
+    <Build Include="dbo\Stored Procedures\v_User_Roles_By_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\v_User_Roles_By_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\v_ServiceFeature_GetSecurityGroupTreeList.sql" />
+    <Build Include="dbo\Stored Procedures\v_ServiceFeature_GetEmptySecurityGroupTreeList.sql" />
+    <Build Include="dbo\Stored Procedures\v_ServiceFeature_GetClientTreeList.sql" />
+    <Build Include="dbo\Stored Procedures\v_ServiceFeature_GetClientGroupTreeList.sql" />
+    <Build Include="dbo\Stored Procedures\sp_IndexAnalysis.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Select_UserLogID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserLog_Bulk_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_SelectForUserAuthorization_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroupMap_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserClientSecurityGroup_Insert_ClientGroupRoles.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAuthorizationLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_UserAuthorizationLog_LogOut.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_UserName_Exists.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_UserGrid.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientID_ServiceCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientID_SecurityGroupName.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientID_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientGroupID_ServiceCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Search_UserName.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Search_Email.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_LogIn_AccessKey.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_LogIn.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_UASBridgeECN_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SubGenUserMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_SelectOnlyEnabled_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_Select_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_Select_ServiceFeatureID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_HasAccess.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_ClientGroup_Service.sql" />
+    <Build Include="dbo\Stored Procedures\e_ServiceFeature_Client_Service.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_ServiceName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_ServiceCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_SecurityGroupID_ApplicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_SecurityGroup_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_SecurityGroup_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_SecurityGroup.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_AMS_Select_SecurityGroup_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_AMS_Select_SecurityGroup_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Service_AMS_Select_SecurityGroup.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupTemplatePermission_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupTemplate_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupTemplate_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupPermission_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupPermission_Select_Permissions_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupPermission_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_SelectPending_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_Select_SetID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_MarkAsAccepted.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_Delete_SGID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupOptIn_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_SelectActive_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_UserID_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_ClientID_AdministrativeLevel.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_ClientGroupID_AdministrativeLevel.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_Exists_ClientGroup_Client.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_CreateFromTemplateForClientGroup.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroup_CreateFromTemplateForClient.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuSecurityGroupMap_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuSecurityGroupMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuSecurityGroupMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuMenuFeatureMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuMenuFeatureMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeatureSecurityGroupMap_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeatureSecurityGroupMap_Select_MenuFeatureID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeatureSecurityGroupMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeatureSecurityGroupMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_SelectOnlyEnabled_MenuID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_Select_MenuID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_Select_ApplicationName_UserID_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_Select_ApplicationName_UserID_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_MenuFeature_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_UserID_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_ApplicationName_UserID_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_ApplicationID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_ApplicationID_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select_ApplicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Menu_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientUADUsersMap_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientUADUsersMap_Select_ClientID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientUADUsersMap_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientUADUsersMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientUADUsersMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientServiceMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientServiceFeatureMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientServiceFeature_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceMap_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceFeatureMap_Select_ClientGroupID_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceFeatureMap_Select_ClientGroupID_ServiceFeatureID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceFeatureMap_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupServiceFeatureMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupSecurityGroupMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupClientMap_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupClientMap_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupClientMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroupClientMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_SelectForUserAuthorization_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_SelectForAMS.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select_User_CustAdmin.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select_MasterClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientGroup_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientConfigurationMap_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientConfigurationMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ClientConfigurationMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_SelectAll_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_SelectActive_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_UserID_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_User_CustAdmin.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_FtpFolder.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_DefaultClient_AccessKey.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_ClientName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_ClientGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_AMSPaid.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_Accesskey.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Exists_ClientName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Delete_ClientID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationSettingMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationSetting_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationServiceMap_Select_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationServiceMap_Select_ApplicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationServiceMap_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationServiceMap_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationLog_Select_DateRange.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationLog_Select_ApplicationId_DateRange.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationLog_Select_ApplicationId.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApplicationLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_SelectOnlyEnabled_ServiceID_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_SelectOnlyEnabled_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_Select_UserID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_Select_ServiceID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_Select_SecurityGroupID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_Select.sql" />
+    <Build Include="dbo\Stored Procedures\e_Application_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_ApiLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_User_Select_UserGrid_Download.sql" />
+    <Build Include="dbo\Stored Procedures\e_SecurityGroupPermission_UpdateAdministrators.sql" />
+    <Build Include="dbo\Stored Procedures\e_Client_Select_AMS.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="system_master_Functions.sql" />
+    <None Include="KMPlatform.tfignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment_2017_Joker.sql" />
+    <None Include="PostDeployment_Joker_SP_Hubs.sql" />
+    <None Include="PostDeployment_2017_Krypto.sql" />
+  </ItemGroup>
+</Project>

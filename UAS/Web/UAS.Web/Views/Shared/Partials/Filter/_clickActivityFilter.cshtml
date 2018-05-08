@@ -1,0 +1,261 @@
+﻿
+
+<table align="center" width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;">
+    <tr style="background-color: #5783BD;">
+        <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+          Click Activity Filter
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+   
+    <tr style="background-color: #EBEBEB" class="ClickSelection">
+        <td>
+            <label style="font-weight:bolder;">Click Criteria </label>
+            <input id="ClickedCtr" />
+            @*@(Html.Kendo().DropDownList()
+                              .Name("ClickedCtr")
+                              .DataSource(d => d.Read(r => r.Action("GetClickedActivityDropDown", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .Events(e =>
+                              {
+                                  e.Change("onClickedCtrDrpChange");
+                              })
+            )*@
+        </td>
+    </tr>
+    <tr class="NoClicksSelected">
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <input type="radio" name="ClickCriteriaSearch" id="ClickSearchAll" class="k-radio" disabled>
+                        <label class="k-radio-label" for="ClickSearchAll">Search All</label>
+
+                    </td>
+                    <td>
+                        <input type="radio" name="ClickCriteriaSearch" id="ClickSearchSelected" class="k-radio" checked="checked">
+                        <label class="k-radio-label" for="ClickSearchSelected">Search Selected Products</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Click Date
+                        </label>
+                        <input id="ClickedCtr_ClickedDate" />
+                        @*@(Html.Kendo().DropDownList()
+                          .Name("ClickedCtr_ClickedDate")
+                          .DataSource(d => d.Read(r => r.Action("GetDateFieldDropDown", "Filter")))
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Events(e =>
+                          {
+                              e.Change("onClickedCtrClickedDateDrpChange");
+                          })
+                        )*@
+                    </td>
+                    <td>
+                        <div id="ClickedCtr_ClickedDate_DateRangeDiv" class="displayNone">
+                            @Html.Kendo().TextBox().Name("ClickedCtr_ClickedDate_DateRangeFrom")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('ClickedCtr_ClickedDate_DateRangeFrom')" />
+                            <span>To</span>
+                            @Html.Kendo().TextBox().Name("ClickedCtr_ClickedDate_DateRangeTo")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('ClickedCtr_ClickedDate_DateRangeTo')" />
+                        </div>
+                        <div id="ClickedCtr_ClickedDate_LastXDaysDiv" class="displayNone">
+                            @(Html.Kendo().DropDownList()
+                              .Name("ClickedCtr_ClickedDate_LastXDays")
+                              .DataSource(d => d.Read(r => r.Action("GetNoOfDaysDropDown", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .HtmlAttributes(new { id = "ClickedCtr_ClickedDate_LastXDays" })
+                            )
+                        </div>
+                        <div id="ClickedCtr_ClickedDate_YearDiv" class="displayNone">
+                            @Html.Kendo().NumericTextBox().Name("ClickedCtr_ClickedDate_YearFrom")
+                            <span>To</span>
+                            @Html.Kendo().NumericTextBox().Name("ClickedCtr_ClickedDate_YearTo")
+                        </div>
+
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="ClickPlusSelected">
+        <td>
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <label>URL</label>
+                        @Html.Kendo().TextBox().Name("ClickedCtr_Url").HtmlAttributes(new { placeholder = "exact match,partial match,keyword,single,comma delimited", style = "width:80%" })
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <label>BlastID</label>
+                        @Html.Kendo().TextBox().Name("ClickedCtr_BlastID").HtmlAttributes(new { placeholder = "single,comma delimited" })
+                    </td>
+                    <td>
+                        <label>
+                            Campaigns
+                        </label>
+                        @(Html.Kendo().MultiSelect()
+                              .Name("ClickedCtr_Campaigns")
+                              .DataSource(d => d.Read(r => r.Action("GetCampaign", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .TagMode(TagMode.Single)
+                              .HtmlAttributes(new { id = "ClickedCtr_Campaigns" })
+                        )
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>Email Subject</label>
+                        @Html.Kendo().TextBox().Name("ClickedCtr_EmailSubject").HtmlAttributes(new { placeholder = "exact match,partial match,keyword", style = "width:70%" })
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Email Sent Date
+                        </label>
+                        <input id="ClickedCtr_EmailSentDate" />
+
+                        @*@(Html.Kendo().DropDownList()
+                          .Name("ClickedCtr_EmailSentDate")
+                          .DataSource(d => d.Read(r => r.Action("GetDateFieldDropDown", "Filter")))
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Events(e =>
+                          {
+                              e.Change("onClickedCtrEmailSentDateDrpChange");
+                          })
+                        )*@
+                    </td>
+                    <td>
+                        <div id="ClickedCtr_EmailSentDate_DateRangeDiv" class="displayNone">
+                            @Html.Kendo().TextBox().Name("ClickedCtr_EmailSentDate_DateRangeFrom")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('ClickedCtr_EmailSentDate_DateRangeFrom')" />
+                            <span>To</span>
+                            @Html.Kendo().TextBox().Name("ClickedCtr_EmailSentDate_DateRangeTo")
+                            <input type="image" src="~/Images/icon-calendar.gif" onclick="openCustomFilter('ClickedCtr_EmailSentDate_DateRangeTo')" />
+                        </div>
+                        <div id="ClickedCtr_EmailSentDate_LastXDaysDiv" class="displayNone">
+                            @(Html.Kendo().DropDownList()
+                              .Name("ClickedCtr_EmailSentDate_LastXDays")
+                              .DataSource(d => d.Read(r => r.Action("GetNoOfDaysDropDown", "Filter")))
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .HtmlAttributes(new { id = "ClickedCtr_EmailSentDate_LastXDays" })
+                            )
+                        </div>
+                        <div id="ClickedCtr_EmailSentDate_YearDiv" class="displayNone">
+                            <input type="number" id="ClickedCtr_EmailSentDate_YearFrom" />
+                            @*@Html.Kendo().NumericTextBox().Name("ClickedCtr_EmailSentDate_YearFrom")*@
+                            <span>To</span>
+                            <input type="number" id="ClickedCtr_EmailSentDate_YearTo" />
+                            @*@Html.Kendo().NumericTextBox().Name("ClickedCtr_EmailSentDate_YearTo")*@
+                        </div>
+
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    
+    <tr>
+        <td align="center" style="padding-bottom: 10px;">
+            <input type="button" name="btnSelectCirculationFilter" onclick="SelectCloseActivityFilter('Click')" value="Select/Close" class="filterButton">
+            <input type="button" name="btnResetCirculationFilter" onclick="ResetCloseActivityFilter('Click')" value="Reset" class="filterButton">
+        </td>
+    </tr>
+</table>
+
+
+
+<script>
+    $(document).ready(function () {
+
+      
+        $(".NoClicksSelected").hide();
+        $(".ClickPlusSelected").hide();
+        $("#ClickedCtr_ClickedDate_DateRangeDiv").removeClass("displayNone").addClass("displayInline");
+        $("#ClickedCtr_EmailSentDate_DateRangeDiv").removeClass("displayNone").addClass("displayInline");
+
+        $("#ClickedCtr").kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/Filter/GetClickedActivityDropDown",
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "Text",
+            dataValueField: "Value",
+            change: function (e) {
+                onClickedCtrDrpChange(this, e);
+
+            }
+        });
+
+        $("#ClickedCtr_ClickedDate").kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/Filter/GetDateFieldDropDown",
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "Text",
+            dataValueField: "Value",
+            change: function (e) {
+                onClickedCtrClickedDateDrpChange(this,e);
+
+            }
+        });
+        $("#ClickedCtr_EmailSentDate").kendoDropDownList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/uas.web/Filter/GetDateFieldDropDown",
+                        dataType: "json"
+                    }
+                }
+            },
+            dataTextField: "Text",
+            dataValueField: "Value",
+            change: function (e) {
+                onClickedCtrEmailSentDateDrpChange(this, e);
+
+            }
+        });
+
+        
+    });
+
+    function onClickedCtrDrpChange(ele,e) {
+        var dataItem = ele.dataItem(e.item);
+        showhideFilterPanel(dataItem.Value, 'Click');
+    }
+    function onClickedCtrClickedDateDrpChange(ele, e) {
+        var dataItem = ele.dataItem(e.item);
+        changeVisibility('ClickedCtr_ClickedDate', dataItem.Value);
+    }
+    function onClickedCtrEmailSentDateDrpChange(ele, e) {
+        var dataItem = ele.dataItem(e.item);
+        changeVisibility('ClickedCtr_EmailSentDate', dataItem.Value);
+    }
+    
+</script>

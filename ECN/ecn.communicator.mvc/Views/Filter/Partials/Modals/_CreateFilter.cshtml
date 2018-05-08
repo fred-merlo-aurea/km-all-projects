@@ -1,0 +1,89 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ECN_Framework_Entities.Communicator.Filter
+
+<script>
+    var lastControlsError = [];
+    function createFilterAjax() {
+        clearValidationError("AddFilter_Validation", lastControlsError);
+        lastControlsError = [];
+        var filterName = $('#FilterName').val().trim();
+        if (filterName.length == 0) {
+            lastControlsError.push("FilterName");
+            setValidationError('Please enter a value for Filter Name', "AddFilter_Validation", lastControlsError);
+        }
+        else {
+            var model = {
+                FilterName: filterName,
+                GroupCompareType: $('#GroupCompareType').data('kendoDropDownList').value()
+            };
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateFilter", "Filter")",
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeWindow('CreateFilter');
+                        window.location.href = response[1];
+                    }
+                    else {
+                        setValidationError(response[1], "AddFilter_Validation", lastControlsError);
+                    }
+                }
+            });
+        }
+    };
+
+    function closeCreateFilterWindow()
+    {
+        clearValidationError("AddFilter_Validation", lastControlsError);
+        lastControlsError = [];
+        closeWindow('CreateFilter');
+    }
+</script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Create Filter</legend>
+
+        <div id="AddFilter_Validation" style="margin:10px;padding-left:15px;">
+
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Filter Name</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("FilterName")
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Group Compare Type</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().DropDownList().Name("GroupCompareType").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "OR", Value = "OR" },
+                new SelectListItem { Text = "AND", Value = "AND" }
+                }).DataTextField("Text").DataValueField("Value")
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Save").Content("Save And Continue").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "createFilterAjax()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn", type = "button", onclick = "closeCreateFilterWindow()" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+</div>     
+   

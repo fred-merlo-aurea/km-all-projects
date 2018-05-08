@@ -1,0 +1,85 @@
+﻿@model UAD.DataCompare.Web.Models.FileViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    body {
+        margin-top: 100px;
+        font-family: 'Trebuchet MS', serif;
+        line-height: 1.6;
+    }
+
+    .container {
+        margin: 0 auto;
+    }
+
+    ul.tabs {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+    }
+
+        ul.tabs li {
+            background: none;
+            color: #222;
+            display: inline-block;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+            ul.tabs li.current {
+                background: #ededed;
+                color: #222;
+            }
+
+    .tab-content {
+        display: none;
+        background: #ededed;
+        padding: 15px;
+    }
+
+        .tab-content.current {
+            display: inherit;
+        }
+</style>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+
+        })
+    </script>
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<div class="container-fluid">
+    <ul class="tabs">
+        <li class="tab-link current" data-tab="tab-1">Add File Details</li>
+        <li class="tab-link" data-tab="tab-2">Map Columns</li>
+    </ul>
+    @using (Html.BeginForm("Create", "Datacompare", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "multiform" }))
+    {
+        <div id="tab-1" class="tab-content current">
+            @Html.Partial("Partials/Create/_ProcessFile", Model)
+        </div>
+        <div id="tab-2" class="tab-content">
+            @if (Model.ColumnMapping != null)
+            {
+                for (int i = 0; i < Model.ColumnMapping.Count; i++)
+                {
+                    @Html.Partial("Partials/Create/_GenerateMapping", Model.ColumnMapping[i])
+                }
+            }
+
+        </div>
+    }
+</div><!-- container -->

@@ -1,0 +1,154 @@
+﻿<script>
+    var _customerID;
+    function CustomerExplorer(options) {
+        this.select = options.select;
+        
+        this.open = function () {
+            var window = $("#CustomerExplorer").data("kendoWindow");
+            window.center().open();
+            showLoadingWindow();
+        };
+        this.close = function () {
+            var window = $("#CustomerExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }
+    var explorer;
+    function onCustomerExplorerOpen() {
+        var customerGrid = $("#Customers").data("kendoGrid");     
+        customerGrid.dataSource.read();
+    }
+
+    function onCustomerExplorerClose() {
+        $(".k-overlay").remove();
+    }
+
+    function customerExplorer(select) {
+        explorer = new CustomerExplorer({
+            select: select
+            
+        });
+        explorer.open();
+    }
+
+    function addCustomer(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var customer = this.dataItem(item);
+        //e.sender.clearSelection();
+        var event = $.Event("CustomerSelected");
+        event.sender = explorer;
+        event.customer = customer;
+        $("#CustomerExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+
+        //$("#cam02").text(customer.CustomerName);
+        //$("#customerSelected").removeAttr("style");
+        //$("#PopupWindow").data('kendoWindow').close();
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("Customers")
+                       .Name("CustomerExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onCustomerExplorerOpen")
+                                    .Close("onCustomerExplorerClose"))
+                       .Visible(false)
+                       .Width(500)
+                       .Height(540);
+
+    explorer.Render();
+}
+@helper Content()
+{
+<div class="wrapper modal" style="min-width:200px">
+    <fieldset title="Customer Explorer">
+        <legend>Customers</legend>
+        <div id="Customers">
+        </div>     
+        <div id="NoCustomers">No Customers</div>
+    </fieldset>
+</div>
+
+<script>
+    $(function () {
+        kendo.destroy("#Customers");
+        $("#Customers").kendoGrid({
+            columns: [
+                {
+                    field: "CustomerName",
+                    width: 400,                    
+                    title: "Customers"
+                },
+                {
+                    template: "<i class='km-icon icon-kmplus-circled-1'></i>",
+                }
+            ],
+            selectable: "row",
+            autoBind:false,
+            change: addCustomer,
+            dataSource: {
+                transport: {
+                    read: '@Url.Action("GetCustomers", "Web")'
+                },
+                schema: {
+                    model: {
+                        id: "CustomerID",
+                        CustomerName: "CustomerName"
+                    }
+                }
+            },
+            dataBound: function (e) {
+                if (e.sender.dataSource.total() != 0) {
+                    $("#Customers").show();
+                    $("#NoCustomers").hide();
+                }
+                else {
+                    $("#Customers").hide();
+                    $("#NoCustomers").show();
+                }
+            },
+            scrollable: true,
+            height: 460
+        });
+        $("#CustomerExplorer").on("CustomerSelected", function (e) {
+            explorer.select(e);
+        });
+    
+
+
+        //$("tr.customerName").click(function () {
+        //    var item = $(this).children("td").text();
+        //    $("#cam02").text(item);
+        //    $("#customerSelected").removeAttr("style");
+        //    $("#PopupWindow").data('kendoWindow').close();
+        //});
+        //$(function () {
+        //    $.ajax({
+        //        url: submit_url,
+        //        type: 'post',
+        //        data: '\Diagrams\GetCustomers',
+        //        dataType: "json",
+        //        success: function (res) {
+        //            var cust;
+        //            $.each(res, function (i, inputItem) {
+        //                cust += '<span>' + inputItem.CustomerName + '</span>';
+        //            });
+        //            $('#Customers').html(cust);
+        //        }
+        //    });
+        //});
+    });
+</script>
+}

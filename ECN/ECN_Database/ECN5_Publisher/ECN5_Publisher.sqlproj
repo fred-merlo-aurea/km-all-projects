@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ECN5_Publisher</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{7f2bbb1c-76ac-41dc-9676-933be629e19b}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ECN5_Publisher</RootNamespace>
+    <AssemblyName>ECN5_Publisher</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Rules.sql" />
+    <Build Include="dbo\Tables\RuleDetails.sql" />
+    <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Tables\EditionHistory.sql" />
+    <Build Include="dbo\Tables\Frequency.sql" />
+    <Build Include="dbo\Tables\Page.sql" />
+    <Build Include="dbo\Tables\EditionActivityLog.sql" />
+    <Build Include="dbo\Tables\Link.sql" />
+    <Build Include="dbo\Tables\Publication.sql" />
+    <Build Include="dbo\Tables\Edition.sql" />
+    <Build Include="Security\db_executor.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\ecn5.sql" />
+    <Build Include="Security\ecn5_1.sql" />
+    <Build Include="Security\ecn5writer.sql" />
+    <Build Include="Security\ecn5writer_1.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="Security\webuser_1.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\bill_1.hipps.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\justin_1.welter.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\latha_1.sunil.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Functions\fn_Split.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionHistory_Select_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Frequency_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Delete_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Select_LinkID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Link_Select_PageID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Page_Delete_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Page_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Page_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Page_Select_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Page_Select_EditionID_PageNo.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Exists_BYCode.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Exists_BYID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Exists_BYName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Publication_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\sp_RebuildIndex.sql" />
+    <Build Include="dbo\Stored Procedures\sp_UpdateEdition.sql" />
+    <Build Include="dbo\Stored Procedures\sp_SavePublication.sql" />
+    <Build Include="dbo\Stored Procedures\sp_SavePage.sql" />
+    <Build Include="dbo\Stored Procedures\sp_SaveEdition.sql" />
+    <Build Include="dbo\Stored Procedures\sp_InsertActivityLog.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_ForwardsDetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_VisitsTop20.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_Summary.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_SubscribesDetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_Searchdetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_PrintsPerPage.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetDEreportDetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_VisitsPerPage.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_VisitDetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_PageSearch.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetLinks.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_TopClicks.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_ClicksDetails.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetActivity_TopClicks_download.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Rule_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Select_PublicationCode.sql" />
+    <Build Include="dbo\Stored Procedures\TableSpaceUsed.sql" />
+    <Build Include="dbo\Stored Procedures\e_Category_Select_All.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Exists_ByName.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Select_CustomerID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Select_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_Edition_Select_PublicationID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionActivityLog_Delete_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionActivityLog_Save.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionActivityLog_Select_EditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionActivityLog_Select_EditionID_SessionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionHistory_Exists_ByEditionID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionHistory_Exists_ByID.sql" />
+    <Build Include="dbo\Stored Procedures\e_EditionHistory_Save.sql" />
+    <Build Include="Security\Permissions.sql" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+﻿@using KMEnums
+@using KMModels
+@using KMModels.PostModels
+
+@model RuleModel
+
+@{  var selectValue = ((IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.PageBreaks).Select((r, i) => new {  Id = r.Id,  TextField ="Page "+(i+1).ToString()+" (" + r.FieldLabel+") " }); }
+         <div class="subtitle"></div>
+            <div class="formbox  formtabled">
+                @Html.HiddenFor(x=>x.Type, new { @value = RuleTypes.Page} )
+                @Html.HiddenFor(x=>x.Order)
+                  <div class="formitem formiteminline">
+                      Go to page number
+               @Html.Kendo().DropDownListFor(x => x.ControlId).Items(items=>{              
+              foreach (var cm in selectValue) 
+              {
+                  items.Add().Text(cm.TextField).Value(cm.Id.ToString());                  
+              }
+              items.Add().Text("End Form").Value("-1");
+          })
+            </div>                  
+         </div>

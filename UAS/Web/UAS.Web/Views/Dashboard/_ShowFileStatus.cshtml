@@ -1,0 +1,122 @@
+﻿@*@model IEnumerable<UAS.Web.Models.Circulations.FileStatus>*@
+
+@model UAS.Web.Models.Circulations.FileStatusWithName
+
+@LoadtoKendoGrid(Model.FileStatusIEnum)
+
+@helper LoadtoKendoGrid(IEnumerable<UAS.Web.Models.Circulations.FileStatus> source)
+{
+
+Html.Kendo()
+    .Grid(source)
+    .Name("grid_" + Model.FileStatusName)
+
+    .Columns(columns =>
+    {
+        columns.Bound(e => e.isPassMaxProcessingTime).Visible(false);
+        columns.Bound(e => e.FileName).Template(
+            @<text>
+                @if (item.isPassMaxProcessingTime)
+                {
+                    <div style='word-break: break-all; word-wrap: break-word;'><span style="color:red;">@item.FileName</span><br /><span style="color:red;">Original Count: @item.OriginalRecordCount</span></div>
+                }
+                else
+                {
+                    <div style='word-break: break-all; word-wrap: break-word;'>@item.FileName</div>
+                }                
+            </text>).Width(160).Title("File Name");
+        columns.Bound(e => e.StartTime).Template(
+            @<text>
+                @if (item.isPassMaxProcessingTime)
+                {                    
+                    <span style="color:red;">Start Time : @item.StartTime.ToString("yyyy-MM-dd hh:mm:ss tt")</span><br /><span style="color:red;">File Type : @item.FileType</span>
+                }
+                else
+                {
+                    <span>Start Time : @item.StartTime.ToString("yyyy-MM-dd hh:mm:ss tt")</span><br /><span>File Type : @item.FileType</span>
+                }                
+            </text>).Width(160).Title("Details");
+        columns.Bound(e => e.StepsCompleted).Template(
+            @<text>
+                @if (item.isPassMaxProcessingTime)
+                {                    
+                    <span style="color:red;">Pub : @item.PubCode</span><br /><span style="color:red;">Status : @item.Status</span><br /><span style="color:red;">Step #: @item.StepsCompleted of @item.Totalsteps</span>
+                }
+                else
+                {
+                    <span>Pub : @item.PubCode</span><br /><span>Status : @item.Status</span><br /><span>Step #: @item.StepsCompleted of @item.Totalsteps</span>
+                }
+                
+            </text>).Width(160).Title("Steps");
+    })
+    .ClientRowTemplate(
+        "# if (data.isPassMaxProcessingTime == true) { #" +
+            "<tr>" +
+                "<td>" +
+                    "<div style='word-break: break-all; word-wrap: break-word;'><span style='color:red;'>#: data.FileName #</span></div>" +
+                "</td>" +
+                "<td>" +
+                    "<span style='color:red;'>Start Time : #: kendo.toString(kendo.parseDate(data.StartTime, 'yyyy-MM-dd hh:mm:ss tt'), 'yyyy-MM-dd hh:mm:ss tt')  #</span><br />" +
+                    "<span style='color:red;'>File Type : #: data.FileType #</span>" +
+                "</td>" +
+                "<td>" +
+                    "<span style='color:red;'>Pub : #: data.PubCode #</span><br />" +
+                    "<span style='color:red;'>Status : #: data.Status #</span><br />" +
+                    "<span style='color:red;'>Step #: data.StepsCompleted # of #: data.Totalsteps #</span>" +
+                "</td>" +
+             "</tr>" +
+         "# } else { #" +
+             "<tr>" +
+                "<td>" +
+                    "<div style='word-break: break-all; word-wrap: break-word;'><span>#: data.FileName #</span></div>" +
+                "</td>" +
+                "<td>" +
+                    "<span >Start Time : #: kendo.toString(kendo.parseDate(data.StartTime, 'yyyy-MM-dd hh:mm:ss tt'), 'yyyy-MM-dd hh:mm:ss tt')  #</span><br />" +
+                    "<span >File Type : #: data.FileType #</span>" +
+                "</td>" +
+                "<td>" +
+                    "<span >Pub : #: data.PubCode #</span><br />" +
+                    "<span >Status : #: data.Status #</span><br />" +
+                    "<span >Step #: data.StepsCompleted # of #: data.Totalsteps #</span>" +
+                "</td>" +
+             "</tr>" +
+         "# } #"
+    )
+    .ClientAltRowTemplate
+    (
+         "# if (data.isPassMaxProcessingTime == true) { #" +
+            "<tr style=\"background-color: WhiteSmoke;\">" +
+                "<td>" +
+                    "<div style='word-break: break-all; word-wrap: break-word;'><span style='color:red;'>#: data.FileName #</span></div>" +
+                "</td>" +
+                "<td>" +
+                    "<span style='color:red;'>Start Time : #: kendo.toString(kendo.parseDate(data.StartTime, 'yyyy-MM-dd hh:mm:ss tt'), 'yyyy-MM-dd hh:mm:ss tt')  #</span><br />" +
+                    "<span style='color:red;'>File Type : #: data.FileType #</span>" +
+                "</td>" +
+                "<td>" +
+                    "<span style='color:red;'>Pub : #: data.PubCode #</span><br />" +
+                    "<span style='color:red;'>Status : #: data.Status #</span><br />" +
+                    "<span style='color:red;'>Step #: data.StepsCompleted # of #: data.Totalsteps #</span>" +
+                "</td>" +
+             "</tr>" +
+         "# } else { #" +
+             "<tr style=\"background-color: WhiteSmoke;\">" +
+                "<td>" +
+                    "<div style='word-break: break-all; word-wrap: break-word;'><span>#: data.FileName #</span></div>" +
+                "</td>" +
+                "<td>" +
+                    "<span >Start Time : #: kendo.toString(kendo.parseDate(data.StartTime, 'yyyy-MM-dd hh:mm:ss tt'), 'yyyy-MM-dd hh:mm:ss tt')  #</span><br />" +
+                    "<span >File Type : #: data.FileType #</span>" +
+                "</td>" +
+                "<td>" +
+                    "<span >Pub : #: data.PubCode #</span><br />" +
+                    "<span >Status : #: data.Status #</span><br />" +
+                    "<span >Step #: data.StepsCompleted # of #: data.Totalsteps #</span>" +
+                "</td>" +
+             "</tr>" +
+         "# } #"
+    )
+    .Scrollable(scroll => scroll.Height(250))
+    .Sortable(sortable => sortable.AllowUnsort(false))    
+    .Render();
+}

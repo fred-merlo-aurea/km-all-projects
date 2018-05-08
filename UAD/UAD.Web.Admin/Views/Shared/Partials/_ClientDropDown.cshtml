@@ -1,0 +1,54 @@
+﻿@model UAD.Web.Admin.Models.ClientDropDown
+
+@{
+    ECN_Framework_BusinessLayer.Application.ECNSession UserSession = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession();
+}
+
+@*<script type="text/javascript">
+$(function () {
+    $('#SelectedClientGroupID').change(function () {
+        var val = $('#variantsDdl').val()
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeClientGroup", "Forms")' + '/' + val,
+            success: function (result) {
+                location.reload();
+            },
+            error: function (data) { alert('Error'); }
+        });
+
+    });
+});
+    </script>*@
+
+@using (Html.BeginForm("_ClientDropDown", "Home"))
+{
+    <table style="text-align:right;width:100%;">
+        <tr>
+            <td style="text-align:right;">
+
+                <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                    Channel:
+                </span>
+                @Html.HiddenFor(m => m.CurrentClientGroupID)
+                @Html.DropDownListFor(m => m.SelectedClientGroupID, Model.ClientGroupItems, new { onchange = "submit()" })
+
+
+            </td>
+            <td style="text-align:right;">
+
+                <span style="font-weight: bold; color: black;" class="ECNLabel10">
+                    &nbsp;
+                    Customer:
+                </span>
+                @Html.HiddenFor(m => m.CurrentClientID)
+                @Html.DropDownListFor(m => m.SelectedClientID, Model.ClientItems, new { onchange = "submit()" })
+
+            </td>
+            <td style="text-align:right;">
+                <span class="ECNText10" style="vertical-align: bottom;">&nbsp;User:</span>
+                <span class="ECNText10" style="vertical-align: bottom;" runat="server" id="spanCurrentUser">@UserSession.CurrentUser.UserName</span>
+            </td>
+        </tr>
+    </table>
+}

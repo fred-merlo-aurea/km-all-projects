@@ -1,0 +1,91 @@
+﻿@model UAD.DataCompare.Web.Models.Datacompare
+@using (Html.BeginForm("Add", "Datacompare", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "multiform" }))
+{
+    if(Model!=null)
+    { 
+    <div class="header-div">
+        <h2>File Details</h2>
+    </div>
+    @Html.Hidden("Step1", "Step1")
+    <div class="center-div">
+        <table class="form-table">
+            <tbody>
+
+                <tr>
+                    <td><label class="form-lable" for="filebrowser">Select a File to Map:</label></td>
+                    <td><input type="file" id="filebrowser" name="filebrowser" required /></td>
+                </tr>
+
+                <tr>
+                    <td><label class="form-lable" for="filename">Save Filename As:</label></td>
+                    <td><input type="text" id="filename" name="filename" placeholder="Please provide filename." required /></td>
+                    @Html.Hidden("hdFileName", Model.FileName)
+                </tr>
+
+                <tr>
+                    <td><label class="form-lable" for="emailAddress">Notification Email Address:</label></td>
+                    <td>
+                        <input type="email" id="emailAddress" name="emailAddress" placeholder="Please add email address." />
+                        <button  id="addemail"  style="margin-left:10px;vertical-align:top;"><i class='km-icon icon-kmcustom-add'></i></button>
+                        <p id="usermessage"></p>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+                        <select id="emailContainer" name="emailContainer" multiple size="5" style="width:180px;margin:0;" ></select>
+                        <button id="removeemail" style="margin-left:10px;vertical-align:top;"><i class='km-icon icon-kmcustom-delete'></i></button>
+                        @Html.Hidden("hdNotiFicationEmail", Model.NotiFicationEmail)
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="form-lable" for="ddlDelimeter">File Delimiter:</label></td>
+                    <td>
+                        @Html.DropDownList("ddlDelimeter", new[]{
+                        new SelectListItem(){ Text = "comma",Value = "comma"},
+                        new SelectListItem(){ Text = "tab", Value = "tab" },
+                        new SelectListItem(){ Text = "semicolan",Value = "semicolan"},
+                        new SelectListItem(){ Text = "colon", Value = "colon" },
+                        new SelectListItem(){ Text = "tild", Value = "tild" }}, new { @id= "ddlDelimeter" })
+                        @Html.Hidden("hddelimeter", Model.Delimiter)
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="form-lable" for="ddlQuotation">Does this contain double quotation mark:</label></td>
+                    <td>
+                        @Html.DropDownList("ddlQuotation", new[]{
+                        new SelectListItem(){ Text = "No",Value = "No"},
+                        new SelectListItem() {Text = "Yes",Value = "Yes" }}, new { @id = "ddlQuotation" })
+                        @Html.Hidden("hdIsTextQualifier", Model.IsTextQualifier)
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+   
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+            </div>
+            <div class="cbtns">
+            </div>
+            <div class="rbtns">
+                @(Html.Kendo().Button()
+                 .Name("submit")
+                 .Content("Next<i class='km-icon icon-kmright-dir ralign'></i>")
+                 .Events(ev => ev.Click("onNextClick"))
+                 .HtmlAttributes(new { @class = "btn btn-blue5", type = "submit"  }))
+               
+            </div>
+        </div>
+    </div>
+
+    }
+
+}

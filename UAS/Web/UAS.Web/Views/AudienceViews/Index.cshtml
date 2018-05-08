@@ -1,0 +1,68 @@
+﻿
+@*@{
+    ViewBag.Title = "Index";
+}
+<input type="hidden" id="parentViewDivId" value="mainview" />
+<div id="mainview">
+@{Html.RenderAction("GetFilterViewModel", "Filter",new { @vwType= "ConsensusView" });}
+</div>*@
+
+@model UAS.Web.Models.UAD.Filter.FilterViewModel
+@{
+    ViewBag.Title = "ConsensusView";
+}
+<input type="hidden" id="parentViewDivId" value="lpane" />
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div id="mainview" style="height:700px;min-height:600px;">
+    <div id="lpane">
+        @*@{Html.RenderAction("GetFilterViewModel", "Filter", new { @vwType = "AMSView", pubID = @ViewBag.ProdID });}*@
+    </div>
+    <div id="rpane" style="overflow-x:hidden;overflow-y:hidden">
+     </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#mainview").kendoSplitter({
+            orientation: "horizontal",
+            panes: [{ collapsible: true, size: "20%", collapsedSize: "0%" },
+                { collapsible: true, size: "80%", collapsedSize: "0%" }
+            ]
+        });
+
+        $("#toggleLeftPane").click(function (e) {
+            var splitterElement = $("#mainview");
+            var leftPane = $("#lpane");
+            var splitter = splitterElement.data("kendoSplitter");
+            console.log(leftPane.width())
+            if (leftPane.width() > 0) {
+                $("#pinLeft").removeClass('k-i-pin').addClass('k-i-unpin');
+            }
+            else {
+                $("#pinLeft").removeClass('k-i-unpin').addClass('k-i-pin');
+            }
+            splitter[leftPane.width() > 0 ? "collapse" : "expand"](leftPane);
+        });
+
+
+        $.ajax({
+            url: '/uas.web/filter/GetFilterViewModel?brandId=0&vwType=ConsensusView',
+            contentType: "application/html; charset=utf-8",
+            type: 'GET',
+            cache: !0,
+            datatype: 'application/json',
+            success: function (response) {
+                $("#lpane").html(response);
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+
+
+    });
+</script>

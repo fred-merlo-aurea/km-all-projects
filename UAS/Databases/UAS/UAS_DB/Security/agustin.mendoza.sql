@@ -1,0 +1,8 @@
+﻿CREATE USER [agustin.mendoza] FOR LOGIN [agustin.mendoza] WITH DEFAULT_SCHEMA=[dbo];
+go
+
+CREATE LOGIN [agustin.mendoza] WITH PASSWORD=N'pMNmR7nRrDHdr8JaEiS5vgZQ2mPPCuRWA1sO10fw1Hs=', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=ON
+GO
+
+
+

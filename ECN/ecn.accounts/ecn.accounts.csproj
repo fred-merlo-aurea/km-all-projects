@@ -1,0 +1,1429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12CD8F7A-C08B-46A3-8E12-4C1BD5D8A5B2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ecn.accounts</RootNamespace>
+    <AssemblyName>ecn.accounts</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\ECN v4.0\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ActiveDateTime, Version=1.1.1127.23303, Culture=neutral, PublicKeyToken=1259648242326289">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\ActiveDateTime.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveUp.WebControls.HtmlTextBox, Version=2.3.1468.30267, Culture=neutral, PublicKeyToken=debdbfc6bad3ccfc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\ActiveUp.WebControls.HtmlTextBox.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxControlToolkit, Version=16.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="BWare.UI.Web.WebControls.DataPanel, Version=1.0.2831.28806, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\BWare.UI.Web.WebControls.DataPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="CKEditor.NET, Version=3.6.2.0, Culture=neutral, PublicKeyToken=e379cdf2f8354999, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\CKEditor.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\..\ThirdPartyDLLs\CrystalReports\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="GroupRadioButton, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93985c16c9bea92d">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\GroupRadioButton.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFNet, Version=4.0.7.0, Culture=neutral, PublicKeyToken=36167be3f67ac39c">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\PDFNet.dll</HintPath>
+    </Reference>
+    <Reference Include="PFProdotNET, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\PFProdotNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.Spreadsheet, Version=2017.2.502.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2017.2.503.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Flow, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip, Version=2017.2.428.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Windows.Zip.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\1\ECN.css" />
+    <Content Include="App_Themes\25\ECN.css" />
+    <Content Include="App_Themes\25\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\25\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\25\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\31\GD.css" />
+    <Content Include="App_Themes\51\ECN.css" />
+    <Content Include="App_Themes\51\images\collector_pl_01.gif" />
+    <Content Include="App_Themes\51\images\communicator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\creator_pl_01.gif" />
+    <Content Include="App_Themes\51\images\shade_bottom_07.jpg" />
+    <Content Include="App_Themes\collector_01.gif" />
+    <Content Include="App_Themes\collector_02.gif" />
+    <Content Include="App_Themes\communicator_01.gif" />
+    <Content Include="App_Themes\communicator_02.gif" />
+    <Content Include="App_Themes\creator_01.gif" />
+    <Content Include="App_Themes\creator_02.gif" />
+    <Content Include="App_Themes\DarkBlueButton.jpg" />
+    <Content Include="App_Themes\OrangeButton.jpg" />
+    <Content Include="App_Themes\stylesheet.css" />
+    <Content Include="App_Themes\stylesheet_default.css" />
+    <Content Include="content.jpg" />
+    <Content Include="create.jpg" />
+    <Content Include="Default.aspx" />
+    <Content Include="default.htm" />
+    <Content Include="Engines\QuoteApproval.aspx" />
+    <Content Include="Engines\ScheduleDemo.aspx" />
+    <Content Include="error.aspx" />
+    <Content Include="exception\exception.aspx" />
+    <Content Include="Font\SourceSansPro\KMPlatform.css" />
+    <Content Include="Font\SourceSansPro\SIL Open Font License.txt" />
+    <Content Include="Font\SourceSansPro\SourceSansPro.js" />
+    <Content Include="images.jpg" />
+    <Content Include="includes\AnnualQuoteItemEditor.ascx" />
+    <Content Include="includes\CCInfoCollector.ascx" />
+    <Content Include="includes\ChannelPartnerRatesEditor.ascx" />
+    <Content Include="includes\ContactEditor.ascx" />
+    <Content Include="includes\ContactEditor2.ascx" />
+    <Content Include="includes\CustomerInfoCollector.ascx" />
+    <Content Include="includes\EditUserProfile.ascx" />
+    <Content Include="includes\EmailNotes.ascx" />
+    <Content Include="includes\EmailQuoteItemEditor.ascx" />
+    <Content Include="includes\folderSystem.ascx" />
+    <Content Include="includes\footer.ascx" />
+    <Content Include="includes\gallery.ascx" />
+    <Content Include="includes\header.ascx" />
+    <Content Include="includes\InfoSummary.ascx" />
+    <Content Include="includes\LeadsWeeklyReport.ascx" />
+    <Content Include="includes\login.aspx" />
+    <Content Include="includes\Login.html" />
+    <Content Include="includes\loginKcomm.html" />
+    <Content Include="includes\MultiSelectGroupExplorer.ascx" />
+    <Content Include="includes\PriceItemEditor.ascx" />
+    <Content Include="includes\QuoteItemEditor.ascx" />
+    <Content Include="includes\QuoteOptionSelector.ascx" />
+    <Content Include="includes\QuoteViewer.ascx" />
+    <Content Include="includes\TestingAccount.ascx" />
+    <Content Include="includes\thumbnail.aspx" />
+    <Content Include="includes\uploader.ascx" />
+    <Content Include="includes\UserInfoCollector.ascx" />
+    <Content Include="js\KMPlatform.js" />
+    <Content Include="js\overlib\mini\overlib_anchor_mini.js" />
+    <Content Include="js\overlib\mini\overlib_centerpopup_mini.js" />
+    <Content Include="js\overlib\mini\overlib_crossframe_mini.js" />
+    <Content Include="js\overlib\mini\overlib_cssstyle_mini.js" />
+    <Content Include="js\overlib\mini\overlib_csstyle_mini.js" />
+    <Content Include="js\overlib\mini\overlib_debug_mini.js" />
+    <Content Include="js\overlib\mini\overlib_exclusive_mini.js" />
+    <Content Include="js\overlib\mini\overlib_followscroll_mini.js" />
+    <Content Include="js\overlib\mini\overlib_hideform_mini.js" />
+    <Content Include="js\overlib\mini\overlib_mini.js" />
+    <Content Include="js\overlib\mini\overlib_setonoff_mini.js" />
+    <Content Include="js\overlib\mini\overlib_shadow_mini.js" />
+    <Content Include="js\overlib\overlib.js" />
+    <Content Include="js\overlib\overlib_anchor.js" />
+    <Content Include="js\overlib\overlib_centerpopup.js" />
+    <Content Include="js\overlib\overlib_crossframe.js" />
+    <Content Include="js\overlib\overlib_cssstyle.js" />
+    <Content Include="js\overlib\overlib_debug.js" />
+    <Content Include="js\overlib\overlib_exclusive.js" />
+    <Content Include="js\overlib\overlib_followscroll.js" />
+    <Content Include="js\overlib\overlib_hideform.js" />
+    <Content Include="js\overlib\overlib_setonoff.js" />
+    <Content Include="js\overlib\overlib_shadow.js" />
+    <Content Include="js\toggle.js" />
+    <Content Include="login.aspx" />
+    <Content Include="logoff.aspx" />
+    <Content Include="App_Themes\LtBlueButton.jpg" />
+    <Content Include="main\billingSystem\billDetail.aspx" />
+    <Content Include="main\billingSystem\BillingHistory.aspx" />
+    <Content Include="main\billingSystem\BillingReports.aspx" />
+    <Content Include="main\billingSystem\Default.aspx" />
+    <Content Include="main\billingSystem\PriceItemDetails.aspx" />
+    <Content Include="main\billingSystem\ProcessInvoice.aspx" />
+    <Content Include="main\billingSystem\quotedetail.aspx" />
+    <Content Include="main\channels\basechanneleditor.aspx" />
+    <Content Include="main\channels\channelseditor.aspx" />
+    <Content Include="main\channels\default.aspx" />
+    <Content Include="main\channels\LicenseReport.aspx" />
+    <Content Include="main\channels\templates.aspx" />
+    <Content Include="main\channels\templateseditor.aspx" />
+    <Content Include="main\ClearCache.aspx" />
+    <Content Include="main\customers\collapse.gif" />
+    <Content Include="main\customers\customerdetail.aspx" />
+    <Content Include="main\customers\CustomerInquirieDetail.aspx" />
+    <Content Include="main\customers\customerlogin.aspx" />
+    <Content Include="main\customers\default.aspx" />
+    <Content Include="main\customers\expand.gif" />
+    <Content Include="main\customers\LandingPage\LandingPages.aspx" />
+    <Content Include="main\customers\LandingPage\Unsubscribe.ascx" />
+    <Content Include="main\customers\license.aspx" />
+    <Content Include="main\customers\licensedetail.aspx" />
+    <Content Include="main\customers\templatedetail.aspx" />
+    <Content Include="main\default.aspx" />
+    <Content Include="main\Digital\AddEdition.aspx" />
+    <Content Include="main\Digital\ConvertDE.aspx" />
+    <Content Include="main\Digital\default.aspx" />
+    <Content Include="main\Digital\EditEdition.aspx" />
+    <Content Include="main\featureAccessError.aspx" />
+    <Content Include="main\leads\default.aspx" />
+    <Content Include="main\leads\demoManager.aspx" />
+    <Content Include="main\leads\DemoSetup.aspx" />
+    <Content Include="main\leads\EmailLog.aspx" />
+    <Content Include="main\leads\Reports.aspx" />
+    <Content Include="main\Notification\Notifications.aspx" />
+    <Content Include="main\Notification\NotificationsSetup.aspx" />
+    <Content Include="main\reports\AccountIntensity.aspx" />
+    <Content Include="main\reports\BlastStatus.aspx" />
+    <Content Include="main\reports\BPAAuditReport.aspx" />
+    <Content Include="main\reports\ChannelLook.aspx" />
+    <Content Include="main\reports\channelreport.aspx" />
+    <Content Include="main\reports\DEReport.aspx" />
+    <Content Include="main\reports\DiskSpace.aspx" />
+    <Content Include="main\reports\ECNToday.aspx" />
+    <Content Include="main\reports\EmailDirectReport.aspx" />
+    <Content Include="main\reports\TotalBlastsForDay.aspx" />
+    <Content Include="main\roles\default.aspx" />
+    <Content Include="main\roles\roledetail.aspx" />
+    <Content Include="main\users\default.aspx" />
+    <Content Include="main\users\EditUserProfile.aspx" />
+    <Content Include="main\users\userdetail.aspx" />
+    <Content Include="main\users\userlogin.aspx" />
+    <Content Include="main\webServicesKey\AccessKey.aspx" />
+    <Content Include="scripts\ddmenu.css" />
+    <Content Include="scripts\ddmenu.js" />
+    <None Include="scripts\jquery-3.1.0.intellisense.js" />
+    <Content Include="scripts\jquery-3.1.0.js" />
+    <Content Include="scripts\jquery-3.1.0.min.js" />
+    <Content Include="scripts\jquery-3.1.0.slim.js" />
+    <Content Include="scripts\jquery-3.1.0.slim.min.js" />
+    <Content Include="scripts\jquery-ui-sliderAccess.js" />
+    <Content Include="scripts\jquery-ui-timepicker-addon.js" />
+    <Content Include="scripts\js\jquery-1.7.2.min.js" />
+    <Content Include="scripts\js\jquery-ui-1.8.22.custom.min.js" />
+    <Content Include="scripts\js\jquery-ui-sliderAccess.js" />
+    <Content Include="scripts\js\jquery-ui-timepicker-addon.js" />
+    <Content Include="Status.aspx" />
+    <Content Include="styles\jquery.ui.potato.menu.css" />
+    <Content Include="scripts\js\jquery.ui.potato.menu.js" />
+    <Content Include="scripts\progressbar.js" />
+    <Content Include="scripts\subjectlineTester.js" />
+    <Content Include="styles\progressbar.css" />
+    <Content Include="styles\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="styles\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="styles\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="styles\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="styles\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="styles\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="styles\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="styles\ui-lightness\jquery-ui-1.8.22.custom.css" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\DataFunctionsAdapter.cs" />
+    <Compile Include="includes\EditUserProfile.ascx.cs">
+      <DependentUpon>EditUserProfile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\EditUserProfile.ascx.designer.cs">
+      <DependentUpon>EditUserProfile.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\folderSystem.ascx.cs">
+      <DependentUpon>folderSystem.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\folderSystem.ascx.designer.cs">
+      <DependentUpon>folderSystem.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\MultiSelectGroupExplorer.ascx.cs">
+      <DependentUpon>MultiSelectGroupExplorer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\MultiSelectGroupExplorer.ascx.designer.cs">
+      <DependentUpon>MultiSelectGroupExplorer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\QuoteItemEditorBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Interfaces\IDataFunctions.cs" />
+    <Compile Include="main\customers\customerdetail.aspx.SaveButton.cs" />
+    <Compile Include="main\Digital\EditionBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\featureAccessError.aspx.cs">
+      <DependentUpon>featureAccessError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\featureAccessError.aspx.designer.cs">
+      <DependentUpon>featureAccessError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Notification\Notifications.aspx.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Notification\Notifications.aspx.designer.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Notification\NotificationsSetup.aspx.cs">
+      <DependentUpon>NotificationsSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Notification\NotificationsSetup.aspx.designer.cs">
+      <DependentUpon>NotificationsSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\EmailDirectReport.aspx.cs">
+      <DependentUpon>EmailDirectReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\EmailDirectReport.aspx.designer.cs">
+      <DependentUpon>EmailDirectReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\roles\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\roles\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\roles\roledetail.aspx.cs">
+      <DependentUpon>roledetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\roles\roledetail.aspx.designer.cs">
+      <DependentUpon>roledetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\users\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\users\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\users\EditUserProfile.aspx.cs">
+      <DependentUpon>EditUserProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\users\EditUserProfile.aspx.designer.cs">
+      <DependentUpon>EditUserProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\users\userdetail.aspx.cs">
+      <DependentUpon>userdetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\users\userdetail.aspx.designer.cs">
+      <DependentUpon>userdetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\AccountMenuFunctions.cs" />
+    <Compile Include="Status.aspx.cs">
+      <DependentUpon>Status.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Status.aspx.designer.cs">
+      <DependentUpon>Status.aspx</DependentUpon>
+    </Compile>
+    <Content Include="AutoLogin.aspx" />
+    <Content Include="classes\LicenseReport_aspx_cs_DateRange.cs" />
+    <Content Include="Global.asax" />
+    <Content Include="main\customers\Contacts.aspx" />
+    <Content Include="main\customers\LicenseEdit.aspx" />
+    <Content Include="main\customers\Notes.aspx" />
+    <Content Include="main\reports\BillingReport.aspx" />
+    <Content Include="main\reports\KMLogoclick.aspx" />
+    <Content Include="main\reports\default.aspx" />
+    <Content Include="main\reports\IR_KMLogoclick.aspx" />
+    <Content Include="main\securityAccessError.aspx" />
+    <Content Include="scripts\highslide\ecnHighslide-styles.css" />
+    <Content Include="scripts\highslide\ecnHighslide.css" />
+    <Content Include="scripts\highslide\graphics\close.png" />
+    <Content Include="scripts\highslide\graphics\controlbar2.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar3.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4-hover.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4.gif" />
+    <Content Include="scripts\highslide\graphics\fullexpand.gif" />
+    <Content Include="scripts\highslide\graphics\geckodimmer.png" />
+    <Content Include="scripts\highslide\graphics\loader.gif" />
+    <Content Include="scripts\highslide\graphics\loader.white.gif" />
+    <Content Include="scripts\highslide\graphics\outlines\beveled.png" />
+    <Content Include="scripts\highslide\graphics\outlines\drop-shadow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\glossy-dark.png" />
+    <Content Include="scripts\highslide\graphics\outlines\outer-glow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-black.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-white.png" />
+    <Content Include="scripts\highslide\graphics\resize.gif" />
+    <Content Include="scripts\highslide\graphics\zoomin.cur" />
+    <Content Include="scripts\highslide\graphics\zoomout.cur" />
+    <Content Include="scripts\highslide\highslide-full.js" />
+    <Content Include="scripts\highslide\highslide-full.packed.js" />
+    <Content Include="scripts\highslide\highslide-with-html.js" />
+    <Content Include="scripts\highslide\highslide-with-html.packed.js" />
+    <Content Include="scripts\highslide\highslide.js" />
+    <Content Include="scripts\highslide\highslide.packed.js" />
+    <Content Include="scripts\highslide\swfobject.js" />
+    <Compile Include="AutoLogin.aspx.cs">
+      <DependentUpon>AutoLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AutoLogin.aspx.designer.cs">
+      <DependentUpon>AutoLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="classes\PayFlowPro\ParaListGenerator.cs" />
+    <Compile Include="classes\PayFlowPro\PayFlowProCreditCardProcessor.cs" />
+    <Compile Include="classes\PayFlowPro\Profile.cs" />
+    <Compile Include="classes\PayFlowPro\ResponseParser.cs" />
+    <Compile Include="classes\PayFlowPro\Transaction.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Engines\QuoteApproval.aspx.cs">
+      <DependentUpon>QuoteApproval.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Engines\QuoteApproval.aspx.designer.cs">
+      <DependentUpon>QuoteApproval.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Engines\ScheduleDemo.aspx.cs">
+      <DependentUpon>ScheduleDemo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Engines\ScheduleDemo.aspx.designer.cs">
+      <DependentUpon>ScheduleDemo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="exception\exception.aspx.cs">
+      <DependentUpon>exception.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="exception\exception.aspx.designer.cs">
+      <DependentUpon>exception.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="includes\AnnualQuoteItemEditor.ascx.cs">
+      <DependentUpon>AnnualQuoteItemEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\AnnualQuoteItemEditor.ascx.designer.cs">
+      <DependentUpon>AnnualQuoteItemEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\CCInfoCollector.ascx.cs">
+      <DependentUpon>CCInfoCollector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\CCInfoCollector.ascx.designer.cs">
+      <DependentUpon>CCInfoCollector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\ChannelPartnerRatesEditor.ascx.cs">
+      <DependentUpon>ChannelPartnerRatesEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\ChannelPartnerRatesEditor.ascx.designer.cs">
+      <DependentUpon>ChannelPartnerRatesEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\ContactEditor.ascx.cs">
+      <DependentUpon>ContactEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\ContactEditor.ascx.designer.cs">
+      <DependentUpon>ContactEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\ContactEditor2.ascx.cs">
+      <DependentUpon>ContactEditor2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\ContactEditor2.ascx.designer.cs">
+      <DependentUpon>ContactEditor2.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\CustomerInfoCollector.ascx.cs">
+      <DependentUpon>CustomerInfoCollector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\CustomerInfoCollector.ascx.designer.cs">
+      <DependentUpon>CustomerInfoCollector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\EmailNotes.ascx.cs">
+      <DependentUpon>EmailNotes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\EmailNotes.ascx.designer.cs">
+      <DependentUpon>EmailNotes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\EmailQuoteItemEditor.ascx.cs">
+      <DependentUpon>EmailQuoteItemEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\EmailQuoteItemEditor.ascx.designer.cs">
+      <DependentUpon>EmailQuoteItemEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\footer.ascx.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\footer.ascx.designer.cs">
+      <DependentUpon>footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\gallery.ascx.cs">
+      <DependentUpon>gallery.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\gallery.ascx.designer.cs">
+      <DependentUpon>gallery.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\header.ascx.designer.cs">
+      <DependentUpon>header.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\InfoSummary.ascx.cs">
+      <DependentUpon>InfoSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\InfoSummary.ascx.designer.cs">
+      <DependentUpon>InfoSummary.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\LeadsWeeklyReport.ascx.cs">
+      <DependentUpon>LeadsWeeklyReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\LeadsWeeklyReport.ascx.designer.cs">
+      <DependentUpon>LeadsWeeklyReport.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\PriceItemEditor.ascx.cs">
+      <DependentUpon>PriceItemEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\PriceItemEditor.ascx.designer.cs">
+      <DependentUpon>PriceItemEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\QuoteItemEditor.ascx.cs">
+      <DependentUpon>QuoteItemEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\QuoteItemEditor.ascx.designer.cs">
+      <DependentUpon>QuoteItemEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\QuoteOptionSelector.ascx.cs">
+      <DependentUpon>QuoteOptionSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\QuoteOptionSelector.ascx.designer.cs">
+      <DependentUpon>QuoteOptionSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\QuoteViewer.ascx.cs">
+      <DependentUpon>QuoteViewer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\QuoteViewer.ascx.designer.cs">
+      <DependentUpon>QuoteViewer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\TestingAccount.ascx.cs">
+      <DependentUpon>TestingAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\TestingAccount.ascx.designer.cs">
+      <DependentUpon>TestingAccount.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\thumbnail.aspx.cs">
+      <DependentUpon>thumbnail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\thumbnail.aspx.designer.cs">
+      <DependentUpon>thumbnail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\uploader.ascx.cs">
+      <DependentUpon>uploader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\uploader.ascx.designer.cs">
+      <DependentUpon>uploader.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="includes\UserInfoCollector.ascx.cs">
+      <DependentUpon>UserInfoCollector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="includes\UserInfoCollector.ascx.designer.cs">
+      <DependentUpon>UserInfoCollector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="logoff.aspx.cs">
+      <DependentUpon>logoff.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="logoff.aspx.designer.cs">
+      <DependentUpon>logoff.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\billDetail.aspx.cs">
+      <DependentUpon>billDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\billDetail.aspx.designer.cs">
+      <DependentUpon>billDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\BillingHistory.aspx.cs">
+      <DependentUpon>BillingHistory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\BillingHistory.aspx.designer.cs">
+      <DependentUpon>BillingHistory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\BillingReports.aspx.cs">
+      <DependentUpon>BillingReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\BillingReports.aspx.designer.cs">
+      <DependentUpon>BillingReports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\PriceItemDetails.aspx.cs">
+      <DependentUpon>PriceItemDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\PriceItemDetails.aspx.designer.cs">
+      <DependentUpon>PriceItemDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\ProcessInvoice.aspx.cs">
+      <DependentUpon>ProcessInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\ProcessInvoice.aspx.designer.cs">
+      <DependentUpon>ProcessInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\billingSystem\quotedetail.aspx.cs">
+      <DependentUpon>quotedetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\billingSystem\quotedetail.aspx.designer.cs">
+      <DependentUpon>quotedetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\basechanneleditor.aspx.cs">
+      <DependentUpon>basechanneleditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\channels\basechanneleditor.aspx.designer.cs">
+      <DependentUpon>basechanneleditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\channelseditor.aspx.cs">
+      <DependentUpon>channelseditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\channels\channelseditor.aspx.designer.cs">
+      <DependentUpon>channelseditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\channels\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\LicenseReport.aspx.cs">
+      <DependentUpon>LicenseReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\LicenseReport.aspx.designer.cs">
+      <DependentUpon>LicenseReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\templates.aspx.cs">
+      <DependentUpon>templates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\channels\templates.aspx.designer.cs">
+      <DependentUpon>templates.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\channels\templateseditor.aspx.cs">
+      <DependentUpon>templateseditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\channels\templateseditor.aspx.designer.cs">
+      <DependentUpon>templateseditor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\ClearCache.aspx.cs">
+      <DependentUpon>ClearCache.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\ClearCache.aspx.designer.cs">
+      <DependentUpon>ClearCache.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\Contacts.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Contacts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\Contacts.aspx.designer.cs">
+      <DependentUpon>Contacts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\customerdetail.aspx.cs">
+      <DependentUpon>customerdetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\customerdetail.aspx.designer.cs">
+      <DependentUpon>customerdetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\CustomerInquirieDetail.aspx.cs">
+      <DependentUpon>CustomerInquirieDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\CustomerInquirieDetail.aspx.designer.cs">
+      <DependentUpon>CustomerInquirieDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\customerlogin.aspx.cs">
+      <DependentUpon>customerlogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\customerlogin.aspx.designer.cs">
+      <DependentUpon>customerlogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\LandingPage\ILandingPage.cs" />
+    <Compile Include="main\customers\LandingPage\LandingPages.aspx.cs">
+      <DependentUpon>LandingPages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\LandingPage\LandingPages.aspx.designer.cs">
+      <DependentUpon>LandingPages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\LandingPage\Unsubscribe.ascx.cs">
+      <DependentUpon>Unsubscribe.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\LandingPage\Unsubscribe.ascx.designer.cs">
+      <DependentUpon>Unsubscribe.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\license.aspx.cs">
+      <DependentUpon>license.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\license.aspx.designer.cs">
+      <DependentUpon>license.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\licensedetail.aspx.cs">
+      <DependentUpon>licensedetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\licensedetail.aspx.designer.cs">
+      <DependentUpon>licensedetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\LicenseEdit.aspx.cs">
+      <DependentUpon>LicenseEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\LicenseEdit.aspx.designer.cs">
+      <DependentUpon>LicenseEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\Notes.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Notes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\Notes.aspx.designer.cs">
+      <DependentUpon>Notes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\customers\templatedetail.aspx.cs">
+      <DependentUpon>templatedetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\customers\templatedetail.aspx.designer.cs">
+      <DependentUpon>templatedetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Digital\AddEdition.aspx.cs">
+      <DependentUpon>AddEdition.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Digital\AddEdition.aspx.designer.cs">
+      <DependentUpon>AddEdition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Digital\ConvertDE.aspx.cs">
+      <DependentUpon>ConvertDE.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Digital\ConvertDE.aspx.designer.cs">
+      <DependentUpon>ConvertDE.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Digital\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Digital\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Digital\EditEdition.aspx.cs">
+      <DependentUpon>EditEdition.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Digital\EditEdition.aspx.designer.cs">
+      <DependentUpon>EditEdition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\leads\default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\leads\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\leads\demoManager.aspx.cs">
+      <DependentUpon>demoManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\leads\demoManager.aspx.designer.cs">
+      <DependentUpon>demoManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\leads\DemoSetup.aspx.cs">
+      <DependentUpon>DemoSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\leads\DemoSetup.aspx.designer.cs">
+      <DependentUpon>DemoSetup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\leads\EmailLog.aspx.cs">
+      <DependentUpon>EmailLog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\leads\EmailLog.aspx.designer.cs">
+      <DependentUpon>EmailLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\leads\Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\leads\Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\AccountIntensity.aspx.cs">
+      <DependentUpon>AccountIntensity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\AccountIntensity.aspx.designer.cs">
+      <DependentUpon>AccountIntensity.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\BillingReport.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>BillingReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\BillingReport.aspx.designer.cs">
+      <DependentUpon>BillingReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\BlastStatus.aspx.cs">
+      <DependentUpon>BlastStatus.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\BlastStatus.aspx.designer.cs">
+      <DependentUpon>BlastStatus.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\BPAAuditReport.aspx.cs">
+      <DependentUpon>BPAAuditReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\BPAAuditReport.aspx.designer.cs">
+      <DependentUpon>BPAAuditReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\ChannelLook.aspx.cs">
+      <DependentUpon>ChannelLook.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\ChannelLook.aspx.designer.cs">
+      <DependentUpon>ChannelLook.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\channelreport.aspx.cs">
+      <DependentUpon>channelreport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\channelreport.aspx.designer.cs">
+      <DependentUpon>channelreport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_BillingNotes.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_BillingNotes.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_BillingReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_BillingReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\KMLogoclick.aspx.cs">
+      <DependentUpon>KMLogoclick.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\KMLogoclick.aspx.designer.cs">
+      <DependentUpon>KMLogoclick.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_AccountIntensity.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_AccountIntensity.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_ChannelLook.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_ChannelLook.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_DigitalEdition.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_DigitalEdition.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_DiskMonitor.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_DiskMonitor.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_ECNToday.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_ECNToday.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_IRKMLogoClick.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_IRKMLogoClick.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_KMLogoClick.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_KMLogoClick.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_NewCustomer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_NewCustomer.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_newUser.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_newUser.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\CrystalReport\rpt_NoUsage.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rpt_NoUsage.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="main\reports\default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\DEReport.aspx.cs">
+      <DependentUpon>DEReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\DEReport.aspx.designer.cs">
+      <DependentUpon>DEReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\DiskSpace.aspx.cs">
+      <DependentUpon>DiskSpace.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\DiskSpace.aspx.designer.cs">
+      <DependentUpon>DiskSpace.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\ECNToday.aspx.cs">
+      <DependentUpon>ECNToday.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\ECNToday.aspx.designer.cs">
+      <DependentUpon>ECNToday.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\IR_KMLogoclick.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>IR_KMLogoclick.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\IR_KMLogoclick.aspx.designer.cs">
+      <DependentUpon>IR_KMLogoclick.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\reports\TotalBlastsForDay.aspx.cs">
+      <DependentUpon>TotalBlastsForDay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\reports\TotalBlastsForDay.aspx.designer.cs">
+      <DependentUpon>TotalBlastsForDay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\securityAccessError.aspx.cs">
+      <DependentUpon>securityAccessError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\securityAccessError.aspx.designer.cs">
+      <DependentUpon>securityAccessError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\users\userlogin.aspx.cs">
+      <DependentUpon>userlogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\users\userlogin.aspx.designer.cs">
+      <DependentUpon>userlogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\webServicesKey\AccessKey.aspx.cs">
+      <DependentUpon>AccessKey.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\webServicesKey\AccessKey.aspx.designer.cs">
+      <DependentUpon>AccessKey.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Accounts.Master.cs">
+      <DependentUpon>Accounts.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Accounts.Master.designer.cs">
+      <DependentUpon>Accounts.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\AccountsHomePage.Master.cs">
+      <DependentUpon>AccountsHomePage.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\AccountsHomePage.Master.designer.cs">
+      <DependentUpon>AccountsHomePage.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\1\ECN.skin" />
+    <Content Include="App_Themes\31\GD.skin" />
+    <Content Include="App_Themes\25\ECN.skin" />
+    <Content Include="App_Themes\51\ECN.skin" />
+    <Content Include="App_Browsers\Telerik_IE11_fix.browser" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-Black.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-BlackIt.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-Bold.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-BoldIt.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-ExtraLight.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-ExtraLightIt.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-It.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-Light.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-LightIt.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-Regular.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-Semibold.otf" />
+    <Content Include="Font\SourceSansPro\SourceSansPro-SemiboldIt.otf" />
+    <None Include="js\overlib\makemini.pl" />
+    <Content Include="MasterPages\Accounts.Master" />
+    <Content Include="MasterPages\AccountsHomePage.Master" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <None Include="Properties\PublishProfiles\Prod.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
+    <None Include="resources\pdfnet.res" />
+    <Content Include="Web.sitemap" />
+    <Content Include="scripts\jquery-3.1.0.slim.min.map" />
+    <Content Include="scripts\jquery-3.1.0.min.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Local.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Prod.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.QA.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main\reports\CrystalReport\rpt_AccountIntensity.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_AccountIntensity.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_ChannelLook.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_ChannelLook.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_DigitalEdition.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_DigitalEdition.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_DiskMonitor.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_DiskMonitor.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_ECNToday.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_ECNToday.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_NewCustomer.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_NewCustomer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_newUser.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_newUser.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="main\reports\CrystalReport\rpt_NoUsage.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_NoUsage.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main\reports\CrystalReport\rpt_IRKMLogoClick.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_IRKMLogoClick.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scripts\highslide\graphics\outlines\Outlines.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\KMCommon\KM.Common.csproj">
+      <Project>{65c7c665-2088-4291-ab27-aadbed47e370}</Project>
+      <Name>KM.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\KM.Framework.Web.WebForms\KM.Framework.Web.WebForms.csproj">
+      <Project>{5de18bc0-1320-46c4-bcef-4107069065c1}</Project>
+      <Name>KM.Framework.Web.WebForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AgileComponents\ActiveUp.WebControls.csproj">
+      <Project>{847FF6D7-B5C4-4884-933F-425FC3C3525F}</Project>
+      <Name>ActiveUp.WebControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AgileComponents\ActiveUp.WebControls.csproj">
+      <Project>{847ff6d7-b5c4-4884-933f-425fc3c3525f}</Project>
+      <Name>ActiveUp.WebControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ecn.controls\ecn.controls.csproj">
+      <Project>{fb0cacb3-28b6-45fc-a266-e5068537f136}</Project>
+      <Name>ecn.controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN\ECN.csproj">
+      <Project>{8BBEB645-DD44-4E47-A204-95341F4D87C2}</Project>
+      <Name>ECN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework\ECN_Framework.csproj">
+      <Project>{3B505AE1-FD1C-429A-A534-81AE42F7CCC5}</Project>
+      <Name>ECN_Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_BusinessLayer\ECN_Framework_BusinessLayer.csproj">
+      <Project>{A0803DC4-88C9-4F0B-B567-2EA5504E5F47}</Project>
+      <Name>ECN_Framework_BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Common\ECN_Framework_Common.csproj">
+      <Project>{63B4326C-31F4-4C42-9110-A1D51DC4DDE6}</Project>
+      <Name>ECN_Framework_Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_DataLayer\ECN_Framework_DataLayer.csproj">
+      <Project>{1BCE78E7-DD4D-48BC-85C3-D77FCE995528}</Project>
+      <Name>ECN_Framework_DataLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECN_Framework_Entities\ECN_Framework_Entities.csproj">
+      <Project>{F17A88C4-2FA5-4312-9AA7-D674A24221A8}</Project>
+      <Name>ECN_Framework_Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrameworkUAS\KMPlatform.csproj">
+      <Project>{6defd456-445c-475a-af97-09d2ef5aaa04}</Project>
+      <Name>KMPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KM.PlatformUser\KM.Platform.User.csproj">
+      <Project>{40a3d230-59ac-448f-b365-472807705310}</Project>
+      <Name>KM.Platform.User</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="main\reports\CrystalReport\rpt_BillingNotes.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_BillingNotes.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="main\reports\CrystalReport\rpt_BillingReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_BillingReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="main\reports\CrystalReport\rpt_KMLogoClick.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rpt_KMLogoClick.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="main\reports\rpt_BillingNotes.rdlc" />
+    <Content Include="main\reports\rpt_BillingReport.rdlc" />
+    <Content Include="main\reports\rpt_ChannelLook.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="main\reports\rpt_ChannelLook_Details.rdlc" />
+    <Content Include="main\reports\rpt_DigitalEdition.rdlc" />
+    <Content Include="main\reports\rpt_DiskMonitor.rdlc" />
+    <Content Include="main\reports\rpt_ECNToday.rdlc" />
+    <Content Include="main\reports\rpt_KMLogoClick.rdlc" />
+    <Content Include="main\reports\rpt_NewCustomer.rdlc" />
+    <Content Include="main\reports\rpt_NewUser.rdlc" />
+    <Content Include="main\reports\rpt_NoUsage.rdlc" />
+    <Content Include="main\reports\rpt_TotalBlastsForDay.rdlc" />
+    <Content Include="main\reports\rpt_EmailDirectReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Themes\31\images\" />
+    <Folder Include="classes\billing\" />
+    <Folder Include="tests\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>19231</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/ecn.accounts</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!--Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>-->
+</Project>

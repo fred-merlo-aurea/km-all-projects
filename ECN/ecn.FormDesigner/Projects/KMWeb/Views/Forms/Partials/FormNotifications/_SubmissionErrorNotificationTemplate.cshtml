@@ -1,0 +1,53 @@
+﻿@using KMEnums
+@using KMModels
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;  
+}
+
+<script id="internalUser-notification-template" type="text/x-kendo-template">
+
+    @*# var type = formatId(getId(NotificationId, 'Type')); #*@
+    @*# var fromEmail = formatId(getId(NotificationId, 'FromEmail')); #*@
+    # var fromName = formatId(getId(NotificationId, 'FromName')); #
+    @*# var replyEmail = formatId(getId(NotificationId, 'ReplyEmail')); #*@
+    # var subjectLine = formatId(getId(NotificationId, 'SubjectLine')); #
+    # var message = formatId(getId(NotificationId, 'Message')); #
+    # var conditionType = formatId(getId(NotificationId, 'ConditionType')); #
+    # var toEmail = formatId(getId(NotificationId, 'ToEmail')); #
+
+    <div id="#=NotificationId#" class="notifitem">
+        <input type="hidden" value="#=NotificationIndex#" name="InternalUserNotifications.Index">
+        <div class="notifinfo">
+            <div class="subscrbinfo">
+                <div class="subtitle">Submission Error Notification</div>
+                <div class="formbox">
+                    <div class="formitem formitemlabeltop">
+                        <label>From Name</label>
+                        @Html.Kendo().TextBox().Name(GetName<InternalUserNotificationModel>("#=NotificationId#", x => x.FromName)).HtmlAttributes(new { @class = "longinput", id = "#=fromName#", Style = "width:340px;" }).ToClientTemplate()
+                    </div>
+                    <div class="formitem formitemlabeltop">
+                        <label>Subject Line</label>
+                        @Html.Kendo().TextBox().Name(GetName<InternalUserNotificationModel>("#=NotificationId#", x => x.SubjectLine)).HtmlAttributes(new { @class = "longinput", id = "#=subjectLine#", Style = "width:340px;" }).ToClientTemplate()
+                    </div>
+                    <div class="formitem formitemlabeltop">
+                        <div class="formitem formiteminline">
+                            <div class="float-left">
+                                <label>Email to</label>
+                                <img style="width:30px; height: 30px; max-width:100%;max-height: 100%;" src="../../images/modal-icon-info.png">
+                            </div>
+                            <div class="float-left" style="margin:10px; font-style:italic; margin-left: 5px;">
+                                Multiple email addresses should be separated by a comma.
+                            </div>  
+                                @Html.Kendo().TextBox().Name(GetName<InternalUserNotificationModel>
+                                    ("#=NotificationId#", x => x.ToEmail)).HtmlAttributes(new { @class = "longinput", id = "#=toEmail#", Style = "width:970px;" }).ToClientTemplate()
+                                    @Html.Kendo().TextBox().Name(GetName<InternalUserNotificationModel>
+                                        ("#=NotificationId#", x => x.Message)).HtmlAttributes(new { @class = "longinput", id = "#=message#", Style = "display:none;" }).ToClientTemplate()
+                        </div>
+
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</script>

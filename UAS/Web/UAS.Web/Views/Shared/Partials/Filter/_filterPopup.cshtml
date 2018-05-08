@@ -1,0 +1,108 @@
+﻿<input type="hidden" value="" id="masterID" />
+<input type="hidden" value="" id="masterLnkID" />
+<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+               <span id="PopUpHeader"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" >
+                <a onclick="sortDimension('v')">Sort By Value</a>&nbsp;<a onclick="sortDimension('d')">Sort By Description</a>&nbsp;&nbsp;<b>Search</b>&nbsp;<input type="text" class="k-textbox" id="txtPopupSearch"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+               <table border="0" id="Popuptable" width="90%">
+                        <tbody>
+                               <tr>
+                                    <td width="50%"><select id="PopUpOptions"></select></td>
+                                    <td width="50%"><select id="PopUpSelected"></select></td>
+                               </tr>
+                               <tr>
+                                    <td align="center" colspan="2">
+                                        <br>
+                                        <input type="button"  value="Select/Close" id="btnPopUpSelectCloseFilter" onclick="SelectAndCloseListBox()" class="filterButton">
+                                        <input type="button"  value="Reset"  onclick="ResetListBox()" class="filterButton">
+                                    </td>
+                                </tr>
+                        </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<style>
+    #Popuptable{
+        margin:10px 5%;
+    }
+    #Popuptable .k-listbox {
+        width: 400px;
+        height: 500px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#txtPopupSearch").on("change", function () {
+            var dataSource = $("#PopUpOptions").data("kendoListBox").dataSource;
+            dataSource.filter({ field: "Text", operator: "contains", value: $(this).val() });
+        });
+        $("#btnPopUpSelectCloseFilter").on("mouseover", function () {
+            $("#txtPopupSearch").val('');
+            var dataSource = $("#PopUpOptions").data("kendoListBox").dataSource;
+            dataSource.filter({ field: "Text", operator: "contains", value: '' });
+        });
+    });
+</script>
+@*<script>
+        $(document).ready(function () {
+
+            function onAdd(e) {
+                kendoConsole.log("add : " + getWidgetName(e) + " : " + e.dataItems.length + " item(s)");
+            }
+
+            function onChange(e) {
+                kendoConsole.log("change : " + getWidgetName(e));
+            }
+
+            function onDataBound(e) {
+                if ("kendoConsole" in window) {
+                    kendoConsole.log("dataBound : " + getWidgetName(e));
+                }
+            }
+
+            function onRemove(e) {
+                kendoConsole.log("remove : " + getWidgetName(e) + " : " + e.dataItems.length + " item(s)");
+            };
+
+            function onReorder(e) {
+                kendoConsole.log("reorder : " + getWidgetName(e));
+            }
+
+            function onDragStart(e) {
+                kendoConsole.log("dragstart : " + getWidgetName(e));
+            }
+
+            function onDrag(e) {
+                kendoConsole.log("drag : " + getWidgetName(e));
+            }
+
+            function onDrop(e) {
+                kendoConsole.log("drop : " + getWidgetName(e));
+            }
+
+            function onDragEnd(e) {
+                kendoConsole.log("dragend : " + getWidgetName(e));
+            }
+
+            function getWidgetName(e) {
+                var listBoxId = e.sender.element.attr("id");
+                var widgetName = listBoxId === "optional" ? "left widget" : "right widget";
+                return widgetName;
+            }
+           
+            
+          
+        });
+</script>*@

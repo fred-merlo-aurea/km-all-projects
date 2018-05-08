@@ -1,0 +1,69 @@
+﻿@using KMEnums
+@using KMModels
+@using KMManagers
+@using KMEntities
+
+@model NotificationModel
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+    var CustomerID = ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID;
+}
+
+
+
+@Html.HiddenFor(x => x.Id)
+
+<div class="notifinfo">
+    <div class="subscrbinfo">
+        <div class="subtitle">Notification</div>
+        <div class="formbox">            
+            @*<div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.FromEmail, "From Email")
+                @Html.Kendo().TextBoxFor(x => x.FromEmail).HtmlAttributes(new { @class = "longinput" })
+            </div>*@
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.FromName, "From Name")
+                @Html.Kendo().TextBoxFor(x => x.FromName).HtmlAttributes(new { @class = "longinput" })
+            </div>
+            @*<div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.ReplyEmail, "Reply to Email")
+                @Html.Kendo().TextBoxFor(x => x.ReplyEmail).HtmlAttributes(new { @class = "longinput" })
+            </div>*@
+            <div class="formitem formitemlabeltop">
+                @Html.LabelFor(x => x.SubjectLine, "Subject Line")
+                @Html.Kendo().TextBoxFor(x => x.SubjectLine).HtmlAttributes(new { @class = "longinput" })
+            </div>
+        </div>
+    </div>
+    <div class="formbox msgbox">
+        <div class="formitem formitemlabeltop">
+            @Html.LabelFor(x => x.Message, "Message")
+           
+            @(
+                Html.Kendo()
+                    .EditorFor(x => x.Message)
+                    .Messages(m => m.InsertHtml("Insert Snippet"))
+                    .Tools(t => t
+                            .ViewHtml()
+                                 .Snippets(s => {
+                                     foreach (var control in controls) 
+                                     {
+                                         s.Add(control.FieldLabel, GetControlSnippet(control));
+                                     }
+                                 })
+                           .CustomButton(x => x.Name("maximize").Exec("maximize"))
+                    )
+                .ImageBrowser(imageBrowser => imageBrowser
+                .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                    .Read("Read", "ImageBrowser")
+                    .Destroy("Destroy", "ImageBrowser")
+                    .Upload("Upload", "ImageBrowser")
+                    .Thumbnail("Thumbnail", "ImageBrowser")
+                )
+                    .Encode(false)
+)
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,164 @@
+﻿   
+@using KMEnums
+@using KMModels.PostModels
+@using KMModels
+
+@model RuleModel
+
+@{
+    var controls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.Controls;
+    var URLcontrols = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.URLControls;
+    var subVisibleControls = (IEnumerable<ControlModel>)ViewContext.Controller.ViewBag.SubVisibleControls;
+    var formType = ViewContext.Controller.ViewBag.FormType;
+    var ruleId = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var ShowMessage = "display:block;";
+    var RequestURL = "display:none;";
+    var RequestURLText = "display:none;";
+    var KMPaidPageText = "display:none;";
+    var KMPaidPage = "display:none;";
+
+    switch (Model.ResultOnSubmit)
+    {
+        case ResultType.URL:
+            ShowMessage = "display:none;";
+            RequestURL = "display:block;";
+            RequestURLText = "display:inline-block;";
+            KMPaidPage = "display:none;";
+            KMPaidPageText = "display:none;";
+            break;
+        case ResultType.Message:
+            ShowMessage = "display:block;";
+            RequestURL = "display:none;";
+            RequestURLText = "display:none;";
+            KMPaidPage = "display:none;";
+            KMPaidPageText = "display:none;";
+            break;
+        case ResultType.KMPaidPage:
+            ShowMessage = "display:none;";
+            RequestURL = "display:none;";
+            RequestURLText = "display:none;";
+            KMPaidPage = "display:block;";
+            KMPaidPageText = "display:inline-block;";
+            break;
+        default:
+            ShowMessage = "display:block;";
+            RequestURL = "display:none;";
+            RequestURLText = "display:none;";
+            KMPaidPage = "display:none;";
+            KMPaidPageText = "display:none;";
+            break;
+    }
+}
+
+<div class="formbox condbox" style="width:100%;">
+    <div class="subtitle">When Form is submitted:</div>
+    @Html.HiddenFor(x => x.Type, new { @value = RuleTypes.Form })
+    @Html.HiddenFor(x => x.Order)
+
+    <div class="formitem formiteminline" style="float: left; width: 51%;">
+        <div class="formitem formiteminline">
+            @Html.Kendo().RadioButtonFor(x => x.ResultOnSubmit).Label("Show Message").Value(ResultType.Message).Checked(Model.ResultOnSubmit == ResultType.Message).HtmlAttributes(new {  @class = "ResultOnSubmit" })
+            @Html.Kendo().RadioButtonFor(x => x.ResultOnSubmit).Label("Redirect to Website").Value(ResultType.URL).Checked(Model.ResultOnSubmit == ResultType.URL).HtmlAttributes(new {  @class = "ResultOnSubmit" })
+            <div id="@String.Format(FormatID(ruleId) + "_RedirectURLText")" style="@RequestURLText">
+                @Html.Kendo().TextBoxFor(x => x.UrlToRedirect).HtmlAttributes(new { @class = "longinput" })
+             </div>
+                @Html.Kendo().RadioButtonFor(x => x.ResultOnSubmit).Label("Redirect to KM Paid Page").Value(ResultType.KMPaidPage).Checked(Model.ResultOnSubmit == ResultType.KMPaidPage).HtmlAttributes(new { @class = "ResultOnSubmit" })
+            <div id="@String.Format(FormatID(ruleId) + "_KMPaidPageText")" style="@KMPaidPageText">
+                @Html.Kendo().TextBoxFor(x => x.UrlToRedirectKM).HtmlAttributes(new { @class = "longinput" })
+            </div>    
+        </div>
+
+        <div class="conditionsbox">
+          
+                  <div  id="@String.Format(FormatID(ruleId) + "_RedirectURL")" style ="@RequestURL">
+                            <div class="subtitle">Querystring Parameters</div>
+                            @(Html.Kendo().Button().Content("Add <i class=\"km-icon icon-kmplus-circled-1\"></i>").Name(FormatID(ruleId) + "__" + ResultType.URL + "__Add").HtmlAttributes(new { type = "button", @class = "AddResultTypeURL btn  btn-blue2  float-left" }))
+                            @(Html.Kendo().Button().Content("Add All").Name(FormatID(ruleId) + "__" + ResultType.URL + "__AddAll").HtmlAttributes(new { type = "button", @class = "AddAllURL btn  btn-blue2  float-left" }))
+                            <div class="conditionslist">
+                                <ul class="inline title" id="titleParameters">
+                                    <li class="name">Name</li>
+                                    <li class="fld">Value</li>
+                                    <li class="comp">Actions</li>
+                                </ul>
+                                <div id="@String.Format(FormatID(ruleId) + "_URLListOfParameters")" name="ListOfParameters">
+                                    @if (Model.RequestQueryValue != null && Model.ResultOnSubmit == ResultType.URL)
+                                    {
+                                        foreach (var parameter in Model.RequestQueryValue.Select((RequestQueryValue, Index) => new { Index, RequestQueryValue }))
+                                        {
+                                            var internalId = string.Format("{0}.RequestQueryValue[{1}]." + ResultType.URL, ruleId, parameter.Index);
+                                            var indexid = string.Format("{0}.RequestQueryValue.Index", ruleId);
+                                            var divid = @String.Format(FormatID(ruleId) + "RequestQueryValue");
+                                            var divname = string.Format("{0}.RequestQueryValue[{1}].RequestQueryValue", ruleId, parameter.Index);
+                                            <div id="@String.Format(divid+"_{0}", parameter.Index)" name=@String.Format(divname) class="class_row_formrulequerystring">
+                                                <input type="hidden" name=@String.Format(indexid)  value="@parameter.Index" />
+                                                @Html.Partial("Partials/FormRules/_RedirectQueryString", parameter.RequestQueryValue, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = internalId } })
+                                            </div>
+                                        }
+                                       
+                                    }
+                                </div>
+                               </div>
+                            </div>
+          
+            <div id="@String.Format(FormatID(ruleId) + "_KMPaidPage")" style="@KMPaidPage">
+                <div class="subtitle">Querystring Parameters</div>
+                @(Html.Kendo().Button().Content("Add All").Name(FormatID(ruleId) + "__" + ResultType.KMPaidPage + "__AddAll").HtmlAttributes(new { type = "button", @class = "AddAllPaidPage btn  btn-blue2  float-left" }))
+                <div class="conditionslist">
+                    <ul class="inline title" id="titleParameters">
+                        <li class="name">Name</li>
+                        <li class="fld">Value</li>
+                        <li class="comp">Actions</li>
+                    </ul>
+                    <div id="@String.Format(FormatID(ruleId) + "_PaidListOfParameters")" name="ListOfParameters">
+                        @if (Model.RequestQueryValue != null && Model.ResultOnSubmit == ResultType.KMPaidPage)
+                        {
+                            foreach (var parameter in Model.RequestQueryValue.Select((RequestQueryValue, Index) => new { Index, RequestQueryValue }))
+                            {
+                                var internalId = string.Format("{0}.RequestQueryValue[{1}]." + ResultType.KMPaidPage, ruleId, parameter.Index);
+                                var indexid = string.Format("{0}.RequestQueryValue.Index", ruleId);
+                                var divid = @String.Format(FormatID(ruleId) + "RequestQueryValue");
+                                var divname = string.Format("{0}.RequestQueryValue[{1}].RequestQueryValue", ruleId, parameter.Index);
+                                <div id="@String.Format(divid+"_{0}", parameter.Index)" name=@String.Format(divname) class="class_row_formrulequerystring">
+                                    <input type="hidden" name=@String.Format(indexid) value="@parameter.Index" />
+                                    @Html.Partial("Partials/FormRules/_RedirectQueryString", parameter.RequestQueryValue, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = internalId } })
+                                </div>
+                            }
+                        }
+                    </div>
+                 </div>
+                </div>
+                <div id="@String.Format(FormatID(ruleId) + "_ShowMessage")" style="@ShowMessage">
+                    @Html.HiddenFor(x => x.ActionJs)
+                    @(
+                    Html.Kendo()
+                        .EditorFor(x => x.Action)
+                        .Messages(m => m.InsertHtml("Insert Snippet"))
+                        .HtmlAttributes(new { @class = "editorRefresh_Rules" })
+                        .Tools(t => t.ViewHtml()
+                                     .Snippets(s =>
+                                     {
+                                         foreach (var control in controls)
+                                         {
+                                             s.Add(control.FieldLabel, GetControlSnippet(control));
+                                         }
+                                     })
+                                     .CustomButton(x => x.Name("custom").ToolTip("Insert Java Script").Exec(@<text> function(e) {onRuleCustomToolClick(e,"@String.Format(ruleId +".ActionJs")");}</text>))
+                                     .CustomButton(x => x.Name("maximize").Exec("maximize")) // maximize should be last in custom button
+                                )
+                        .ImageBrowser(imageBrowser => imageBrowser
+                        .Image("http://" + Request.Url.Host + "/ecn.images/Customers/" + ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CustomerID.ToString() + "/images/{0}")
+                            .Read("Read", "ImageBrowser")
+                            .Destroy("Destroy", "ImageBrowser")
+                            .Upload("Upload", "ImageBrowser")
+                            .Thumbnail("Thumbnail", "ImageBrowser")
+                        )
+                        .Encode(false)
+                    )
+                </div>
+
+            </div>
+       </div>
+
+       
+
+</div>

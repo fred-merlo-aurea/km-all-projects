@@ -1,0 +1,47 @@
+﻿
+@(
+ Html.Kendo()
+    .Grid<MVC.Standards.Models.ContentViewModel>()
+    .Name("grid")
+    .Events(e => e.DataBound("onDataBound"))
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.TotalRecordCounts).Hidden(true);
+        columns.Bound(c => c.ContentTitle).Title("Title").Filterable(filter => { filter.Cell(cell => cell.Enabled(false).ShowOperators(false)); filter.UI("titleFilter"); });
+        columns.Bound(c => c.CreatedDate).Title("Created Date").Format("{0:MM/dd/yyyy hh:mm:ss}").Filterable(filter => { filter.Cell(cell => cell.Enabled(false).ShowOperators(false));  });
+        columns.Bound(c => c.ContentType).Title("Type").Filterable(filter => { filter.Cell(cell => cell.Enabled(false).ShowOperators(false)); });
+
+    })
+    .Pageable(pages => pages.PageSizes(true).ButtonCount(1).Input(true).PageSizes(new int[] { 5,10,15,20}))
+    .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))
+    .Filterable(filter =>
+    {
+        filter.Mode(GridFilterMode.Menu | GridFilterMode.Row); //Activates filtermode as row and  menu
+        filter.Extra(false); //Disable or Enable Extra Filters
+        filter.Operators(op =>
+        {
+            op.ForString(str => str.Clear().Contains("Contains")
+                            //.StartsWith("Starts with")
+                            //.IsEqualTo("Is equal to")
+                            //.IsNotEqualTo("Is not equal to")
+                            ); // Contains for String
+            op.ForNumber(num => num.IsEqualTo("Equal")); //Filter for Date operator -> Equal for Number
+            op.ForDate(dat => dat.Clear().IsGreaterThanOrEqualTo("Greater Than Or Equal")); //Filter for Date operator -> Greater Than Or Equal To
+        });
+
+    })
+    .HtmlAttributes(new { style = "height:550px;min-width:100px;" })
+    .DataSource(dataSource => dataSource // Configure the grid data source
+                    .Ajax() // Specify that ajax binding is used
+                    .Read(read => read.Data("filterGridParams").Action("Read_Data", "KendoStandarGridClient"))// Set the action method which will return the data in JSON format
+                    .PageSize(20) //Set up page size
+                    .ServerOperation(false) //Get Data from Server
+
+    ))
+    @*.DataSource(dataSource => dataSource
+       .Ajax()
+       .PageSize(20)
+       .ServerOperation(false)
+    )*@
+
+

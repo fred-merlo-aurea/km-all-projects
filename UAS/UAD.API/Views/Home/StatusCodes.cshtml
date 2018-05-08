@@ -1,0 +1,252 @@
+﻿<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <br />
+                <h10>HTTP Status Codes</h10>
+                <br />
+                <br />
+                <h11>
+                    HTTP status codes are included in the response from each call to the UAD API.
+                </h11>
+            </hgroup>
+            <h13>
+                <p>
+                    Each time you make a request using the UAD API, the API will respond with one of these
+                    status codes to let your application know whether the request was successful.
+                </p>
+                <p>
+                    HTTP Status Codes are defined by international standard and maintained by ICANN (The Internet Corporation for Assigned Names
+                    and Numbers), a non-profit organization responsible for coordinating many different types of unique
+                    identifiers used across the internet.
+                </p>
+                <p>
+                    Even with their standard textual representations (called "status descriptions"), these simple codes can be
+                    frustratingly terse when you are trying to develop an application. That's why we've created this page!
+                </p>
+                <p>
+                    Here you will find each of the different HTTP Status Codes used by the UAD API, along with
+                    descriptions of the circumstances under which you may encounter them and, in cases where an error has
+                    occurred, a sample of additional messages the API may provide to help troubleshoot the problem.
+                </p>
+                <p>
+                    Did we miss something?<br />
+                    If you come across a status code that you don't see listed here or  if you have other suggestions
+                    to improve this page <a href="mailto:info@knowledgemarketing.com?subject=UAD+API" title="Contact Us!">let us know</a>!
+                    We look forward to hearing from you!
+                </p>
+            </h13>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <h11>HTTP Status Codes and Their Meanings</h11>
+        <table class="help-page-table" cellspacing="10">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Is Error?</th>
+                    <th>Meaning</th>
+                </tr>
+            </thead>
+            <tbody id="table-body-get-codes" style="border-top: solid thick">
+                <tr>
+                    <th>GET</th>
+                    <td>200</td>
+                    <td>OK</td>
+                    <td>Success</td>
+                    <td>
+                        The request was processed successfully.  The body of the response will contain additional information,
+                        such as the requested/updated/added resource.
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Error</td>
+                    <td>
+                        The API was unable to authenticate you.  This is usually caused by a missing or invalid <code>APIAccessKey</code>
+                        header.   The body of the response message will include a message with additional information, for example:<br />
+                        <em>Authentication Token Header "APIAccessKey" is missing</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>Error</td>
+                    <td>
+                        You do not have permission to access the requested resource. This is usually caused by a mismatch between your
+                        APIAccessKey and the requested resource.   Double check your <code>APIAccessKey</code> header value.                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>404</td>
+                    <td>Not Found</td>
+                    <td>Error</td>
+                    <td>
+                        The resource requested doesn't exist.  For example, when requesting Subscription, the specified emailAddress
+                        may be incorrect or have been deleted.
+                    </td>
+            </tbody>
+            <tbody id="table-body-put-codes" style="border-top: solid thin">
+                <tr>
+                    <th>PUT</th>
+                    <td>200</td>
+                    <td>OK</td>
+                    <td>Success</td>
+                    <td>
+                        The request was processed successfully.  A <code>Location</code> header will be included reflecting the
+                        URI for the updated resource and the body of the response will contain the resource as updated by
+                        the request.
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>400</td>
+                    <td>Bad Request</td>
+                    <td>Error</td>
+                    <td>
+                        The API couldn't complete the request because of one or more issues with the request body.  This is usually
+                        caused by validation errors related to the content being updated.
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Error</td>
+                    <td>
+                        The API was unable to authenticate you.  This is usually caused by a missing or invalid <code>APIAccessKey</code>
+                        header.   The body of the response message will include a message with additional information, for example:<br />
+                        <em>Authentication Token Header "APIAccessKey" is missing</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>Error</td>
+                    <td>
+                        You do not have permission to access the requested resource. This is usually caused by mismatch between your APIAccessKey
+                        and the requested resource.   Double check your <code>APIAccessKey</code> header value.
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>404</td>
+                    <td>Not Found</td>
+                    <td>Error</td>
+                    <td>
+                        The resource requested doesn't exist.  For example, when updating Subscription, the specified emailAddress
+                        may be incorrect or may previously have been deleted.
+                    </td>
+                </tr>
+            </tbody>
+            <tbody id="table-body-post-codes" style="border-top: solid thin">
+                <tr>
+                    <th>POST</th>
+                    <td>201</td>
+                    <td>Created</td>
+                    <td>Success</td>
+                    <td>
+                        The request was processed successfully.  A <code>Location</code> header will be included reflecting the
+                        URI for the newly created resource and the body of the response will contain the resource as created by
+                        the request.
+                    </td>
+
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td>207</td>
+                    <td>Multi-Status</td>
+                    <td>Partial Success</td>
+                    <td>
+                        Part of the request was processed successfully. The body of the response will include a message with additional, more detailed information.
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>400</td>
+                    <td>Bad Request</td>
+                    <td>Error</td>
+                    <td>
+                        The API couldn't complete the request because of one or more issues with the request body.  This is usually
+                        caused by validation errors related to the content being inserted.
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Error</td>
+                    <td>
+                        The API was unable to authenticate you.  This is usually caused by a missing or invalid <code>APIAccessKey</code>
+                        header.   The body of the response message will include a message with additional information, for example:<br />
+                        <em>Authentication Token Header "APIAccessKey" is missing</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>Error</td>
+                    <td>
+                        You do not have permission to access the requested resource. This is usually caused by mismatch between your APIAccessKey
+                        and the requested resource.   Double check your <code>APIAccessKey</code> header value.
+                    </td>
+                </tr>
+            </tbody>
+            <tbody id="table-body-delete-codes" style="border-top: solid thin">
+                <tr>
+                    <th>DELETE</th>
+                    <td>204</td>
+                    <td>No Content</td>
+                    <td>Success</td>
+                    <td>
+                        The request was processed successfully.  The target resource has been removed so the response body, as indicated
+                        by the HTTP Status Description, will not contain any content.
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Error</td>
+                    <td>
+                        The API was unable to authenticate you.  This is usually caused by a missing or invalid <code>APIAccessKey</code>
+                        header.   The body of the response message will include a message with additional information, for example:<br />
+                        <em>Authentication Token Header "APIAccessKey" is missing</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>403</td>
+                    <td>Forbidden</td>
+                    <td>Error</td>
+                    <td>
+                        You do not have permission to access the requested resource. This is usually caused by mismatch between your APIAccessKey
+                        and the requested resource.   Double check your <code>APIAccessKey</code> header value.
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>404</td>
+                    <td>Not Found</td>
+                    <td>Error</td>
+                    <td>
+                        The resource requested doesn't exist.  For example, when removing Subscription, the specified emailAddress
+                        may be incorrect or may have been deleted previously.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

@@ -1,0 +1,17 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().MultiSelect()
+    .Name("selectedPubID")
+    .DataSource(d => d.Read(r => r.Action("GetAllProductsForTransformation", "FileMapperWizard")))
+    .DataTextField("Text")
+    .DataValueField("Value")
+    .AutoClose(false)
+    .TagMode(TagMode.Single)
+    .Placeholder("Select Product(s)")
+    .HtmlAttributes(new { @style = "width: 200px;" })
+    .Events(e =>
+    {
+        e.Select("onProductSelect");
+    })
+    .TagTemplateId("tagTemplate")
+)

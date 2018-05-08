@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [latha.sunil]
+    WITH PASSWORD = N'>hx|ibv|vdno8F?ocq%R&rkcmsFT7_&#$!~<ikavwWfb|ftu', SID = 0x10C27EA7562B3C4F8975F793D7074728, DEFAULT_DATABASE = [ECN5_ACCOUNTS], DEFAULT_LANGUAGE = [us_english];
+

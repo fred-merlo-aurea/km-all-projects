@@ -1,0 +1,16 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownList()
+              .Name("selectedOperator")
+              //.OptionLabel("- Select -")
+              .DataSource(d => d.Read(r => r.Action("GetOperators", "FileMapperWizard").Data("GetSelectedDataBaseField")))
+              .DataTextField("Text")
+              .DataValueField("Value")
+.Events(e =>
+{
+    e.Change("onChangeOperator");
+})
+)
+
+
+

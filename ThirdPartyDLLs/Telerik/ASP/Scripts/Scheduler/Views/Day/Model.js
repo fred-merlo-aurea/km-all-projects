@@ -1,0 +1,12 @@
+Type.registerNamespace("Telerik.Web.UI.Scheduler");
+(function(a){a.DayModel=function(b){a.DayModel.initializeBase(this,[b]);
+this._settings=this._owner.get_dayViewSettings();
+this._defaultHeaderDateFormat="D";
+};
+a.DayModel.prototype={get_numberOfDays:function(){return 1;
+},_getRenderer:function(){if(!this._renderer){this._renderer=new a.Rendering.DayViewRenderer(this);
+}return this._renderer;
+},_getAllowMultiColumnResizing:function(){return false;
+}};
+a.DayModel.registerClass("Telerik.Web.UI.Scheduler.DayModel",a.MultiDayModel);
+})(Telerik.Web.UI.Scheduler);

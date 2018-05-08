@@ -1,0 +1,57 @@
+﻿@model MVC.Standards.Models.OpenCloseViewModel
+
+<style>
+    fieldset {
+    border: 1px solid lightgray;
+    margin: 5px;
+    padding: 5px;
+    border-radius:5px 5px;
+    }
+     fieldset legend {
+       text-align:left;
+    }
+</style>
+<fieldset>
+    <legend>Status</legend>
+    <table>
+        <tr>
+            <td>Data Entry</td>
+            <td>File Import</td>
+            <td>Web Locking</td>
+            <td>Add/Remove</td>
+        </tr>
+        <tr>
+            <td>
+                <button class="OpenCloseWg" type="button" id="dataEntry" data-unlocked="@Model.AllowDataEntry">
+                </button>
+            </td>
+            <td>
+                <button class="OpenCloseWg" type="button" id="fileImport" data-unlocked="@Model.AllowClientImport">
+                </button>
+            </td>
+            <td>
+                <button class="OpenCloseWg" type="button" id="webSync" data-unlocked="@Model.AllowKMmport">
+                   
+                </button>
+            </td>
+            <td>
+                <button class="OpenCloseWg" type="button" id="addRemove"data-unlocked="@Model.AllowAddRemove">
+                 </button>
+            </td>
+            </tr>
+</table>
+</fieldset>
+<script>
+    $(".OpenCloseWg").kendoButton({
+                    click: function(e) {
+                    alert($("#" + e.event.target.id).data("unlocked"));
+                    var button = $("#" + e.event.target.id).data("kendoButton");
+                    $("#" + e.event.target.id).data("unlocked", true)
+                    // disable button
+                    button.enable(false);
+                    // enable button
+                    button.enable(true);
+                    alert($("#" + e.event.target.id).data("unlocked"));
+                    }
+                });
+</script>

@@ -1,0 +1,374 @@
+﻿@using UAD.Web.Admin.Infrastructure
+@using KMSite
+@{
+    ViewBag.Title = "Master Groups";
+}
+<script>
+    var firstGridLoad = true;
+
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                Search();
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $('#btnNewMasterGroup').click(function () {
+            window.location.href = "/UAD.Web.Admin/MasterGroup/AddEdit";
+        });
+
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+
+        //Enents -Page number input changed.
+        $("#pagerInputPageNumber").on("change", function (e) {
+            RebindOnPageOrSizeChange()
+        });
+
+        //Events - Page Size input changed
+        $("#ddPageSize").on("change", function (e) {
+            RebindOnPageOrSizeChange()
+        });
+
+    });
+
+    function onDataBound(arg) {
+        if (firstGridLoad) {
+            firstGridLoad = false;
+            SetPagerWidget("firstpage");
+        }
+
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+    }
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data)
+    }
+
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        SetPagerWidget("firstpage");
+        firstGridLoad = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#grdMasterGroup").data("kendoGrid");
+        var options = grid.getOptions();
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetMasterGroupData", "MasterGroup")',
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        })
+        options.dataSource.data = dataSource.data;
+        options.dataSource.pageSize = obj.PageSize;
+        grid.setOptions(options);
+    }
+
+    function filterGridParams() {
+        return {
+            Name: $("#Name").val(),
+            SearchCriteria: $("#ddlSearchCriteria").val(),
+            PageNumber: $("#pagerInputPageNumber").val(),
+            PageSize: $("#ddPageSize").val()
+        };
+    }
+
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+        if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+            SetPagerWidget($("#pagerInputPageNumber").val());
+            var data = filterGridParams();
+            ReBindGrid(data);
+        }
+        else {
+            showMessage({
+                type: 'Error',
+                text: 'Please enter valid page number.',
+                autoClose: false
+            });
+        }
+    }
+
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#grdMasterGroup").data("kendoGrid");
+        if (grid.dataSource.view()[0]) {
+            totalrecordCount = parseInt(grid.dataSource.view()[0].TotalRecordCounts);
+        }
+        var pagesize = parseInt($("#ddPageSize").val());
+        var currentpage = parseInt($("#pagerInputPageNumber").val());
+
+        if (totalrecordCount % pagesize == 0){
+            var lastpage = parseInt(totalrecordCount / pagesize);
+        }
+        else{
+            var lastpage = parseInt(totalrecordCount / pagesize) + 1;
+        }
+
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+
+        if (currentpage == 0) {
+            var start = 0;
+        }
+        else {
+            var start = ((currentpage - 1) * pagesize + 1);
+        }
+      
+        if (start > totalrecordCount) {
+            currentpage = 1;
+            start = 1;
+        }
+
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+    }
+
+    function checkChange(e) {
+        RebindOnPageOrSizeChange()
+    }
+
+    function Reset() {
+        $("#Name").val('');
+        $("#ddlSearchCriteria").val('starts');
+        Search();
+    }
+
+    function showDeleteAlert(id) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: 'Are you sure you want to delete Mastergroup. It will delete Mastergroup, MasterCodesheet and  all mapping for the Mastergroup?',
+            autoClose: false,
+            IsOpen: false,
+            action: deleteMasterGroup,
+            data: { id: id },
+        });
+        return false;
+    }
+
+    function deleteMasterGroup(values) {
+        var data = {
+            id: values.id
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Delete", "MasterGroup")',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var result = JSON.parse(response);
+                if (result.Success) {
+                    $("#alertDiv").hide();
+                    var data = {
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        text: result.Text,
+                        autoClose: false,
+                        action: RedirectPage,
+                        IsOpen: false
+                    }
+                    showMessage(data);
+                }
+                else
+                {
+                    $("#alertMsg").html(result.Text);
+                    $("#alertDiv").show();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+                alert("An error has occured!!!");
+            }
+        });
+
+        var RedirectPage = function () {
+            window.location = '@Url.Action("Index", "MasterGroup")';
+        }
+    }
+
+    function showResponses(id) {
+        window.location = '@Url.Action("Index", "MasterCodeSheet", new { id = "temp"})'.replace("temp", id);
+    }
+</script>
+<style>
+    a:link, a:visited, a:active, a:hover {
+    color: #115fa9;
+}</style>
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<div>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <div id="alertDiv" style="display:none;color:red;margin:5px 0 0 0;">
+                    <span><img src='@Url.Content("~/Images/Notifications/Error_New.png")' style="margin:0px;padding:0px;" /></span>
+                    <span id="alertMsg" class="message-error"></span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="SearchPanel" style="margin:20px auto;">
+        <span style="margin:20px">
+            <label class="control-label">Display Name or Name:</label>
+            @Html.DropDownList("ddlSearchCriteria", new List<SelectListItem> {
+                new SelectListItem { Text = "starts with", Value = "starts" },
+                new SelectListItem { Text = "contains", Value = "like" },
+                new SelectListItem { Text = "equals", Value = "equals" },
+                new SelectListItem { Text = "ends with", Value = "ends" }
+            })
+            @Html.Kendo().TextBox().Name("Name").HtmlAttributes(new { style = "overflow: hidden; width:25%" })
+            <input type="button" class="btn-blue2" value="Search" id="search" onclick="Search()" />
+            <input type="button" class="btn-blue2" value="Reset" id="reset" onclick="Reset()" />
+        </span>
+        <span style="align:right">
+            @Html.Kendo().Button().Name("Addbb").Content("Add Master Group<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { type = "button", id = "btnNewMasterGroup", @class = "btn-blue2 float-right" })
+        </span>
+    </div>
+    <div id="grid">
+        @(
+     Html.Kendo()
+            .Grid<UAD.Web.Admin.Models.MasterGroups>()
+        .Name("grdMasterGroup")
+        .Events(e => e.DataBound("onDataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.TotalRecordCounts).Hidden(true);
+            columns.Bound(e => e.DisplayName).Title("Display Name").HtmlAttributes(new { @style = "vertical-align:middle;" });
+            columns.Bound(e => e.Name).Title("Name").HtmlAttributes(new { @style = "vertical-align:middle" });
+            columns.Bound(e => e.IsActive).ClientTemplate(
+            "# if (IsActive == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+            ).Title("Active").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+            columns.Bound(e => e.EnableSubReporting).ClientTemplate(
+            "# if (EnableSubReporting == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+            ).Title("Enable SubReporting").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+            columns.Bound(e => e.EnableSearching).ClientTemplate(
+            "# if (EnableSearching == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+            ).Title("Enable Searching").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+            columns.Bound(e => e.EnableAdhocSearch).ClientTemplate(
+            "# if (EnableAdhocSearch == true) { #" +
+            "yes" +
+            "# } else { #" +
+            "No" +
+            "# } #"
+            ).Title("Enable Adhoc Search").HtmlAttributes(new { @style = "vertical-align:middle; text-align:center;" }).HeaderHtmlAttributes(new { @style = "text-align:center" });
+            columns.Bound(p => p).ClientTemplate(GetActions("grdMasterGroup").ToString()).Width(100).Filterable(false).Sortable(false);
+        })
+        .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn).AllowUnsort(false))//Sort Based on Single column at a time, you can cnfigure allow for unsorting
+        .Pageable(page => page.Enabled(false))
+        .Filterable(filter => filter.Enabled(false))
+        .DataSource(dataSource => dataSource // Configure the grid data source
+                        .Ajax() // Specify that ajax binding is used
+                        .Model(m =>
+                        {
+                            m.Id(y => y.MasterGroupID);
+                        })
+                        .Read(read => read.Data("filterGridParams").Action("GetMasterGroupData", "MasterGroup"))// Set the action method which will return the data in JSON format
+                        .ServerOperation(true) //Get Data from Server
+        ))
+    </div>
+    <div id="serverGrid">
+        @Html.Partial("Partials/_ServerGridPager")
+    </div>
+</div>
+<br /><br />
+@helper  GetActions(string name)
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=MasterGroupID#")
+        .Direction(MenuDirection.Right)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").HtmlAttributes(new { style = "display:none;" });
+                    innerItems.Add().Text("Edit")
+                        .Action("AddEdit", "MasterGroup", new { id = "#=MasterGroupID#" })
+                        .HtmlAttributes(new { onclick = "showLoadingMessage()" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "showDeleteAlert(id)", id = "#=MasterGroupID#" });
+                    innerItems.Add().Text("Responses").HtmlAttributes(new { onclick = "showResponses(id)", id = "#=MasterGroupID#" });
+                }
+            )
+        ).ToClientTemplate())
+}
+
+
+
+

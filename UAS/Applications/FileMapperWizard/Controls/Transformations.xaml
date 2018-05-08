@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="FileMapperWizard.Controls.Transformations"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:tileView="clr-namespace:Telerik.Windows.Controls.TileView;assembly=Telerik.Windows.Controls.Navigation"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" 
+             xmlns:telerikChromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls" 
+             mc:Ignorable="d"  
+             d:DesignHeight="500" d:DesignWidth="600">
+    <Grid Background="White" AllowDrop="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Do you want to apply a transformation? " Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+            <!--<telerik:RadComboBox x:Name="rcbApplyTransformation" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Height="22" Margin="0,0,1,0" Width="60" SelectionChanged="rcbApplyTransformation_SelectionChanged" />-->
+            <RadioButton Name="rbNo" Content="NO" Margin="10,0,15,0" IsChecked="True" Checked="rbNo_Checked" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"></RadioButton>
+            <RadioButton Name="rbYes" Content="YES" Margin="0,0,15,0" IsChecked="False" Checked="rbYes_Checked" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"></RadioButton>
+        </StackPanel>
+        
+        <TextBlock x:Name="txtSelectCol" Visibility="Collapsed" Text="Select a column to apply transformation on: " Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+        <telerik:RadComboBox x:Name="rcbColumnSelection"  Visibility="Collapsed" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Height="22" Margin="0,0,1,0" Width="84" SelectionChanged="rcbColumnSelection_SelectionChanged" />
+
+        <TextBlock Name="txtApplied" Text="Applied Transformation to '': " Visibility="Collapsed" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+        <ListBox x:Name="ListBoxClientAddedMappings" Visibility="Collapsed" Grid.Row="2" Margin="0,0,1,0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="180" Height="74" BorderBrush="#FF605F5F" Background="White" BorderThickness="1" FontFamily="Calibri" IsSynchronizedWithCurrentItem="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="25"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="txtInfo" Grid.Column="0" Text="{Binding TransformationName}" Tag="{Binding TransformationID}" VerticalAlignment="Center"/>
+                        <telerik:RadButton x:Name="btnDeleteTrans" Grid.Column="1" Content="X" FontSize="12" FontWeight="Bold" Background="White" 
+                                                               Width="25" VerticalAlignment="Center" Click="btnDeleteTrans_Click" Tag="{Binding TransformationID}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock x:Name="txtApplyExistNew" Visibility="Collapsed" Text="Apply existing or new? " Grid.Row="5" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+        <telerik:RadComboBox x:Name="rcbNewExist" Visibility="Collapsed" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Height="22" Margin="0,0,1,0" Width="115" SelectionChanged="rcbNewExist_SelectionChanged" />
+
+        <StackPanel Name="spExist" Orientation="Vertical" Visibility="Collapsed" Grid.Row="0" Grid.Column="3" Grid.RowSpan="7">
+            <TextBlock Text="Existing Transformations"  HorizontalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBox Name="txtTransformSearch" Margin="18,2,2,2" Grid.Row="1" Grid.Column="2" Height="23" TextWrapping="NoWrap" VerticalAlignment="Center" Width="140" Style="{DynamicResource TextBoxMapper}" TextChanged="txtTransformSearch_TextChanged" />
+                <Image Name="imgTransformSearch" Source="/ImageLibrary;Component/Images/Search/search-32.png" Height="22" Width="22" />
+            </StackPanel>
+            <telerik:RadListBox x:Name="ListBoxDataMapping" Margin="5" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" 
+                                        HorizontalAlignment="Center" Height="140" Width="160" Visibility="Visible"
+                                        Background="White" MouseDoubleClick="ListBoxDataMapping_MouseDoubleClick" 
+                                        >
+                <telerik:RadListBox.Template>
+                    <ControlTemplate>
+                        <Border BorderBrush="#FF605F5F" BorderThickness="1">
+                            <ScrollViewer x:Name="svListBox" Margin="1" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </telerik:RadListBox.Template>
+            </telerik:RadListBox>
+        </StackPanel>
+
+        <TextBlock x:Name="txtSelectTrans" Text="Select transformation to perform: " Visibility="Collapsed" Grid.Row="6" Grid.ColumnSpan="2" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#4B87BC" FontSize="14"/>
+        <telerik:RadComboBox x:Name="rcbTransformationType" Visibility="Collapsed" Grid.Row="6" Grid.Column="1" Margin="0,0,1,0" Height="22" Width="115" SelectionChanged="rcbTransformationType_SelectionChanged" HorizontalAlignment="Right"/>
+
+        <!-- START TRANSFORMATION SECTIONS -->
+        <StackPanel Orientation="Vertical" Name="spTransformations" Visibility="Visible" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">
+        </StackPanel>
+        <!-- END TRANSFORMATION SECTIONS -->
+        <telerik:RadButton x:Name="btnStep4Prev" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Height="22"
+                                           Margin="5" Style="{DynamicResource RadButtonRound}" Click="btnStep4Prev_Click" Width="60">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/ImageLibrary;Component/Images/TileList/Prev.png" Height="16" Width="16"/>
+                <TextBlock Text="Prev" Margin="5,0,0,0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </telerik:RadButton>
+        <telerik:RadButton x:Name="btnImportRules" AllowDrop="False" Grid.Row="8" Grid.Column="2" Height="22" Width="70" VerticalAlignment="Center" Visibility="Visible"
+                                               HorizontalAlignment="Right" Style="{DynamicResource RadButtonRound}" Click="btnImportRules_Click" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Next" Margin="0,0,5,0" VerticalAlignment="Bottom"/>
+                <Image Source="/ImageLibrary;Component/Images/TileList/Next.png" Height="16" Width="16" VerticalAlignment="Center"/>
+            </StackPanel>
+        </telerik:RadButton>
+        
+    </Grid>
+</UserControl>

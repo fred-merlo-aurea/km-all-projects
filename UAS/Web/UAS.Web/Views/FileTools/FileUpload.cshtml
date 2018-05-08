@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "File Upload";
+}
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Upload").click(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            var has_selected_file = $('#FileUpload').filter(function () {
+                return $.trim(this.value) != ''
+            }).length > 0;
+
+            if (has_selected_file == true) {
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("FileUpload").files[i];
+
+                    formData.append("FileUpload", file);
+                }
+                formData.append("UserName", "Jason");
+                $.ajax({
+                    type: "POST",
+                    url: '/UAS.Web/FileTools/FileUpload',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $("#divShowResults").html(data);
+                    },
+                    error: function (error) {
+                        alert("An error has occured!!!" + JSON.stringify(error));
+                    }
+                });
+            }
+            else {
+                alert("No file was selected.");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("FileUpload", "FileTools", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <div style="float: left; margin: 10px;">
+            <label class="form-lable" for="FileUpload">Select a File to Upload:</label>
+        </div>
+        <div style="float: left; margin: 10px;">
+            <input name="FileUpload" type="file" id="FileUpload" />
+        </div>
+    </div>
+    <div style="clear: both;">
+        <input type="button" id="Upload" value="Upload" class="btn btn-blue2 k-button" />
+    </div>
+}
+
+<div id="divShowResults" style="margin: 20px 10px 10px 10px;">
+    
+</div>

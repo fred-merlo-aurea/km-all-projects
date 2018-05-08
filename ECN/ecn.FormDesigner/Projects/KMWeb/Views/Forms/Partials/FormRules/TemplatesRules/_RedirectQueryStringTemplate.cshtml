@@ -1,0 +1,24 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+<script id="formrulequerystring-template" type="text/x-kendo-template">    
+   <div id ="Rules_#=RuleNum#_RequestQueryValue_#=Num#" name="Rules[#=RuleNum#].RequestQueryValue[#=Num#].RequestQueryValue" class ="class_row_formrulequerystring">
+       <input type="hidden" value="#=Num#" name="Rules[#=RuleNum#].RequestQueryValue.Index" />
+       <ul class="inline">
+           <li class="name">@Html.Kendo().TextBox().Name(GetName<RequestQueryDataValueModel>("Rules[#=RuleNum#].RequestQueryValue[#=Num#]", x => x.Name)).HtmlAttributes(new { id = "#=FormattedQueryId#__Name" }).ToClientTemplate()</li>
+           <li class="value">  @Html.Kendo().DropDownList().Name(GetName<RequestQueryDataValueModel>("Rules[#=RuleNum#].RequestQueryValue[#=Num#]", x => x.Value)).HtmlAttributes(new { id = "#=FormattedQueryId#__Value" }).BindTo((IEnumerable<KMModels.ControlModel>)ViewBag.URLControls).DataTextField("FieldLabel").DataValueField("Id").ToClientTemplate()</li>
+           <li class="acts">
+            @(Html.Kendo().Button().Content( "Delete<i class='km-icon icon-kmcustom-delete'></i>" ).Name("Rules_#=RuleNum#_RequestQueryValue_#=Num#_DeleteBtn").HtmlAttributes(new { @class="DeleteBtnClass btn btn-blue3"  , type = "button", id = "Rules_#=RuleNum#_RequestQueryValue_#=Num#_DeleteBtn" })
+                    .ToClientTemplate())</li>
+       </ul>
+   </div>
+</script>
+
+
+
+    
+
+
+
+
+

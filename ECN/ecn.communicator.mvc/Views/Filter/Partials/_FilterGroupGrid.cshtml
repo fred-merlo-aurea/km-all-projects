@@ -1,0 +1,56 @@
+﻿@model List<ECN_Framework_Entities.Communicator.FilterGroup>
+<table style="width:100%">
+    <tr>
+        <td><h3 style="margin-top: 0px;">Filter Groups</h3></td>
+        <td style="float: right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="addFilterGroup()">Add Filter Group<i class='km-icon icon-kmplus-circled-1'></i></button></td>
+    </tr>
+</table>
+
+@(Html.Kendo()
+        .Grid(Model)
+        .Name("filterGroupsGrid")
+        .Events(x => x.DataBound("dataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.Name).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Filter Group Name").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle; " });
+            columns.Bound(e => e.ConditionCompareType).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Connector").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: left;" }).HeaderHtmlAttributes(new { @style = "text-align:left; vertical-align:middle;" });
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).HtmlAttributes(new { @style = "width:95px" }); ;
+        })
+        .Pageable(pageable => pageable
+            .PageSizes(new[] { 5, 10, 15, 20 })
+            .Input(true)
+            .ButtonCount(1)
+            )
+        .Sortable()
+        .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.FilterGroupID);
+            })
+            .PageSize(10)
+            .ServerOperation(false)
+        )
+)
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=FilterGroupID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").Action("Index", "Group").HtmlAttributes(new { @style = "display:none;" });
+                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "editFilterGroup('#=FilterGroupID#')" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteFilterGroup('#=FilterGroupID#')" });
+                    innerItems.Add().Text("Add Condition").HtmlAttributes(new { onclick = "addConditionFilterGroup('#=FilterGroupID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}

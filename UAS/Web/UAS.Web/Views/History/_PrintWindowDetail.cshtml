@@ -1,0 +1,75 @@
+﻿@model System.Data.DataTable
+
+<script language="JavaScript" type="text/JavaScript">
+    function printGrid() {
+        var gridElement = $("#Grid_Detail"),
+            printableContent = '',
+            win = window.open('', '', 'width=800, height=500, resizable=1, scrollbars=1'),
+            doc = win.document.open();
+
+        var htmlStart =
+                '<!DOCTYPE html>' +
+                '<html>' +
+                '<head>' +
+                '<meta charset="utf-8" />' +
+                '<title>BatchReport</title>' +
+                //'<link href="http://kendo.cdn.telerik.com/2017.1.223/styles/kendo.common.min.css" rel="stylesheet" /> ' +
+                '<style>' +
+                'html { font: 10pt sans-serif; }' +
+                '.k-grid { border-top-width: 0; }' +
+                '.k-grid, .k-grid-content { height: auto !important; }' +
+                '.k-grid-content { overflow: visible !important; }' +
+                'div.k-grid table { table-layout: auto; width: 100% !important; }' +
+                '.k-grid .k-grid-header th { border-top: 1px solid; text-align: left; }' +
+                '.k-grouping-header, .k-grid-toolbar, .k-grid-pager > .k-link { display: none; }' +
+                '.k-grid-pager { display: none; }' + // optional: hide the whole pager
+                '</style>' +
+                '</head>' +
+                '<body>';
+
+        var htmlEnd =
+                '</body>' +
+                '</html>';
+
+        var gridHeader = gridElement.children('.k-grid-header');
+        if (gridHeader[0]) {
+            var thead = gridHeader.find('thead').clone().addClass('k-grid-header');
+            printableContent = gridElement
+                .clone()
+                    .children('.k-grid-header').remove()
+                .end()
+                    .children('.k-grid-content')
+                        .find('table')
+                            .first()
+                                .children('tbody').before(thead)
+                            .end()
+                        .end()
+                    .end()
+                .end()[0].outerHTML;
+        } else {
+            printableContent = gridElement.clone()[0].outerHTML;
+        }
+
+        doc.write(htmlStart + printableContent + htmlEnd);
+        doc.close();
+        win.print();
+
+    }
+</script>
+
+<button id="btnPrint" class="btn-blue2" style="width: 50px; height: 24px;" onclick="printGrid()">Print</button>
+
+@(Html.Kendo().Grid<dynamic>()
+    .Name("Grid_Detail")
+    .Columns(columns =>
+    {
+        foreach (System.Data.DataColumn column in Model.Columns)
+        {
+            columns.Bound(column.ColumnName);
+        }
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("GetDetail", "History", new { BatchID = ViewBag.BatchID }))        
+    )    
+)

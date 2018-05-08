@@ -1,0 +1,45 @@
+﻿<div class="row" width="100%">
+   <div ng-show="!subscrberViewModel.PubSubscription.IsNewSubscription" class="col-md-2 col-sm-2 col-lg-2" style="padding:10px;">
+        <span ng-if="subscrberViewModel.PubSubscription.SubscriptionStatusID == 1">
+            <img src="~/Images/SubscriptionStatus/Prospect_72.png" height="20" width="20" />
+        </span>
+        <span ng-if="subscrberViewModel.PubSubscription.SubscriptionStatusID == 3 ||subscrberViewModel.PubSubscription.SubscriptionStatusID == 4">
+            <img src="~/Images/SubscriptionStatus/Active_72.png" height="20" width="20" />
+        </span>
+        <span ng-if="subscrberViewModel.PubSubscription.SubscriptionStatusID == 2 ||subscrberViewModel.PubSubscription.SubscriptionStatusID == 5 || subscrberViewModel.PubSubscription.SubscriptionStatusID == 6">
+            <img src="~/Images/SubscriptionStatus/InActive_72.png" height="20" width="20" />
+        </span>
+        <span class="subcriber-header"><strong>{{subscrberViewModel.PubSubscription.FirstName}} {{subscrberViewModel.PubSubscription.LastName}}</strong></span>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6">
+        <table class="status-table">
+            <tr>
+                <td>
+                    <span class="subcriber-row"><strong>Created By: </strong></span><span class="subcriber-column">{{subscrberViewModel.CreatedByUser}}</span>
+                </td>
+                <td>
+                    <span class="subcriber-row"><strong>Last Modified By: </strong></span><span class="subcriber-column">{{subscrberViewModel.LastModifiedByUser}}</span>
+                </td>
+                <td>
+                    <span class="subcriber-row"><strong>Category: </strong></span><span class="subcriber-column">{{CategoryCodeName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="subcriber-row"><strong>Created Date: </strong></span><span class="subcriber-column" ng-bind="subscrberViewModel.PubSubscription.DateCreated | ctime"></span>
+                </td>
+                <td>
+                    <span class="subcriber-row"><strong>Last Modified: </strong></span><span class="subcriber-column" ng-bind="subscrberViewModel.PubSubscription.DateUpdated | ctime"></span>
+                </td>
+                <td>
+                    <span class="subcriber-row"><strong>Transaction: </strong></span><span id="TransactionText" class="subcriber-column">{{subscrberViewModel.TransactionName}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-2 col-sm-2 col-lg-2 pull-right" style="padding:10px;text-align:right;">
+            <input type="button" class="btn btn-blue6" id="rstButton" value="Reset" />
+            <input type="submit" class="btn btn-blue6" id="saveBtn" name="Save" value="Save" />
+            <input type="button" class="btn btn-blue6" id="cancelButton" value="Cancel" onclick="return showAlert()" />
+     </div>
+</div>

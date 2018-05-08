@@ -1,0 +1,93 @@
+﻿@using KMEnums
+@using System.Collections
+@model ecn.communicator.mvc.Models.ImportDataOptions
+@{
+    ViewBag.Title = "Import Data";
+}
+<style>
+    #dataTable table tr td:nth-child(2) {
+        padding: 0px;
+        text-align: center;
+    }
+</style>
+<script>
+    function ImportDataAction() {
+        var dds = [];
+        for (var i = 0; i < @Model.numOfColumns; i++) {
+            dds.push($('#ColumnHeaderSelect' + [i]).val());
+        }
+        var Model = {
+            file: '@Model.file',
+            ftc: '@Model.ftc',
+            stc: '@Model.stc',
+            gid: '@Model.gid',
+            dupes: '@Model.dupes',
+            fileType: '@Model.fileType',
+            separator: '@Model.separator',
+            sheetName: '@Model.sheetName',
+            lineStart: '@Model.lineStart',
+            dl: '@Model.dl',
+            lblGUID: '@Model.lblGUID',
+            numOfColumns : @Model.numOfColumns,
+            dropDownValues: dds
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ImportDataAction", "Group")",
+            contentType: 'application/json',
+            dataType: "json",
+            data: JSON.stringify(Model),
+            success: function (response) {
+                if (response[0] == '200') {
+                    showMessage({
+                        type: '@MessageType.Success',
+                        autoClose: true
+                    });
+                    $('html,body').scrollTop(0);
+                    $("#buttons").hide();
+                    $("#dataTable").html(response[1]);
+                }
+                else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: response[1]
+                    });
+                }
+            }
+        });
+    }
+</script>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/ecn.communicator/main/default.aspx">Home /</a></li>
+    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Group")">Groups /</a></li>
+    <li class="breadcrumb-item active">Import Data</li>
+</ol>
+
+<div class="wrapper modal modaladdnewform" style="padding-left:50px;">
+    <div class="formbox">
+        <div class="subtitle">Group</div>
+        <div class="formitem formiteminline">
+            @ViewBag.GroupName
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="subtitle">File</div>
+        <div class="formitem formiteminline">
+            @Model.file
+        </div>
+    </div>
+    <div class="formbox" id="dataTable">
+        <div class="subtitle">Data Mapping</div>
+        <div class="formitem formiteminline">
+            @Html.Raw(ViewBag.TableToImport)
+        </div>
+    </div>
+
+    <div class="formbox" id="buttons">
+        <div class="subtitle">&nbsp;</div>
+        <div class="formitem formiteminline">
+            @Html.Kendo().Button().Name("ImportData").Content("Import Data").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "ImportDataAction()" })
+        </div>
+    </div>
+</div>

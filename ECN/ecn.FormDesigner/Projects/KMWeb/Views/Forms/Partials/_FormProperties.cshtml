@@ -1,0 +1,36 @@
+﻿@using KMModels.PostModels
+
+@model FormPropertiesPostModel
+@{
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+<div class="ptitle">
+    <span>Form Properties</span>
+</div>
+@using (Ajax.BeginForm("SaveProperties", new AjaxOptions { 
+    HttpMethod = "POST",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "formPropertiesContent",
+    OnComplete = "onComplete",
+    //OnFailure = "onError"
+}))
+{
+    <div id="formPropertiesContent" style='width: 75%'>
+        @Html.Partial("Partials/_FormPropertiesContent", Model)
+    </div>
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns"></div>
+            <div class="cbtns">
+                @if (!viewOnly)
+                {
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "reloadTab()" })
+                    @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn btn-blue5" })
+                }                
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "moveNext(this)" })
+            </div>
+        </div>
+    </div>
+}

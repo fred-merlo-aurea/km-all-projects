@@ -1,0 +1,103 @@
+﻿@model UAD.DataCompare.Web.Models.SourceFile
+@{
+    ViewBag.Title = "Edit File";
+}
+
+@using (Html.BeginForm("Edit", "Datacompare", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+
+    foreach (ModelState modelState in ViewData.ModelState.Values)
+    {
+        foreach (ModelError error in modelState.Errors)
+        {
+            <label class="k-state-highlight-red">@error.ErrorMessage</label>
+        }
+    }
+    <div class="header-div">
+        <h2>Edit File Details</h2>
+    </div>
+
+    <div class="center-div">
+        <table class="form-table">
+            <tbody>
+
+                <tr>
+                    <td>
+                        @Html.Label("Select a File to Map:", new { @class = "form-lable" })
+                    </td>
+                    <td>
+                        <input type="file" id="filebrowser" name="filebrowser" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.Label("Save Filename As:", new { @class = "form-lable" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.FileName, new { @readonly = true })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.Label("Date Created:", new { @class = "form-lable" })
+                    </td>
+                    <td>
+                        @Model.DateCreated
+                    </td>
+                </tr>
+                @*<tr>
+                    <td>
+                        @Html.Label("Notification Email Address:", new { @class = "form-lable" })
+                    </td>
+                    <td><input type="text" id="emailAddress" name="emailAddress" placeholder="Enter your email address." /></td>
+                </tr>*@
+                <tr>
+                    <td>
+                        @Html.Label("File Delimiter:", new { @class = "form-lable" })
+                    </td>
+                    <td>
+                        @Html.DropDownList("Delimiter",  new[]{
+                            new SelectListItem(){ Text = "comma",Value = "comma"},
+                            new SelectListItem(){ Text = "tab", Value = "tab" },
+                            new SelectListItem(){ Text = "semicolan",Value = "semicolan"},
+                            new SelectListItem(){ Text = "colon", Value = "colon" },
+                            new SelectListItem(){ Text = "tild", Value = "tild" }})
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.Label("Does this contain double quotation mark:", new { @class = "form-lable" })
+                    </td>
+                    <td>
+                        @Html.DropDownList("Quotation", new[]{
+                            new SelectListItem(){ Text = "Yes",Value = "Yes"},
+                            new SelectListItem() {Text = "No",Value = "No" }})
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        @Html.Hidden("SourceFileID", Model.SourceFileID)
+                        @Html.Hidden("Rescan", "Rescan")
+                        @(Html.Kendo().Button()
+                                      .Name("Submit")
+                                      .Content("Rescan")
+                                      //.Events(ev => ev.Click("onNextClick"))
+                                      .HtmlAttributes(new { @class = "k-primary", @id = "rescan" }))
+
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+    
+    <div class="footer-div">
+        @(Html.Kendo().Button()
+                            .Name("Next")
+                            .Content("Next")
+                            .Events(ev => ev.Click("onNextClick"))
+                            .HtmlAttributes(new { @class = "k-primary", @style = "float: right;margin-top:10px;" }))
+    </div>
+}

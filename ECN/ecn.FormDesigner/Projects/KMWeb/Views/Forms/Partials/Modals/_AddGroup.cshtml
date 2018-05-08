@@ -1,0 +1,65 @@
+﻿@using KMWeb.Models.Forms
+
+@{
+    var defaultContent = Html.Partial("Partials/Modals/_AddGroupContent", new AddGroupModel());
+    
+    Html.Kendo()
+        .Window()
+        .Title("Add New Group")
+        .Name("AddGroup")
+        .Modal(true)
+        .Animation(false)
+        .Content(
+            @<text>
+                @using (Ajax.BeginForm("AddGroup", new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnSuccess = "addGroupSuccess",
+                    OnFailure = "onError"
+                }))
+                {
+                    <div id="AddGroupContent"></div>
+                }
+            </text>
+        )
+        .Visible(false)
+        .Render();
+}
+
+<script>
+    function AddGroup(options) {
+        this.groupAdded = options.groupAdded;
+        this.customerId = options.customerId;
+        this.folderId = options.folderId;
+        this.open = function () {
+            var content = $("#AddGroupContent");
+            content.html('@Html.Raw(HttpUtility.JavaScriptStringEncode(defaultContent.ToString()))');
+            kendo.bind(content, {
+                CustomerId: this.customerId,
+                FolderId: this.folderId
+            });
+            var window = $("#AddGroup").data("kendoWindow");
+            window.center().open();
+        }
+        this.close = function () {
+            var window = $("#AddGroup").data("kendoWindow");
+            window.close();
+        }
+    }
+    var addGroup;
+    function openAddGroup(options) {
+        addGroup = new AddGroup(options);
+        addGroup.open();
+    }
+    function addGroupSuccess(data) {
+        var content = $("#AddGroupContent");
+        if (data.success) {
+            if (addGroup.groupAdded) {
+                addGroup.groupAdded(data.group);
+            }
+            addGroup.close();
+        } else {
+            content.html(data);
+        }
+    }
+</script>

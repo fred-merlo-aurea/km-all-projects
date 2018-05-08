@@ -1,0 +1,49 @@
+﻿<Window x:Class="WpfControls.WindowsAndDialogs.ColumnSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="ColumnSelector" Height="400" Width="600">
+    <Window.Resources>
+        <Style x:Key="DraggableListBoxItem" TargetType="telerik:RadListBoxItem">
+            <Setter Property="telerik:DragDropManager.AllowCapturedDrag" Value="True" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Drag or double-click columns to add and remove columns." Foreground="#559EDB" TextWrapping="Wrap" Margin="10"/>
+        <TextBlock Grid.Column="1" Text="Exporting Columns" Foreground="#559EDB" TextWrapping="Wrap" Margin="10" VerticalAlignment="Bottom" FontSize="16" />
+        <telerik:RadListBox x:Name="rlbCurrentColumns" Visibility="Visible" Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" BorderThickness="1" AllowDrop="True"
+         telerik:TouchManager.IsTouchHitTestVisible="True" ItemContainerStyle="{StaticResource DraggableListBoxItem}" MouseDoubleClick="rlbCurrentColumns_MouseDoubleClick">
+            <telerik:RadListBox.DragVisualProvider>
+                <telerik:ScreenshotDragVisualProvider />
+            </telerik:RadListBox.DragVisualProvider>
+            <telerik:RadListBox.DragDropBehavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:RadListBox.DragDropBehavior>
+            <telerik:ListBoxDragDrop.Behavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:ListBoxDragDrop.Behavior>
+        </telerik:RadListBox>
+        <telerik:RadListBox x:Name="rlbAddedColumn" Visibility="Visible" Grid.Column="1" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" BorderThickness="1" AllowDrop="True"
+         telerik:TouchManager.IsTouchHitTestVisible="True" ItemContainerStyle="{StaticResource DraggableListBoxItem}" PreviewDrop="rlbAddedColumn_PreviewDrop" MouseDoubleClick="rlbAddedColumn_MouseDoubleClick">
+            <telerik:RadListBox.DragVisualProvider>
+                <telerik:ScreenshotDragVisualProvider />
+            </telerik:RadListBox.DragVisualProvider>
+            <telerik:RadListBox.DragDropBehavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:RadListBox.DragDropBehavior>
+            <telerik:ListBoxDragDrop.Behavior>
+                <telerik:ListBoxDragDropBehavior />
+            </telerik:ListBoxDragDrop.Behavior>
+        </telerik:RadListBox>
+        <telerik:RadButton Name="btnOkay" Grid.Row="2" Grid.Column="1" Content="Okay" Width="80" Margin="5" HorizontalAlignment="Right" Click="btnOkay_Click"/>
+    </Grid>
+</Window>

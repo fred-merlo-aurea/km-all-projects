@@ -1,0 +1,14 @@
+Type.registerNamespace("Telerik.Web.UI.Scheduler.Views.Agenda.GroupedByDate");
+(function(a,c,d,b,e){e.GroupedByDate.Model=function(h,f,g){e.GroupedByDate.Model.initializeBase(this,[h,g]);
+};
+e.GroupedByDate.Model.prototype={_getShowDateHeadersResolved:function(){return(this._getShowDateHeaders()&&this._settings.isVertical!==true);
+},_getShowResourceHeadersResolved:function(){return this._getShowResourceHeaders();
+},_addColGroups:function(f){this._addDateCol(f);
+this._addResourceCol(f);
+this._addTimeCol(f);
+this._addAppointmentCol(f);
+},_getRenderer:function(){if(!this._renderer){this._renderer=new d.Rendering.DateGroupedAgendaViewRenderer(this);
+}return this._renderer;
+}};
+e.GroupedByDate.Model.registerClass("Telerik.Web.UI.Scheduler.Views.Agenda.GroupedByDate.Model",e.GroupedByResource.Model);
+})($telerik.$,Telerik.Web.UI,Telerik.Web.UI.Scheduler,Telerik.Web.UI.Scheduler.DateTime,Telerik.Web.UI.Scheduler.Views.Agenda);

@@ -1,0 +1,308 @@
+﻿@model UAD.Web.Admin.Models.ProductWrapper
+@using UAD.Web.Admin.Infrastructure;
+@using KMPS.MD.Objects;
+@{
+    ViewBag.Title = "Add Product";
+}
+<style>
+    td, th {
+        padding: 5px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if (!validate()) return;
+            $("#selectedGroups option").prop("selected", true);
+            $("#selectedBrands option").prop("selected", true);
+            $("#AddProductForm").submit();
+        });
+    });
+
+    function validate() {
+        var ret_val = true;
+        if ($('#PubName').val() == "") {
+            $('#PubNameValid').html("<< Required");
+            ret_val = false;
+        }
+        if ($('#PubCode').val() == "") {
+            $('#PubCodeValid').html("<< Required");
+            ret_val = false;
+        }
+        return ret_val;
+    }
+
+    $('#Clients').change(function () {
+        loadAvailableGroups();
+        }).trigger('change');
+    
+
+    function loadAvailableGroups()
+    {
+        var key = $('#Clients').val();
+        // Cleaning the second LB
+        $('#selectedGroups option').each(function () {
+            $(this).remove();
+        });
+
+        if (key != "") {
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: '@Url.Action("GetGroups")',
+                data: "key=" + key,
+                dataType: "json",
+                success: function (response) {
+                    if (response.length != 0) {
+                        var items = "";
+                        for (var i = 0; i < response.length; i++) {
+                            items += '<option value="' + response[i].GroupID + '">' + response[i].GroupName + '</option>';
+                        }
+                        $('#availableGroups').append(items);
+                    }
+                }
+            });
+        }
+    }
+    function addItem() {
+        $("#availableGroups option:selected").appendTo("#selectedGroups");
+        $("#selectedGroups option").attr("selected", false);
+    }
+
+    function addallItems() {
+        $("#availableGroups option").appendTo("#selectedGroups");
+        $("#selectedGroups option").attr("selected", false);
+    }
+
+    function removeItem() {
+        $("#selectedGroups option:selected").appendTo("#availableGroups");
+        $("#availableGroups option").attr("selected", false);
+    }
+
+    function removeallItems() {
+        $("#selectedGroups option").appendTo("#availableGroups");
+        $("#availableGroups option").attr("selected", false);
+    }
+
+    function addBrandItem() {
+        $("#availableBrands option:selected").appendTo("#selectedBrands");
+        $("#selectedBrands option").attr("selected", false);
+    }
+
+    function addBrandAllItems() {
+        $("#availableBrands option").appendTo("#selectedBrands");
+        $("#selectedBrands option").attr("selected", false);
+    }
+
+    function removeBrandItem() {
+        $("#selectedBrands option:selected").appendTo("#availableBrands");
+        $("#availableBrands option").attr("selected", false);
+    }
+
+    function removeBrandAllItems() {
+        $("#selectedBrands option").appendTo("#availableBrands");
+        $("#availableBrands option").attr("selected", false);
+    }
+
+</script>
+
+@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { id = "AddProductForm" }))
+{
+    <fieldset>
+        <div>@Html.ValidationSummary()</div>
+        <table>
+            <tr><td class="h4" colspan="2">Add Product</td></tr>
+            <tr>
+                <td align="right">Name:</td>
+                <td>
+                    @Html.TextBoxFor(e => e.pub.PubName, new { id = "PubName" })
+                    <div id="PubNameValid" class="field-validation-error" style="display:inline-block;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Code:</td>
+                <td>
+                    @Html.TextBoxFor(e => e.pub.PubCode, new { id = "PubCode" })
+                    @Html.ValidationMessageFor(e => e.pub.PubCode, "PubCode is Required")
+                    <div id="PubCodeValid" class="field-validation-error" style="display:inline-block;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Type:</td>
+                <td>
+                    @Html.DropDownListFor(e => e.pub.PubTypeID, Model.pubTypes.Select(item => new SelectListItem
+               {
+                   Value = item.PubTypeID.ToString(),
+                   Text = item.PubTypeDisplayName,
+               }), new { id = "PubTypes" })
+                </td>
+            </tr>
+
+            <tr>
+                <td align="right">Searching:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.EnableSearching).Label("Yes").Value("true").Checked(true)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.EnableSearching).Label("No").Value("false").Checked(false)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Score:</td>
+                <td>
+                    @Html.DropDownListFor(e => e.pub.Score,
+                    new SelectList(
+                    new List<Object>
+                    {
+                        new { value = 0 , text = "0" },
+                        new { value = 1 , text = "1" },
+                        new { value = 2 , text = "2" },
+                        new { value = 3 , text = "3" },
+                        new { value = 4 , text = "4" },
+                        new { value = 5 , text = "5" },
+                        new { value = 6 , text = "6" },
+                        new { value = 7 , text = "7" },
+                        new { value = 8 , text = "8" },
+                        new { value = 9 , text = "9" },
+                        new { value = 10 , text = "10" },
+                        new { value = 11 , text = "11" },
+                        new { value = 12 , text = "12" },
+                        new { value = 13 , text = "13" },
+                        new { value = 14 , text = "14" },
+                        new { value = 15 , text = "15" },
+                        new { value = 16 , text = "16" },
+                        new { value = 17 , text = "17" },
+                        new { value = 18 , text = "18" },
+                        new { value = 19 , text = "19" },
+                        new { value = 20 , text = "20" },
+                        new { value = 21 , text = "21" },
+                        new { value = 22 , text = "22" },
+                        new { value = 23 , text = "23" },
+                        new { value = 24 , text = "24" },
+                        new { value = 25 , text = "25" }
+                    },
+                    "value",
+                    "text",
+                    new { id = "Score" }
+                    ), "-- Select --"
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td align="right">HasPaidRecords:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.HasPaidRecords).Label("Yes").Value("true").Checked(false)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.HasPaidRecords).Label("No").Value("false").Checked(true)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Active:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsActive).Label("Yes").Value("true").Checked(true)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsActive).Label("No").Value("false").Checked(false)
+            </tr>
+            <tr>
+                <td align="right">IsUAD:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsUAD).Label("Yes").Value("true").Checked(false)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsUAD).Label("No").Value("false").Checked(true)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">IsCirc:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsCirc).Label("Yes").Value("true").Checked(false)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.IsCirc).Label("No").Value("false").Checked(true)
+            </tr>
+            <tr>
+                <td align="right">UseSubGen:</td>
+                <td>
+                    @Html.Kendo().RadioButtonFor(e => e.pub.UseSubGen).Label("Yes").Value("true").Checked(false)
+                    @Html.Kendo().RadioButtonFor(e => e.pub.UseSubGen).Label("No").Value("false").Checked(true)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Frequency:</td>
+                <td>
+                    @Html.DropDownListFor(e => e.pub.FrequencyID, Model.frequency.Select(item => new SelectListItem
+               {
+                   Value = item.FrequencyID.ToString(),
+                   Text = item.FrequencyName,
+               }), "-- Select --", new { id = "FrequencyID" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Year Start Date:</td>
+                <td>
+                    @Html.TextBoxFor(e => e.pub.YearStartDate, new { id = "YearStartDate" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Year End Date:</td>
+                <td>
+                    @Html.TextBoxFor(e => e.pub.YearEndDate, new { id = "YearEndDate" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Customers:</td>
+                <td>
+                    @Html.DropDownListFor(e => e.clientID, Model.clients.Select(item => new SelectListItem
+               {
+                   Value = item.ClientID.ToString(),
+                   Text = item.ClientName,
+               }), "-- Select --", new { id = "Clients", onchange = "loadAvailableGroups()" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr><td>Available Groups</td><td></td><td>Selected Groups</td></tr>
+                        <tr>
+                            <td>
+                                @Html.ListBoxFor(e => e.availableGroups, new MultiSelectList(Model.availableGroups, "GroupID", "GroupName"), new { size = "10", id = "availableGroups", style = "width:300px; height:200px" })
+                            </td>
+                            <td align="center">
+                                <input id="btnAddAll" type="button" value=">> " class="btn k-button" onclick="addallItems();" /><br /><br />
+                                <input id="btnAdd" type="button" value="> " class="btn k-button" onclick="addItem();" /><br /><br />
+                                <input id="btnRemove" type="button" value="< " class="btn k-button" onclick="removeItem();" /><br /><br />
+                                <input id="btnRemoveAll" type="button" value="<< " class="btn k-button" onclick="removeallItems();" /><br />
+                            </td>
+                            <td>
+                                @Html.ListBoxFor(e => e.selectedGroupsList, new MultiSelectList(Model.selectedGroups, "GroupID", "GroupName"), new { size = "10", id = "selectedGroups", style = "width:300px; height:200px" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr><td>Available Brands</td><td></td><td>Selected Brands</td></tr>
+                        <tr>
+                            <td>
+                                @Html.ListBoxFor(e => e.availableBrands, new MultiSelectList(Model.availableBrands, "BrandID", "BrandName"), new { size = "10", id = "availableBrands", style = "width:300px; height:200px" })
+                            </td>
+                            <td align="center">
+                                <input id="btnBrandAddAll" type="button" value=">> " class="btn k-button" onclick="addBrandAllItems();" /><br /><br />
+                                <input id="btnBrandAdd" type="button" value="> " class="btn k-button" onclick="addBrandItem();" /><br /><br />
+                                <input id="btnBrandRemove" type="button" value="< " class="btn k-button" onclick="removeBrandItem();" /><br /><br />
+                                <input id="btnBrandRemoveAll" type="button" value="<< " class="btn k-button" onclick="removeBrandAllItems();" /><br />
+                            </td>
+                            <td>
+                                @Html.ListBoxFor(e => e.selectedBrandsList, new MultiSelectList(Model.selectedBrands, "BrandID", "BrandName"), new { size = "10", id = "selectedBrands", style = "width:300px; height:200px" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <br />
+                    <button type="button" id="btnSave" class="btn k-button"> Save </button>
+                    <input type="button" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Product")'" class="btn k-button" />
+                </td>
+            </tr>
+        </table>
+        <br /><br />
+    </fieldset>
+}

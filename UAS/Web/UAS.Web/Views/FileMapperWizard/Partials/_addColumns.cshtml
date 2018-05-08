@@ -1,0 +1,73 @@
+﻿@* delete this cshtml file
+
+
+    @model UAS.Web.Models.FileMapperWizard.AddColumnsViewModel *@
+<script type="text/javascript">
+    function SaveAddColumns() {
+        //need to use jQuery to find table for each sourceColumn
+
+        var modelData = {
+            //"SourceFileId": @Html.Raw(Json.Encode(Model.SourceFileId)),
+        }
+
+        $.ajax({
+            type: 'post',
+            dataType: 'html',//this is data type of what you are returning
+            url: '/UAS.Web/FileMapperWizard/SaveAddColumns',
+            data: modelData,
+            success: function (returnData) {
+                var tabs = $("#tabstrip").data("kendoTabStrip");
+                if (tabs != null) {
+                    var tabIndex = 3;
+                    var prevIndex = tabIndex - 1;
+                    if (prevIndex < 0) {
+                        prevIndex = 0;
+                    }
+                    //$('#tabstrip-3').html("Add Columns");
+                    //$('#tabstrip-4').append(returnData);
+                    //$('#tabstrip-4').fadeIn(500);
+                    var item = tabs.contentElement(tabIndex);
+                    $(item).html(returnData);
+
+                    tabs.select(tabIndex);
+                    tabs.enable(tabs.tabGroup.children().eq(tabIndex), true); // enable tab 1
+                    tabs.enable(tabs.tabGroup.children().eq(prevIndex), false); // disable tab 1
+
+                }
+                return false;
+                //1 = setup
+                //2 = MapColumns
+                //3 = AddColumns
+                //4 = Transformations
+                //5 = Rules
+                //6 = Review
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+</script>
+
+<div style="width:700px;">
+    <div id="columnMapping" style="margin:10px; border:solid 1px gray;">
+        <div style="width: 250px; margin-left:20px; text-align:left;">
+            <h3>Add Columns</h3>
+        </div>
+        
+
+    </div>
+
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+            </div>
+            <div class="cbtns">
+
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "return SaveAddColumns()" })
+            </div>
+        </div>
+    </div>
+</div>

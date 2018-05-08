@@ -1,0 +1,122 @@
+﻿<script>
+    function CampaignItemTemplateExplorer(options) {
+        this.select = options.select;
+        this.customerID = options.CustomerID;
+
+        this.open = function () {
+            var window = $("#CampaignItemTemplateExplorer").data("kendoWindow");
+            window.center().open();
+            showLoadingWindow();
+        };
+        this.close = function () {
+            var window = $("#CampaignItemTemplateExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }
+
+    function bindSelectCampaignItemTemplates() {
+       
+        kendo.destroy("#CampaignItemTemplates");
+        $("#CampaignItemTemplates").kendoGrid({
+            columns: [
+                { field: "TemplateName", width:325, title: "Template Name" },
+                { field: "CreatedDate", width: 150, title: "Created Date", "template": "#= (CreatedDate == null) ? ' ' : kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd'), 'MM/dd/yyyy HH:mm tt') #" },
+                { field: "UpdatedDate", width: 150, title: "Updated Date", "template": "#= (UpdatedDate == null) ? ' ' : kendo.toString(kendo.parseDate(UpdatedDate, 'yyyy-MM-dd'), 'MM/dd/yyyy HH:mm tt') #" },
+                {
+                    template: "<i class='km-icon icon-kmplus-circled-1'></i>",
+                }
+            ],
+            selectable: "row",
+            autoBind: false,
+            change: addCampaignItemTemplate,
+            dataSource: {
+                transport: {
+                    read: '@Url.Action("GetCampaignItemTemplates", "Web")',
+                    data: {
+                        customerID: explorer.customerID
+                    }
+                },
+                schema: {
+                    model: {
+                        CITemplateID: "CampaignItemTemplateID",
+                        TemplateName: "TemplateName",
+                        CreatedDate: "CreatedDate",
+                        UpdatedDate: "UpdatedDate"
+                    }
+                },
+            },
+            scrollable: true,
+            height: 450
+        });
+        $("#CampaignItemTemplateExplorer").on("CampaignItemTemplateSelected", function (e) {
+            explorer.select(e);
+        });
+    }
+
+    var _customerID;
+    var explorer;
+    function onCampaignItemTemplateExplorerOpen() {
+        bindSelectCampaignItemTemplates();
+        var grid = $("#CampaignItemTemplates").data("kendoGrid");
+        grid.dataSource.read({
+            customerId: explorer.customerID           
+        });
+    }
+
+    function onCampaignItemTemplateExplorerClose() {
+        $(".k-overlay").remove();
+    }
+
+    function campaignItemTemplateExplorer(select, customerID) {
+        explorer = new CampaignItemTemplateExplorer({
+            select: select,
+            CustomerID: customerID
+        });
+        explorer.open();
+    }
+
+    function addCampaignItemTemplate(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var citemplate = this.dataItem(item);
+        var event = $.Event("CampaignItemTemplateSelected");
+        event.sender = explorer;
+        event.citemplate = citemplate;
+        $("#CampaignItemTemplateExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Name("CampaignItemTemplateExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onCampaignItemTemplateExplorerOpen")
+                                    .Close("onCampaignItemTemplateExplorerClose"))
+                       .Visible(false)
+                       .Width(740);
+
+    explorer.Render();
+}
+@helper Content()
+{
+    <div class="wrapper modal modalgroupexplorer">
+         <fieldset title="Campaign Item Template Explorer">
+          <legend>Select Campaign Item Template</legend>
+            <div class="customerlist">
+                  <div id="CampaignItemTemplates" style="width:680px" ></div>
+             </div>
+        </fieldset>
+    </div>
+
+   
+}

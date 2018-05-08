@@ -1,0 +1,30 @@
+﻿@model HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+    Layout = "_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    @Styles.Render("~/Content/css")
+</head>
+
+<body>
+<hgroup class="title">
+    <h2 class="error">
+        @if (@ViewData["ErrorMessage"] != null)
+        {
+            @ViewData["ErrorMessage"].ToString()
+        }
+        else
+        {
+            <label>Sorry! We're having trouble processing your request right now</label>
+        }
+    </h2>
+</hgroup>
+</body>
+</html>

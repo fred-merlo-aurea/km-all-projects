@@ -1,0 +1,106 @@
+﻿@model UAS.Web.Models.FileTools.FileViewer
+
+@{
+    ViewBag.Title = "File Viewer";
+}
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Upload").click(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("FileUpload").files.length;
+            var has_selected_file = $('#FileUpload').filter(function () {
+                return $.trim(this.value) != ''
+            }).length > 0;
+
+            if (has_selected_file == true) {
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("FileUpload").files[i];
+
+                    formData.append("FileUpload", file);
+                }
+                var cd = $('#ColumnDelimiter').val();
+                var iqe = $('#IsQuoteEncapsulated').val();
+                formData.append("ColumnDelimiter", cd.toString());
+                formData.append("IsQuoteEncapsulated", iqe.toString());
+                $.ajax({
+                    type: "POST",
+                    url: '/UAS.Web/FileTools/FileViewer',
+                    data: formData,
+                    //dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $("#divShowResults").html(data);
+                    },
+                    error: function (error) {
+                        alert("An error has occured!!!" + JSON.stringify(error));
+                    }
+                });
+            }
+            else {
+                alert("No file was selected.");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $("#FileUpload").change(function () {
+            var fileExtension = ['txt', 'csv'];
+            if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                $("#content").hide();
+            }
+            else {
+                $("#content").show();
+            }
+        });
+    });
+
+</script>
+
+@using (Html.BeginForm("FileViewer", "FileTools", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{ 
+    <div>
+        <div style="float: left; margin: 10px;">
+            <label class="form-lable" for="FileUpload">Select a File to View:</label>
+        </div>
+        <div style="float: left; margin: 10px;">
+            <input name="FileUpload" type="file" id="FileUpload" accept="csv,txt,xls,xlsx" />
+        </div>
+    </div>
+    <div id="content">
+        <div style="clear: both;">
+            <div style="float: left; margin: 0px 10px 10px 10px;">
+                <label class="form-lable" for="ColumnDelimiter">Column Delimiter:</label>
+                @Html.DropDownList("ColumnDelimiter", Model.ColumnDelimiter.Select(item => new SelectListItem
+                   {
+                       Value = item.ToString(),
+                       Text = item.ToString()
+                       //Selected = "select" == Model.ToString()
+                   }))
+            </div>
+        </div>
+        <div style="clear: both;">
+            <div style="float: left; margin: 0px 10px 10px 10px;">
+                <label class="form-lable" for="IsQuoteEncapsulated">Is Quote Encapsulated:</label>
+                @Html.DropDownList("IsQuoteEncapsulated", Model.TrueFalseOptions.Select(item => new SelectListItem
+                   {
+                       Value = item.ToString(),
+                       Text = item.ToString()
+                   }))
+            </div>
+        </div>
+    </div>
+    <div style="clear: both; margin: 10px;">
+        <input type="button" id="Upload" value="View" class="btn btn-blue2 k-button" />
+    </div>
+}
+
+
+<div id="divShowResults">
+
+</div>

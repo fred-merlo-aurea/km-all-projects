@@ -1,0 +1,201 @@
+﻿
+<style>
+    .k-widget [role='gridcell'] {
+        overflow: hidden !important;
+    }
+</style>
+
+<script>
+    var _customerID;
+    function CampaignItemExplorer(options) {
+        this.select = options.select;
+        this.customerID = options.customerID;
+        _customerID = this.customerID;
+        this.MAID = options.MAID;
+
+        
+
+        this.open = function () {
+            var window = $("#CampaignItemExplorer").data("kendoWindow");
+            window.center().open();
+        };
+        this.close = function () {
+            var window = $("#CampaignItemExplorer").data("kendoWindow");
+            window.close();
+        };
+    }
+
+    function bindCampaignItems(customerID)
+    {
+        var campaignItems =
+        {
+            transport: {
+                read: '/ecn.MarketingAutomation/Web/GetCampaignItems?customerID=' + customerID + '&MAID=' + explorer.MAID
+            },
+            schema: {
+                model: {
+                    id: "CampaignItemID",
+                    CampaignItemID: "CampaignItemID",
+                    CampaignItemName: "CampaignItemName",
+                    EmailSubject: "EmailSubject",
+                    Group: "Group",
+                    CampaignItemType: "CampaignItemType",
+                    UpdatedDate: "SendTime",
+                    CustomerID: "CustomerID",
+                    LayoutID:"LayoutID",
+                    LayoutName:"LayoutName"
+                }
+            },
+            pageSize: 10
+        };
+        kendo.destroy("#CampaignItems");
+        $("#CampaignItems").kendoGrid({
+            columns: [
+                {
+                    field: "CampaignItemName",
+                    width: 140,
+                    title: "Campaign Items"
+                },
+                {
+                    field: "EmailSubject",
+                    width: 140,
+                    title: "Email Subject"
+                },
+                {
+                    field: "Group",
+                    width: 90,
+                    title: "Group"
+
+                },
+                {
+                    field: "CampaignItemType",
+                    width: 40,
+                    title: "Type"
+                },
+                {
+                    field: "SendTimeUTC",
+                    width: 85,
+                    title: "Scheduled Time"
+                },
+                {
+                    width: 30,
+                    template: "<i style='float:right;' class='km-icon icon-kmplus-circled-1'></i>"
+                },
+                {
+                    field: "CampaignItemID",
+                    hidden: true
+                },
+                {
+                    field:"LayoutID",
+                    hidden:true
+                },
+                {
+                    field:"LayoutName",
+                    hidden:true
+                }
+
+
+            ],
+            selectable: "row",
+            change: addCampaignItem,
+            dataSource: campaignItems,
+            pageable: {
+                pageSizes: [10, 15, 20],
+                buttonCount: 5,
+                messages: {
+                    first: "",
+                    previous: "",
+                    next: "",
+                    last: ""
+                }
+            },
+            dataBound: function (e) {
+                if (e.sender.dataSource.total() != 0) {
+                    $("#CampaignItems").show();
+                    $("#NoCampaignItems").hide();
+                }
+                else {
+                    $("#CampaignItems").hide();
+                    $("#NoCampaignItems").show();
+                }
+            },
+            autoBind: false,
+            sortable: true
+        }) ;
+        $("#CampaignItemExplorer").on("CampaignItemSelected", function (e) {
+            explorer.select(e);
+        });
+    }
+
+    var explorer;
+    
+    function onCampaignItemExplorerOpen() {
+        bindCampaignItems(explorer.customerID);
+        var grid = $("#CampaignItems").data("kendoGrid");
+        grid.dataSource.read();
+        
+
+    }
+    function onCampaignItemExplorerClose() {
+        $(".k-overlay").remove();
+    }
+
+    function campaignItemExplorer(select, customerID, MAID) {
+        explorer = new CampaignItemExplorer({
+            select: select,
+            customerID : customerID,
+            MAID:MAID
+        });
+
+        
+        explorer.open();
+    }
+
+    function addCampaignItem(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var campaignItem = this.dataItem(item);
+
+        var event = $.Event("CampaignItemSelected");
+        event.sender = explorer;
+        event.campaignItem = campaignItem;
+        $("#CampaignItemExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("CampaignItems")
+                       .Name("CampaignItemExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onCampaignItemExplorerOpen")
+                                    .Close("onCampaignItemExplorerClose"))
+                       .Visible(false)
+                       .Width(900);
+
+    explorer.Render();
+}
+
+@helper Content()
+{
+<div class="wrapper modal" style="min-width:200px">
+    <fieldset title="CampaignItem Explorer">
+        <legend>Campaign Items</legend>
+        <div id="CampaignItems">
+            
+        </div>
+        <div id="NoCampaignItems">No Campaign Items</div>
+    </fieldset>
+</div>
+    
+}

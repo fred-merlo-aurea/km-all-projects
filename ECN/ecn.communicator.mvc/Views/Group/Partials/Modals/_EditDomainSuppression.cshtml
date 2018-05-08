@@ -1,0 +1,101 @@
+﻿@model ECN_Framework_Entities.Communicator.DomainSuppression
+@using KMEnums
+<script>
+    function EditDomainSuppresion() {
+        clearValidationErrorMessages();
+        var lastControlError = [];
+        var domainRegex = new RegExp("(([a-zA-Z0-9-_]+)[\.]([a-zA-Z0-9]{1,}))$");
+        if ($('#EditDomainName').val() == "") {
+            lastControlError.push({ name: "EditDomainName", message: "Please add a Domain", label: "EditDomainNameLabel", isKendo: false });
+            setValidationClient(lastControlError);
+            return;
+        }
+        else if(!domainRegex.test($("#EditDomainName").val()))
+        {
+            lastControlError.push({ name: "EditDomainName", message: "Invalid Domain", label: "EditDomainNameLabel", isKendo: false });
+            setValidationClient(lastControlError);
+            return;
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddDomainSuppression", "Group")",
+                data: {
+                    DomainSuppressionID: @Model.DomainSuppressionID,
+                    RbType: $('input[name=RadioB]:checked').val(),
+                    TxtDomain: $('#EditDomainName').val()
+                },
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        $("#domainSuppressionGridDiv").html(response[1]);
+                        $('#Domain').val("");
+                        $("#Customer").prop("checked", true);
+
+                        cancelEditDomainSuppression();
+                    }
+                    else {
+                        cancelEditDomainSuppression();
+                        var errorArray = [];
+                        for (var i = 1; i < response.length; i++) {
+                            errorArray.push(response[i]);
+                        }
+                        setValidationServer(errorArray);
+                    }
+                }
+            });
+        }
+    }
+
+    function cancelEditDomainSuppression() {
+        $('#EditDomainName').val("");
+        $("#Customer").prop("checked", true);
+        var win = $("#EditDomainSuppression");
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+</script>
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>
+            Edit Domain Suppression
+        </legend>
+
+        <div class="formbox">
+            <div class="subtitle">Type</div>
+            <div class="formitem formiteminline">
+
+                @Html.HiddenFor(m => m.DomainSuppressionID)
+                @Html.Kendo().RadioButton().Value("Channel").Label("Channel").Checked(Model.BaseChannelID.HasValue).Name("RadioB")
+                <br />
+                @Html.Kendo().RadioButton().Value("Customer").Label("Customer").Checked(Model.CustomerID.HasValue).Name("RadioB")
+
+            </div>
+        </div>
+
+        <div class="formbox">
+            <div class="subtitle" id="EditDomainNameLabel">Domain</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().TextBoxFor(m => m.Domain).Name("EditDomainName")
+            </div>
+        </div>
+
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Save").Content("Save Domain Suppression").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "EditDomainSuppresion()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "cancelEditDomainSuppression()" })
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </fieldset>
+</div>

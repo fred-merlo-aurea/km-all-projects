@@ -1,0 +1,19 @@
+﻿<label>Show Filter<input type="checkbox" data-bind="checked: slideChecked"></label>
+<div id="filterCriteria" data-bind="slide: slideChecked" style="background: #e2dfdf;margin:20px 10px;height:80px;"></div>
+<script>
+kendo.data.binders.slide = kendo.data.Binder.extend({
+    refresh: function() {
+        var value = this.bindings["slide"].get();
+
+        if (value) {
+            $(this.element).slideDown();
+        } else {
+            $(this.element).slideUp();
+        }
+    }
+});
+var viewModel = kendo.observable({
+    slideChecked: false
+});
+kendo.bind(document.body, viewModel);
+</script>

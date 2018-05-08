@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="CreateWeeklySolicitationFilter">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Accesskey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="GroupID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="SolicitationStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SolicitationEndDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZipCodes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateWeeklySolicitationFilterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateWeeklySolicitationFilterResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreateWeeklySolicitationFilterSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateWeeklySolicitationFilter" />
+  </wsdl:message>
+  <wsdl:message name="CreateWeeklySolicitationFilterSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateWeeklySolicitationFilterResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateWeeklySolicitationFilterHttpGetIn">
+    <wsdl:part name="Accesskey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="SolicitationStartDate" type="s:string" />
+    <wsdl:part name="SolicitationEndDate" type="s:string" />
+    <wsdl:part name="ZipCodes" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateWeeklySolicitationFilterHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateWeeklySolicitationFilterHttpPostIn">
+    <wsdl:part name="Accesskey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="SolicitationStartDate" type="s:string" />
+    <wsdl:part name="SolicitationEndDate" type="s:string" />
+    <wsdl:part name="ZipCodes" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateWeeklySolicitationFilterHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="SaversAPISoap">
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will create a filter for the specified GroupID.  ZipCodes XML string must be in this format: &amp;lt;ZipCodes&amp;gt;&amp;lt;ZipCode&amp;gt;55447&amp;lt;/ZipCode&amp;gt;&amp;lt;ZipCode&amp;gt;55388&amp;gt;/ZipCode&amp;gt;&amp;lt;/ZipCodes&amp;gt;</wsdl:documentation>
+      <wsdl:input message="tns:CreateWeeklySolicitationFilterSoapIn" />
+      <wsdl:output message="tns:CreateWeeklySolicitationFilterSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SaversAPIHttpGet">
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will create a filter for the specified GroupID.  ZipCodes XML string must be in this format: &amp;lt;ZipCodes&amp;gt;&amp;lt;ZipCode&amp;gt;55447&amp;lt;/ZipCode&amp;gt;&amp;lt;ZipCode&amp;gt;55388&amp;gt;/ZipCode&amp;gt;&amp;lt;/ZipCodes&amp;gt;</wsdl:documentation>
+      <wsdl:input message="tns:CreateWeeklySolicitationFilterHttpGetIn" />
+      <wsdl:output message="tns:CreateWeeklySolicitationFilterHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SaversAPIHttpPost">
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will create a filter for the specified GroupID.  ZipCodes XML string must be in this format: &amp;lt;ZipCodes&amp;gt;&amp;lt;ZipCode&amp;gt;55447&amp;lt;/ZipCode&amp;gt;&amp;lt;ZipCode&amp;gt;55388&amp;gt;/ZipCode&amp;gt;&amp;lt;/ZipCodes&amp;gt;</wsdl:documentation>
+      <wsdl:input message="tns:CreateWeeklySolicitationFilterHttpPostIn" />
+      <wsdl:output message="tns:CreateWeeklySolicitationFilterHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SaversAPISoap" type="tns:SaversAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <soap:operation soapAction="http://tempuri.org/CreateWeeklySolicitationFilter" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SaversAPISoap12" type="tns:SaversAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <soap12:operation soapAction="http://tempuri.org/CreateWeeklySolicitationFilter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SaversAPIHttpGet" type="tns:SaversAPIHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <http:operation location="/CreateWeeklySolicitationFilter" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SaversAPIHttpPost" type="tns:SaversAPIHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="CreateWeeklySolicitationFilter">
+      <http:operation location="/CreateWeeklySolicitationFilter" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SaversAPI">
+    <wsdl:port name="SaversAPISoap" binding="tns:SaversAPISoap">
+      <soap:address location="http://localhost/ecn.webservice/CustomAPI/SaversAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SaversAPISoap12" binding="tns:SaversAPISoap12">
+      <soap12:address location="http://localhost/ecn.webservice/CustomAPI/SaversAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SaversAPIHttpGet" binding="tns:SaversAPIHttpGet">
+      <http:address location="http://localhost/ecn.webservice/CustomAPI/SaversAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SaversAPIHttpPost" binding="tns:SaversAPIHttpPost">
+      <http:address location="http://localhost/ecn.webservice/CustomAPI/SaversAPI.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

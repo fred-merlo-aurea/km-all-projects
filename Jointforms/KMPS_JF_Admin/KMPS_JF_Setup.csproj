@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2A1E2D78-871D-4633-8A5E-AA2D2A286DC2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KMPS_JF_Setup</RootNamespace>
+    <AssemblyName>KMPS_JF_Setup</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=16.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPartyDLLs\Dlls\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>..\..\ThirdPartyDLLs\Telerik\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Default\ImageEditor.css" />
+    <Content Include="App_Themes\Default\RadCustomStyles.css" />
+    <Content Include="Images\icon-copy.png" />
+    <Content Include="scripts\telerik_replaceChars.js" />
+    <Content Include="ToolsFile.xml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\DataFunctions.cs" />
+    <Compile Include="Class\ECNUpdate.cs" />
+    <Compile Include="Class\JFSession.cs" />
+    <Compile Include="Class\myReorderList.cs" />
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Login.Master.cs">
+      <DependentUpon>Login.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Login.Master.designer.cs">
+      <DependentUpon>Login.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPages\Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPages\Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Publisher\AJAX_Servlet.aspx.cs">
+      <DependentUpon>AJAX_Servlet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\AJAX_Servlet.aspx.designer.cs">
+      <DependentUpon>AJAX_Servlet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\FieldSettings.aspx.cs">
+      <DependentUpon>FieldSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\FieldSettings.aspx.designer.cs">
+      <DependentUpon>FieldSettings.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\LeftMenu.ascx.cs">
+      <DependentUpon>LeftMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\LeftMenu.ascx.designer.cs">
+      <DependentUpon>LeftMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\NewPub_FieldForm.aspx.cs">
+      <DependentUpon>NewPub_FieldForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\NewPub_FieldForm.aspx.designer.cs">
+      <DependentUpon>NewPub_FieldForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Newsletter_UDF.aspx.cs">
+      <DependentUpon>Newsletter_UDF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Newsletter_UDF.aspx.designer.cs">
+      <DependentUpon>Newsletter_UDF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\NonQualFieldSettings.aspx.cs">
+      <DependentUpon>NonQualFieldSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\NonQualFieldSettings.aspx.designer.cs">
+      <DependentUpon>NonQualFieldSettings.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\popup.aspx.cs">
+      <DependentUpon>popup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\popup.aspx.designer.cs">
+      <DependentUpon>popup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\popuptest.aspx.cs">
+      <DependentUpon>popuptest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\popuptest.aspx.designer.cs">
+      <DependentUpon>popuptest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\PublisherAdd.aspx.cs">
+      <DependentUpon>PublisherAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\PublisherAdd.aspx.designer.cs">
+      <DependentUpon>PublisherAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\PublisherList.aspx.cs">
+      <DependentUpon>PublisherList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\PublisherList.aspx.designer.cs">
+      <DependentUpon>PublisherList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_AutoSubscription.aspx.cs">
+      <DependentUpon>Pub_AutoSubscription.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_AutoSubscription.aspx.designer.cs">
+      <DependentUpon>Pub_AutoSubscription.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_Categories.aspx.cs">
+      <DependentUpon>Pub_Categories.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_Categories.aspx.designer.cs">
+      <DependentUpon>Pub_Categories.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_CustomPage.aspx.cs">
+      <DependentUpon>Pub_CustomPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_CustomPage.aspx.designer.cs">
+      <DependentUpon>Pub_CustomPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_Events.aspx.cs">
+      <DependentUpon>Pub_Events.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_Events.aspx.designer.cs">
+      <DependentUpon>Pub_Events.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_Forms.aspx.cs">
+      <DependentUpon>Pub_Forms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_Forms.aspx.designer.cs">
+      <DependentUpon>Pub_Forms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_FormsCreate.aspx.cs">
+      <DependentUpon>Pub_FormsCreate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_FormsCreate.aspx.designer.cs">
+      <DependentUpon>Pub_FormsCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_Newsletters.aspx.cs">
+      <DependentUpon>Pub_Newsletters.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_Newsletters.aspx.designer.cs">
+      <DependentUpon>Pub_Newsletters.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_RelatedPubs.aspx.cs">
+      <DependentUpon>Pub_RelatedPubs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_RelatedPubs.aspx.designer.cs">
+      <DependentUpon>Pub_RelatedPubs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Publisher\Pub_UDF.aspx.cs">
+      <DependentUpon>Pub_UDF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Publisher\Pub_UDF.aspx.designer.cs">
+      <DependentUpon>Pub_UDF.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Default\Default.skin" />
+    <Content Include="App_Themes\Default\RadEditor.skin" />
+    <Content Include="App_Data\RadSpell\de-DE.tdf" />
+    <Content Include="App_Data\RadSpell\en-US.tdf" />
+    <Content Include="App_Data\RadSpell\fr-FR.tdf" />
+    <None Include="assets\skins\sam\Thumbs.db" />
+    <None Include="assets\Thumbs.db" />
+    <None Include="CSS\highslide\graphics\outlines\Outlines.psd" />
+    <Content Include="App_Themes\Default\Default.css" />
+    <Content Include="Login.aspx" />
+    <Content Include="MasterPages\Site.Master" />
+    <Content Include="MasterPages\Login.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\colorpicker-min.js" />
+    <Content Include="assets\fonts-min.css" />
+    <Content Include="assets\hue_thumb.png" />
+    <Content Include="assets\picker_thumb.png" />
+    <Content Include="assets\skins\sam\asc.gif" />
+    <Content Include="assets\skins\sam\autocomplete.css" />
+    <Content Include="assets\skins\sam\blankimage.png" />
+    <Content Include="assets\skins\sam\button.css" />
+    <Content Include="assets\skins\sam\calendar.css" />
+    <Content Include="assets\skins\sam\colorpicker.css" />
+    <Content Include="assets\skins\sam\container.css" />
+    <Content Include="assets\skins\sam\datatable.css" />
+    <Content Include="assets\skins\sam\desc.gif" />
+    <Content Include="assets\skins\sam\dt-arrow-dn.png" />
+    <Content Include="assets\skins\sam\dt-arrow-up.png" />
+    <Content Include="assets\skins\sam\editor-knob.gif" />
+    <Content Include="assets\skins\sam\editor-sprite-active.gif" />
+    <Content Include="assets\skins\sam\editor-sprite.gif" />
+    <Content Include="assets\skins\sam\editor.css" />
+    <Content Include="assets\skins\sam\header_background.png" />
+    <Content Include="assets\skins\sam\hue_bg.png" />
+    <Content Include="assets\skins\sam\imagecropper.css" />
+    <Content Include="assets\skins\sam\layout.css" />
+    <Content Include="assets\skins\sam\layout_sprite.png" />
+    <Content Include="assets\skins\sam\logger.css" />
+    <Content Include="assets\skins\sam\menu-button-arrow-disabled.png" />
+    <Content Include="assets\skins\sam\menu-button-arrow.png" />
+    <Content Include="assets\skins\sam\menu.css" />
+    <Content Include="assets\skins\sam\menubaritem_submenuindicator.png" />
+    <Content Include="assets\skins\sam\menubaritem_submenuindicator_disabled.png" />
+    <Content Include="assets\skins\sam\menuitem_checkbox.png" />
+    <Content Include="assets\skins\sam\menuitem_checkbox_disabled.png" />
+    <Content Include="assets\skins\sam\menuitem_submenuindicator.png" />
+    <Content Include="assets\skins\sam\menuitem_submenuindicator_disabled.png" />
+    <Content Include="assets\skins\sam\picker_mask.png" />
+    <Content Include="assets\skins\sam\profilerviewer.css" />
+    <Content Include="assets\skins\sam\resize.css" />
+    <Content Include="assets\skins\sam\simpleeditor.css" />
+    <Content Include="assets\skins\sam\skin.css" />
+    <Content Include="assets\skins\sam\split-button-arrow-active.png" />
+    <Content Include="assets\skins\sam\split-button-arrow-disabled.png" />
+    <Content Include="assets\skins\sam\split-button-arrow-focus.png" />
+    <Content Include="assets\skins\sam\split-button-arrow-hover.png" />
+    <Content Include="assets\skins\sam\split-button-arrow.png" />
+    <Content Include="assets\skins\sam\sprite.png" />
+    <Content Include="assets\skins\sam\tabview.css" />
+    <Content Include="assets\skins\sam\transparent.gif" />
+    <Content Include="assets\skins\sam\treeview-loading.gif" />
+    <Content Include="assets\skins\sam\treeview-sprite.gif" />
+    <Content Include="assets\skins\sam\treeview.css" />
+    <Content Include="assets\skins\sam\wait.gif" />
+    <Content Include="assets\skins\sam\yuitest.css" />
+    <Content Include="assets\slider-min.js" />
+    <Content Include="assets\utilities.js" />
+    <Content Include="CSS\ecnHighslide-styles.css" />
+    <Content Include="CSS\ecnHighslide.css" />
+    <Content Include="CSS\highslide\graphics\close.png" />
+    <Content Include="CSS\highslide\graphics\controlbar2.gif" />
+    <Content Include="CSS\highslide\graphics\controlbar3.gif" />
+    <Content Include="CSS\highslide\graphics\controlbar4-hover.gif" />
+    <Content Include="CSS\highslide\graphics\controlbar4.gif" />
+    <Content Include="CSS\highslide\graphics\fullexpand.gif" />
+    <Content Include="CSS\highslide\graphics\geckodimmer.png" />
+    <Content Include="CSS\highslide\graphics\loader.gif" />
+    <Content Include="CSS\highslide\graphics\loader.white.gif" />
+    <Content Include="CSS\highslide\graphics\outlines\beveled.png" />
+    <Content Include="CSS\highslide\graphics\outlines\drop-shadow.png" />
+    <Content Include="CSS\highslide\graphics\outlines\glossy-dark.png" />
+    <Content Include="CSS\highslide\graphics\outlines\outer-glow.png" />
+    <Content Include="CSS\highslide\graphics\outlines\rounded-black.png" />
+    <Content Include="CSS\highslide\graphics\outlines\rounded-white.png" />
+    <Content Include="CSS\highslide\graphics\resize.gif" />
+    <Content Include="CSS\highslide\graphics\zoomin.cur" />
+    <Content Include="CSS\highslide\graphics\zoomout.cur" />
+    <Content Include="CSS\styles.css" />
+    <Content Include="CSS\tabStyle.css" />
+    <Content Include="default.aspx" />
+    <Content Include="Images\animated-loading-orange-big.gif" />
+    <Content Include="Images\animated-loading-orange.gif" />
+    <Content Include="Images\arrow-down.gif" />
+    <Content Include="Images\arrow-up.gif" />
+    <Content Include="Images\bar.gif" />
+    <Content Include="Images\bg-menu-main.png" />
+    <Content Include="Images\bg_gradient-left.png" />
+    <Content Include="Images\bg_nav.gif" />
+    <Content Include="Images\body_bg.gif" />
+    <Content Include="Images\boxbottomleft.gif" />
+    <Content Include="Images\boxbottomright.gif" />
+    <Content Include="Images\boxmiddleleft.gif" />
+    <Content Include="Images\boxmiddleright.gif" />
+    <Content Include="Images\boxtopbg.gif" />
+    <Content Include="Images\boxupperleft.gif" />
+    <Content Include="Images\boxupperright.gif" />
+    <Content Include="Images\button.gif" />
+    <Content Include="Images\buttonMedium.gif" />
+    <Content Include="Images\buttonSmall.GIF" />
+    <Content Include="Images\close.png" />
+    <Content Include="Images\collapse.jpg" />
+    <Content Include="Images\collapse_blue.jpg" />
+    <Content Include="Images\cp_button.png" />
+    <Content Include="Images\down-arrow.gif" />
+    <Content Include="Images\expand.jpg" />
+    <Content Include="Images\expand_blue.jpg" />
+    <Content Include="Images\header-logo.gif" />
+    <Content Include="Images\ic-alert.gif" />
+    <Content Include="Images\ic-alert.jpg" />
+    <Content Include="Images\ic-error.gif" />
+    <Content Include="Images\icon-add.gif" />
+    <Content Include="Images\icon-calendar.gif" />
+    <Content Include="Images\icon-cancel.gif" />
+    <Content Include="Images\icon-delete.gif" />
+    <Content Include="Images\icon-edit.gif" />
+    <Content Include="Images\icon-preview.gif" />
+    <Content Include="Images\icon-save.gif" />
+    <Content Include="Images\icon-settings-edit.gif" />
+    <Content Include="Images\icon-settings-edit.png" />
+    <Content Include="Images\icon-settings.gif" />
+    <Content Include="Images\icon-settings.png" />
+    <Content Include="Images\JointFormsLogo.gif" />
+    <Content Include="Images\JointFormsLogo.png" />
+    <Content Include="Images\jointformspsd.gif" />
+    <Content Include="Images\KMFB-logo.gif" />
+    <Content Include="Images\KMFB1-logo.gif" />
+    <Content Include="Images\loader.white.gif" />
+    <Content Include="Images\loading.gif" />
+    <Content Include="Images\loadingAnimation.gif" />
+    <Content Include="Images\Pub-label.gif" />
+    <Content Include="Images\required_field.jpg" />
+    <Content Include="Images\required_field_de.jpg" />
+    <Content Include="Images\required_field_es.jpg" />
+    <Content Include="Images\spacer.gif" />
+    <Content Include="Images\tick.gif" />
+    <Content Include="Images\up-arrow.gif" />
+    <Content Include="Publisher\AJAX_Servlet.aspx" />
+    <Content Include="Publisher\FieldSettings.aspx" />
+    <Content Include="Publisher\LeftMenu.ascx" />
+    <Content Include="Publisher\NewPub_FieldForm.aspx" />
+    <Content Include="Publisher\Newsletter_UDF.aspx" />
+    <Content Include="Publisher\NonQualFieldSettings.aspx" />
+    <Content Include="Publisher\popup.aspx" />
+    <Content Include="Publisher\popuptest.aspx" />
+    <Content Include="Publisher\PublisherAdd.aspx" />
+    <Content Include="Publisher\PublisherList.aspx" />
+    <Content Include="Publisher\Pub_AutoSubscription.aspx" />
+    <Content Include="Publisher\Pub_Categories.aspx" />
+    <Content Include="Publisher\Pub_CustomPage.aspx" />
+    <Content Include="Publisher\Pub_Events.aspx" />
+    <Content Include="Publisher\Pub_Forms.aspx" />
+    <Content Include="Publisher\Pub_FormsCreate.aspx" />
+    <Content Include="Publisher\Pub_Newsletters.aspx" />
+    <Content Include="Publisher\Pub_RelatedPubs.aspx" />
+    <Content Include="Publisher\Pub_UDF.aspx" />
+    <Content Include="PubLogo\appl_small.gif" />
+    <Content Include="PubLogo\Pub-label.gif" />
+    <Content Include="scripts\calendar\agenda.js" />
+    <Content Include="scripts\calendar\calbtn.gif" />
+    <Content Include="scripts\calendar\fck_dialog.css" />
+    <Content Include="scripts\calendar\ipopeng.htm" />
+    <Content Include="scripts\calendar\normal.css" />
+    <Content Include="scripts\calendar\normal.js" />
+    <Content Include="scripts\calendar\plugins.js" />
+    <Content Include="scripts\calendar\Templatestyle.js" />
+    <Content Include="scripts\highslide\graphics\close.png" />
+    <Content Include="scripts\highslide\graphics\controlbar2.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar3.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4-hover.gif" />
+    <Content Include="scripts\highslide\graphics\controlbar4.gif" />
+    <Content Include="scripts\highslide\graphics\fullexpand.gif" />
+    <Content Include="scripts\highslide\graphics\geckodimmer.png" />
+    <Content Include="scripts\highslide\graphics\loader.gif" />
+    <Content Include="scripts\highslide\graphics\loader.white.gif" />
+    <Content Include="scripts\highslide\graphics\outlines\beveled.png" />
+    <Content Include="scripts\highslide\graphics\outlines\drop-shadow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\glossy-dark.png" />
+    <Content Include="scripts\highslide\graphics\outlines\outer-glow.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-black.png" />
+    <Content Include="scripts\highslide\graphics\outlines\rounded-white.png" />
+    <Content Include="scripts\highslide\graphics\resize.gif" />
+    <Content Include="scripts\highslide\graphics\zoomin.cur" />
+    <Content Include="scripts\highslide\graphics\zoomout.cur" />
+    <Content Include="scripts\highslide\highslide-full.js" />
+    <Content Include="scripts\highslide\highslide-full.packed.js" />
+    <Content Include="scripts\highslide\highslide-with-html.js" />
+    <Content Include="scripts\highslide\highslide-with-html.packed.js" />
+    <Content Include="scripts\highslide\highslide.js" />
+    <Content Include="scripts\highslide\highslide.packed.js" />
+    <Content Include="scripts\highslide\swfobject.js" />
+    <Content Include="scripts\Thickbox\jquery.js" />
+    <Content Include="scripts\Thickbox\thickbox.css" />
+    <Content Include="scripts\Thickbox\thickbox.js" />
+    <Content Include="scripts\Validation.js" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <None Include="Resources\Icon1.ico" />
+    <None Include="scripts\highslide\graphics\outlines\Outlines.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KMPS_JF_Objects\KMPS_JF_Objects.csproj">
+      <Project>{D9D1F242-E750-4B2E-95F6-79C75E77F7C8}</Project>
+      <Name>KMPS_JF_Objects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>59425</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/KMPS_JF_Setup</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

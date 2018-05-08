@@ -1,0 +1,12 @@
+﻿@using KMEnums
+@using KMModels.Controls
+
+<script>
+    array[@((int)ControlType.ListBox)] = {
+        name: '@ControlType.ListBox',
+        object: @Html.Raw(Json.Encode(new ListBox(true))),
+        control: "<select class='input multiple' size='3' multiple='multiple'>\
+                    <option ng-repeat='item in control.Items' ng-value='item.Value' ng-selected='item.Default'>{{item.Text}}</option>\
+                  </select>"
+    }
+</script>

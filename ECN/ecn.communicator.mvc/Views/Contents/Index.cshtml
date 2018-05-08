@@ -1,0 +1,63 @@
+﻿@model ecn.communicator.mvc.Models.FolderExplorer
+@using ecn.communicator.mvc.Infrastructure;
+@{
+    ViewBag.Title = "Index";
+}
+<script>
+    function dataBound()
+    {
+        $('#folderPanel').height($('#contentsGridPanel').height());
+        ActionMenu_OnGridDataBoundEvent();
+    }
+
+    var currentFolderID = 0;
+    $(document).ready(function () {
+        $('li.k-item').hover(function () {
+            var id = $(this).attr('data-id');
+            $(this).children('div').children('span.k-in').attr('data-id', id);
+        });
+        $('li.k-item div span.k-in').click(function () {
+            var id = parseInt($(this).attr('data-id'));
+            if (id !== currentFolderID) {
+                var req = $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Search")' + '?folderID=' + id
+                });
+                req.done(function (resp) {
+                    $("#contentsGridPanel").html(resp);
+                });
+                currentFolderID = id;
+
+            }
+        });
+    });
+</script>
+<style>
+    #folderPanel {
+        width: 25%;
+        float: left;
+        overflow: auto;
+    }
+
+    #contentsGridPanel {
+        width: 75%;
+        float: right;
+    }
+</style>
+<h3> Content > Manage Content </h3>
+<div id="errorPanel">@Html.ECNErrors(Model.Errors)</div>
+<hr />
+<div id="notificationDiv"></div>
+<div id="searchToolbarPanel">
+    @Html.Partial("Partials/_SearchToolbar")
+</div>
+<br />
+<br />
+<hr />
+<!-- Folder panel in partial view-->
+@Html.Partial("Partials/_FolderTree", Model.FolderTree)
+<div id="contentsGridPanel">
+    @Html.Partial("Partials/_ContentGrid", ECN_Framework_BusinessLayer.Communicator.Content.GetByFolderIDCustomerID(0, ECN_Framework_BusinessLayer.Application.ECNSession.CurrentSession().CurrentUser, false))
+</div>
+<br />
+<br />

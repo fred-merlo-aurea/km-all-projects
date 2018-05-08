@@ -1,0 +1,113 @@
+﻿<style>
+    .k-grid {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    #Grid {
+        display: inline-block;
+        width: auto;
+        table-layout: fixed;
+    }
+
+    #Grid table {
+        width: auto;
+        table-layout: fixed;
+    }
+
+    #gridWrapp {
+        overflow: auto;
+    }
+</style>
+
+<div style="float: left; margin: 10px">
+    @{
+        if (ViewBag.Message != null && string.IsNullOrEmpty(ViewBag.Message) == false)
+        {
+            if (ViewBag.IsError == true)
+            {
+                <span style="color:red;">@ViewBag.Message</span>
+            }
+            else
+            {
+                <span>@ViewBag.Message</span>
+            }
+        }
+    }
+</div>
+
+<div id="gridWrapp" class="k-content" style="clear: both;">
+    <div id="grid">
+        @(Html.Kendo().Grid<dynamic>()
+            .Name("Grid")
+            .DataSource(dataSource => dataSource
+               .Ajax()
+               .Model(model =>
+               {
+                   //Define the model
+                   foreach (var prop in Model.Data.GetType().GetProperties())
+                   {
+                       string propName = prop.Name;                       
+                       model.Field(propName, typeof(string));
+                   }
+                   //foreach (System.Data.DataColumn column in Model.Data.Columns)
+                   //{
+                   //    model.Field(column.ColumnName, column.DataType);
+                   //}
+               })
+               //Unfortunately you need an ajax call that will execute and return the same data of the same query.
+               //Alternatively you can save the data from the Index action to a session variable and restore it in Grid_Read,
+               //but I would probably suggest a TOP 1 query at first, and a paged call in Grid_Read, depending on the number of rows returned...
+               //This code does neither, so you should probably implement a solution for the two calls...!
+               .Read(read => read.Action("FileViewer_Read", "FileTools"))
+            )
+            .Columns(columns =>
+            {
+                //Define the columns
+                foreach (var c in Model.Bind)
+                    columns.Bound(c.Value, c.Key);
+            })
+            .Groupable()
+            .Sortable(s => s.AllowUnsort(true))
+            .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+               .Pageable(pageable => pageable
+               .Refresh(false)
+               .PageSizes(true)
+               .ButtonCount(5)
+            )
+        )
+        @*@(Html.Kendo().Grid<dynamic>()
+            .Name("Grid")
+            .Columns(columns =>
+            {
+                //Define the columns
+                foreach (var c in Model.Bind)
+                    columns.Bound(c.Value, c.Key);
+            })
+            .DataSource(dataSource => dataSource
+               .Ajax()
+               .Model(model =>
+               {
+                   //Define the model
+                   foreach (System.Data.DataColumn column in Model.Data.Columns)
+                   {
+                       model.Field(column.ColumnName, column.DataType);
+                   }
+               })
+               //Unfortunately you need an ajax call that will execute and return the same data of the same query.
+               //Alternatively you can save the data from the Index action to a session variable and restore it in Grid_Read,
+               //but I would probably suggest a TOP 1 query at first, and a paged call in Grid_Read, depending on the number of rows returned...
+               //This code does neither, so you should probably implement a solution for the two calls...!
+               .Read(read => read.Action("FileViewer_Read", "FileTools"))
+            )
+            .Groupable()
+            .Sortable(s => s.AllowUnsort(true))
+            .Filterable(ftb => ftb.Mode(GridFilterMode.Menu))
+               .Pageable(pageable => pageable
+               .Refresh(false)
+               .PageSizes(true)
+               .ButtonCount(5)
+            )
+        )*@
+    </div>
+</div>

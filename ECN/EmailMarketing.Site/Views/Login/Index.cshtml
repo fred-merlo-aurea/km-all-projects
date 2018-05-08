@@ -1,0 +1,40 @@
+﻿@model EmailMarketing.Site.Models.LoginUserViewModel
+
+@{
+    Layout = "~/Views/Shared/_UnauthenticatedLayout.cshtml";
+}
+<div id="login">
+    <h2>
+        <img src="@ViewBag.BrandingImageSrc" />
+    </h2>
+    @using (Html.BeginForm()) {
+        <fieldset>
+            <p><label for="user">User Name</label></p>
+            <p><input type="text" id="user" name="user" tabindex="1" value=""></p>
+
+            <p><label for="password">Password</label>@Html.ActionLink("Forgot Password?", "Forgot", new { }, new { style="float:right;" })</p>
+            <p><input type="password" id="password" value="" tabindex="2" name="password"></p>
+            @if(Model.NoActiveRoles)
+            {
+                <p>There are no roles currently associated with this User.  Please contact your administrator.</p>
+            }
+            else if(Model.UserIsLocked)
+            {
+                <p>This User is currently locked.  Please contact Customer Service to continue.</p>
+            }
+            else if(Model.UserIsDisabled)
+            {
+                <p>This User is currently disabled.  Please contact Customer Service to continue.</p>
+            }
+            else if (Model.InvalidUsername_Password)
+            {
+                <p>Invalid Username/Password.</p>
+            }
+            else if(Model.NoActive_Clients)
+            {
+                <p>Error!  Your default Customer Account is Inactive.  Please contact your User Administrator for assistance.</p>
+            }
+            <p><input type="submit" value="Sign In"></p>
+        </fieldset>
+    }
+</div>

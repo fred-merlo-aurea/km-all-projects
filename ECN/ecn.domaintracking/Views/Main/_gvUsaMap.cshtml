@@ -1,0 +1,32 @@
+﻿@Model
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['geochart']}]}"></script>
+<script language="javascript" type="text/javascript">
+    google.setOnLoadCallback(drawMarkersMap);
+    function drawMarkersMap() {
+        
+            var aoa = [["City", "Page Requests"]];
+            @foreach (DataRow row in Model.Rows)
+            {
+                var cityState = row["City"] + " " + row["State"];
+                var hitCount = row["Count"];
+                <text>
+            aoa.push(["@cityState", @hitCount]);
+            </text>
+            }
+            var data = google.visualization.arrayToDataTable(aoa);
+            var options = {
+                region: "US",
+                resolution: "provinces",
+                enableRegionInteractivity: "true",
+                displayMode: "markers",
+                colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+                legend: "none"
+            };
+            var chart = new google.visualization.GeoChart(document.getElementById('USA_div'));
+            chart.draw(data, options);
+       
+    };
+</script>
+<div id="USA_div" style="margin-left: 140px; width: 500px;"></div>
+<div id="USA_div_unknown" style="margin-left: 140px; width: 500px;"></div>
+<br />

@@ -1,0 +1,323 @@
+﻿@model UAS.Web.Models.Circulations.Search
+@{
+    ViewBag.Title = "Search";
+  
+}
+
+<style>
+    .modal-dialog {
+        width: 60%;
+    }
+    .lbl {
+        text-align: left;
+        padding-right: 5px;
+    }
+    #btnReset,
+    #btnSearch {
+        position: relative;
+        margin-top: 1%;
+    }
+    .k-grid td {
+        overflow: hidden;
+    }
+    th {
+        text-align: center;
+    }
+    .OneCellTextBox {
+        width: 1px;
+    }
+
+    td.OneCell {
+        width: 28%;
+    }
+
+    td.HalfCell {
+        width: 14%;
+    }
+</style>
+
+<script>
+   
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                Search();
+                event.preventDefault();
+                return false;
+            }
+        });
+        var clientID = $("#SelectedClientID").val();
+        BindDropDownList({
+            ControlID: "search_kddlCountry",
+            URL :targetCountryUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel : "",
+            DataType: "json"
+        })
+
+        BindDropDownList({
+            ControlID: "search_kddlProduct",
+            URL: "/uas.web/CommonMethods/GetCircProducts?clientId="+clientID,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel : "",
+            DataType: "json",
+            SelectedValue: $("#SelectedProductID").val()
+        });
+       
+        BindDropDownList({
+            ControlID: "search_kddlRegion",
+            URL :targetRegionUrl+"?countryID="+$("#search_kddlCountry").val(),
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            sort:true,
+            DataType: "json"
+        })
+        
+
+        var SetStateDataSource= function(){
+           
+            BindDropDownList({
+                ControlID: "search_kddlRegion",
+                URL :targetRegionUrl+"?countryID="+$("#search_kddlCountry").val(),
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "",
+                sort: true,
+                DataType: "json"
+            })
+           
+        }
+        var Reset = function () {
+
+            var countryDropdownList = $("#search_kddlCountry").data("kendoDropDownList");
+            var productDropdownList = $("#search_kddlProduct").data("kendoDropDownList");
+            var regionDropdownList = $("#search_kddlRegion").data("kendoDropDownList");
+            productDropdownList.value($("#SelectedProductID").val());
+            countryDropdownList.text('');
+            regionDropdownList.text('');
+            $('#search_txtPhoneNumber').val('');
+            $('#search_txtUserTitle').val('');
+            $('#search_txtSubscriptionID').val('');
+            $('#search_txtAccountNumber').val('');
+            $('#search_txtCompany').val('');
+            $('#search_txtZipCode').val('');
+            $('#search_txtFirstName').val('');
+            $('#search_txtAddress').val('');
+            $('#search_txtEmail').val('');
+            $('#search_txtLastName').val('');
+            $('#search_txtCity').val('');
+            $('#search_txtSequenceNumber').val('');
+            $("#ResultsTable").html('');
+
+        };
+        $('#btnReset').click(function () {
+            Reset();
+        });
+
+        $('#btnSearch').click(function () {
+            Search();
+        });
+
+        $("#search_kddlCountry").on("change", function(){
+
+            SetStateDataSource();
+
+        });
+
+        $('#btnNewSubscription').click(function () {
+            var selProdID = $("#SelectedProductID").val();
+            window.location.href = "/UAS.Web/Search/Subscribe?PubID="+selProdID;
+        });
+
+
+    });
+    function ValidateModel(model) {
+        if ((model.Product && model.Product != "Product") || model.Address || model.UserTitle || model.PhoneNumber || model.SequenceNumber || model.City
+            || model.Company || model.Email || model.FirstName || model.Country || model.SubscriptionID || model.AccountNumber || model.LastName || model.ZipCode || model.State) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function Search() {
+
+        var countryDropdownList = $("#search_kddlCountry").data("kendoDropDownList");
+        var productDropdownList = $("#search_kddlProduct").data("kendoDropDownList");
+        var regionDropdownList = $("#search_kddlRegion").data("kendoDropDownList");
+
+        var model ={
+            Product:productDropdownList.value(),
+            Address:$('#search_txtAddress').val(),
+            UserTitle:$('#search_txtUserTitle').val(),
+            PhoneNumber:$('#search_txtPhoneNumber').val(),
+            SequenceNumber:$('#search_txtSequenceNumber').val(),
+            City:$('#search_txtCity').val(),
+            Company:$('#search_txtCompany').val(),
+            Email:$('#search_txtEmail').val(),
+            FirstName:$('#search_txtFirstName').val(),
+            Country:countryDropdownList.text(),
+            SubscriptionID:$('#search_txtSubscriptionID').val(),
+            AccountNumber:$('#search_txtAccountNumber').val(),
+            LastName:$('#search_txtLastName').val(),
+            ZipCode:$('#search_txtZipCode').val(),
+            State:regionDropdownList.value()
+        }
+        if (ValidateModel(model)) {
+             AjaxPostMethod({
+                Type: "POST",
+                URL: '/uas.web/search/Index',
+                PostModel: model,
+                TargetControlId: "ResultsTable",
+                FailureControlID: "validationErrorDiv"
+            });
+            $('#validationErrorDiv').hide();
+            $('#ResultsTable').show();
+        }
+        else {
+            $('#alertMsgMain').text("Please enter atleast one selection criteria.");
+            $('#validationErrorDiv').show();
+            $('#ResultsTable').hide();
+        }
+       
+      }
+</script>
+
+<div class="gridttl">
+    <div class="gridttlbox">
+        <span>@ViewBag.Title</span>
+     </div>
+</div>
+
+<div id="notificationDiv">
+</div>
+
+<div>
+
+    @using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "MyForm" }))
+    {
+        <br />
+        <div id="validationErrorDiv" style="display:none;">
+            <span>
+                <img src='@Url.Content("~/Images/Notifications/Error_New.png")' height="20" width="20" style="margin:0px;padding:0px;" />
+                <span id="alertMsgMain" style="vertical-align:top;margin-top:5px;"></span>
+            </span>
+        </div>
+        //Search Panel
+        <div>
+            <div>
+                <table style="width:100%;">
+                    <tr>
+                        <td colspan="8" align="right">
+                            @Html.Kendo().Button().Name("Add").Content("Add New Subscription<i class='km-icon icon-kmplus-circled-1'></i>").HtmlAttributes(new { type = "button", id = "btnNewSubscription", @class = "btn-blue2 float-right" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="lbl">Product:</label></td>
+                        <td>
+                            <input id="search_kddlProduct" name="Product" style="width:70%;" />
+                        </td>
+                        <td><label class="lbl">Address: </label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.Address).HtmlAttributes(new { style = "width:70%;", tabindex = 4, id= "search_txtAddress" })
+                        </td>
+                        <td><label class="lbl">Title:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.UserTitle).HtmlAttributes(new { style = "width:70%;", tabindex = 9, id = "search_txtUserTitle" })
+                        </td>
+                        <td><label class="lbl">Phone:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.PhoneNumber).HtmlAttributes(new { style = "width:70%;", tabindex = 12, id = "search_txtPhoneNumber" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="lbl">Sequence#:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.SequenceNumber).HtmlAttributes(new { style = "width:70%;", tabindex = 1, id = "search_txtSequenceNumber" })
+                        </td>
+                        <td><label class="lbl">City:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.City).HtmlAttributes(new { style = "width:70%;", tabindex = 5, id = "search_txtCity" })
+                        </td>
+                        <td><label class="lbl">Company:</label></td>
+                        <td>@Html.Kendo().TextBoxFor(x => x.Company).HtmlAttributes(new { style = "width:70%;", tabindex = 10, id = "search_txtCompany" })</td>
+                        <td><label class="lbl">Email: </label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.Email).HtmlAttributes(new { style = "width:70%;", tabindex = 13, id = "search_txtEmail" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="lbl">First Name:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.FirstName).HtmlAttributes(new { style = "width:70%;", tabindex = 2, id = "search_txtFirstName" })
+                        </td>
+                        <td><label class="lbl">Country:</label></td>
+                        <td>
+                            <input id="search_kddlCountry" name="Country" style="width:70%;" tabindex=6 />
+                        </td>
+
+                        <td><label class="lbl">Subscription ID:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.SubscriptionID).HtmlAttributes(new { style = "width:70%;", tabindex = 11, id = "search_txtSubscriptionID" })
+
+                        </td>
+                        <td><label class="lbl">Old Acct#:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.AccountNumber).HtmlAttributes(new { style = "width:70%;", tabindex = 14, id = "search_txtAccountNumber" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="lbl">Last Name:</label></td>
+                        <td>
+                            @Html.Kendo().TextBoxFor(x => x.LastName).HtmlAttributes(new { style = "width:70%;", tabindex = 3, id = "search_txtLastName" })
+                        </td>
+                        <td><label class="lbl">State:</label></td>
+                        <td colspan="2">
+                            <input id="search_kddlRegion" name="State" style="width:30%;" tabindex=7 />
+                            <label class="lbl">Zip:</label>
+                            @Html.Kendo().TextBoxFor(x => x.ZipCode).HtmlAttributes(new { style = "width:20%;", tabindex = 8, id = "search_txtZipCode" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <div>
+                    <button type="button" class="btn-blue2" id="btnSearch">Search</button>
+                    <button type="button" class="btn-blue2" id="btnReset" value="Reset">Reset</button>
+                </div>
+            </div>
+            <br />
+        </div>
+        //Result Grid View
+        <div id="ResultsTable">
+        </div>
+
+    }
+
+    @{
+        Html.Kendo()
+            .Window()
+            .Modal(true)
+            .Title(false)
+            .Animation(false)
+            .Name("FormWindow")
+            .Content(@<text>
+                @using (Ajax.BeginForm("Action", new AjaxOptions
+                {
+                    HttpMethod = "GET",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "FormContent",
+
+                }))
+                {
+                    <div id="FormContent"></div>
+                }
+            </text>
+        )
+        .Visible(false)
+        .Render();
+    }
+</div>
+

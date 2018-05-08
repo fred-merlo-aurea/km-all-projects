@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ECN5_Creator</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{0db62701-6c52-4419-917c-f3e6e84f7c2a}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ECN5_Creator</RootNamespace>
+    <AssemblyName>ECN5_Creator</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71562,71502,71558</SuppressTSqlWarnings>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\cd.sql" />
+    <Build Include="dbo\Tables\page_backup_10032012.sql" />
+    <Build Include="dbo\Tables\headerfooters_backup_10022012.sql" />
+    <Build Include="dbo\Tables\Code.sql" />
+    <Build Include="dbo\Tables\CodeType.sql" />
+    <Build Include="dbo\Tables\dtproperties.sql" />
+    <Build Include="dbo\Tables\Events.sql" />
+    <Build Include="dbo\Tables\HeaderFooters.sql" />
+    <Build Include="dbo\Tables\Media.sql" />
+    <Build Include="dbo\Tables\Menus.sql" />
+    <Build Include="dbo\Tables\Page.sql" />
+    <Build Include="dbo\Tables\Creator_Templates.sql" />
+    <Build Include="Security\db_executor.sql" />
+    <Build Include="Security\Developer.sql" />
+    <Build Include="Security\QA.sql" />
+    <Build Include="Security\ecn5.sql" />
+    <Build Include="Security\ecn5_1.sql" />
+    <Build Include="Security\ecn5writer.sql" />
+    <Build Include="Security\ecn5writer_1.sql" />
+    <Build Include="Security\webuser.sql" />
+    <Build Include="Security\webuser_1.sql" />
+    <Build Include="Security\bill.hipps.sql" />
+    <Build Include="Security\bill_1.hipps.sql" />
+    <Build Include="Security\justin.welter.sql" />
+    <Build Include="Security\justin_1.welter.sql" />
+    <Build Include="Security\latha.sunil.sql" />
+    <Build Include="Security\latha_1.sunil.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Stored Procedures\e_Code_Select_ByType.sql" />
+    <Build Include="dbo\Stored Procedures\sp_RebuildIndex.sql" />
+    <Build Include="dbo\Stored Procedures\dt_displayoaerror.sql" />
+    <Build Include="dbo\Stored Procedures\dt_vcsenabled.sql" />
+    <Build Include="dbo\Stored Procedures\dt_verstamp006.sql" />
+    <Build Include="dbo\Stored Procedures\dt_verstamp007.sql" />
+    <Build Include="dbo\Stored Procedures\dt_adduserobject.sql" />
+    <Build Include="dbo\Stored Procedures\dt_adduserobject_vcs.sql" />
+    <Build Include="dbo\Stored Procedures\dt_displayoaerror_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_droppropertiesbyid.sql" />
+    <Build Include="dbo\Stored Procedures\dt_dropuserobjectbyid.sql" />
+    <Build Include="dbo\Stored Procedures\dt_generateansiname.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getobjwithprop.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getobjwithprop_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getpropertiesbyid.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getpropertiesbyid_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getpropertiesbyid_vcs.sql" />
+    <Build Include="dbo\Stored Procedures\dt_setpropertybyid.sql" />
+    <Build Include="dbo\Stored Procedures\dt_addtosourcecontrol.sql" />
+    <Build Include="dbo\Stored Procedures\dt_checkinobject.sql" />
+    <Build Include="dbo\Stored Procedures\dt_checkoutobject.sql" />
+    <Build Include="dbo\Stored Procedures\dt_getpropertiesbyid_vcs_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_isundersourcecontrol.sql" />
+    <Build Include="dbo\Stored Procedures\dt_removefromsourcecontrol.sql" />
+    <Build Include="dbo\Stored Procedures\dt_setpropertybyid_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_validateloginparams.sql" />
+    <Build Include="dbo\Stored Procedures\dt_whocheckedout.sql" />
+    <Build Include="dbo\Stored Procedures\dt_addtosourcecontrol_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_checkinobject_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_checkoutobject_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_isundersourcecontrol_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_validateloginparams_u.sql" />
+    <Build Include="dbo\Stored Procedures\dt_whocheckedout_u.sql" />
+    <Build Include="Security\Permissions.sql" />
+  </ItemGroup>
+</Project>

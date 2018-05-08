@@ -1,0 +1,1 @@
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="LogWizardActivity.ascx.cs" Inherits="ecn.showcare.wizard.includes.LogWizardActivity" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>

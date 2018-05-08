@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="Circulation.Modules.Subscription"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <Style x:Key="MyFocusVisualStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="-2" StrokeThickness="1" Stroke="#045DA4" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Horizontal">
+            <Grid Name="Grid"  Width="800" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding Enabled}">
+                    <TextBlock Text="Subscribe" VerticalAlignment="Top" Margin="2" Style="{DynamicResource TextBlockBlack20}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
+                    <telerik:RadRadioButton x:Name="btnReactivate" ToolTip="Reactivate or Requalify subscriber" Click="btnReactivate_Click" Content="Reactivation" Margin="2,-1,2,17" FontSize="13" Height="24" Width="75"
+                                            GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="IsEnabled" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ReactivateEnabled}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </telerik:RadRadioButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Right" IsEnabled="{Binding Enabled}">
+                    <TextBlock Name="lbTransCode" Margin="2" Text="{Binding Path=TransactionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" 
+                               Style="{DynamicResource TextBlockBlue20}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" IsEnabled="{Binding Enabled}">
+                    <TextBlock Name="txtFreePaid" Margin="2" Text="Free/Paid:" VerticalAlignment="Top" Style="{DynamicResource TextBlockC13}" />
+                    <TextBlock Text="*" Foreground="Red"/>
+                    <telerik:RadComboBox Margin="2" Name="cbFreePaid" SelectionChanged="cbFreePaid_SelectionChanged" VerticalAlignment="Top" Width="247" Style="{DynamicResource ComboBoxC14}">
+                    </telerik:RadComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" IsEnabled="{Binding Enabled}">
+                    <TextBlock Name="txtCat" Margin="2" Text="Category Type:" VerticalAlignment="Top" Style="{DynamicResource TextBlockC13}" />
+                    <TextBlock Text="*" Foreground="Red"/>
+                    <telerik:RadComboBox Name="cbCat" IsEnabled="False" Margin="2,0" VerticalAlignment="Top" Width="247" Style="{DynamicResource ComboBoxC14}"
+                                     SelectedValue="{Binding Path=CategoryCodeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" IsEnabled="{Binding Enabled}">
+                    <TextBlock Name="lbUnsub" Margin="2" Text="UnSubscribe" VerticalAlignment="Top">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockBlack20}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left" IsEnabled="{Binding Enabled}">
+                    <RadioButton x:Name="btnPOKill" Click="btnPOKill_Click" Margin="2" FontSize="13" Height="24"
+                             GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Content" Value="Post Office" />
+                                <Style.Triggers>                                    
+                                    <DataTrigger Binding="{Binding IsPaid}" Value="True">
+                                        <Setter Property="Content" Value="Paid Post Office Cancel" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <RadioButton x:Name="btnPersonKill" Click="btnPersonKill_Click" Content="Personal Request" Margin="2" FontSize="13" Height="24"
+                             GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}" IsEnabled="{Binding Enabled}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPaid}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <RadioButton x:Name="btnPaidExpire" Click="btnPaidExpire_Click"  Content="Paid Expire Cancel" Margin="2" FontSize="13" Height="24"
+                             GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}" IsEnabled="{Binding Enabled}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsPaid}" Value="True" />
+                                            <Condition Binding="{Binding IsNewSubscription}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <RadioButton x:Name="btnOnBehalfKill" Click="btnOnBehalfKill_Click" Content="On Behalf Request" Margin="2" FontSize="13" Height="24"
+                             GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}" IsEnabled="{Binding Enabled}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPaid}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <RadioButton x:Name="btnCreditCancel" Click="btnCreditCancel_Click"  Content="Paid Credit Cancel" Margin="2" FontSize="13" Height="24"
+                             GroupName="Buttons" FocusVisualStyle="{DynamicResource MyFocusVisualStyle}" IsEnabled="{Binding Enabled}">
+                        <RadioButton.Style>
+                            <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>                                    
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsPaid}" Value="True" />
+                                            <Condition Binding="{Binding IsNewSubscription}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <TextBox Margin="2" x:Name="tbOnBehalfName" Width="250" Text="{Binding Path=OnBehalfOf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Enabled}">
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxC13}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPaid}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNewSubscription}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

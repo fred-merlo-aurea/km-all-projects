@@ -1,0 +1,125 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model FormOutputPostModel
+
+@Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.ResultId)
+
+
+
+@Html.Partial("Partials/FormOutput/_OutputParameterTemplate")
+
+  <div class="form-wrapper partoutput" style='width: 90%'>
+            <section>            
+            <div class="formbox"> 
+                  <div class="formitem formiteminline" >
+                    <label>External Post URL</label>
+                   @(Html.Kendo().TextBox().Name("ExternalUrl"))
+                  </div>
+                </div>
+          <div class="conditionsbox"> <div class="subtitle">Querystring Parameters</div>                        
+                      <!--  <a title="Home" class="btn gridbtn gridbtn-addnewcondition lalign" style="clear:both;" href="#">Add<i class="fa fa-plus-circle "></i></a> -->
+                        @(Html.Kendo().Button().Content( "Add <i class=\"km-icon icon-kmplus-circled-1\"></i>" ).Name("Add").HtmlAttributes(new { type = "button", id="Add", @class  = "btn  btn-blue2 " }))
+                        <div class="conditionslist">
+                          <ul class="inline title" id="titleParameters">
+                            <li class="name">Name</li>
+                            <li class="value">Value</li>
+                            <li class="acts">Actions</li>
+                          </ul>
+                            <div id="ListOfParameters">
+
+        @if(Model.ThirdPartyQueryValue!=null){foreach (var parameter in Model.ThirdPartyQueryValue.Select((ThirdPartyQueryValue, Index) => new { Index, ThirdPartyQueryValue }))
+        {           
+            var internalId = string.Format("ThirdPartyQueryValue[{0}]", parameter.Index);
+            
+                <div id="@String.Format("{0}_Row", parameter.Index)" class ="class_row_output">
+                     <input type="hidden" name="ThirdPartyQueryValue.Index" value="@parameter.Index" />
+                        
+                    @Html.Partial("Partials/FormOutput/_OutputParameter", parameter.ThirdPartyQueryValue, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = internalId } })                    
+                </div>
+            }
+       }
+                </div>
+             </div>                          
+          </div></section>
+          </div>
+       <script>
+               var constants = { TextEdit: "_TextEdit", Row: "_Row", ListSelect: "_ListValues",  DeleteBtn: "_DeleteBtn" };
+               var loaded_indx = $(".class_row_output").length - 1;
+               var indx = loaded_indx + 1;
+
+               assignHandlers();
+
+               function assignHandlers()
+               {
+                   $('.DeleteBtnClass').unbind("click", RemoveParameterHandler);
+                   $('.DeleteBtnClass').on("click", RemoveParameterHandler);
+               }
+
+
+               function RemoveParameterHandler() {
+                   var that = this;
+                  var DeleteParameterAction = function () {
+                      var current_number = that.id.replace(constants.DeleteBtn, "");
+                      $("#" + current_number + "_Row").remove();
+                      if ($(".class_row_output").length == 0)
+                          $("#titleParameters").css("display", "none");
+                  }
+                  showMessage({
+                      type: '@MessageType.Confirm',
+                      text: 'Are you sure you want to delete this item?',
+                      action: DeleteParameterAction
+                  });
+
+              };
+
+
+              function IsEmptyName() {
+                  var result = false;
+                  $("input[name*='.Name']").each(function () { if ($(this).val().trim() == "") result = true; });
+                  return result;
+              }
+
+               $("#Add").click(function () {
+                   try {
+                       if ($(".class_row_output").length == 0)
+                       {
+                           $("#titleParameters").css("display", "block");
+                       }
+
+                       if (IsEmptyName())
+                       {
+                           showMessage({
+                               type: '@MessageType.Error',
+                               text: 'Querystring Parameter Name Required'
+                           });
+
+                           return;
+                       }
+
+                       var scriptTemplate = kendo.template($("#output-template").html());
+                       $("#ListOfParameters").append(scriptTemplate({"Num": indx + ""}));
+                       assignHandlers();
+                       indx++;
+                   }
+                   catch (e) {
+                       alert(e.message);
+                   }
+               });
+
+        </script>
+
+@if(!ViewContext.ViewData.ModelState.IsValid)
+{
+    var summary = Html.ValidationSummary().ToString();
+
+    var errors = Html.Raw(HttpUtility.JavaScriptStringEncode(summary));
+    
+    <script>
+        showMessage({
+            type: '@MessageType.Error',
+            text: '@errors'
+        });
+    </script>
+}

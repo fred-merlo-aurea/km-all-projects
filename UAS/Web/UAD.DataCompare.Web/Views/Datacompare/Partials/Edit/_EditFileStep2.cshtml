@@ -1,0 +1,100 @@
+﻿@model UAD.DataCompare.Web.Models.SourceFile
+@{
+    ViewBag.Title = "Edit Mapping Columns";
+}
+
+@using (Html.BeginForm("Edit", "Datacompare", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+
+    <div id="wrappereditstep2">
+        <div class="header-div">
+            <h2>Map Columns</h2>
+        </div>
+        <div style="margin:40px 20px 40px 20px ;">
+            @if (Model != null)
+            {
+                @Html.Hidden("hdIsTextQualifier", Model.IsTextQualifier)
+                @Html.Hidden("hdDelimeter", Model.Delimiter)
+                @Html.HiddenFor(m => m.SourceFileID)
+                @Html.Hidden("Save", "Save")
+                <input type="button" id="togglepreview" class="k-primary k-button" role="button" value="View Details" />
+                @*<label for="saveImport" class="form-lable">Do you want to import the file? </label>*@
+                @*<input type="checkbox" id="saveImport" name="saveandimport" checked />*@
+
+            }
+        </div>
+        <div class="center-div-2">
+
+            <table class="form-table" id="tbColumnMapper">
+                <tbody>
+                    @{
+                        int counter = 1;
+                    }
+                    @if (Model.ColumnMapping != null)
+                {
+
+                    foreach (UAD.DataCompare.Web.Models.ColumnMapper cm in Model.ColumnMapping)
+                    {
+                            <tr id="row_@counter" @if (cm.isAlreadyAvailable && cm.isRescan) { <text> style="background-color:green;" </text>      } else if (cm.isRescan) { <text> style="background-color:red;" </text>      }>
+                                <td>
+                                    <input type="text" name='mySourceColumn_@counter#_@cm.myFieldMappingID' value="@cm.mySourceColumn" readonly />
+
+                                </td>
+
+                                <td>
+                                    <select name='dropDownMapper_@counter#_@cm.myFieldMappingID' required>
+                                        @foreach (UAD.DataCompare.Web.Models.CustomDropDown cd in cm._dropDownMapper)
+                        {
+                            if (cd.SelectedItem != "Ignore")
+                            {
+                                                <option selected>@cd.Item</option>
+                                            }
+                                            else
+                                            {
+                                                <option>@cd.Item</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+
+                                    <button value="Delete" class="btnDelete icon-kmcustom-delete" id="@cm.myFieldMappingID"></button>
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="previewdetails" colspan="3">
+                                    <textarea name='myPreviewData_@counter#_@cm.myFieldMappingID' style="width:88%;background-color:#dadada;" readonly>@cm.myPreviewData</textarea>
+                                </td>
+                            </tr>
+
+                            counter++;
+
+                        }
+                    }
+
+
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="footer-div">
+
+
+            @(Html.Kendo().Button()
+                    .Name("Previous")
+                    .Content("Previous")
+                    .Events(ev => ev.Click("onPreviousClick"))
+                    .HtmlAttributes(new { @class = "k-primary", @style = "margin-top:10px;margin-bottom:10px;" }))
+
+            @(Html.Kendo().Button()
+                     .Name("Submit")
+                     .Content("Save")
+                     //.Events(ev => ev.Click("Save"))
+                     .HtmlAttributes(new { @class = "k-primary k-button", @style = "margin-top:10px;margin-bottom:10px;" }))
+
+        </div>
+    </div>
+}

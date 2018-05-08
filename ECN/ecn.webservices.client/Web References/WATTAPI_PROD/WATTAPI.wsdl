@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webservices.ecn5.com/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://webservices.ecn5.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.ecn5.com/">
+      <s:element name="GetTokenForSubscriber">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="GroupID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="issueID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTokenForSubscriberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTokenForSubscriberResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIssueURL">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accesskey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="IssueID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIssueURLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetIssueURLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTokenForSubscriberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTokenForSubscriber" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenForSubscriberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTokenForSubscriberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetIssueURL" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetIssueURLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenForSubscriberHttpGetIn">
+    <wsdl:part name="accessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="EmailAddress" type="s:string" />
+    <wsdl:part name="issueID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenForSubscriberHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLHttpGetIn">
+    <wsdl:part name="accesskey" type="s:string" />
+    <wsdl:part name="IssueID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenForSubscriberHttpPostIn">
+    <wsdl:part name="accessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="EmailAddress" type="s:string" />
+    <wsdl:part name="issueID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenForSubscriberHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLHttpPostIn">
+    <wsdl:part name="accesskey" type="s:string" />
+    <wsdl:part name="IssueID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIssueURLHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="WATTAPISoap">
+    <wsdl:operation name="GetTokenForSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return a token for the specified IssueID for the specified Email Address within the specified group</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenForSubscriberSoapIn" />
+      <wsdl:output message="tns:GetTokenForSubscriberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return the URL for the specified Issue</wsdl:documentation>
+      <wsdl:input message="tns:GetIssueURLSoapIn" />
+      <wsdl:output message="tns:GetIssueURLSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WATTAPIHttpGet">
+    <wsdl:operation name="GetTokenForSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return a token for the specified IssueID for the specified Email Address within the specified group</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenForSubscriberHttpGetIn" />
+      <wsdl:output message="tns:GetTokenForSubscriberHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return the URL for the specified Issue</wsdl:documentation>
+      <wsdl:input message="tns:GetIssueURLHttpGetIn" />
+      <wsdl:output message="tns:GetIssueURLHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WATTAPIHttpPost">
+    <wsdl:operation name="GetTokenForSubscriber">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return a token for the specified IssueID for the specified Email Address within the specified group</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenForSubscriberHttpPostIn" />
+      <wsdl:output message="tns:GetTokenForSubscriberHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Will return the URL for the specified Issue</wsdl:documentation>
+      <wsdl:input message="tns:GetIssueURLHttpPostIn" />
+      <wsdl:output message="tns:GetIssueURLHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WATTAPISoap" type="tns:WATTAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTokenForSubscriber">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetTokenForSubscriber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <soap:operation soapAction="http://webservices.ecn5.com/GetIssueURL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WATTAPISoap12" type="tns:WATTAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetTokenForSubscriber">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetTokenForSubscriber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <soap12:operation soapAction="http://webservices.ecn5.com/GetIssueURL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WATTAPIHttpGet" type="tns:WATTAPIHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetTokenForSubscriber">
+      <http:operation location="/GetTokenForSubscriber" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <http:operation location="/GetIssueURL" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WATTAPIHttpPost" type="tns:WATTAPIHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetTokenForSubscriber">
+      <http:operation location="/GetTokenForSubscriber" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIssueURL">
+      <http:operation location="/GetIssueURL" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WATTAPI">
+    <wsdl:port name="WATTAPISoap" binding="tns:WATTAPISoap">
+      <soap:address location="http://test.webservices.ecn5.com/CustomAPI/WATTAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WATTAPISoap12" binding="tns:WATTAPISoap12">
+      <soap12:address location="http://test.webservices.ecn5.com/CustomAPI/WATTAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WATTAPIHttpGet" binding="tns:WATTAPIHttpGet">
+      <http:address location="http://test.webservices.ecn5.com/CustomAPI/WATTAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WATTAPIHttpPost" binding="tns:WATTAPIHttpPost">
+      <http:address location="http://test.webservices.ecn5.com/CustomAPI/WATTAPI.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

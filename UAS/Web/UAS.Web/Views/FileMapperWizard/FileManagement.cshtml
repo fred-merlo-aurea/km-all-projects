@@ -1,0 +1,606 @@
+﻿@{
+    ViewBag.Title = "File Search";
+}
+
+<script language="JavaScript" type="text/JavaScript">
+    $(document).ready(function () {
+        BindDropDownList({
+            ControlID: "fileSearch_kddlProduct",
+            URL: targetProductsUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json"
+        });
+
+        BindDropDownList({
+            ControlID: "fileSearch_kddlFileType",
+            URL: targetDatabaseFileTypesUrl,
+            TextField: "Text",
+            ValueField: "Value",
+            OptionLabel: "",
+            DataType: "json"
+        });
+
+        $("input[name='IsCirculation'][value='CIRC']").prop("checked", true);
+        $('#divProduct').show();
+        Search();
+        //LoadSearchResults();
+    })
+
+    $(document).on("change", "input[name='IsCirculation']", function displayProduct() {
+        $("#spanFileMapperErrorMessage").html("");
+        var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+
+        if (rbCirc == true) {
+            $('#divProduct').show();
+            BindDropDownList({
+                ControlID: "fileSearch_kddlFileType",
+                URL: targetDatabaseFileTypesUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "",
+                DataType: "json"
+            });
+            var grid = $("#grid").data("kendoGrid");
+            if (grid != null) {
+                grid.showColumn("PubCode");
+            }
+        }
+        else {
+            $('#divProduct').hide();
+            BindDropDownList({
+                ControlID: "fileSearch_kddlFileType",
+                URL: targetUadServiceFeaturesUrl,
+                TextField: "Text",
+                ValueField: "Value",
+                OptionLabel: "",
+                DataType: "json"
+            });
+            var grid = $("#grid").data("kendoGrid");
+            if (grid != null) {
+                grid.hideColumn("PubCode");
+            }
+        }
+    });
+
+    //Events -Page number input changed.
+    $(document).on("change", "input[id='pagerInputPageNumber']", function () {
+        RebindOnPageOrSizeChange()
+    });
+    //Events - Page Size input changed
+    $(document).on("change", "input[id='ddPageSize']", function () {
+        RebindOnPageOrSizeChange()
+    });
+
+    function AddNewFile() {
+        var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+        var rbUad = ($("input[name='IsCirculation']:checked").val() == "UAD" ? true : false);
+        var type = "UAD";
+        if (rbCirc)
+            type = "CIRC";
+
+        if (rbCirc == false && rbUad == false) {
+            $("#spanFileMapperErrorMessage").html("Please select CIRC or UAD before clicking Add New File.");
+        }
+        else {
+            window.location.href = "/UAS.Web/FileMapperWizard/Index?Type=" + type;
+        }
+    }
+
+    function ResetPage() {
+        var fileTypeDropdownList = $("#fileSearch_kddlFileType").data("kendoDropDownList");
+        fileTypeDropdownList.text('-- Select --');
+
+        var productDropdownList = $("#fileSearch_kddlProduct").data("kendoDropDownList");
+        productDropdownList.text('Product');
+
+        $('#FileName').val('');
+    }
+
+    function LoadSearchResults() {
+        $("#resultgrid").html("");
+
+        var IsCirc = false;
+        var rbType = "";
+        var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+        var rbUad = ($("input[name='IsCirculation']:checked").val() == "UAD" ? true : false);
+
+        if (rbCirc == true) {
+            IsCirc = true;
+            rbType = "CIRC";
+        }
+        else if (rbUad == true)
+            rbType = "UAD";
+
+        var filetype = 0;
+        var pubid = 0;
+
+        var fileTypeDropdownList = $("#fileSearch_kddlFileType").data("kendoDropDownList");
+        if (fileTypeDropdownList.value() != "0")
+            filetype = fileTypeDropdownList.value();
+
+        if (IsCirc == true) {
+            var productDropdownList = $("#fileSearch_kddlProduct").data("kendoDropDownList");
+            if (productDropdownList.value() != "Product")
+                pubid = productDropdownList.value();
+
+        }
+
+        var fileManagementSearchModel =
+        {
+            type: rbType,
+            fileName: $('#FileName').val(),
+            fileType: filetype,
+            pubID: pubid
+        }
+
+        AjaxPostMethod({
+            Type: "POST",
+            URL: '/UAS.Web/FileMapperWizard/CurrentMappings',
+            PostModel: fileManagementSearchModel,
+            TargetControlId: "resultgrid",
+            FailureControlID: "spanFileMapperErrorMessage"
+        });
+    }
+
+    function openEditFile(id) {
+        var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+        var type = "UAD";
+        if (rbCirc)
+            type = "CIRC";
+
+        window.location.href = "/UAS.Web/FileMapperWizard/IndexEdit?ID=" + id;
+    }
+
+    function openCopyFile(id) {
+        var values = { sourceFileID: id }
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/CopyNewFileMapping",
+            type: "GET",
+            data: values,
+            traditional: true,
+            cache: false,
+            success: function (result) {
+                debugger;
+                var status = result.status;
+                var message = result.message;
+                var sourceId = result.sourceFileID;
+                if (status == "true") {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: message,
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+                else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                    //LoadSearchResults();
+                    if (sourceId > 0) {
+                        window.location.href = "/UAS.Web/FileMapperWizard/IndexEdit?ID=" + sourceId;
+                    }
+                }
+            },
+            error: function () {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                    text: "An error has occurred while copying a new file mapping.",
+                    autoClose: false,
+                    IsOpen: false
+                });
+            }
+        });
+    }
+
+    function deleteFile(values) {
+        var id = values.ID;
+
+        $.ajax({
+            url: "/UAS.Web/FileMapperWizard/DeleteFile",
+            type: "GET",
+            data: { sourceFileID: id },
+            traditional: true,
+            cache: false,
+            success: function (result) {
+                if (result) {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Success',
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                    LoadSearchResults();
+                }
+                else {
+                    showMessage({
+                        type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                        text: "Unable to delete file " + values.FileName,
+                        autoClose: false,
+                        IsOpen: false
+                    });
+                }
+            },
+            error: function () {
+                showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Error',
+                    text: "An error has occurred while deleting the file.",
+                    autoClose: false,
+                    IsOpen: false
+                });
+            }
+        });
+    }
+
+    function openDeleteWindow(id, file) {
+        showMessage({
+            type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+            text: "Are you sure you want to delete file " + file + "?",
+            autoClose: false,
+            action: deleteFile,
+            data: { ID: id, FileName: file },
+            IsOpen: true
+        });
+    }
+
+    function openViewHistory(id) {
+        window.location.href = "/UAS.Web/Dashboard/FileHistory?SingleView=" + id;
+    }
+
+    //function dataBound() {
+    //    var grid = this;
+    //    this.element.find("[role='gridcell']").each(function () {
+    //        eval($(this).children("script").html());
+    //    });
+
+    //    grid.tbody.find('>tr').each(function () {
+    //        var dataItem = grid.dataItem(this);
+    //        if (!dataItem.Child) {
+    //            $(this).find(".k-hierarchy-cell a").hide();
+    //        }
+    //    });
+    //}
+
+    var targetUrl = '@Url.Action("FileManagement_Read_Data", "FileMapperWizard")';
+    var firstGridLoad = true;
+    $(document).ready(function () {
+        $("#ddPageSize").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            value: 10,
+            dataSource: [
+              { text: "5", value: "5" },
+              { text: "10", value: "10" },
+              { text: "15", value: "15" },
+              { text: "20", value: "20" }
+            ]
+        });
+    });
+    //Events - Grid Event - Grid DataBound where you can get all the filters , sorts and other properties for Grid
+    function onDataBound(arg) {
+        var grid = this;
+        this.element.find("[role='gridcell']").each(function () {
+            eval($(this).children("script").html());
+        });
+
+        grid.tbody.find('>tr').each(function () {
+            var dataItem = grid.dataItem(this);
+            if (!dataItem.Child) {
+                $(this).find(".k-hierarchy-cell a").hide();
+            }
+        });
+
+        if (firstGridLoad) {
+            firstGridLoad = false;
+            SetPagerWidget("firstpage");
+        }
+    }
+
+    //Events - When First , Lats Previous and Next Buttons clicked on Pager.
+    function GoToPage(e) {
+        SetPagerWidget(e.target.id);
+        var data = filterGridParams();
+        ReBindGrid(data)
+    }
+    //Events - Triggers the Search using Search Criteria
+    function Search() {
+        SetPagerWidget("firstpage");
+        firstGridLoad = true;
+        var data = filterGridParams();
+        ReBindGrid(data);
+    }
+
+    //Rebinds the Grid with data sends with DataSourceRequest
+    function ReBindGrid(obj) {
+        var grid = $("#grid").data("kendoGrid");
+        var options = null;
+        if (grid != null) {
+            options = grid.getOptions();
+        }
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: targetUrl,
+                    dataType: "json",
+                    data: obj
+                }
+            }
+        })
+        if (options != null) {
+            options.dataSource.data = dataSource.data;
+            options.dataSource.pageSize = obj.PageSize;
+            grid.setOptions(options);
+        }
+    }
+    //Data Sends with DataSourceRequest- Parameters that needs to be passed to the server
+    function filterGridParams() {
+
+        var IsCirc = false;
+        var rbType = "";
+        var rbCirc = ($("input[name='IsCirculation']:checked").val() == "CIRC" ? true : false);
+        var rbUad = ($("input[name='IsCirculation']:checked").val() == "UAD" ? true : false);
+
+        if (rbCirc == true) {
+            IsCirc = true;
+            rbType = "CIRC";
+        }
+        else if (rbUad == true)
+            rbType = "UAD";
+
+        var filetype = 0;
+        var pubid = 0;
+
+        var fileTypeDropdownList = $("#fileSearch_kddlFileType").data("kendoDropDownList");
+        if (fileTypeDropdownList.value() != "0")
+            filetype = fileTypeDropdownList.value();
+
+        if (IsCirc == true) {
+            var productDropdownList = $("#fileSearch_kddlProduct").data("kendoDropDownList");
+            if (productDropdownList.value() != "Product")
+                pubid = productDropdownList.value();
+
+        }
+
+        return {
+            type: rbType,
+            fileName: $('#FileName').val(),
+            fileType: filetype,
+            pubID: pubid,
+            PageSize: $("#ddPageSize").val(),
+            PageNumber: $("#pagerInputPageNumber").val()
+        };
+    }
+    //Function - Rebinds the Grid on Page Number input chnaged or Page size changed
+    function RebindOnPageOrSizeChange() {
+        if (parseInt($("#pagerInputPageNumber").val()) > 0 && !isNaN(parseInt($("#pagerInputPageNumber").val())) && $("#pagerInputPageNumber").val() <= parseInt($("#pagerTotalItems").text())) {
+            SetPagerWidget($("#pagerInputPageNumber").val());
+            var data = filterGridParams();
+            ReBindGrid(data);
+        }
+        else {
+            showMessage({
+                type: 'Error',
+                text: 'Please enter valid page number.',
+                autoClose: false
+            });
+
+        }
+    }
+    //This drives the server side paging by getting current page and setting all Pager messages
+    function SetPagerWidget(id) {
+        var totalrecordCount = 0;
+        var grid = $("#grid").data("kendoGrid");
+        if (grid != null) {
+            if (grid.dataSource.view()[0]) {
+                totalrecordCount = parseInt(grid.dataSource.view()[0].TotalRecordCounts);
+            }
+        }
+        var pagesize = 0;
+        var psVal = parseInt($("#ddPageSize").val());
+        if (psVal > 0) {
+            pagesize = psVal;
+        }
+        var currentpage = 0;
+        var cpVal = parseInt($("#pagerInputPageNumber").val());
+        if (cpVal > 0) {
+            currentpage = cpVal;
+        }
+        var lastpage = 0;
+        var lpVal = parseInt(totalrecordCount / pagesize) + 1;
+        if (lpVal > 0) {
+            lastpage = lpVal;
+        }
+
+        var firstpage = 1;
+
+        if (id == "firstpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else {
+                currentpage = firstpage;
+
+            }
+        }
+        else if (id == "prevpage") {
+            if (currentpage == firstpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage - 1;
+        }
+        else if (id == "nextpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = currentpage + 1;
+
+        }
+        else if (id == "lastpage") {
+            if (currentpage == lastpage)
+                currentpage = currentpage;
+            else
+                currentpage = lastpage;
+
+        }
+        else {
+            currentpage = parseInt(id);
+        }
+        var start = ((currentpage - 1) * pagesize + 1);
+        var end = (currentpage * pagesize) < totalrecordCount ? (currentpage * pagesize) : totalrecordCount;
+        var displaymessage = start + " - " + end + " of " + totalrecordCount + " items";
+
+        $("#currentpage").text(currentpage);
+        $("#pagerDisplay").text(displaymessage);
+        $("#pagerTotalItems").text(lastpage);
+        $("#pagerInputPageNumber").val(currentpage);
+    }
+</script>
+<script id="delete-confirmation" type="text/x-kendo-template">
+    <p style="font-size: 12px; padding: 10px">
+        Do you want to delete #=FileName#? #=SourceFileID#
+    </p>
+    <div style="text-align: right">
+        <button class="password-ok k-button">OK</button>
+    </div>
+</script>
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td colspan="4"><div id="divFileMapperErrorMessage" style="text-align: center;"><span id="spanFileMapperErrorMessage" style="color: red;"></span></div></td>
+        <td style="text-align: right; padding: 0px;">
+            <button type="button" id="btnNew" class="btn btn-blue2 k-button" onclick="AddNewFile();" style="margin: 5px;">Add New File<i class='km-icon icon-kmplus-circled-1'></i></button>
+        </td>
+    </tr>
+    <tr>
+        <td style="white-space: nowrap; padding: 2px 10px 2px 2px;">
+            @Html.Kendo().RadioButton().Name("IsCirculation").Label("CIRC").Value("CIRC")
+            @Html.Kendo().RadioButton().Name("IsCirculation").Label("UAD").Value("UAD")
+        </td>
+        <td style="white-space: nowrap; padding: 2px;">
+            @Html.Label("File Name:")
+            @Html.TextBox("FileName", "", new { style = "width: 250px;" })
+        </td>
+        <td style="white-space: nowrap; padding: 2px;">
+            @Html.Label("File Type:")
+            <input id="fileSearch_kddlFileType" name="FileType" style="width: 200px;" />
+        </td>
+        <td style="white-space: nowrap; padding: 2px;">
+            <div id="divProduct" style="display: none;">
+                @Html.Label("Product:")
+                <input id="fileSearch_kddlProduct" name="Product" style="width: 100px;" />
+            </div>
+        </td>
+        <td style="white-space: nowrap; padding: 2px;">
+            @*<input type="button" id="btnSearch" class="btn btn-blue2 k-button" value="Search" onclick="LoadSearchResults();" style="margin:10px;" />*@
+            <input type="button" id="btnSearch" class="btn btn-blue2 k-button" value="Search" onclick="Search();" style="margin:5px;" />
+            <input type="button" id="btnReset" class="btn btn-blue2 k-button" value="Reset" onclick="ResetPage();" style="margin-left:5px;" />
+        </td>
+    </tr>  
+</table>
+<table style="width: 100%">  
+    <tr>
+        <td colspan="5">
+            <div id="resultgrid">
+                <input type="hidden" value="1" id="latestpagehdn" />
+                @(Html.Kendo().Grid<UAS.Web.Models.FileMapperWizard.CurrentMappingModel>()
+                     .Name("grid")
+                     .Events(e => e.DataBound("onDataBound"))
+                     .Columns(columns =>
+                     {
+                         columns.Bound(e => e.TotalRecordCounts).Hidden(true);
+                         columns.Bound(e => e.PubCode).Title("Pub Code").Filterable(false);
+                         columns.Bound(e => e.FileName).Title("File Name").ClientTemplate("<div style='word-break: break-all; word-wrap: break-word;'>#= FileName #</div>").HtmlAttributes(new { @style = "width:25%; vertical-align:middle" }).Filterable(false);
+                         columns.Bound(e => e.FileType).Title("File Type").Filterable(false);//.Sortable(false);
+                         columns.Bound(e => e.DateCreated).Format("{0:MM/dd/yyyy hh:mm:ss tt}").Title("Date Created").Filterable(false);
+                         columns.Bound(e => e.CreatedByUserName).Title("Created By").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(false);
+                         columns.Bound(e => e.DateUpdated).Format("{0:MM/dd/yyyy hh:mm:ss tt}").Title("Date Updated").Filterable(false);
+                         columns.Bound(e => e.UpdatedByUserName).Title("Updated By").HtmlAttributes(new { @style = "width:10%; vertical-align:middle" }).Filterable(false);
+                         columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Width(110).Filterable(false).Sortable(false);
+                     })
+                     .Sortable(sortable => sortable.SortMode(GridSortMode.SingleColumn))//Sort Based on Single column at a time, you can cnfigure allow for unsorting
+                     .Pageable(page => page.Enabled(false))
+                     .Filterable(filter => filter.Enabled(false))
+                     .DataSource(dataSource => dataSource // Configure the grid data source
+                            .Ajax() // Specify that ajax binding is used
+                            .Read(read => read.Data("filterGridParams").Action("FileManagement_Read_Data", "FileMapperWizard"))// Set the action method which will return the data in JSON format
+                            .PageSize(10) //Set up page size
+                            .ServerOperation(true) //Get Data from Server
+
+                    )
+                )
+            </div>
+            <div id="pager" class="k-pager-wrap k-grid-pager k-widget k-floatwrap">
+                <a class="k-link k-pager-nav k-pager-first" title="Go to the first page" tabindex="-1">
+                    <span onclick="GoToPage(event)" id="firstpage" class="k-icon k-i-seek-w">seek-w</span>
+                </a>
+                <a class="k-link k-pager-nav" title="Go to the previous page" tabindex="-1">
+                    <span onclick="GoToPage(event)" id="prevpage" class="k-icon k-i-arrow-w">arrow-w</span>
+                </a>
+
+                <ul class="k-pager-numbers k-reset">
+                    <li class="k-current-page"><span class="k-link k-pager-nav">1</span></li>
+                    <li><span class="k-state-selected" id="currentpage">1</span></li>
+
+                </ul>
+                <span class="k-pager-input k-label">Page<input class="k-textbox" id="pagerInputPageNumber">of <span id="pagerTotalItems"></span></span>
+                <a class="k-link k-pager-nav" title="Go to the next page" tabindex="-1">
+                    <span onclick="GoToPage(event)" id="nextpage" class="k-icon k-i-arrow-e">arrow-e</span>
+                </a>
+                <a class="k-link k-pager-nav k-pager-last" title="Go to the last page" tabindex="-1">
+                    <span onclick="GoToPage(event)" id="lastpage" class="k-icon k-i-seek-e">seek-e</span>
+                </a>
+
+                <span class="k-pager-sizes k-label">
+                    <span title="" class="k-widget k-dropdown k-header">
+                        <input id="ddPageSize" />
+                    </span>items per page
+                </span>
+                <span class="float-right" style="margin-right:10px;">
+                    <lable id="pagerDisplay"></lable>
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+@(Html.Kendo().Window()
+        .Name("deleteWindow") //The name of the window is mandatory. It specifies the "id" attribute of the widget.
+        .Title("Login") //set the title of the window
+        .Content(@<text>
+
+        </text>)
+        .Draggable() //Enable dragging of the window
+        .Resizable() //Enable resizing of the window
+        .Width(600) //Set width of the window
+        .Height(600)
+        .Modal(true)
+        .Visible(false)
+)
+
+
+<div id="client-detail-modal">
+    @helper  GetActions()
+    {
+        @(Html.Kendo()
+                .Menu()
+                .Name("menu_Results_#=SourceFileID#")
+                .Direction(MenuDirection.Right)
+                .Orientation(MenuOrientation.Vertical)
+                .Animation(false)
+                .Items(items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                                innerItems =>
+                                {
+                                    innerItems.Add().Text("").HtmlAttributes(new { style = "Display:none;" });
+                                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "openEditFile(#=SourceFileID#);" });
+                                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "openDeleteWindow(#=SourceFileID#, '#=FileName#');" });
+                                    innerItems.Add().Text("Copy").HtmlAttributes(new { onclick = "openCopyFile(#=SourceFileID#);" });
+                                    innerItems.Add().Text("View History").HtmlAttributes(new { onclick = "openViewHistory(#=SourceFileID#);" });
+                                }
+                            )
+                        )
+                        .ToClientTemplate()
+        )
+    }
+</div>

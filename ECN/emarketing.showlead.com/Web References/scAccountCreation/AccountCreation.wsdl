@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to Create ShowCare Accounts in ECN&lt;br&gt;* Use setCustomerContactInformation() to set the values for the Contact Object which is the Contact Information for the new Customer.&lt;br&gt;* Use setupCustomerAccount() to create the Customer Account in ECN.&lt;br&gt;* Use setupUserAccount() to create the User Accounts for the new Customer.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx">
+      <s:element name="setCustomerContactInformation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactFirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactLastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactCountry" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactFax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactEmailAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactUID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setCustomerContactInformationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="setCustomerContactInformationResult" type="tns:Contact" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Contact">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Salutation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsTheSameAsBillingContact" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsTheSameAsTechContact" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="setupCustomerAccount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="customerContactInformation" type="tns:Contact" />
+            <s:element minOccurs="0" maxOccurs="1" name="customerName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setupCustomerAccountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="setupCustomerAccountResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setupUserAccount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="customerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setupUserAccountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="setupUserAccountResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="setCustomerContactInformationSoapIn">
+    <wsdl:part name="parameters" element="tns:setCustomerContactInformation" />
+  </wsdl:message>
+  <wsdl:message name="setCustomerContactInformationSoapOut">
+    <wsdl:part name="parameters" element="tns:setCustomerContactInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="setupCustomerAccountSoapIn">
+    <wsdl:part name="parameters" element="tns:setupCustomerAccount" />
+  </wsdl:message>
+  <wsdl:message name="setupCustomerAccountSoapOut">
+    <wsdl:part name="parameters" element="tns:setupCustomerAccountResponse" />
+  </wsdl:message>
+  <wsdl:message name="setupUserAccountSoapIn">
+    <wsdl:part name="parameters" element="tns:setupUserAccount" />
+  </wsdl:message>
+  <wsdl:message name="setupUserAccountSoapOut">
+    <wsdl:part name="parameters" element="tns:setupUserAccountResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AccountCreationSoap">
+    <wsdl:operation name="setCustomerContactInformation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to Set Values for a Customer Contact Information in ECN.&lt;br&gt;- Parameters passed are First &amp; LastName, Address, phone etc.&lt;br&gt;- Returns the Contact Object</wsdl:documentation>
+      <wsdl:input message="tns:setCustomerContactInformationSoapIn" />
+      <wsdl:output message="tns:setCustomerContactInformationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="setupCustomerAccount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to SetUp Customer Account in ECN.&lt;br&gt;- Parameters passed are Contact Object, CustomerName&lt;br&gt;- Will Create a new Customer Account if it doesn't Exist. Will Update if it exists.&lt;br&gt;- Returns Integer CustomerID value.</wsdl:documentation>
+      <wsdl:input message="tns:setupCustomerAccountSoapIn" />
+      <wsdl:output message="tns:setupCustomerAccountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="setupUserAccount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to SetUp User Account in ECN for a Customer.&lt;br&gt;- Parameters passed are UserName, Password, CustomerID&lt;br&gt;- Will Create a new User Account if it doesn't Exist.&lt;br&gt;- Returns Integer UserID value.</wsdl:documentation>
+      <wsdl:input message="tns:setupUserAccountSoapIn" />
+      <wsdl:output message="tns:setupUserAccountSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AccountCreationSoap" type="tns:AccountCreationSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="setCustomerContactInformation">
+      <soap:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setCustomerContactInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setupCustomerAccount">
+      <soap:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setupCustomerAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setupUserAccount">
+      <soap:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setupUserAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AccountCreationSoap12" type="tns:AccountCreationSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="setCustomerContactInformation">
+      <soap12:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setCustomerContactInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setupCustomerAccount">
+      <soap12:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setupCustomerAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setupUserAccount">
+      <soap12:operation soapAction="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx/setupUserAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountCreation">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides Access to Create ShowCare Accounts in ECN&lt;br&gt;* Use setCustomerContactInformation() to set the values for the Contact Object which is the Contact Information for the new Customer.&lt;br&gt;* Use setupCustomerAccount() to create the Customer Account in ECN.&lt;br&gt;* Use setupUserAccount() to create the User Accounts for the new Customer.</wsdl:documentation>
+    <wsdl:port name="AccountCreationSoap" binding="tns:AccountCreationSoap">
+      <soap:address location="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AccountCreationSoap12" binding="tns:AccountCreationSoap12">
+      <soap12:address location="http://showcare.ecn5.com/ecn.showcare.webservice/KM/AccountCreation.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

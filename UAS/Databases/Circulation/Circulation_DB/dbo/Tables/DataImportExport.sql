@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[DataImportExport] (
+    [SubscriberID]   INT           NOT NULL,
+    [Hisbatch1]      VARCHAR (100) NULL,
+    [Hisbatch2]      VARCHAR (100) NULL,
+    [Hisbatch3]      VARCHAR (100) NULL,
+    [NANQ]           VARCHAR (100) NULL,
+    [EmailID]        INT           NULL,
+    [Verify]         VARCHAR (100) NULL,
+    [Interview]      VARCHAR (100) NULL,
+    [Mail]           VARCHAR (100) NULL,
+    [PrevQDate]      DATE          NULL,
+    [PrevQSource]    VARCHAR (100) NULL,
+    [MemberID]       INT           NULL,
+    [MemberFlag]     VARCHAR (100) NULL,
+    [MemberReject]   VARCHAR (100) NULL,
+    [IMBSerial1]     INT           NULL,
+    [IMBSerial2]     INT           NULL,
+    [IMBSerial3]     INT           NULL,
+    [HomeValue]      VARCHAR (100) NULL,
+    [IssuesToGo]     INT           NULL,
+    [AmountEarned]   DECIMAL (18)  NULL,
+    [AmountDeferred] DECIMAL (18)  NULL,
+    [NewExpire]      DATE          NULL,
+    PRIMARY KEY CLUSTERED ([SubscriberID] ASC)
+);
+

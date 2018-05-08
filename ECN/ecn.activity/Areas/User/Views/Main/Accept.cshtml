@@ -1,0 +1,362 @@
+﻿@model ecn.activity.Areas.User.Models.UserAcceptModel
+@{
+    ViewBag.Title = "Accept";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var newUser = document.getElementById('NewUser').value;
+        var SysAdmin = document.getElementById('IsSysAdmin').value;
+        var Existing = document.getElementById('ExistingUser');
+        Existing.checked = !newUser;
+        var NewUser = document.getElementById('NewUserRBL');
+        NewUser.checked = newUser;
+        if (SysAdmin == 'True') {
+            var Existing = document.getElementById('divRBLExisting');
+            Existing.style.display = 'none';
+            var NewUser = document.getElementById('NewUserRBL');
+            NewUser.checked = true;
+            var divExisting = document.getElementById('divExisting');
+            divExisting.style.display = 'none';
+            var divNew = document.getElementById('divNewUser');
+            divNew.style.display = 'block';
+            var UserName = document.getElementById("UserName");
+
+            document.getElementById("NewUserName").value = UserName.value;
+        }
+        else {
+            if (newUser == 'True') {
+                var Existing = document.getElementById('ExistingUser');
+                Existing.checked = false;
+                var NewUser = document.getElementById('NewUserRBL');
+                NewUser.checked = true;
+                var divExisting = document.getElementById('divExisting');
+                divExisting.style.display = 'none';
+                var divNew = document.getElementById('divNewUser');
+                divNew.style.display = 'block';
+
+                var UserName = document.getElementById("UserName");
+
+                document.getElementById("NewUserName").value = UserName.value;
+                document.getElementById("NewPassword").value = "";
+                document.getElementById("RetypePassword").value = "";
+            }
+            else {
+                var NewUser = document.getElementById('NewUserRBL');
+                NewUser.checked = false;
+                var Existing = document.getElementById('ExistingUser');
+                Existing.checked = true;
+                var divExisting = document.getElementById('divExisting');
+                divExisting.style.display = 'block';
+                var divNew = document.getElementById('divNewUser');
+                divNew.style.display = 'none';
+
+                //get hidden fields
+                var UserName = document.getElementById("UserName");
+                document.getElementById("ExistingUserName").value = UserName.value;
+                document.getElementById("ExistingPassword").value = "";
+            }
+        }
+
+    });
+
+
+    function rblClick(sender) {
+        if (sender.id == 'NewUserRBL' && sender.checked) {
+            var Existing = document.getElementById('ExistingUser');
+            Existing.checked = false;
+            var divExisting = document.getElementById('divExisting');
+            divExisting.style.display = 'none';
+            var divNew = document.getElementById('divNewUser');
+            divNew.style.display = 'block';
+            document.getElementById('NewUser').value = true;
+        }
+        else if (sender.id == 'ExistingUser' && sender.checked) {
+            var NewUser = document.getElementById('NewUserRBL');
+            NewUser.checked = false;
+            var divExisting = document.getElementById('divExisting');
+            divExisting.style.display = 'block';
+            var divNew = document.getElementById('divNewUser');
+            divNew.style.display = 'none';
+            document.getElementById('NewUser').value = false;
+        }
+
+        var newUserName = document.getElementsByName('UserName');
+        for (var i = 0; i < newUserName.length; i++) {
+            newUserName[i].value = '';
+        }
+        var newPassword = document.getElementsByName('Password');
+        for (var i = 0; i < newPassword.length; i++) {
+            newPassword[i].value = '';
+        }
+        var newRetype = document.getElementById('ReTypePassword');
+
+        newRetype.value = '';
+
+
+
+    }
+
+    function btnSubmitClick() {
+        var newUser = document.getElementById("NewUserRBL").checked;
+        $("#spnPasswordMatch").css("display", "none");
+        $("#spnNewUserNameValid").css("display", "none");
+        $("#spnNewUserNameValidationSpaces").css("display", "none");
+        $("#spnNewPasswordValid").css("display", "none");
+        $("#spnExistingUserNameValid").css("display", "none");
+        $("#spnExistingPasswordValid").css("display", "none");
+        if (newUser) {
+            //get hidden fields
+            var UserName = document.getElementById("UserName");
+            var Password = document.getElementById("Password");
+            var RetypePassword = document.getElementById("ReTypePassword");
+
+            //get textbox values
+            var UserNameValue = document.getElementById("NewUserName").value;
+            var PasswordValue = document.getElementById("NewPassword").value;
+            var RetypePasswordValue = document.getElementById("RetypePassword").value;
+
+            UserName.value = UserNameValue;
+            Password.value = PasswordValue;
+            RetypePassword.value = RetypePasswordValue;
+            var isValid = true;
+            if (RetypePassword.value != Password.value) {
+                $("#spnPasswordMatch").show();
+                isValid = false;
+            }
+            if (UserName.value.length == 0) {
+                $("#spnNewUserNameValid").show();
+                isValid = false;
+            }
+            else
+            {
+                var regex = /^[ \s]+|[ \s]+$/i;
+                if (regex.test(UserName.value))
+                {
+                    $("#spnNewUserNameValidationSpaces").show();
+                    isValid = false;
+                }
+            }
+            if (Password.value.length == 0) {
+                $("#spnNewPasswordValid").show();
+                isValid = false;
+            }
+            if (!isValid)
+                return;
+        }
+        else {
+            //get hidden fields
+            var UserName = document.getElementById("UserName");
+            var Password = document.getElementById("Password");
+
+            //get textbox values
+            var UserNameValue = document.getElementById("ExistingUserName").value;
+            var PasswordValue = document.getElementById("ExistingPassword").value;
+
+            UserName.value = UserNameValue;
+            Password.value = PasswordValue;
+            var isValid = true;
+            if (UserName.value.length == 0) {
+                $("#spnExistingUserNameValid").show();
+                isValid = false;
+            }
+            if (Password.value.length == 0) {
+                $("#spnExistingPasswordValid").show();
+                isValid = false;
+            }
+            if (!isValid)
+                return;
+        }
+        var form = $("#AcceptForm");
+        form.validate();
+        if (form.valid()) {
+            form.submit();
+        }
+
+    }
+</script>
+@using (Html.BeginForm("Accept", "Index", FormMethod.Post, new { id = "AcceptForm" }))
+{
+    @Html.ValidationSummary(true)
+    if (Model.ValidForAccepting)
+    {
+        <div style="margin:0 auto;width:60%;">
+            <table style="width:100%;">
+                <tr>
+                    <td style="text-align:center;">
+                        <h2>Welcome to the KM Platform User Setup!</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Please create a new username and password to access your KM Platform user account or associate your new access to an existing KM Platform username</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <input type="radio" id="NewUserRBL" checked="checked" onclick="rblClick(this) " />New User
+                        </div>
+                        <div id="divNewUser">
+                            <table style="width:100%;">
+
+                                <tr>
+                                    <td style="width:0%;"></td>
+                                    <td style="width:15%;">
+                                        <p>User Name</p>
+                                    </td>
+                                    <td style="width:85%;">
+                                        @Html.TextBox("NewUserName")
+                                        <span id="spnNewUserNameValid" style="display:none;color:red;">User Name is required</span>
+                                        <span id="spnNewUserNameValidationSpaces" style="display:none;color:red;">Invalid format. Please remove any leading and trailing white spaces from Username.</span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style ="width:0%;"></td>
+                                    <td style="width:15%;">
+                                        <p>Password</p>
+                                    </td>
+                                    <td style="text-align:left;width:85%;">
+                                        @Html.Password("NewPassword")
+                                        <span id="spnNewPasswordValid" style="display:none;color:red;">Password is required</span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p>Retype Password</p>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        @Html.Password("RetypePassword")
+                                        <span id="spnPasswordMatch" style="display:none;color:red;">Passwords must match</span>
+                                    </td>
+                                </tr>
+                                @if(!string.IsNullOrEmpty(Model.ErrorMessage) && Model.NewUser)
+                                { 
+                                <tr>
+                                    
+                                    <td colspan="3">
+                                        <span id="spnNewUserError" style="color:red;">@Model.ErrorMessage</span>
+                                    </td>
+                                </tr>
+                                }
+                            </table>
+                        </div>
+
+                        <div id="divRBLExisting">
+                            <input type="radio" id="ExistingUser" onclick="rblClick(this)" />Existing User
+                        </div>
+                        <div id="divExisting" style="display:none;">
+                            <table>
+
+                                <tr>
+                                    <td style="width:0%;"></td>
+                                    <td style="width:15%;">
+                                        <p>User Name</p>
+                                    </td>
+                                    <td style="text-align:left;width:85%;">
+                                        @Html.TextBox("ExistingUserName")
+                                        <span id="spnExistingUserNameValid" style="display:none;color:red;">User Name is required</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p>Password</p>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        @Html.Password("ExistingPassword")
+                                        <span id="spnExistingPasswordValid" style="display:none;color:red;">Password is required</span>
+                                    </td>
+                                </tr>
+                                @if(!string.IsNullOrEmpty(Model.ErrorMessage) && !Model.NewUser)
+                                {
+                                    <tr>
+                                        <td colspan="3">
+                                            <span id="spnExistingErrorMessage" style="color:red;">@Model.ErrorMessage</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">
+                        @Html.HiddenFor(m => m.setID)
+                        @Html.HiddenFor(m => m.UserID)
+                        @Html.HiddenFor(m => m.CreatedByUserID)
+                        @Html.HiddenFor(m => m.NewUser)
+                        @Html.HiddenFor(m => m.UserName)
+                        @Html.HiddenFor(m => m.Password)
+                        @Html.HiddenFor(m => m.ReTypePassword)
+                        @Html.HiddenFor(m => m.IsExistingUser)
+                        @Html.HiddenFor(m => m.IsSysAdmin)
+                        <input id="btnSubmit" type="button" onclick="btnSubmitClick()" value="Create/Associate UserName" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+    else
+    {
+        if (Model.UserIsLocked)
+        {
+            <div style="margin:0 auto;width:60%;">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="text-align:center;">
+                            <h2>Welcome to the KM Platform User Setup!</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                This User is currently locked.  Please contact Customer Service to continue.<br />
+                                
+                            </p>
+
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        }
+        else
+        {
+        <div style="margin:0 auto;width:60%;">
+            <table style="width:100%;">
+                <tr>
+                    <td style="text-align:center;">
+                        <h2>Welcome to the KM Platform User Setup!</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>You have already accepted the requested roles.<br />
+                        Please click the button below to go to the KM Platform login page</p>
+                        
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <div id='redirectbutton' style='width:200px;text-align:center;  background-color: #FFFFFF;  moz-border-radius: 8px;  -webkit-border-radius: 8px;  border: 2px solid #000000;  '>
+                            <p style='width:100%;height:100%;'><a href='@Model.PlatformLoginURL' style='color:black;text-decoration:none;width:100%;height:100%;'>KM Platform Login</a></p>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+}
+    }
+}

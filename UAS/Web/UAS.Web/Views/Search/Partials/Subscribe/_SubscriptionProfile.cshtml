@@ -1,0 +1,119 @@
+﻿<style>
+     .collabelwidth {
+        width: 10%;
+        padding:0px;
+        margin:0px;
+        padding-left: 5px;
+    }
+     .colinputwidth{
+        padding:0px;
+        margin:0px;
+        width: 23%;
+    }
+    .k-textbox,.k-dropdown{
+        min-width:30px;
+        max-width:200px;
+    }
+    
+</style>
+
+<div id="subProfile">
+    <table width="100%">
+        <tr>
+            <td class="collabelwidth"><label>Product:</label></td>
+            <td class="colinputwidth"><input id="ProductID" ng-model="subscrberViewModel.PubSubscription.PubID" style="width:100%;" /></td>
+            <td class="collabelwidth"><label>Address2:</label></td>
+            <td class="colinputwidth"><input class="k-textbox"  ng-model="subscrberViewModel.PubSubscription.Address2" style="width:100%;"  id="Address2" tabindex="7" /></td>
+            <td class="collabelwidth"><label>Phone:</label></td>
+            <td class="colinputwidth">
+                <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.PhoneCode" id="PhoneCode" readonly style="width:10%;background-color:#D3D3D3;" />
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID==1 || subscrberViewModel.PubSubscription.CountryID==2" ng-model="subscrberViewModel.PubSubscription.Phone" k-mask="'000-000-0000'" style="width:60%;" id="Phone" tabindex="14" />
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID!=1 && subscrberViewModel.PubSubscription.CountryID!=2" ng-model="subscrberViewModel.PubSubscription.Phone" k-mask="'0000000000'" style="width:60%;" id="Phone" tabindex="14" />
+                <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.PhoneExt" style="width:20%;" tabindex="15" id="PhoneExt" />
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>FirstName:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.FirstName" style="width:100%;" id="subcriber_txtFirstName"  tabindex="1"/></td>
+            <td class="collabelwidth"><label>Address3:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Address3" style="width:100%;" id="Address3" tabindex="8"/></td>
+            <td class="collabelwidth"><label>Mobile:</label></td>
+            <td class="colinputwidth">
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID==1 || subscrberViewModel.PubSubscription.CountryID==2" ng-model="subscrberViewModel.PubSubscription.Mobile" k-mask="'000-000-0000'" style="width:100%;"  tabindex="16" id="Mobile" />
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID!=1 && subscrberViewModel.PubSubscription.CountryID!=2" ng-model="subscrberViewModel.PubSubscription.Mobile" k-mask="'0000000000'" style="width:100%;" tabindex="16" id="Mobile" />
+
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>LastName:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.LastName" style="width:100%;" id="subcriber_txtLastName" tabindex="2"/></td>
+            <td class="collabelwidth"><label>City:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.City" style="width:100%;" id="City" tabindex="9"/></td>
+            <td class="collabelwidth"><label>Fax:</label></td>
+            <td class="colinputwidth">
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID==1 || subscrberViewModel.PubSubscription.CountryID==2" ng-model="subscrberViewModel.PubSubscription.Fax" k-mask="'000-000-0000'" style="width:100%;" tabindex="17" id="Fax" />
+                <input kendo-masked-text-box ng-show="subscrberViewModel.PubSubscription.CountryID!=1 && subscrberViewModel.PubSubscription.CountryID!=2" ng-model="subscrberViewModel.PubSubscription.Fax" k-mask="'0000000000'"  style="width:100%;" tabindex="17" id="Fax" />
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>Title:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Title" style="width:100%;" tabindex="3" id="subcriber_txtTitle" /></td>
+
+
+            <td class="collabelwidth"><label>Country:</label></td>
+            <td class="colinputwidth">
+                <input id="Country" ng-model="subscrberViewModel.PubSubscription.CountryID" style="width:100%;" tabindex="10" />
+
+            </td>
+            <td class="collabelwidth"><label>Email:</label></td>
+            <td class="colinputwidth">
+                <input class="k-textbox"  ng-model="subscrberViewModel.PubSubscription.Email" style="width:100%;" id="Email" tabindex="18"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>Company:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Company" style="width:100%;" tabindex="4" id="Company"/></td>
+
+
+            <td class="collabelwidth"><label>State:</label></td>
+            <td class="colinputwidth">
+                <input id="State" ng-model="subscrberViewModel.PubSubscription.RegionID" style="width:100%;" tabindex="11" />
+            </td>
+            <td class="collabelwidth"><label>Website:</label></td>
+            <td class="colinputwidth">
+                <input id="Website" class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Website" style="width:100%;" tabindex="19"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>Add-Type:</label></td>
+            <td class="colinputwidth">
+                <input id="AddressTypeCodeId" ng-model="subscrberViewModel.PubSubscription.AddressTypeCodeId" style="width:100%;" tabindex="5"/>
+            </td>
+            <td class="collabelwidth"><label>County:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.County" style="width:100%;" id="County" tabindex="12" /></td>
+            <td class="collabelwidth"><label>SubscriptionID:</label></td>
+            <td class="colinputwidth">
+                <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.SubscriptionID" style="width:100%;background-color:#D3D3D3;"  readonly />
+            </td>
+        </tr>
+        <tr>
+            <td class="collabelwidth"><label>Address1:</label></td>
+            <td class="colinputwidth"><input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.Address1" style="width:100%;" id="Address1" tabindex="6"/></td>
+
+            <td class="collabelwidth"><label>Zip:</label></td>
+            <td class="colinputwidth" ng-show="subscrberViewModel.PubSubscription.CountryID==1">
+                <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.FullZip"  style="width:100%;" k-mask="'00000-0000'" id="FullZip"  tabindex="13"/>
+            </td>
+            <td class="colinputwidth" ng-show="subscrberViewModel.PubSubscription.CountryID==2">
+                <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.FullZip" style="width:100%;" k-mask="'L0L-0L0'" id="FullZip" tabindex="13"/>
+            </td>
+            <td class="colinputwidth" ng-show="subscrberViewModel.PubSubscription.CountryID!=1 && subscrberViewModel.PubSubscription.CountryID!=2">
+                <input kendo-masked-text-box ng-model="subscrberViewModel.PubSubscription.FullZip" style="width:100%;" k-mask="'AAAAAAAAAAAAAA'" id="FullZip" tabindex="13" />
+            </td>
+            <td class="collabelwidth"><label>Sequence #:</label></td>
+            <td class="colinputwidth">
+                <input class="k-textbox" ng-model="subscrberViewModel.PubSubscription.SequenceID" style="width:100%;background-color:#D3D3D3;" readonly />
+            </td>
+        </tr>
+    </table>
+</div>

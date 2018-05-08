@@ -1,0 +1,1572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetSubscriberCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="GroupID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSubscriberCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSubscriberCountResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FilterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReplyEmail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsTest" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddAdvancedBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FilterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReplyEmail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsTest" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="refBlasts" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="OverRideAmount" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsOverRideAmount" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddAdvancedBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddAdvancedBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="BlastID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FilterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReplyEmail" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddScheduledBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FilterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReplyEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSchedule" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddScheduledBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddScheduledBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddScheduledAdvancedBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MessageID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ListID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeptID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="FilterID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FromName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReplyEmail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsTest" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSchedule" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="refBlasts" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddScheduledAdvancedBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddScheduledAdvancedBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="BlastID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchForBlasts">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSearch" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchForBlastsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchForBlastsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBlast">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="BlastID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBlastResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteBlastResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastReportByISP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="XMLSearch" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastReportByISPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastReportByISPResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastOpensReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="filterType" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="withDetail" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastOpensReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastOpensReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastClicksReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="filterType" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="withDetail" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastClicksReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastClicksReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastBounceReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="withDetail" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastBounceReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastBounceReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastUnsubscribeReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="blastID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="withDetail" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastUnsubscribeReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastUnsubscribeReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastDeliveryReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ecnAccessKey" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="fromDate" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="toDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlastDeliveryReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlastDeliveryReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetSubscriberCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSubscriberCount" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSubscriberCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:AddBlast" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:AddBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:AddAdvancedBlast" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:AddAdvancedBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateBlast" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:AddScheduledBlast" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:AddScheduledBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:AddScheduledAdvancedBlast" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:AddScheduledAdvancedBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlast" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchForBlasts" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchForBlastsResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteBlast" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteBlastResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastReportByISP" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastReportByISPResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastOpensReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastOpensReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastClicksReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastClicksReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastBounceReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastBounceReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastUnsubscribeReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastUnsubscribeReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlastDeliveryReport" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlastDeliveryReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+    <wsdl:part name="refBlasts" type="s:string" />
+    <wsdl:part name="OverRideAmount" type="s:string" />
+    <wsdl:part name="IsOverRideAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="XMLSchedule" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+    <wsdl:part name="XMLSchedule" type="s:string" />
+    <wsdl:part name="refBlasts" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="filterType" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="filterType" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportHttpGetIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="fromDate" type="s:string" />
+    <wsdl:part name="toDate" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSubscriberCountHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+    <wsdl:part name="refBlasts" type="s:string" />
+    <wsdl:part name="OverRideAmount" type="s:string" />
+    <wsdl:part name="IsOverRideAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddAdvancedBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="UpdateBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="XMLSchedule" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="MessageID" type="s:string" />
+    <wsdl:part name="ListID" type="s:string" />
+    <wsdl:part name="DeptID" type="s:string" />
+    <wsdl:part name="FilterID" type="s:string" />
+    <wsdl:part name="Subject" type="s:string" />
+    <wsdl:part name="FromEmail" type="s:string" />
+    <wsdl:part name="FromName" type="s:string" />
+    <wsdl:part name="ReplyEmail" type="s:string" />
+    <wsdl:part name="IsTest" type="s:string" />
+    <wsdl:part name="XMLSchedule" type="s:string" />
+    <wsdl:part name="refBlasts" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddScheduledAdvancedBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchForBlastsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="BlastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlastHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="XMLSearch" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastReportByISPHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="filterType" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastOpensReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="filterType" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastClicksReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastBounceReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="blastID" type="s:string" />
+    <wsdl:part name="withDetail" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastUnsubscribeReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportHttpPostIn">
+    <wsdl:part name="ecnAccessKey" type="s:string" />
+    <wsdl:part name="fromDate" type="s:string" />
+    <wsdl:part name="toDate" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlastDeliveryReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="BlastManagerSoap">
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountSoapIn" />
+      <wsdl:output message="tns:GetSubscriberCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddBlastSoapIn" />
+      <wsdl:output message="tns:AddBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddAdvancedBlastSoapIn" />
+      <wsdl:output message="tns:AddAdvancedBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Blast in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateBlastSoapIn" />
+      <wsdl:output message="tns:UpdateBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledBlastSoapIn" />
+      <wsdl:output message="tns:AddScheduledBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledAdvancedBlastSoapIn" />
+      <wsdl:output message="tns:AddScheduledAdvancedBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastSoapIn" />
+      <wsdl:output message="tns:GetBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Blasts in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForBlastsSoapIn" />
+      <wsdl:output message="tns:SearchForBlastsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteBlastSoapIn" />
+      <wsdl:output message="tns:DeleteBlastSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportSoapIn" />
+      <wsdl:output message="tns:GetBlastReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report by ISP from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportByISPSoapIn" />
+      <wsdl:output message="tns:GetBlastReportByISPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Opens Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastOpensReportSoapIn" />
+      <wsdl:output message="tns:GetBlastOpensReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Clicks Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastClicksReportSoapIn" />
+      <wsdl:output message="tns:GetBlastClicksReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Bounce Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastBounceReportSoapIn" />
+      <wsdl:output message="tns:GetBlastBounceReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Unsubscribe Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastUnsubscribeReportSoapIn" />
+      <wsdl:output message="tns:GetBlastUnsubscribeReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Delivery Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastDeliveryReportSoapIn" />
+      <wsdl:output message="tns:GetBlastDeliveryReportSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="BlastManagerHttpGet">
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountHttpGetIn" />
+      <wsdl:output message="tns:GetSubscriberCountHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddBlastHttpGetIn" />
+      <wsdl:output message="tns:AddBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddAdvancedBlastHttpGetIn" />
+      <wsdl:output message="tns:AddAdvancedBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Blast in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateBlastHttpGetIn" />
+      <wsdl:output message="tns:UpdateBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledBlastHttpGetIn" />
+      <wsdl:output message="tns:AddScheduledBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledAdvancedBlastHttpGetIn" />
+      <wsdl:output message="tns:AddScheduledAdvancedBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastHttpGetIn" />
+      <wsdl:output message="tns:GetBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Blasts in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForBlastsHttpGetIn" />
+      <wsdl:output message="tns:SearchForBlastsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteBlastHttpGetIn" />
+      <wsdl:output message="tns:DeleteBlastHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report by ISP from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportByISPHttpGetIn" />
+      <wsdl:output message="tns:GetBlastReportByISPHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Opens Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastOpensReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastOpensReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Clicks Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastClicksReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastClicksReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Bounce Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastBounceReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastBounceReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Unsubscribe Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastUnsubscribeReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastUnsubscribeReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Delivery Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastDeliveryReportHttpGetIn" />
+      <wsdl:output message="tns:GetBlastDeliveryReportHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="BlastManagerHttpPost">
+    <wsdl:operation name="GetSubscriberCount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get the subscriber count from a List from ECN.</wsdl:documentation>
+      <wsdl:input message="tns:GetSubscriberCountHttpPostIn" />
+      <wsdl:output message="tns:GetSubscriberCountHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddBlastHttpPostIn" />
+      <wsdl:output message="tns:AddBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddAdvancedBlastHttpPostIn" />
+      <wsdl:output message="tns:AddAdvancedBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Update a Blast in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:UpdateBlastHttpPostIn" />
+      <wsdl:output message="tns:UpdateBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN. </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledBlastHttpPostIn" />
+      <wsdl:output message="tns:AddScheduledBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add a Scheduled Blast to ECN(Advanced). </wsdl:documentation>
+      <wsdl:input message="tns:AddScheduledAdvancedBlastHttpPostIn" />
+      <wsdl:output message="tns:AddScheduledAdvancedBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastHttpPostIn" />
+      <wsdl:output message="tns:GetBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Search for Blasts in ECN. </wsdl:documentation>
+      <wsdl:input message="tns:SearchForBlastsHttpPostIn" />
+      <wsdl:output message="tns:SearchForBlastsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete Blast from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:DeleteBlastHttpPostIn" />
+      <wsdl:output message="tns:DeleteBlastHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Report by ISP from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastReportByISPHttpPostIn" />
+      <wsdl:output message="tns:GetBlastReportByISPHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Opens Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastOpensReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastOpensReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Clicks Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastClicksReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastClicksReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Bounce Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastBounceReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastBounceReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Unsubscribe Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastUnsubscribeReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastUnsubscribeReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get a Blast Delivery Report from ECN. </wsdl:documentation>
+      <wsdl:input message="tns:GetBlastDeliveryReportHttpPostIn" />
+      <wsdl:output message="tns:GetBlastDeliveryReportHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BlastManagerSoap" type="tns:BlastManagerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSubscriberCount">
+      <soap:operation soapAction="http://tempuri.org/GetSubscriberCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <soap:operation soapAction="http://tempuri.org/AddBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <soap:operation soapAction="http://tempuri.org/AddAdvancedBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <soap:operation soapAction="http://tempuri.org/UpdateBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <soap:operation soapAction="http://tempuri.org/AddScheduledBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <soap:operation soapAction="http://tempuri.org/AddScheduledAdvancedBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <soap:operation soapAction="http://tempuri.org/GetBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <soap:operation soapAction="http://tempuri.org/SearchForBlasts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <soap:operation soapAction="http://tempuri.org/DeleteBlast" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <soap:operation soapAction="http://tempuri.org/GetBlastReportByISP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastOpensReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastClicksReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastBounceReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastUnsubscribeReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <soap:operation soapAction="http://tempuri.org/GetBlastDeliveryReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlastManagerSoap12" type="tns:BlastManagerSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSubscriberCount">
+      <soap12:operation soapAction="http://tempuri.org/GetSubscriberCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <soap12:operation soapAction="http://tempuri.org/AddBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <soap12:operation soapAction="http://tempuri.org/AddAdvancedBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <soap12:operation soapAction="http://tempuri.org/UpdateBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <soap12:operation soapAction="http://tempuri.org/AddScheduledBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <soap12:operation soapAction="http://tempuri.org/AddScheduledAdvancedBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <soap12:operation soapAction="http://tempuri.org/GetBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <soap12:operation soapAction="http://tempuri.org/SearchForBlasts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <soap12:operation soapAction="http://tempuri.org/DeleteBlast" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastReportByISP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastOpensReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastClicksReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastBounceReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastUnsubscribeReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <soap12:operation soapAction="http://tempuri.org/GetBlastDeliveryReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlastManagerHttpGet" type="tns:BlastManagerHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetSubscriberCount">
+      <http:operation location="/GetSubscriberCount" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <http:operation location="/AddBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <http:operation location="/AddAdvancedBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <http:operation location="/UpdateBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <http:operation location="/AddScheduledBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <http:operation location="/AddScheduledAdvancedBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <http:operation location="/GetBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <http:operation location="/SearchForBlasts" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <http:operation location="/DeleteBlast" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <http:operation location="/GetBlastReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <http:operation location="/GetBlastReportByISP" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <http:operation location="/GetBlastOpensReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <http:operation location="/GetBlastClicksReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <http:operation location="/GetBlastBounceReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <http:operation location="/GetBlastUnsubscribeReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <http:operation location="/GetBlastDeliveryReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlastManagerHttpPost" type="tns:BlastManagerHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetSubscriberCount">
+      <http:operation location="/GetSubscriberCount" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddBlast">
+      <http:operation location="/AddBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdvancedBlast">
+      <http:operation location="/AddAdvancedBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBlast">
+      <http:operation location="/UpdateBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledBlast">
+      <http:operation location="/AddScheduledBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddScheduledAdvancedBlast">
+      <http:operation location="/AddScheduledAdvancedBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlast">
+      <http:operation location="/GetBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchForBlasts">
+      <http:operation location="/SearchForBlasts" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlast">
+      <http:operation location="/DeleteBlast" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReport">
+      <http:operation location="/GetBlastReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastReportByISP">
+      <http:operation location="/GetBlastReportByISP" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastOpensReport">
+      <http:operation location="/GetBlastOpensReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastClicksReport">
+      <http:operation location="/GetBlastClicksReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastBounceReport">
+      <http:operation location="/GetBlastBounceReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastUnsubscribeReport">
+      <http:operation location="/GetBlastUnsubscribeReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlastDeliveryReport">
+      <http:operation location="/GetBlastDeliveryReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BlastManager">
+    <wsdl:port name="BlastManagerSoap" binding="tns:BlastManagerSoap">
+      <soap:address location="http://test.webservices.ecn5.com/blastmanager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlastManagerSoap12" binding="tns:BlastManagerSoap12">
+      <soap12:address location="http://test.webservices.ecn5.com/blastmanager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlastManagerHttpGet" binding="tns:BlastManagerHttpGet">
+      <http:address location="http://test.webservices.ecn5.com/blastmanager.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlastManagerHttpPost" binding="tns:BlastManagerHttpPost">
+      <http:address location="http://test.webservices.ecn5.com/blastmanager.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

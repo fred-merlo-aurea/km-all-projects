@@ -1,0 +1,56 @@
+﻿@model ECN_Framework_Entities.Communicator.FilterGroup
+<table style="width:100%">
+    <tr>
+        <td><h3 style="margin-top: 0px;">Filter Conditions for @Model.Name</h3></td>
+        <td style="float: right; padding-right: 0px;"><button type="button" class="btn k-button" onclick="addConditionFilterGroup('@Model.FilterGroupID')">Add Condition<i class='km-icon icon-kmplus-circled-1'></i></button></td>
+    </tr>
+</table>
+
+@(Html.Kendo()
+        .Grid(Model.FilterConditionList)
+        .Name("filterConditionGrid")
+        .Events(x => x.DataBound("dataBound"))
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.Field).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Field").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" }).ClientTemplate("#if(FieldType == 'Date'){# <span>#=Field# (#=DatePart#)</span>#} else{#<span>#=Field#</span>#}#");
+            columns.Bound(e => e.Comparator).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Comparator").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" }).ClientTemplate("#if(NotComparator > 0){#<span>NOT #=Comparator#</span>#}else{#<span>#=Comparator#</span>#}#");
+            columns.Bound(e => e.CompareValue).Filterable(x => x.Cell(c => c.ShowOperators(false))).Title("Compare Value").HtmlAttributes(new { @style = "overflow: hidden; vertical-align:middle; text-align: center;" }).HeaderHtmlAttributes(new { @style = "text-align:center; vertical-align:middle; text-align: center;" });
+            columns.Bound(e => e).ClientTemplate(GetActions().ToString()).Filterable(false).Sortable(false).HtmlAttributes(new { @style = "width:95px" }); ;
+        })
+        .Pageable(pageable => pageable
+            .PageSizes(new[] { 5, 10, 15, 20 })
+            .Input(true)
+            .ButtonCount(1)
+            )
+        .Sortable()
+        .HtmlAttributes(new { style = "min-height:400px;min-width:600px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(m =>
+            {
+                m.Id(y => y.FilterConditionID);
+            })
+            .PageSize(10)
+            .ServerOperation(false)
+        )
+)
+
+@helper  GetActions()
+{
+    @(Html.Kendo()
+        .Menu()
+        .Name("Menu#=FilterConditionID#")
+        .Direction(MenuDirection.Left)
+        .Orientation(MenuOrientation.Vertical)
+        .Animation(false)
+        .Items(
+            items => items.Add().Text("Actions").HtmlAttributes(new { @class = "k-menu-actions" }).Items(
+                innerItems =>
+                {
+                    innerItems.Add().Text("").Action("Index", "Group").HtmlAttributes(new { @style = "display:none;" });
+                    innerItems.Add().Text("Edit").HtmlAttributes(new { onclick = "editConditionFilterGroup('#=FilterConditionID#')" });
+                    innerItems.Add().Text("Delete").HtmlAttributes(new { onclick = "deleteConditionFilterGroup('#=FilterConditionID#')" });
+                }
+            )
+        ).ToClientTemplate())
+}

@@ -1,0 +1,226 @@
+﻿<table width="100%" border="0" cellpadding="5" cellspacing="5" style="border: solid 1px #5783BD;margin:0;">
+    <tbody>
+        <tr style="background-color: #5783BD;">
+            <td style="padding: 5px; font-size: 20px; color: #ffffff; font-weight: bold" align="center">
+                Download/Export Records
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <div id="dvCreateNewColumnErrorDiv" style="color:red;"></div>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="padding:10px;">
+                <table width="100%" align="center" id="tblIssueSplitExportFields">
+                    <tr>
+                        <td align="left"><em>Note: This will eliminate the original columns.</em></td>
+                        <td align="right">
+                            <b>New Column Name</b>
+                            <input type="text" class="k-textbox" id="txtExportNewColumnName" required/>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            @(Html.Kendo().ListBox().Name("AvailableDefaultFieldOptions")
+                            .ConnectWith("SelectedDefaultFieldOptions")
+                            .DataTextField("DisplayName")
+                            .DataValueField("DownloadName")
+                            .Selectable(ListBoxSelectable.Multiple)
+                            .Draggable(true)
+                            .DropSources("SelectedDefaultFieldOptions")
+                            .Toolbar(toolbar =>
+                            {
+                                toolbar.Position(Kendo.Mvc.UI.Fluent.ListBoxToolbarPosition.Right);
+                                toolbar.Tools(tools => tools
+                                    .TransferTo()
+                                    .TransferFrom()
+
+                                );
+                            })
+                            .HtmlAttributes(new { style = "height:200px;width:350px;text-align:left;", id = "AvailableDefaultFieldOptions" }))
+                        
+                        </td>
+                        <td align="center">
+                            @(Html.Kendo().ListBox().Name("SelectedDefaultFieldOptions")
+                             .ConnectWith("AvailableDefaultFieldOptions")
+                             .DataTextField("DisplayName")
+                             .DataValueField("DownloadName")
+                             .Draggable(true)
+                             .DropSources("AvailableDefaultFieldOptions")
+                             .Selectable(ListBoxSelectable.Multiple)
+                             .HtmlAttributes(new { style = "height:200px;width:350px;text-align:left;" ,id= "SelectedDefaultFieldOptions" }))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="right"></td>
+                        <td width="50%" align="right">
+                            <b>Delimiter:</b>
+                            <select id="kddlColumnDelimeter" style="width:50%;">
+                                <option value=""></option>
+                                <option value="Comma">Comma</option>
+                                <option value="Space">Space</option>
+                                <option value="None">None</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="right">
+                        </td>
+                        <td width="50%" align="right">
+                            <input type="button" id="btnAddNewColumn" value="Add New Column" style="width:120px;" class="filterButton">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="left">
+                            <b>New Columns:</b>
+                        </td>
+                        <td width="50%" align="left">
+                           <strong>Select a new column to view the contained columns and delimiter below</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="left">
+                            <div id="dvNewColumn">
+
+                            </div>
+                        </td>
+                        <td width="50%" align="left">
+                            <div id="dvNewColumnDetails">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="4">
+                            <br>
+                            <input type="button" id="btnExportWithNewColumns"  value="Export" class="filterButton">
+                            <input type="button" id="btnCancelExport"  value="Cancel" class="filterButton">
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        
+        $("#kddlColumnDelimeter").kendoDropDownList();
+       
+        $("#btnAddNewColumn").on("click", function () {
+            var errorlist = [];
+
+            var columnname = "";
+            var columnlist = "";
+            var columndelimiter = "";
+            $("#dvCreateNewColumnErrorDiv").html('');
+            var listBox = $("#SelectedDefaultFieldOptions").data("kendoListBox");
+            var lstitems = listBox.dataItems();
+            var kddl = $("#kddlColumnDelimeter").data("kendoDropDownList");
+            if (!$("#txtExportNewColumnName").val()) {
+                errorlist.push({ EleId: 'txtExportNewColumnName', errorMessage: 'Please provide new column name.' })
+            } else {
+                $("#txtExportNewColumnName").removeClass('highlightInput');
+                columnname = $("#txtExportNewColumnName").val();
+            }
+            if (!$("#kddlColumnDelimeter").val()) {
+                errorlist.push({ EleId: 'kddlColumnDelimeter', errorMessage: 'Please select delimiiter.' });
+                $(['aria-owns="kddlColumnDelimeter_listbox"']).addClass('highlightInput');
+            } else {
+                $(['aria-owns="kddlColumnDelimeter_listbox"']).removeClass('highlightInput');
+                columndelimiter = $("#kddlColumnDelimeter").val();
+            }
+            if (lstitems.length == 0) {
+                errorlist.push({ EleId: 'SelectedDefaultFieldOptions', errorMessage: 'Please select fields to create new column.' });
+                $(listBox).addClass('highlightInput');
+            } else {
+                $(listBox).removeClass('highlightInput');
+                $.each(lstitems, function (i, item) {
+                    if (!columnlist) {
+                        columnlist = columnlist + item.DownloadName;
+                    } else {
+                        columnlist = columnlist + "," + item.DownloadName;
+                    }
+                });
+            }
+            if (errorlist.length > 0) {
+                var lis = "<ul>";
+                $.each(errorlist, function (i, item) {
+                    $("#" + item.EleId).addClass('highlightInput');
+                    lis = lis + "<li>" + item.errorMessage + "</li>"
+                });
+                lis = lis + "</ul>";
+                $("#dvCreateNewColumnErrorDiv").append(lis);
+            } else {
+                var divs = "<div style='background-color:gray;margin-bottom:5px;color:white;' class='NewlyCreatedColumn'  data-columnname=" + columnname + " data-columndelimiter=" + columndelimiter + " data-columnlist=" + columnlist + ">";
+                divs = divs + "<span>" + columnname + "</span><span class='k-icon k-i-close-circle k-i-x-circle pull-right'></span></div>";
+                $("#dvNewColumn").append(divs);
+                $("#dvCreateNewColumnErrorDiv").html('');
+                listBox.remove(listBox.items());
+                $("#txtExportNewColumnName").val('');
+                kddl.value('');
+            }
+            
+        });
+        $("#btnExportWithNewColumns").on("click", function () {
+            var newcolumns = [];
+            var data = [];
+            var listavailable = $("#AvailableDefaultFieldOptions").data("kendoListBox");
+            var availableitems = listavailable.dataItems();
+            $.each(availableitems, function (i, obj) {
+                data.push({ DisplayName: obj.DisplayName, DownloadName: obj.DownloadName, Type: obj.Type });
+            });
+            var newclms = $(".NewlyCreatedColumn");
+            if (newclms && newclms.length > 0) {
+                $.each(newclms, function (i, obj) {
+                    var clname = $(obj).data('columnname');
+                    var cldel = $(obj).data('columndelimiter');
+                    var cllst = $(obj).data('columnlist');
+                    var columnlst = cllst.split(',');
+                    var columnDisplaynamelst = [];
+                    $.each(columnlst, function (ni, nesobj) {
+                        var left = nesobj.indexOf('[');
+                        var right = nesobj.indexOf(']');
+                        var res = nesobj.substring(left + 1, right);
+                        columnDisplaynamelst.push(res);
+                        data.push({ DisplayName: res, DownloadName: nesobj, Type: "Default" });
+                    });
+                    newcolumns.push({ Name: clname, Delimiter: cldel, Columns: columnDisplaynamelst });
+                });
+            }
+            var model = {
+                IsDefault: false,
+                DownloadFields: data,
+                NewColumnsFields: newcolumns
+            };
+
+            console.log(model);
+            CloseWindow('IssuSplitCreateNewColumns');
+            ExportSplits(model); //Index page
+           
+        });
+
+        $("#btnCancelExport").on("click", function () {
+            var listavailable = $("#AvailableDefaultFieldOptions").data("kendoListBox");
+            var availableitems = listavailable.dataItems();
+            var data = [];
+            var newcolumns = [];
+            $.each(availableitems, function (i, obj) {
+                data.push({ DisplayName: obj.DisplayName, DownloadName: obj.DownloadName, Type: obj.Type });
+            });
+            CloseWindow('IssuSplitCreateNewColumns');
+            var model = {
+                IsDefault: true,
+                DownloadFields: data,
+                NewColumnsFields: newcolumns
+            };
+
+            ExportWithDefaultTransformation(data); //Index page
+        });
+    });
+</script>

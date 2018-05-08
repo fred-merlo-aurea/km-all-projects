@@ -1,0 +1,103 @@
+﻿<script>
+    var explorer;
+    function linkAliasExplorer(select, customerID, layoutID) {
+        explorer = new LinkAliasExplorer({
+            select: select,
+            customerID: customerID,
+            layoutID: layoutID
+        });
+        explorer.open();
+    }
+    function LinkAliasExplorer(options) {
+        this.select = options.select;
+        this.customerID = options.customerID;
+        this.layoutID = options.layoutID;
+        this.open = function () {
+            var window = $("#LinkAliasExplorer").data("kendoWindow");
+            window.center().open();
+        };
+        this.close = function () {
+            var window = $("#LinkAliasExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }    
+    function onLinkAliasExplorerOpen() {
+        bindSelectLinkAlias();
+        var grid = $("#LinkAlias").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function onLinkAliasExplorerClose() {
+        $(".k-overlay").remove();
+    }    
+    function bindSelectLinkAlias() {
+        kendo.destroy("#LinkAlias");
+        $("#LinkAlias").kendoGrid({
+            columns: [
+                { field: "Alias", width: 200, title: "Link Alias" },
+                { field: "Link", width: 250, title: "Link" },
+                { template: "<i class='km-icon icon-kmplus-circled-1'></i>", width: 20 }
+            ],
+            selectable: "row",
+            autoBind: false,
+            change: addLinkAlias,
+            dataSource: {
+                transport: {
+                    read: '@Url.Action("GetLinkAlias", "Web")?customerID=' + explorer.customerID + '&layoutID=' + explorer.layoutID
+                },
+                schema: {
+                    model: {
+                        Alias: "Alias",
+                        Link: "Link"
+                    }
+                }
+            },
+            scrollable: true,
+            height: 460
+        });
+        $("#LinkAliasExplorer").on("LinkAliasSelected", function (e) {
+            explorer.select(e);
+        });
+    }
+    function addLinkAlias(e) {
+        var item = this.select();
+        if (item.length == 0)
+            return;
+        var link = this.dataItem(item);
+        var event = $.Event("LinkAliasSelected");
+        event.sender = explorer;
+        event.link = link;
+        $("#LinkAliasExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("LinkAlias")
+                       .Name("LinkAliasExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onLinkAliasExplorerOpen")
+                                    .Close("onLinkAliasExplorerClose"))
+                       .Visible(false)
+                       .Width(850)
+                       .Height(540);
+
+    explorer.Render();
+}
+@helper Content()
+{
+    <div class="wrapper modal modalgroupexplorer">
+        <fieldset title="Select Link Alias">
+            <legend>Select Link Alias</legend>
+            <div id="LinkAlias"></div>
+        </fieldset>
+    </div>
+}

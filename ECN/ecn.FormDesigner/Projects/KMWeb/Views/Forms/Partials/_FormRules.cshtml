@@ -1,0 +1,45 @@
+﻿@using KMModels.PostModels
+@using KMEnums
+@model FormRulesPostModel
+@{
+    bool viewOnly = (bool)ViewBag.ViewOnly;
+}
+<div class="ptitle">
+    <span>Rules</span>
+</div>
+
+@using (Ajax.BeginForm("SaveRules", new AjaxOptions
+{
+    HttpMethod = "POST",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "formRulesContent",
+    OnComplete = "onComplete",
+    //OnFailure = "onError"
+}))
+{   
+    <div id="formRulesContent" style='width: 100%'>
+        @Html.Partial("Partials/_FormRulesContent", Model)
+    </div>
+    
+    
+    <div class="bottomnavbox">
+        <div class="bottomnav">
+            <div class="lbtns">
+                @Html.Kendo().Button().Name("Previous").Content("<i class='km-icon icon-kmleft-dir lalign'></i>Previous").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "movePrevious(this)" })
+            </div>
+            <div class="cbtns SaveCancelBlock">
+                @if (!viewOnly)
+                {
+                    @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "reloadTab()" })
+                    @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn btn-blue5" })
+                }
+            </div>
+            <div class="rbtns">
+                @Html.Kendo().Button().Name("Next").Content("Next<i class='km-icon icon-kmright-dir ralign'></i>").HtmlAttributes(new { @class = "btn btn-blue5", type = "button", onclick = "moveNext(this)" })
+            </div>
+        </div>
+    </div>
+}
+
+
+

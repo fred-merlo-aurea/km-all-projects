@@ -1,0 +1,630 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+
+@model ECN_Framework_Entities.Communicator.FilterCondition
+@{ 
+    Dictionary<string,string> fields = ViewBag.Fields;
+}
+
+<script>
+    var lastControlsError = [];
+    var lastControlsError_E = [];
+    $(document).ready(function () {
+
+
+        setTimeout(function(){
+            SetupFieldType('@Model.Field', true);
+            LoadComparators($('#fieldType_E').data('kendoDropDownList').value(), true);
+            SetupValueEntry($('#fieldType_E').data('kendoDropDownList').value(), true);
+
+            if (@Model.NotComparator.Value == 1)
+                $('#notComparator_E').prop('checked', true);
+            else
+                $('#notComparator_E').prop('checked', false);
+            $('#comparator_E').data('kendoDropDownList').value('@Model.Comparator');
+            if ('@Model.FieldType' == 'Date' && '@Model.DatePart' == 'full')
+            {
+                $("#btnSelectDate_E").show();
+                $('#compareValue_E').val('@Model.CompareValue');
+                $("#compareValue_E").attr('disabled','disabled');
+            }
+            else
+            {
+                $("#btnSelectDate_E").hide();
+                $('#compareValue_E').val('@Model.CompareValue');
+                $("#compareValue_E").removeAttr('disabled');
+            }
+
+
+            if( $('#comparator_E').data('kendoDropDownList').value() == 'is empty')
+            {
+                $("#btnSelectDate_E").hide();
+            }
+        },50);
+
+
+    });
+
+    function Field_E_Change()
+    {
+        debugger;
+        var fieldDDL = $("#field_E").data('kendoDropDownList');
+        SetupFieldType(fieldDDL.value(), false);
+        LoadComparators($('#fieldType_E').data('kendoDropDownList').value(), false);
+        SetupValueEntry($('#fieldType_E').data('kendoDropDownList').value(), false);
+    }
+
+    function fieldType_E_Change()
+    {
+        LoadComparators($('#fieldType_E').data('kendoDropDownList').value(), false);
+        SetupValueEntry($('#fieldType_E').data('kendoDropDownList').value(), false);
+    }
+
+    function datePart_E_Change()
+    {
+        LoadComparators($('#fieldType_E').data('kendoDropDownList').value(), false);
+        SetupValueEntry($('#fieldType_E').data('kendoDropDownList').value(), false);
+        if($("#datePart_E").data('kendoDropDownList').value() == 'full')
+        {
+            $('#compareValue_E').attr("disabled", "disabled");
+        }
+        else{
+            $('#compareValue_E').removeAttr("disabled");
+        }
+    }
+
+    function comparator_E_Change()
+    {
+        SetupValueEntry($('#fieldType_E').data('kendoDropDownList').value(), false);
+        var comparator = $('#comparator_E').data('kendoDropDownList');
+        if(comparator.value() == 'is empty')
+        {
+            $('#compareValue_E').val('');
+            $('#compareValue_E').attr("disabled", "disabled");
+        }
+    }
+
+    function SetupFieldType(fieldName, firstLoad)
+    {
+        var fieldTypeDDL = $("#fieldType_E").data('kendoDropDownList');
+        switch (fieldName)
+        {
+            case "EmailAddress":
+            case "FormatTypeCode":
+            case "SubscribeTypeCode":
+            case "Title":
+            case "FirstName":
+            case "LastName":
+            case "FullName":
+            case "Company":
+            case "Occupation":
+            case "Address":
+            case "Address2":
+            case "City":
+            case "State":
+            case "Zip":
+            case "Country":
+            case "Voice":
+            case "Mobile":
+            case "Fax":
+            case "Website":
+            case "Age":
+            case "Income":
+            case "Gender":
+                debugger;
+
+                fieldTypeDDL.value('String');
+                fieldTypeDDL.enable(false);
+                $("#divDatePart").hide();
+                break;
+            case "User1":
+            case "User2":
+            case "User3":
+            case "User4":
+            case "User5":
+            case "User6":
+
+                fieldTypeDDL.value('@Model.FieldType');
+                fieldTypeDDL.enable(true);
+                if('@Model.FieldType' == 'Date')
+                {
+                    var currentType = '@Model.DatePart.ToLower()';
+                    $("#divDatePart").show();
+                    if(currentType == 'full' || currentType == 'month' || currentType == 'day' || currentType == 'year')
+                    {
+                        $("#datePart_E").data('kendoDropDownList').value('@Model.DatePart.ToLower()');
+                    }
+                }
+                else{
+                    $("#divDatePart").hide();
+                }
+                break;
+            case "Birthdate":
+            case "UserEvent1Date":
+            case "UserEvent2Date":
+            case "CreatedOn":
+            case "LastChanged":
+
+                fieldTypeDDL.value('Date');
+                fieldTypeDDL.enable(false);
+                var currentType = '@Model.DatePart.ToLower()';
+
+                if(currentType == 'full' || currentType == 'month' || currentType == 'day' || currentType == 'year')
+                {
+                    $("#datePart_E").data('kendoDropDownList').value('@Model.DatePart.ToLower()');
+                }
+                $("#divDatePart").show();
+                break;
+            case "UserEvent1":
+            case "UserEvent2":
+            case "Notes":
+
+                fieldTypeDDL.value('String');
+                fieldTypeDDL.enable(false);
+                $("#divDatePart").hide();
+                break;
+            default:
+
+                fieldTypeDDL.value('@Model.FieldType');
+                fieldTypeDDL.enable(true);
+                if('@Model.FieldType' == 'Date')
+                {
+                    var currentType = '@Model.DatePart.ToLower()';
+                    $("#divDatePart").show();
+                    if(currentType == 'full' || currentType == 'month' || currentType == 'day' || currentType == 'year')
+                    {
+                        $("#datePart_E").data('kendoDropDownList').value('@Model.DatePart.ToLower()');
+                    }
+                }
+                else{
+                    $("#divDatePart").hide();
+                }
+                break;
+        }
+
+    }
+    function LoadComparators(fieldType_E, firstLoad)
+    {
+        var ddlComparator = $('#comparator_E').data('kendoDropDownList');
+        ddlComparator.dataSource.data([]);
+        var dataS = [];
+        switch (fieldType_E)
+        {
+            case "String":
+                dataS = [{ Text: "equals [=]", Value: "equals" },
+                 { Text: "is in", Value: "is in" },
+                 { Text: "contains", Value: "contains" },
+                 { Text: "starts with", Value: "starts with" },
+                 { Text: "ends with", Value: "ends with" },
+                 { Text: "is empty", Value: "is empty" }];
+                $("#divDatePart").hide();
+                break;
+            case "Date":
+                dataS =[{ Text: "equals [=]", Value: "equals" },
+                { Text: "greater than [>]", Value: "greater than" },
+                { Text: "less than [<]", Value: "less than" },
+                { Text: "is empty", Value: "is empty" }];
+                $("#divDatePart").show();
+                break;
+            case "Number":
+            case "Money":
+                dataS =[{ Text: "equals [=]", Value: "equals" },
+                { Text: "is in", Value: "is in" },
+                { Text: "greater than [>]", Value: "greater than" },
+                { Text: "less than [<]", Value: "less than" },
+                { Text: "is empty", Value: "is empty" }];
+                $("#divDatePart").hide();
+                break;
+            default:
+                break;
+        }
+        var newSource = new kendo.data.DataSource({ data: dataS });
+        ddlComparator.setDataSource(newSource);
+
+        ddlComparator.select(0);
+    }
+    function SetupValueEntry(fieldType_E, firstLoad)
+    {
+        debugger;
+        var ddlDatePart = $('#datePart_E').data('kendoDropDownList');
+        if (fieldType_E == "Date")
+        {
+            $('#compareValue_E').val('');
+            if (ddlDatePart.value() == "full")
+            {
+                //ddlDatePart.value('full');
+                ddlDatePart.enable(true);
+                $('#compareValue_E').attr("disabled", "disabled");
+                $("#btnSelectDate_E").show();
+            }
+            else
+            {
+                //ddlDatePart.value('@Model.DatePart');
+                $("#btnSelectDate_E").hide();
+                ddlDatePart.enable(true);
+
+            }
+        }
+        else if (fieldType_E == "String")
+        {
+            ddlDatePart.enable(true);
+            ddlDatePart.value('full');
+            ddlDatePart.enable(false);
+            $("#btnSelectDate_E").hide();
+            $('#compareValue_E').removeAttr("disabled");
+            $('#compareValue_E').val('');
+        }
+        else
+        {
+            $("#btnSelectDate_E").hide();
+            ddlDatePart.enable(true);
+            ddlDatePart.value('full');
+            ddlDatePart.enable(false);
+            $('#compareValue_E').removeAttr("disabled");
+            $('#compareValue_E').val('');
+        }
+
+
+        if ($('#comparator_E').val() == "is empty")
+        {
+
+            $('#compareValue_E').prop("disabled", true);
+            $("#btnSelectDate_E").hide();
+            $('#compareValue_E').val("");
+        }
+
+
+    }
+
+    function editFilterCondition() {
+        clearValidationError("EditCondition_Validation", lastControlsError);
+        lastControlsError = [];
+        var model = {
+            FilterConditionID: $('#filterConditionID_E').val(),
+            FilterGroupID: $('#filterGroupID_E').val(),
+            Field: $('#field_E').data('kendoDropDownList').value(),
+            FieldType: $('#fieldType_E').data('kendoDropDownList').value(),
+            DatePart: $('#fieldType_E').data('kendoDropDownList').value() == "Date" ? $('#datePart_E').data('kendoDropDownList').value() : "",
+            NotComparator : $('#notComparator_E').is(":checked") ? 1 : 0,
+            Comparator: $('#comparator_E').data('kendoDropDownList').value(),
+            CompareValue: $('#fieldType_E').data('kendoDropDownList').value() == "Date" && $('#datePart_E').data('kendoDropDownList').value() == "full" ? kendo.toString($('#compareValue_E').val(),'d') : $('#compareValue_E').val()
+        };
+        if(model.FieldType == "Date" && model.Comparator != 'is empty' && model.CompareValue.length == 0)
+        {
+            lastControlsError.push("compareValue_E");
+            setValidationError("Please enter a value to compare against", "EditCondition_Validation", lastControlsError);
+        }
+        else{
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditFilterCondition", "Filter")",
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response[0] == '200') {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                        closeEditFilterCondition();
+                        $("#divFilterGrid").html(response[1]);
+                    }
+                    else {
+                        lastControlsError = [];
+                        setValidationError(response[1], "EditCondition_Validation", lastControlsError);
+                    }
+                }
+            });
+        }
+    };
+
+    function btnSelectDate_Click()
+    {
+        debugger;
+        //SelectDateWindow
+        var win = $("#SelectDateWindow_Edit");
+        //kendo.bind(win, { Id: id });
+        var kendoWindow = win.data('kendoWindow');
+
+        var selected = $("#compareValue_E").val();
+        var isEXP = false;
+        var plusOrMinus = '';
+        var number ='0';
+        if(selected.indexOf('EXP') >= 0)
+        {
+            isEXP = true;
+            if(selected.indexOf('-') > 0)
+                plusOrMinus = 'minus';
+            else if (selected.indexOf('+') > 0)
+                plusOrMinus = 'plus';
+
+            if(plusOrMinus.length > 0)
+            {
+                var regex = new RegExp('\[[+-]([0-9]+)+\]');
+                var match = regex.exec(selected);
+                number = match[1];
+            }
+        }
+
+        var txtplus = $("#PlusValue_E");
+        var otherDate = $("#chooseDatePicker").data('kendoDatePicker');
+        if(selected.length != 0)
+        {
+            if(isEXP && plusOrMinus.length > 0)
+            {
+                //today plus or minus
+                $("#ddlPlus").data('kendoDropDownList').value(plusOrMinus);
+                $("input[id=DateToday_E_todayPlus]").prop('checked', true);
+
+                txtplus.val(number);
+                txtplus.removeAttr('disabled');
+                otherDate.value('');
+                otherDate.enable(false);
+            }
+            else if(isEXP)
+            {
+                $("input[id=DateToday_E_today]").prop('checked', true);
+                txtplus.val('');
+                txtplus.attr('disabled','disabled');
+                otherDate.value('');
+                otherDate.enable(false);
+            }
+            else{
+                $("input[id=DateToday_E_other]").prop('checked', true);
+                otherDate.value(selected);
+                otherDate.enable(true);
+                txtplus.val('');
+                txtplus.attr('disabled','disabled');
+            }
+
+        }
+
+        kendoWindow.center().open();
+
+    }
+
+    function btnChooseDate_Click()
+    {
+        clearValidationError("SelectDate_E_Validation",lastControlsError_E);
+        lastControlsError_E = [];
+        //var todayRB = $("input[name='DateToday'][value='today']");
+        //var todayPlusRB = $("input[name='DateToday'][ value='todayPlus']");
+        //var otherRB = $("input[name='DateToday'][ value='other']");
+        var checked = $("input[name='DateToday_E']:checked");
+        var selectedDate = ""
+        if(checked.val() == 'today')
+        {
+            selectedDate = 'EXP:Today';
+        }
+        else if(checked.val() == 'todayPlus')
+        {
+            var plusOrMinus = $("#ddlPlus").data('kendoDropDownList').value();
+            var plusValue = parseInt($('#PlusValue_E').val());
+            if (isNaN(plusValue) || (!isNaN(plusValue) && (plusValue < 1 || plusValue > 18250)))
+            {
+                lastControlsError_C.push("PlusValue_C");
+                setValidationError("Enter a number between 1 and 18250", "SelectDate_E_Validation", lastControlsError_C);
+                return;
+            }
+            if(plusOrMinus == 'plus')
+            {
+                selectedDate = 'EXP:Today[+' + plusValue + ']';
+            }
+            else if(plusOrMinus == 'minus')
+            {
+                selectedDate = 'EXP:Today[-' + plusValue + ']';
+            }
+
+
+
+
+        }
+        else if(checked.val() == 'other')
+        {
+            selectedDate = kendo.toString($("#chooseDatePicker").data('kendoDatePicker').value(), 'd');
+            if(selectedDate)
+            {
+
+            }
+            else{
+                lastControlsError_E.push("chooseDatePicker");
+                setValidationError("Please select a Date", "SelectDate_E_Validation", lastControlsError_E);
+                return;
+            }
+        }
+        var txtValue = $("#compareValue_E");
+
+        txtValue.removeAttr('disabled');
+        txtValue.val(selectedDate);
+        txtValue.attr('disabled','disabled');
+
+
+
+        var win = $("#SelectDateWindow_Edit");
+
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+
+    //function deactivateSelectDateWindow()
+    //{
+    //    this.destroy();
+    //}
+
+    function btnCancelChooseDate_Click()
+    {
+        var win = $("#SelectDateWindow_Edit");
+
+        var kendoWindow = win.data('kendoWindow');
+        kendoWindow.close();
+    }
+</script>
+
+
+<div class="wrapper modal modaladdnewform">
+    <fieldset class="no-border">
+        <legend>Edit Filter Condition</legend>
+
+        <div id="EditCondition_Validation" style="margin:10px;padding-left:15px;">
+
+        </div>
+        @Html.HiddenFor(x => x.FilterGroupID, new { id = "filterGroupID_E" })
+        @Html.HiddenFor(x => x.FilterConditionID, new { id = "filterConditionID_E" })
+        <div class="formbox">
+            <div class="subtitle">Field</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().DropDownList().Name("field_E").BindTo(fields.Select(item => new SelectListItem
+           {
+               Value = item.Key,
+               Text = item.Value,
+               Selected = item.Key.ToLower().Equals(Model.Field.ToLower())
+           })).Events(x => x.Change("Field_E_Change"))
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Field Type</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().DropDownList().Name("fieldType_E").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "String", Value = "String" },
+                new SelectListItem { Text = "Number", Value = "Number" },
+                new SelectListItem { Text = "Date [MM/DD/YYYY]", Value = "Date" },
+                new SelectListItem { Text = "Money $$", Value = "Money" }
+                }).Events(x => x.Change("fieldType_E_Change")).DataTextField("Text").DataValueField("Value")
+            </div>
+        </div>
+        <div class="formbox" id="divDatePart">
+            <div class="subtitle">Date Part</div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().DropDownList().Name("datePart_E").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "full", Value = "full", Selected = true },
+                new SelectListItem { Text = "month", Value = "month" },
+                new SelectListItem { Text = "day", Value = "day" },
+                new SelectListItem { Text = "year", Value = "year" }
+                }).Events(x => x.Change("datePart_E_Change")).DataTextField("Text").DataValueField("Value")
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Comparator</div>
+            <div class="formitem formiteminline">
+                <input type="checkbox" id="notComparator_E" /><span>NOT</span>
+            </div>
+            <div class="formitem formiteminline">
+                @Html.Kendo().DropDownList().Name("comparator_E").BindTo(new List<SelectListItem> {
+                new SelectListItem { Text = "String", Value = "String" },
+                new SelectListItem { Text = "Number", Value = "Number" },
+                new SelectListItem { Text = "Date [MM/DD/YYYY]", Value = "Date" },
+                new SelectListItem { Text = "Money $$", Value = "Money" }
+                }).DataTextField("Text").DataValueField("Value").Events(e => e.Change("comparator_E_Change"))
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="subtitle">Value</div>
+            <div class="formitem formiteminline">
+                @Html.TextBox("compareValue_E")
+                <div id="compareValueDate_E" style="display:inline;">
+                    <span class="k-icon k-i-calendar" id="btnSelectDate_E" onclick="btnSelectDate_Click()"></span>
+                    @*@(Html.Kendo().DatePicker()
+                          .Name("compareValueDate_picker_E")
+                          .HtmlAttributes(new { style = "width: 100%" })
+                        )*@
+                </div>
+            </div>
+        </div>
+        <div class="buttonsgroup">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Save").Content("Save").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "editFilterCondition()" })
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow('EditFilterCondition')" })
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </fieldset>
+
+</div>     
+<script>
+    $(document).on("change", "input[name='DateToday_E']", function(){
+
+        //var test = $("input[name='DateToday'][value='today']");
+        //var todayRB = $("input[name='DateToday'][value='today']").data('kendoRadioButton');
+        //var todayPlusRB = $("input[name='DateToday'][ value='todayPlus']").data('kendoRadioButton');
+        //var otherRB = $("input[name='DateToday'][ value='other']").data('kendoRadioButton');
+        debugger;
+        var txtplus = $("#PlusValue_E");
+        var otherDate = $("#chooseDatePicker").data('kendoDatePicker');
+        if(this.value == 'today')
+        {
+            txtplus.val('');
+            txtplus.attr('disabled','disabled');
+            otherDate.value('');
+            otherDate.enable(false);
+        }
+        else if(this.value == 'todayPlus')
+        {
+            txtplus.val('');
+            txtplus.removeAttr('disabled');
+            otherDate.value('');
+            otherDate.enable(false);
+        }
+        else if(this.value == 'other')
+        {
+            otherDate.enable(true);
+            txtplus.val('');
+            txtplus.attr('disabled','disabled');
+        }
+    });
+
+</script>
+@{
+    Html.Kendo()
+        .Window()
+        .Modal(true)
+        .Animation(false)
+        
+        .Actions(x => x.Clear())        
+        .Name("SelectDateWindow_Edit")
+        .Title("")
+        .Content(
+        @<text>
+
+            <div id="selectDateWindowDiv">
+                <div id="SelectDate_E_Validation"></div>
+                @Html.Kendo().RadioButton().Name("DateToday_E").Label("Today").Value("today")
+                <br />
+                @Html.Kendo().RadioButton().Name("DateToday_E").Label("Today").Value("todayPlus")
+                @Html.Kendo().DropDownList().Name("ddlPlus").BindTo(new List<SelectListItem> {
+                                            new SelectListItem { Text = "Plus", Value = "plus" },
+                                            new SelectListItem { Text = "Minus", Value = "minus" }
+                                        }).DataTextField("Text").DataValueField("Value")
+                @Html.Kendo().TextBox().Name("PlusValue_E").HtmlAttributes(new { style="width:60px;" })
+                <br />
+                @Html.Kendo().RadioButton().Name("DateToday_E").Label("Other").Value("other")
+                @(Html.Kendo().DatePicker()
+                      .Name("chooseDatePicker")
+                      .HtmlAttributes(new { style = "width: 150px;" })
+                )
+
+                <div>
+                    <table style="width:100%;">
+                        <tr>
+                            <td style="width:50%;text-align:center;">
+                                @Html.Kendo().Button().Name("btnChooseDate").Content("Choose Date").Events(x => x.Click("btnChooseDate_Click"))
+                            </td>
+                            <td style="width:50%;text-align:center;">
+                                @Html.Kendo().Button().Name("btnCancelChooseDate").Content("Cancel").Events(x => x.Click("btnCancelChooseDate_Click"))
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </text>
+        )
+        .Visible(false)
+        .Render();
+}
+   

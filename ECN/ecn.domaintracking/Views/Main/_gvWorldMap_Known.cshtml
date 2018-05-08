@@ -1,0 +1,70 @@
+﻿
+@Model
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['geochart']}]}"></script>
+<script language="javascript" type="text/javascript">
+    google.setOnLoadCallback(drawMarkersMap);
+    function drawMarkersMap() {
+
+            $('#regions_div_unknown').show();
+            var aoa = [["Country", "Page Requests"]];
+
+            @foreach (DataRow row in Model.Rows)//known
+            {
+                var knownCountry = row["Country"];
+                var knownCount = row["Known"].ToString();
+                int count = 0;
+                int.TryParse(knownCount, out count);
+                if (knownCount != "0" && count > 0)
+                {
+                    <text>
+                    aoa.push(["@knownCountry", @knownCount]);
+                    </text>
+                    }
+                }
+
+                var data = google.visualization.arrayToDataTable(aoa);
+                var options = {
+                displayMode: "regions",
+                colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+                legend: "none"
+            };
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div_known'));
+            chart.draw(data, options);
+
+            var aoa_Unknown = [["Country", "Page Requests"]];
+            @foreach(DataRow ros in Model.Rows)
+            {
+                var unknownCountry = ros["Country"];
+                var unknownCount = ros["Unknown"].ToString();
+                int count = 0;
+                int.TryParse(unknownCount, out count);
+                if (unknownCount != "0" && count > 0)
+                {
+                <text>
+                aoa_Unknown.push(["@unknownCountry", @unknownCount]);
+                </text>
+                        }
+                    }
+
+                    var data_unknown = google.visualization.arrayToDataTable(aoa_Unknown);
+                    var options_unknown = {
+                displayMode: "regions",
+                colorAxis: { colors: ["#F47e1f", "#F47e1f"] },
+                legend: "none"
+            };
+                var chart_unknown = new google.visualization.GeoChart(document.getElementById('regions_div_unknown'));
+                chart_unknown.draw(data_unknown, options_unknown);
+        
+    }
+
+
+</script>
+<div style="float:left; font-weight:bold;"> 
+    Known
+    <div id="regions_div_known" style=" width: 500px;"></div>
+</div>
+<div style="float:left; font-weight:bold;">
+    Unknown
+    <div id="regions_div_unknown" style="margin-left:10px; width:500px;display:none;"></div>
+</div>
+<br />

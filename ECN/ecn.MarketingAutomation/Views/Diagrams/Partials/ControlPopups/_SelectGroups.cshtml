@@ -1,0 +1,474 @@
+﻿<script>
+    var selectedClass = 'k-state-selected';
+
+    function GroupExplorerMulti(options) {
+        this.select = options.select;
+        this.customerID = options.customerID;
+        this.open = function () {
+            var window = $("#GroupsExplorer").data("kendoWindow");
+            window.center().open();
+            showLoadingWindow();
+        };
+        this.close = function () {
+            var window = $("#GroupsExplorer").data("kendoWindow");
+            window.close();
+        };
+
+    }
+    function bindSelectFolders()
+    {
+        var Groups_Folders = {
+            schema: {
+                model: {
+                    id: "FolderID",
+                    FolderID: "FolderID",
+                    CustomerID: "CustomerID",
+                    FolderName: "FolderName"
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetFolders", "Web")?customerId=' + explorer.customerID,
+                    async:true,
+                    data: function (data) {
+                        data.CustomerID = explorer.customerID;
+                        data.Type = "GRP";
+                    }
+                }
+            }
+        };
+
+        var Groups_Customer = new kendo.data.HierarchicalDataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSingleCustomer", "Web")?customerID=' + explorer.customerID,
+                    async:true
+                }
+            },
+            schema: {
+                model: {
+                    id: 0,
+                    FolderID: 0,
+                    children: Groups_Folders,
+                    hasChildren: true
+                }
+            }
+        });
+
+        kendo.destroy("#Groups_Folders");
+        var treeview = $("#Groups_Folders").kendoTreeView({
+            dataSource: Groups_Customer,
+            dataTextField: ["CustomerName", "FolderName"],
+            loadOnDemand: true,
+            autoBind: false,
+            expand: function (e) {
+                expandedItem = this.dataItem(e.node);
+            },
+            dataBound:tvDataBound,
+            select: function (e) {
+                var tree = $('#Groups_Folders').data('kendoTreeView');
+                var searchString = $("#groups_searchInput").val();
+                var dataItem = tree.dataItem(e.node);
+                $('#AvailableGroups').empty();
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    url: '/ecn.MarketingAutomation/Web/GetGroups',
+                    data: {
+                        customerId: dataItem.CustomerID,
+                        folderId: dataItem.FolderID,
+                        search: searchString,
+                        allFolders: false
+                    },
+                    success: function (response) {
+                        var itemlist = '';
+                        $.each(response, function (i, inputItem) {
+                            var s = inputItem;
+                            if ($("#" + inputItem.GroupID + "_" + inputItem.FolderID).length == 0) {
+                                itemlist += '<li id="' + inputItem.GroupID + "_" + inputItem.FolderID + '" >' + inputItem.GroupName + '</li>';
+                            }
+                        });
+                        $('#AvailableGroups').append(itemlist);
+                    }
+                });
+            }
+        }).data('kendoTreeView');
+    }
+
+    function tvDataBound(e) {
+        if (e.node == undefined) {
+            var tree = $("#Groups_Folders").data("kendoTreeView");
+            var root = tree.findByText("Root");
+            tree.expand(root);
+            tree.select(root);
+            
+
+        }
+    }
+
+    function bindSelectGroups()
+    {
+        var searchString = $("#groups_searchInput").val();
+        var allFolders = $("#selectGroups_allFoldersCB").is(':checked');
+        $('#SelectedGroups').empty();
+        if (Campaign_SelectedGroups != null) {
+            var itemlist = '';
+            for (var g = 0; g < Campaign_SelectedGroups.length; g++) {
+                var group = Campaign_SelectedGroups[g];
+                itemlist += '<li id="' + group.GroupID + "_" + group.FolderID + '" >' + group.GroupName + '</li>';
+            }
+            $('#SelectedGroups').append(itemlist);
+        }
+    }
+
+    function bindSelected_SelectGroups()
+    {
+    }
+
+    var explorer;
+    var _customerID;
+    function groupExplorerMulti(select, customerID) {
+        explorer = new GroupExplorerMulti({
+            select: select,
+            customerID: customerID
+        });
+        _customerID = customerID;
+        explorer.open();
+    }
+
+    function selectGroup(e) {
+        var item = this.select();
+        if (item.length == 0) {
+            return;
+        }
+        var group = this.dataItem(item);
+        e.sender.clearSelection();
+        var event = $.Event("GroupSelected");
+        event.sender = explorer;
+        event.group = group;
+        $("#GroupsExplorer").trigger(event);
+        if (!event.isDefaultPrevented()) {
+            explorer.close();
+        }
+    }
+    function onGroupsExplorerOpen() {
+        $("#groups_searchInput").val('');
+        $("#selectGroups_allFoldersCB").prop('checked', false);
+        bindSelectGroups();
+        bindSelectFolders();
+        bindSelected_SelectGroups();
+        var tree = $("#Groups_Folders").data("kendoTreeView");
+        tree.dataSource.read();
+             
+
+        $("#openAddGroupButton").prop('disabled', true);
+        $('#AvailableGroups').empty();
+        $.ajax({
+            url: '/ecn.MarketingAutomation/Web/GetGroups',
+            data: {
+                customerId: explorer.customerID,
+                folderId: 0,
+                search: '',
+                allFolders: false
+            },
+            dataType: "json",
+            success: function (response) {
+                var itemlist = '';
+                for (var i = 0; i < response.length; i++) {
+                    itemlist += '<li id="' + response[i].GroupID + "_" + response[i].FolderID + '" >' + response[i].GroupName + '</li>';
+                }
+                $('#AvailableGroups').append(itemlist);
+            }
+        });
+
+
+    }
+    function onGroupsExplorerClose() {
+        $(".k-overlay").remove();
+    }
+    function openAddGroupWindow() {
+
+        var selected = tree.select();
+        if (selected.length != 0) {
+            var data = tree.dataItem(selected);
+            var options = {
+                customerId: data.CustomerID,
+                folderId: data.FolderID,
+                groupAdded: function (group) {
+                    grid.dataSource.read({
+                        CustomerId: data.CustomerID,
+                        FolderId: data.FolderID
+                    });
+                }
+            }
+            openAddGroup(options);
+        }
+    }
+</script>
+
+@{
+    var explorer = Html.Kendo()
+                       .Window()
+                       .Title("Group Explorer")
+                       .Name("GroupsExplorer")
+                       .Modal(true)
+                       .Animation(false)
+                       .Content(Content().ToString())
+                       .Events(e => e
+                                    .Open("onGroupsExplorerOpen")
+                                    .Close("onGroupsExplorerClose"))
+                       .Visible(false);
+
+    explorer.Render();
+}
+@helper Content()
+{
+    <style>
+    #AvailableGroups li, #SelectedGroups li {
+        border-bottom:1px dotted Gray
+    }
+    #AvailableGroups li.selected, #SelectedGroups li.selected  {
+        background-color:#115fa9;
+        color: white;
+    }
+    .droptrue {
+        width: 12em;
+        height: 20em;
+        line-height: 2em;
+        border: 1px solid #ccc;
+        padding: 0;
+        margin: 0;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    .dataItems {
+        outline: none;
+        background-color: transparent;
+        border: 0px solid;
+        color: #115fa9;
+        font-weight: 300;
+        font-size: 12px;
+        color: #115fa9;
+        font-family: Arial;
+        width: 56px;
+    }
+
+        .dataItems:focus, input:focus {
+            outline: none;
+            background-color: transparent;
+            border: 1px solid #115fa9;
+        }
+
+        .buttonsselectgroup {
+            margin: 520px 0 0 830px;
+        }
+        #GroupsExplorer {
+            width: 1180px;
+            overflow:auto;
+        }
+    </style>
+
+    <div class="wrapper modal modalgroupexplorer">
+        <fieldset title="Group Explorer">
+            <legend>Select Group(s)</legend>
+        <div class="formbox">
+         <div>
+            <span>Group Name to Search:</span>
+            <input type="text" id="groups_searchInput" />
+            <input type="checkbox" id="selectGroups_allFoldersCB" /> All Folders
+            @Html.Kendo().Button().Name("Search").Content("Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "Groups_search()" })
+            @Html.Kendo().Button().Name("ClearSearch").Content("Clear Search").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "Groups_clearSearch()" })
+        </div>
+        <div class="customerlist" style="height:500px;overflow-y:hidden;">
+            <fieldset title="Customer/Folder ">
+                <legend>Folders</legend>
+                <div id="Groups_Folders"></div>
+            </fieldset>
+        </div>
+
+    <div class="formitem formiteminline">
+        <fieldset title="Group">
+            <legend>Group Name</legend>
+            <ul id="AvailableGroups" class="droptrue" style="list-style-type: none; border:1px solid Black; width:300px; height:400px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+        </fieldset>
+    </div>
+    <div class="formitem formiteminline" style="float:left;width:100px;margin-right:10px;display:table;margin-top:70px;">
+        <p>Drag and Drop your Groups.</p>
+        <p>Click to select individual group. Ctrl + Click or Shift + Click to select multiple groups.</p>
+    </div>
+    <div class="formitem formiteminline">
+        <fieldset title="Selected Group">
+            <legend>Selected Groups</legend>
+            <ul id="SelectedGroups" class="droptrue" style="list-style-type: none; border:1px solid Black; width:300px; height:400px; display:inline-block; vertical-align:top; padding:0;" multiple="multiple"></ul>
+        </fieldset>
+    </div>
+    <div class="formitem formiteminline" style="margin: 0 auto; width: 750px; text-align: right;">
+        @Html.Kendo().Button().Name("Continue").Content("Continue").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "continueGroupsWindow()" })
+        @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn k-button", type = "button", onclick = "closeWindow()" })
+    </div>
+</div>
+        </fieldset>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var prev = -1;
+            $(".droptrue").on('click', 'li', function (e) {
+                //debugger;
+                var curr = $(this).index();
+                if (e.ctrlKey || e.metaKey) {
+                    $(this).toggleClass("selected");
+                } else if (e.shiftKey && prev > -1) {
+                    if ($(this).parent().attr("id") == "AvailableGroups")
+                        $("ul#AvailableGroups.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                    if ($(this).parent().attr("id") == "SelectedGroups")
+                        $("ul#SelectedGroups.droptrue li").slice(Math.min(prev, curr), 1 + Math.max(prev, curr)).addClass("selected");
+                } else {
+                    prev = curr;
+                    $(this).addClass("selected").siblings().removeClass("selected");
+                }
+               }).sortable({
+                connectWith: "ul.droptrue",
+                delay: 150, //Needed to prevent accidental drag when trying to select
+                revert: 0,
+                helper: function (e, item) {
+
+                    if (!item.hasClass('selected')) { //If you grab an unhighlighted item to drag, it will deselect (unhighlight) everything else
+                        item.addClass('selected').siblings().removeClass('selected');
+                    }
+                    //Clone the selected items into an array
+                    var elements = item.parent().children('.selected').clone();
+                    item.data('multidrag', elements).siblings('.selected').remove();
+                    var helper = $('<li/>');
+                    return helper.append(elements);
+                },
+                stop: function (e, ui) {
+                    var elements = ui.item.data('multidrag');
+                    ui.item.after(elements).remove();
+                }
+
+            });
+
+
+        });
+
+        function continueGroupsWindow() {
+            var template = kendo.template($("#groupsTemplate").html());
+            $('#AvailableGroups').empty();
+            var phrases = [];
+            $('#SelectedGroups').each(function () {
+                $(this).find('li').each(function () {
+                    var current = $(this);
+                    if (current.children().size() > 0) { return true; }
+                    liID = $(this).attr('id');
+                    var IDS = liID.split('_');
+                    var folderID = IDS[1];
+                    var groupID = IDS[0];
+                    var filter = { CustomerID: explorer.customerID, FolderID: folderID, GroupID: groupID, GroupName: current.text() };
+                    phrases.push(filter);
+
+                });
+            });
+            var dataSource = new kendo.data.DataSource({
+                data: phrases,
+                change: function () { // subscribe to the CHANGE event of the data source
+                    $("#selectedGroups tbody").html(kendo.render(template, this.view())); // populate the table
+                }
+            });
+            dataSource.read();
+            Campaign_SelectedGroups = dataSource.data(); // Store SelectedGroups data in global variable
+            // Updating Filters data with selected Groups
+            if (Campaign_SelectedGroupFilters != null) {
+                var filtersFiltered = new Array();
+                for (var i = 0; i < Campaign_SelectedGroups.length; i++) {
+                    for (var j = 0; j < Campaign_SelectedGroupFilters.length; j++) {
+                        if (Campaign_SelectedGroups[i].GroupID == Campaign_SelectedGroupFilters[j].GroupID) {
+                            filtersFiltered.push(Campaign_SelectedGroupFilters[j]);
+                        }
+                    }
+                }
+                // Resetting filters
+                Campaign_SelectedGroupFilters.splice(0, Campaign_SelectedGroupFilters.length)
+                for (var i = 0; i < filtersFiltered.length; i++) {
+                    Campaign_SelectedGroupFilters.push(filtersFiltered[i]);
+                }
+                var filterTemplate = kendo.template($("#filterTemplate").html());
+                var selectedGroupFilters = new kendo.data.DataSource({
+                    data: Campaign_SelectedGroupFilters,
+                    change: function () { // subscribe to the CHANGE event of the data source
+                        $("#selectedGroupFilters tbody").html(kendo.render(filterTemplate, this.view())); // populate the table
+                    }
+                });
+                selectedGroupFilters.read();
+            }
+            closeWindow();
+        };
+        function closeWindow() {
+            explorer.close();
+
+        };
+        function Groups_search() {
+           
+            var tv = $("#Groups_Folders").data("kendoTreeView");
+            var selectedFolder = tv.dataItem(tv.select());
+            var allFolders = $("#selectGroups_allFoldersCB").is(':checked');
+            var searchString = $("#groups_searchInput").val();
+
+            var folderID = 0;
+            if (selectedFolder === undefined)
+                folderID = 0;
+            else
+                folderID = selectedFolder.id;
+            $('#AvailableGroups').empty();
+            $.ajax({
+                url: '/ecn.MarketingAutomation/Web/GetGroups',
+                data: {
+                    customerId: explorer.customerID,
+                    folderId: folderID,
+                    search: searchString,
+                    allFolders: allFolders
+                },
+                dataType: "json",
+                success: function (response) {
+                    var itemlist = '';
+                    for (var i = 0; i < response.length; i++) {
+                        itemlist += '<li id="' + response[i].GroupID + "_" + response[i].FolderID + '" data-draggable="item" draggable="true" aria-grabbed="false" tabindex="0">' + response[i].GroupName + '</li>';
+                    }
+                    $('#AvailableGroups').append(itemlist);
+                }
+            });
+            
+        }
+
+        function Groups_clearSearch() {
+            var tv = $("#Groups_Folders").data("kendoTreeView");
+            $("#groups_searchInput").val('');
+            $("#selectGroups_allFoldersCB").prop('checked', false);
+            var getitem = tv.dataSource.get(0);
+            tv.findByUid(getitem.uid);
+            var selectitem = tv.findByUid(getitem.uid);
+            tv.select(selectitem);
+            $('#AvailableGroups').empty();
+            $.ajax({
+                url: '/ecn.MarketingAutomation/Web/GetGroups',
+                data: {
+                    customerId: explorer.customerID,
+                    folderId: 0,
+                    search: '',
+                    allFolders: false
+                },
+                dataType: "json",
+                success: function (response) {
+                    var itemlist = '';
+                    for (var i = 0; i < response.length; i++) {
+                        itemlist += '<li id="' + response[i].GroupID + "_" + response[i].FolderID + '" data-draggable="item" draggable="true" aria-grabbed="false" tabindex="0">' + response[i].GroupName + '</li>';
+                    }
+                    $('#AvailableGroups').append(itemlist);
+                }
+            });
+
+
+              
+        };
+    </script>
+}

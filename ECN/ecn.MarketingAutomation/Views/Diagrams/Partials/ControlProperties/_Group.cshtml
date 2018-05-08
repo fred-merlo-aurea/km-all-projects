@@ -1,0 +1,98 @@
+﻿
+<div id="GroupProp">
+    <section class="propertyTitle">Group</section>
+    <section class="propertyItem" id="group_download" style="text-align:center;">
+        @Html.Kendo().Button().Name("btn_GroupDownload").Content("Download").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btn_GroupDownload_Click()" })
+        <input id="group_ECNID" type="hidden" />
+    </section>
+    <section class="propertyItem">
+        <span>Control Name:</span>
+        <input type="text" id="gro01" />
+    </section>
+    <section class="propertyItem">
+        <span>Customer:</span><br>
+        @Html.Kendo().Button().Name("_Group_customer").Content("Select Customer").HtmlAttributes(new { @class = "btn", type = "button", onclick = "customerExplorer(customerSelected)" })<br>
+        <strong style="margin-left:10px;">Customer:</strong>
+        <span id="_Group_customerName"></span>
+        <input id="_Group_customerID" type="hidden" name="customerID" />
+    </section>
+    <section id="Group_groupSelectItem">
+        <section class="propertyItem">
+            <span>Group:</span><br>
+            @Html.Kendo().Button().Name("group").Content("Select Group").HtmlAttributes(new { @class = "btn", type = "button", onclick = "btnSelectGroup_Click()" })<br>
+            <strong style="margin-left:10px;">Group:</strong>
+            <span id="_Group_groupName"></span>
+            <input id="_Group_groupID" type="hidden" name="groupID_Group" />
+        </section>
+    </section>
+</div>
+
+<script>
+    function propsGroup(shape, isHeatMap, canEdit) {
+        $('section.propertyTitle').html(shape.category);
+        $("#gro01").val(shape.control_text);
+        $("#_Group_customerName").text(shape.customer);
+        $("#_Group_customerID").val(shape.customerid);
+        $("#_Group_groupName").text(shape.group);
+        $("#_Group_groupID").val(shape.groupID);
+        if (shape.customer != "")
+            $("#Group_groupSelectItem").removeAttr("style");
+        else
+            $("#Group_groupSelectItem").css("display", "none");
+
+        
+
+        if(!canEdit || shape.MAControlID > 0)
+        {
+            $("#GroupProp :input").attr("disabled", true);
+            $("#gro01").attr("disabled",false);
+        }
+        else {
+            $("#GroupProp :input").attr("disabled", false);
+        }
+
+        if (isHeatMap) {
+            $("#group_ECNID").val(shape.ECNID);
+            $("#GroupProp :input").attr("disabled", true);
+            $("#btn_GroupDownload").attr("disabled",false);
+            $("#group_download").show();
+        }
+        else {
+            $("#group_download").hide();
+            $("#btn_GroupDownload").attr("disabled", true);
+        }
+    }
+    function disableGroupControls()
+    {
+        $("#GroupProp :input").attr("disabled", true);
+        $("#gro01").attr("disabled", true);
+    }
+    function customerSelected(select) {
+        var customer = select.customer;
+        $("#_Group_customerID").val(customer.CustomerID);
+        $("#_Group_customerName").text(customer.CustomerName);
+
+        if (customer.CustomerName != "")
+            $("#Group_groupSelectItem").removeAttr("style");
+        else
+            $("#Group_groupSelectItem").css("display", "none");
+    }
+
+    function btn_GroupDownload_Click() {
+        window.location = "/ecn.MarketingAutomation/Diagrams/DownloadEmails?ECNID=" + $("#group_ECNID").val() + "&controlType=Group&isWait=false" + "&maID=-1";
+
+    }
+
+    function groupSelected(select) {
+        var group = select.group;
+        $("#_Group_groupID").val(group.GroupID);
+        $("#_Group_groupName").text(group.GroupName);
+    }
+
+    function btnSelectGroup_Click()
+    {
+        var customerID = $("#_Group_customerID").val();
+        var customerName = $("#_Group_customerName").text();
+        groupExplorerSingle(groupSelected, customerID,customerName);
+    }
+</script>

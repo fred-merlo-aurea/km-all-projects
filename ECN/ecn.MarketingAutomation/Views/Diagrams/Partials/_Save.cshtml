@@ -1,0 +1,43 @@
+﻿<div class="wrapper km-modal modalnotify">
+    <fieldset title="Save">
+        <legend></legend>
+        <div class="picon" style="margin: 0 auto; width: 100px;">
+            <img src="/KMWeb/Images/modal-icon-warning.png" border="0" />
+        </div>
+        <div class="text" style="margin: 0 auto; width: 400px; text-align: left;">
+            Any changes you made will be lost. Would you like to save your changes?
+        </div>
+        <div class="buttons" style="margin: 0 auto; width: 300px; text-align: center;">
+            @Html.Kendo().Button().Name("NavSave").HtmlAttributes(new { @class = "btn gridbtn gridbtn-addnewrule", type = "button", onclick = "saveAndMove()" })
+            @Html.Kendo().Button().Name("NotSave").Content("Don't Save").HtmlAttributes(new { @class = "btn gridbtn gridbtn-addnewrule", type = "button", onclick = "notSaveAndMove()" })
+            @Html.Kendo().Button().Name("Cancel").Content("Cancel").HtmlAttributes(new { @class = "btn gridbtn gridbtn-addnewrule", type = "button", onclick = "cancelMove()" })
+        </div>
+    </fieldset>
+</div>
+<script>
+    function SaveMode()
+    {
+        $('#NavSave').text('Save');
+    }
+    function editMode(modelState)
+    {
+        if(modelState == 'Saved')
+        {
+            $('#NavSave').text('Save');
+            $('#NavSave').show();
+        }
+        else
+        {
+            if ((modelState == 'Completed') || (modelState == 'Archived'))
+            {
+                $('#NavSave').hide();
+            }
+            else
+            {
+                $('#NavSave').text('Publish');
+                $('#NavSave').show();
+            }
+        }
+
+    }
+</script>

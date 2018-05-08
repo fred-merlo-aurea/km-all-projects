@@ -1,0 +1,35 @@
+﻿@model  UAD.DataCompare.Web.Models.ColumnMap
+
+<table id="@Model.SourceColumn" style="width:100%;margin:10px 20px;">
+    @Html.HiddenFor(m =>m.FieldMapID)
+    @Html.HiddenFor(m => m.SourceFileID)
+    <tr>
+        <td>
+            @Html.Kendo().TextBoxFor(m => m.SourceColumn).HtmlAttributes(new { @readonly = true,style = "width:250px;" })
+        </td>
+        <td>
+            @if (Model.ProfileColumnList != null)
+            {
+                @(Html.Kendo().DropDownListFor(m => m.MappedColumn)
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(Model.ProfileColumnList).HtmlAttributes(new { style = "width:250px;" }))
+            }
+           
+        </td>
+        @*<td>
+            <button value="Delete" class="btnDelete" type="button"><i class='km-icon icon-kmcustom-delete'></i></button>
+        </td>*@
+    </tr>
+    <tr>
+        <td colspan="3">
+            
+        </td>
+    </tr>
+    <tr class="previewdetails">
+        <td colspan="3">
+                @Html.Kendo().TextBoxFor(m => m.PreviewDataColumn).HtmlAttributes(new { @readonly = true, style = "width:100%;height:50px;background-color:#FCF5D8;" })
+        </td>
+    </tr>
+</table>
+

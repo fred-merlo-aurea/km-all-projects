@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="Circulation.Modules.PaidNew"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="1000">
+    <Grid Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Enabled}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Text="Subscription Price:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="0,5,0,8" />
+        <TextBox Name="tbSubscriptionPrice" TabIndex="1" Grid.Row="0" Grid.Column="1" IsReadOnly="False" VerticalAlignment="Center" HorizontalAlignment="Stretch" Style="{DynamicResource TextBoxC13}"
+                 Margin="5,0,5,0" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Text="Payment Type:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="0,8,0,9" />
+        <telerik:RadComboBox Name="cbPaymentType" TabIndex="1" Style="{DynamicResource ComboBoxC14}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0,5,0"
+                             VerticalAlignment="Center" SelectedValue="{Binding Path=PaymentTypeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" Text="Term:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0"  />
+        <TextBox x:Name="tbTerm" IsReadOnly="False" Grid.Column="3" Grid.Row="2" Style="{DynamicResource TextBoxC13}" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                 Text="{Binding Path=Term, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:#}}" Margin="5,0,5,0"/>
+
+        <TextBlock Name="lbName"  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Text="Name:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}"
+                   Visibility="Visible" />
+        <TextBox Name="tbNameOn" TabIndex="1" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" 
+                 Style="{DynamicResource TextBoxC13}" Margin="5,0,5,0" Visibility="Visible" Text="{Binding Path=CCHolderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Name="lbCreditCardType" Grid.Row="4" Grid.Column="0" Text="Credit Card Type:" HorizontalAlignment="Left" Visibility="Visible" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}"  />
+        <telerik:RadComboBox Name="cbCreditCardType" TabIndex="1" Style="{DynamicResource ComboBoxC14}" Grid.Row="4" HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Center" Visibility="Visible"  Margin="5,0,5,0"  Grid.Column="1" SelectedValue="{Binding Path=CreditCardTypeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Name="lbCCMonthYear" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" Text="CC Month/Year:" IsEnabled="False" Visibility="Visible" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" />
+        <Grid Name="stkMonthYearExp" Grid.Row="5" Visibility="Visible" Margin="5,0,5,0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <telerik:RadComboBox x:Name="cbMonth" Grid.Column="0" HorizontalAlignment="Stretch" Visibility="Visible" Style="{DynamicResource ComboBoxC14}" VerticalAlignment="Center"
+                                 SelectedValue="{Binding Path=CCExpirationMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label x:Name="lbCCMonthYearBreak" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible" Content="/" 
+                   Style="{DynamicResource LabelC14}"/>
+            <telerik:RadComboBox x:Name="cbYear" Grid.Column="2" HorizontalAlignment="Stretch" Visibility="Visible" VerticalAlignment="Center"
+                                 Style="{DynamicResource ComboBoxC14}" SelectedValue="{Binding Path=CCExpirationYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <TextBlock Name="lbPaymentNumber" Grid.Row="3" HorizontalAlignment="Left" Text="Number:" Visibility="Visible" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Height="20" Margin="0,6,0,7" Width="120" />
+        <TextBox Name="tbCreditCard" TabIndex="1" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch"  VerticalAlignment="Center" Visibility="Visible" 
+                 Style="{DynamicResource TextBoxC13}" Margin="5,0,5,0" Text="{Binding Path=CreditCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,TargetNullValue={x:Static sys:String.Empty}}" 
+                 MaxLength="4"/>
+        <TextBox Name="tbCheckNumber" TabIndex="1" PreviewTextInput="NumberValidation" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                 Visibility="Visible" Style="{DynamicResource TextBoxC13}" Margin="5,0,5,0" Text="{Binding Path=CheckNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="20"/>
+
+        <TextBlock Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Text="Amount Paid:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" />
+        <TextBox Name="tbAmountPaid" TabIndex="1" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Style="{DynamicResource TextBoxC13}"
+                 Margin="5,0,5,0" Text="{Binding Path=AmountPaid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Text="Frequency:" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0"/>
+        <TextBox Name="tbFrequency" TabIndex="1" Grid.Row="3" Grid.Column="3" IsReadOnly="False" VerticalAlignment="Center" HorizontalAlignment="Stretch" Style="{DynamicResource TextBoxC13}"
+                 Text="{Binding Path=Frequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:#}}" Margin="5,0,5,0"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Text="Copies:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" />
+        <telerik:RadNumericUpDown x:Name="iudCopies" Grid.Row="1" Grid.Column="3" SmallChange="1" Minimum="1" IsEnabled="{Binding Path=IsCopiesEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
+                            Value="{Binding Path=Copies, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,5,0"/>
+
+        <TextBlock Grid.Column="4" HorizontalAlignment="Left" Text="Total Issues:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" Visibility="Collapsed" />
+        <TextBox x:Name="tbTotalIssues" Grid.Column="5" IsReadOnly="False" Style="{DynamicResource TextBoxC13}" HorizontalAlignment="Stretch" Margin="5,0,5,0"
+                 Text="{Binding Path=TotalIssues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:#}}" Visibility="Collapsed"/>
+
+        <TextBlock Grid.Column="4" HorizontalAlignment="Left" Text="Grace Issues:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Grid.Row="1" Margin="5,0,0,0"
+                   Visibility="Collapsed"/>
+        <TextBox x:Name="tbGraceIssues" Grid.Column="5" Style="{DynamicResource TextBoxC13}" Grid.Row="1" HorizontalAlignment="Stretch" Margin="5,0,5,0" Visibility="Collapsed"
+                 Text="{Binding Path=GraceIssues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:#}}"/>
+
+        <TextBlock Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left" Text="Pay Date:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" />
+        <telerik:RadDatePicker Name="dpPayDate" Grid.Row="0" Grid.Column="5" VerticalAlignment="Center"  InputMode="DatePicker" HorizontalAlignment="Stretch"
+                               SelectedValue="{Binding Path=PayDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="4" HorizontalAlignment="Left" Text="Start Issue:" IsEnabled="False" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" />
+        <telerik:RadDatePicker Name="dpStartIssue" Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"
+                               SelectedValue="{Binding Path=StartIssueDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" Text="Expire Date:" IsEnabled="True" VerticalAlignment="Center" Style="{DynamicResource TextBlockC13}" Margin="5,0,0,0" />
+        <telerik:RadDatePicker Grid.Row="2" Grid.Column="5" Name="dpNewExpire" VerticalAlignment="Center" InputMode="DatePicker" HorizontalAlignment="Stretch" Margin="5,0,5,0"
+                               SelectedValue="{Binding Path=ExpireDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <!-- END Original Stuff Here-->
+
+    </Grid>
+</UserControl>

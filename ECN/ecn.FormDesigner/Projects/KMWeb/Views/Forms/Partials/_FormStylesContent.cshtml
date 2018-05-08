@@ -1,0 +1,881 @@
+﻿@using KMEnums
+@using KMModels.PostModels
+@using System.Globalization
+@using Newtonsoft.Json
+
+@model FormStylesPostModel
+
+@{
+    var defaultStyles = (CustomStyles)ViewBag.DefaultStyles;
+}
+
+<style>
+    .maxWidth {
+        width: 100% !important;
+    }
+    .k-widget {
+        border-width: 0px;
+    }
+</style>
+
+<script>
+    angular = null;
+</script>
+
+<script src="@Url.Content("~/Scripts/kendo/2017.1.223/angular.min.js")"></script>
+<script src="@Url.Content("~/Scripts/kendo/2017.1.223/kendo.all.min.js")"></script>
+
+<script>
+    var pattern = new RegExp("^https?://(?:[a-z0-9\-]+\.)+[a-z]{2,6}(?:/[^/#?]+)+\.(?:css).*?$", "i");
+
+    var stylesApplication = angular.module("stylesApplication", [ "kendo.directives" ]);
+    stylesApplication.controller('controller', function ($scope) {
+        var link = $("#stylesLink");
+        $scope.getTicks = function() {
+            return new Date().getTime().toString();
+        }
+        $scope.StylingType = '@Model.StylingType';
+        $scope.$watch('StylingType', function(newValue , oldValue) {
+            if(newValue === oldValue) return;
+            if($scope.StylingType == '@StylingType.External'){
+                $scope.applyExternalStyles();
+            }
+            if($scope.StylingType == '@StylingType.Upload'){
+                $scope.applyUploadedStyles();
+            }
+            if($scope.StylingType == '@StylingType.Custom'){
+                $scope.clearStyles();
+                $("#stylepreview").show();
+                $("#unableToPreview").hide();
+            }
+        });
+        $scope.clearStyles = function(){
+            if(link.is("[href]")) {
+                link.removeAttr("href");
+            }
+        }
+        $scope.ExternalUrl = '@Model.ExternalUrl';
+        $scope.applyExternalStyles = function() {
+            if($scope.ExternalUrl) {
+                if(pattern.test($scope.ExternalUrl)) {
+                    // AJAX to verify match with KM Standard CSS
+                    var arrayOfValues = [ $scope.ExternalUrl, '@StylingType.External'];
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("MatchKMStandardCSS")',
+                        data: { 'arrayOfValues': arrayOfValues },
+                        traditional: true,
+                        dataType: "json",
+                        complete: function(response) {
+                            if(response.status == '@((int)HttpStatusCode.OK)'){
+                                $("#stylepreview").show();
+                                $("#unableToPreview").hide();
+                    link.attr('href', $scope.ExternalUrl + "?v=" + $scope.getTicks());
+                } else {
+                                $("#stylepreview").hide();
+                                $("#unableToPreview").show();
+                            }
+                        }
+                    });                    
+                } else {
+                    $scope.clearStyles();
+                    $("#stylepreview").show();
+                    $("#unableToPreview").hide();
+                }
+            } else {
+                $scope.clearStyles();
+                $("#stylepreview").show();
+                $("#unableToPreview").hide();
+            }
+        }
+        if($scope.StylingType == '@StylingType.External') {
+            $scope.applyExternalStyles();
+        }
+        $scope.$watch('ExternalUrl', function(newValue , oldValue){
+            if(newValue === oldValue) return;
+            $scope.applyExternalStyles();
+        });
+        $scope.File = @Html.Raw(Json.Encode(Model.File));
+        $scope.applyUploadedStyles = function() {
+            if($scope.File) {
+                // AJAX to verify match with KM Standard CSS
+                var arrayOfValues = [ $scope.File.UID, '@StylingType.Upload'];
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("MatchKMStandardCSS")',
+                    data: { 'arrayOfValues': arrayOfValues },
+                    traditional: true,
+                    dataType: "json",
+                    complete: function(response) {
+                        if(response.status == '@((int)HttpStatusCode.OK)'){
+                            $("#stylepreview").show();
+                            $("#unableToPreview").hide();
+                link.attr('href', String.format("@Config("CssUri"){0}.css?v={1}", $scope.File.UID, $scope.getTicks()));
+            } else {
+                            $("#stylepreview").hide();
+                            $("#unableToPreview").show();
+                        }
+                    }
+                });
+            } else {
+                $scope.clearStyles();
+                $("#stylepreview").show();
+                $("#unableToPreview").hide();
+            }
+        }
+        if($scope.StylingType == '@StylingType.Upload') {
+            $scope.applyUploadedStyles();
+        }
+        $scope.$watch('File', function(newValue , oldValue) {
+            if(newValue === oldValue) return;
+            $scope.applyUploadedStyles();
+        });
+        @{
+            var formsStyles = Model.CustomStyles != null ? Model.CustomStyles.FormStyles : null;
+            var buttonStyles = Model.CustomStyles != null ? Model.CustomStyles.ButtonStyles : null;
+        }
+        $scope.Form = @(formsStyles != null ? Html.Raw(Json.Encode(formsStyles)) : Html.Raw(Json.Encode(defaultStyles.FormStyles)));
+        $scope.Button = @(buttonStyles != null ? Html.Raw(Json.Encode(buttonStyles)) : Html.Raw(Json.Encode(defaultStyles.ButtonStyles)));
+        $scope.controls = [];
+        var control;
+        @foreach (StyledControlType controlType in Enum.GetValues(typeof(StyledControlType)))
+        {
+            if (controlType == StyledControlType.Button) { continue; }
+            
+            ControlStyles model = null;
+            var controlsStyles = Model.CustomStyles != null ? Model.CustomStyles.ControlsStyles : null;
+            if (controlsStyles != null)
+            {
+                controlsStyles.TryGetValue(controlType, out model);
+            }
+            var type = controlType.ToString();
+            @:control = @(model != null ? Html.Raw(Json.Encode(model)) : Html.Raw(Json.Encode(defaultStyles.ControlsStyles[controlType])));
+            @:control.Border = control.BackgroundColor == control.BorderColor ? false : true;
+            @:control.Type = '@type';
+            @:$scope.controls.push(control);
+            @:$scope['@type'] = control;
+        }
+
+        var defaultStyles = @Html.Raw(JsonConvert.SerializeObject(defaultStyles));
+        $scope.resetFormStyles = function() {
+            var formStyles = angular.copy(defaultStyles.FormStyles);
+            $scope.Form = formStyles;
+        }
+        $scope.resetControlStyles = function() {
+            var buttonStyles = angular.copy(defaultStyles.ButtonStyles);
+            $scope.Button = buttonStyles;
+            var controlsStyles = angular.copy(defaultStyles.ControlsStyles);
+            for(var type in controlsStyles) {
+                if(type == '@ControlType.Button') {
+                    continue;
+                }
+                var controlStyles = controlsStyles[type];
+                controlStyles.Type = type;
+                $.each($scope.controls, function(i, control){
+                    if(control.Type == type){
+                        $scope.controls[i] = controlStyles;
+                    }
+                });
+                $scope[type] = controlStyles;
+            }
+            $scope.controlTypes.trigger("change");
+        }
+        $scope.applyToAllControlStyles = function() {
+            var indx = document.getElementById('formControlType');
+            var btn = indx.options[indx.selectedIndex].text;
+            if (btn != 'Button') {            
+                var ctrlObj = $scope.controls[indx.selectedIndex];
+                for (var i = 0; i < $scope.controls.length; i++) {
+                    $scope.controls[i].BackgroundColor = ctrlObj.BackgroundColor;
+                    $scope.controls[i].Border = ctrlObj.Border; 
+                    $scope.controls[i].BorderColor = ctrlObj.BorderColor; 
+                    $scope.controls[i].Font = ctrlObj.Font; 
+                    $scope.controls[i].FontBold = ctrlObj.FontBold;
+                    $scope.controls[i].FontSize = ctrlObj.FontSize; 
+                    $scope.controls[i].LabelBackgroundColor = ctrlObj.LabelBackgroundColor; 
+                    $scope.controls[i].LabelFont = ctrlObj.LabelFont; 
+                    $scope.controls[i].LabelFontBold = ctrlObj.LabelFontBold;
+                    $scope.controls[i].LabelFontSize = ctrlObj.LabelFontSize; 
+                    $scope.controls[i].LabelTextColor = ctrlObj.LabelTextColor; 
+                    $scope.controls[i].CategoryBackgroundColor = ctrlObj.CategoryBackgroundColor; 
+                    $scope.controls[i].CategoryFont = ctrlObj.CategoryFont; 
+                    $scope.controls[i].CategoryFontBold = ctrlObj.CategoryFontBold;
+                    $scope.controls[i].CategoryFontSize = ctrlObj.CategoryFontSize; 
+                    $scope.controls[i].CategoryTextColor = ctrlObj.CategoryTextColor; 
+                    $scope.controls[i].Selected = ctrlObj.Selected; 
+                    $scope.controls[i].TextColor = ctrlObj.TextColor; 
+                }
+                $scope.Button.BackgroundColor = ctrlObj.BackgroundColor;
+                $scope.Button.BorderColor = ctrlObj.BorderColor; 
+                $scope.Button.Color = ctrlObj.TextColor; 
+                $scope.Button.Font = ctrlObj.Font; 
+                $scope.Button.FontBold = ctrlObj.FontBold;
+                $scope.Button.FontSize = ctrlObj.FontSize;                 
+            } else {
+                var ctrlObj = $scope.Button;
+                for (var i = 0; i < $scope.controls.length; i++) {
+                    $scope.controls[i].BackgroundColor = ctrlObj.BackgroundColor;
+                    $scope.controls[i].BorderColor = ctrlObj.BorderColor; 
+                    $scope.controls[i].Font = ctrlObj.Font; 
+                    $scope.controls[i].FontBold = ctrlObj.FontBold;
+                    $scope.controls[i].FontSize = ctrlObj.FontSize;
+                    $scope.controls[i].TextColor = ctrlObj.Color; 
+                }
+            }
+            $scope.controlTypes.trigger("change");
+        }
+        $scope.controls[0].Selected = true;
+        $scope.select = function(e){
+            $.each($scope.controls, function(index, control){
+                if(control.Type == e.sender.value()){
+                    control.Selected = true;
+                }else{
+                    control.Selected = false;
+                }
+            });
+            if(e.sender.value() == '@StyledControlType.Button'){
+                $scope.Button.Selected = true;
+            }
+            else{
+                $scope.Button.Selected = false;
+            }
+        }
+        $scope.getFormStyles = function(){
+            if($scope.StylingType != '@StylingType.Custom') return null;
+            var form = $scope.Form;
+
+            if(typeof form.Border == "string") {
+                form.Border = form.Border == "1";
+            }
+            var styles = {
+                backgroundColor: form.Color
+            }
+
+            if(form.Border) {
+                styles.borderStyle = 'solid';
+                styles.borderWidth = '1px';
+                styles.borderColor = form.BorderColor;
+            } else {
+                styles.borderStyle = 'solid';
+                styles.borderWidth = '1px';
+                styles.borderColor = form.BackgroundColor;
+            }
+            switch(form.Alignment.toString()) {
+                case '@((int)Alignment.Left)': styles.textAlign = 'left'; break;
+                case '@((int)Alignment.Center)': styles.textAlign = 'center'; break;
+                case '@((int)Alignment.Right)': styles.textAlign = 'right'; break;
+            }
+            return styles;
+        }
+        $scope.getControlContainerStyles = function(){
+            if($scope.StylingType != '@StylingType.Custom') return null;
+            var form = $scope.Form;
+            var styles = {
+                marginBottom: form.Spacing + 'px'
+            }
+            return styles;
+        }
+        $scope.getButtonStyles = function(){
+            if($scope.StylingType != '@StylingType.Custom') return null;
+            var button = $scope.Button;
+            if(typeof button.FontBold == "string") {
+                button.FontBold = button.FontBold == "1";
+            }
+            return {
+                color: button.Color,
+                fontFamily: button.Font,
+                fontSize: button.FontSize + 'px',
+                fontWeight: button.FontBold ? 'bold' : 'normal',
+                backgroundColor: button.BackgroundColor,
+                borderColor: button.BorderColor,
+                borderStyle: 'solid',
+                borderWidth: '1px'
+            }
+        }
+        $scope.getLabelStyles = function(control){
+            if($scope.StylingType != '@StylingType.Custom') return null;
+            if(typeof control.LabelFontBold == "string") {
+                control.LabelFontBold = control.LabelFontBold == "1";
+            }
+            return {
+                color: control.LabelTextColor,
+                fontFamily: control.LabelFont,
+                fontSize: control.LabelFontSize + 'px',
+                fontWeight: control.LabelFontBold ? 'bold' : 'normal',
+                backgroundColor: control.LabelBackgroundColor
+            }
+        }
+        $scope.getControlStyles = function(control) {
+            if($scope.StylingType != '@StylingType.Custom') return null;
+            if(typeof control.Border == "string") {
+                control.Border = control.Border == "1";
+            }
+            if(typeof control.FontBold == "string") {
+                control.FontBold = control.FontBold == "1";
+            }
+            var styles = {
+                color: control.TextColor,
+                backgroundColor: control.BackgroundColor,
+                fontFamily: control.Font,
+                fontSize: control.FontSize + 'px',
+                fontWeight: control.FontBold ? 'bold' : 'normal'
+            }
+            if(control.Border) {
+                styles.borderStyle = 'solid';
+                styles.borderWidth = '1px';
+                styles.borderColor = control.BorderColor;
+            } else {
+                styles.borderStyle = 'solid';
+                styles.borderWidth = '1px';
+                styles.borderColor = control.BackgroundColor;
+            }
+            return styles;
+        }
+        $scope.hexToRgbA = function(hex){
+            var c;
+            if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+                c= hex.substring(1).split('');
+                if(c.length== 3){
+                    c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+                }
+                c= '0x'+c.join('');
+                hex = 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(', ')+', 1)';
+            } 
+            return hex;            
+        }
+        $scope.fonts = @Html.Raw(Json.Encode(Fonts));
+    });
+    function saveStyles(onSave){
+        var app = document.querySelector('#stylesApplication');
+        var $scope = angular.element(app).scope();
+        var model = @Html.Raw(Json.Encode(new FormStylesPostModel()));
+        model.Id = @Model.Id;
+        model.StylingType = $scope.StylingType;
+        var errors = [];
+        if($scope.StylingType == '@StylingType.External') {
+            if($scope.ExternalUrl) {
+                model.ExternalUrl = $scope.ExternalUrl;
+            } else {
+                errors.push("Please, enter url first");
+            }
+        }
+        if($scope.StylingType == '@StylingType.Upload') {
+            if($scope.File){
+                model.File = $scope.File;
+            } else {
+                errors.push("Please, upload file first");
+            }
+        }
+        if(errors.length != 0){
+            var template = kendo.template($("#errors-template").html());
+            var html = template({ errors: errors });
+            showMessage({
+                type: '@MessageType.Error', 
+                text: html
+            });
+            return;
+        }
+        if($scope.StylingType == '@StylingType.Custom'){
+            model.CustomStyles = {
+                FormStyles: $scope.Form,
+                ButtonStyles: $scope.Button,
+                ControlsStyles: []
+            }
+            $.each($scope.controls, function(index, control){
+                model.CustomStyles.ControlsStyles.push({ Key: control.Type, Value: control });
+            });
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveStyles")',
+            data: JSON.stringify(model),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            complete: function(response) {
+                if(response.status == '@((int)HttpStatusCode.OK)'){
+                    if(onSave) {
+                        onSave();
+                    } else {
+                        showMessage({
+                            type: '@MessageType.Success',
+                            autoClose: true
+                        });
+                    }
+                } else {
+                    showMessage({
+                        type: '@MessageType.Error',
+                        text: 'Unable to save styles'
+                    });
+                }
+            }
+        });
+    }
+    angular.bootstrap(document.getElementById("stylesApplication"), ["stylesApplication"]);
+</script>
+
+<script type="text/x-kendo-template" id="errors-template">
+    <div class="validation-summary-errors">
+        <ul>
+            #for(var i=0; i < errors.length; i++) {#
+                <li>#= errors[i] #</li>
+            #}#
+        </ul>
+    </div>
+</script>
+
+<script>
+    function uploadSuccess(e) {
+        var response = e.response;
+        if(response.success) {
+            var scope = getScope();
+            scope.File = {
+                UID: response.fileUID,
+                Name: e.files[0].name
+            };
+            scope.$apply();
+        }
+    }
+    function getScope(){
+        var app = document.querySelector('#stylesApplication');
+        return angular.element(app).scope();
+    }
+    
+</script>
+
+@Html.HiddenFor(x => x.Id)
+
+<div id="stylesApplication" data-ng-controller="controller" class="form-wrapper formedit-formStyles"> 
+    <div class="topsection" style="margin: 0 auto; width: 50%; text-align:center;">
+        <div class="formbox csschoice" style="margin: 0 auto; width: 30%; text-align:left;">
+            <div class="formitem">
+                @(Html.Kendo().RadioButtonFor(x => x.StylingType).Label("Link to External CSS").Value(StylingType.External).Checked(Model.StylingType == StylingType.External)
+                    .HtmlAttributes(new Dictionary<string, object> { { "ng-model", "StylingType" } }))
+            </div>
+            <div class="formitem">
+                @(Html.Kendo().RadioButtonFor(x => x.StylingType).Label("Upload CSS File").Value(StylingType.Upload).Checked(Model.StylingType == StylingType.Upload)
+                    .HtmlAttributes(new Dictionary<string, object> { { "ng-model", "StylingType" } }))
+            </div>
+            <div class="formitem">
+                @(Html.Kendo().RadioButtonFor(x => x.StylingType).Label("Use KM Styling").Value(StylingType.Custom).Checked(Model.StylingType == StylingType.Custom)
+                    .HtmlAttributes(new Dictionary<string, object> { { "ng-model", "StylingType" } }))
+            </div>
+        </div>
+        <div class="formbox formtabled" style="margin: 0 auto; width: 20%; text-align:center;">
+            <div class="formitem formiteminline" data-ng-style="{ visibility: StylingType == '@StylingType.External' ? 'visible' : 'hidden'}">
+                @Html.Kendo().TextBoxFor(x => x.ExternalUrl).HtmlAttributes(new Dictionary<string, object> { { "ng-model", "ExternalUrl" } })
+            </div>
+            <div class="formitem formiteminline" data-ng-style="{ visibility: StylingType == '@StylingType.Upload' ? 'visible' : 'hidden'}">
+                @{
+                    var upload = Html.Kendo()
+                                     .Upload()
+                                     .Name("File")
+                                     .Multiple(false)
+                                     .Async(a => a
+                                        .Save("Save", "Upload")
+                                        .AutoUpload(true)
+                                     )
+                                     .Events(e => e.Success("uploadSuccess"))
+                                     .HtmlAttributes(new { accept = ".css" });
+                        
+                    if (Model.File != null)
+                    {
+                        upload.Files(files => files.Add().Name(Model.File.Name));
+                    }
+
+                    upload.Render();
+                }
+            </div>
+        </div>
+        <div class="getCSSfile" style="margin: 0 auto; width: 40%; text-align:center;">
+            <span>
+                If you want to link to External CSS or Upload your own CSS File, download KM's standard CSS as your baseline.
+            </span>
+            @Html.ActionLink("KM CSS", "GetCss", new { id = Model.Id }, new { @class = "btn btn-orange1" })
+        </div>
+    </div>
+    <div class="section-wrapper" style='width: 100%'>
+        <div class="stylesсontrols" data-ng-show="StylingType == '@StylingType.Custom'" style="width:30%">
+            @(Html.Kendo()
+                    .TabStrip()
+                    .Name("Styles")
+                    .Animation(false)
+                    .Items(items =>
+                    {
+                        items.Add().Text("Form").Content(GetFormContent().ToString()).Selected(true).HtmlAttributes(new { style = "overflow: hidden; width:50%" });
+                        items.Add().Text("Controls").Content(GetControlsContent().ToString()).HtmlAttributes(new { style = "overflow: hidden; width:50%" });
+                    })
+            )
+        </div>
+        <div id="unableToPreview" style="width: 35% ;display:none; margin: 0 50px 30px 50px; width: 900px;" class="wrapper modal modalnotify modal-warning">
+            <fieldset title="">
+                <legend>Warning</legend>
+                <div class="picon"></div>
+                <div class="text">
+                    <div class="validation-summary-errors" style="color:#e8880c">
+                        <ul>
+                            <li>Warning! We’ve detected that your CSS file did not use KM’s standard CSS as the baseline. Therefore, it cannot be previewed on this page. Please use caution and test this form functionality thoroughly or go back and download KM’s standard CSS as your baseline.</li>
+                        </ul>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div id="stylepreview" class="stylepreview" data-ng-class="{ maxWidth: StylingType != '@StylingType.Custom' }" style="width: 65%">
+            <span class="sboxtitle">Style Preview</span>
+            <link id="stylesLink" rel="stylesheet" type="text/css" />
+            <div class="elcontainer" data-ng-style="StylingType == '@StylingType.Custom' ? { backgroundColor: Form.BackgroundColor } : null">
+                <ul class="kmForm" data-ng-style='getFormStyles()'>
+                    @foreach (StyledControlType type in Enum.GetValues(typeof(StyledControlType)))
+                    {
+                        <li data-ng-style='getControlContainerStyles()'>
+                            <div class="km@(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(type.ToString()))">@GetControl(type)</div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper GetControl(StyledControlType type)
+{
+    if (type != StyledControlType.Button)
+    {
+        <label data-ng-style='getLabelStyles(@type)' style="display:block">@type</label>
+    }
+
+    if (type == StyledControlType.TextBox)
+    {
+        <input data-ng-style='getControlStyles(@type)' type='text' />
+    }
+    if (type == StyledControlType.TextArea)
+    {
+        <textarea data-ng-style='getControlStyles(@type)'></textarea>
+    }
+    if (type == StyledControlType.DropDown)
+    {
+        <select data-ng-style='getControlStyles(@type)'>
+            <option>Default</option>
+        </select>
+    }
+    if (type == StyledControlType.ListBox)
+    {
+        <select data-ng-style='getControlStyles(@type)' size="3">
+            <option>Default</option>
+        </select>
+    }
+    if (type == StyledControlType.RadioButton)
+    {
+        <div data-ng-style='getControlStyles(@type)'>
+            <input type="radio" name="radio" />Default
+            <input type="radio" name="radio" />Default
+        </div>
+    }
+    if (type == StyledControlType.CheckBox)
+    {
+        <div data-ng-style='getControlStyles(@type)'>
+            <input type="checkbox" />Default
+            <input type="checkbox" />Default
+        </div>
+    }
+    if (type == StyledControlType.Grid)
+    {
+        <table data-ng-style='getControlStyles(@type)' style="display:inline-block">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <th>Column1</th>
+                    <th>Column2</th>
+                </tr>
+                <tr>
+                    <td>Row1</td>
+                    <td>x</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Row2</td>
+                    <td></td>
+                    <td>x</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    if (type == StyledControlType.NewsLetter)
+    {
+        <div data-ng-style='getControlStyles(@type)'>
+            <input type='checkbox'>Subscribe
+        </div>
+    }
+    if (type == StyledControlType.Button)
+    {
+        <button type="button" ng-style="getButtonStyles()">Submit</button>
+    }
+}
+
+@helper GetFormContent()
+{
+    <div class="resetButtonBox">
+        <button class="btn k-button" data-ng-click="resetFormStyles()">Reset Form Properties</button>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Label("Form Color")
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="Form.Color" />
+            <label ng-bind="hexToRgbA(Form.Color)"></label>
+        </div>
+    </div>
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+            @Html.Label("Background Color")
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="Form.BackgroundColor" />
+            <label ng-bind="hexToRgbA(Form.BackgroundColor)"></label>
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="formitem  formiteminline">
+            @Html.Label("Border")
+        </div>
+        <div class="formitem formiteminline">
+            <label><input type="radio" ng-value="1" ng-model="Form.Border">Yes</label>
+        </div>
+        <div class="formitem formiteminline">
+            <label><input type="radio" ng-value="0" ng-model="Form.Border">No</label>
+        </div>
+    </div>
+    <div class="formbox  formtabled">
+        <div class="formitem  formiteminline">
+            @Html.Label("Border Color")
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="Form.BorderColor" />
+            <label ng-bind="hexToRgbA(Form.BorderColor)"></label>
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="formitem  formiteminline">
+            @Html.Label("Form Alignment")
+        </div>
+        <div class="formitem formiteminline">
+            <label><input type="radio" ng-value="@((int)Alignment.Left)" ng-model="Form.Alignment">@Alignment.Left</label>
+        </div>
+        <div class="formitem formiteminline">
+            <label><input type="radio" ng-value="@((int)Alignment.Center)" ng-model="Form.Alignment">@Alignment.Center</label>
+        </div>
+        <div class="formitem formiteminline">
+            <label><input type="radio" ng-value="@((int)Alignment.Right)" ng-model="Form.Alignment">@Alignment.Right</label>
+        </div>
+    </div>
+    <div class="formbox">
+        <div class="formitem formiteminline">
+            @Html.Label("Spacing")
+            <select kendo-drop-down-list k-data-source="@Html.Raw(Json.Encode(Sizes))" ng-model="Form.Spacing"></select>
+        </div>
+    </div>
+}
+
+@helper GetControlsContent()
+{   
+    <div class="resetButtonBox">
+        <button class="btn k-button" data-ng-click="resetControlStyles()">Reset Controls Properties</button>
+    </div>    
+    <div class="formbox formtabled">
+        <div class="formitem formiteminline">
+        <label>Form Control</label>
+            <select id="formControlType" kendo-drop-down-list="controlTypes" k-on-change="select(kendoEvent)">
+                @foreach (var type in Enum.GetValues(typeof(StyledControlType)))
+                {
+                    <option value="@type.ToString()">@type.ToString()</option>
+                }
+            </select>
+        </div>        
+    </div>
+    <div ng-show="Button.Selected">
+        <div class="subtitle">Form Control</div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Color</label>
+                <input kendo-color-picker k-options="{ opacity: true }" ng-model="Button.Color" />
+                <label ng-bind="hexToRgbA(Button.Color)"></label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Type</label>
+                <select kendo-drop-down-list k-data-source="fonts" ng-model="Button.Font"></select>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Size</label>
+                <select kendo-drop-down-list k-data-source="@Html.Raw(Json.Encode(Sizes))" ng-model="Button.FontSize"></select>
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="formitem  formiteminline">
+                <label>Font Bold</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="1" ng-model="Button.FontBold">Yes</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="0" ng-model="Button.FontBold">No</label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Border Color</label>
+                <input kendo-color-picker k-options="{ opacity: true }" ng-model="Button.BorderColor" />
+                <label ng-bind="hexToRgbA(Button.BorderColor)"></label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Background Color</label>
+                <input kendo-color-picker k-options="{ opacity: true }" ng-model="Button.BackgroundColor" />
+                <label ng-bind="hexToRgbA(Button.BackgroundColor)"></label>
+            </div>
+        </div>
+    </div>
+    <div ng-repeat="control in controls" ng-show="control.Selected">
+        <div class="subtitle">Label</div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Text Color</label>
+                <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.LabelTextColor" />
+                <label ng-bind="hexToRgbA(control.LabelTextColor)"></label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Type</label>
+                <select kendo-drop-down-list k-data-source="fonts" ng-model="control.LabelFont"></select>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Size</label>
+                <select kendo-drop-down-list k-data-source="@Html.Raw(Json.Encode(Sizes))" ng-model="control.LabelFontSize"></select>
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="formitem  formiteminline">
+                <label>Font Bold</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="1" ng-model="control.LabelFontBold">Yes</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="0" ng-model="control.LabelFontBold">No</label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Background Color</label>
+                <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.LabelBackgroundColor" />
+                <label ng-bind="hexToRgbA(control.LabelBackgroundColor)"></label>
+            </div>
+        </div>
+        <div ng-if="control.Type == '@(ControlType.NewsLetter.ToString())' || 
+             control.Type == '@(ControlType.CheckBox.ToString())' || 
+             control.Type == '@(ControlType.DropDown.ToString())' || 
+             control.Type == '@(ControlType.ListBox.ToString())' || 
+             control.Type == '@(ControlType.RadioButton.ToString())'">
+            <div class="subtitle">Category</div>
+            <div class="formbox  formtabled">
+                <div class="formitem  formiteminline">
+                    <label>Text Color</label>
+                    <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.CategoryTextColor" />
+                    <label ng-bind="hexToRgbA(control.CategoryTextColor)"></label>
+                </div>
+            </div>
+            <div class="formbox  formtabled">
+                <div class="formitem  formiteminline">
+                    <label>Font Type</label>
+                    <select kendo-drop-down-list k-data-source="fonts" ng-model="control.CategoryFont"></select>
+                </div>
+            </div>
+            <div class="formbox  formtabled">
+                <div class="formitem  formiteminline">
+                    <label>Font Size</label>
+                    <select kendo-drop-down-list k-data-source="@Html.Raw(Json.Encode(Sizes))" ng-model="control.CategoryFontSize"></select>
+                </div>
+            </div>
+            <div class="formbox">
+                <div class="formitem  formiteminline">
+                    <label>Font Bold</label>
+                </div>
+                <div class="formitem formiteminline">
+                    <label><input type="radio" ng-value="1" ng-model="control.CategoryFontBold">Yes</label>
+                </div>
+                <div class="formitem formiteminline">
+                    <label><input type="radio" ng-value="0" ng-model="control.CategoryFontBold">No</label>
+                </div>
+            </div>
+            <div class="formbox  formtabled">
+                <div class="formitem  formiteminline">
+                    <label>Background Color</label>
+                    <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.CategoryBackgroundColor" />
+                    <label ng-bind="hexToRgbA(control.CategoryBackgroundColor)"></label>
+                </div>
+            </div>
+        </div>
+        <div class="subtitle">Form Control</div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+            <label>Text Color</label>
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.TextColor" />
+                <label ng-bind="hexToRgbA(control.TextColor)"></label>
+            </div>
+        </div>
+
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Type</label>
+                <select kendo-drop-down-list k-data-source="fonts" ng-model="control.Font"></select>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+                <label>Font Size</label>
+                <select kendo-drop-down-list k-data-source="@Html.Raw(Json.Encode(Sizes))" ng-model="control.FontSize"></select>
+            </div>
+        </div>
+        <div class="formbox">
+            <div class="formitem  formiteminline">
+                <label>Font Bold</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="1" ng-model="control.FontBold">Yes</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="0" ng-model="control.FontBold">No</label>
+            </div>
+        </div>
+
+        <div class="formbox">
+            <div class="formitem  formiteminline">
+                <label>Border</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="1" ng-model="control.Border">Yes</label>
+            </div>
+            <div class="formitem formiteminline">
+                <label><input type="radio" ng-value="0" ng-model="control.Border">No</label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+            <label>Border Color</label>
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.BorderColor" />
+                <label ng-bind="hexToRgbA(control.BorderColor)"></label>
+            </div>
+        </div>
+        <div class="formbox  formtabled">
+            <div class="formitem  formiteminline">
+            <label>Background Color</label>
+            <input kendo-color-picker k-options="{ opacity: true }" ng-model="control.BackgroundColor" />
+                <label ng-bind="hexToRgbA(control.BackgroundColor)"></label>
+            </div>
+        </div>
+        <div class="applyToAllButtonBox">
+            <button class="btn k-button" data-ng-click="applyToAllControlStyles()">Apply to all Form Control Types</button>
+        </div>
+    </div>
+}

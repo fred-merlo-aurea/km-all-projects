@@ -1,0 +1,265 @@
+﻿@model UAS.Web.Models.Common.OpenCloseStatusViewModel
+<style>
+   .hideSubMenu{
+       display:none;
+   }
+   .showSubMenu{
+       display:block;
+   }
+    fieldset.widget-border {
+    height: auto;
+    border: 1px solid gray !important;
+    width:80%;
+    padding:0px 15px 10px 0px;
+    margin:0px 20px;
+    border-radius: 20px 20px;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+    legend.widget-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0px 0px 0px 0px;
+        border-bottom:none;
+        margin:0px 0px 0px 40%;
+       
+    }
+    .tblOpenCloseWidget {
+        margin:0% 10px;
+        padding: 0px;
+        align-content:center;
+        width:100%;
+         
+    }
+    .tblOpenCloseWidget tr > td {
+            /*margin: 0px 5px;*/
+            padding: 0px 5px;
+            font-weight: bold;
+            font-size: x-small;
+            text-align:center;
+        }
+    .unlocked {
+        background-color: orange;
+        border: 1px solid orange;
+    }
+    .unlocked[disabled],.unlocked:hover{
+         background-color: orange;
+        border: 1px solid orange;
+    }
+    
+    .locked{
+         background-color: #6babe5;
+        border: 1px solid #6babe5;
+    }
+    .locked[disabled],.locked:hover{
+         background-color: #6babe5;
+        border: 1px solid #6babe5;
+    }
+     
+</style>
+@{ 
+    bool isDisabled = true;
+    if (Model.HasFullAccess)
+    {
+        isDisabled = false;
+    }
+    else
+    {
+        isDisabled = true;
+    }
+
+}
+<div style="width:60%;float:left;" >
+    <fieldset class="widget-border">
+        <legend class="widget-border">Status</legend>
+
+        <input type="hidden" id="pubId" value="@Model.PubID" />
+        <table class="tblOpenCloseWidget">
+            <tr>
+                <td>Data Entry</td>
+                <td>Internal Import</td>
+                <td>External Import</td>
+                <td>Add/Remove</td>
+            </tr>
+            <tr>
+                <td>
+                    @{ var src = Url.Content("~/Images/");
+                    var styleclass = "locked";
+                    if (Model.AllowDataEntry)
+                    {
+                        src = src + "black-unlock-64.png";
+                        styleclass = "unlocked";
+                    }
+                    else
+                    {
+                        src = src + "black-lock-64.png";
+                        styleclass = "locked";
+                    }
+                    <input class="OpenCloseWg @styleclass" disabled="@isDisabled" id="dataEntry" type="image" src="@src" data-unlocked="@Model.AllowDataEntry">
+                    }
+
+                </td>
+
+                <td>
+                    @{  src = Url.Content("~/Images/");
+                    if (Model.AllowKMmport)
+                    {
+                        src = src + "black-unlock-64.png";
+                        styleclass = "unlocked";
+                    }
+                    else
+                    {
+                        src = src + "black-lock-64.png";
+                        styleclass = "locked";
+                    }
+                    <input class="OpenCloseWg @styleclass" disabled="@isDisabled" id="fileImport" type="image" src="@src" data-unlocked="@Model.AllowKMmport">
+                    }
+
+                </td>
+                <td>
+                    @{
+                    src = Url.Content("~/Images/");
+                    if (Model.AllowClientImport)
+                    {
+                        src = src + "black-unlock-64.png";
+                        styleclass = "unlocked";
+                    }
+                    else
+                    {
+                        src = src + "black-lock-64.png";
+                        styleclass = "locked";
+                    }
+                    <input class="OpenCloseWg @styleclass" disabled="@isDisabled" id="webSync" type="image" src="@src" data-unlocked="@Model.AllowClientImport">
+                    }
+
+                </td>
+                <td>
+                    @{  src = Url.Content("~/Images/");
+                    if (Model.AllowAddRemove)
+                    {
+                        src = src + "black-unlock-64.png";
+                        styleclass = "unlocked";
+                    }
+                    else
+                    {
+                        src = src + "black-lock-64.png";
+                        styleclass = "locked";
+                    }
+                    <input class="OpenCloseWg @styleclass" disabled="@isDisabled" id="addRemove" type="image"  src="@src" data-unlocked="@Model.AllowAddRemove">
+                    }
+
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+
+
+@if (!string.IsNullOrEmpty(@Model.ErrorMessage))
+{
+    <div  style="width:40%;float:left;padding:10px 0px;">
+        <span style="color:red;font-size:small;">@Model.ErrorMessage</span>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+
+        var openclose = {
+            dataEntryShow: [],
+            dataEntryHide: ['KM_Import_File', 'KM_Edit_File_Mapping', 'KM_Record_Update', 'KM_Issue_Comps', 'KM_Issue_Splits', 'KM_Add_Remove'],
+            fileImportShow:['KM_Import_File', 'KM_Edit_File_Mapping', 'KM_Record_Update'],
+            fileImportHide:['KM_Issue_Comps', 'KM_Issue_Splits', 'KM_Add_Remove'],
+            addRemoveShow: ['KM_Add_Remove'],
+            addRemoveHide: ['KM_Import_File', 'KM_Edit_File_Mapping', 'KM_Record_Update', 'KM_Issue_Comps', 'KM_Issue_Splits'],
+            allclosedShow: ['KM_Issue_Comps', 'KM_Issue_Splits', 'KM_Edit_File_Mapping', 'KM_Record_Update'],
+            allclosedHide: ['KM_Add_Remove', 'KM_Import_File']
+        };
+        var unlocks = {
+            dataEntry: $("#dataEntry").data("unlocked") == "False" ? false : true,
+            fileImport: $("#fileImport").data("unlocked") == "False" ? false : true,
+            webSync: $("#webSync").data("unlocked") == "False" ? false : true,
+            addRemove: $("#addRemove").data("unlocked") == "False" ? false : true
+        }
+        var showHideSubMenu = function (showlist, hidelist) {
+            $.each(showlist, function (index, value) {
+                $("#" + value).show();
+            });
+            $.each(hidelist, function (index, value) {
+                $("#" + value).hide();
+            });
+        }
+        if (unlocks.dataEntry)
+            showHideSubMenu(openclose.dataEntryShow, openclose.dataEntryHide);
+        else if (unlocks.fileImport || unlocks.webSync)
+            showHideSubMenu(openclose.fileImportShow, openclose.fileImportHide);
+        else if (unlocks.addRemove)
+            showHideSubMenu(openclose.addRemoveShow, openclose.addRemoveHide);
+        else
+            showHideSubMenu(openclose.allclosedShow, openclose.allclosedHide);
+        
+    });
+    function OpenCloseWidget(options) {
+        
+        $.ajax({
+                     url: "/UAS.Web/Home/UpdateOpenCloseWidget",
+                     type: "POST",
+                     cache: false,
+                     traditional: true,
+                     data: { locked: options.Locked, target: options.Id, PubID: options.PubID },
+                     success: function (t) {
+                         if (t != 0) {
+                             $("#dvOpenCloseWidget").html(t);
+                             window.location = window.location.href;
+                          }
+                        },
+                     error: function () {
+                         $("#dvOpenCloseWidget").html("Post Not Found")
+                     }
+                 })
+    }
+    $(".OpenCloseWg").kendoButton({
+        click: function (e) {
+            var option = {
+                Id: e.event.target.id,
+                PubID: $("#SelectedProductID").val(),
+                PubCode: $("#SelectedProductID :selected").text(),
+                Locked: false,
+                Item: "",
+                Action:""
+            }
+            switch (option.Id) {
+                case "dataEntry":
+                    option.Item = "Data Entry";
+                    break;
+                case "fileImport":
+                    option.Item = "Internal Import";
+                    break;
+                case "webSync":
+                    option.Item = "External Import";
+                    break;
+                case "addRemove":
+                    option.Item = "Add/Removes";
+                    break;
+            }
+            if ($("#" + option.Id).data("unlocked") == "True") {
+                option.Locked = true;
+                option.Action = "Close";
+                
+            } else {
+                option.Locked = false;
+                option.Action = "Open";
+               
+            }
+           showMessage({
+                    type: '@ECN_Framework_Common.Objects.Communicator.Enums.MessageType.Confirm',
+                    text: "Are you sure you want to " + option.Action + " " + option.Item + " for Product "+option.PubCode+"?",
+                    autoClose: false,
+                    action: OpenCloseWidget,
+                    data: option,
+                    IsOpen:false
+                })
+         }
+    });
+</script>

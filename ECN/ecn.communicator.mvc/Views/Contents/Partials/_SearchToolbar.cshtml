@@ -1,0 +1,62 @@
+﻿<script>
+    $(document).ready(function () {
+        $('#btnSearch').click(contentSearch_click);
+    });
+    function contentSearch_click() {
+        var searchModel = {};
+        searchModel['contentName'] = $('#contentName').val();
+        searchModel['userID'] = $('#drpUsers').val();
+        searchModel['archiveFilter'] = $('#archiveFilter').val();
+        searchModel['allFolders'] = ($('#allFolders:checked').length > 0) ? true : false;
+        searchModel['folderID'] = currentFolderID;
+
+        searchModel['pageSize'] = 10000; // hardcoded for now.
+        searchModel['currentPage'] = 1;
+        searchModel['sortcolumn'] = "ContentTitle";
+        searchModel['sortdirection'] = "ASC";
+       
+        var req = $.ajax({
+            method: 'post',
+            url: '@Url.Action("Search")',
+            data: searchModel
+        });
+        req.done(function (resp) {
+            $('#contentsGridPanel').html(resp);
+        });
+    }
+</script>
+
+<style>
+    #panelDownload{
+        width: 33%;
+        float: left;
+    }
+    #panelSearch{
+        width: 66%;
+        float: right;
+    }
+    td, th{
+        padding: 3px;
+    }
+</style>
+
+
+<div id="panelSearch">
+    <table>
+        <tr>
+            <td> @Html.TextBox("contentName") </td>
+            <td> @Html.DropDownList("drpUsers", new List<SelectListItem> {
+            new SelectListItem { Text = "All", Value = "All" },
+            }) </td>
+            <td> @Html.DropDownList("archiveFilter", new List<SelectListItem>{
+            new SelectListItem { Text = "Active", Value = "active" },
+            new SelectListItem { Text = "Archived", Value = "archived" },
+            new SelectListItem { Text = "All", Value = "all" }
+            }) </td>
+            <td><input id="allFolders" type="checkbox" /></td>
+            <td style="font-size: 75%;"> All folders </td>
+            <td> <button type="button" class="btn k-button" id="btnSearch">Search</button></td>
+        </tr>
+    </table>
+</div>
+
