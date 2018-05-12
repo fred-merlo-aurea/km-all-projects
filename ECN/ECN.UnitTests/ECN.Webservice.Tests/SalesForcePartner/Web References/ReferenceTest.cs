@@ -7,6 +7,7 @@ using Shouldly;
 using AutoFixture;
 using NUnit.Framework;
 using Moq;
+using ECN_Framework_EntitiesTests.ConfigureProject;
 using Microsoft.QualityTools.Testing.Fakes;
 using System.Web.Services.Protocols.Fakes;
 using System.Xml;
@@ -15,7 +16,7 @@ using ecn.webservice.SalesForcePartner;
 namespace ecn.webservice.SalesForcePartner
 {
     [TestFixture]
-    public class SforceServiceTest
+    public class SforceServiceTest : AbstractGenericTest
     {
         #region Category : General
 
@@ -29,10 +30,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_login_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var username = fixture.Create<string>();
-        	var password = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var username = Fixture.Create<string>();
+        	var password = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -65,11 +65,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_loginAsync_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var username = fixture.Create<string>();
-        	var password = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var username = Fixture.Create<string>();
+        	var password = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -102,9 +101,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeSObject_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -137,10 +135,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeSObjectAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -173,9 +170,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeSObjects_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -208,10 +204,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeSObjectsAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -275,9 +270,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeGlobalAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -310,9 +304,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeDataCategoryGroups_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -345,10 +338,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeDataCategoryGroupsAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -381,10 +373,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeDataCategoryGroupStructures_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var pairs = fixture.CreateMany<DataCategoryGroupSobjectTypePair>().ToArray();
-        	var topCategoriesOnly = fixture.Create<bool>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var pairs = Fixture.CreateMany<DataCategoryGroupSobjectTypePair>().ToArray();
+        	var topCategoriesOnly = Fixture.Create<bool>();
 
         	using(ShimsContext.Create())
         	{
@@ -417,11 +408,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeDataCategoryGroupStructuresAsync_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var pairs = fixture.CreateMany<DataCategoryGroupSobjectTypePair>().ToArray();
-        	var topCategoriesOnly = fixture.Create<bool>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var pairs = Fixture.CreateMany<DataCategoryGroupSobjectTypePair>().ToArray();
+        	var topCategoriesOnly = Fixture.Create<bool>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -454,10 +444,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeLayout_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var recordTypeIds = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var recordTypeIds = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -490,11 +479,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeLayoutAsync_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var recordTypeIds = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var recordTypeIds = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -558,9 +546,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeSoftphoneLayoutAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -624,9 +611,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_describeTabsAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -659,9 +645,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_create_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -694,10 +679,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_createAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -730,9 +714,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_update_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -765,10 +748,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_updateAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -801,10 +783,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_upsert_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var externalIDFieldName = fixture.Create<string>();
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var externalIDFieldName = Fixture.Create<string>();
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -837,11 +818,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_upsertAsync_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var externalIDFieldName = fixture.Create<string>();
-        	var sObjects = fixture.CreateMany<sObject>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var externalIDFieldName = Fixture.Create<string>();
+        	var sObjects = Fixture.CreateMany<sObject>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -874,9 +854,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_merge_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var request = fixture.CreateMany<MergeRequest>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var request = Fixture.CreateMany<MergeRequest>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -909,10 +888,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_mergeAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var request = fixture.CreateMany<MergeRequest>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var request = Fixture.CreateMany<MergeRequest>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -945,9 +923,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_delete_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -980,10 +957,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_deleteAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1016,9 +992,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_undelete_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1051,10 +1026,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_undeleteAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1087,9 +1061,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_emptyRecycleBin_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1122,10 +1095,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_emptyRecycleBinAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var ids = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var ids = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1158,11 +1130,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_retrieve_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var fieldList = fixture.Create<string>();
-        	var sObjectType = fixture.Create<string>();
-        	var ids = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var fieldList = Fixture.Create<string>();
+        	var sObjectType = Fixture.Create<string>();
+        	var ids = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1195,12 +1166,11 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_retrieveAsync_Method_4_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var fieldList = fixture.Create<string>();
-        	var sObjectType = fixture.Create<string>();
-        	var ids = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var fieldList = Fixture.Create<string>();
+        	var sObjectType = Fixture.Create<string>();
+        	var ids = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1233,9 +1203,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_process_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var actions = fixture.CreateMany<ProcessRequest>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var actions = Fixture.CreateMany<ProcessRequest>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1268,10 +1237,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_processAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var actions = fixture.CreateMany<ProcessRequest>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var actions = Fixture.CreateMany<ProcessRequest>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1304,9 +1272,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_convertLead_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var leadConverts = fixture.CreateMany<LeadConvert>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var leadConverts = Fixture.CreateMany<LeadConvert>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1339,10 +1306,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_convertLeadAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var leadConverts = fixture.CreateMany<LeadConvert>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var leadConverts = Fixture.CreateMany<LeadConvert>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1406,9 +1372,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_logoutAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1441,9 +1406,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_invalidateSessions_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sessionIds = fixture.CreateMany<string>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sessionIds = Fixture.CreateMany<string>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -1476,10 +1440,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_invalidateSessionsAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sessionIds = fixture.CreateMany<string>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sessionIds = Fixture.CreateMany<string>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1512,11 +1475,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getDeleted_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var startDate = fixture.Create<System.DateTime>();
-        	var endDate = fixture.Create<System.DateTime>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var startDate = Fixture.Create<System.DateTime>();
+        	var endDate = Fixture.Create<System.DateTime>();
 
         	using(ShimsContext.Create())
         	{
@@ -1549,12 +1511,11 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getDeletedAsync_Method_4_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var startDate = fixture.Create<System.DateTime>();
-        	var endDate = fixture.Create<System.DateTime>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var startDate = Fixture.Create<System.DateTime>();
+        	var endDate = Fixture.Create<System.DateTime>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1587,11 +1548,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getUpdated_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var startDate = fixture.Create<System.DateTime>();
-        	var endDate = fixture.Create<System.DateTime>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var startDate = Fixture.Create<System.DateTime>();
+        	var endDate = Fixture.Create<System.DateTime>();
 
         	using(ShimsContext.Create())
         	{
@@ -1624,12 +1584,11 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getUpdatedAsync_Method_4_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var sObjectType = fixture.Create<string>();
-        	var startDate = fixture.Create<System.DateTime>();
-        	var endDate = fixture.Create<System.DateTime>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var sObjectType = Fixture.Create<string>();
+        	var startDate = Fixture.Create<System.DateTime>();
+        	var endDate = Fixture.Create<System.DateTime>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1662,9 +1621,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_query_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryString = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryString = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -1697,10 +1655,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_queryAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryString = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryString = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1733,9 +1690,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_queryAll_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryString = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryString = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -1768,10 +1724,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_queryAllAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryString = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryString = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1804,9 +1759,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_queryMore_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryLocator = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryLocator = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -1839,10 +1793,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_queryMoreAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var queryLocator = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var queryLocator = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1875,9 +1828,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_search_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var searchString = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var searchString = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -1910,10 +1862,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_searchAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var searchString = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var searchString = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -1977,9 +1928,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getServerTimestampAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -2012,10 +1962,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_setPassword_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userId = fixture.Create<string>();
-        	var password = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userId = Fixture.Create<string>();
+        	var password = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -2048,11 +1997,10 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_setPasswordAsync_Method_3_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userId = fixture.Create<string>();
-        	var password = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userId = Fixture.Create<string>();
+        	var password = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -2085,9 +2033,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_resetPassword_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userId = fixture.Create<string>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userId = Fixture.Create<string>();
 
         	using(ShimsContext.Create())
         	{
@@ -2120,10 +2067,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_resetPasswordAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userId = fixture.Create<string>();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userId = Fixture.Create<string>();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -2187,9 +2133,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_getUserInfoAsync_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
@@ -2222,9 +2167,8 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_sendEmail_Method_1_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var messages = fixture.CreateMany<Email>().ToArray();
+        	Fixture.Register<XmlElement>(() => null);
+        	var messages = Fixture.CreateMany<Email>().ToArray();
 
         	using(ShimsContext.Create())
         	{
@@ -2257,10 +2201,9 @@ namespace ecn.webservice.SalesForcePartner
         public void SforceService_sendEmailAsync_Method_2_Parameters_Simple_Call_Test()
         {
             // Arrange
-        	var fixture = new Fixture();
-        	fixture.Register(() => new XmlDocument().DocumentElement);
-        	var messages = fixture.CreateMany<Email>().ToArray();
-        	var userState = fixture.Create<object>();
+        	Fixture.Register<XmlElement>(() => null);
+        	var messages = Fixture.CreateMany<Email>().ToArray();
+        	var userState = Fixture.Create<object>();
 
         	using(ShimsContext.Create())
         	{
